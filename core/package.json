@@ -5,16 +5,20 @@
   "author": "Y.Takeuchi",
   "license": "ISC",
   "scripts": {
-    "build": "npm-run-all clean type-check transpile copy-type-definition",
+    "build": "npm-run-all clean type-check lint transpile copy-type-definition",
     "type-check": "flow check",
-    "copy-type-definition": "flow-copy-source src lib",
+    "lint": "eslint src",
     "transpile": "babel src/ -d lib/",
+    "copy-type-definition": "flow-copy-source src lib",
     "clean": "rimraf lib"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.0",
     "@babel/preset-flow": "^7.13.13",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-flowtype": "^5.7.2",
     "flow-bin": "^0.150.1",
     "flow-copy-source": "^2.0.9"
   },
