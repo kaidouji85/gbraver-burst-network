@@ -1,18 +1,6 @@
 // @flow
 
-import type {PlayerCommand, GameState} from "gbraver-burst-core";
-import type {UserID} from "./user";
-import type {PlayerId} from "gbraver-burst-core/lib/player/player";
-
-/**
- * ユーザID、プレイヤーIDのマッピング
- */
-export type UserIDPlayerIDMapping = {
-  /** ユーザID */
-  userID: UserID,
-  /** プレイヤーID */
-  playerID: PlayerId,
-};
+import type {GameState, PlayerId, Command} from "gbraver-burst-core";
 
 /** バトルルーム準備完了 */
 export type BattleRoomReady = {
@@ -20,16 +8,18 @@ export type BattleRoomReady = {
   battleRoom: BattleRoom,
   /** ゲームの初期状態 */
   initialState: GameState[],
-  /** ユーザID、プレイヤーIDのマッピング */
-  idMappings: UserIDPlayerIDMapping[],
+  /** バトルルームから発行されたプレイヤーID */
+  playerId: PlayerId,
 };
 
 /** バトルルーム準備 */
 export interface PrepareBattleRoom {
   /**
    * バトルルームの準備が完了したら告知する
+   *
+   * @return 準備完了情報
    */
-  onBattleRoomReady: Promise<BattleRoomReady>;
+  onBattleRoomReady(): Promise<BattleRoomReady>;
 }
 
 /**
@@ -48,8 +38,8 @@ export interface BattleRoom {
   /**
    * ゲームを進行させる
    *
-   * @param commands プレイヤーのコマンド
+   * @param command プレイヤーが入力するコマンド
    * @return ゲーム結果
    */
-  progress(commands: PlayerCommand[]): Promise<GameState[]>;
+  progress(command: Command): Promise<GameState[]>;
 }
