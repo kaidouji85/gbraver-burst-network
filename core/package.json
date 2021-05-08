@@ -1,0 +1,25 @@
+{
+  "name": "gbraver-burst-network-core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Y.Takeuchi",
+  "license": "ISC",
+  "scripts": {
+    "build": "npm-run-all clean type-check transpile copy-type-definition",
+    "type-check": "flow check",
+    "copy-type-definition": "flow-copy-source src lib",
+    "transpile": "babel src/ -d lib/",
+    "clean": "rimraf lib"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-flow": "^7.13.13",
+    "flow-bin": "^0.150.1",
+    "flow-copy-source": "^2.0.9"
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
+  }
+}
