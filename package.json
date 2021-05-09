@@ -1,0 +1,11 @@
+{
+  "name": "gbraver-burst-network",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "gbraver-burst-network-core"
+  ],
+  "description": "gbraver burst network module",
+  "author": "Y.Takeuchi",
+  "license": "ISC"
+}
