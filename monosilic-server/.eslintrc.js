@@ -1,9 +1,12 @@
 module.exports = {
-    "extends": [
+    env: {
+        node: true,
+    },
+    extends: [
         "eslint:recommended",
         "plugin:flowtype/recommended"
     ],
-    "plugins": [
+    plugins: [
         "flowtype"
     ]
 };
