@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "gbraver-burst-network-core"
+    "gbraver-burst-network-core",
+    "monosilic-server"
   ],
   "description": "gbraver burst network module",
   "author": "Y.Takeuchi",
