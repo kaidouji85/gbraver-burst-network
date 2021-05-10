@@ -3,10 +3,10 @@
   "private": true,
   "scripts": {
     "prepare": "npm-run-all bootstrap build",
-    "bootstrap": "lerna bootstrap",
-    "build": "npm-run-all build:core build:monosilic",
+    "bootstrap": "lerna bootstrap --ci",
+    "build": "npm-run-all build:core build:monosilic-server",
     "build:core": "lerna run --scope @gbraver-burst-network/core build",
-    "build:monosilic": "lerna run --scope @gbraver-burst-network/core build"
+    "build:monosilic-server": "lerna run --scope @gbraver-burst-network/monosilic-server build"
   },
   "devDependencies": {
     "lerna": "^4.0.0",

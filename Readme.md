@@ -8,5 +8,6 @@ monorepo構造になってます。
 ```shell
 cd <本リポジトリをcloneした場所>
 npm ci
-npm run prepare
+# プロジェクトルートのnpmパッケージインストール完了後に、
+# プロジェクト準備スクリプトが自動的に実行される
 ```
