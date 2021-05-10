@@ -3,10 +3,13 @@
 Gブレイバーバーストのネットワーク機能のコアになる部分です。
 
 ## ビルド方法
-### 初回
+
+### 前提
+「[clone直後にやること](../../Readme.md)」を実施済であること
+
+### コマンド
 
 ```shell
-cd <本リポジトリをcloneした場所>/gbraver-burst-network-core
-yarn install
-yarn build
+cd <本リポジトリをcloneした場所>/packages/core
+npm run build
 ```
