@@ -7,5 +7,6 @@ monorepo構造になってます。
 
 ```shell
 cd <本リポジトリをcloneした場所>
-npm run bootstrap
+npm ci
+npm run prepare
 ```
