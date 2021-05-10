@@ -1,12 +1,7 @@
 {
-  "name": "gbraver-burst-network",
-  "version": "1.0.0",
+  "name": "root",
   "private": true,
-  "workspaces": [
-    "gbraver-burst-network-core",
-    "monosilic-server"
-  ],
-  "description": "gbraver burst network module",
-  "author": "Y.Takeuchi",
-  "license": "ISC"
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
 }
