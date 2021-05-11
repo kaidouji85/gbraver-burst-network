@@ -1,7 +1,6 @@
 // @flow
 
 import type {UserID} from "./user";
-import type {GBraverBurstNetwork} from "./gbraver-burst-network";
 
 /**
  * ID、パスワードでのログイン
@@ -9,11 +8,31 @@ import type {GBraverBurstNetwork} from "./gbraver-burst-network";
 export interface IdPasswordLogin {
   /**
    * ユーザID、パスワードでログインを行う
-   * ID、パスワードの組み合わせが間違っている場合はnullを返す
+   * ログインに成功した場合はtrueを返す
    *
    * @param userID ユーザID
    * @param password パスワード
    * @return ログイン結果
    */
-  login(userID: UserID, password: string): Promise<?GBraverBurstNetwork>;
+  login(userID: UserID, password: string): Promise<boolean>;
+}
+
+/** ログインチェック */
+export interface LoginCheck {
+  /**
+   * ログインしているかをチェックする
+   * 
+   * @return ログインしている場合trueを返す
+   */
+  isLogin(): Promise<boolean>;
+}
+
+/** ログオフ */
+export interface Logout {
+  /**
+   * ログオフする
+   *
+   * @return ログオフ成功したら発火するPromise
+   */
+  logout(): Promise<void>;
 }
