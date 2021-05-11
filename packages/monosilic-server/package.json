@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm-run-all build serve",
     "serve": "node build/index.js",
-    "build": "npm-run-all clean type-check transpile",
+    "build": "npm-run-all clean type-check lint transpile",
     "type-check": "flow check src",
     "lint": "eslint src",
     "transpile": "babel src -d build/",
