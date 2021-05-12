@@ -2,9 +2,21 @@
 
 import type {IdPasswordLogin} from "@gbraver-burst-network/core";
 import type {UserID} from "@gbraver-burst-network/core/lib";
+import {login} from "./login";
 
 /** モノシリックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin {
+  _apiServerURL: string
+
+  /**
+   * コンストラクタ
+   *
+   * @param apiServerURL APIサーバURL
+   */
+  constructor(apiServerURL: string) {
+    this._apiServerURL = apiServerURL;
+  }
+
   /**
    * ユーザID、パスワードでログインを行う
    * ログインに成功した場合はtrueを返す
@@ -14,8 +26,6 @@ export class MonolithicBrowser implements IdPasswordLogin {
    * @return ログイン結果
    */
   login(userID: UserID, password: string): Promise<boolean> {
-    // TODO ちゃんと実装する
-    console.log(userID, password);
-    return Promise.resolve(true);
+    return login(userID, password, this._apiServerURL);
   }
 }
