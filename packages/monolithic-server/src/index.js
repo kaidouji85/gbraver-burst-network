@@ -1,13 +1,14 @@
 // @flow
 
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
-
 import type {User} from "@gbraver-burst-network/core";
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.listen(port, () => {
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
   res.send(user);
 });
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
   console.log(req.body);
   res.send({hp: 1000, power: 2000});
 });

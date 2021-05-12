@@ -16,7 +16,7 @@ export async function login(userID: UserID, password: string, apiServerURL: stri
     password: password
   };
   const resp = await fetch(`${apiServerURL}/login`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
