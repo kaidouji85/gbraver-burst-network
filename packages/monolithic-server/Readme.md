@@ -10,6 +10,6 @@ Gブレイバーバーストのモノシリック構造のサーバです。
 ### コマンド
 
 ```shell
-cd <本リポジトリをcloneした場所>/packages/monosilic-server
+cd <本リポジトリをcloneした場所>/packages/monolithic-server
 npm start
 ```

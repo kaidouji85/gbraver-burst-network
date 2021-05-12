@@ -1,21 +1,23 @@
 {
-  "name": "@gbraver-burst-network/monosilic-client",
+  "name": "@gbraver-burst-network/monolithic-server",
   "version": "0.1.0",
-  "author": "Y.Takeuchi",
-  "license": "ISC",
-  "main": "lib/monosilic-client.js",
-  "files": [
-    "lib"
-  ],
+  "main": "index.js",
+  "private": true,
   "scripts": {
+    "start": "npm-run-all build serve",
+    "serve": "node build/index.js",
     "build": "npm-run-all clean type-check lint transpile",
     "type-check": "flow check src",
     "lint": "eslint src",
     "transpile": "babel src -d build/",
-    "clean": "rimraf lib"
+    "clean": "rimraf build"
   },
+  "author": "Y.Takeuchi",
+  "license": "ISC",
   "dependencies": {
-    "@gbraver-burst-network/core": "^0.1.0"
+    "@gbraver-burst-network/core": "^0.1.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
