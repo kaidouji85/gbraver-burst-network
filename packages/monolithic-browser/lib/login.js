@@ -34,7 +34,7 @@ function _login() {
             };
             _context.next = 3;
             return fetch("".concat(apiServerURL, "/login"), {
-              method: 'GET',
+              method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },

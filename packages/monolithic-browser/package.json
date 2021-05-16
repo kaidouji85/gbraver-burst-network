@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Y.Takeuchi",
   "license": "ISC",
-  "main": "lib/monosilic-client.js",
+  "main": "lib/index.js",
   "files": [
     "lib"
   ],

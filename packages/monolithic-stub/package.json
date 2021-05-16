@@ -15,6 +15,10 @@
     "dev-server": "webpack serve",
     "serve": "http-server build -p 3000 -c-1"
   },
+  "dependencies": {
+    "@gbraver-burst-network/core": "^0.1.0",
+    "@gbraver-burst-network/monolithic-browser": "^0.1.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.0",

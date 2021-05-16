@@ -1,7 +1,6 @@
 // @flow
 
-import type {IdPasswordLogin} from "@gbraver-burst-network/core";
-import type {UserID} from "@gbraver-burst-network/core/lib";
+import type {IdPasswordLogin, UserID} from "@gbraver-burst-network/core";
 import {login} from "./login";
 
 /** モノシリックサーバ ブラウザ用 SDK */
