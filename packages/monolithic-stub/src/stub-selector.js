@@ -7,23 +7,33 @@ export class StubSelector {
   _root: HTMLElement;
 
   constructor(stubs: Stub[]) {
-    const selectorID = 'stub-selector';
-    this._root = document.createElement('div');
-    this._root.innerHTML = `
-      <select id="${selectorID}" name="stub-selector"></select>
-      <button>実行</button>
-    `;
-
-    const stubSelector = this._root.querySelector(`#${selectorID}`)
-      ?? document.createElement('select');
-    const options = stubs.map(v => {
+    const stubSelector: HTMLSelectElement = document.createElement('select');
+    const options = stubs.map((v, index) => {
       const option: HTMLOptionElement = document.createElement('option');
-      option.value = v.name();
+      option.value = `${index}`;
       option.innerText = v.name();
       return option;
     });
     options.forEach(v => {
       stubSelector.appendChild(v);
+    });
+
+    const executeButton: HTMLButtonElement = document.createElement('button');
+    executeButton.innerText = '実行';
+    const onExecuteButtonPush = async (e: Event): Promise<void> => {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetIndex = parseInt(stubSelector.value);
+      const target = stubs[targetIndex];
+      await target.execute();
+    };
+    executeButton.addEventListener('click', onExecuteButtonPush);
+    executeButton.addEventListener('pushStart', onExecuteButtonPush);
+
+    this._root = document.createElement('div');
+    const underRoot = [stubSelector, executeButton];
+    underRoot.forEach(v => {
+      this._root.appendChild(v);
     });
   }
 
