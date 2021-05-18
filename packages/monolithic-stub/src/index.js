@@ -6,7 +6,7 @@ import {WebpackDefinePlugin} from './webpack-define-plugin';
 
 window.onload = () => {
   console.log(WebpackDefinePlugin);
-  const stubContainer = createStubContainer('http://localhost:3000', 'user', 'pass');
+  const stubContainer = createStubContainer(WebpackDefinePlugin.API_SERVER_URL, WebpackDefinePlugin.USER_ID, WebpackDefinePlugin.PASSWORD);
   const stubSelector = new StubSelector(stubContainer);
   const stubSelectorBinder: HTMLElement = document.querySelector('#stub-selector')
     ?? document.createElement('div');
