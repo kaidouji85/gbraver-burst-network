@@ -1,10 +1,11 @@
 # モノシリックサーバ クライアントSDK スタブ
 
 ## 動かし方
-### 1. 前提
+### 前提
 「[clone直後にやること](../../Readme.md)」を予め実行してください。
 
-### 2. 設定ファイルの記載
+### コマンド
+#### 1. 設定ファイルの記載
 この手順は初回起動時にだけ実施すれば大丈夫です。
 
 ```shell
@@ -16,7 +17,7 @@ cp .env.template .env
 vi .env
 ```
 
-### 3. スタブ起動
+#### 2. スタブ起動
 ```shell
 cd <本リポジトリをcloneした場所>
 npx lerna run --scope @gbraver-burst-network/monolithic-server start
