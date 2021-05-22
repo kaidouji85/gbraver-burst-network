@@ -14,12 +14,10 @@ type UserFromJSON = {
 /** users.jsonから生成したユーザ達 */
 export class UsersFromJSON {
   _users: UserFromJSON[];
-  _hash: crypto$Hash;
 
   /** コンストラクタ */
   constructor() {
     this._users = require('../users.json');
-    this._hash = createHash('sha256');
   }
 
   /**
@@ -31,7 +29,9 @@ export class UsersFromJSON {
    * @return 検索結果
    */
   find(userID: UserID, password: string): ?User {
-    const hashedPassword = this._hash.update(password);
+    const hashedPassword = createHash('sha256')
+      .update(password)
+      .digest('hex');
     const target = this._users.find(v => (v.userID === userID) && (v.password === hashedPassword));
     return target ? {id: target.userID} : null;
   }
