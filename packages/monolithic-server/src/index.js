@@ -6,10 +6,12 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import type {User} from "@gbraver-burst-network/core";
 import {listenPortFromEnv} from "./listen-port-from-env";
+import {UsersFromJSON} from "./users-from-json";
 
 dotenv.config();
-const app = express();
+const users = new UsersFromJSON();
 const port = listenPortFromEnv();
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,6 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  console.log(req.body);
-  res.send({hp: 1000, power: 2000});
+  const user = users.find(req.body.userID, req.body.password);
+  const body = user ?? 'userID or password incorrect';
+  res.send(body);
 });
