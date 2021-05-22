@@ -13,6 +13,7 @@ Gブレイバーバーストのモノシリック構造のサーバです。
 ```shell
 cd <本リポジトリをcloneした場所>/packages/monolithic-server
 cp .env.template .env
+cp users.json.template users.json
 
 # .envをテキストエディタで編集して
 # 環境に応じた値をセットする
@@ -23,4 +24,13 @@ vi .env
 ```shell
 cd <本リポジトリをcloneした場所>
 npx lerna run --scope @gbraver-burst-network/monolithic-server start
+```
+
+## tips
+
+### sha256ハッシュの作り方
+
+```shell
+echo -n '任意のパスワード' | shasum -a 256
+# コマンドラインにハッシュ化されたパスワードが表示される
 ```
