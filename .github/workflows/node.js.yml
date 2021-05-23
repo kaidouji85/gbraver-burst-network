@@ -25,4 +25,5 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    - run: cp packages/monolithic-server/users.json.template packages/monolithic-server/users.json
     - run: npm ci
