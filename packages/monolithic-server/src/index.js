@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 
 app.listen(port, () => {
   console.log(`listening at ${port}`);
+  console.log(`env ${app.get('env')}`);
 });
 
 app.post('/login', (req, res) => {
