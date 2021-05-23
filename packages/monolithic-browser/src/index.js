@@ -1,5 +1,6 @@
 // @flow
 
+import io from 'socket.io-client';
 import type {IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
 import {isLogin, login} from "./login";
 
@@ -16,6 +17,8 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck {
   constructor(apiServerURL: string) {
     this._apiServerURL = apiServerURL;
     this._accessToken = '';
+    const test = io(apiServerURL);
+    console.log(test);
   }
 
   /**

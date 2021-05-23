@@ -16,8 +16,15 @@ const users = new UsersFromJSON();
 const port = listenPortFromEnv();
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  // TODO 本番公開時はoriginを明確に指定する
+  cors: {
+    origin: "*",
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']
+  }
+});
 
+// TODO 本番公開時はoriginを明確に指定する
 app.use(cors());
 app.use(bodyParser.json());
 
