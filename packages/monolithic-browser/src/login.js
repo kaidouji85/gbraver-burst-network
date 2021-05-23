@@ -2,13 +2,16 @@
 
 import type {UserID} from "@gbraver-burst-network/core/lib";
 
+/** ログインAPI実行結果 */
 export type LoginResult = LoginSuccess | LoginFailed;
 
+/** ログイン成功 */
 export type LoginSuccess = {
   isSuccess: true,
   accessToken: string
 };
 
+/** ログイン失敗 */
 export type LoginFailed = {
   isSuccess: false
 };
