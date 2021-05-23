@@ -34,6 +34,8 @@ export function createAccessToken(user: User): Buffer {
 /**
  * ログイン専用ページの制御ミドルウェア
  * 有効なアクセストークンでない場合は401を返す
+ * また有効なアクセストーンの場合、req.gbraverBurstAccessTokenに
+ * アクセストークン payload をデコードしたものがセットされる
  *
  * @param req リクエスト
  * @param res レスポンス
@@ -60,7 +62,7 @@ export function validAccessTokenOnly(req: typeof Request, res: typeof Response, 
       return;
     }
 
-    req.accessToken = decodedToken;
+    req.gbraverBurstAccessToken = decodedToken;
     next();
   });
 }

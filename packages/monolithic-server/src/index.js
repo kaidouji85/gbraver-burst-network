@@ -34,6 +34,6 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/login', validAccessTokenOnly, (req, res) => {
-  const accessToken: AccessToken = req.accessToken;
+  const accessToken: AccessToken = req.gbraverBurstAccessToken;
   res.send(`hello ${accessToken.userID} access token valid`);
 });
