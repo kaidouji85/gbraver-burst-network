@@ -4,9 +4,11 @@
   "scripts": {
     "prepare": "npm-run-all bootstrap build",
     "bootstrap": "lerna bootstrap --ci",
-    "build": "npm-run-all build:core build:monosilic-server",
+    "build": "npm-run-all build:core build:monolithic-server build:monolithic-browser build:monolithic-stub",
     "build:core": "lerna run --scope @gbraver-burst-network/core build",
-    "build:monosilic-server": "lerna run --scope @gbraver-burst-network/monosilic-server build"
+    "build:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server build",
+    "build:monolithic-browser": "lerna run --scope @gbraver-burst-network/monolithic-browser build",
+    "build:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub build"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
