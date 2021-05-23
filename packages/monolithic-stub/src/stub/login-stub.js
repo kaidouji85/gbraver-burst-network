@@ -40,6 +40,13 @@ export class LoginStub implements Stub {
   async execute(): Promise<void> {
     const browser = new MonolithicBrowser(this._url);
     const isSuccess = await browser.login(this._userID, this._password);
-    return isSuccess ? Promise.resolve() : Promise.reject();
+    if (!isSuccess) {
+      return Promise.reject();
+    }
+
+    const isLogin = await browser.isLogin();
+    if (!isLogin) {
+      return Promise.reject();
+    }
   }
 }

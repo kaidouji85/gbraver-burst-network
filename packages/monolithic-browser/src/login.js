@@ -35,7 +35,8 @@ export async function login(userID: UserID, password: string, apiServerURL: stri
   if (resp.status !== 200 ) {
     return {isSuccess: false};
   }
-  const accessToken = await resp.text();
+  const json = await resp.json();
+  const accessToken = String(json?.accessToken);
   return {isSuccess: true, accessToken: accessToken};
 }
 
