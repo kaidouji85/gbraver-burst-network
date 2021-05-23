@@ -14,18 +14,19 @@ import type {AccessToken} from "./auth";
 dotenv.config();
 const users = new UsersFromJSON();
 const port = listenPortFromEnv();
+const origin = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  // TODO 本番公開時はoriginを明確に指定する
   cors: {
-    origin: "*",
+    origin: origin,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']
   }
 });
 
-// TODO 本番公開時はoriginを明確に指定する
-app.use(cors());
+app.use(cors({
+  origin: origin
+}));
 app.use(bodyParser.json());
 
 app.post('/login', (req, res) => {
