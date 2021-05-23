@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import type {User} from "@gbraver-burst-network/core";
 import {listenPortFromEnv} from "./listen-port-from-env";
 import {UsersFromJSON} from "./users-from-json";
+import {createAccessToken} from "./access-token";
 
 dotenv.config();
 const users = new UsersFromJSON();
@@ -27,6 +28,12 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const user = users.find(req.body.userID, req.body.password);
-  const body = user ?? 'userID or password incorrect';
+  if (!user) {
+    res.send('userID or password incorrect');
+    return;
+  }
+
+  const accessToken = createAccessToken(user);
+  const body = {accessToken};
   res.send(body);
 });
