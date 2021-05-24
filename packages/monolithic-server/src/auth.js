@@ -3,6 +3,7 @@
 import type {User} from "@gbraver-burst-network/core";
 import jwt from 'jsonwebtoken';
 import {Request, Response} from "express";
+import {Socket} from 'socket.io';
 
 /** アクセストークン */
 export type AccessToken = {
@@ -32,7 +33,7 @@ export function createAccessToken(user: User): Buffer {
 }
 
 /**
- * ログイン専用ページの制御ミドルウェア
+ * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合は401を返す
  * また有効なアクセストーンの場合、req.gbraverBurstAccessTokenに
  * アクセストークン payload をデコードしたものがセットされる
@@ -41,7 +42,7 @@ export function createAccessToken(user: User): Buffer {
  * @param res レスポンス
  * @param next 次のミドルウェアに処理を渡す
  */
-export function validAccessTokenOnly(req: typeof Request, res: typeof Response, next: Function): void {
+export function loginOnlyForExpress(req: typeof Request, res: typeof Response, next: Function): void {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     res.sendStatus(401);
@@ -63,6 +64,36 @@ export function validAccessTokenOnly(req: typeof Request, res: typeof Response, 
     }
 
     req.gbraverBurstAccessToken = decodedToken;
+    next();
+  });
+}
+
+/**
+ * ログイン専用ページの制御 expressミドルウェア
+ * 有効なアクセストークンでない場合はエラーになる
+ * また有効なアクセストーンの場合、socket.gbraverBurstAccessTokenに
+ * アクセストークン payload をデコードしたものがセットされる
+ *
+ * @param socket ソケット
+ * @param next 次のミドルウェアに処理を渡す
+ */
+export function loginOnlyForSocketIO(socket: typeof Socket, next: Function): void {
+  const invalidAccessToken = new Error('invalid access token');
+  const token = socket.handshake?.auth?.token;
+  if (!token && (typeof token !== 'string')) {
+    next(invalidAccessToken);
+    return;
+  }
+
+  const secret = accessTokenSecretFromEnv();
+  jwt.verify(token, secret, (err, decodedToken) => {
+    if (err) {
+      console.log(err);
+      next(invalidAccessToken);
+      return;
+    }
+
+    socket.gbraverBurstAccessToken = decodedToken;
     next();
   });
 }
