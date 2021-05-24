@@ -8,6 +8,7 @@ import {isLogin, login} from "./login";
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck {
   _apiServerURL: string
   _accessToken: string;
+  _socket: typeof io.Socket;
 
   /**
    * コンストラクタ
@@ -17,8 +18,8 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck {
   constructor(apiServerURL: string) {
     this._apiServerURL = apiServerURL;
     this._accessToken = '';
-    const test = io(apiServerURL);
-    console.log(test);
+    this._socket = io(apiServerURL);
+    this._socket.on('connect_error', this._onSocketError.bind(this));
   }
 
   /**
@@ -47,5 +48,9 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck {
    */
   isLogin(): Promise<boolean> {
     return isLogin(this._accessToken, this._apiServerURL);
+  }
+
+  _onSocketError(err: string): void {
+    console.error(err);
   }
 }

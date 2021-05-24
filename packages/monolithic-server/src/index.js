@@ -8,7 +8,7 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {listenPortFromEnv} from "./listen-port-from-env";
 import {UsersFromJSON} from "./users-from-json";
-import {createAccessToken, validAccessTokenOnly} from "./auth";
+import {createAccessToken, loginOnlyForExpress, loginOnlyForSocketIO} from "./auth";
 import type {AccessToken} from "./auth";
 
 dotenv.config();
@@ -41,10 +41,12 @@ app.post('/login', (req, res) => {
   res.send(body);
 });
 
-app.get('/login', validAccessTokenOnly, (req, res) => {
+app.get('/login', loginOnlyForExpress, (req, res) => {
   const accessToken: AccessToken = req.gbraverBurstAccessToken;
   res.send(`hello ${accessToken.userID} access token valid`);
 });
+
+io.use(loginOnlyForSocketIO);
 
 io.on('connection', () => {
   console.log('a user connected');
