@@ -3,6 +3,7 @@
 import type {Stub} from "./stub";
 import {LoginStub} from "./login-stub";
 import type {UserID} from "@gbraver-burst-network/core";
+import {StartCasualMatchStub} from "./start-casual-match-stub";
 
 /**
  * スタブコンテナを生成する
@@ -14,6 +15,7 @@ import type {UserID} from "@gbraver-burst-network/core";
  */
 export function createStubContainer(url: string, userID: UserID, password: string): Stub[] {
   return [
-    new LoginStub(url, userID, password)
+    new LoginStub(url, userID, password),
+    new StartCasualMatchStub(url, userID, password),
   ];
 }

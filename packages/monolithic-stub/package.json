@@ -18,7 +18,8 @@
   "dependencies": {
     "@gbraver-burst-network/core": "^0.2.0",
     "@gbraver-burst-network/monolithic-browser": "^0.2.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "gbraver-burst-core": "^1.5.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",

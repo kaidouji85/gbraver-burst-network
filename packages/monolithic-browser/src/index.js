@@ -5,6 +5,7 @@ import type {BattleRoom, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from 
 import {isLogin, login} from "./login";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import {emptyBattleRoom} from "./empty-battle-room";
+import {socketIoConnection} from "./socket-io-connection";
 
 /** モノシリックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMatch {
@@ -59,7 +60,8 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    * @return バトルルーム準備
    */
   startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleRoom> {
-    console.log(armdozerId, pilotId);
+    const socket = socketIoConnection(this._apiServerURL, this._accessToken);
+    console.log(armdozerId, pilotId, socket);
     return Promise.resolve(emptyBattleRoom());
   }
 }
