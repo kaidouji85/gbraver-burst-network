@@ -10,15 +10,19 @@ import io from 'socket.io-client';
  * @return socket.io コネクション
  */
 export function socketIoConnection(apiServerURL: string, accessToken: string): Promise<typeof io.Socket> {
+  const socket = io(apiServerURL, {
+    auth: {
+      token: accessToken
+    }
+  });
   return new Promise((resolve, reject) => {
-    const socket = io(apiServerURL, {
-      auth: {
-        token: accessToken
-      }
-    });
-    socket.on('connect', () => {
+    socket.once('connect', () => {
       resolve(socket);
     });
-    socket.on('connect_error', reject);
+    socket.once('connect_error', reject);
+  }).finally(() => {
+    ['connect', 'connect_error'].forEach(v => {
+      socket.removeAllListeners(v);
+    });
   });
 }
