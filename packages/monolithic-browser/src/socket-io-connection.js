@@ -21,8 +21,6 @@ export function socketIoConnection(apiServerURL: string, accessToken: string): P
     });
     socket.once('connect_error', reject);
   }).finally(() => {
-    ['connect', 'connect_error'].forEach(v => {
-      socket.removeAllListeners(v);
-    });
+    socket.removeAllListeners();
   });
 }
