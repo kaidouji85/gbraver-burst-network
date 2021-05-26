@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.post('/login', (req, res) => {
   const user = users.find(req.body.userID, req.body.password);
   if (!user) {
-    res.send('userID or password incorrect');
+    res.sendStatus(401);
     return;
   }
 
