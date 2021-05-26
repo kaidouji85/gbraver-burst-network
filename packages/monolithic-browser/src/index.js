@@ -59,9 +59,9 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    * @param pilotId 選択したパイロットID
    * @return バトルルーム準備
    */
-  startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleRoom> {
-    const socket = socketIoConnection(this._apiServerURL, this._accessToken);
+  async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleRoom> {
+    const socket = await socketIoConnection(this._apiServerURL, this._accessToken);
     console.log(armdozerId, pilotId, socket);
-    return Promise.resolve(emptyBattleRoom());
+    return emptyBattleRoom();
   }
 }
