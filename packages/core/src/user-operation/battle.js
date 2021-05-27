@@ -3,7 +3,10 @@
 import type {GameState, Command} from "gbraver-burst-core";
 import type {Player} from "gbraver-burst-core/lib/player/player";
 
-/** バトル */
+/** 
+ * バトル
+ * 本操作はログイン後に実行することを想定している
+ */
 export interface Battle {
   /** プレイヤーの情報 */
   player: Player;
