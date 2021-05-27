@@ -3,8 +3,8 @@
 import type {GameState, Command} from "gbraver-burst-core";
 import type {Player} from "gbraver-burst-core/lib/player/player";
 
-/** バトルルーム */
-export interface BattleRoom {
+/** バトル */
+export interface Battle {
   /** プレイヤーの情報 */
   player: Player;
   /** 対戦相手の情報 */

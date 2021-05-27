@@ -1,6 +1,6 @@
 // @flow
 
-import type {BattleRoom} from "./battle-room";
+import type {Battle} from "./battle";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 
 /** カジュアルマッチ */
@@ -10,7 +10,7 @@ export interface CasualMatch {
    *
    * @param armdozerId 選択したアームドーザID
    * @param pilotId 選択したパイロットID
-   * @return バトルルーム準備
+   * @return バトル
    */
-  startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleRoom>;
+  startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle>;
 }

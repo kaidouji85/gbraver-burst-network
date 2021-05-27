@@ -1,10 +1,10 @@
 // @flow
 
 import io from 'socket.io-client';
-import type {BattleRoom, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
+import type {Battle, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
 import {isLogin, login} from "./login";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
-import {emptyBattleRoom} from "./empty-battle-room";
+import {emptyBattle} from "./empty-battle";
 import {socketIoConnection} from "./socket-io-connection";
 
 /** モノシリックサーバ ブラウザ用 SDK */
@@ -57,11 +57,11 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    *
    * @param armdozerId 選択したアームドーザID
    * @param pilotId 選択したパイロットID
-   * @return バトルルーム準備
+   * @return バトル
    */
-  async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleRoom> {
+  async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle> {
     const socket = await socketIoConnection(this._apiServerURL, this._accessToken);
     console.log(armdozerId, pilotId, socket);
-    return emptyBattleRoom();
+    return emptyBattle();
   }
 }

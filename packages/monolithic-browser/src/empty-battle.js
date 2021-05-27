@@ -1,15 +1,15 @@
 // @flow
 
-import type {BattleRoom} from "@gbraver-burst-network/core";
+import type {Battle} from "@gbraver-burst-network/core";
 import type {Command, GameState, Player} from "gbraver-burst-core";
 import {ArmDozerIdList, ArmDozers, PilotIds, Pilots} from "gbraver-burst-core";
 
 /**
- * 空のバトルルームを生成する
+ * 空のバトルを生成する
  *
  * @return 生成結果
  */
-export function emptyBattleRoom(): BattleRoom {
+export function emptyBattle(): Battle {
   const shinBraver = ArmDozers.find(v => v.id === ArmDozerIdList.SHIN_BRAVER)
     ?? ArmDozers[0];
   const neoLandozer = ArmDozers.find(v => v.id === ArmDozerIdList.NEO_LANDOZER)
