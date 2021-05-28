@@ -10,6 +10,6 @@ test('同じユーザIDでエントリした場合、二重入室と判定する
     {...EMPTY_ENTRY, userID: 'test02'},
   ];
   const entry = {...EMPTY_ENTRY, userID: 'test02'};
-  const result = isDoubleEntry(roomEntries, entry.userID);
+  const result = isDoubleEntry(roomEntries, entry);
   t.true(result);
 });

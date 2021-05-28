@@ -19,7 +19,7 @@ export class FirstArrivalRoom implements WaitingRoom {
    * @return 入室結果
    */
   async enter(entry: Entry): Promise<EntryResult> {
-    if (isDoubleEntry(this._entries, entry.userID)) {
+    if (isDoubleEntry(this._entries, entry)) {
       return {type: 'DoubleEntry'};
     }
 
