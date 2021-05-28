@@ -2,16 +2,16 @@
 import type {Entry} from "../entry";
 
 /** 先着順マッチングの結果 */
-export type FirstArrivalRoomResult = SuccessFirstArrivalMatch | FailFirstArrivalMatch;
+export type FirstArrivalMatchingResult = SuccessFirstArrivalMatching | FailFirstArrivalMatching;
 
 /** 先着順マッチング成功 */
-export type SuccessFirstArrivalMatch = {
+export type SuccessFirstArrivalMatching = {
   isSuccess: true,
   matching: [Entry, Entry],
   roomEntries: Entry[]
 }
 /** 先着順マッチング失敗 */
-export type FailFirstArrivalMatch = {
+export type FailFirstArrivalMatching = {
   isSuccess: false,
   roomEntries: Entry[]
 };
@@ -23,9 +23,9 @@ export type FailFirstArrivalMatch = {
  * @param entry 新しいエントリ
  * @return マッチング結果
  */
-export function firstArrivalMatch(roomEntries: Entry[], entry: Entry): FirstArrivalRoomResult {
+export function firstArrivalMatching(roomEntries: Entry[], entry: Entry): FirstArrivalMatchingResult {
   if (roomEntries.length <= 0) {
-    return {isSuccess: false, roomEntries: roomEntries};
+    return {isSuccess: false, roomEntries: [...roomEntries, entry]};
   }
 
   const matching: [Entry, Entry] = [roomEntries[0], entry];

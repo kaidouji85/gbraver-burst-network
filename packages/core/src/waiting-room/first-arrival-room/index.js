@@ -3,7 +3,7 @@
 import type {EntryResult, WaitingRoom} from "../waiting-room";
 import type {Entry} from "../entry";
 import {isDoubleEntry} from "../is-double-entry";
-import {firstArrivalMatch} from "./first-arrival-match";
+import {firstArrivalMatching} from "./first-arrival-matching";
 
 /** 先着順でマッチングされる待合室 */
 export class FirstArrivalRoom implements WaitingRoom {
@@ -27,7 +27,7 @@ export class FirstArrivalRoom implements WaitingRoom {
       return {type: 'DoubleEntry'};
     }
 
-    const result = firstArrivalMatch(this._entries, entry);
+    const result = firstArrivalMatching(this._entries, entry);
     this._entries = result.roomEntries;
     return result.isSuccess
       ? {type: 'Matching', entries: result.matching}
