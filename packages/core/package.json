@@ -8,17 +8,23 @@
   ],
   "license": "ISC",
   "scripts": {
-    "build": "npm-run-all clean type-check lint transpile copy-type-definition",
+    "build": "npm-run-all clean type-check lint lint:test test transpile copy-type-definition",
     "type-check": "flow check",
     "lint": "eslint src",
+    "lint:test": "eslint test",
+    "test": "ava -T 600000",
     "transpile": "babel src -d lib/",
     "copy-type-definition": "flow-copy-source src lib",
     "clean": "rimraf lib"
   },
   "devDependencies": {
+    "@ava/babel": "^1.0.1",
     "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
     "@babel/preset-flow": "^7.13.13",
+    "@babel/register": "^7.13.16",
+    "ava": "^3.15.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.27.0",
     "eslint-plugin-flowtype": "^5.7.2",
@@ -29,5 +35,16 @@
   },
   "dependencies": {
     "gbraver-burst-core": "^1.5.6"
+  },
+  "ava": {
+    "babel": {
+      "compileEnhancements": false
+    },
+    "files": [
+      "test/src/**/*.js"
+    ],
+    "require": [
+      "@babel/register"
+    ]
   }
 }

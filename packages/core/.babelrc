@@ -1,4 +1,17 @@
 {
-  "presets": ["@babel/preset-flow"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": "last 2 versions"
+      }
+    ],
+    "@babel/preset-flow"
+  ],
+  "env": {
+    "development": {
+      "sourceMaps": "inline"
+    }
+  }
 }
 

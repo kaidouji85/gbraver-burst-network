@@ -3,7 +3,10 @@
 import type {Battle} from "./battle";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 
-/** カジュアルマッチ */
+/** 
+ * カジュアルマッチ
+ * 本操作はログイン後に実行することを想定している
+ */
 export interface CasualMatch {
   /**
    * カジュアルマッチをスタートさせる
