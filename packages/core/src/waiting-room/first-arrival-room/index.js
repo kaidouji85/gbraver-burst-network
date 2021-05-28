@@ -27,7 +27,8 @@ export class FirstArrivalRoom implements WaitingRoom {
       return {type: 'DoubleEntry'};
     }
 
-    const result = firstArrivalMatching(this._entries, entry);
+    const entered = [...this._entries, entry];
+    const result = firstArrivalMatching(entered);
     this._entries = result.roomEntries;
     return result.isSuccess
       ? {type: 'Matching', entries: result.matching}

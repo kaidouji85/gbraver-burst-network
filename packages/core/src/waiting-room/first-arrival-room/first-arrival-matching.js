@@ -20,15 +20,14 @@ export type FailFirstArrivalMatching = {
  * 先着順でマッチングをする
  *
  * @param roomEntries 待合室の全エントリ
- * @param entry 新しいエントリ
  * @return マッチング結果
  */
-export function firstArrivalMatching(roomEntries: Entry[], entry: Entry): FirstArrivalMatchingResult {
-  if (roomEntries.length <= 0) {
-    return {isSuccess: false, roomEntries: [...roomEntries, entry]};
+export function firstArrivalMatching(roomEntries: Entry[]): FirstArrivalMatchingResult {
+  if (roomEntries.length < 2) {
+    return {isSuccess: false, roomEntries: roomEntries};
   }
 
-  const matching: [Entry, Entry] = [roomEntries[0], entry];
-  const updatedRoomEntries = roomEntries.slice(1);
+  const matching: [Entry, Entry] = [roomEntries[0], roomEntries[1]];
+  const updatedRoomEntries = roomEntries.slice(2);
   return {isSuccess: true, matching: matching, roomEntries: updatedRoomEntries};
 }
