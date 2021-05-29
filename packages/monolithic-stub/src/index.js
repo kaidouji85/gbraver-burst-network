@@ -5,8 +5,14 @@ import {createStubContainer} from "./stub/stub-container";
 import {WebpackDefinePlugin} from './webpack-define-plugin';
 
 window.onload = () => {
-  console.log(WebpackDefinePlugin);
-  const stubContainer = createStubContainer(WebpackDefinePlugin.API_SERVER_URL, WebpackDefinePlugin.USER_ID, WebpackDefinePlugin.PASSWORD);
+  const param = {
+    url: WebpackDefinePlugin.API_SERVER_URL,
+    userID: WebpackDefinePlugin.USER_ID,
+    password: WebpackDefinePlugin.PASSWORD,
+    invalidUserID: WebpackDefinePlugin.INVALID_USER_ID,
+    invalidPassword: WebpackDefinePlugin.INVALID_PASSWORD,
+  };
+  const stubContainer = createStubContainer(param);
   const stubSelector = new StubSelector(stubContainer);
   const stubSelectorBinder: HTMLElement = document.querySelector('#stub-selector')
     ?? document.createElement('div');

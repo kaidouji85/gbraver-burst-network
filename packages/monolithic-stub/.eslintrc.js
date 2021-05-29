@@ -14,5 +14,7 @@ module.exports = {
         API_SERVER_URL: true,
         USER_ID: true,
         PASSWORD: true,
+        INVALID_USER_ID: true,
+        INVALID_PASSWORD: true,
     }
 };

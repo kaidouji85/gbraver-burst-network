@@ -43,6 +43,8 @@ module.exports = {
       API_SERVER_URL: JSON.stringify(process.env.API_SERVER_URL),
       USER_ID: JSON.stringify(process.env.USER_ID),
       PASSWORD: JSON.stringify(process.env.PASSWORD),
+      INVALID_USER_ID: JSON.stringify(process.env.INVALID_USER_ID),
+      INVALID_PASSWORD: JSON.stringify(process.env.INVALID_PASSWORD),
     })
   ]
 };
