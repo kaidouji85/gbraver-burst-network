@@ -10,7 +10,7 @@ import type {PlayerId} from "gbraver-burst-core/lib/player/player";
  * @param playerId プレイヤーID
  * @return 判定結果、trueで二重入力である
  */
-export function isDoubleEnter(roomCommands: PlayerCommand[], playerId: PlayerId): boolean {
+export function isDoubleEnterCommand(roomCommands: PlayerCommand[], playerId: PlayerId): boolean {
   return roomCommands.map(v => v.playerId)
     .includes(playerId)
 }

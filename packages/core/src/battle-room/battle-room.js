@@ -5,7 +5,7 @@ import {GbraverBurstCore} from "gbraver-burst-core";
 import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
-import {isDoubleEnter} from "./is-double-enter";
+import {isDoubleEnterCommand} from "./is-double-enter-command";
 import type {RoomUser} from "./room-user";
 
 /** コマンド入力結果 */
@@ -76,7 +76,7 @@ export class BattleRoom {
       return {type: 'Error', error: 'invalid userID'};
     }
 
-    if (isDoubleEnter(this._roomCommands, target.player.playerId)) {
+    if (isDoubleEnterCommand(this._roomCommands, target.player.playerId)) {
       return {type: 'Error', error: `${userID}  double enter command`};
     }
 
