@@ -5,6 +5,7 @@ import {GbraverBurstCore} from "gbraver-burst-core";
 import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
+import {isDoubleEnter} from "./is-double-enter";
 
 /** 入室しているユーザの情報 */
 export type RoomUser = {
@@ -36,9 +37,9 @@ export type InputCommandError = {
 
 /** バトルルーム */
 export class BattleRoom {
-  _roomPlayers: RoomUser[];
+  _roomUsers: RoomUser[];
+  _roomCommands: PlayerCommand[];
   _core: GbraverBurstCore;
-  _commands: PlayerCommand[];
 
   /**
    * コンストラクタ
@@ -46,9 +47,9 @@ export class BattleRoom {
    * @param players 入室するユーザの情報
    */
   constructor(players: RoomUser[]) {
-    this._roomPlayers = players;
+    this._roomUsers = players;
     this._core = new GbraverBurstCore(players.map(v => v.player));
-    this._commands = [];
+    this._roomCommands = [];
   }
 
   /**
@@ -57,7 +58,7 @@ export class BattleRoom {
    * @return 取得結果
    */
   roomUsers(): RoomUser[] {
-    return this._roomPlayers;
+    return this._roomUsers;
   }
 
   /**
@@ -72,28 +73,32 @@ export class BattleRoom {
   /**
    * コマンド入力する
    *
-   * @param userId コマンド入力するユーザのID
+   * @param userID コマンド入力するユーザのID
    * @param command 入力するコマンド
    * @return コマンド入力結果
    */
-  inputCommand(userId: UserID, command: Command): InputCommandResult {
-    const target = this._roomPlayers.find(v => v.userID === userId);
+  enter(userID: UserID, command: Command): InputCommandResult {
+    if (isDoubleEnter(this._roomUsers, this._roomCommands, userID)) {
+      return {type: 'Error', error: `${userID}  double enter command`};
+    }
+
+    const target = this._roomUsers.find(v => v.userID === userID);
     if (!target) {
       return {type: 'Error', error: 'invalid userID'};
     }
 
     const playerCommand = {playerId: target.player.playerId, command: command};
-    this._commands = [...this._commands, playerCommand];
-    if (isWaiting(this._commands)) {
+    this._roomCommands = [...this._roomCommands, playerCommand];
+    if (isWaiting(this._roomCommands)) {
       return {type: 'Waiting'};
     }
 
-    const result = extractCommands(this._commands);
+    const result = extractCommands(this._roomCommands);
     if (!result) {
-      return {type: 'Error', error: 'fail extract commands'};
+      return {type: 'Error', error: 'invalid command'};
     }
 
-    this._commands = result.roomCommands;
+    this._roomCommands = result.roomCommands;
     const update = this._core.progress(result.commands);
     return {type: 'Progress', update: update};
   }
