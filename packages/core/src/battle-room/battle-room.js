@@ -71,13 +71,13 @@ export class BattleRoom {
    * @return コマンド入力結果
    */
   enter(userID: UserID, command: Command): InputCommandResult {
-    if (isDoubleEnter(this._roomUsers, this._roomCommands, userID)) {
-      return {type: 'Error', error: `${userID}  double enter command`};
-    }
-
     const target = this._roomUsers.find(v => v.userID === userID);
     if (!target) {
       return {type: 'Error', error: 'invalid userID'};
+    }
+
+    if (isDoubleEnter(this._roomCommands, target.player.playerId)) {
+      return {type: 'Error', error: `${userID}  double enter command`};
     }
 
     const playerCommand = {playerId: target.player.playerId, command: command};
