@@ -1,6 +1,6 @@
 // @flow
 
-import type {User} from "packages/core";
+import type {User} from "@gbraver-burst-network/core";
 import jwt from 'jsonwebtoken';
 import {Request, Response} from "express";
 import {Socket} from 'socket.io';
