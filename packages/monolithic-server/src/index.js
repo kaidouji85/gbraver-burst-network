@@ -6,9 +6,9 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import http from 'http';
 import {Server} from 'socket.io';
-import {listenPortFromEnv} from "./listen-port-from-env";
+import {listenPortFromEnv} from "./listen-port";
 import {UsersFromJSON} from "./users/users-from-json";
-import {loginOnlyForSocketIO} from "./auth";
+import {loginOnlyForSocketIO} from "./auth/auth";
 import {loginRouter} from "./router/login";
 
 dotenv.config();
