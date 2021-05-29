@@ -1,19 +1,12 @@
 // @flow
 
-import type {Command, GameState, Player, PlayerCommand} from "gbraver-burst-core";
+import type {Command, GameState, PlayerCommand} from "gbraver-burst-core";
 import {GbraverBurstCore} from "gbraver-burst-core";
 import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
 import {isDoubleEnter} from "./is-double-enter";
-
-/** 入室しているユーザの情報 */
-export type RoomUser = {
-  /** ユーザID */
-  userID: UserID,
-  /** ユーザのプレイヤー情報 */
-  player: Player,
-}
+import type {RoomUser} from "./room-user";
 
 /** コマンド入力結果 */
 export type InputCommandResult = Waiting | Progress | InputCommandError;

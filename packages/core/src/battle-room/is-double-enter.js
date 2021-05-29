@@ -2,7 +2,7 @@
 
 import type {PlayerCommand} from "gbraver-burst-core";
 import type {UserID} from "../user";
-import type {RoomUser} from "./battle-room";
+import type {RoomUser} from "./room-user";
 
 /**
  * 同一ユーザの二重コマンド入力であるかを判定する
