@@ -8,8 +8,8 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {listenPortFromEnv} from "./listen-port";
 import {UsersFromJSON} from "./users/users-from-json";
-import {loginOnlyForSocketIO} from "./auth/auth";
 import {loginRouter} from "./router/login";
+import {loginOnlyForSocketIO} from "./auth/login-only";
 
 dotenv.config();
 const users = new UsersFromJSON();

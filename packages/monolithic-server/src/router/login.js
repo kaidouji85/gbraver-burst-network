@@ -2,8 +2,9 @@
 
 import express from 'express';
 import type {PasswordUserFinder} from "../users/password-user-finder";
-import {createAccessToken, loginOnlyForExpress} from "../auth/auth";
-import type {AccessTokenPayload} from "../auth/auth";
+import {createAccessToken} from "../auth/access-token";
+import type {AccessTokenPayload} from "../auth/access-token";
+import {loginOnlyForExpress} from "../auth/login-only";
 
 /**
  * ログイン処理

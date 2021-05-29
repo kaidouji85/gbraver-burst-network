@@ -1,68 +1,9 @@
 // @flow
 
-import type {User} from "@gbraver-burst-network/core";
-import jwt from 'jsonwebtoken';
+import {Socket} from "socket.io";
+import {accessTokenSecretFromEnv} from "./access-token-secret";
+import jwt from "jsonwebtoken";
 import {Request, Response} from "express";
-import {Socket} from 'socket.io';
-
-export type JWT = string;
-
-/** アクセストークン */
-export type AccessTokenPayload = {
-  /** ユーザID */
-  userID: string
-};
-
-export interface AccessTokenCreator {
-  createAccessToken(user: User): JWT;
-}
-
-export interface AccessTokenGetter {
-  toAccessTokenPayload(token: JWT): Promise<AccessTokenPayload>;
-}
-
-export class AccessToken implements AccessTokenCreator, AccessTokenGetter {
-  _accessTokenSecret: string;
-
-  constructor(accessTokenSecret: string) {
-    this._accessTokenSecret = accessTokenSecret;
-  }
-
-  createAccessToken(user: User): JWT {
-    const payload: AccessTokenPayload = {userID: user.id};
-    return jwt.sign(payload, this._accessTokenSecret, {expiresIn: '40m'});
-  }
-
-  toAccessTokenPayload(token: JWT): Promise<AccessTokenPayload> {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, this._accessTokenSecret, (err, decodedToken) => {
-        err ? reject(err) : resolve(decodedToken);
-      });
-    });
-  }
-}
-
-/**
- * 環境変数からアクセストークン秘密鍵を取得する
- *
- * @return 取得結果
- */
-function accessTokenSecretFromEnv(): string {
-  return process.env.ACCESS_TOKEN_SECRET ?? '';
-}
-
-/**
- * @deprecated
- * ユーザ情報からAPI アクセストークンを生成する
- *
- * @param user ユーザ情報
- * @return 生成結果
- */
-export function createAccessToken(user: User): Buffer {
-  const payload: AccessTokenPayload = {userID: user.id};
-  const secret = accessTokenSecretFromEnv();
-  return jwt.sign(payload, secret, {expiresIn: '40m'});
-}
 
 /**
  * ログイン専用ページの制御 expressミドルウェア
