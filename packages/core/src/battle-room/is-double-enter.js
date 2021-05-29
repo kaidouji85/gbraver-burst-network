@@ -15,5 +15,6 @@ import type {RoomUser} from "./room-user";
 export function isDoubleEnter(roomUsers: RoomUser[], roomCommands: PlayerCommand[], userID: UserID): boolean {
   return roomCommands
     .map(command => roomUsers.find(user => user.player.playerId === command.playerId))
+    .map(v => v?.userID)
     .includes(userID);
 }
