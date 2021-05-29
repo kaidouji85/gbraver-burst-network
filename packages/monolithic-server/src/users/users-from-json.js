@@ -2,6 +2,7 @@
 
 import type {User, UserID} from "@gbraver-burst-network/core";
 import {createHash} from 'crypto';
+import type {PasswordUserFinder} from "./password-user-finder";
 
 /** JSONに定義されているユーザ情報 */
 type UserFromJSON = {
@@ -12,12 +13,12 @@ type UserFromJSON = {
 };
 
 /** users.jsonから生成したユーザ達 */
-export class UsersFromJSON {
+export class UsersFromJSON implements PasswordUserFinder {
   _users: UserFromJSON[];
 
   /** コンストラクタ */
   constructor() {
-    this._users = require('../users.json');
+    this._users = require('../../users.json');
   }
 
   /**
@@ -28,7 +29,7 @@ export class UsersFromJSON {
    * @param password パスワード
    * @return 検索結果
    */
-  find(userID: UserID, password: string): ?User {
+  findUser(userID: UserID, password: string): ?User {
     const hashedPassword = createHash('sha256')
       .update(password)
       .digest('hex');
