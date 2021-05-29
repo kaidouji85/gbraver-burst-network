@@ -18,7 +18,7 @@ type ExtractCommands = {
  * @return 抽出結果
  */
 export function extractCommands(roomCommands: PlayerCommand[]): ?ExtractCommands {
-  if (2 <= roomCommands.length) {
+  if (roomCommands.length <= 1) {
     return null;
   }
 
