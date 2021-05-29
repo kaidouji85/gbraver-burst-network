@@ -7,9 +7,9 @@ import dotenv from 'dotenv';
 import http from 'http';
 import {Server} from 'socket.io';
 import {listenPortFromEnv} from "./listen-port-from-env";
-import {UsersFromJSON} from "./users-from-json";
-import {createAccessToken, loginOnlyForExpress, loginOnlyForSocketIO} from "./auth";
-import type {AccessToken} from "./auth";
+import {UsersFromJSON} from "./users/users-from-json";
+import {loginOnlyForSocketIO} from "./auth";
+import {loginRouter} from "./router/login";
 
 dotenv.config();
 const users = new UsersFromJSON();
@@ -28,23 +28,7 @@ app.use(cors({
   origin: origin
 }));
 app.use(bodyParser.json());
-
-app.post('/login', (req, res) => {
-  const user = users.find(req.body.userID, req.body.password);
-  if (!user) {
-    res.sendStatus(401);
-    return;
-  }
-
-  const accessToken = createAccessToken(user);
-  const body = {accessToken};
-  res.send(body);
-});
-
-app.get('/login', loginOnlyForExpress, (req, res) => {
-  const accessToken: AccessToken = req.gbraverBurstAccessToken;
-  res.send(`hello ${accessToken.userID} access token valid`);
-});
+app.use('/login', loginRouter(users));
 
 io.use(loginOnlyForSocketIO);
 
