@@ -10,11 +10,16 @@ import {listenPortFromEnv} from "./listen-port";
 import {UsersFromJSON} from "./users/users-from-json";
 import {loginRouter} from "./router/login";
 import {loginOnlyForSocketIO} from "./auth/login-only";
+import {AccessToken} from "./auth/access-token";
+import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
 
 dotenv.config();
-const users = new UsersFromJSON();
+
 const port = listenPortFromEnv();
 const origin = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
+const users = new UsersFromJSON();
+const accessToken = new AccessToken(accessTokenSecretFromEnv());
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -28,7 +33,7 @@ app.use(cors({
   origin: origin
 }));
 app.use(bodyParser.json());
-app.use('/login', loginRouter(users));
+app.use('/login', loginRouter(users, accessToken));
 
 io.use(loginOnlyForSocketIO);
 
