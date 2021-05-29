@@ -35,7 +35,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use('/login', loginRouter(users, accessToken));
 
-io.use(loginOnlyForSocketIO);
+io.use(loginOnlyForSocketIO(accessToken));
 
 io.on('connection', () => {
   console.log('a user connected');

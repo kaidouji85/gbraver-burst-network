@@ -1,8 +1,6 @@
 // @flow
 
 import {Socket} from "socket.io";
-import {accessTokenSecretFromEnv} from "./access-token-secret";
-import jwt from "jsonwebtoken";
 import {Request, Response} from "express";
 import type {AccessTokenPayloadParser} from "./access-token";
 
@@ -46,10 +44,10 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser): Func
  * また有効なアクセストーンの場合、socket.gbraverBurstAccessTokenに
  * アクセストークン payload をデコードしたものがセットされる
  *
- * @param socket ソケット
- * @param next 次のミドルウェアに処理を渡す
+ * @param accessToken アクセストークンユーティリティ
+ * @return sicket.ioミドルウェア
  */
-export function loginOnlyForSocketIO(socket: typeof Socket, next: Function): void {
+export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser): Function => (socket: typeof Socket, next: Function): void => {
   const invalidAccessToken = new Error('invalid access token');
   const token = socket.handshake?.auth?.token;
   if (!token && (typeof token !== 'string')) {
@@ -57,15 +55,13 @@ export function loginOnlyForSocketIO(socket: typeof Socket, next: Function): voi
     return;
   }
 
-  const secret = accessTokenSecretFromEnv();
-  jwt.verify(token, secret, (err, decodedToken) => {
-    if (err) {
+  accessToken.toAccessTokenPayload(token)
+    .then(decodedToken => {
+      socket.gbraverBurstAccessToken = decodedToken;
+      next();
+    })
+    .catch(err => {
       console.error(err);
       next(invalidAccessToken);
-      return;
-    }
-
-    socket.gbraverBurstAccessToken = decodedToken;
-    next();
-  });
+    });
 }
