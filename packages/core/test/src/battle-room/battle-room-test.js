@@ -85,3 +85,13 @@ test('2人がコマンド入力したら、ゲームが進行する', t => {
   const result = room.enter(user2.userID, command);
   t.true((result.type === 'Progress') && (1 <= result.update.length));
 });
+
+test('2人がコマンド入力したら、ゲームステートが更新される', t => {
+  const room = new BattleRoom([user1, user2]);
+  const firstState = room.stateHistory();
+  room.enter(user1.userID, command);
+  const progress = room.enter(user2.userID, command);
+  const update = progress.type === 'Progress' ? progress.update : [];
+  const afterProgress = room.stateHistory();
+  t.deepEqual([...firstState, ...update], afterProgress);
+});
