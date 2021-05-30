@@ -37,11 +37,11 @@ export class BattleRoom {
   /**
    * コンストラクタ
    *
-   * @param players 入室するユーザの情報
+   * @param roomUsers 入室するユーザの情報
    */
-  constructor(players: RoomUser[]) {
-    this._roomUsers = players;
-    this._core = new GbraverBurstCore(players.map(v => v.player));
+  constructor(roomUsers: RoomUser[]) {
+    this._roomUsers = roomUsers;
+    this._core = new GbraverBurstCore(roomUsers.map(v => v.player));
     this._roomCommands = [];
   }
 
