@@ -5,8 +5,7 @@ import type {PlayerCommand} from "gbraver-burst-core/lib/game/command/player-com
 /** コマンド抽出成功 */
 type ExtractCommands = {
   /** 抽出したコマンド */
-  commands: PlayerCommand[],
-  // TODO タプルに置き換える
+  commands: [PlayerCommand, PlayerCommand],
   /** ルームの全コマンド入力の更新結果 */
   roomCommands: PlayerCommand[],
 };
@@ -23,7 +22,7 @@ export function extractCommands(roomCommands: PlayerCommand[]): ?ExtractCommands
     return null;
   }
 
-  const commands = roomCommands.slice(0, 2);
+  const commands = [roomCommands[0], roomCommands[1]];
   const updatedRoomCommands = roomCommands.slice(2);
   return {commands: commands, roomCommands: updatedRoomCommands};
 }

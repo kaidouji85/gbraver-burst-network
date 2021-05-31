@@ -70,7 +70,7 @@ export class BattleRoom {
    * @param command 入力するコマンド
    * @return コマンド入力結果
    */
-  enter(userID: UserID, command: Command): InputCommandResult {
+  inputCommand(userID: UserID, command: Command): InputCommandResult {
     const target = this._roomUsers.find(v => v.userID === userID);
     if (!target) {
       return {type: 'Error', error: 'invalid userID'};
@@ -92,7 +92,7 @@ export class BattleRoom {
     }
 
     this._roomCommands = result.roomCommands;
-    const update = this._core.progress([result.commands[0], result.commands[1]]);
+    const update = this._core.progress(result.commands);
     return {type: 'Progress', update: update};
   }
 }
