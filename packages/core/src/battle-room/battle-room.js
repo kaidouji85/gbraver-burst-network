@@ -41,7 +41,7 @@ export class BattleRoom {
    */
   constructor(roomUsers: RoomUser[]) {
     this._roomUsers = roomUsers;
-    this._core = new GbraverBurstCore(roomUsers.map(v => v.player));
+    this._core = new GbraverBurstCore([roomUsers[0].player, roomUsers[1].player]);
     this._roomCommands = [];
   }
 
@@ -92,7 +92,7 @@ export class BattleRoom {
     }
 
     this._roomCommands = result.roomCommands;
-    const update = this._core.progress(result.commands);
+    const update = this._core.progress([result.commands[0], result.commands[1]]);
     return {type: 'Progress', update: update};
   }
 }

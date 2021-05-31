@@ -6,6 +6,7 @@ import type {PlayerCommand} from "gbraver-burst-core/lib/game/command/player-com
 type ExtractCommands = {
   /** 抽出したコマンド */
   commands: PlayerCommand[],
+  // TODO タプルに置き換える
   /** ルームの全コマンド入力の更新結果 */
   roomCommands: PlayerCommand[],
 };
