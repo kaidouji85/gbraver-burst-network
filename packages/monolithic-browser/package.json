@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@gbraver-burst-network/core": "^0.2.0",
-    "gbraver-burst-core": "^1.6.1",
+    "gbraver-burst-core": "^1.6.2",
     "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
