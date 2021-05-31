@@ -30,7 +30,7 @@ export type InputCommandError = {
 
 /** バトルルーム */
 export class BattleRoom {
-  _roomUsers: RoomUser[];
+  _roomUsers: [RoomUser, RoomUser];
   _roomCommands: PlayerCommand[];
   _core: GbraverBurstCore;
 
@@ -39,9 +39,9 @@ export class BattleRoom {
    *
    * @param roomUsers 入室するユーザの情報
    */
-  constructor(roomUsers: RoomUser[]) {
+  constructor(roomUsers: [RoomUser, RoomUser]) {
     this._roomUsers = roomUsers;
-    this._core = new GbraverBurstCore(roomUsers.map(v => v.player));
+    this._core = new GbraverBurstCore([roomUsers[0].player, roomUsers[1].player]);
     this._roomCommands = [];
   }
 
@@ -50,7 +50,7 @@ export class BattleRoom {
    *
    * @return 取得結果
    */
-  roomUsers(): RoomUser[] {
+  roomUsers(): [RoomUser, RoomUser] {
     return this._roomUsers;
   }
 
@@ -70,7 +70,7 @@ export class BattleRoom {
    * @param command 入力するコマンド
    * @return コマンド入力結果
    */
-  enter(userID: UserID, command: Command): InputCommandResult {
+  inputCommand(userID: UserID, command: Command): InputCommandResult {
     const target = this._roomUsers.find(v => v.userID === userID);
     if (!target) {
       return {type: 'Error', error: 'invalid userID'};
