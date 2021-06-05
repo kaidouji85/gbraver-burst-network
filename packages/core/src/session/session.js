@@ -12,7 +12,7 @@ export type SessionID = string;
 export type SessionAuth = UserAuth;
 
 /** ユーザ認証 */
-type UserAuth = {
+export type UserAuth = {
   type: 'UserAuth',
   user: User,
 };

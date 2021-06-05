@@ -1,6 +1,6 @@
 // @flow
 
-import type {User} from "@gbraver-burst-network/core";
+import type {Session} from "@gbraver-burst-network/core";
 import jwt from 'jsonwebtoken';
 
 /** JWT */
@@ -8,8 +8,8 @@ export type JWT = string;
 
 /** アクセストークン payload */
 export type AccessTokenPayload = {
-  /** ユーザID */
-  userID: string
+  /** セッションID */
+  sessionID: string
 };
 
 /** アクセストークン発行 */
@@ -17,10 +17,10 @@ export interface AccessTokenCreator {
   /**
    * アクセストークンを発行する
    *
-   * @param user ユーザ情報
+   * @param session セッション情報
    * @return 発行したアクセストークン
    */
-  createAccessToken(user: User): JWT;
+  createAccessToken(session: Session): JWT;
 }
 
 /** アクセストークンからペイロードを取得する */
@@ -50,11 +50,11 @@ export class AccessToken implements AccessTokenCreator, AccessTokenPayloadParser
   /**
    * アクセストークンを発行する
    *
-   * @param user ユーザ情報
+   * @param session セッション情報
    * @return 発行したアクセストークン
    */
-  createAccessToken(user: User): JWT {
-    const payload: AccessTokenPayload = {userID: user.id};
+  createAccessToken(session: Session): JWT {
+    const payload: AccessTokenPayload = {sessionID: session.id};
     return jwt.sign(payload, this._accessTokenSecret, {expiresIn: '40m'});
   }
 
