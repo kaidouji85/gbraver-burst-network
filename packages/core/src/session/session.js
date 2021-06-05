@@ -1,6 +1,6 @@
 // @flow
 
-import type {User} from "./user";
+import type {User} from "../user";
 
 /**
  * セッションID

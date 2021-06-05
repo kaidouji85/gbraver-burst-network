@@ -6,7 +6,7 @@ import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
 import {isDoubleEnterCommand} from "./is-double-enter-command";
-import type {SessionID} from "../session";
+import type {SessionID} from "../session/session";
 
 /** コマンド入力結果 */
 export type InputCommandResult = Waiting | Progress;
