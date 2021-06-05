@@ -1,15 +1,15 @@
 // @flow
 
-import type {Command, GameState, PlayerCommand} from "gbraver-burst-core";
+import type {Command, GameState, Player, PlayerCommand} from "gbraver-burst-core";
 import {GbraverBurstCore} from "gbraver-burst-core";
 import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
 import {isDoubleEnterCommand} from "./is-double-enter-command";
-import type {RoomUser} from "./room-user";
+import type {SessionID} from "../session";
 
 /** コマンド入力結果 */
-export type InputCommandResult = Waiting | Progress | InputCommandError;
+export type InputCommandResult = Waiting | Progress;
 
 /** 相手のコマンド入力待ち */
 export type Waiting = {
@@ -22,26 +22,28 @@ export type Progress = {
   update: GameState[]
 };
 
-/** エラー */
-export type InputCommandError = {
-  type: 'Error',
-  error: any,
-};
+/** セッション、ユーザのマッピング */
+export type RoomPlayer = {
+  /** セッションID */
+  sessionID: SessionID,
+  /** ユーザのプレイヤー情報 */
+  player: Player,
+}
 
 /** バトルルーム */
 export class BattleRoom {
-  _roomUsers: [RoomUser, RoomUser];
+  _roomPlayers: [RoomPlayer, RoomPlayer];
   _roomCommands: PlayerCommand[];
   _core: GbraverBurstCore;
 
   /**
    * コンストラクタ
    *
-   * @param roomUsers 入室するユーザの情報
+   * @param roomPlayers 入室するユーザの情報
    */
-  constructor(roomUsers: [RoomUser, RoomUser]) {
-    this._roomUsers = roomUsers;
-    this._core = new GbraverBurstCore([roomUsers[0].player, roomUsers[1].player]);
+  constructor(roomPlayers: [RoomPlayer, RoomPlayer]) {
+    this._roomPlayers = roomPlayers;
+    this._core = new GbraverBurstCore([roomPlayers[0].player, roomPlayers[1].player]);
     this._roomCommands = [];
   }
 
@@ -50,8 +52,8 @@ export class BattleRoom {
    *
    * @return 取得結果
    */
-  roomUsers(): [RoomUser, RoomUser] {
-    return this._roomUsers;
+  roomPlayers(): [RoomPlayer, RoomPlayer] {
+    return this._roomPlayers;
   }
 
   /**
@@ -66,18 +68,18 @@ export class BattleRoom {
   /**
    * コマンド入力する
    *
-   * @param userID コマンド入力するユーザのID
+   * @param sessionID コマンド入力するセッションのID
    * @param command 入力するコマンド
    * @return コマンド入力結果
    */
-  inputCommand(userID: UserID, command: Command): InputCommandResult {
-    const target = this._roomUsers.find(v => v.userID === userID);
+  inputCommand(sessionID: UserID, command: Command): InputCommandResult {
+    const target = this._roomPlayers.find(v => v.sessionID === sessionID);
     if (!target) {
-      return {type: 'Error', error: 'invalid userID'};
+      throw new Error('not found session');
     }
 
     if (isDoubleEnterCommand(this._roomCommands, target.player.playerId)) {
-      return {type: 'Error', error: `${userID}  double enter command`};
+      throw new Error(`${sessionID} is double enter command`);
     }
 
     const playerCommand = {playerId: target.player.playerId, command: command};
@@ -88,7 +90,7 @@ export class BattleRoom {
 
     const result = extractCommands(this._roomCommands);
     if (!result) {
-      return {type: 'Error', error: 'invalid command'};
+      throw new Error('command extract fail');
     }
 
     this._roomCommands = result.roomCommands;

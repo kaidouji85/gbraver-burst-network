@@ -2,7 +2,10 @@
 
 import type {User} from "./user";
 
-/** セッションID */
+/**
+ * セッションID
+ * 本IDはシステム内でユニークな値をとるものと見なす
+ */
 export type SessionID = string;
 
 /** セッションの認証情報 */
