@@ -19,7 +19,7 @@
     "@gbraver-burst-network/core": "^0.2.0",
     "@gbraver-burst-network/monolithic-browser": "^0.2.0",
     "dotenv": "^10.0.0",
-    "gbraver-burst-core": "^1.6.2"
+    "gbraver-burst-core": "^1.6.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
@@ -28,7 +28,7 @@
     "@babel/preset-flow": "^7.13.13",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "eslint-plugin-flowtype": "^5.7.2",
     "flow-bin": "^0.152.0",
     "html-webpack-plugin": "^5.3.1",
