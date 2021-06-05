@@ -1,12 +1,12 @@
 // @flow
 
-import type {UserID} from '../user';
 import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
+import type {SessionID} from "../session";
 
 /** エントリ */
 export type Entry = {
-  /** エントリしたユーザのID */
-  userID: UserID,
+  /** エントリしたセッションのID */
+  sessionID: SessionID,
   /** アームドーザID */
   armdozerId: ArmDozerId,
   /** パイロットID */

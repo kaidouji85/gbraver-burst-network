@@ -24,7 +24,7 @@ export class FirstArrivalRoom implements WaitingRoom {
    */
   async enter(entry: Entry): Promise<EntryResult> {
     if (isDoubleEntry(this._entries, entry)) {
-      return {type: 'DoubleEntry'};
+      throw new Error('double entry');
     }
 
     const entered = [...this._entries, entry];
