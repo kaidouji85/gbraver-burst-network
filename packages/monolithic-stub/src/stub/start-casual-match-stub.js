@@ -2,26 +2,23 @@
 
 import type {Stub} from "./stub";
 import {MonolithicBrowser} from "@gbraver-burst-network/monolithic-browser";
-import type {UserID} from "@gbraver-burst-network/core";
 import {ArmDozerIdList, PilotIds} from "gbraver-burst-core";
+import type {UserLogin} from "./user-login";
 
 /** カジュアルマッチスタートのスタブ*/
 export class StartCasualMatchStub implements Stub {
   _url: string;
-  _userID: string;
-  _password: string;
+  _user1: UserLogin;
 
   /**
    * コンストラクタ
    *
    * @param url APIサーバのURL
-   * @param userID ユーザID
-   * @param password パスワード
+   * @param user1 ユーザ1 ログイン情報
    */
-  constructor(url: string, userID: UserID, password: string) {
+  constructor(url: string, user1: UserLogin) {
     this._url = url;
-    this._userID = userID;
-    this._password = password;
+    this._user1 = user1;
   }
 
   /**
@@ -39,12 +36,12 @@ export class StartCasualMatchStub implements Stub {
    * @return 実行後に発火するPromise
    */
   async execute(): Promise<void> {
-    const browser = new MonolithicBrowser(this._url);
-    const isSuccess = await browser.login(this._userID, this._password);
+    const browser_1 = new MonolithicBrowser(this._url);
+    const isSuccess = await browser_1.login(this._user1.id, this._user1.password);
     if (!isSuccess) {
       return Promise.reject();
     }
 
-    await browser.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
+    await browser_1.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
   }
 }

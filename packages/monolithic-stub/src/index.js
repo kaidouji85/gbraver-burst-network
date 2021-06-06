@@ -7,10 +7,18 @@ import {WebpackDefinePlugin} from './webpack-define-plugin';
 window.onload = () => {
   const param = {
     url: WebpackDefinePlugin.API_SERVER_URL,
-    userID: WebpackDefinePlugin.USER_ID_1,
-    password: WebpackDefinePlugin.PASSWORD_1,
-    invalidUserID: WebpackDefinePlugin.INVALID_USER_ID,
-    invalidPassword: WebpackDefinePlugin.INVALID_PASSWORD,
+    user1: {
+      id: WebpackDefinePlugin.USER_ID_1,
+      password: WebpackDefinePlugin.PASSWORD_1
+    },
+    user2: {
+      id: WebpackDefinePlugin.USER_ID_2,
+      password: WebpackDefinePlugin.PASSWORD_2
+    },
+    invalidUser: {
+      id: WebpackDefinePlugin.INVALID_USER_ID,
+      password: WebpackDefinePlugin.INVALID_PASSWORD,
+    }
   };
   const stubContainer = createStubContainer(param);
   const stubSelector = new StubSelector(stubContainer);
