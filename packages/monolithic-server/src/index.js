@@ -13,14 +13,18 @@ import {loginOnlyForSocketIO} from "./auth/login-only";
 import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
 import {SessionContainer} from "@gbraver-burst-network/core";
+import {FirstArrivalRoom} from "@gbraver-burst-network/core/src/waiting-room/first-arrival-room";
+import {CasualMatch} from "./socket/casual-match";
 
 dotenv.config();
 
 const port = listenPortFromEnv();
 const origin = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
+
 const users = new UsersFromJSON();
 const accessToken = new AccessToken(accessTokenSecretFromEnv());
 const sessions = new SessionContainer();
+const waitingRoom = new FirstArrivalRoom();
 
 const app = express();
 const server = http.createServer(app);
@@ -39,8 +43,10 @@ app.use('/login', loginRouter(users, accessToken, sessions));
 
 io.use(loginOnlyForSocketIO(accessToken));
 
-io.on('connection', () => {
+io.on('connection', socket => {
   console.log('a user connected');
+
+  socket.on('CasualMatch', CasualMatch(socket, waitingRoom));
 });
 
 server.listen(port, () => {

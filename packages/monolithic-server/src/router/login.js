@@ -15,6 +15,7 @@ interface AccessTokenForLogin extends AccessTokenCreator, AccessTokenPayloadPars
  *
  * @param users ユーザ検索
  * @param accessToken アクセストークンユーティリティ
+ * @param sessions セッションコンテナ
  * @return ルーター
  */
 export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenForLogin, sessions: AddSession): typeof express.Router {
