@@ -3,7 +3,7 @@
 import type {Entry} from './entry';
 
 /** 入室結果 */
-export type EntryResult = Waiting | Matching | DoubleEntry;
+export type EntryResult = Waiting | Matching;
 
 /** ペアが見つかるまで待つ */
 export type Waiting = {
@@ -15,11 +15,6 @@ export type Matching= {
   type: 'Matching',
   /** マッチングしたペア */
   entries: [Entry, Entry]
-};
-
-/** 二重入室エラー */
-export type DoubleEntry = {
-  type: 'DoubleEntry'
 };
 
 /** カジュアルマッチ待合室 */

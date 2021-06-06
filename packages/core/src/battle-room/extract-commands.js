@@ -1,6 +1,6 @@
 // @flow
 
-import type {PlayerCommand} from "gbraver-burst-core/lib/game/command/player-command";
+import type {PlayerCommand} from "gbraver-burst-core";
 
 /** コマンド抽出成功 */
 type ExtractCommands = {

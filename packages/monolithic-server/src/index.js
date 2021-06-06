@@ -12,6 +12,7 @@ import {loginRouter} from "./router/login";
 import {loginOnlyForSocketIO} from "./auth/login-only";
 import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
+import {SessionContainer} from "@gbraver-burst-network/core";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const port = listenPortFromEnv();
 const origin = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
 const users = new UsersFromJSON();
 const accessToken = new AccessToken(accessTokenSecretFromEnv());
+const sessions = new SessionContainer();
 
 const app = express();
 const server = http.createServer(app);
@@ -33,7 +35,7 @@ app.use(cors({
   origin: origin
 }));
 app.use(bodyParser.json());
-app.use('/login', loginRouter(users, accessToken));
+app.use('/login', loginRouter(users, accessToken, sessions));
 
 io.use(loginOnlyForSocketIO(accessToken));
 

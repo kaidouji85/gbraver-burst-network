@@ -1,12 +1,12 @@
 // @flow
 
-import type {RoomUser} from "../../src/battle-room/room-user";
 import {EMPTY_PLAYER} from "gbraver-burst-core/lib/empty/player";
+import type {RoomPlayer} from "../../src/battle-room/battle-room";
 
-/** 空のルームユーザ */
-export const EMPTY_ROOM_USER: RoomUser = {
+/** 空のルームプレイヤー */
+export const EMPTY_ROOM_PLAYER: RoomPlayer = {
   /** ユーザID */
-  userID: '',
+  sessionID: 'emptySession',
   /** ユーザのプレイヤー情報 */
   player: EMPTY_PLAYER,
 };

@@ -1,7 +1,6 @@
 // @flow
 
-import type {PlayerCommand} from "gbraver-burst-core";
-import type {PlayerId} from "gbraver-burst-core/lib/player/player";
+import type {PlayerCommand, PlayerId} from "gbraver-burst-core";
 
 /**
  * 同一ユーザの二重コマンド入力であるかを判定する
