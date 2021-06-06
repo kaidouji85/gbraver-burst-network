@@ -1,7 +1,7 @@
 // @flow
 
 import {Socket} from 'socket.io';
-import type {WaitingRoom} from "@gbraver-burst-network/core/src/waiting-room/waiting-room";
+import type {WaitingRoom} from "@gbraver-burst-network/core";
 import type {AccessTokenPayload} from "../auth/access-token";
 
 /** クライアントから送信されるデータ */

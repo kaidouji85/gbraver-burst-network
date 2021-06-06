@@ -8,6 +8,10 @@ export {createSessionFromUser} from './session/create-session';
 export {SessionContainer} from './session/session-container';
 export type {AddSession, AllSessions} from './session/session-container';
 
+export {WaitingRoom} from './waiting-room/waiting-room';
+export {FirstArrivalRoom} from './waiting-room/first-arrival-room/index';
+export type {EntryResult, Waiting as WaitingMatch, Matching} from "./waiting-room/waiting-room";
+
 export {BattleRoom} from './battle-room/battle-room';
 export type {InputCommandResult, Progress, Waiting} from "./battle-room/battle-room";
 

@@ -12,8 +12,7 @@ import {loginRouter} from "./router/login";
 import {loginOnlyForSocketIO} from "./auth/login-only";
 import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
-import {SessionContainer} from "@gbraver-burst-network/core";
-import {FirstArrivalRoom} from "@gbraver-burst-network/core/src/waiting-room/first-arrival-room";
+import {SessionContainer, FirstArrivalRoom} from "@gbraver-burst-network/core";
 import {CasualMatch} from "./socket/casual-match";
 
 dotenv.config();
