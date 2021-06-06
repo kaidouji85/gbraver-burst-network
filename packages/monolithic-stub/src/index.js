@@ -7,8 +7,8 @@ import {WebpackDefinePlugin} from './webpack-define-plugin';
 window.onload = () => {
   const param = {
     url: WebpackDefinePlugin.API_SERVER_URL,
-    userID: WebpackDefinePlugin.USER_ID,
-    password: WebpackDefinePlugin.PASSWORD,
+    userID: WebpackDefinePlugin.USER_ID_1,
+    password: WebpackDefinePlugin.PASSWORD_1,
     invalidUserID: WebpackDefinePlugin.INVALID_USER_ID,
     invalidPassword: WebpackDefinePlugin.INVALID_PASSWORD,
   };
