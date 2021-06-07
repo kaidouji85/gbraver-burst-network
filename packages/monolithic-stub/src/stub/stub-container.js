@@ -23,7 +23,7 @@ type Param = {
 export function createStubContainer(param: Param): Stub[] {
   return [
     new LoginStub(param.url, param.user1),
-    new StartCasualMatchStub(param.url, param.user1),
+    new StartCasualMatchStub(param.url, param.user1, param.user2),
     new InvalidUserLoginStub(param.url, param.invalidUser),
   ];
 }
