@@ -13,7 +13,7 @@ import {loginOnlyForSocketIO} from "./auth/login-only";
 import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
 import {SessionContainer, FirstArrivalRoom} from "@gbraver-burst-network/core";
-import {CasualMatch} from "./socket/casual-match";
+import {CasualMatch} from "./socket.io/handler/casual-match";
 
 dotenv.config();
 
