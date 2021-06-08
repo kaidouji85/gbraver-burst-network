@@ -14,6 +14,7 @@ import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
 import {SessionContainer, FirstArrivalRoom} from "@gbraver-burst-network/core";
 import {CasualMatch} from "./socket.io/handler/casual-match";
+import {SocketFetcher} from "./socket.io/fetcher/socket-fetcher";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ const io = new Server(server, {
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']
   }
 });
+const socketFetcher = new SocketFetcher(io);
 
 app.use(cors({
   origin: origin
@@ -45,7 +47,7 @@ io.use(loginOnlyForSocketIO(accessToken));
 io.on('connection', socket => {
   console.log('a user connected');
 
-  socket.on('CasualMatch', CasualMatch(socket, waitingRoom));
+  socket.on('CasualMatch', CasualMatch(socket, socketFetcher, waitingRoom));
 });
 
 server.listen(port, () => {
