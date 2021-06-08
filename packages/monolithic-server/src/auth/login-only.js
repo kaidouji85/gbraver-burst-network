@@ -50,7 +50,7 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser): Func
 export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser): Function => (socket: typeof Socket, next: Function): void => {
   const invalidAccessToken = new Error('invalid access token');
   const token = socket.handshake?.auth?.token;
-  if (!token && (typeof token !== 'string')) {
+  if (!token || (typeof token !== 'string')) {
     next(invalidAccessToken);
     return;
   }
