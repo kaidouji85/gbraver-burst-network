@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "clean": "rimraf build",
     "dev-server": "webpack serve",
-    "serve": "http-server build -p 3000 -c-1"
+    "serve": "http-server build -p 8080 -c-1"
   },
   "dependencies": {
     "@gbraver-burst-network/core": "^0.2.0",

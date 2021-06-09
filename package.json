@@ -5,7 +5,7 @@
     "prepare": "npm-run-all bootstrap build",
     "bootstrap": "lerna bootstrap --ci",
     "start:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix start",
-    "start:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix start",
+    "start:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix start:production",
     "build": "npm-run-all build:core build:monolithic-server build:monolithic-browser build:monolithic-stub",
     "build:core": "lerna run --scope @gbraver-burst-network/core build",
     "build:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server build",
