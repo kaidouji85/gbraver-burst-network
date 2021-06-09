@@ -12,7 +12,7 @@ import {loginRouter} from "./router/login";
 import {loginOnlyForSocketIO} from "./auth/login-only";
 import {AccessToken} from "./auth/access-token";
 import {accessTokenSecretFromEnv} from "./auth/access-token-secret";
-import {SessionContainer, FirstArrivalRoom} from "@gbraver-burst-network/core";
+import {SessionContainer, FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core";
 import {CasualMatch} from "./socket.io/handler/casual-match";
 import {SocketFetcher} from "./socket.io/fetcher/socket-fetcher";
 
@@ -25,6 +25,7 @@ const users = new UsersFromJSON();
 const accessToken = new AccessToken(accessTokenSecretFromEnv());
 const sessions = new SessionContainer();
 const waitingRoom = new FirstArrivalRoom();
+const battleRoomContainer = new BattleRoomContainer();
 
 const app = express();
 const server = http.createServer(app);
@@ -47,7 +48,7 @@ io.use(loginOnlyForSocketIO(accessToken));
 io.on('connection', socket => {
   console.log('a user connected');
 
-  socket.on('CasualMatch', CasualMatch(socket, socketFetcher, waitingRoom));
+  socket.on('CasualMatch', CasualMatch(socket, socketFetcher, waitingRoom, battleRoomContainer));
 });
 
 server.listen(port, () => {
