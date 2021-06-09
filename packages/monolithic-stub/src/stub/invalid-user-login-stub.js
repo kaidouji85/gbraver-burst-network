@@ -2,25 +2,22 @@
 
 import type {Stub} from "./stub";
 import {MonolithicBrowser} from "@gbraver-burst-network/monolithic-browser";
-import type {UserID} from "@gbraver-burst-network/core";
+import type {UserLogin} from "./user-login";
 
 /** 存在しないユーザでのログインスタブ*/
 export class InvalidUserLoginStub implements Stub {
   _url: string;
-  _userID: string;
-  _password: string;
+  _login: UserLogin;
 
   /**
    * コンストラクタ
    *
    * @param url APIサーバのURL
-   * @param userID ユーザID
-   * @param password パスワード
+   * @param login ユーザログイン情報
    */
-  constructor(url: string, userID: UserID, password: string) {
+  constructor(url: string, login: UserLogin) {
     this._url = url;
-    this._userID = userID;
-    this._password = password;
+    this._login = login;
   }
 
   /**
@@ -39,7 +36,7 @@ export class InvalidUserLoginStub implements Stub {
    */
   async execute(): Promise<void> {
     const browser = new MonolithicBrowser(this._url);
-    const isSuccess = await browser.login(this._userID, this._password);
+    const isSuccess = await browser.login(this._login.id, this._login.password);
     if (!isSuccess) {
       return Promise.reject();
     }

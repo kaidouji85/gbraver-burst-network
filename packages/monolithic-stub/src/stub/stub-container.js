@@ -2,16 +2,18 @@
 
 import type {Stub} from "./stub";
 import {LoginStub} from "./login-stub";
-import type {UserID} from "@gbraver-burst-network/core";
 import {StartCasualMatchStub} from "./start-casual-match-stub";
 import {InvalidUserLoginStub} from "./invalid-user-login-stub";
+import type {UserLogin} from "./user-login";
+import {User1CasualMatchStub} from "./user1-casual-match-stub";
+import {User2CasualMatchStub} from "./user2-casual-match-stub";
 
+/** スタブコンテナのパラメータ */
 type Param = {
   url: string,
-  userID: UserID,
-  password: string,
-  invalidUserID: UserID,
-  invalidPassword: string,
+  user1: UserLogin,
+  user2: UserLogin,
+  invalidUser: UserLogin,
 };
 
 /**
@@ -22,8 +24,10 @@ type Param = {
  */
 export function createStubContainer(param: Param): Stub[] {
   return [
-    new LoginStub(param.url, param.userID, param.password),
-    new StartCasualMatchStub(param.url, param.userID, param.password),
-    new InvalidUserLoginStub(param.url, param.invalidUserID, param.invalidUserID),
+    new LoginStub(param.url, param.user1),
+    new StartCasualMatchStub(param.url, param.user1, param.user2),
+    new User1CasualMatchStub(param.url, param.user1),
+    new User2CasualMatchStub(param.url, param.user2),
+    new InvalidUserLoginStub(param.url, param.invalidUser),
   ];
 }

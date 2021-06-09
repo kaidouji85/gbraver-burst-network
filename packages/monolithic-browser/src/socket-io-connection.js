@@ -13,7 +13,8 @@ export function socketIoConnection(apiServerURL: string, accessToken: string): P
   const socket = io(apiServerURL, {
     auth: {
       token: accessToken
-    }
+    },
+    forceNew: true
   });
   return new Promise((resolve, reject) => {
     socket.once('connect', () => {
