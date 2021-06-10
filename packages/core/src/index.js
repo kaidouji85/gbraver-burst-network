@@ -16,8 +16,8 @@ export {BattleRoom} from './battle-room/battle-room';
 export {createRoomPlayer} from './battle-room/create-room-player';
 export type {InputCommandResult, Progress, Waiting, RoomPlayer} from "./battle-room/battle-room";
 
-export {BattleRoomContainer} from './battle-room-container/battle-room-container';
-export type {BattleRoomID, IDRoomPair, BattleRoomAdd, AllBattleRooms} from './battle-room-container/battle-room-container';
+export {BattleRoomContainer} from './battle-room/battle-room-container';
+export type {BattleRoomID, IDRoomPair, BattleRoomAdd, AllBattleRooms} from './battle-room/battle-room-container';
 
 export type {CasualMatch} from './user-operation/casual-match';
 export type {Battle} from './user-operation/battle';
