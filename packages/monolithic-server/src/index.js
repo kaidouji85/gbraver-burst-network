@@ -2,7 +2,6 @@
 
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import http from 'http';
 import {Server} from 'socket.io';
@@ -41,10 +40,10 @@ const socketFetcher = new SocketFetcher(io);
 app.use(cors({
   origin: origin
 }));
-app.use(bodyParser.json());
+app.use(express.json());
 app.use('/login', loginRouter(users, accessToken, sessions));
 
-io.use(loginOnlyForSocketIO(accessToken));
+io.use(loginOnlyForSocketIO(accessToken, sessions));
 io.on('connection', socket => {
   console.log('a user connected');
   socket.on('CasualMatch', CasualMatch(socket, socketFetcher, waitingRoom, battleRooms));
