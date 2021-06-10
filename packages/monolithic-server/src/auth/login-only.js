@@ -54,23 +54,31 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
  * アクセストークン payload をデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
+ * @param sessions セッション取得
  * @return sicket.ioミドルウェア
  */
-export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser): Function => (socket: typeof Socket, next: Function): void => {
+export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sessions: AllSessions): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
   const invalidAccessToken = new Error('invalid access token');
-  const token = socket.handshake?.auth?.token;
-  if (!token || (typeof token !== 'string')) {
-    next(invalidAccessToken);
-    return;
-  }
-
-  accessToken.toAccessTokenPayload(token)
-    .then(decodedToken => {
-      socket.gbraverBurstAccessToken = decodedToken;
-      next();
-    })
-    .catch(err => {
-      console.error(err);
+  try {
+    const token = socket.handshake?.auth?.token;
+    if (!token || (typeof token !== 'string')) {
       next(invalidAccessToken);
-    });
+      return;
+    }
+  
+    const decodedToken = await accessToken.toAccessTokenPayload(token);
+    const isExistSession = sessions.sessions()
+      .map(v => v.id)
+      .includes(decodedToken.sessionID);
+    if (!isExistSession) {
+      next(invalidAccessToken);
+      return;  
+    }
+
+    socket.gbraverBurstAccessToken = decodedToken;
+    next();
+  } catch(err) {
+    console.error(err);
+    next(invalidAccessToken);
+  }
 }
