@@ -2,13 +2,13 @@
 
 import {Socket} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
-import type {AllBattleRooms} from '@gbraver-burst-network/core';
+import type {AllBattleRooms, BattleRoomID} from '@gbraver-burst-network/core';
 import type {AccessTokenPayload} from '../../auth/access-token';
 import type {SocketPairFetcher} from '../fetcher/socket-pair-fetch';
 
 /** クライアントから渡されるデータ */
 export type Data = {
-  battleRoomID: String,
+  battleRoomID: BattleRoomID,
   command: Command,
 };
 

@@ -3,13 +3,14 @@
 import {Socket} from 'socket.io';
 import {WaitingRoom, BattleRoom, createRoomPlayer} from "@gbraver-burst-network/core";
 import type {BattleRoomAdd, BattleRoomID, RoomPlayer} from "@gbraver-burst-network/core";
+import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
 import type {AccessTokenPayload} from "../../auth/access-token";
 import type {SocketPairFetcher} from "../fetcher/socket-pair-fetch";
 
 /** クライアントから送信されるデータ */
 export type Data = {
-  armdozerId: string,
-  pilotId: string,
+  armdozerId: ArmDozerId,
+  pilotId: PilotId,
 };
 
 /** マッチングした際のレスポンス */
