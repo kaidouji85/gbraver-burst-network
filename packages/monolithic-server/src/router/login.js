@@ -5,10 +5,13 @@ import type {PasswordUserFinder} from "../users/password-user-finder";
 import type {AccessTokenCreator, AccessTokenPayloadParser} from "../auth/access-token";
 import {loginOnlyForExpress} from "../auth/login-only";
 import {createSessionFromUser} from "@gbraver-burst-network/core";
-import type {AddSession} from "@gbraver-burst-network/core";
+import type {AddSession, AllSessions} from "@gbraver-burst-network/core";
 
 /** ログイン処理で利用するアクセストークンユーティリティの機能 */
 interface AccessTokenForLogin extends AccessTokenCreator, AccessTokenPayloadParser {}
+
+/** ログイン処理で利用するセッションコンテナの機能 */
+interface SessionsForLogin extends AddSession, AllSessions {}
 
 /**
  * ログイン処理
@@ -18,7 +21,7 @@ interface AccessTokenForLogin extends AccessTokenCreator, AccessTokenPayloadPars
  * @param sessions セッションコンテナ
  * @return ルーター
  */
-export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenForLogin, sessions: AddSession): typeof express.Router {
+export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenForLogin, sessions: SessionsForLogin): typeof express.Router {
   const router = express.Router();
 
   router.post('/', (req, res) => {
@@ -36,7 +39,7 @@ export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenF
     res.send(body);
   });
 
-  router.get('/', loginOnlyForExpress(accessToken), (req, res) => {
+  router.get('/', loginOnlyForExpress(accessToken, sessions), (req, res) => {
     res.send('valid access token.');
   });
 
