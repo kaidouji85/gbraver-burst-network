@@ -10,7 +10,7 @@ import {casualMatch} from "../socket.io/casual-match";
 
 /** モノシリックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMatch {
-  _apiServerURL: string
+  _apiServerURL: string;
   _accessToken: string;
   _socket: typeof io.Socket | null;
 
