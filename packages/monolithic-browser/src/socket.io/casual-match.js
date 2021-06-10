@@ -11,7 +11,7 @@ import type {ArmDozerId, PilotId} from "gbraver-burst-core";
  * @param pilotId 選択したパイロットID
  * @return 結果
  */
-export function startCasualMatch(socket: typeof Socket, armdozerID: ArmDozerId, pilotId: PilotId): Promise<void> {
+export function casualMatch(socket: typeof Socket, armdozerID: ArmDozerId, pilotId: PilotId): Promise<void> {
   return new Promise(resolve => {
     const data = {armdozerId: armdozerID, pilotId: pilotId};
     socket.emit('CasualMatch', data);

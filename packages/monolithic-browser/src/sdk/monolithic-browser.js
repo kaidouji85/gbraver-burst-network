@@ -6,7 +6,7 @@ import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import {isLogin, login} from "../http/login";
 import {emptyBattle} from "../battle/empty-battle";
 import {socketIoConnection} from "../socket.io/socket-io-connection";
-import {startCasualMatch} from "../socket.io/start-casual-match";
+import {casualMatch} from "../socket.io/casual-match";
 
 /** モノシリックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMatch {
@@ -62,7 +62,7 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    */
   async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle> {
     const socket = await this._getOrConnectSocket();
-    await startCasualMatch(socket, armdozerId, pilotId);
+    await casualMatch(socket, armdozerId, pilotId);
     return emptyBattle();
   }
 
