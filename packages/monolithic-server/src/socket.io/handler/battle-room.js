@@ -30,7 +30,7 @@ export const BattleRoom = (socket: typeof Socket, socketFetcher: SocketPairFetch
   const room = battleRooms.battleRooms()
     .find(v => v.id === data.battleRoomID);
   if (!room) {
-    socket.emit('Error', 'invalid battle room');
+    socket.emit('error', 'invalid battle room');
     return;
   }
 
