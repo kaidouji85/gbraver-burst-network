@@ -14,6 +14,7 @@ export type {EntryResult, Waiting as WaitingMatch, Matching} from "./waiting-roo
 
 export {BattleRoom} from './battle-room/battle-room';
 export {createRoomPlayer} from './battle-room/create-room-player';
+export {extractPlayerAndEnemy} from './battle-room/extract-player-and-enemy';
 export type {InputCommandResult, Progress, Waiting, RoomPlayer} from "./battle-room/battle-room";
 
 export {BattleRoomContainer} from './battle-room/battle-room-container';

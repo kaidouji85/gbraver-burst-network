@@ -1,8 +1,8 @@
 // @flow
 
 import {Socket} from 'socket.io-client';
-import type {BattleRoomID, RoomPlayer} from '@gbraver-burst-network/core';
-import type {ArmDozerId, PilotId} from "gbraver-burst-core";
+import type {BattleRoomID} from '@gbraver-burst-network/core';
+import type {ArmDozerId, PilotId, GameState, Player} from "gbraver-burst-core";
 
 /** サーバに送信するデータ */
 export type Data = {
@@ -13,7 +13,9 @@ export type Data = {
 /** マッチング時にサーバから送信されるデータ */
 export type ResponseWhenMatching = {
   battleRoomID: BattleRoomID,
-  roomPlayers: RoomPlayer[],
+  initialState: GameState[],
+  player: Player,
+  enemy: Player,
 };
 
 /**
