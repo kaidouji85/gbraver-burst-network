@@ -8,7 +8,7 @@ import {socketIoConnection} from "../socket.io/socket-io-connection";
 import {casualMatch} from "../socket.io/casual-match";
 import {BrowserBattle} from '../battle/browser-battle';
 
-/** モノシリックサーバ ブラウザ用 SDK */
+/** モノリシックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMatch {
   _apiServerURL: string;
   _accessToken: string;
