@@ -2,7 +2,7 @@
 
 import {Socket} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
-import type {AllBattleRooms, BattleRoomID} from '@gbraver-burst-network/core';
+import type {AllBattleRooms, BattleRoomRemove, BattleRoomID} from '@gbraver-burst-network/core';
 import type {AccessTokenPayload} from '../../auth/access-token';
 import type {SocketPairFetcher} from '../fetcher/socket-pair-fetch';
 
@@ -17,6 +17,9 @@ export type ResponseWhenProgress = {
   update: GameState[]
 };
 
+/** 本ハンドラで利用するバトルルームの機能 */
+interface OwnBattleRoom extends AllBattleRooms, BattleRoomRemove {}
+
 /**
  * バトルルーム
  * 
@@ -25,7 +28,7 @@ export type ResponseWhenProgress = {
  * @param battleRooms バトルルームコンテナ
  * @return イベントハンドラ 
  */
-export const BattleRoom = (socket: typeof Socket, socketFetcher: SocketPairFetcher, battleRooms: AllBattleRooms): Function => async (data: Data) => {
+export const BattleRoom = (socket: typeof Socket, socketFetcher: SocketPairFetcher, battleRooms: OwnBattleRoom): Function => async (data: Data) => {
   const token: AccessTokenPayload = socket.gbraverBurstAccessToken;
   const room = battleRooms.battleRooms()
     .find(v => v.id === data.battleRoomID);
@@ -40,9 +43,13 @@ export const BattleRoom = (socket: typeof Socket, socketFetcher: SocketPairFetch
     return;
   }
 
-  const roomPlayers = room.battleRoom.roomPlayers();
+  const lastState = result.update[result.update.length - 1];
+  if (lastState.effect.name === 'GameEnd') {
+    battleRooms.remove(data.battleRoomID);
+  }
+
   const resp: ResponseWhenProgress = {update: result.update};
-  
+  const roomPlayers = room.battleRoom.roomPlayers();
   const sessionIDPair = [roomPlayers[0].sessionID, roomPlayers[1].sessionID];
   const sockets = await socketFetcher.fetchPair(sessionIDPair);
   sockets.forEach(v => {
