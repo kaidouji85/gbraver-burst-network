@@ -25,7 +25,9 @@ export class StubSelector {
       e.stopPropagation();
       const targetIndex = parseInt(stubSelector.value);
       const target = stubs[targetIndex];
+      console.log(`${target.name()} start`);
       await target.execute();
+      console.log('end');
     };
     executeButton.addEventListener('click', onExecuteButtonPush);
     executeButton.addEventListener('pushStart', onExecuteButtonPush);

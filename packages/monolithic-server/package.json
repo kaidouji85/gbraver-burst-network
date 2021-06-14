@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/monolithic-server",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -15,22 +15,23 @@
   "author": "Y.Takeuchi",
   "license": "ISC",
   "dependencies": {
-    "@gbraver-burst-network/core": "^0.2.0",
-    "body-parser": "^1.19.0",
+    "@gbraver-burst-network/core": "^0.3.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1"
+    "gbraver-burst-core": "^1.6.5",
+    "jsonwebtoken": "^8.5.1",
+    "socket.io": "^4.1.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
-    "@babel/preset-flow": "^7.13.13",
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "@babel/preset-flow": "^7.14.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "eslint-plugin-flowtype": "^5.7.2",
-    "flow-bin": "^0.151.0",
+    "flow-bin": "^0.152.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2"
   }

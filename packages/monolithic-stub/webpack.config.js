@@ -41,8 +41,12 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       API_SERVER_URL: JSON.stringify(process.env.API_SERVER_URL),
-      USER_ID: JSON.stringify(process.env.USER_ID),
-      PASSWORD: JSON.stringify(process.env.PASSWORD),
+      USER_ID_1: JSON.stringify(process.env.USER_ID_1),
+      PASSWORD_1: JSON.stringify(process.env.PASSWORD_1),
+      USER_ID_2: JSON.stringify(process.env.USER_ID_2),
+      PASSWORD_2: JSON.stringify(process.env.PASSWORD_2),
+      INVALID_USER_ID: JSON.stringify(process.env.INVALID_USER_ID),
+      INVALID_PASSWORD: JSON.stringify(process.env.INVALID_PASSWORD),
     })
   ]
 };
