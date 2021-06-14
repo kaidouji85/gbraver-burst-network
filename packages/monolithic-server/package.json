@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/monolithic-server",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
   "author": "Y.Takeuchi",
   "license": "ISC",
   "dependencies": {
-    "@gbraver-burst-network/core": "^0.2.0",
+    "@gbraver-burst-network/core": "^0.3.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
