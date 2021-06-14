@@ -35,8 +35,18 @@ export interface AllBattleRooms {
   battleRooms(): IDRoomPair[];
 }
 
+/** バトルルームをコンテナから削除する */
+export interface BattleRoomRemove {
+  /**
+   * 指定したバトルルームをコンテナから削除する
+   * 
+   * @param id 削除するバトルルームのID
+   */
+  remove(id: BattleRoomID): void;
+}
+
 /** バトルルームコンテナ */
-export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms {
+export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, BattleRoomRemove {
   _battleRooms: IDRoomPair[];
 
   /**
@@ -67,5 +77,15 @@ export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms {
    */
   battleRooms(): IDRoomPair[] {
     return this._battleRooms;
+  }
+
+  /**
+   * 指定したバトルルームをコンテナから削除する
+   * 
+   * @param id 削除するバトルルームのID
+   */
+  remove(id: BattleRoomID): void {
+    const updated = this._battleRooms.filter(v => v.id !== id);
+    this._battleRooms = updated;
   }
 }
