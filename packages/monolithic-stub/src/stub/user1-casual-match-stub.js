@@ -41,6 +41,11 @@ export class User1CasualMatchStub implements Stub {
     if (!isLoginSuccess) {
       throw new Error(`${this._user1.id} login failed`);
     }
-    await browser.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
+
+    const battle = await browser.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
+    console.log(`${this._user1.id}'s battle`, battle);
+    const command = {type: 'BATTERY_COMMAND', battery: 5};
+    const update = await battle.progress(command);
+    console.log(`${this._user1.id}'s update`, update);
   }
 }

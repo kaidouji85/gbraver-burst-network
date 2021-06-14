@@ -1,6 +1,6 @@
 // @flow
 
-import {BattleRoom} from '../battle-room/battle-room';
+import {BattleRoom} from './battle-room';
 import {v4 as uuidv4} from 'uuid';
 
 /** バトルルームID */
