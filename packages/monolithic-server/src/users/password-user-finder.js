@@ -12,5 +12,5 @@ export interface PasswordUserFinder {
    * @param password パスワード
    * @return 検索結果
    */
-  findUser(userID: UserID, password: string): ?User;
+  findUser(userID: UserID, password: string): Promise<?User>;
 }

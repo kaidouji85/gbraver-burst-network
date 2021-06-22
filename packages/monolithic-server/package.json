@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "gbraver-burst-core": "^1.6.7",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.14",
     "socket.io": "^4.1.2"
   },
   "devDependencies": {

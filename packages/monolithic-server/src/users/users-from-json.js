@@ -29,7 +29,7 @@ export class UsersFromJSON implements PasswordUserFinder {
    * @param password パスワード
    * @return 検索結果
    */
-  findUser(userID: UserID, password: string): ?User {
+  async findUser(userID: UserID, password: string): Promise<?User> {
     const hashedPassword = createHash('sha256')
       .update(password)
       .digest('hex');
