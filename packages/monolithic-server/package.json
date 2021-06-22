@@ -1,11 +1,13 @@
 {
   "name": "@gbraver-burst-network/monolithic-server",
   "version": "0.3.0",
-  "main": "index.js",
+  "main": "local.js",
   "private": true,
   "scripts": {
     "start": "npm-run-all build serve",
-    "serve": "node build/index.js",
+    "start:production": "npm-run-all build serve:production",
+    "serve": "node build/local.js",
+    "serve:production": "node build/production.js",
     "build": "npm-run-all clean type-check lint transpile",
     "type-check": "flow check src",
     "lint": "eslint src",
@@ -21,6 +23,7 @@
     "express": "^4.17.1",
     "gbraver-burst-core": "^1.6.7",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.14",
     "socket.io": "^4.1.2"
   },
   "devDependencies": {

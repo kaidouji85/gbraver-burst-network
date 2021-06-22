@@ -24,8 +24,8 @@ interface SessionsForLogin extends AddSession, AllSessions {}
 export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenForLogin, sessions: SessionsForLogin): typeof express.Router {
   const router = express.Router();
 
-  router.post('/', (req, res) => {
-    const user = users.findUser(req.body.userID, req.body.password);
+  router.post('/', async (req, res) => {
+    const user = await users.findUser(req.body.userID, req.body.password);
     if (!user) {
       res.sendStatus(401);
       return;
