@@ -1,11 +1,11 @@
 {
   "name": "@gbraver-burst-network/monolithic-server",
   "version": "0.3.0",
-  "main": "index.js",
+  "main": "local.js",
   "private": true,
   "scripts": {
     "start": "npm-run-all build serve",
-    "serve": "node build/index.js",
+    "serve": "node build/local.js",
     "build": "npm-run-all clean type-check lint transpile",
     "type-check": "flow check src",
     "lint": "eslint src",
