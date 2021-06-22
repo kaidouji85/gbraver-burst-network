@@ -5,13 +5,13 @@ import type {PasswordUserFinder} from "../users/password-user-finder";
 import type {AccessTokenCreator, AccessTokenPayloadParser} from "../auth/access-token";
 import {loginOnlyForExpress} from "../auth/login-only";
 import {createSessionFromUser} from "@gbraver-burst-network/core";
-import type {AddSession, AllSessions} from "@gbraver-burst-network/core";
+import type {AddSession, FindSession} from "@gbraver-burst-network/core";
 
 /** ログイン処理で利用するアクセストークンユーティリティの機能 */
 interface AccessTokenForLogin extends AccessTokenCreator, AccessTokenPayloadParser {}
 
 /** ログイン処理で利用するセッションコンテナの機能 */
-interface SessionsForLogin extends AddSession, AllSessions {}
+interface SessionsForLogin extends AddSession, FindSession {}
 
 /**
  * ログイン処理
