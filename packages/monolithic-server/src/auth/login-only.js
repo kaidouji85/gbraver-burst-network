@@ -2,8 +2,11 @@
 
 import {Socket} from "socket.io";
 import {Request, Response} from "express";
-import type {AllSessions} from '@gbraver-burst-network/core';
+import type {FindSession} from '@gbraver-burst-network/core';
 import type {AccessTokenPayloadParser} from "./access-token";
+
+/** 本ミドルウェアで利用するセッションコンテナの機能 */
+interface OwnSessions extends FindSession {}
 
 /**
  * ログイン専用ページの制御 expressミドルウェア
@@ -12,10 +15,10 @@ import type {AccessTokenPayloadParser} from "./access-token";
  * アクセストークン payload をデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
- * @param sessions セッション取得
+ * @param sessions セッションコンテナ
  * @return expressミドルウェア
  */
-export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessions: AllSessions): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
+export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessions: OwnSessions): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -31,10 +34,8 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
   
     const token = splitHeader[1];
     const decodedToken = await accessToken.toAccessTokenPayload(token);
-    const isExistSession = sessions.sessions()
-      .map(v => v.id)
-      .includes(decodedToken.sessionID);
-    if (!isExistSession) {
+    const isNoExistSession = !sessions.find(decodedToken.sessionID);
+    if (isNoExistSession) {
       res.sendStatus(401);
       return;  
     }
@@ -54,10 +55,10 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
  * アクセストークン payload をデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
- * @param sessions セッション取得
+ * @param sessions セッションコンテナ
  * @return sicket.ioミドルウェア
  */
-export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sessions: AllSessions): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
+export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sessions: OwnSessions): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
   const invalidAccessToken = new Error('invalid access token');
   try {
     const token = socket.handshake?.auth?.token;
@@ -67,10 +68,8 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sess
     }
   
     const decodedToken = await accessToken.toAccessTokenPayload(token);
-    const isExistSession = sessions.sessions()
-      .map(v => v.id)
-      .includes(decodedToken.sessionID);
-    if (!isExistSession) {
+    const isNoExistSession = !sessions.find(decodedToken.sessionID);
+    if (isNoExistSession) {
       next(invalidAccessToken);
       return;  
     }

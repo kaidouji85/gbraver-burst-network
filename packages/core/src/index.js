@@ -6,7 +6,7 @@ export type {IdPasswordLogin, LoginCheck} from './user-operation/login';
 export type {Session, SessionID, SessionAuth, UserAuth} from './session/session';
 export {createSessionFromUser} from './session/create-session';
 export {SessionContainer} from './session/session-container';
-export type {AddSession, AllSessions} from './session/session-container';
+export type {AddSession, FindSession} from './session/session-container';
 
 export {WaitingRoom} from './waiting-room/waiting-room';
 export {FirstArrivalRoom} from './waiting-room/first-arrival-room/index';
