@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
-    "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production",
+    "start:app-runner": "npm-run-all serve:monolithic-server-production",
     "start:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix start",
     "start:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix start:production",
     "start:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix start:production",
@@ -13,7 +13,8 @@
     "build:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server build",
     "build:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server build:production",
     "build:monolithic-browser": "lerna run --scope @gbraver-burst-network/monolithic-browser build",
-    "build:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub build"
+    "build:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub build",
+    "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
