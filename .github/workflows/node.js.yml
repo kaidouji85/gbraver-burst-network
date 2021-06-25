@@ -27,3 +27,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: cp packages/monolithic-server/users.json.template packages/monolithic-server/users.json
     - run: npm ci
+    - run: npm run bootstrap
+    - run: npm run build
