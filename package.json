@@ -4,6 +4,7 @@
   "scripts": {
     "prepare": "npm-run-all bootstrap build",
     "bootstrap": "lerna bootstrap --ci",
+    "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production",
     "start:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix start",
     "start:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix start:production",
     "start:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix start:production",
