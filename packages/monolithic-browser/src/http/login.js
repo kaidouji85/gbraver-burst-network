@@ -29,6 +29,7 @@ export async function login(userID: UserID, password: string, apiServerURL: stri
   const body = {userID, password};
   const resp = await fetch(`${apiServerURL}/login`, {
     method: 'POST',
+    mode: 'cors',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -54,6 +55,7 @@ export async function login(userID: UserID, password: string, apiServerURL: stri
 export async function isLogin(accessToken: string, apiServerURL: string): Promise<boolean> {
   const resp = await fetch(`${apiServerURL}/login`, {
     method: 'GET',
+    mode: 'cors',
     headers: {
       'Authorization': `Bearer ${accessToken}`
     },
