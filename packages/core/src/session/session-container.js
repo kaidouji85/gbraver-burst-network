@@ -1,6 +1,6 @@
 // @flow
 
-import type {Session} from "./session";
+import type {Session, SessionID} from "./session";
 
 /** セッション追加 */
 export interface AddSession {
@@ -12,18 +12,20 @@ export interface AddSession {
   add(session: Session): void;
 }
 
-/** 全セッション取得 */
-export interface AllSessions {
+/** ID指定でのセッション検索 */
+export interface FindSession {
   /**
-   * コンテナに登録されている全セッションを取得する
-   *
-   * @return 取得結果
+   * ID指定でセッションを検索する
+   * 該当するものがない場合、nullを返す
+   * 
+   * @param sessionID セッションID
+   * @return 検索結果 
    */
-  sessions(): Session[];
+  find(sessionID: SessionID): ?Session;
 }
 
 /** セッションコンテナ */
-export class SessionContainer implements AddSession, AllSessions {
+export class SessionContainer implements AddSession, FindSession {
   _sessions: Session[];
 
   /** コンストラクタ */
@@ -47,5 +49,16 @@ export class SessionContainer implements AddSession, AllSessions {
    */
   sessions(): Session[] {
     return this._sessions;
+  }
+
+  /**
+   * ID指定でセッションを検索する
+   * 該当するものがない場合、nullを返す
+   * 
+   * @param sessionID セッションID
+   * @return 検索結果 
+   */
+  find(sessionID: SessionID): ?Session {
+    return this._sessions.find(v => v.id === sessionID) ?? null;
   }
 }
