@@ -18,7 +18,7 @@ export {extractPlayerAndEnemy} from './battle-room/extract-player-and-enemy';
 export type {InputCommandResult, Progress, Waiting, RoomPlayer} from "./battle-room/battle-room";
 
 export {BattleRoomContainer} from './battle-room/battle-room-container';
-export type {BattleRoomID, IDRoomPair, BattleRoomAdd, AllBattleRooms, BattleRoomRemove} from './battle-room/battle-room-container';
+export type {BattleRoomID, IDRoomPair, BattleRoomAdd, AllBattleRooms, BattleRoomFindBySessionID, BattleRoomFind, BattleRoomRemove} from './battle-room/battle-room-container';
 
 export type {CasualMatch} from './user-operation/casual-match';
 export type {Battle} from './user-operation/battle';

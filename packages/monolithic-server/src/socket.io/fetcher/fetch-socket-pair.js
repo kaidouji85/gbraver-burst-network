@@ -4,9 +4,8 @@ import type {SessionID} from "@gbraver-burst-network/core";
 import {Socket} from 'socket.io';
 
 /** ソケットのペアを取得する */
-export interface SocketPairFetcher {
+export interface FetchSocketPair {
   /**
-   * @deprecated
    * ソケットのペアを取得する
    * 本メソッドはバトルルームの通知に利用する想定
    *

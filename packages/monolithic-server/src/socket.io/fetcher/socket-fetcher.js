@@ -1,23 +1,12 @@
 // @flow
 
-import type {SocketPairFetcher} from "./socket-pair-fetch";
+import type {FetchSocketPair} from "./fetch-socket-pair";
+import type {FetchSocketBySessionID} from './fetch-socket-by-session-id';
 import {Server, Socket} from 'socket.io';
 import type {SessionID} from "@gbraver-burst-network/core";
 
-/** セッションID指定での検索 */
-export interface SessionIDFetcher {
-  /**
-   * セッションID指定でソケットを検索する
-   * 条件に一致するソケットがない場合はnullを返す
-   * 
-   * @param sessionID 検索するソケットのセッションID
-   * @return 検索結果
-   */
-  fetchBySessionID(sessionID: SessionID): Promise<?typeof Socket>;
-}
-
 /** サーバ内のソケット接続を取得する */
-export class SocketFetcher implements SocketPairFetcher, SessionIDFetcher {
+export class SocketFetcher implements FetchSocketPair, FetchSocketBySessionID {
   _io: typeof Server;
 
   /**
