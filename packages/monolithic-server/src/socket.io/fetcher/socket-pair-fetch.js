@@ -6,6 +6,7 @@ import {Socket} from 'socket.io';
 /** ソケットのペアを取得する */
 export interface SocketPairFetcher {
   /**
+   * @deprecated
    * ソケットのペアを取得する
    * 本メソッドはバトルルームの通知に利用する想定
    *
