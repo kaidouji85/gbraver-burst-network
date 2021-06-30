@@ -3,6 +3,9 @@
 import type {SessionID} from "@gbraver-burst-network/core";
 import {Socket} from 'socket.io';
 
+/** ソケットペア */
+export type SocketPair = [typeof Socket, typeof Socket];
+
 /** ソケットのペアを取得する */
 export interface FetchSocketPair {
   /**
@@ -12,5 +15,5 @@ export interface FetchSocketPair {
    * @param sessionIDs 検索対象のセッションID
    * @return 取得結果
    */
-  fetchPair(sessionIDs: [SessionID, SessionID]): Promise<typeof Socket[]>;
+  fetchPair(sessionIDs: [SessionID, SessionID]): Promise<?SocketPair>;
 }

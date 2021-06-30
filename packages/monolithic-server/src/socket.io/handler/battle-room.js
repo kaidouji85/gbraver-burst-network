@@ -54,6 +54,11 @@ export const BattleRoom = (socket: typeof Socket, socketFetcher: OwnSocketFetche
   const roomPlayers = room.roomPlayers();
   const sessionIDPair = [roomPlayers[0].sessionID, roomPlayers[1].sessionID];
   const sockets = await socketFetcher.fetchPair(sessionIDPair);
+  if (!sockets) {
+    socket.emit('error', 'not found room socket pair');
+    return;
+  }
+
   sockets.forEach(v => {
     v.emit('Progress', resp);
   });

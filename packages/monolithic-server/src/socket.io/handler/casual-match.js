@@ -48,6 +48,10 @@ export const CasualMatch = (socket: typeof Socket, socketFetcher: FetchSocketPai
 
   const sessionIDPair = [result.entries[0].sessionID, result.entries[1].sessionID];
   const sockets = await socketFetcher.fetchPair(sessionIDPair);
+  if (!sockets) {
+    socket.emit('error', 'not found entry socket pair');
+    return;
+  }
   sockets.forEach(v => {
     const payload: AccessTokenPayload = v.gbraverBurstAccessToken;
     const extractResult = extractPlayerAndEnemy(payload.sessionID, battleRoom.roomPlayers());

@@ -1,6 +1,6 @@
 // @flow
 
-import type {FetchSocketPair} from "./fetch-socket-pair";
+import type {FetchSocketPair, SocketPair} from "./fetch-socket-pair";
 import type {FetchSocketBySessionID} from './fetch-socket-by-session-id';
 import {Server, Socket} from 'socket.io';
 import type {SessionID} from "@gbraver-burst-network/core";
@@ -25,10 +25,12 @@ export class SocketFetcher implements FetchSocketPair, FetchSocketBySessionID {
    * @param sessionIDs 検索対象のセッションID
    * @return 取得結果
    */
-  async fetchPair(sessionIDs: [SessionID, SessionID]): Promise<typeof Socket[]> {
+  async fetchPair(sessionIDs: [SessionID, SessionID]): Promise<?SocketPair> {
     const sockets = await this._io.fetchSockets();
-    return sockets.filter(v => v.gbraverBurstAccessToken)
-      .filter(v => sessionIDs.includes(v.gbraverBurstAccessToken.sessionID));
+    const socketsWithSession = sockets.filter(v => v.gbraverBurstAccessToken);
+    const socket0 = socketsWithSession.find(v => v.gbraverBurstAccessToken.sessionID === sessionIDs[0]);
+    const socket1 = socketsWithSession.find(v => v.gbraverBurstAccessToken.sessionID === sessionIDs[1]);
+    return (socket0 && socket1) ? [socket0, socket1] : null;
   }
 
   /**
