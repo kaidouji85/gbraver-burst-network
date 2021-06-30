@@ -1,6 +1,7 @@
 // @flow
 
 import type {Entry} from './entry';
+import type {SessionID} from '../session/session';
 
 /** 入室結果 */
 export type EntryResult = Waiting | Matching;
@@ -17,13 +18,26 @@ export type Matching= {
   entries: [Entry, Entry]
 };
 
-/** カジュアルマッチ待合室 */
-export interface WaitingRoom {
-  /**
+/** カジュアルマッチ入室 */
+export interface EnterWaitingRoom {
+/**
    * 待合室にエントリする
    *
    * @param entry エントリ
    * @return 入室結果
    */
-  enter(entry: Entry): Promise<EntryResult>
+ enter(entry: Entry): Promise<EntryResult>
 }
+
+/** 待合室から退室する */
+export interface LeaveWaitingRoom {
+  /**
+   * 待合室から退室する
+   * 
+   * @param sessionID 退出するセッションのID 
+   */
+  leave(sessionID: SessionID): Promise<void>;
+}
+
+/** カジュアルマッチ待合室 */
+export interface WaitingRoom extends EnterWaitingRoom, LeaveWaitingRoom {}
