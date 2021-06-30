@@ -25,12 +25,10 @@ export interface BattleRoomAdd {
 }
 
 /** 
- * @deprecated
  * 登録されている全バトルルームを取得する
  */
 export interface AllBattleRooms {
   /**
-   * @deprecated
    * ID指定でバトルルームを検索する
    * 見つからない場合はnullを返す
    * 
