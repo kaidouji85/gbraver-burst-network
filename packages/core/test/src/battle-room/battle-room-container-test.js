@@ -3,7 +3,7 @@
 import test from 'ava';
 import {EMPTY_PLAYER} from 'gbraver-burst-core';
 import { BattleRoom } from '../../../src/battle-room/battle-room';
-import { BattleRoomContainer } from '../../../src/battle-room/battle-room-container';
+import { BattleRoomContainer } from '../../../src/battle-room-container/battle-room-container';
 
 const player1 = {
   sessionID: 'session1',

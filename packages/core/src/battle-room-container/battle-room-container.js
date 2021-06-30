@@ -1,17 +1,9 @@
 // @flow
 
-import {BattleRoom} from './battle-room';
-import {v4 as uuidv4} from 'uuid';
+import type {BattleRoomID, IDRoomPair} from './id-room-pair';
+import {BattleRoom} from '../battle-room/battle-room';
 import type {SessionID} from '../session/session';
-
-/** バトルルームID */
-export type BattleRoomID = string;
-
-/** バトルルームとIDのペア */
-export type IDRoomPair = {
-  id: BattleRoomID,
-  battleRoom: BattleRoom
-};
+import {addBattleRoom} from './add-battle-room';
 
 /** バトルルーム追加 */
 export interface BattleRoomAdd {
@@ -92,9 +84,9 @@ export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, Battl
    * @return 発行したバトルルームID 
    */
   add(battleRoom: BattleRoom): BattleRoomID {
-    const id = uuidv4();
-    this._battleRooms = [...this._battleRooms, {id, battleRoom}];
-    return id;     
+    const {updatedBattleRooms, issuedID} = addBattleRoom(this._battleRooms, battleRoom);
+    this._battleRooms = updatedBattleRooms;
+    return issuedID;
   }
 
   /**
