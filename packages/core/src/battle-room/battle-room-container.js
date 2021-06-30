@@ -2,6 +2,7 @@
 
 import {BattleRoom} from './battle-room';
 import {v4 as uuidv4} from 'uuid';
+import type {SessionID} from '../session/session';
 
 /** バトルルームID */
 export type BattleRoomID = string;
@@ -23,9 +24,13 @@ export interface BattleRoomAdd {
   add(battleRoom: BattleRoom): BattleRoomID;
 }
 
-/** 登録されている全バトルルームを取得する */
+/** 
+ * @deprecated
+ * 登録されている全バトルルームを取得する
+ */
 export interface AllBattleRooms {
   /**
+   * @deprecated
    * ID指定でバトルルームを検索する
    * 見つからない場合はnullを返す
    * 
@@ -33,6 +38,30 @@ export interface AllBattleRooms {
    * @return 検索結果
    */
   battleRooms(): IDRoomPair[];
+}
+
+/** ID指定でバトルルームを検索する */
+export interface BattleRoomFind {
+  /**
+   * ID指定でバトルルームを検索する
+   * 条件に一致するバトルルームが存在しない場合、nullを返す
+   * 
+   * @param id 検索するバトルルームのID
+   * @return 検索結果 
+   */
+  find(id: BattleRoomID): ?BattleRoom;
+}
+
+/** セッションID指定でバトルルームを検索する */
+export interface BattleRoomFindBySessionID {
+  /**
+   * セッションID指定でバトルルームを検索する
+   * 条件に一致するバトルルームが存在しない場合、nullを返す
+   * 
+   * @param sessionID セッションID
+   * @return 検索結果
+   */
+  findBySessionID(sessionID: SessionID): ?BattleRoom;
 }
 
 /** バトルルームをコンテナから削除する */
@@ -46,7 +75,7 @@ export interface BattleRoomRemove {
 }
 
 /** バトルルームコンテナ */
-export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, BattleRoomRemove {
+export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, BattleRoomFind, BattleRoomFindBySessionID, BattleRoomRemove {
   _battleRooms: IDRoomPair[];
 
   /**
@@ -77,6 +106,31 @@ export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, Battl
    */
   battleRooms(): IDRoomPair[] {
     return this._battleRooms;
+  }
+
+  /**
+   * ID指定でバトルルームを検索する
+   * 検索失敗した場合、nullを返す
+   * 
+   * @param id 検索するバトルルームのID
+   * @return 検索結果 
+   */
+  find(id: BattleRoomID): ?BattleRoom {
+    return this._battleRooms.find(v => v.id === id)?.battleRoom ?? null;
+  }
+
+  /**
+   * セッションID指定でバトルルームを検索する
+   * 条件に一致するバトルルームが存在しない場合、nullを返す
+   * 
+   * @param sessionID セッションID
+   * @return 検索結果
+   */
+  findBySessionID(sessionID: SessionID): ?BattleRoom {
+    return this._battleRooms.find(v => v.battleRoom.roomPlayers()
+      .map(p => p.sessionID)
+      .includes(sessionID)
+    )?.battleRoom ?? null;
   }
 
   /**
