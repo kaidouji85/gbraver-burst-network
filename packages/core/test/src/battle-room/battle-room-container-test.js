@@ -68,3 +68,23 @@ test('バトルルームを正しく削除することができる', t => {
   const expected = [{id: id2, battleRoom: room2}];
   t.deepEqual(result, expected);
 });
+
+test('バトルルームID指定で検索することができる', t => {
+  const contaier = new BattleRoomContainer();
+  contaier.add(room1);
+  const id2 = contaier.add(room2);
+  
+  const result = contaier.find(id2);
+  const expected = room2;
+  t.deepEqual(result, expected);
+});
+
+test('セッションID指定で検索することができる', t => {
+  const contaier = new BattleRoomContainer();
+  contaier.add(room1);
+  contaier.add(room2);
+  
+  const result = contaier.findBySessionID(player3.sessionID);
+  const expected = room2;
+  t.deepEqual(result, expected);
+});
