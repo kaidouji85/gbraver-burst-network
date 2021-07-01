@@ -1,8 +1,8 @@
 // @flow
 
 import {Socket, Server} from 'socket.io';
-import {WaitingRoom, BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
-import type {BattleRoomAdd, BattleRoomID} from "@gbraver-burst-network/core";
+import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
+import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
 import type {AccessTokenPayload} from "../../auth/access-token";
 import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
@@ -21,6 +21,12 @@ export type ResponseWhenMatching = {
   enemy: Player,
 };
 
+/** 本ハンドラで利用する待合室の機能 */
+interface OwnWaitingRoom extends EnterWaitingRoom {}
+
+/** 本ハンドラで利用するバトルルームコンテナの機能 */
+interface OwnBattleRooms extends BattleRoomAdd {}
+
 /**
  * カジュアルマッチ
  * マッチングしたら、ルーム生成、初期ゲームステート生成まで進める
@@ -31,7 +37,7 @@ export type ResponseWhenMatching = {
  * @param battleRooms バトルルームコンテナ
  * @return socket.ioのハンドラ
  */
-export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoom: WaitingRoom, battleRooms: BattleRoomAdd): Function => async (data: Data): Promise<void> => {
+export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async (data: Data): Promise<void> => {
   const payload: AccessTokenPayload = socket.gbraverBurstAccessToken;
   const entry = {sessionID: payload.sessionID, armdozerId: data.armdozerId, pilotId: data.pilotId};
   const result = await waitingRoom.enter(entry);

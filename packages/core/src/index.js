@@ -10,7 +10,7 @@ export type {AddSession, FindSession} from './session/session-container';
 
 export {WaitingRoom} from './waiting-room/waiting-room';
 export {FirstArrivalRoom} from './waiting-room/first-arrival-room/index';
-export type {EntryResult, Waiting as WaitingMatch, Matching} from "./waiting-room/waiting-room";
+export type {EnterWaitingRoom, EntryResult, Waiting as WaitingMatch, Matching, LeaveWaitingRoom} from "./waiting-room/waiting-room";
 
 export {BattleRoom} from './battle-room/battle-room';
 export {createRoomPlayer} from './battle-room/create-room-player';
