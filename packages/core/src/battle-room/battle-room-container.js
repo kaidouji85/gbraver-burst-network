@@ -24,16 +24,6 @@ export interface BattleRoomAdd {
   add(battleRoom: BattleRoom): BattleRoomID;
 }
 
-/** 登録されている全バトルルームを取得する */
-export interface AllBattleRooms {
-  /**
-   * 登録されている全バトルルームを取得する
-   * 
-   * @return 取得結果
-   */
-  battleRooms(): IDRoomPair[];
-}
-
 /** ID指定でバトルルームを検索する */
 export interface BattleRoomFind {
   /**
@@ -69,7 +59,7 @@ export interface BattleRoomRemove {
 }
 
 /** バトルルームコンテナ */
-export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, BattleRoomFind, BattleRoomFindBySessionID, BattleRoomRemove {
+export class BattleRoomContainer implements BattleRoomAdd, BattleRoomFind, BattleRoomFindBySessionID, BattleRoomRemove {
   _battleRooms: IDRoomPair[];
 
   /**
