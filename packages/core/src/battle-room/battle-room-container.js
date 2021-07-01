@@ -92,11 +92,9 @@ export class BattleRoomContainer implements BattleRoomAdd, AllBattleRooms, Battl
   }
 
   /**
-   * ID指定でバトルルームを検索する
-   * 見つからない場合はnullを返す
-   * 
-   * @param id バトルルームID
-   * @return 検索結果
+   * 登録されている全バトルルームを取得する
+   *
+   * @return 取得結果
    */
   battleRooms(): IDRoomPair[] {
     return this._battleRooms;
