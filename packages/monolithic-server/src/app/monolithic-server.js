@@ -54,7 +54,7 @@ export function monolithicServer(param: Param): void {
   io.use(loginOnlyForSocketIO(accessToken, sessions));
   io.on('connection', socket => {
     console.log('a user connected');
-    socket.on('CasualMatch', CasualMatch(socket, socketFetcher, waitingRoom, battleRooms));
+    socket.on('CasualMatch', CasualMatch(socket, io, waitingRoom, battleRooms));
     socket.on('BattleRoom', BattleRoom(socket, socketFetcher, battleRooms));
   });
   
