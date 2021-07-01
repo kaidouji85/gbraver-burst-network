@@ -13,6 +13,7 @@
     "build:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server build:production",
     "build:monolithic-browser": "lerna run --scope @gbraver-burst-network/monolithic-browser build",
     "build:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub build",
+    "serve:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve",
     "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production",
     "serve:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix serve"
   },

@@ -5,7 +5,7 @@ import {WaitingRoom, BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "
 import type {BattleRoomAdd, BattleRoomID} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
 import type {AccessTokenPayload} from "../../auth/access-token";
-import {ioWaitingRoom} from '../room/room-name';
+import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
 
 /** クライアントから送信されるデータ */
 export type Data = {
@@ -64,10 +64,12 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
   const battleRoomID = battleRooms.add(battleRoom);
   const initialState = battleRoom.stateHistory();
   const sockets = [socket, otherSocket];
+  const ioBattleRoom = getIoBattleRoom(battleRoomID);
   sockets.forEach(v => {
     const payload: AccessTokenPayload = v.gbraverBurstAccessToken;
     const extractResult = extractPlayerAndEnemy(payload.sessionID, battleRoom.roomPlayers());
     const resp: ResponseWhenMatching = {battleRoomID, initialState, player: extractResult.player, enemy: extractResult.enemy};
+    v.join(ioBattleRoom);
     v.emit('Matching', resp);
   });
 }
