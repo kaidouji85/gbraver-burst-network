@@ -20,13 +20,13 @@ export type Matching= {
 
 /** カジュアルマッチ入室 */
 export interface EnterWaitingRoom {
-/**
+  /**
    * 待合室にエントリする
    *
    * @param entry エントリ
    * @return 入室結果
    */
- enter(entry: Entry): Promise<EntryResult>
+  enter(entry: Entry): Promise<EntryResult>
 }
 
 /** 待合室から退室する */

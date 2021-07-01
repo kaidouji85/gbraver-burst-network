@@ -24,16 +24,12 @@ export interface BattleRoomAdd {
   add(battleRoom: BattleRoom): BattleRoomID;
 }
 
-/** 
- * 登録されている全バトルルームを取得する
- */
+/** 登録されている全バトルルームを取得する */
 export interface AllBattleRooms {
   /**
-   * ID指定でバトルルームを検索する
-   * 見つからない場合はnullを返す
+   * 登録されている全バトルルームを取得する
    * 
-   * @param id バトルルームID
-   * @return 検索結果
+   * @return 取得結果
    */
   battleRooms(): IDRoomPair[];
 }
