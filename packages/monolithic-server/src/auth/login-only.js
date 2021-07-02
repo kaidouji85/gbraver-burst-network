@@ -43,8 +43,8 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
     req.gbraverBurstAccessToken = decodedToken;
     next();
   } catch(err) {
-    console.error(err);
     res.sendStatus(401);
+    throw err;
   }
 }
 
@@ -77,7 +77,7 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sess
     socket.gbraverBurstAccessToken = decodedToken;
     next();
   } catch(err) {
-    console.error(err);
     next(invalidAccessToken);
+    throw err;
   }
 }
