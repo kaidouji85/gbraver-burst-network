@@ -30,13 +30,13 @@ interface OwnBattleRoom extends BattleRoomFind, BattleRoomRemove {}
  */
 export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms: OwnBattleRoom): Function => async (data: Data) => {
   const token: AccessTokenPayload = socket.gbraverBurstAccessToken;
-  const room = battleRooms.find(data.battleRoomID); 
-  if (!room) {
+  const pair = battleRooms.find(data.battleRoomID);
+  if (!pair) {
     socket.emit('error', 'invalid battle room');
     return;
   }
 
-  const result = room.inputCommand(token.sessionID, data.command);
+  const result = pair.battleRoom.inputCommand(token.sessionID, data.command);
   if (result.type === 'Waiting') {
     socket.emit('Waiting');
     return;

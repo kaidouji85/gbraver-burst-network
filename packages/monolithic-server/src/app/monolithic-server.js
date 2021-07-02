@@ -11,6 +11,7 @@ import {AccessToken} from "../auth/access-token";
 import {SessionContainer, FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core";
 import {CasualMatch} from "../socket.io/handler/casual-match";
 import {BattleRoom} from '../socket.io/handler/battle-room';
+import {Disconnect} from "../socket.io/handler/disconnect";
 
 /** モノリシックサーバで利用するUserの機能 */
 interface OwnUsers extends PasswordUserFinder {}
@@ -54,6 +55,7 @@ export function monolithicServer(param: Param): void {
     console.log('a user connected');
     socket.on('CasualMatch', CasualMatch(socket, io, waitingRoom, battleRooms));
     socket.on('BattleRoom', BattleRoom(socket, io, battleRooms));
+    socket.on('disconnect', Disconnect(socket, io, waitingRoom, battleRooms))
   });
   
   server.listen(param.listenPort, () => {
