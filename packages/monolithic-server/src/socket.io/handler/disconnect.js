@@ -30,11 +30,11 @@ export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom
   };
   const removeBattleRoom = async (roomID: BattleRoomID) => {
     const ioBattleRoom = getIoBattleRoom(roomID);
+    io.in(ioBattleRoom).emit('error', 'battle room end');
     const roomSockets = await io.in(ioBattleRoom).fetchSockets();
-    roomSockets.forEach(v => {
-      v.leave(ioBattleRoom);
-      v.emit('error', 'battle room end')
-    });
+    await Promise.all(
+      roomSockets.map(v => v.leave(ioBattleRoom))
+    );
     battleRooms.remove(roomID);
   };
 
