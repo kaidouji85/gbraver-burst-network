@@ -40,5 +40,7 @@ export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom
 
   await leaveWaitingRoom();
   const pair = battleRooms.findBySessionID(payload.sessionID);
-  pair && await removeBattleRoom(pair.id);
+  if (pair) {
+    await removeBattleRoom(pair.id);
+  }
 }

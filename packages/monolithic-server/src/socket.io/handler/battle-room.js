@@ -28,7 +28,7 @@ interface OwnBattleRoom extends BattleRoomFind, BattleRoomRemove {}
  * @param battleRooms バトルルームコンテナ
  * @return イベントハンドラ 
  */
-export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms: OwnBattleRoom): Function => async (data: Data) => {
+export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms: OwnBattleRoom): Function => async (data: Data): Promise<void> => {
   const token: AccessTokenPayload = socket.gbraverBurstAccessToken;
   const pair = battleRooms.find(data.battleRoomID);
   if (!pair) {
@@ -44,18 +44,15 @@ export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms
 
   const resp: ResponseWhenProgress = {update: result.update};
   const ioBattleRoom = getIoBattleRoom(data.battleRoomID);
-  const sockets = await io.in(ioBattleRoom).fetchSockets();
-  sockets.forEach(v => {
-    v.emit('Progress', resp);
-  });
-
+  await io.in(ioBattleRoom).emit('Progress', resp);
   const lastState = result.update[result.update.length - 1];
   if (lastState.effect.name !== 'GameEnd') {
     return;
   }
 
   battleRooms.remove(data.battleRoomID);
-  sockets.forEach(v => {
-    v.leave(ioBattleRoom);
-  });
+  const sockets = await io.in(ioBattleRoom).fetchSockets();
+  await Promise.all(
+    sockets.map(v => v.leave(ioBattleRoom))
+  );
 };
