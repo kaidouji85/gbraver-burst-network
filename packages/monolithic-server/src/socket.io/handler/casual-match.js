@@ -42,7 +42,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
   const entry = {sessionID: payload.sessionID, armdozerId: data.armdozerId, pilotId: data.pilotId};
   const result = await waitingRoom.enter(entry);
   if (result.type === 'Waiting') {
-    socket.join(ioWaitingRoom());
+    await socket.join(ioWaitingRoom());
     socket.emit('Waiting');
     return;
   }
@@ -56,26 +56,28 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
 
   const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
   const otherSocket = waitingRoomSockets.find(v => {
-    const othrPayload: AccessTokenPayload = v.gbraverBurstAccessToken;
-    return othrPayload.sessionID === otherEntry.sessionID;
+    const otherPayload: AccessTokenPayload = v.gbraverBurstAccessToken;
+    return otherPayload.sessionID === otherEntry.sessionID;
   });
   if (!otherSocket) {
     socket.emit('error', 'not found other socket');
     return;
   }
-  otherSocket.leave(ioWaitingRoom());
 
+  await otherSocket.leave(ioWaitingRoom());
   const roomPlayers = [createRoomPlayer(myEntry), createRoomPlayer(otherEntry)];
   const battleRoom = new BattleRoom(roomPlayers);
-  const battleRoomID = battleRooms.add(battleRoom);
+  const pair = battleRooms.add(battleRoom);
   const initialState = battleRoom.stateHistory();
   const sockets = [socket, otherSocket];
-  const ioBattleRoom = getIoBattleRoom(battleRoomID);
+  const ioBattleRoom = getIoBattleRoom(pair.id);
+  await Promise.all(
+    sockets.map(v => v.join(ioBattleRoom))
+  );
   sockets.forEach(v => {
     const payload: AccessTokenPayload = v.gbraverBurstAccessToken;
     const extractResult = extractPlayerAndEnemy(payload.sessionID, battleRoom.roomPlayers());
-    const resp: ResponseWhenMatching = {battleRoomID, initialState, player: extractResult.player, enemy: extractResult.enemy};
-    v.join(ioBattleRoom);
+    const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
     v.emit('Matching', resp);
   });
 }
