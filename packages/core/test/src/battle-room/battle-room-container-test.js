@@ -50,41 +50,41 @@ test('バトルルームコンテナ生成直後はルームが登録されて�
 
 test('バトルルームを正しく追加することができる', t => {
   const container = new BattleRoomContainer();
-  const id1 = container.add(room1);
-  const id2 = container.add(room2);
+  const p1 = container.add(room1);
+  const p2 = container.add(room2);
   
   const result = container.battleRooms();
-  const expected = [{id: id1, battleRoom: room1}, {id: id2, battleRoom: room2}];
+  const expected = [{id: p1.id, battleRoom: room1}, {id: p2.id, battleRoom: room2}];
   t.deepEqual(result, expected);
 });
 
 test('バトルルームを正しく削除することができる', t => {
   const container = new BattleRoomContainer();
-  const id1 = container.add(room1);
-  const id2 = container.add(room2);
-  container.remove(id1);
+  const p1 = container.add(room1);
+  const p2 = container.add(room2);
+  container.remove(p1.id);
   
   const result = container.battleRooms();
-  const expected = [{id: id2, battleRoom: room2}];
+  const expected = [{id: p2.id, battleRoom: room2}];
   t.deepEqual(result, expected);
 });
 
 test('バトルルームID指定で検索することができる', t => {
   const container = new BattleRoomContainer();
   container.add(room1);
-  const id2 = container.add(room2);
+  const p2 = container.add(room2);
   
-  const result = container.find(id2);
-  const expected = {id: id2, battleRoom: room2}
+  const result = container.find(p2.id);
+  const expected = {id: p2.id, battleRoom: room2}
   t.deepEqual(result, expected);
 });
 
 test('セッションID指定で検索することができる', t => {
   const container = new BattleRoomContainer();
   container.add(room1);
-  const id2 = container.add(room2);
+  const p2 = container.add(room2);
   
   const result = container.findBySessionID(player3.sessionID);
-  const expected = {id: id2, battleRoom: room2};
+  const expected = {id: p2.id, battleRoom: room2};
   t.deepEqual(result, expected);
 });

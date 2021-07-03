@@ -67,17 +67,17 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
   await otherSocket.leave(ioWaitingRoom());
   const roomPlayers = [createRoomPlayer(myEntry), createRoomPlayer(otherEntry)];
   const battleRoom = new BattleRoom(roomPlayers);
-  const battleRoomID = battleRooms.add(battleRoom);
+  const pair = battleRooms.add(battleRoom);
   const initialState = battleRoom.stateHistory();
   const sockets = [socket, otherSocket];
-  const ioBattleRoom = getIoBattleRoom(battleRoomID);
+  const ioBattleRoom = getIoBattleRoom(pair.id);
   await Promise.all(
     sockets.map(v => v.join(ioBattleRoom))
   );
   sockets.forEach(v => {
     const payload: AccessTokenPayload = v.gbraverBurstAccessToken;
     const extractResult = extractPlayerAndEnemy(payload.sessionID, battleRoom.roomPlayers());
-    const resp: ResponseWhenMatching = {battleRoomID, initialState, player: extractResult.player, enemy: extractResult.enemy};
+    const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
     v.emit('Matching', resp);
   });
 }
