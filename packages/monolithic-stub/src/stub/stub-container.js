@@ -7,7 +7,7 @@ import {InvalidUserLoginStub} from "./invalid-user-login-stub";
 import type {UserLogin} from "./user-login";
 import {User1CasualMatchStub} from "./user1-casual-match-stub";
 import {User2CasualMatchStub} from "./user2-casual-match-stub";
-import { User2CasualMatchCloseStub } from "./user2-casual-match-close-stub";
+import {User2CasualMatchCloseStub} from "./user2-casual-match-close-stub";
 
 /** スタブコンテナのパラメータ */
 type Param = {
