@@ -2,13 +2,13 @@
 
 import type {Player, GameState, Command} from 'gbraver-burst-core';
 import type {Battle, BattleRoomID} from '@gbraver-burst-network/core';
-import {Socket} from 'socket.io-client';
 import {battleRoom} from '../socket.io/battle-room';
+import {SocketConnection} from '../socket.io/socket-io-connection';
 
 /** コンストラクタのパラメータ */
 type Param = {
   apiServerURL: string, 
-  socket: typeof Socket,
+  socket: SocketConnection,
   battleRoomID: BattleRoomID,
   player: Player,
   enemy: Player,
@@ -21,7 +21,7 @@ export class BrowserBattle implements Battle {
   enemy: Player;
   initialState: GameState[];
   _apiServerURL: string;
-  _socket: typeof Socket;
+  _socket: SocketConnection;
   _battleRoomID: BattleRoomID;
 
   /**
@@ -47,7 +47,7 @@ export class BrowserBattle implements Battle {
    * @return ゲーム結果
    */
   async progress(command: Command): Promise<GameState[]> {
-    const progress = await battleRoom(this._socket, this._battleRoomID, command);
+    const progress = await this._socket.execute(v => battleRoom(v, this._battleRoomID, command))
     return progress.update;
   }
 }

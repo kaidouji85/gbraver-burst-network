@@ -1,18 +1,17 @@
 // @flow
 
-import io from 'socket.io-client';
 import type {Battle, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import {isLogin, login} from "../http/login";
-import {socketIoConnection} from "../socket.io/socket-io-connection";
-import {casualMatch} from "../socket.io/casual-match";
+import {startConnection, SocketConnection} from "../socket.io/socket-io-connection";
+import {casualMatch} from '../socket.io/casual-match';
 import {BrowserBattle} from '../battle/browser-battle';
 
 /** モノリシックサーバ ブラウザ用 SDK */
 export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMatch {
   _apiServerURL: string;
   _accessToken: string;
-  _socket: typeof io.Socket | null;
+  _socket: SocketConnection | null;
 
   /**
    * コンストラクタ
@@ -62,7 +61,7 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    */
   async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle> {
     const socket = await this._getOrConnectSocket();
-    const matching = await casualMatch(socket, armdozerId, pilotId);
+    const matching = await socket.execute(v => casualMatch(v, armdozerId, pilotId));
     return new BrowserBattle({apiServerURL: this._apiServerURL, socket, battleRoomID: matching.battleRoomID, 
       initialState: matching.initialState, player: matching.player, enemy: matching.enemy});  
   }
@@ -72,14 +71,14 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    * 既に存在すれば取得して、なければ新たにsocket接続する
    *
    * @return ソケット
-   * @private
    */
-  async _getOrConnectSocket(): Promise<typeof io.Socket> {
+  async _getOrConnectSocket(): Promise<SocketConnection> {
     if (this._socket) {
       return this._socket;
     }
     
-    this._socket = await socketIoConnection(this._apiServerURL, this._accessToken);
+    const connection = await startConnection(this._apiServerURL, this._accessToken);
+    this._socket = new SocketConnection(connection);
     return this._socket;
   }
 }

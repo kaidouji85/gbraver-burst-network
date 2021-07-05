@@ -3,13 +3,13 @@
 import io from 'socket.io-client';
 
 /**
- * socket.io コネクションを生成する
+ * socket.io サーバに接続する
  *
  * @param apiServerURL APIサーバのURL
  * @param accessToken アクセストークン
  * @return socket.io コネクション
  */
-export function socketIoConnection(apiServerURL: string, accessToken: string): Promise<typeof io.Socket> {
+export function startConnection(apiServerURL: string, accessToken: string): Promise<typeof io.Socket> {
   const socket = io(apiServerURL, {
     auth: {
       token: accessToken
