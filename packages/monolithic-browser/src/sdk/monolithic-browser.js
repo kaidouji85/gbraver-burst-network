@@ -3,7 +3,7 @@
 import type {Battle, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import {isLogin, login} from "../http/login";
-import {startConnection, SocketConnection} from "../socket.io/socket-io-connection";
+import {startConnection, SocketConnection} from "../socket.io/socket-connection";
 import {casualMatch} from '../socket.io/casual-match';
 import {BrowserBattle} from '../battle/browser-battle';
 

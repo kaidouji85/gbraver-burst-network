@@ -3,7 +3,7 @@
 import type {Player, GameState, Command} from 'gbraver-burst-core';
 import type {Battle, BattleRoomID} from '@gbraver-burst-network/core';
 import {battleRoom} from '../socket.io/battle-room';
-import {SocketConnection} from '../socket.io/socket-io-connection';
+import {SocketConnection} from '../socket.io/socket-connection';
 
 /** コンストラクタのパラメータ */
 type Param = {
