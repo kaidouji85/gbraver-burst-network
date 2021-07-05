@@ -27,16 +27,11 @@ export type ResponseWhenMatching = {
  * @return マッチング情報
  */
 export function casualMatch(socket: typeof Socket, armdozerID: ArmDozerId, pilotId: PilotId): Promise<ResponseWhenMatching> {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const data: Data = {armdozerId: armdozerID, pilotId: pilotId};
     socket.emit('CasualMatch', data);
     socket.once('Matching', (resp: ResponseWhenMatching) => {
       resolve(resp);
     });
-    socket.on('error', err => {
-      reject(err);
-    });
-  }).finally(() => {
-    socket.removeAllListeners();
   });
 }
