@@ -25,3 +25,30 @@ export function socketIoConnection(apiServerURL: string, accessToken: string): P
     socket.removeAllListeners();
   });
 }
+
+/** socket.ioコネクション管理 */
+export class SocketConnection {
+  _socket: typeof io.Socket;
+  
+  /**
+   * コンストラクタ
+   * 
+   * @param socket socket.ioコネクション
+   */
+  constructor(socket: typeof io.Socket) {
+    this._socket = socket;
+  }
+
+  /**
+   * ソケット通信を行う
+   * 通信前にサーバからエラーを受信した場合、
+   * Promise.rejectを発生させる
+   * 
+   * @param fn 通信内容を定義するコールバック関数
+   * @return コールバック関数の実行結果
+   */
+  async execute<X>(fn: (socket: typeof io.Socket) => Promise<X>): Promise<X> {
+    const resp = await fn(this._socket);
+    return resp;
+  }
+}
