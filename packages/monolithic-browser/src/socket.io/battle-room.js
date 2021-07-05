@@ -24,16 +24,11 @@ export type ResponseWhenProgress = {
  * @return ゲーム進行結果
  */
 export function battleRoom(socket: typeof Socket, battleRoomID: BattleRoomID, command: Command): Promise<ResponseWhenProgress> {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const data: Data = {battleRoomID, command};
     socket.emit('BattleRoom', data);
     socket.once('Progress', (resp: ResponseWhenProgress) => {
       resolve(resp);
     });
-    socket.once('error', err => {
-      reject(err);
-    });
-  }).finally(() => {
-    socket.removeAllListeners();
   });
 }
