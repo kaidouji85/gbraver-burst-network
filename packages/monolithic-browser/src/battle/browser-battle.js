@@ -50,11 +50,4 @@ export class BrowserBattle implements Battle {
     const progress = await this._socket.execute(v => battleRoom(v, this._battleRoomID, command))
     return progress.update;
   }
-
-  /**
-   * APIサーバとの接続を切る
-   */
-   close(): void {
-    this._socket.close();
-  }
 }
