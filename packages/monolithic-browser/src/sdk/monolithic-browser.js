@@ -67,6 +67,13 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
   }
 
   /**
+   * APIサーバとの接続を切る
+   */
+  close(): void {
+    this._socket && this._socket.close();
+  }
+
+  /**
    * ソケットを取得する
    * 既に存在すれば取得して、なければ新たにsocket接続する
    *

@@ -63,4 +63,11 @@ export class SocketConnection {
       this._socket.removeAllListeners();
     }
   }
+
+  /**
+   * socket.ioコネクションを切断する
+   */
+  close(): void {
+    this._socket.close();
+  }
 }
