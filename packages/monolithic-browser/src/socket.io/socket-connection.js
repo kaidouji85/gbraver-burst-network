@@ -48,7 +48,19 @@ export class SocketConnection {
    * @return コールバック関数の実行結果
    */
   async execute<X>(fn: (socket: typeof io.Socket) => Promise<X>): Promise<X> {
-    const resp = await fn(this._socket);
-    return resp;
+    try {
+      const success = fn(this._socket)
+        .then(resp => ({isSuccess: true, resp}));
+      const errorOccuere = new Promise(resolve => {
+        this._socket.once('error', resolve)
+      }).then(error => ({isSuccess: false,error}));
+      const result = await Promise.race([success, errorOccuere]);
+      if (!result.isSuccess) {
+        throw result.error;
+      }
+      return result.resp;
+    } finally {
+      this._socket.removeAllListeners();
+    }
   }
 }
