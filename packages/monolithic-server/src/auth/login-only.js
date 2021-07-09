@@ -27,7 +27,7 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
     }
   
     const splitHeader = authHeader.split(' ');
-    if ((splitHeader.length !== 2) || (splitHeader[0] !== 'Bearer') || (splitHeader[1] === '')) {
+    if (!(splitHeader.length === 2 && splitHeader[0] === 'Bearer' && splitHeader[1])) {
       res.sendStatus(401);
       return;
     }
@@ -62,7 +62,7 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sess
   const invalidAccessToken = new Error('invalid access token');
   try {
     const token = socket.handshake?.auth?.token;
-    if (!token || (typeof token !== 'string') || token === '') {
+    if (!(token && (typeof token === 'string'))) {
       next(invalidAccessToken);
       return;
     }
