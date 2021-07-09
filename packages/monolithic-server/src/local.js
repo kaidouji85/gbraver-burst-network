@@ -11,5 +11,5 @@ monolithicServer({
   listenPort: listenPortFromEnv(),
   accessControllOrigin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN ?? '',
   accessTokenSecret: accessTokenSecretFromEnv(),
-  users: new UsersFromJSON(),
+  users: new UsersFromJSON('users.json'),
 });
