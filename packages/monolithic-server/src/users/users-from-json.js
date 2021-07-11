@@ -1,5 +1,6 @@
 // @flow
 
+import {promises as fs} from 'fs';
 import type {User, UserID} from "@gbraver-burst-network/core";
 import {createHash} from 'crypto';
 import type {PasswordUserFinder} from "./password-user-finder";
@@ -14,11 +15,16 @@ type UserFromJSON = {
 
 /** users.jsonから生成したユーザ達 */
 export class UsersFromJSON implements PasswordUserFinder {
-  _users: UserFromJSON[];
+  _jsonFilePath: string;
+  _users: ?UserFromJSON[];
 
-  /** コンストラクタ */
-  constructor() {
-    this._users = require('../../users.json');
+  /**
+   * コンストラクタ
+   *
+   * @param jsonFilePath JSONファイルのパス
+   */
+  constructor(jsonFilePath: string) {
+    this._jsonFilePath = jsonFilePath;
   }
 
   /**
@@ -33,7 +39,18 @@ export class UsersFromJSON implements PasswordUserFinder {
     const hashedPassword = createHash('sha256')
       .update(password)
       .digest('hex');
-    const target = this._users.find(v => (v.userID === userID) && (v.password === hashedPassword));
+    const users = this._users ?? await this._loadUsers();
+    const target = users.find(v => (v.userID === userID) && (v.password === hashedPassword));
     return target ? {id: target.userID} : null;
+  }
+
+  /**
+   * JSONファイルからユーザ情報を読み込む
+   *
+   * @return ユーザ情報
+   */
+  async _loadUsers(): Promise<UserFromJSON[]> {
+    const content = await fs.readFile(this._jsonFilePath, 'utf8');
+    return JSON.parse(content);
   }
 }
