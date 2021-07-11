@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/monolithic-stub",
   "private": true,
-  "version": "0.4.3",
+  "version": "0.4.4",
   "author": "Y.Takeuchi",
   "license": "ISC",
   "main": "lib/monolithic-stub.js",
@@ -17,8 +17,8 @@
     "serve": "http-server build -p 8080 -c-1"
   },
   "dependencies": {
-    "@gbraver-burst-network/core": "^0.4.3",
-    "@gbraver-burst-network/monolithic-browser": "^0.4.3",
+    "@gbraver-burst-network/core": "^0.4.4",
+    "@gbraver-burst-network/monolithic-browser": "^0.4.4",
     "dotenv": "^10.0.0",
     "gbraver-burst-core": "^1.6.9"
   },
