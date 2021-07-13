@@ -39,7 +39,7 @@ export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenF
     res.send(body);
   });
 
-  router.get('/', loginOnlyForExpress(accessToken, sessions), (req, res) => {
+  router.get('/', loginOnlyForExpress(accessToken), (req, res) => {
     res.send('valid access token.');
   });
 

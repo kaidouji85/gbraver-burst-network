@@ -50,7 +50,7 @@ export function monolithicServer(param: Param): void {
   app.use(express.json());
   app.use('/login', loginRouter(param.users, accessToken, sessions));
   
-  io.use(loginOnlyForSocketIO(accessToken, sessions));
+  io.use(loginOnlyForSocketIO(accessToken));
   io.on('connection', socket => {
     console.log('a user connected');
     socket.on('CasualMatch', CasualMatch(socket, io, waitingRoom, battleRooms));
