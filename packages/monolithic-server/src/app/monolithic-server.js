@@ -8,7 +8,7 @@ import type {PasswordUserFinder} from "../users/password-user-finder";
 import {loginRouter} from "../router/login";
 import {loginOnlyForSocketIO} from "../auth/login-only";
 import {AccessToken} from "../auth/access-token";
-import {SessionContainer, FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core";
+import {FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core";
 import {CasualMatch} from "../socket.io/handler/casual-match";
 import {BattleRoom} from '../socket.io/handler/battle-room';
 import {Disconnect} from "../socket.io/handler/disconnect";
@@ -31,7 +31,6 @@ type Param = {
  */
 export function monolithicServer(param: Param): void {
   const accessToken = new AccessToken(param.accessTokenSecret);
-  const sessions = new SessionContainer();
   const waitingRoom = new FirstArrivalRoom();
   const battleRooms = new BattleRoomContainer();
   
@@ -48,7 +47,7 @@ export function monolithicServer(param: Param): void {
     origin: param.accessControllOrigin
   }));
   app.use(express.json());
-  app.use('/login', loginRouter(param.users, accessToken, sessions));
+  app.use('/login', loginRouter(param.users, accessToken));
   
   io.use(loginOnlyForSocketIO(accessToken));
   io.on('connection', socket => {
