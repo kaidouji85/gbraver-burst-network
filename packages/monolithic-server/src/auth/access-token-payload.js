@@ -2,8 +2,14 @@
 
 import type {Session} from "@gbraver-burst-network/core/src/session/session";
 
-/** アクセストークン payload */
-export type AccessTokenPayload = Session;
+/** アクセストークンペイロード */
+export type AccessTokenPayload = SessionPayload;
+
+/** セッション情報を格納したペイロード */
+export type SessionPayload = {
+  type: 'SessionPayload',
+  session: Session
+};
 
 /**
  * セッションからペイロードを生成する
@@ -12,9 +18,15 @@ export type AccessTokenPayload = Session;
  * @return ペイロード
  */
 export function toPayload(session: Session): AccessTokenPayload {
-  return session;
+  return {type: 'SessionPayload', session}
 }
 
+/**
+ * ペイロードからセッションを取り出す
+ *
+ * @param payload ペイロード
+ * @return セッション
+ */
 export function toSession(payload: AccessTokenPayload): Session {
-  return payload;
+  return payload.session;
 }
