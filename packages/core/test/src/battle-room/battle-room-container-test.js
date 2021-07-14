@@ -79,7 +79,7 @@ test('バトルルームID指定で検索することができる', t => {
   t.deepEqual(result, expected);
 });
 
-test('セッションID指定で検索することができる', t => {
+test('ユーザID指定で検索することができる', t => {
   const container = new BattleRoomContainer();
   container.add(room1);
   const p2 = container.add(room2);

@@ -28,7 +28,7 @@ test('プレイヤー、敵の抽出が正しくできる', t => {
   t.deepEqual(result, expected);
 });
 
-test('ルームに存在しないセッションIDを指定した場合は、例外が発生する', t => {
+test('ルームに存在しないユーザIDを指定した場合は、例外が発生する', t => {
   t.throws(() => {
     extractPlayerAndEnemy('no-exist-user-id', roomPlayers);
   });

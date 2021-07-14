@@ -9,7 +9,7 @@ const entry2 = {...EMPTY_ENTRY, userID: 'user2'};
 const entry3 = {...EMPTY_ENTRY, userID: 'user3'};
 const roomEntries = [entry1, entry2, entry3];
 
-test('指定したセッションIDを持つエントリを取り除くことができる', t => {
+test('指定したユーザIDを持つエントリを取り除くことができる', t => {
   const result = removeEntry(roomEntries, entry2.userID);
   const expected = [entry1, entry3];
   t.deepEqual(result, expected);

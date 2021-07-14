@@ -13,9 +13,9 @@ export type ExtractResult = {
 };
 
 /**
- * セッションID指定でルームからプレイヤー、敵を抽出する
+ * ユーザID指定でルームからプレイヤー、敵を抽出する
  * 
- * @param userID プレイヤーのセッションID
+ * @param userID プレイヤーのユーザID
  * @param roomPlayers ルームプレイヤー
  * @return 抽出結果
  */

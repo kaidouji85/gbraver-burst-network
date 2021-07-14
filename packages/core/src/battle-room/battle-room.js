@@ -21,7 +21,7 @@ export type Progress = {
   update: GameState[]
 };
 
-/** セッション、ユーザのマッピング */
+/** ユーザ、プレイヤーのマッピング */
 export type RoomPlayer = {
   /** ユーザID */
   userID: UserID,

@@ -1,6 +1,6 @@
 // @flow
 
-import {EMPTY_PLAYER} from "gbraver-burst-core/lib/empty/player";
+import {EMPTY_PLAYER} from "gbraver-burst-core";
 import type {RoomPlayer} from "../../src/battle-room/battle-room";
 
 /** 空のルームプレイヤー */
