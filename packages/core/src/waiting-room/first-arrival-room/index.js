@@ -4,8 +4,8 @@ import type {EntryResult, WaitingRoom} from "../waiting-room";
 import type {Entry} from "../entry";
 import {isDoubleEntry} from "../is-double-entry";
 import {firstArrivalMatching} from "./first-arrival-matching";
-import type {SessionID} from '../../session/session';
 import {removeEntry} from "../remove-entry";
+import type {UserID} from "../../user";
 
 /** 先着順でマッチングされる待合室 */
 export class FirstArrivalRoom implements WaitingRoom {
@@ -33,7 +33,7 @@ export class FirstArrivalRoom implements WaitingRoom {
   }
 
   /** @override */
-  async leave(userID: SessionID): Promise<void> {
+  async leave(userID: UserID): Promise<void> {
     this._entries = removeEntry(this._entries, userID);
   }
 }
