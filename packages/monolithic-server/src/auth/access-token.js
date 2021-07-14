@@ -7,14 +7,14 @@ import type {AccessTokenPayload} from "./access-token-payload";
 export type JWT = string;
 
 /** アクセストークン発行 */
-export interface AccessTokenEncoder {
+export interface AccessTokenIssuance {
   /**
    * アクセストークンを発行する
    *
    * @param payload アクセストークンペイロード
    * @return 発行したアクセストークン
    */
-  encode(payload: AccessTokenPayload): JWT;
+  issue(payload: AccessTokenPayload): JWT;
 }
 
 /** アクセストークンをデコードする */
@@ -29,7 +29,7 @@ export interface AccessTokenPayloadDecoder {
 }
 
 /** アクセストークン ユーティリティ */
-export class AccessToken implements AccessTokenEncoder, AccessTokenPayloadDecoder {
+export class AccessToken implements AccessTokenIssuance, AccessTokenPayloadDecoder {
   _accessTokenSecret: string;
 
   /**
@@ -42,7 +42,7 @@ export class AccessToken implements AccessTokenEncoder, AccessTokenPayloadDecode
   }
 
   /** @override */
-  encode(payload: AccessTokenPayload): JWT {
+  issue(payload: AccessTokenPayload): JWT {
     return jwt.sign(payload, this._accessTokenSecret, {expiresIn: '40m'});
   }
 

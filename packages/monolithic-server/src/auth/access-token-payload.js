@@ -20,13 +20,3 @@ export type SessionPayload = {
 export function toPayload(session: Session): AccessTokenPayload {
   return {type: 'SessionPayload', session}
 }
-
-/**
- * ペイロードからセッションを取り出す
- *
- * @param payload ペイロード
- * @return セッション
- */
-export function toSession(payload: AccessTokenPayload): Session {
-  return payload.session;
-}

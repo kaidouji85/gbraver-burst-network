@@ -2,10 +2,9 @@
 
 import {Socket, Server} from 'socket.io';
 import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
-import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom} from "@gbraver-burst-network/core";
+import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom, Session} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
 import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
-import {toSession} from "../../auth/access-token-payload";
 
 /** クライアントから送信されるデータ */
 export type Data = {
@@ -38,7 +37,7 @@ interface OwnBattleRooms extends BattleRoomAdd {}
  * @return socket.ioのハンドラ
  */
 export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async (data: Data): Promise<void> => {
-  const session = toSession(socket.gbraverBurstAccessToken);
+  const session = (socket.gbraverBurstSession: Session);
   const entry = {sessionID: session.id, armdozerId: data.armdozerId, pilotId: data.pilotId};
   const result = await waitingRoom.enter(entry);
   if (result.type === 'Waiting') {
@@ -56,7 +55,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
 
   const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
   const otherSocket = waitingRoomSockets.find(v => {
-    const otherSession = toSession(v.gbraverBurstAccessToken);
+    const otherSession = (v.gbraverBurstSession: Session);
     return otherSession.id === otherEntry.sessionID;
   });
   if (!otherSocket) {
@@ -75,7 +74,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
     sockets.map(v => v.join(ioBattleRoom))
   );
   sockets.forEach(v => {
-    const session = toSession(v.gbraverBurstAccessToken);
+    const session = (v.gbraverBurstSession: Session);
     const extractResult = extractPlayerAndEnemy(session.id, battleRoom.roomPlayers());
     const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
     v.emit('Matching', resp);

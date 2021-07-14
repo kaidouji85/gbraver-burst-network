@@ -7,7 +7,7 @@ import type {AccessTokenPayloadDecoder} from "./access-token";
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合は401を返す
- * また有効なアクセストーンの場合、req.gbraverBurstAccessTokenに
+ * また有効なアクセストーンの場合、req.gbraverBurstSessionに
  * AccessTokenPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
@@ -28,7 +28,13 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Fun
     }
   
     const token = splitHeader[1];
-    req.gbraverBurstAccessToken = await accessToken.decode(token);
+    const payload = await accessToken.decode(token);
+    if (payload.type !== 'SessionPayload') {
+      res.sendStatus(401);
+      return;
+    }
+
+    req.gbraverBurstSession = payload.session;
     next();
   } catch(err) {
     res.sendStatus(401);
@@ -39,7 +45,7 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Fun
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合はエラーになる
- * また有効なアクセストーンの場合、socket.gbraverBurstAccessTokenに
+ * また有効なアクセストーンの場合、socket.gbraverBurstSessionに
  * AccessTokenPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
@@ -54,7 +60,13 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadDecoder): Fu
       return;
     }
 
-    socket.gbraverBurstAccessToken = await accessToken.decode(token);
+    const payload = await accessToken.decode(token);
+    if (payload.type !== 'SessionPayload') {
+      next(invalidAccessToken);
+      return;
+    }
+
+    socket.gbraverBurstSession = payload.session;
     next();
   } catch(err) {
     next(invalidAccessToken);

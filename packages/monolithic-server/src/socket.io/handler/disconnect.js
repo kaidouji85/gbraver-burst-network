@@ -3,7 +3,7 @@ import {Socket, Server} from 'socket.io';
 import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomFindBySessionID} from "@gbraver-burst-network/core";
 import {ioWaitingRoom, ioBattleRoom as getIoBattleRoom} from "../room/room-name";
 import type {BattleRoomID} from "@gbraver-burst-network/core/src/battle-room/battle-room-container";
-import {toSession} from "../../auth/access-token-payload";
+import type {Session} from "@gbraver-burst-network/core/src/session/session";
 
 /** 本ハンドラが利用する待合室の機能 */
 interface OwnWaitingRoom extends LeaveWaitingRoom {}
@@ -21,7 +21,7 @@ interface OwnBattleRooms extends BattleRoomRemove, BattleRoomFindBySessionID {}
  * @return ハンドラ
  */
 export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async  (): Promise<void> => {
-  const session = toSession(socket.gbraverBurstAccessToken);
+  const session = (socket.gbraverBurstSession: Session);
   const leaveWaitingRoom = async () => {
     await Promise.all([
       waitingRoom.leave(session.id),
