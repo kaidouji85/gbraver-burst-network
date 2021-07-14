@@ -18,7 +18,7 @@ export interface AccessTokenIssuance {
 }
 
 /** アクセストークンをデコードする */
-export interface AccessTokenPayloadDecoder {
+export interface PayloadDecoder {
   /**
    * アクセストークンをデコードして、そのペイロードを取得する
    *
@@ -29,7 +29,7 @@ export interface AccessTokenPayloadDecoder {
 }
 
 /** アクセストークン ユーティリティ */
-export class AccessToken implements AccessTokenIssuance, AccessTokenPayloadDecoder {
+export class AccessToken implements AccessTokenIssuance, PayloadDecoder {
   _accessTokenSecret: string;
 
   /**

@@ -1,7 +1,7 @@
 // @flow
 
 import type {Entry} from './entry';
-import type {SessionID} from '../session/session';
+import type {UserID} from "../user";
 
 /** 入室結果 */
 export type EntryResult = Waiting | Matching;
@@ -34,9 +34,9 @@ export interface LeaveWaitingRoom {
   /**
    * 待合室から退室する
    * 
-   * @param sessionID 退出するセッションのID 
+   * @param userID 退出するユーザのID
    */
-  leave(sessionID: SessionID): Promise<void>;
+  leave(userID: UserID): Promise<void>;
 }
 
 /** カジュアルマッチ待合室 */

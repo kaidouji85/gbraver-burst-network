@@ -2,7 +2,7 @@
 
 import type {RoomPlayer} from './battle-room';
 import type {Player} from 'gbraver-burst-core';
-import type {SessionID} from '../session/session';
+import type {UserID} from "../user";
 
 /** 抽出結果 */
 export type ExtractResult = {
@@ -13,15 +13,15 @@ export type ExtractResult = {
 };
 
 /**
- * セッションID指定でルームからプレイヤー、敵を抽出する
+ * ユーザID指定でルームからプレイヤー、敵を抽出する
  * 
- * @param playerSessionID プレイヤーのセッションID
+ * @param userID プレイヤーのユーザID
  * @param roomPlayers ルームプレイヤー
  * @return 抽出結果
  */
-export function extractPlayerAndEnemy(playerSessionID: SessionID, roomPlayers: [RoomPlayer, RoomPlayer]): ExtractResult {
-  const player = roomPlayers.find(v => v.sessionID === playerSessionID);
-  const enemy = roomPlayers.find(v => v.sessionID !== playerSessionID);
+export function extractPlayerAndEnemy(userID: UserID, roomPlayers: [RoomPlayer, RoomPlayer]): ExtractResult {
+  const player = roomPlayers.find(v => v.userID === userID);
+  const enemy = roomPlayers.find(v => v.userID !== userID);
   if (!player || !enemy) {
     throw new Error('not found player or enemy');
   }
