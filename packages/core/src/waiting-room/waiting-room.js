@@ -34,9 +34,9 @@ export interface LeaveWaitingRoom {
   /**
    * 待合室から退室する
    * 
-   * @param UserID 退出するユーザのID
+   * @param userID 退出するユーザのID
    */
-  leave(UserID: UserID): Promise<void>;
+  leave(userID: UserID): Promise<void>;
 }
 
 /** カジュアルマッチ待合室 */
