@@ -18,12 +18,7 @@ export class FirstArrivalRoom implements WaitingRoom {
     this._entries = [];
   }
 
-  /**
-   * 待合室にエントリする
-   *
-   * @param entry エントリ
-   * @return 入室結果
-   */
+  /** @override */
   async enter(entry: Entry): Promise<EntryResult> {
     if (isDoubleEntry(this._entries, entry)) {
       throw new Error('double entry');
@@ -37,12 +32,8 @@ export class FirstArrivalRoom implements WaitingRoom {
       : {type: 'Waiting'};
   }
 
-  /**
-   * 待合室から退室する
-   * 
-   * @param sessionID 退出するセッションのID 
-   */
-  async leave(sessionID: SessionID): Promise<void> {
-    this._entries = removeEntry(this._entries, sessionID);
+  /** @override */
+  async leave(userID: SessionID): Promise<void> {
+    this._entries = removeEntry(this._entries, userID);
   }
 }

@@ -4,13 +4,13 @@ import test from 'ava';
 import {removeEntry} from '../../../src/waiting-room/remove-entry';
 import {EMPTY_ENTRY} from "../../data/entry";
 
-const entry1 = {...EMPTY_ENTRY, sessionID: 'session1'};
-const entry2 = {...EMPTY_ENTRY, sessionID: 'session2'};
-const entry3 = {...EMPTY_ENTRY, sessionID: 'session3'};
+const entry1 = {...EMPTY_ENTRY, userID: 'session1'};
+const entry2 = {...EMPTY_ENTRY, userID: 'session2'};
+const entry3 = {...EMPTY_ENTRY, userID: 'session3'};
 const roomEntries = [entry1, entry2, entry3];
 
 test('指定したセッションIDを持つエントリを取り除くことができる', t => {
-  const result = removeEntry(roomEntries, entry2.sessionID);
+  const result = removeEntry(roomEntries, entry2.userID);
   const expected = [entry1, entry3];
   t.deepEqual(result, expected);
 });
