@@ -37,46 +37,51 @@ interface OwnBattleRooms extends BattleRoomAdd {}
  * @return socket.ioのハンドラ
  */
 export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async (data: Data): Promise<void> => {
-  const user = (socket.gbraverBurstUser: User);
-  const entry = {userID: user.id, armdozerId: data.armdozerId, pilotId: data.pilotId};
-  const result = await waitingRoom.enter(entry);
-  if (result.type === 'Waiting') {
-    await socket.join(ioWaitingRoom());
-    socket.emit('Waiting');
-    return;
-  }
+  try {
+    const user = (socket.gbraverBurstUser: User);
+    const entry = {userID: user.id, armdozerId: data.armdozerId, pilotId: data.pilotId};
+    const result = await waitingRoom.enter(entry);
+    if (result.type === 'Waiting') {
+      await socket.join(ioWaitingRoom());
+      socket.emit('Waiting');
+      return;
+    }
 
-  const myEntry = result.entries.find(v => v.userID === user.id);
-  const otherEntry = result.entries.find(v => v !== myEntry);
-  if (!myEntry || !otherEntry) {
-    socket.emit('error', 'not found other entry');
-    return;
-  }
+    const myEntry = result.entries.find(v => v.userID === user.id);
+    const otherEntry = result.entries.find(v => v !== myEntry);
+    if (!myEntry || !otherEntry) {
+      socket.emit('error', 'not found other entry');
+      return;
+    }
 
-  const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
-  const otherSocket = waitingRoomSockets.find(v => {
-    const otherUser = (v.gbraverBurstUser: User);
-    return otherUser.id === otherEntry.userID;
-  });
-  if (!otherSocket) {
-    socket.emit('error', 'not found other socket');
-    return;
-  }
+    const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
+    const otherSocket = waitingRoomSockets.find(v => {
+      const otherUser = (v.gbraverBurstUser: User);
+      return otherUser.id === otherEntry.userID;
+    });
+    if (!otherSocket) {
+      socket.emit('error', 'not found other socket');
+      return;
+    }
 
-  await otherSocket.leave(ioWaitingRoom());
-  const roomPlayers = [createRoomPlayer(myEntry), createRoomPlayer(otherEntry)];
-  const battleRoom = new BattleRoom(roomPlayers);
-  const pair = battleRooms.add(battleRoom);
-  const initialState = battleRoom.stateHistory();
-  const sockets = [socket, otherSocket];
-  const ioBattleRoom = getIoBattleRoom(pair.id);
-  await Promise.all(
-    sockets.map(v => v.join(ioBattleRoom))
-  );
-  sockets.forEach(v => {
-    const user = (v.gbraverBurstUser: User);
-    const extractResult = extractPlayerAndEnemy(user.id, battleRoom.roomPlayers());
-    const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
-    v.emit('Matching', resp);
-  });
+    await otherSocket.leave(ioWaitingRoom());
+    const roomPlayers = [createRoomPlayer(myEntry), createRoomPlayer(otherEntry)];
+    const battleRoom = new BattleRoom(roomPlayers);
+    const pair = battleRooms.add(battleRoom);
+    const initialState = battleRoom.stateHistory();
+    const sockets = [socket, otherSocket];
+    const ioBattleRoom = getIoBattleRoom(pair.id);
+    await Promise.all(
+      sockets.map(v => v.join(ioBattleRoom))
+    );
+    sockets.forEach(v => {
+      const user = (v.gbraverBurstUser: User);
+      const extractResult = extractPlayerAndEnemy(user.id, battleRoom.roomPlayers());
+      const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
+      v.emit('Matching', resp);
+    });
+  } catch(err) {
+    socket.emit('error', 'casual match error');
+    console.error(err);
+  }
 }

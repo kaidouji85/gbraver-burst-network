@@ -70,6 +70,6 @@ export const loginOnlyForSocketIO = (accessToken: PayloadDecoder): Function => a
     next();
   } catch(err) {
     next(invalidAccessToken);
-    throw err;
+    console.error(err);
   }
 }

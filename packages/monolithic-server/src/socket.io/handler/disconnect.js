@@ -20,26 +20,31 @@ interface OwnBattleRooms extends BattleRoomRemove, BattleRoomFindByUserID {}
  * @return ハンドラ
  */
 export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async  (): Promise<void> => {
-  const user = (socket.gbraverBurstUser: User);
-  const leaveWaitingRoom = async () => {
-    await Promise.all([
-      waitingRoom.leave(user.id),
-      socket.leave(ioWaitingRoom())
-    ]);
-  };
-  const removeBattleRoom = async (roomID: BattleRoomID) => {
-    const ioBattleRoom = getIoBattleRoom(roomID);
-    io.in(ioBattleRoom).emit('error', 'battle room end');
-    const roomSockets = await io.in(ioBattleRoom).fetchSockets();
-    await Promise.all(
-      roomSockets.map(v => v.leave(ioBattleRoom))
-    );
-    battleRooms.remove(roomID);
-  };
+  try {
+    const user = (socket.gbraverBurstUser: User);
+    const leaveWaitingRoom = async () => {
+      await Promise.all([
+        waitingRoom.leave(user.id),
+        socket.leave(ioWaitingRoom())
+      ]);
+    };
+    const removeBattleRoom = async (roomID: BattleRoomID) => {
+      const ioBattleRoom = getIoBattleRoom(roomID);
+      io.in(ioBattleRoom).emit('error', 'battle room end');
+      const roomSockets = await io.in(ioBattleRoom).fetchSockets();
+      await Promise.all(
+        roomSockets.map(v => v.leave(ioBattleRoom))
+      );
+      battleRooms.remove(roomID);
+    };
 
-  await leaveWaitingRoom();
-  const pair = battleRooms.findByUserID(user.id);
-  if (pair) {
-    await removeBattleRoom(pair.id);
+    await leaveWaitingRoom();
+    const pair = battleRooms.findByUserID(user.id);
+    if (pair) {
+      await removeBattleRoom(pair.id);
+    }
+  } catch(err) {
+    socket.emit('error', 'disconnect error');
+    console.error(err);
   }
 }
