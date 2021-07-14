@@ -14,6 +14,12 @@ const UserSchema = new Schema({
 /** mongodb ユーザモデル */
 const UserModel = model('users', UserSchema);
 
+/** mongodbユーザのデータ型 */
+type MongoUser = {
+  userID: string,
+  password: string,
+};
+
 /** mongodbから取得したユーザ */
 export const UsersFromMongo: PasswordUserFinder = {
   /**
@@ -29,6 +35,11 @@ export const UsersFromMongo: PasswordUserFinder = {
       .update(password)
       .digest('hex');
     const result = await UserModel.find({userID, password: hashedPassword}).exec();
-    return result.length === 1 ? result[0] : null;
+    if (result.length !== 1) {
+      return null;
+    }
+
+    const mongoUser = (result[0]: MongoUser);
+    return {id: mongoUser.userID};
   }
 }
