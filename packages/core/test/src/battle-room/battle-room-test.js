@@ -10,7 +10,7 @@ import type {RoomPlayer} from "../../../src/battle-room/battle-room";
 /** テストプレイヤー1 */
 const player1: RoomPlayer = {
   ...EMPTY_ROOM_PLAYER,
-  userID: 'session1',
+  userID: 'user1',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player1'
@@ -20,7 +20,7 @@ const player1: RoomPlayer = {
 /** テストプレイヤー2 */
 const player2: RoomPlayer = {
   ...EMPTY_ROOM_PLAYER,
-  userID: 'session2',
+  userID: 'user2',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player2'

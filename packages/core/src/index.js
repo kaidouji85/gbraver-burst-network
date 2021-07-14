@@ -3,9 +3,6 @@
 export type {User, UserID} from './user';
 export type {IdPasswordLogin, LoginCheck} from './user-operation/login';
 
-export type {Session, SessionID, SessionAuth, UserAuth} from './session/session';
-export {createSessionFromUser} from './session/create-session';
-
 export {WaitingRoom} from './waiting-room/waiting-room';
 export {FirstArrivalRoom} from './waiting-room/first-arrival-room/index';
 export type {EnterWaitingRoom, EntryResult, Waiting as WaitingMatch, Matching, LeaveWaitingRoom} from "./waiting-room/waiting-room";
