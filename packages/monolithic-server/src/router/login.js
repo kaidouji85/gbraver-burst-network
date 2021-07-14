@@ -2,13 +2,12 @@
 
 import express from 'express';
 import type {PasswordUserFinder} from "../users/password-user-finder";
-import type {AccessTokenIssuance, AccessTokenPayloadDecoder} from "../auth/access-token";
+import type {AccessTokenIssuance, PayloadDecoder} from "../auth/access-token";
 import {loginOnlyForExpress} from "../auth/login-only";
-import {createSessionFromUser as createSession} from "@gbraver-burst-network/core";
 import {toPayload} from "../auth/access-token-payload";
 
 /** ログイン処理で利用するアクセストークンユーティリティの機能 */
-interface AccessTokenForLogin extends AccessTokenIssuance, AccessTokenPayloadDecoder {}
+interface AccessTokenForLogin extends AccessTokenIssuance, PayloadDecoder {}
 
 /**
  * ログイン処理
@@ -27,8 +26,7 @@ export function loginRouter(users: PasswordUserFinder, accessToken: AccessTokenF
       return;
     }
 
-    const session = createSession(user);
-    const payload = toPayload(session);
+    const payload = toPayload(user);
     const token = accessToken.issue(payload);
     const body = {accessToken: token};
     res.send(body);

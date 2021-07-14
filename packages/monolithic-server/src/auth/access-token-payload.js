@@ -1,22 +1,22 @@
 // @flow
 
-import type {Session} from "@gbraver-burst-network/core";
+import type {User} from "@gbraver-burst-network/core";
 
 /** アクセストークンペイロード */
-export type AccessTokenPayload = SessionPayload;
+export type AccessTokenPayload = UserPayload;
 
-/** セッション情報を格納したペイロード */
-export type SessionPayload = {
-  type: 'SessionPayload',
-  session: Session
+/** ユーザ情報を格納したペイロード */
+export type UserPayload = {
+  type: 'UserPayload',
+  user: User
 };
 
 /**
- * セッションからペイロードを生成する
+ * ユーザ情報からペイロードを生成する
  *
- * @param session セッション
+ * @param user ユーザ情報
  * @return ペイロード
  */
-export function toPayload(session: Session): AccessTokenPayload {
-  return {type: 'SessionPayload', session}
+export function toPayload(user: User): UserPayload {
+  return {type: 'UserPayload', user}
 }

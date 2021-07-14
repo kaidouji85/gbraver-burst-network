@@ -2,18 +2,18 @@
 
 import {Socket} from "socket.io";
 import {Request, Response} from "express";
-import type {AccessTokenPayloadDecoder} from "./access-token";
+import type {PayloadDecoder} from "./access-token";
 
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合は401を返す
- * また有効なアクセストーンの場合、req.gbraverBurstSessionに
- * AccessTokenPayloadをデコードしたものがセットされる
+ * また有効なアクセストーンの場合、req.gbraverBurstUserに
+ * UserPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
  * @return expressミドルウェア
  */
-export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
+export const loginOnlyForExpress = (accessToken: PayloadDecoder): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -29,12 +29,12 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Fun
   
     const token = splitHeader[1];
     const payload = await accessToken.decode(token);
-    if (payload.type !== 'SessionPayload') {
+    if (payload.type !== 'UserPayload') {
       res.sendStatus(401);
       return;
     }
 
-    req.gbraverBurstSession = payload.session;
+    req.gbraverBurstUser = payload.user;
     next();
   } catch(err) {
     res.sendStatus(401);
@@ -45,13 +45,13 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Fun
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合はエラーになる
- * また有効なアクセストーンの場合、socket.gbraverBurstSessionに
- * AccessTokenPayloadをデコードしたものがセットされる
+ * また有効なアクセストーンの場合、socket.gbraverBurstUserに
+ * UserPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
  * @return sicket.ioミドルウェア
  */
-export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadDecoder): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
+export const loginOnlyForSocketIO = (accessToken: PayloadDecoder): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
   const invalidAccessToken = new Error('invalid access token');
   try {
     const token = socket.handshake?.auth?.token;
@@ -61,12 +61,12 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadDecoder): Fu
     }
 
     const payload = await accessToken.decode(token);
-    if (payload.type !== 'SessionPayload') {
+    if (payload.type !== 'UserPayload') {
       next(invalidAccessToken);
       return;
     }
 
-    socket.gbraverBurstSession = payload.session;
+    socket.gbraverBurstUser = payload.user;
     next();
   } catch(err) {
     next(invalidAccessToken);

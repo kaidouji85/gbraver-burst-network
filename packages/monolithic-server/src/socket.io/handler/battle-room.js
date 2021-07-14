@@ -2,7 +2,7 @@
 
 import {Socket, Server} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
-import type {BattleRoomFind, BattleRoomRemove, BattleRoomID, Session} from '@gbraver-burst-network/core';
+import type {BattleRoomFind, BattleRoomRemove, BattleRoomID, User} from '@gbraver-burst-network/core';
 import {ioBattleRoom as getIoBattleRoom} from "../room/room-name";
 
 /** クライアントから渡されるデータ */
@@ -28,14 +28,14 @@ interface OwnBattleRoom extends BattleRoomFind, BattleRoomRemove {}
  * @return イベントハンドラ 
  */
 export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms: OwnBattleRoom): Function => async (data: Data): Promise<void> => {
-  const session = (socket.gbraverBurstSession: Session);
+  const user = (socket.gbraverBurstUser: User);
   const pair = battleRooms.find(data.battleRoomID);
   if (!pair) {
     socket.emit('error', 'invalid battle room');
     return;
   }
 
-  const result = pair.battleRoom.inputCommand(session.id, data.command);
+  const result = pair.battleRoom.inputCommand(user.id, data.command);
   if (result.type === 'Waiting') {
     socket.emit('Waiting');
     return;

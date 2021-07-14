@@ -1,13 +1,14 @@
 // @flow
+
 import {Socket, Server} from 'socket.io';
-import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomID, BattleRoomFindBySessionID, Session} from "@gbraver-burst-network/core";
+import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomID, BattleRoomFindByUserID, User} from "@gbraver-burst-network/core";
 import {ioWaitingRoom, ioBattleRoom as getIoBattleRoom} from "../room/room-name";
 
 /** 本ハンドラが利用する待合室の機能 */
 interface OwnWaitingRoom extends LeaveWaitingRoom {}
 
 /** 本ハンドラが利用するバトルルームコンテナの機能 */
-interface OwnBattleRooms extends BattleRoomRemove, BattleRoomFindBySessionID {}
+interface OwnBattleRooms extends BattleRoomRemove, BattleRoomFindByUserID {}
 
 /**
  * コネクション接続切の際に呼ばれるハンドラ
@@ -19,10 +20,10 @@ interface OwnBattleRooms extends BattleRoomRemove, BattleRoomFindBySessionID {}
  * @return ハンドラ
  */
 export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async  (): Promise<void> => {
-  const session = (socket.gbraverBurstSession: Session);
+  const user = (socket.gbraverBurstUser: User);
   const leaveWaitingRoom = async () => {
     await Promise.all([
-      waitingRoom.leave(session.id),
+      waitingRoom.leave(user.id),
       socket.leave(ioWaitingRoom())
     ]);
   };
@@ -37,7 +38,7 @@ export const Disconnect = (socket: typeof Socket, io: typeof Server, waitingRoom
   };
 
   await leaveWaitingRoom();
-  const pair = battleRooms.findBySessionID(session.id);
+  const pair = battleRooms.findByUserID(user.id);
   if (pair) {
     await removeBattleRoom(pair.id);
   }
