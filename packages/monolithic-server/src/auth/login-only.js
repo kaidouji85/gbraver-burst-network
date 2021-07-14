@@ -2,7 +2,7 @@
 
 import {Socket} from "socket.io";
 import {Request, Response} from "express";
-import type {AccessTokenPayloadParser} from "./access-token";
+import type {AccessTokenPayloadDecoder} from "./access-token";
 
 
 /**
@@ -14,7 +14,7 @@ import type {AccessTokenPayloadParser} from "./access-token";
  * @param accessToken アクセストークンユーティリティ
  * @return expressミドルウェア
  */
-export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
+export const loginOnlyForExpress = (accessToken: AccessTokenPayloadDecoder): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -29,7 +29,7 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser): Func
     }
   
     const token = splitHeader[1];
-    const decodedToken = await accessToken.toAccessTokenPayload(token);
+    const decodedToken = await accessToken.decode(token);
     req.gbraverBurstAccessToken = decodedToken;
     next();
   } catch(err) {
@@ -47,7 +47,7 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser): Func
  * @param accessToken アクセストークンユーティリティ
  * @return sicket.ioミドルウェア
  */
-export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
+export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadDecoder): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
   const invalidAccessToken = new Error('invalid access token');
   try {
     const token = socket.handshake?.auth?.token;
@@ -56,7 +56,7 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser): Fun
       return;
     }
   
-    const decodedToken = await accessToken.toAccessTokenPayload(token);
+    const decodedToken = await accessToken.decode(token);
     socket.gbraverBurstAccessToken = decodedToken;
     next();
   } catch(err) {

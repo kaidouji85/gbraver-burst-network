@@ -4,8 +4,8 @@ import {Socket, Server} from 'socket.io';
 import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
 import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
-import type {AccessTokenPayload} from "../../auth/access-token";
 import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
+import type {AccessTokenPayload} from "../../auth/access-token-payload";
 
 /** クライアントから送信されるデータ */
 export type Data = {
