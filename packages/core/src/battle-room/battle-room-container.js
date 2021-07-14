@@ -2,7 +2,7 @@
 
 import {BattleRoom} from './battle-room';
 import {v4 as uuidv4} from 'uuid';
-import type {SessionID} from '../session/session';
+import type {UserID} from "../user";
 
 /** バトルルームID */
 export type BattleRoomID = string;
@@ -37,16 +37,16 @@ export interface BattleRoomFind {
   find(id: BattleRoomID): ?IDRoomPair;
 }
 
-/** セッションID指定でバトルルームを検索する */
-export interface BattleRoomFindBySessionID {
+/** ユーザID指定でバトルルームを検索する */
+export interface BattleRoomFindByUserID {
   /**
-   * セッションID指定でバトルルームを検索する
+   * ユーザID指定でバトルルームを検索する
    * 条件に一致するバトルルームが存在しない場合、nullを返す
    * 
-   * @param sessionID セッションID
+   * @param userID ユーザID
    * @return 検索結果
    */
-  findBySessionID(sessionID: SessionID): ?IDRoomPair;
+  findByUserID(userID: UserID): ?IDRoomPair;
 }
 
 /** バトルルームをコンテナから削除する */
@@ -60,7 +60,7 @@ export interface BattleRoomRemove {
 }
 
 /** バトルルームコンテナ */
-export class BattleRoomContainer implements BattleRoomAdd, BattleRoomFind, BattleRoomFindBySessionID, BattleRoomRemove {
+export class BattleRoomContainer implements BattleRoomAdd, BattleRoomFind, BattleRoomFindByUserID, BattleRoomRemove {
   _battleRooms: IDRoomPair[];
 
   /**
@@ -68,19 +68,6 @@ export class BattleRoomContainer implements BattleRoomAdd, BattleRoomFind, Battl
    */
   constructor() {
     this._battleRooms = [];
-  }
-
-  /**
-   * バトルルームを追加して、IDを発行する
-   * 
-   * @param battleRoom 追加するバトルルーム
-   * @return 発行したバトルルームID 
-   */
-  add(battleRoom: BattleRoom): IDRoomPair {
-    const id = uuidv4();
-    const newRoom = {id, battleRoom};
-    this._battleRooms = [...this._battleRooms, newRoom];
-    return newRoom;
   }
 
   /**
@@ -92,36 +79,29 @@ export class BattleRoomContainer implements BattleRoomAdd, BattleRoomFind, Battl
     return this._battleRooms;
   }
 
-  /**
-   * ID指定でバトルルームを検索する
-   * 検索失敗した場合、nullを返す
-   * 
-   * @param id 検索するバトルルームのID
-   * @return 検索結果 
-   */
+  /** @override */
+  add(battleRoom: BattleRoom): IDRoomPair {
+    const id = uuidv4();
+    const newRoom = {id, battleRoom};
+    this._battleRooms = [...this._battleRooms, newRoom];
+    return newRoom;
+  }
+
+  /** @override */
   find(id: BattleRoomID): ?IDRoomPair {
     return this._battleRooms.find(v => v.id === id) ?? null;
   }
 
-  /**
-   * セッションID指定でバトルルームを検索する
-   * 条件に一致するバトルルームが存在しない場合、nullを返す
-   * 
-   * @param sessionID セッションID
-   * @return 検索結果
-   */
-  findBySessionID(sessionID: SessionID): ?IDRoomPair {
-    return this._battleRooms.find(v => v.battleRoom.roomPlayers()
-      .map(p => p.sessionID)
-      .includes(sessionID)
+  /** @override */
+  findByUserID(userID: UserID): ?IDRoomPair {
+    return this._battleRooms.find(v =>
+      v.battleRoom.roomPlayers()
+        .map(p => p.userID)
+        .includes(userID)
     ) ?? null;
   }
 
-  /**
-   * 指定したバトルルームをコンテナから削除する
-   * 
-   * @param id 削除するバトルルームのID
-   */
+  /** @override */
   remove(id: BattleRoomID): void {
     this._battleRooms = this._battleRooms.filter(v => v.id !== id);
   }

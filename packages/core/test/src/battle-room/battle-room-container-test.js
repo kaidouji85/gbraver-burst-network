@@ -6,7 +6,7 @@ import {BattleRoom} from '../../../src/battle-room/battle-room';
 import {BattleRoomContainer} from '../../../src/battle-room/battle-room-container';
 
 const player1 = {
-  sessionID: 'session1',
+  userID: 'user1',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player1'
@@ -14,7 +14,7 @@ const player1 = {
 };
 
 const player2 = {
-  sessionID: 'session2',
+  userID: 'user2',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player2'
@@ -22,7 +22,7 @@ const player2 = {
 };
 
 const player3 = {
-  sessionID: 'session3',
+  userID: 'user3',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player3'
@@ -30,7 +30,7 @@ const player3 = {
 };
 
 const player4 = {
-  sessionID: 'session4',
+  userID: 'user4',
   player: {
     ...EMPTY_PLAYER,
     playerId: 'player4'
@@ -84,7 +84,7 @@ test('セッションID指定で検索することができる', t => {
   container.add(room1);
   const p2 = container.add(room2);
   
-  const result = container.findBySessionID(player3.sessionID);
+  const result = container.findByUserID(player3.userID);
   const expected = {id: p2.id, battleRoom: room2};
   t.deepEqual(result, expected);
 });

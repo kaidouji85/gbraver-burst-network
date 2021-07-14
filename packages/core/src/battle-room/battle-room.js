@@ -6,7 +6,6 @@ import type {UserID} from "../user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
 import {isDoubleEnterCommand} from "./is-double-enter-command";
-import type {SessionID} from "../session/session";
 
 /** コマンド入力結果 */
 export type InputCommandResult = Waiting | Progress;
@@ -24,8 +23,8 @@ export type Progress = {
 
 /** セッション、ユーザのマッピング */
 export type RoomPlayer = {
-  /** セッションID */
-  sessionID: SessionID,
+  /** ユーザID */
+  userID: UserID,
   /** ユーザのプレイヤー情報 */
   player: Player,
 }
@@ -68,18 +67,18 @@ export class BattleRoom {
   /**
    * コマンド入力する
    *
-   * @param sessionID コマンド入力するセッションのID
+   * @param userID コマンド入力するユーザのID
    * @param command 入力するコマンド
    * @return コマンド入力結果
    */
-  inputCommand(sessionID: UserID, command: Command): InputCommandResult {
-    const target = this._roomPlayers.find(v => v.sessionID === sessionID);
+  inputCommand(userID: UserID, command: Command): InputCommandResult {
+    const target = this._roomPlayers.find(v => v.userID === userID);
     if (!target) {
-      throw new Error('not found session');
+      throw new Error('not found user');
     }
 
     if (isDoubleEnterCommand(this._roomCommands, target.player.playerId)) {
-      throw new Error(`${sessionID} is double enter command`);
+      throw new Error(`${userID} is double enter command`);
     }
 
     const playerCommand = {playerId: target.player.playerId, command: command};
