@@ -5,7 +5,7 @@ import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burs
 import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
 import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
-import type {AccessTokenPayload} from "../../auth/access-token-payload";
+import {toSession} from "../../auth/access-token-payload";
 
 /** クライアントから送信されるデータ */
 export type Data = {
@@ -38,8 +38,8 @@ interface OwnBattleRooms extends BattleRoomAdd {}
  * @return socket.ioのハンドラ
  */
 export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoom: OwnWaitingRoom, battleRooms: OwnBattleRooms): Function => async (data: Data): Promise<void> => {
-  const payload: AccessTokenPayload = socket.gbraverBurstAccessToken;
-  const entry = {sessionID: payload.sessionID, armdozerId: data.armdozerId, pilotId: data.pilotId};
+  const session = toSession(socket.gbraverBurstAccessToken);
+  const entry = {sessionID: session.id, armdozerId: data.armdozerId, pilotId: data.pilotId};
   const result = await waitingRoom.enter(entry);
   if (result.type === 'Waiting') {
     await socket.join(ioWaitingRoom());
@@ -47,7 +47,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
     return;
   }
 
-  const myEntry = result.entries.find(v => v.sessionID === payload.sessionID);
+  const myEntry = result.entries.find(v => v.sessionID === session.id);
   const otherEntry = result.entries.find(v => v !== myEntry);
   if (!myEntry || !otherEntry) {
     socket.emit('error', 'not found other entry');
@@ -56,8 +56,8 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
 
   const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
   const otherSocket = waitingRoomSockets.find(v => {
-    const otherPayload: AccessTokenPayload = v.gbraverBurstAccessToken;
-    return otherPayload.sessionID === otherEntry.sessionID;
+    const otherSession = toSession(v.gbraverBurstAccessToken);
+    return otherSession.id === otherEntry.sessionID;
   });
   if (!otherSocket) {
     socket.emit('error', 'not found other socket');
@@ -75,8 +75,8 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
     sockets.map(v => v.join(ioBattleRoom))
   );
   sockets.forEach(v => {
-    const payload: AccessTokenPayload = v.gbraverBurstAccessToken;
-    const extractResult = extractPlayerAndEnemy(payload.sessionID, battleRoom.roomPlayers());
+    const session = toSession(v.gbraverBurstAccessToken);
+    const extractResult = extractPlayerAndEnemy(session.id, battleRoom.roomPlayers());
     const resp: ResponseWhenMatching = {battleRoomID: pair.id, initialState, player: extractResult.player, enemy: extractResult.enemy};
     v.emit('Matching', resp);
   });
