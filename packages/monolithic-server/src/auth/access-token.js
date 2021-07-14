@@ -1,41 +1,35 @@
 // @flow
 
-import type {Session} from "@gbraver-burst-network/core";
 import jwt from 'jsonwebtoken';
+import type {AccessTokenPayload} from "./access-token-payload";
 
 /** JWT */
 export type JWT = string;
 
-/** アクセストークン payload */
-export type AccessTokenPayload = {
-  /** セッションID */
-  sessionID: string
-};
-
 /** アクセストークン発行 */
-export interface AccessTokenCreator {
+export interface AccessTokenIssuance {
   /**
    * アクセストークンを発行する
    *
-   * @param session セッション情報
+   * @param payload アクセストークンペイロード
    * @return 発行したアクセストークン
    */
-  createAccessToken(session: Session): JWT;
+  issue(payload: AccessTokenPayload): JWT;
 }
 
-/** アクセストークンからペイロードを取得する */
-export interface AccessTokenPayloadParser {
+/** アクセストークンをデコードする */
+export interface AccessTokenPayloadDecoder {
   /**
-   * JWTからペイロードを取得する
+   * アクセストークンをデコードして、そのペイロードを取得する
    *
    * @param token 取得元のJWT
    * @return 取得結果結果
    */
-  toAccessTokenPayload(token: JWT): Promise<AccessTokenPayload>;
+  decode(token: JWT): Promise<AccessTokenPayload>;
 }
 
 /** アクセストークン ユーティリティ */
-export class AccessToken implements AccessTokenCreator, AccessTokenPayloadParser {
+export class AccessToken implements AccessTokenIssuance, AccessTokenPayloadDecoder {
   _accessTokenSecret: string;
 
   /**
@@ -47,24 +41,13 @@ export class AccessToken implements AccessTokenCreator, AccessTokenPayloadParser
     this._accessTokenSecret = accessTokenSecret;
   }
 
-  /**
-   * アクセストークンを発行する
-   *
-   * @param session セッション情報
-   * @return 発行したアクセストークン
-   */
-  createAccessToken(session: Session): JWT {
-    const payload: AccessTokenPayload = {sessionID: session.id};
+  /** @override */
+  issue(payload: AccessTokenPayload): JWT {
     return jwt.sign(payload, this._accessTokenSecret, {expiresIn: '40m'});
   }
 
-  /**
-   * JWTからペイロードを取得する
-   *
-   * @param token 取得元のJWT
-   * @return 取得結果結果
-   */
-  toAccessTokenPayload(token: JWT): Promise<AccessTokenPayload> {
+  /** @override */
+  decode(token: JWT): Promise<AccessTokenPayload> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, this._accessTokenSecret, (err, decodedToken) => {
         err ? reject(err) : resolve(decodedToken);
