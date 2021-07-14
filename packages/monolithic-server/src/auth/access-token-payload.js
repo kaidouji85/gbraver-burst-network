@@ -1,6 +1,6 @@
 // @flow
 
-import type {Session} from "@gbraver-burst-network/core/src/session/session";
+import type {Session} from "@gbraver-burst-network/core";
 
 /** アクセストークンペイロード */
 export type AccessTokenPayload = SessionPayload;

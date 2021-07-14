@@ -1,9 +1,7 @@
 // @flow
 import {Socket, Server} from 'socket.io';
-import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomFindBySessionID} from "@gbraver-burst-network/core";
+import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomID, BattleRoomFindBySessionID, Session} from "@gbraver-burst-network/core";
 import {ioWaitingRoom, ioBattleRoom as getIoBattleRoom} from "../room/room-name";
-import type {BattleRoomID} from "@gbraver-burst-network/core/src/battle-room/battle-room-container";
-import type {Session} from "@gbraver-burst-network/core/src/session/session";
 
 /** 本ハンドラが利用する待合室の機能 */
 interface OwnWaitingRoom extends LeaveWaitingRoom {}

@@ -1,6 +1,6 @@
 // @flow
 
-import type {UserID} from "@gbraver-burst-network/core/lib";
+import type {UserID} from "@gbraver-burst-network/core";
 
 /** ログインAPI実行結果 */
 export type LoginResult = LoginSuccess | LoginFailed;
