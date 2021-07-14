@@ -14,9 +14,14 @@ export type UserPayload = {
 /**
  * ユーザ情報からペイロードを生成する
  *
- * @param user ユーザ情報
+ * @param origin ユーザ情報
  * @return ペイロード
  */
-export function toPayload(user: User): UserPayload {
+export function toPayload(origin: User): UserPayload {
+  // originにはUserに定義されていないプロパティが含まれる可能性がある
+  // 例えばパスワードが含まれることも、理論上はありえる
+  // その場合、JWTトークンにパスワードを平文で含めてしまうことになる
+  // それだとまずいので、必要な情報のみを抽出している
+  const user: User = {id: origin.id};
   return {type: 'UserPayload', user}
 }
