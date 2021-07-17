@@ -21,6 +21,6 @@ export function createRoomPlayer(entry: Entry): RoomPlayer {
 
   const playerId = uuidv4();
   const player: Player = {playerId, armdozer, pilot};
-  const sessionID = entry.sessionID;
-  return {sessionID, player};
+  const userID = entry.userID;
+  return {userID, player};
 }

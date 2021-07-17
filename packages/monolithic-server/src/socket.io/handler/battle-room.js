@@ -2,8 +2,7 @@
 
 import {Socket, Server} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
-import type {BattleRoomFind, BattleRoomRemove, BattleRoomID} from '@gbraver-burst-network/core';
-import type {AccessTokenPayload} from '../../auth/access-token';
+import type {BattleRoomFind, BattleRoomRemove, BattleRoomID, User} from '@gbraver-burst-network/core';
 import {ioBattleRoom as getIoBattleRoom} from "../room/room-name";
 
 /** クライアントから渡されるデータ */
@@ -29,30 +28,35 @@ interface OwnBattleRoom extends BattleRoomFind, BattleRoomRemove {}
  * @return イベントハンドラ 
  */
 export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms: OwnBattleRoom): Function => async (data: Data): Promise<void> => {
-  const token: AccessTokenPayload = socket.gbraverBurstAccessToken;
-  const pair = battleRooms.find(data.battleRoomID);
-  if (!pair) {
-    socket.emit('error', 'invalid battle room');
-    return;
-  }
+  try {
+    const user = (socket.gbraverBurstUser: User);
+    const pair = battleRooms.find(data.battleRoomID);
+    if (!pair) {
+      socket.emit('error', 'invalid battle room');
+      return;
+    }
 
-  const result = pair.battleRoom.inputCommand(token.sessionID, data.command);
-  if (result.type === 'Waiting') {
-    socket.emit('Waiting');
-    return;
-  }
+    const result = pair.battleRoom.inputCommand(user.id, data.command);
+    if (result.type === 'Waiting') {
+      socket.emit('Waiting');
+      return;
+    }
 
-  const resp: ResponseWhenProgress = {update: result.update};
-  const ioBattleRoom = getIoBattleRoom(data.battleRoomID);
-  await io.in(ioBattleRoom).emit('Progress', resp);
-  const lastState = result.update[result.update.length - 1];
-  if (lastState.effect.name !== 'GameEnd') {
-    return;
-  }
+    const resp: ResponseWhenProgress = {update: result.update};
+    const ioBattleRoom = getIoBattleRoom(data.battleRoomID);
+    await io.in(ioBattleRoom).emit('Progress', resp);
+    const lastState = result.update[result.update.length - 1];
+    if (lastState.effect.name !== 'GameEnd') {
+      return;
+    }
 
-  battleRooms.remove(data.battleRoomID);
-  const sockets = await io.in(ioBattleRoom).fetchSockets();
-  await Promise.all(
-    sockets.map(v => v.leave(ioBattleRoom))
-  );
+    battleRooms.remove(data.battleRoomID);
+    const sockets = await io.in(ioBattleRoom).fetchSockets();
+    await Promise.all(
+      sockets.map(v => v.leave(ioBattleRoom))
+    );
+  } catch(err) {
+    socket.emit('error', 'battle room error');
+    console.error(err);
+  }
 };

@@ -2,23 +2,18 @@
 
 import {Socket} from "socket.io";
 import {Request, Response} from "express";
-import type {FindSession} from '@gbraver-burst-network/core';
-import type {AccessTokenPayloadParser} from "./access-token";
-
-/** 本ミドルウェアで利用するセッションコンテナの機能 */
-interface OwnSessions extends FindSession {}
+import type {PayloadDecoder} from "./access-token";
 
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合は401を返す
- * また有効なアクセストーンの場合、req.gbraverBurstAccessTokenに
- * アクセストークン payload をデコードしたものがセットされる
+ * また有効なアクセストーンの場合、req.gbraverBurstUserに
+ * UserPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
- * @param sessions セッションコンテナ
  * @return expressミドルウェア
  */
-export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessions: OwnSessions): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
+export const loginOnlyForExpress = (accessToken: PayloadDecoder): Function => async (req: typeof Request, res: typeof Response, next: Function): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -33,14 +28,13 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
     }
   
     const token = splitHeader[1];
-    const decodedToken = await accessToken.toAccessTokenPayload(token);
-    const isNoExistSession = !sessions.find(decodedToken.sessionID);
-    if (isNoExistSession) {
+    const payload = await accessToken.decode(token);
+    if (payload.type !== 'UserPayload') {
       res.sendStatus(401);
-      return;  
+      return;
     }
 
-    req.gbraverBurstAccessToken = decodedToken;
+    req.gbraverBurstUser = payload.user;
     next();
   } catch(err) {
     res.sendStatus(401);
@@ -51,14 +45,13 @@ export const loginOnlyForExpress = (accessToken: AccessTokenPayloadParser, sessi
 /**
  * ログイン専用ページの制御 expressミドルウェア
  * 有効なアクセストークンでない場合はエラーになる
- * また有効なアクセストーンの場合、socket.gbraverBurstAccessTokenに
- * アクセストークン payload をデコードしたものがセットされる
+ * また有効なアクセストーンの場合、socket.gbraverBurstUserに
+ * UserPayloadをデコードしたものがセットされる
  *
  * @param accessToken アクセストークンユーティリティ
- * @param sessions セッションコンテナ
  * @return sicket.ioミドルウェア
  */
-export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sessions: OwnSessions): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
+export const loginOnlyForSocketIO = (accessToken: PayloadDecoder): Function => async (socket: typeof Socket, next: Function): Promise<void> => {
   const invalidAccessToken = new Error('invalid access token');
   try {
     const token = socket.handshake?.auth?.token;
@@ -66,18 +59,17 @@ export const loginOnlyForSocketIO = (accessToken: AccessTokenPayloadParser, sess
       next(invalidAccessToken);
       return;
     }
-  
-    const decodedToken = await accessToken.toAccessTokenPayload(token);
-    const isNoExistSession = !sessions.find(decodedToken.sessionID);
-    if (isNoExistSession) {
+
+    const payload = await accessToken.decode(token);
+    if (payload.type !== 'UserPayload') {
       next(invalidAccessToken);
-      return;  
+      return;
     }
 
-    socket.gbraverBurstAccessToken = decodedToken;
+    socket.gbraverBurstUser = payload.user;
     next();
   } catch(err) {
     next(invalidAccessToken);
-    throw err;
+    console.error(err);
   }
 }

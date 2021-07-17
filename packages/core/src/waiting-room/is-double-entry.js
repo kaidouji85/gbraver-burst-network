@@ -10,6 +10,6 @@ import type {Entry} from "./entry";
  * @return 判定結果、trueで二重入室
  */
 export function isDoubleEntry(roomEntries: Entry[], entry: Entry): boolean {
-  return roomEntries.map(v => v.sessionID)
-    .includes(entry.sessionID);
+  return roomEntries.map(v => v.userID)
+    .includes(entry.userID);
 }
