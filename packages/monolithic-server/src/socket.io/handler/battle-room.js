@@ -3,7 +3,7 @@
 import {Socket, Server} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
 import type {BattleRoomFind, BattleRoomRemove, BattleRoomID, User} from '@gbraver-burst-network/core';
-import {ioBattleRoomName as getIoBattleRoom} from "../room/room-name";
+import {ioBattleRoomName} from "../room/room-name";
 
 /** クライアントから渡されるデータ */
 export type Data = {
@@ -43,7 +43,7 @@ export const BattleRoom = (socket: typeof Socket, io: typeof Server, battleRooms
     }
 
     const resp: ResponseWhenProgress = {update: result.update};
-    const ioBattleRoom = getIoBattleRoom(data.battleRoomID);
+    const ioBattleRoom = ioBattleRoomName(data.battleRoomID);
     await io.in(ioBattleRoom).emit('Progress', resp);
     const lastState = result.update[result.update.length - 1];
     if (lastState.effect.name !== 'GameEnd') {

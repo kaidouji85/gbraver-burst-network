@@ -4,7 +4,7 @@ import {Socket, Server} from 'socket.io';
 import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
 import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom, User} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
-import {ioBattleRoomName as getIoBattleRoom, ioWaitingRoomName} from '../room/room-name';
+import {ioBattleRoomName, ioWaitingRoomName} from '../room/room-name';
 
 /** クライアントから送信されるデータ */
 export type Data = {
@@ -70,7 +70,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
     const pair = battleRooms.add(battleRoom);
     const initialState = battleRoom.stateHistory();
     const sockets = [socket, otherSocket];
-    const ioBattleRoom = getIoBattleRoom(pair.id);
+    const ioBattleRoom = ioBattleRoomName(pair.id);
     await Promise.all(
       sockets.map(v => v.join(ioBattleRoom))
     );
