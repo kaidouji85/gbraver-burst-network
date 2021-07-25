@@ -19,7 +19,7 @@ interface OwnUsers extends PasswordUserFinder {}
 /** モノリシックサーバのパラメータ */
 type Param = {
   listenPort: number,
-  accessControllOrigin: string,
+  accessControlOrigin: string,
   accessTokenSecret: string,
   users: OwnUsers,
 };
@@ -38,13 +38,13 @@ export function monolithicServer(param: Param): void {
   const server = http.createServer(app);
   const io = new Server(server, {
     cors: {
-      origin: param.accessControllOrigin,
+      origin: param.accessControlOrigin,
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']
     }
   });
   
   app.use(cors({
-    origin: param.accessControllOrigin
+    origin: param.accessControlOrigin
   }));
   app.use(express.json());
   app.use('/login', loginRouter(param.users, accessToken));
