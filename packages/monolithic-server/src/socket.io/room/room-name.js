@@ -7,7 +7,7 @@ import type {BattleRoomID} from '@gbraver-burst-network/core';
  * 
  * @return ルーム名 
  */
-export function ioWaitingRoom(): string {
+export function ioWaitingRoomName(): string {
   return 'WAITING_ROOM';
 }
 
@@ -16,6 +16,6 @@ export function ioWaitingRoom(): string {
  * @param battleRoomID バトルルームID
  * @return ルーム名
  */
-export function ioBattleRoom(battleRoomID: BattleRoomID): string {
+export function ioBattleRoomName(battleRoomID: BattleRoomID): string {
   return `BATTLE_ROOM_OF_${battleRoomID}`;
 }
