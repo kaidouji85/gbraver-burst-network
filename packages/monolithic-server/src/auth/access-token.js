@@ -43,13 +43,15 @@ export class AccessToken implements AccessTokenIssuance, PayloadDecoder {
 
   /** @override */
   issue(payload: AccessTokenPayload): JWT {
-    return jwt.sign(payload, this._accessTokenSecret, {expiresIn: '40m'});
+    const options = {expiresIn: '40m',  algorithm: 'HS256'};
+    return jwt.sign(payload, this._accessTokenSecret, options);
   }
 
   /** @override */
   decode(token: JWT): Promise<AccessTokenPayload> {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, this._accessTokenSecret, (err, decodedToken) => {
+      const options = {algorithms: 'HS256'};
+      jwt.verify(token, this._accessTokenSecret, options, (err, decodedToken) => {
         err ? reject(err) : resolve(decodedToken);
       });
     });
