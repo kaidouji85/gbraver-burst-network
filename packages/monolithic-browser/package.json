@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/monolithic-browser",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "author": "Y.Takeuchi",
   "license": "ISC",
   "main": "lib/index.js",
@@ -16,7 +16,7 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "@gbraver-burst-network/core": "^0.4.4",
+    "@gbraver-burst-network/core": "^0.4.5",
     "flow-copy-source": "^2.0.9",
     "gbraver-burst-core": "^1.7.8",
     "socket.io-client": "^4.1.3"
