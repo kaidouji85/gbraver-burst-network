@@ -4,7 +4,7 @@ import {Socket, Server} from 'socket.io';
 import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
 import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom, User} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
-import {ioBattleRoom as getIoBattleRoom, ioWaitingRoom} from '../room/room-name';
+import {ioBattleRoomName, ioWaitingRoomName} from '../room/room-name';
 
 /** クライアントから送信されるデータ */
 export type Data = {
@@ -42,7 +42,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
     const entry = {userID: user.id, armdozerId: data.armdozerId, pilotId: data.pilotId};
     const result = await waitingRoom.enter(entry);
     if (result.type === 'Waiting') {
-      await socket.join(ioWaitingRoom());
+      await socket.join(ioWaitingRoomName());
       socket.emit('Waiting');
       return;
     }
@@ -54,7 +54,7 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
       return;
     }
 
-    const waitingRoomSockets = await io.in(ioWaitingRoom()).fetchSockets();
+    const waitingRoomSockets = await io.in(ioWaitingRoomName()).fetchSockets();
     const otherSocket = waitingRoomSockets.find(v => {
       const otherUser = (v.gbraverBurstUser: User);
       return otherUser.id === otherEntry.userID;
@@ -64,13 +64,13 @@ export const CasualMatch = (socket: typeof Socket, io: typeof Server, waitingRoo
       return;
     }
 
-    await otherSocket.leave(ioWaitingRoom());
+    await otherSocket.leave(ioWaitingRoomName());
     const roomPlayers = [createRoomPlayer(myEntry), createRoomPlayer(otherEntry)];
     const battleRoom = new BattleRoom(roomPlayers);
     const pair = battleRooms.add(battleRoom);
     const initialState = battleRoom.stateHistory();
     const sockets = [socket, otherSocket];
-    const ioBattleRoom = getIoBattleRoom(pair.id);
+    const ioBattleRoom = ioBattleRoomName(pair.id);
     await Promise.all(
       sockets.map(v => v.join(ioBattleRoom))
     );

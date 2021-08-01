@@ -12,6 +12,7 @@ import {FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core
 import {CasualMatch} from "../socket.io/handler/casual-match";
 import {BattleRoom} from '../socket.io/handler/battle-room';
 import {Disconnect} from "../socket.io/handler/disconnect";
+import {noSameUserSocket} from "../auth/no-same-user-socket";
 
 /** モノリシックサーバで利用するUserの機能 */
 interface OwnUsers extends PasswordUserFinder {}
@@ -50,6 +51,7 @@ export function monolithicServer(param: Param): void {
   app.use('/login', loginRouter(param.users, accessToken));
   
   io.use(loginOnlyForSocketIO(accessToken));
+  io.use(noSameUserSocket(io));
   io.on('connection', socket => {
     console.log('a user connected');
     socket.on('CasualMatch', CasualMatch(socket, io, waitingRoom, battleRooms));
