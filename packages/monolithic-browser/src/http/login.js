@@ -1,7 +1,5 @@
 // @flow
 
-import type {UserID} from "@gbraver-burst-network/core";
-
 /** ログインAPI実行結果 */
 export type LoginResult = LoginSuccess | LoginFailed;
 
@@ -25,7 +23,7 @@ export type LoginFailed = {
  * @param apiServerURL APIサーバのURL
  * @return 処理結果
  */
-export async function login(userID: UserID, password: string, apiServerURL: string): Promise<LoginResult> {
+export async function login(userID: string, password: string, apiServerURL: string): Promise<LoginResult> {
   const body = {userID, password};
   const resp = await fetch(`${apiServerURL}/login`, {
     method: 'POST',

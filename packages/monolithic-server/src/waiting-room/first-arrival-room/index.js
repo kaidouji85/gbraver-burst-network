@@ -5,7 +5,7 @@ import type {Entry} from "../entry";
 import {isDoubleEntry} from "../is-double-entry";
 import {firstArrivalMatching} from "./first-arrival-matching";
 import {removeEntry} from "../remove-entry";
-import type {UserID} from "../../user";
+import type {UserID} from "../../users/user";
 
 /** 先着順でマッチングされる待合室 */
 export class FirstArrivalRoom implements WaitingRoom {

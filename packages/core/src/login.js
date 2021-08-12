@@ -1,12 +1,12 @@
 // @flow
 
-import type {UserID} from "../user";
-
 /**
+ * @deprecated
  * ID、パスワードでのログイン
  */
 export interface IdPasswordLogin {
   /**
+   * @deprecated
    * ユーザID、パスワードでログインを行う
    * ログインに成功した場合はtrueを返す
    *
@@ -14,7 +14,7 @@ export interface IdPasswordLogin {
    * @param password パスワード
    * @return ログイン結果
    */
-  login(userID: UserID, password: string): Promise<boolean>;
+  login(userID: string, password: string): Promise<boolean>;
 }
 
 /** ログインチェック */

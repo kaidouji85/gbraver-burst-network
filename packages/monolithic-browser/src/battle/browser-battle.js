@@ -1,7 +1,7 @@
 // @flow
 
 import type {Player, GameState, Command} from 'gbraver-burst-core';
-import type {Battle, BattleRoomID} from '@gbraver-burst-network/core';
+import type {Battle} from '@gbraver-burst-network/core';
 import {battleRoom} from '../socket.io/battle-room';
 import {SocketConnection} from '../socket.io/socket-connection';
 
@@ -9,7 +9,7 @@ import {SocketConnection} from '../socket.io/socket-connection';
 type Param = {
   apiServerURL: string, 
   socket: SocketConnection,
-  battleRoomID: BattleRoomID,
+  battleRoomID: string,
   player: Player,
   enemy: Player,
   initialState: GameState[],
@@ -22,7 +22,7 @@ export class BrowserBattle implements Battle {
   initialState: GameState[];
   _apiServerURL: string;
   _socket: SocketConnection;
-  _battleRoomID: BattleRoomID;
+  _battleRoomID: string;
 
   /**
    * コンストラクタ

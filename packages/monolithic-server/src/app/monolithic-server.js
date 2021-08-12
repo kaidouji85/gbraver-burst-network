@@ -8,11 +8,12 @@ import type {PasswordUserFinder} from "../users/password-user-finder";
 import {loginRouter} from "../router/login";
 import {loginOnlyForSocketIO} from "../auth/login-only";
 import {AccessToken} from "../auth/access-token";
-import {FirstArrivalRoom, BattleRoomContainer} from "@gbraver-burst-network/core";
 import {CasualMatch} from "../socket.io/handler/casual-match";
 import {BattleRoom} from '../socket.io/handler/battle-room';
 import {Disconnect} from "../socket.io/handler/disconnect";
 import {noSameUserSocket} from "../auth/no-same-user-socket";
+import {FirstArrivalRoom} from "../waiting-room/first-arrival-room";
+import {BattleRoomContainer} from "../battle-room/battle-room-container";
 
 /** モノリシックサーバで利用するUserの機能 */
 interface OwnUsers extends PasswordUserFinder {}

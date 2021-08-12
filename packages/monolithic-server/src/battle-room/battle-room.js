@@ -2,7 +2,7 @@
 
 import type {Command, GameState, Player, PlayerCommand} from "gbraver-burst-core";
 import {GbraverBurstCore} from "gbraver-burst-core";
-import type {UserID} from "../user";
+import type {UserID} from "../users/user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
 import {isDoubleEnterCommand} from "./is-double-enter-command";
