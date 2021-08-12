@@ -2,11 +2,10 @@
 
 import {Socket} from 'socket.io-client';
 import type {GameState, Command} from 'gbraver-burst-core';
-import type {BattleRoomID} from '@gbraver-burst-network/core';
 
 /** サーバに送信するデータ */
 export type Data = {
-  battleRoomID: BattleRoomID,
+  battleRoomID: string,
   command: Command,
 };
 
@@ -23,7 +22,7 @@ export type ResponseWhenProgress = {
  * @param command コマンド
  * @return ゲーム進行結果
  */
-export function battleRoom(socket: typeof Socket, battleRoomID: BattleRoomID, command: Command): Promise<ResponseWhenProgress> {
+export function battleRoom(socket: typeof Socket, battleRoomID: string, command: Command): Promise<ResponseWhenProgress> {
   return new Promise(resolve => {
     const data: Data = {battleRoomID, command};
     socket.emit('BattleRoom', data);
