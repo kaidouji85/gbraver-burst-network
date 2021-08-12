@@ -1,6 +1,6 @@
 // @flow
 
-import type {UserID} from "../user";
+import type {UserID} from "../user/user";
 
 /**
  * ID、パスワードでのログイン

@@ -2,7 +2,7 @@
 
 import type {RoomPlayer} from './battle-room';
 import type {Player} from 'gbraver-burst-core';
-import type {UserID} from "../user";
+import type {UserID} from "../user/user";
 
 /** 抽出結果 */
 export type ExtractResult = {

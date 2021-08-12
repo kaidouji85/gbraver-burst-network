@@ -1,6 +1,6 @@
 // @flow
 
-export type {User, UserID} from './user';
+export type {User, UserID} from './user/user';
 export type {IdPasswordLogin, LoginCheck} from './user-operation/login';
 
 export {WaitingRoom} from './waiting-room/waiting-room';
