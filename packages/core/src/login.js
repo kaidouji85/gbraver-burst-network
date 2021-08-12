@@ -1,7 +1,5 @@
 // @flow
 
-import type {UserID} from "../user/user";
-
 /**
  * ID、パスワードでのログイン
  */
@@ -14,7 +12,7 @@ export interface IdPasswordLogin {
    * @param password パスワード
    * @return ログイン結果
    */
-  login(userID: UserID, password: string): Promise<boolean>;
+  login(userID: string, password: string): Promise<boolean>;
 }
 
 /** ログインチェック */

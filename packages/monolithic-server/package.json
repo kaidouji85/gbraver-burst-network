@@ -8,9 +8,10 @@
     "start:production": "npm-run-all build serve:production",
     "serve": "node build/local.js",
     "serve:production": "node build/production.js",
-    "build": "npm-run-all clean type-check lint test transpile",
+    "build": "npm-run-all clean type-check lint lint:test test transpile",
     "type-check": "flow check src",
     "lint": "eslint src",
+    "lint:test": "eslint test",
     "test": "ava -T 600000",
     "transpile": "babel src -d build/",
     "clean": "rimraf build"
