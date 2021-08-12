@@ -1,10 +1,12 @@
 // @flow
 
 /**
+ * @deprecated
  * ID、パスワードでのログイン
  */
 export interface IdPasswordLogin {
   /**
+   * @deprecated
    * ユーザID、パスワードでログインを行う
    * ログインに成功した場合はtrueを返す
    *
