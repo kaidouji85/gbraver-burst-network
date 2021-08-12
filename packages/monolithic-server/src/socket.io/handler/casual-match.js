@@ -1,10 +1,14 @@
 // @flow
 
 import {Socket, Server} from 'socket.io';
-import {BattleRoom, createRoomPlayer, extractPlayerAndEnemy} from "@gbraver-burst-network/core";
-import type {BattleRoomAdd, BattleRoomID, EnterWaitingRoom, User} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId, Player, GameState} from 'gbraver-burst-core';
 import {ioBattleRoomName, ioWaitingRoomName} from '../room/room-name';
+import type {BattleRoomAdd, BattleRoomID} from "../../battle-room/battle-room-container";
+import type {EnterWaitingRoom} from "../../waiting-room/waiting-room";
+import type {User} from "../../users/user";
+import {extractPlayerAndEnemy} from "../../battle-room/extract-player-and-enemy";
+import {BattleRoom} from "../../battle-room/battle-room";
+import {createRoomPlayer} from "../../battle-room/create-room-player";
 
 /** クライアントから送信されるデータ */
 export type Data = {

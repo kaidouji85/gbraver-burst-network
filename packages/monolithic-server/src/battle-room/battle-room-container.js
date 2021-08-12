@@ -2,7 +2,7 @@
 
 import {BattleRoom} from './battle-room';
 import {v4 as uuidv4} from 'uuid';
-import type {UserID} from "../user/user";
+import type {UserID} from "../users/user";
 
 /** バトルルームID */
 export type BattleRoomID = string;

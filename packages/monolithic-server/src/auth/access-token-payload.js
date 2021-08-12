@@ -1,6 +1,6 @@
 // @flow
 
-import type {User} from "@gbraver-burst-network/core";
+import type {User} from "../users/user";
 
 /** アクセストークンペイロード */
 export type AccessTokenPayload = UserPayload;

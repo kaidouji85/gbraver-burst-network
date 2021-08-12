@@ -1,9 +1,9 @@
 // @flow
 
 import {promises as fs} from 'fs';
-import type {User, UserID} from "@gbraver-burst-network/core";
 import {createHash} from 'crypto';
 import type {PasswordUserFinder} from "./password-user-finder";
+import type {User, UserID} from "./user";
 
 /** JSONに定義されているユーザ情報 */
 type UserFromJSON = {

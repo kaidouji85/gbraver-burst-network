@@ -2,8 +2,9 @@
 
 import {Socket, Server} from 'socket.io';
 import type {Command, GameState} from 'gbraver-burst-core';
-import type {BattleRoomFind, BattleRoomRemove, BattleRoomID, User} from '@gbraver-burst-network/core';
 import {ioBattleRoomName} from "../room/room-name";
+import type {BattleRoomFind, BattleRoomID, BattleRoomRemove} from "../../battle-room/battle-room-container";
+import type {User} from "../../users/user";
 
 /** クライアントから渡されるデータ */
 export type Data = {

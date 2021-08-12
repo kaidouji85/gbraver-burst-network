@@ -1,9 +1,9 @@
 // @flow
 
-import type {User, UserID} from "@gbraver-burst-network/core";
 import {Schema, model} from 'mongoose';
 import type {PasswordUserFinder} from "./password-user-finder";
 import {createHash} from 'crypto';
+import type {User, UserID} from "./user";
 
 /** mongodb ユーザスキーマ */
 const UserSchema = new Schema({

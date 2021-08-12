@@ -1,7 +1,7 @@
 // @flow
 
 import type {Entry} from "./entry";
-import type {UserID} from "../user/user";
+import type {UserID} from "../users/user";
 
 /**
  * 指定したユーザIDのエントリーを取り除く

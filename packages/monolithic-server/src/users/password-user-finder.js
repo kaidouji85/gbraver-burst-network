@@ -1,6 +1,6 @@
 // @flow
 
-import type {User, UserID} from "@gbraver-burst-network/core";
+import type {User, UserID} from "./user";
 
 /** ID、パスワードでのユーザ検索 */
 export interface PasswordUserFinder {
