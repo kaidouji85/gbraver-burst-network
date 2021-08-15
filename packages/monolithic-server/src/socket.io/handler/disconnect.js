@@ -1,9 +1,11 @@
 // @flow
 
 import {Socket, Server} from 'socket.io';
-import type {LeaveWaitingRoom, BattleRoomRemove, BattleRoomFindByUserID, User} from "@gbraver-burst-network/core";
 import {ioBattleRoomName} from "../room/room-name";
 import {deleteIoRoom} from "../room/delete-room";
+import type {LeaveWaitingRoom} from "../../waiting-room/waiting-room";
+import type {BattleRoomFindByUserID, BattleRoomRemove} from "../../battle-room/battle-room-container";
+import type {User} from "../../users/user";
 
 /** 本ハンドラが利用する待合室の機能 */
 interface OwnWaitingRoom extends LeaveWaitingRoom {}

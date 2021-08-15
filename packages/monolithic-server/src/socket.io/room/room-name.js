@@ -1,6 +1,6 @@
 // @flow
 
-import type {BattleRoomID} from '@gbraver-burst-network/core';
+import type {BattleRoomID} from "../../battle-room/battle-room-container";
 
 /**
  * カジュアルマッチ 待合室 socket.ioルーム名

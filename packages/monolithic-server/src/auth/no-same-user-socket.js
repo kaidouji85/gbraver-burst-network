@@ -1,7 +1,7 @@
 // @flow
 
 import {Server, Socket} from "socket.io";
-import type {User} from "@gbraver-burst-network/core";
+import type {User} from "../users/user";
 
 /**
  * 同一ユーザが複数接続しているか否かをチェック

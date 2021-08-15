@@ -1,6 +1,6 @@
 // @flow
 
-import type {Battle, CasualMatch, IdPasswordLogin, LoginCheck, UserID} from "@gbraver-burst-network/core";
+import type {Battle, CasualMatch, IdPasswordLogin, LoginCheck} from "@gbraver-burst-network/core";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import {isLogin, login} from "../http/login";
 import {startConnection, SocketConnection} from "../socket.io/socket-connection";
@@ -32,7 +32,7 @@ export class MonolithicBrowser implements IdPasswordLogin, LoginCheck, CasualMat
    * @param password パスワード
    * @return ログイン結果
    */
-  async login(userID: UserID, password: string): Promise<boolean> {
+  async login(userID: string, password: string): Promise<boolean> {
     const result = await login(userID, password, this._apiServerURL);
     if (!result.isSuccess) {
       return false;
