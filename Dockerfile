@@ -1,4 +1,4 @@
-FROM node:16.6.1-buster
+FROM node:16.6.2-buster
 WORKDIR /usr/src/app
 COPY . /usr/src/app/
 RUN npm ci && npm run bootstrap && npm run build:docker
