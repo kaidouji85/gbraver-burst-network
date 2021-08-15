@@ -1,7 +1,7 @@
 // @flow
 
-import type {Command, GameState, Player, PlayerCommand} from "gbraver-burst-core";
-import {GbraverBurstCore} from "gbraver-burst-core";
+import type {GbraverBurstCore, Command, GameState, Player, PlayerCommand} from "gbraver-burst-core";
+import {startGbraverBurst} from "gbraver-burst-core";
 import type {UserID} from "../users/user";
 import {extractCommands} from "./extract-commands";
 import {isWaiting} from "./is-waiting";
@@ -42,7 +42,7 @@ export class BattleRoom {
    */
   constructor(roomPlayers: [RoomPlayer, RoomPlayer]) {
     this._roomPlayers = roomPlayers;
-    this._core = new GbraverBurstCore([roomPlayers[0].player, roomPlayers[1].player]);
+    this._core = startGbraverBurst([roomPlayers[0].player, roomPlayers[1].player]);
     this._roomCommands = [];
   }
 
