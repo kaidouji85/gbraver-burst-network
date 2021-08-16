@@ -53,13 +53,14 @@ export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> 
  * @param event イベント
  * @return レスポンス
  */
-export async function defaultHandler(event: HandlerEvent): Promise<HandlerResponse> {
+export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
   try {
     const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
+    const respData = JSON.stringify(data);
     const endpoint = apiGatewayEndpoint(event);
     const apiGateway = createAPIGatewayManagement(endpoint);
     await apiGateway
-      .postToConnection({ConnectionId: event.requestContext.connectionId, Data: data})
+      .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
       .promise();
     return {statusCode: 200, body: 'ping success'};
   } catch(err) {

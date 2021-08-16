@@ -1,4 +1,4 @@
-service: sls-chat
+service: gbraver-burst-serverless
 frameworkVersion: '2'
 useDotenv: true
 
