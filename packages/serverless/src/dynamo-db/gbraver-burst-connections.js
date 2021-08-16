@@ -2,13 +2,13 @@
 
 import {DynamoDB} from "aws-sdk";
 
-/** sls_chat_connectionのスキーマ */
-type SLSChatConnection = {
+/** gbraver_burst_connectionのスキーマ */
+type GbraverBurstConnection = {
   connectionId: string,
 };
 
-/** sls_chat_connectionのDAO */
-export class SLSChatConnections {
+/** gbraver_burst_connectionのDAO */
+export class GbraverBurstConnections {
   _client: typeof DynamoDB.DocumentClient;
   _tableName: string;
 
@@ -29,7 +29,7 @@ export class SLSChatConnections {
    * @param connection 追加する項目
    * @return 項目追加が完了したら発火するPromise
    */
-  async put(connection: SLSChatConnection): Promise<void> {
+  async put(connection: GbraverBurstConnection): Promise<void> {
     return this._client.put({TableName: this._tableName, Item: connection}).promise();
   }
 
@@ -49,7 +49,7 @@ export class SLSChatConnections {
    *
    * @return 取得結果
    */
-  async all(): Promise<SLSChatConnection[]> {
+  async all(): Promise<GbraverBurstConnection[]> {
     const resp = await this._client.scan({TableName: this._tableName, ProjectionExpression: 'connectionId'}).promise();
     return resp.Items;
   }
