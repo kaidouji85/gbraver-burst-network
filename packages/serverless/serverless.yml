@@ -52,11 +52,6 @@ functions:
     events:
       - websocket:
           route: $disconnect
-  default:
-    handler: src/handler.ping
-    events:
-      - websocket:
-        route: $default
   ping:
     handler: src/handler.ping
     events:

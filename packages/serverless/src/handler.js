@@ -18,15 +18,10 @@ const dynamoClient = createDynamoDBClient(AWS_REGION);
  * @return レスポンス
  */
 export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
-  try {
-    const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
-    const connection = {connectionId: event.requestContext.connectionId}
-    await dao.put(connection);
-    return {statusCode: 200, body: 'connected.'};
-  } catch(err) {
-    console.error(err);
-    return {statusCode: 500, body: 'connection error'};
-  }
+  const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
+  const connection = {connectionId: event.requestContext.connectionId}
+  await dao.put(connection);
+  return {statusCode: 200, body: 'connected.'};
 }
 
 /**
@@ -36,15 +31,10 @@ export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
  * @return レスポンス
  */
 export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> {
-  try {
-    const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
-    const connectionId = event.requestContext.connectionId;
-    await dao.delete(connectionId);
-    return {statusCode: 200, body: 'disconnected'};
-  } catch(err) {
-    console.error(err);
-    return {statusCode: 500, body: 'disconnect error'};
-  }
+  const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
+  const connectionId = event.requestContext.connectionId;
+  await dao.delete(connectionId);
+  return {statusCode: 200, body: 'disconnected'};
 }
 
 /**
@@ -54,17 +44,12 @@ export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> 
  * @return レスポンス
  */
 export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
-  try {
-    const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
-    const respData = JSON.stringify(data);
-    const endpoint = apiGatewayEndpoint(event);
-    const apiGateway = createAPIGatewayManagement(endpoint);
-    await apiGateway
-      .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
-      .promise();
-    return {statusCode: 200, body: 'ping success'};
-  } catch(err) {
-    console.error(err);
-    return {statusCode: 500, body: 'ping error'};
-  }
+  const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
+  const respData = JSON.stringify(data);
+  const endpoint = apiGatewayEndpoint(event);
+  const apiGateway = createAPIGatewayManagement(endpoint);
+  await apiGateway
+    .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
+    .promise();
+  return {statusCode: 200, body: 'ping success'};
 }

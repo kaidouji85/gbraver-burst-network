@@ -16,7 +16,8 @@
     "build:serverless": "lerna run --scope @gbraver-burst-network/serverless build",
     "serve:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve",
     "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production",
-    "serve:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix serve"
+    "serve:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix serve",
+    "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless deploy"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
