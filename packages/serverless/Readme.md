@@ -1,11 +1,8 @@
-# severless チャット習作
+# Gブレイバーバースト サーバサイド(serverless)
 
 ## はじめに
-serverless frameworkでチャットシステムを作りました。
-以下を参考にして、プログラムを組みました。
-
-API Gateway の WebsocketAPI を Serverless で実装してみる  
-https://www.nightswinger.dev/2020/05/websocketapi-in-apigateway/
+Gブレイバーバーストのサーバサイド実装です。
+serverless frameworkを使っています。
 
 ## 前提条件
 ### 必須ソフト
@@ -48,5 +45,6 @@ API_URL=<AWS APIGatewayのURL>
 # https://auth0.com/docs/tokens/access-tokens/get-access-tokens
 ACCESS_TOKEN=<auth0 access token>
 wscat -c "$API_URL?token=$ACCESS_TOKEN"
-{"action":"sendmessage", "data":"hello world"}
+{"action":"ping"}
+-> サーバからメッセージが返される
 ```

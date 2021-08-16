@@ -6,7 +6,8 @@
     "build": "npm-run-all type-check lint package",
     "type-check": "flow",
     "lint": "eslint src",
-    "package": "sls package"
+    "package": "sls package",
+    "deploy": "sls deploy"
   },
   "dependencies": {
     "aws-sdk": "^2.958.0",
