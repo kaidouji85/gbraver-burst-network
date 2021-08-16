@@ -1,10 +1,12 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
+import type {User} from '../dto/user';
 
 /** gbraver_burst_connectionのスキーマ */
 type GbraverBurstConnection = {
   connectionId: string,
+  user: User,
 };
 
 /** gbraver_burst_connectionのDAO */
@@ -24,33 +26,27 @@ export class GbraverBurstConnections {
   }
 
   /**
-   * sls_chat_connectionsに項目追加する
+   * gbraver_burst_connectionに項目追加する
    *
    * @param connection 追加する項目
    * @return 項目追加が完了したら発火するPromise
    */
   async put(connection: GbraverBurstConnection): Promise<void> {
-    return this._client.put({TableName: this._tableName, Item: connection}).promise();
+    return this._client
+      .put({TableName: this._tableName, Item: connection})
+      .promise();
   }
 
   /**
-   * sls_chat_connectionsの項目を削除する
+   * gbraver_burst_connectionの項目を削除する
    *
    * @param connectionId コネクションID
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
     const Key = {connectionId};
-    return this._client.delete({TableName: this._tableName, Key}).promise();
-  }
-
-  /**
-   * sls_chat_connectionsの全項目を取得する
-   *
-   * @return 取得結果
-   */
-  async all(): Promise<GbraverBurstConnection[]> {
-    const resp = await this._client.scan({TableName: this._tableName, ProjectionExpression: 'connectionId'}).promise();
-    return resp.Items;
+    return this._client
+      .delete({TableName: this._tableName, Key})
+      .promise();
   }
 }

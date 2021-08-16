@@ -6,6 +6,7 @@ import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createAPIGatewayManagement} from "./api-gateway/management";
 import {apiGatewayEndpoint} from "./api-gateway/endpoint";
 import type {HandlerEvent} from "./lambda/handler-event";
+import {extractUser} from './lambda/handler-event';
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
@@ -19,7 +20,8 @@ const dynamoClient = createDynamoDBClient(AWS_REGION);
  */
 export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
   const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
-  const connection = {connectionId: event.requestContext.connectionId}
+  const user = extractUser(event.requestContext.authorizer);
+  const connection = {connectionId: event.requestContext.connectionId, user};
   await dao.put(connection);
   return {statusCode: 200, body: 'connected.'};
 }
