@@ -13,7 +13,7 @@ provider:
   runtime: nodejs14.x
   region: ap-northeast-1
   lambdaHashingVersion: 20201221
-  websocketsApiName: sls-chat-ws-api
+  websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
@@ -28,7 +28,7 @@ provider:
         - 'dynamodb:DeleteItem'
         - 'dynamodb:Scan'
       Resource:
-        - Fn::GetAtt: [SLSChatRoomConnectionsTable, Arn]
+        - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
@@ -60,7 +60,7 @@ functions:
 
 resources:
   Resources:
-    SLSChatRoomConnectionsTable:
+    GbraverBurstConnectionsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.gbraverBurstConnections}
