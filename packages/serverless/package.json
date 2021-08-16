@@ -1,7 +1,7 @@
 {
-  "name": "sls-chat",
-  "version": "0.4.4",
-  "description": "Serverless webpack example using ecma script",
+  "name": "@gbraver-burst-network/serverless",
+  "version": "0.4.7",
+  "description": "gbraver burst serverless",
   "scripts": {
     "build": "npm-run-all type-check lint package",
     "type-check": "flow",
