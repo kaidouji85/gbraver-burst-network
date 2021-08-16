@@ -3,8 +3,7 @@
 import type {HandlerResponse} from './lambda/handler-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
-import {createAPIGatewayManagement} from "./api-gateway/management";
-import {apiGatewayEndpoint} from "./api-gateway/endpoint";
+import {createAPIGatewayFromRequestContext } from "./api-gateway/management";
 import type {HandlerEvent} from "./lambda/handler-event";
 import {extractUser} from './lambda/handler-event';
 
@@ -48,8 +47,7 @@ export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> 
 export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
   const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
   const respData = JSON.stringify(data);
-  const endpoint = apiGatewayEndpoint(event);
-  const apiGateway = createAPIGatewayManagement(endpoint);
+  const apiGateway = createAPIGatewayFromRequestContext(event.requestContext);
   await apiGateway
     .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
     .promise();
