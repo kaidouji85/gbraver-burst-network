@@ -12,4 +12,22 @@ window.onload = async () => {
   if (browserSDK.isLoginSuccessRedirect()) {
     await browserSDK.afterLoginSuccess();
   }
+
+  const loginForm = document.getElementById('login-form') ?? document.createElement('form');
+  const loginButton = document.getElementById('login-button') ?? document.createElement('button');
+  const logoutForm = document.getElementById('logout-form') ?? document.createElement('form');
+  const logoutButton = document.getElementById('logout-button') ?? document.createElement('button');
+
+  const updateScreen = async () => {
+    const isLogin = await browserSDK.isLogin();
+    loginForm.style.display = isLogin ? 'none' : 'block';
+    logoutForm.style.display = isLogin ? 'block' : 'none';
+  };
+  loginButton.addEventListener('click', async () => {
+    await browserSDK.gotoLoginPage();
+  });
+  logoutButton.addEventListener('click', async () => {
+    await browserSDK.logout();
+    await updateScreen();
+  });
 };

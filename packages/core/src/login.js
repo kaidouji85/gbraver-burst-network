@@ -51,12 +51,12 @@ export interface LoginCheck {
   isLogin(): Promise<boolean>;
 }
 
-/** ログオフ */
+/** ログアウト */
 export interface Logout {
   /**
-   * ログオフする
+   * ログアウトする
    *
-   * @return ログオフ成功したら発火するPromise
+   * @return ログアウト成功したら発火するPromise
    */
   logout(): Promise<void>;
 }

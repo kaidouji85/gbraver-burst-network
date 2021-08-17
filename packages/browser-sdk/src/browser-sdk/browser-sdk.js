@@ -1,12 +1,12 @@
 // @flow
 
-import type {UniversalLogin} from '@gbraver-burst-network/core';
+import type {UniversalLogin, LoginCheck, Logout} from '@gbraver-burst-network/core';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-success';
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -38,6 +38,16 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async gotoLoginPage(): Promise<void> {
     await this._auth0Client.loginWithRedirect({redirect_uri: this._ownURL});
+  }
+
+  /** @override */
+  isLogin(): Promise<boolean> {
+    return this._auth0Client.isAuthenticated();
+  }
+
+  /** @override */
+  logout(): Promise<void> {
+    return this._auth0Client.logout();
   }
 }
 
