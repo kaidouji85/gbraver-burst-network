@@ -1,0 +1,37 @@
+{
+  "name": "@gbraver-burst-network/serverless",
+  "version": "0.4.7",
+  "description": "gbraver burst serverless",
+  "scripts": {
+    "deploy": "npm-run-all type-check lint upload",
+    "build": "npm-run-all type-check lint package",
+    "type-check": "flow",
+    "lint": "eslint src",
+    "package": "sls package",
+    "upload": "sls deploy"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.958.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8",
+    "@babel/preset-flow": "^7.14.5",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-flowtype": "^5.8.2",
+    "flow-bin": "^0.156.0",
+    "npm-run-all": "^4.1.5",
+    "serverless": "^2.52.1",
+    "serverless-webpack": "^5.5.1",
+    "webpack": "^5.47.1"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "ISC"
+}

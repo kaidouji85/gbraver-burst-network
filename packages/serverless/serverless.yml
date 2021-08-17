@@ -1,0 +1,75 @@
+service: gbraver-burst-serverless
+frameworkVersion: '2'
+useDotenv: true
+
+custom:
+  gbraverBurstConnections: gbraver_burst_connections
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-1
+  lambdaHashingVersion: 20201221
+  websocketsApiName: gbraver-burst-ws-api
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
+    AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
+    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 'dynamodb:PutItem'
+        - 'dynamodb:GetItem'
+        - 'dynamodb:DeleteItem'
+        - 'dynamodb:Scan'
+      Resource:
+        - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
+    - Effect: Allow
+      Action:
+        - 'execute-api:ManageConnections'
+      Resource:
+        - 'arn:aws:execute-api:*:*:**/@connections/*'
+
+functions:
+  auth:
+    handler: src/authorizer.authorizer
+  connect:
+    handler: src/handler.connect
+    events:
+      - websocket:
+          route: $connect
+          authorizer:
+            name: auth
+            identitySource:
+              - 'route.request.querystring.token'
+  disconnect:
+    handler: src/handler.disconnect
+    events:
+      - websocket:
+          route: $disconnect
+  ping:
+    handler: src/handler.ping
+    events:
+      - websocket:
+          route: ping
+
+resources:
+  Resources:
+    GbraverBurstConnectionsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.gbraverBurstConnections}
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
