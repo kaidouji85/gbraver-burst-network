@@ -33,5 +33,5 @@
     "webpack": "^5.47.1"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+  "license": "ISC"
 }

@@ -9,7 +9,7 @@ import {extractUser} from './lambda/handler-event';
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
-const dynamoClient = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBClient(AWS_REGION);
 
 /**
  * $connect エントリポイント
@@ -18,10 +18,10 @@ const dynamoClient = createDynamoDBClient(AWS_REGION);
  * @return レスポンス
  */
 export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
-  const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
+  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
   const user = extractUser(event.requestContext.authorizer);
   const connection = {connectionId: event.requestContext.connectionId, user};
-  await dao.put(connection);
+  await connections.put(connection);
   return {statusCode: 200, body: 'connected.'};
 }
 
@@ -32,9 +32,9 @@ export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
  * @return レスポンス
  */
 export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> {
-  const dao = new GbraverBurstConnections(dynamoClient, GBRAVER_BURST_CONNECTIONS);
+  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
   const connectionId = event.requestContext.connectionId;
-  await dao.delete(connectionId);
+  await connections.delete(connectionId);
   return {statusCode: 200, body: 'disconnected'};
 }
 
