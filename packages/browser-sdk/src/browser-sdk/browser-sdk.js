@@ -50,7 +50,7 @@ class BrowserSDKImpl implements BrowserSDK {
  * @param redirectURI リダイレクト元となるGブレイバーバーストのURL
  * @return GブレイバーバーストブラウザSDK
  */
-export async function createBroserSDK(domain: string, clientID: String, audience: String, ownURL: string): Promise<BrowserSDK> {
+export async function createBrowserSDK(domain: string, clientID: string, audience: string, ownURL: string): Promise<BrowserSDK> {
   const auth0Client = await createAuth0ClientHelper(domain, clientID, audience, ownURL);
   return new BrowserSDKImpl(auth0Client, ownURL);
 }
