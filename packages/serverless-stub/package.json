@@ -17,6 +17,7 @@
     "serve": "http-server build -p 8080 -c-1"
   },
   "dependencies": {
+    "@gbraver-burst-network/browser-sdk": "^0.4.7",
     "dotenv": "^10.0.0",
     "gbraver-burst-core": "^1.8.2"
   },
