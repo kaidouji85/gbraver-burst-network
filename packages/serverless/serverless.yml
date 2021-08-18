@@ -4,6 +4,7 @@ useDotenv: true
 
 custom:
   gbraverBurstConnections: gbraver_burst_connections
+  casualMatchEntries: casual_match_entries
 
 plugins:
   - serverless-webpack
@@ -17,6 +18,7 @@ provider:
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
+    CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
 
@@ -69,6 +71,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: connectionId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    CasualMatchEntriesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.casualMatchEntries}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
