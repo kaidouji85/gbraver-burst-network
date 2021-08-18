@@ -6,6 +6,7 @@ import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createAPIGatewayFromRequestContext } from "./api-gateway/management";
 import type {HandlerEvent} from "./lambda/handler-event";
 import {extractUser} from './lambda/handler-event';
+import {parseEnterCasualMatchBody} from "./lambda/enter-casual-match";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
@@ -61,7 +62,8 @@ export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
  * @return レスポンス
  */
 export async function enterCasualMatch(event: HandlerEvent): Promise<HandlerResponse> {
-  console.log('start enter casual match');
-  console.log(event);
+  const body = event.body ?? '';
+  const data = parseEnterCasualMatchBody(body);
+  console.log(data);
   return {statusCode: 200, body: 'enter casual match success'};
 }
