@@ -1,4 +1,4 @@
-# モノリシックサーバ クライアントSDK スタブ
+# ブラウザSDK スタブ
 
 ## 動かし方
 ### 前提
@@ -9,7 +9,7 @@
 この手順は初回起動時にだけ実施すれば大丈夫です。
 
 ```shell
-cd <本リポジトリをcloneした場所>/packages/monolithic-stub
+cd <本リポジトリをcloneした場所>/packages/serverless-stub
 cp .env.template .env
 
 # .envをテキストエディタで編集して
@@ -17,11 +17,31 @@ cp .env.template .env
 vi .env
 ```
 
-#### 2. スタブ起動
-```shell
-cd <本リポジトリをcloneした場所>
-npx lerna run --scope @gbraver-burst-network/monolithic-server start
-npx lerna run --scope @gbraver-burst-network/monolithic-stub start
+#### 2. ビルド
 
+```shell
+# 通常ビルド
+cd <本リポジトリをcloneした場所>
+npm run build:serverless-stub
+# or
+cd <本リポジトリをcloneした場所>/packages/serverless-stub 
+npm run build
+
+# フルビルド
+cd <本リポジトリをcloneした場所>
+npm run build:core
+npm run build:browser-sdk
+npm run build:serverless-stub
+```
+#### 3. スタブ起動
+```shell
+# 通常起動
+# 事前にビルドをする必要がある
+cd <本リポジトリをcloneした場所>
+npm run serve:serverless-stub
 # ブラウザでlocalhost:8080を開く
+
+# ビルドも含めての起動
+cd cd <本リポジトリをcloneした場所>
+npm run start:serverless-stub
 ```
