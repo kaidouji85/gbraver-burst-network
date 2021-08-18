@@ -53,3 +53,15 @@ export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
     .promise();
   return {statusCode: 200, body: 'ping success'};
 }
+
+/**
+ * enterCasualMatch エントリポイント
+ *
+ * @param event イベント
+ * @return レスポンス
+ */
+export async function enterCasualMatch(event: HandlerEvent): Promise<HandlerResponse> {
+  console.log('start enter casual match');
+  console.log(event);
+  return {statusCode: 200, body: 'enter casual match success'};
+}

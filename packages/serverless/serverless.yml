@@ -59,6 +59,11 @@ functions:
     events:
       - websocket:
           route: ping
+  enterCasualMatch:
+    handler: src/handler.enterCasualMatch
+    events:
+      - websocket:
+          route: enterCasualMatch
 
 resources:
   Resources:
@@ -80,10 +85,10 @@ resources:
       Properties:
         TableName: ${self:custom.casualMatchEntries}
         AttributeDefinitions:
-          - AttributeName: userId
+          - AttributeName: userID
             AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: userID
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
