@@ -7,9 +7,11 @@ import {createAPIGatewayFromRequestContext } from "./api-gateway/management";
 import type {HandlerEvent} from "./lambda/handler-event";
 import {extractUser} from './lambda/handler-event';
 import {parseEnterCasualMatchBody} from "./lambda/enter-casual-match";
+import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
+const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 
 /**
@@ -64,6 +66,13 @@ export async function ping(event: HandlerEvent): Promise<HandlerResponse> {
 export async function enterCasualMatch(event: HandlerEvent): Promise<HandlerResponse> {
   const body = event.body ?? '';
   const data = parseEnterCasualMatchBody(body);
-  console.log(data);
+  if (!data) {
+    return {statusCode: 400, body: 'invalid request body'}
+  }
+
+  const user = extractUser(event.requestContext.authorizer);
+  const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+  const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId};
+  await casualMatchEntries.put(entry);
   return {statusCode: 200, body: 'enter casual match success'};
 }

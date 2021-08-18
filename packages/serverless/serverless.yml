@@ -31,6 +31,7 @@ provider:
         - 'dynamodb:Scan'
       Resource:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
+        - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
