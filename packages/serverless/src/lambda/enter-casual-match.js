@@ -2,8 +2,8 @@
 
 import {parseJSON} from "../json/parse";
 
-/** カジュアルマッチエントリのデータ */
-export type EnterCasualMatchBody = {
+/** カジュアルマッチエントリのリクエストボディ */
+export type EnterCasualMatch = {
   action: 'enterCasualMatch',
   armdozerId: string,
   pilotId: string,
@@ -16,7 +16,7 @@ export type EnterCasualMatchBody = {
  * @param origin 変換元のリクエストボディ
  * @return 変換結果
  */
-export function parseEnterCasualMatchBody(origin: string): ?EnterCasualMatchBody {
+export function parseEnterCasualMatch(origin: string): ?EnterCasualMatch {
   let json = parseJSON(origin);
   return(
     (json?.action  === 'enterCasualMatch')

@@ -6,7 +6,7 @@ import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createAPIGatewayFromRequestContext} from "./api-gateway/management";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/websocket-api-event';
-import {parseEnterCasualMatchBody} from "./lambda/enter-casual-match";
+import {parseEnterCasualMatch} from "./lambda/enter-casual-match";
 import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
 import type {AuthorizerEvent} from "./lambda/authorizer-event";
 import type {AuthorizerResponse} from "./lambda/authorizer-response";
@@ -85,7 +85,7 @@ export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIRespon
  */
 export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const body = event.body ?? '';
-  const data = parseEnterCasualMatchBody(body);
+  const data = parseEnterCasualMatch(body);
   if (!data) {
     return {statusCode: 400, body: 'invalid request body'}
   }
