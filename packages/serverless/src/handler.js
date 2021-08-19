@@ -91,7 +91,8 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 
   const user = extractUser(event.requestContext.authorizer);
   const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
-  const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId};
+  const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId,
+    connectionID: event.requestContext.connectionId};
   await casualMatchEntries.put(entry);
   return {statusCode: 200, body: 'enter casual match success'};
 }
@@ -103,6 +104,7 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
  * @return 処理完了後に発火するPromise
  */
 export async function pollingCasualMatchEntries(event: any): Promise<void> {
-  console.log('pollingCasualMatchEntries');
-  console.log(event);
+  const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+  const entries = await casualMatchEntries.scan();
+  console.log(entries);
 }

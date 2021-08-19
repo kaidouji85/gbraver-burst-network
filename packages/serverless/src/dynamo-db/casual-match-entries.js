@@ -4,9 +4,14 @@ import {DynamoDB} from "aws-sdk";
 
 /** casual_match_entriesのスキーマ */
 type CasualMatchEntry = {
+  /** ユーザID */
   userID: string,
+  /** 選択したアームドーザのID */
   armdozerId: string,
-  pilotId: string
+  /** 選択したパイロットのID */
+  pilotId: string,
+  /** コネクションID */
+  connectionID: string,
 }
 
 /** casual_match_entriesのDAO */
@@ -35,5 +40,17 @@ export class CasualMatchEntries {
     return this._client
       .put({TableName: this._tableName, Item: entry})
       .promise();
+  }
+
+  /**
+   * 全項目を取得する
+   *
+   * @return 取得結果
+   */
+  async scan(): Promise<CasualMatchEntry[]> {
+    const resp = await this._client
+      .scan({TableName: this._tableName, Select: "ALL_ATTRIBUTES"})
+      .promise();
+    return resp?.Items ?? [];
   }
 }
