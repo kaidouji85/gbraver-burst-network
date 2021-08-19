@@ -100,10 +100,9 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 /**
  * カジュアルマッチエントリテーブルをポーリングする
  *
- * @param event イベント
  * @return 処理完了後に発火するPromise
  */
-export async function pollingCasualMatchEntries(event: any): Promise<void> {
+export async function pollingCasualMatchEntries(): Promise<void> {
   const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
   const entries = await casualMatchEntries.scan();
   console.log(entries);

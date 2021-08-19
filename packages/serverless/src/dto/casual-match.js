@@ -7,5 +7,5 @@ import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 export type CasualMatchEntry = {
   userID: UserID;
   armdozerId: ArmDozerId,
-  pitloId: PilotId
+  pilotId: PilotId
 };
