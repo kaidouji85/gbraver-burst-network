@@ -2,10 +2,16 @@
 
 import type {CasualMatchEntry} from "../dto/casual-match";
 
-/** マッチング */
+/**
+ * マッチング
+ * @template X エントリのデータ型
+ */
 export type Matching<X: CasualMatchEntry> = [X, X];
 
-/** マッチメイク結果 */
+/**
+ * マッチメイク結果
+ * @template X エントリのデータ型
+ */
 export type MatchingResult<X: CasualMatchEntry> = {
   /** マッチングしたプレイヤーのリスト */
   matchingList: Matching<X>[],
@@ -16,6 +22,7 @@ export type MatchingResult<X: CasualMatchEntry> = {
 /**
  * マッチメイクを行う
  *
+ * @template X エントリのデータ型
  * @param entries 全エントリ
  * @return マッチメイク結果
  */
