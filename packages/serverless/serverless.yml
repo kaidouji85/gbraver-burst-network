@@ -65,6 +65,10 @@ functions:
     events:
       - websocket:
           route: enterCasualMatch
+  pollingCasualMatchEntries:
+    handler: src/handler.pollingCasualMatchEntries
+    events:
+      - schedule: rate(1 minute)
 
 resources:
   Resources:

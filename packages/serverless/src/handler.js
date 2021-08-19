@@ -76,3 +76,14 @@ export async function enterCasualMatch(event: HandlerEvent): Promise<HandlerResp
   await casualMatchEntries.put(entry);
   return {statusCode: 200, body: 'enter casual match success'};
 }
+
+/**
+ * カジュアルマッチエントリテーブルをポーリングする
+ *
+ * @param event イベント
+ * @return 処理完了後に発火するPromise
+ */
+export async function pollingCasualMatchEntries(event: any): Promise<void> {
+  console.log('pollingCasualMatchEntries');
+  console.log(event);
+}
