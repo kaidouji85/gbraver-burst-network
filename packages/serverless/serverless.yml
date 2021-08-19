@@ -40,7 +40,7 @@ provider:
 
 functions:
   auth:
-    handler: src/authorizer.authorizer
+    handler: src/handler.authorizer
   connect:
     handler: src/handler.connect
     events:

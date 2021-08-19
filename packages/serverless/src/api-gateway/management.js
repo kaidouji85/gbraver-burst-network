@@ -1,7 +1,7 @@
 // @flow
 
 import {ApiGatewayManagementApi} from 'aws-sdk';
-import type {HandlerRequestContext} from '../lambda/handler-event';
+import type {WebsocketAPIRequestContext} from '../lambda/websocket-api-event';
 
 /**
  * APIゲートウェイ管理オブジェクトを生成するヘルパー関数
@@ -19,7 +19,7 @@ export function createAPIGateway(endpoint: string): typeof ApiGatewayManagementA
  * @param requestContext リクエストコンテキスト
  * @return APIゲートウェイのエンドポイント
  */
-export function endpointFromRequestContext(requestContext: HandlerRequestContext): string {
+export function endpointFromRequestContext(requestContext: WebsocketAPIRequestContext): string {
   return `${requestContext.domainName}/${requestContext.stage}`;
 }
 
@@ -29,7 +29,7 @@ export function endpointFromRequestContext(requestContext: HandlerRequestContext
  * @param requestContext リクエストコンテキスト
  * @return APIゲートウェイ管理オブジェクト
  */
-export function createAPIGatewayFromRequestContext(requestContext: HandlerRequestContext): typeof ApiGatewayManagementApi {
+export function createAPIGatewayFromRequestContext(requestContext: WebsocketAPIRequestContext): typeof ApiGatewayManagementApi {
   const endpoint = endpointFromRequestContext(requestContext);
   return createAPIGateway(endpoint);
 }
