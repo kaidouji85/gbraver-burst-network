@@ -29,6 +29,7 @@ provider:
         - 'dynamodb:GetItem'
         - 'dynamodb:DeleteItem'
         - 'dynamodb:Scan'
+        - 'dynamodb:BatchWrite*'
       Resource:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]

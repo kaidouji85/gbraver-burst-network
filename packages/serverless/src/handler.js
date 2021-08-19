@@ -109,4 +109,8 @@ export async function pollingCasualMatchEntries(): Promise<void> {
   console.log(entries);
   const result = matchMake(entries);
   console.log(result);
+  const deleteKeys = result.matchingList
+    .flat()
+    .map(v => v.userID)
+  await casualMatchEntries.batchDelete(deleteKeys);
 }
