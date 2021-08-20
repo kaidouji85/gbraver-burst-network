@@ -16,11 +16,18 @@ provider:
   lambdaHashingVersion: 20201221
   websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
+  #apiGateway:
+  #  websocketApiId:
+  #    Fn::GetAtt: [GbraverBurstWebsocket, ApiEndpoint]
   environment:
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
     CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
+    TEST_API_ID:
+      Ref: GbraverBurstWebsocket
+    TEST_API_ENDPOINT:
+      Fn::GetAtt: [GbraverBurstWebsocket, ApiEndpoint]
 
   iamRoleStatements:
     - Effect: Allow
@@ -73,6 +80,12 @@ functions:
 
 resources:
   Resources:
+    GbraverBurstWebsocket:
+      Type: 'AWS::ApiGatewayV2::Api'
+      Properties:
+        Name: gbraver-burst-ws
+        ProtocolType: WEBSOCKET
+        RouteSelectionExpression: '$request.body.action'
     GbraverBurstConnectionsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
