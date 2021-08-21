@@ -17,6 +17,8 @@ provider:
   websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
+    WEBSOCKET_API_ID:
+      Ref: WebsocketsApi
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
     CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
