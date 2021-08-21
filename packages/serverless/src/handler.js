@@ -111,11 +111,17 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 export async function pollingCasualMatchEntries(): Promise<void> {
   const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
   const entries = await casualMatchEntries.scan();
-  console.log(entries);
   const result = matchMake(entries);
-  console.log(result);
   const deleteKeys = result.matchingList
     .flat()
     .map(v => v.userID)
   await casualMatchEntries.batchDelete(deleteKeys);
+
+  const notices = result.matchingList.map(matching => matching.map(v => apiGateway.postToConnection({
+    ConnectionId: v.connectionID,
+    Data: JSON.stringify({action: 'matching', matching})
+  })))
+    .flat()
+    .map(v => v.promise());
+  await Promise.all(notices);
 }
