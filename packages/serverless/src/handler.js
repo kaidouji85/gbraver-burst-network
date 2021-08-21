@@ -3,7 +3,7 @@
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
-import {createAPIGatewayFromRequestContext} from "./api-gateway/management";
+import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/websocket-api-event';
 import {parseEnterCasualMatch} from "./lambda/enter-casual-match";
@@ -13,12 +13,18 @@ import type {AuthorizerResponse} from "./lambda/authorizer-response";
 import {successAuthorize} from "./lambda/authorizer-response";
 import {verifyAccessToken} from "./auth0/access-token";
 import {matchMake} from "./match-make/match-make";
+import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 
-const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL || '';
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE || '';
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const STAGE = process.env.STAGE ?? '';
+const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
+const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? '';
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
+
+const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 
 /**
@@ -70,7 +76,6 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
 export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
   const respData = JSON.stringify(data);
-  const apiGateway = createAPIGatewayFromRequestContext(event.requestContext);
   await apiGateway
     .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
     .promise();

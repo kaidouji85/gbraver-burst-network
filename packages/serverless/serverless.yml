@@ -3,8 +3,8 @@ frameworkVersion: '2'
 useDotenv: true
 
 custom:
-  gbraverBurstConnections: gbraver_burst_connections
-  casualMatchEntries: casual_match_entries
+  gbraverBurstConnections: gbraver_burst_connections-${sls:stage}
+  casualMatchEntries: casual_match_entries-${sls:stage}
 
 plugins:
   - serverless-webpack
@@ -17,6 +17,7 @@ provider:
   websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
+    STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
