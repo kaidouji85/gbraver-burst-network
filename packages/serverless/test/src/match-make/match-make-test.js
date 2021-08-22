@@ -13,32 +13,23 @@ const entry5 = {...EMPTY_CASUAL_MATCH_ENTRY, userID: 'user05'};
 test('先頭から順番にマッチメイクすることができる', t => {
   const entries = [entry1, entry2, entry3, entry4, entry5];
   const result = matchMake(entries);
-  const expected = {
-    matchingList: [
-      [entry1, entry2],
-      [entry3, entry4],
-    ],
-    remainder: [entry5]
-  };
+  const expected = [
+    [entry1, entry2],
+    [entry3, entry4],
+  ]
   t.deepEqual(result, expected);
 });
 
-test('エントリが1個の場合は何も変わらない', t => {
+test('エントリが1個の場合はマッチングが成立しない', t => {
   const entries = [entry1];
   const result = matchMake(entries);
-  const expected = {
-    matchingList: [],
-    remainder: [entry1]
-  };
+  const expected = [];
   t.deepEqual(result, expected);
 });
 
-test('エントリが0の場合でも正しく動く', t => {
+test('エントリが0の場合はマッチングが成立しない', t => {
   const entries = [];
   const result = matchMake(entries);
-  const expected = {
-    matchingList: [],
-    remainder: []
-  };
+  const expected = [];
   t.deepEqual(result, expected);
 });

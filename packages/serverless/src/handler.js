@@ -111,13 +111,13 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 export async function pollingCasualMatchEntries(): Promise<void> {
   const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
   const entries = await casualMatchEntries.scan();
-  const result = matchMake(entries);
-  const deleteKeys = result.matchingList
+  const matchingList = matchMake(entries);
+  const deleteKeys = matchingList
     .flat()
     .map(v => v.userID)
   await casualMatchEntries.batchDelete(deleteKeys);
 
-  const notices = result.matchingList.map(matching => matching.map(v => apiGateway.postToConnection({
+  const notices = matchingList.map(matching => matching.map(v => apiGateway.postToConnection({
     ConnectionId: v.connectionID,
     Data: JSON.stringify({action: 'matching', matching})
   })))
