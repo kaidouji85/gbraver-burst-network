@@ -75,7 +75,6 @@ export class CasualMatchEntries {
         [`${this._tableName}`] : items
       }
     };
-    console.log(params);
     await this._client.batchWrite(params)
       .promise();
   }

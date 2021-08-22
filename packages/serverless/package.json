@@ -3,7 +3,7 @@
   "version": "0.4.7",
   "description": "gbraver burst serverless",
   "scripts": {
-    "deploy": "npm-run-all type-check lint lint:test upload",
+    "deploy": "npm-run-all type-check lint lint:test test upload",
     "build": "npm-run-all type-check lint lint:test test package",
     "type-check": "flow",
     "lint": "eslint src",

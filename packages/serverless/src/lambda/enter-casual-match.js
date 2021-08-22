@@ -5,7 +5,9 @@ import {parseJSON} from "../json/parse";
 /** カジュアルマッチエントリのリクエストボディ */
 export type EnterCasualMatch = {
   action: 'enterCasualMatch',
+  /** 選択したアームドーザのID */
   armdozerId: string,
+  /** 選択したパイロットのID */
   pilotId: string,
 }
 
