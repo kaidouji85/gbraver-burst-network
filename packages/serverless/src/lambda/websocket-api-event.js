@@ -8,8 +8,8 @@ export type Authorizer = {
   principalId: string,
 };
 
-/** ハンドラ リクエストコンテクスト */
-export type HandlerRequestContext = {
+/** websocket api リクエストコンテクスト */
+export type WebsocketAPIRequestContext = {
   /** コネクションID */
   connectionId: string,
   /** ドメイン名 */
@@ -20,12 +20,12 @@ export type HandlerRequestContext = {
   authorizer: Authorizer
 };
 
-/** ハンドラのイベント */
-export type HandlerEvent = {
+/** websocket api イベント */
+export type WebsocketAPIEvent = {
   /** リクエストボディ */
   body?: string,
   /** リクエストコンテクスト */
-  requestContext: HandlerRequestContext
+  requestContext: WebsocketAPIRequestContext
 };
 
 /**

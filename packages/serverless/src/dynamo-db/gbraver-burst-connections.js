@@ -29,9 +29,9 @@ export class GbraverBurstConnections {
    * gbraver_burst_connectionに項目追加する
    *
    * @param connection 追加する項目
-   * @return 項目追加が完了したら発火するPromise
+   * @return 処理が完了したら発火するPromise
    */
-  async put(connection: GbraverBurstConnection): Promise<void> {
+  put(connection: GbraverBurstConnection): Promise<void> {
     return this._client
       .put({TableName: this._tableName, Item: connection})
       .promise();
