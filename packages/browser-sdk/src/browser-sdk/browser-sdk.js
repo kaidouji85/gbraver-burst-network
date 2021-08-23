@@ -18,10 +18,10 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /**
    * コンストラクタ
-   * 
-   * @param auth0Client auth0クライアント
-   * @param websocketAPIURL Websocket API のURL
+   *
    * @param ownURL リダイレクト元となるGブレイバーバーストのURL
+   * @param websocketAPIURL Websocket API のURL
+   * @param auth0Client auth0クライアント
    */
   constructor(ownURL: string, websocketAPIURL: string, auth0Client: typeof Auth0Client) {
     this._ownURL = ownURL;
@@ -64,7 +64,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /**
    * WebSocketクライアントの取得を行う
-   *　WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
+   * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
    *
    * @return 取得、生成結果
    */
@@ -81,14 +81,15 @@ class BrowserSDKImpl implements BrowserSDK {
 
 /**
  * GブレイバーバーストブラウザSDKを生成する
- * 
- * @param domain auth0ドメイン
- * @param clientID auth0クライアントID
- * @param audience auth0 audience
+ *
  * @param ownURL リダイレクト元となるGブレイバーバーストのURL
+ * @param websocketAPIURL Websocket APIのURL
+ * @param auth0Domain auth0ドメイン
+ * @param auth0ClientID auth0クライアントID
+ * @param auth0Audience auth0 audience
  * @return GブレイバーバーストブラウザSDK
  */
-export async function createBrowserSDK(domain: string, clientID: string, audience: string, ownURL: string): Promise<BrowserSDK> {
-  const auth0Client = await createAuth0ClientHelper(domain, clientID, audience, ownURL);
-  return new BrowserSDKImpl(auth0Client, ownURL);
+export async function createBrowserSDK(ownURL: string, websocketAPIURL: string, auth0Domain: string, auth0ClientID: string, auth0Audience: string): Promise<BrowserSDK> {
+  const auth0Client = await createAuth0ClientHelper(auth0Domain, auth0ClientID, auth0Audience, ownURL);
+  return new BrowserSDKImpl(ownURL, websocketAPIURL, auth0Client);
 }
