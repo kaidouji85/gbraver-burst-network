@@ -24,6 +24,8 @@ window.onload = async () => {
   const logoutForm = document.getElementById('logout-form') ?? document.createElement('form');
   const logoutButton = document.getElementById('logout-button') ?? document.createElement('button');
   const useCaseForm = document.getElementById('use-case-form') ?? document.createElement('form');
+  const useCaseSelector = document.getElementById('use-case-selector') ?? document.createElement('select');
+  const useCaseExecuteButton = document.getElementById('use-case-execute-button') ?? document.createElement('button');
 
   const updateScreen = async () => {
     const isLogin = await browserSDK.isLogin();
@@ -37,6 +39,12 @@ window.onload = async () => {
   logoutButton.addEventListener('click', async () => {
     await browserSDK.logout();
     await updateScreen();
+  });
+  useCases.forEach((v, index) => {
+    const item = document.createElement('option');
+    item.innerText = v.name();
+    item.value = index;
+    useCaseSelector.appendChild(item);
   });
 
   updateScreen();
