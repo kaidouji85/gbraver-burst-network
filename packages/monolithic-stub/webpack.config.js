@@ -17,7 +17,7 @@ module.exports = {
     filename: '[name]'
   },
   devServer: {
-    contentBase: path.resolve(__dirname, BUILD_PATH),
+    static: path.resolve(__dirname, BUILD_PATH),
     port: 8080,
     host:'0.0.0.0'
   },
