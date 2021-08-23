@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/serverless",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "gbraver burst serverless",
   "scripts": {
     "deploy": "npm-run-all type-check lint lint:test test upload",

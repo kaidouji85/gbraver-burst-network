@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/core",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "main": "lib/index.js",
   "author": "Y.Takeuchi",
   "files": [
