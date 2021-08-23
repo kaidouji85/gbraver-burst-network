@@ -1,27 +1,32 @@
 // @flow
 
-import type {UniversalLogin, LoginCheck, Logout} from '@gbraver-burst-network/core';
+import type {UniversalLogin, LoginCheck, Logout, Ping} from '@gbraver-burst-network/core';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect';
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
-  _auth0Client: typeof Auth0Client;
   _ownURL: string;
+  _websocketAPIURL: string;
+  _auth0Client: typeof Auth0Client;
+  _websocket: ?WebSocket;
 
   /**
    * コンストラクタ
    * 
    * @param auth0Client auth0クライアント
+   * @param websocketAPIURL Websocket API のURL
    * @param ownURL リダイレクト元となるGブレイバーバーストのURL
    */
-  constructor(auth0Client: typeof Auth0Client, ownURL: string) {
-    this._auth0Client = auth0Client;
+  constructor(ownURL: string, websocketAPIURL: string, auth0Client: typeof Auth0Client) {
     this._ownURL = ownURL;
+    this._websocketAPIURL = websocketAPIURL;
+    this._auth0Client = auth0Client;
+    this._websocket = null;
   }
 
   /** @override */
@@ -49,6 +54,27 @@ class BrowserSDKImpl implements BrowserSDK {
   logout(): Promise<void> {
     return this._auth0Client.logout();
   }
+
+  /** @override */
+  async ping(): Promise<string> {
+    return 'hello';
+  }
+
+  /**
+   * WebSocketクライアントの取得を行う
+   *　WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
+   *
+   * @return 取得、生成結果
+   */
+  async _getOrCreateWebSocket(): Promise<WebSocket> {
+    if (this._websocket) {
+      return this._websocket;
+    }
+
+    const accessToken = await this._auth0Client.getTokenSilently();
+    this._websocket = new WebSocket(`${this._websocketAPIURL}?token=${accessToken}`);
+    return this._websocket;
+  }
 }
 
 /**
@@ -57,7 +83,7 @@ class BrowserSDKImpl implements BrowserSDK {
  * @param domain auth0ドメイン
  * @param clientID auth0クライアントID
  * @param audience auth0 audience
- * @param redirectURI リダイレクト元となるGブレイバーバーストのURL
+ * @param ownURL リダイレクト元となるGブレイバーバーストのURL
  * @return GブレイバーバーストブラウザSDK
  */
 export async function createBrowserSDK(domain: string, clientID: string, audience: string, ownURL: string): Promise<BrowserSDK> {
