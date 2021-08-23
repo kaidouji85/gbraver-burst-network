@@ -17,6 +17,9 @@ export function ping(websocket: WebSocket): Promise<string> {
     errorHandler = reject;
     websocket.addEventListener('message', handler);
     websocket.addEventListener('error', errorHandler);
+
+    const data = {action: "ping"};
+    websocket.send(JSON.stringify(data));
   })
     .finally(() => {
       handler && websocket.removeEventListener('message', handler);

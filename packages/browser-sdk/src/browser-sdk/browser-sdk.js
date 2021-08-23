@@ -5,6 +5,7 @@ import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect';
 import {ping} from '../websocket/ping';
+import {connect} from "../websocket/connect";
 
 /** ブラウザSDK */
 export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping {}
@@ -74,7 +75,7 @@ class BrowserSDKImpl implements BrowserSDK {
     }
 
     const accessToken = await this._auth0Client.getTokenSilently();
-    this._websocket = new WebSocket(`${this._websocketAPIURL}?token=${accessToken}`);
+    this._websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
     return this._websocket;
   }
 }

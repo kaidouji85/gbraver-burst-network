@@ -24,8 +24,14 @@ window.onload = async () => {
   const logoutForm = document.getElementById('logout-form') ?? document.createElement('form');
   const logoutButton = document.getElementById('logout-button') ?? document.createElement('button');
   const useCaseForm = document.getElementById('use-case-form') ?? document.createElement('form');
-  const useCaseSelector = document.getElementById('use-case-selector') ?? document.createElement('select');
-  const useCaseExecuteButton = document.getElementById('use-case-execute-button') ?? document.createElement('button');
+  const useCaseSelectorSearchResult = document.getElementById('use-case-selector');
+  const useCaseSelector: HTMLSelectElement = (useCaseSelectorSearchResult instanceof HTMLSelectElement)
+    ? useCaseSelectorSearchResult
+    : document.createElement('select');
+  const useCaseExecuteButtonSearchResult = document.getElementById('use-case-execute-button');
+  const useCaseExecuteButton: HTMLButtonElement = (useCaseExecuteButtonSearchResult instanceof HTMLButtonElement)
+    ? useCaseExecuteButtonSearchResult
+    : document.createElement('button');
 
   const updateScreen = async () => {
     const isLogin = await browserSDK.isLogin();
@@ -33,6 +39,12 @@ window.onload = async () => {
     logoutForm.style.display = isLogin ? 'block' : 'none';
     useCaseForm.style.display = isLogin ? 'block' : 'none';
   };
+  useCases.forEach((v, index) => {
+    const item = document.createElement('option');
+    item.innerText = v.name();
+    item.value = index.toString();
+    useCaseSelector.appendChild(item);
+  });
   loginButton.addEventListener('click', async () => {
     await browserSDK.gotoLoginPage();
   });
@@ -40,11 +52,20 @@ window.onload = async () => {
     await browserSDK.logout();
     await updateScreen();
   });
-  useCases.forEach((v, index) => {
-    const item = document.createElement('option');
-    item.innerText = v.name();
-    item.value = index;
-    useCaseSelector.appendChild(item);
+  useCaseExecuteButton.addEventListener('click', async () => {
+    const useCaseIndex = Number(useCaseSelector.value);
+    if (isNaN(useCaseIndex)) {
+      return;
+    }
+
+    const useCase = useCases[useCaseIndex];
+    if (!useCase) {
+      return;
+    }
+
+    useCaseExecuteButton.disabled = true;
+    await useCase.execute();
+    useCaseExecuteButton.disabled = false;
   });
 
   updateScreen();
