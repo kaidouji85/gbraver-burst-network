@@ -4,6 +4,7 @@ import type {UniversalLogin, LoginCheck, Logout, Ping} from '@gbraver-burst-netw
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect';
+import {ping} from '../websocket/ping';
 
 /** ブラウザSDK */
 export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping {}
@@ -57,7 +58,8 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async ping(): Promise<string> {
-    return 'hello';
+    const websocket = await this._getOrCreateWebSocket();
+    return ping(websocket);
   }
 
   /**
