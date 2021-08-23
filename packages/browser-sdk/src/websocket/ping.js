@@ -1,5 +1,7 @@
 // @flow
 
+import {parsePingResp} from "./response";
+
 /**
  * API サーバへの疎通確認
  *
@@ -9,10 +11,13 @@
 export function ping(websocket: WebSocket): Promise<string> {
   let handler = null;
   let errorHandler = null;
+
   return new Promise((resolve, reject) => {
     handler = (e: MessageEvent) => {
-      console.log(e.data);
-      resolve('hello'); // TODO データから値を取得する
+      const response = (typeof e.data === 'string')
+        ? parsePingResp(e.data)
+        : null;
+      response && resolve(response.message);
     };
     errorHandler = reject;
     websocket.addEventListener('message', handler);
