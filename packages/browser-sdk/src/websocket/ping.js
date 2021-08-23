@@ -1,6 +1,6 @@
 // @flow
 
-import {parsePingResp} from "./response";
+import {parsePingResponse} from "./response";
 
 /**
  * API サーバへの疎通確認
@@ -15,7 +15,7 @@ export function ping(websocket: WebSocket): Promise<string> {
   return new Promise((resolve, reject) => {
     handler = (e: MessageEvent) => {
       const response = (typeof e.data === 'string')
-        ? parsePingResp(e.data)
+        ? parsePingResponse(e.data)
         : null;
       response && resolve(response.message);
     };

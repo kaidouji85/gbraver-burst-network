@@ -19,7 +19,7 @@ export type PingResponse = {
  * @param data パース元となる文字列
  * @return パース結果
  */
-export function parsePingResp(data: string): ?PingResponse {
+export function parsePingResponse(data: string): ?PingResponse {
   const json = parseJSON(data);
   if (!json) {
     return null;
