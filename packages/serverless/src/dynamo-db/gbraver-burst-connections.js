@@ -46,7 +46,7 @@ export class GbraverBurstConnections {
    * @param connectionId
    * @return {Promise<*|null>}
    */
-  async query(connectionId: string): Promise<?GbraverBurstConnection> {
+  async get(connectionId: string): Promise<?GbraverBurstConnection> {
     const result = await this._client.get({
       TableName: this._tableName,
       Key: {connectionId},
@@ -73,9 +73,9 @@ export class GbraverBurstConnections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    const Key = {connectionId};
-    return this._client
-      .delete({TableName: this._tableName, Key})
-      .promise();
+    return this._client.delete({
+      TableName: this._tableName,
+      Key: {connectionId}
+    }).promise();
   }
 }
