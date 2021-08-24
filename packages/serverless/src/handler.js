@@ -143,8 +143,17 @@ export async function pollingCasualMatchEntries(): Promise<void> {
   })))
     .flat()
     .map(v => v.promise());
+  const updateState = matchingList.flat()
+    .map(v => {
+      // TODO 将来的にはバトル開始などのステートに変える
+      const user = {userID: v.userID};
+      const state = {type: 'None'};
+      const connection = {connectionId: v.connectionID, user, state};
+      return connections.put(connection);
+    });
   await Promise.all([
     ...notices,
-    casualMatchEntries.batchDelete(deleteKeys)
+    casualMatchEntries.batchDelete(deleteKeys),
+    ...updateState
   ]);
 }
