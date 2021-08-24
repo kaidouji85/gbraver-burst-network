@@ -6,26 +6,27 @@ import {parsePingResponse} from "../../../src/websocket/response";
 
 const origin: PingResponse = {action: 'ping', message: 'test'};
 
-test('PingResponseのJSON文字列を正しくパースできる', t => {
-  const data = JSON.stringify(origin);
-  const result = parsePingResponse(data);
+test('PingResponseをパースすることができる', t => {
+  const result = parsePingResponse(origin);
   t.deepEqual(result, origin);
-});
-
-test('ただの文字列だとパースできない', t => {
-  const data = 'hello test';
-  const result = parsePingResponse(data);
-  t.is(result, null);
 });
 
 test('余計なプロパティがあっても正しくパースはできる', t => {
-  const data = JSON.stringify({...origin, hp: 1000, power: 2000})
-  const result = parsePingResponse(data);
+  const result = parsePingResponse({...origin, hp: 1000, power: 2000});
   t.deepEqual(result, origin);
 });
 
-test('空文字の場合はパースできない', t => {
-  const data = '';
-  const result = parsePingResponse(data);
+test('PingResponseのJSON文字列はパースできない', t => {
+  const result = parsePingResponse(JSON.stringify(origin));
+  t.is(result, null);
+});
+
+test('nullの場合はパースできない', t => {
+  const result = parsePingResponse(null);
+  t.is(result, null);
+});
+
+test('undefinedの場合はパースできない', t => {
+  const result = parsePingResponse(undefined);
   t.is(result, null);
 });

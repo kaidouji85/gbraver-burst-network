@@ -1,7 +1,5 @@
 // @flow
 
-import {parseJSON} from "../json/parse";
-
 /** APIサーバからのレスポンス */
 export type WebsocketAPIResponse = PingResponse;
 
@@ -13,19 +11,14 @@ export type PingResponse = {
 };
 
 /**
- * 文字列をpingレスポンスにパースする
+ * 任意のオブジェクトをPingResponseにパースする
  * パースできない場合はnullを返す
  *
  * @param data パース元となる文字列
  * @return パース結果
  */
-export function parsePingResponse(data: string): ?PingResponse {
-  const json = parseJSON(data);
-  if (!json) {
-    return null;
-  }
-
-  return ((json?.action === 'ping') && (typeof json?.message === 'string'))
-    ? ({action: json.action, message: json.message})
+export function parsePingResponse(data: Object): ?PingResponse {
+  return ((data?.action === 'ping') && (typeof data?.message === 'string'))
+    ? ({action: data.action, message: data.message})
     : null;
 }
