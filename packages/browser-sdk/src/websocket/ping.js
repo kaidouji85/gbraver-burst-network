@@ -1,6 +1,8 @@
 // @flow
 
 import {parsePingResponse} from "./response";
+import {onMessage} from "./message";
+import type {Resolve} from "../promise/promise";
 
 /**
  * API サーバへの疎通確認
@@ -9,25 +11,10 @@ import {parsePingResponse} from "./response";
  * @return APIサーバからの返答内容
  */
 export function ping(websocket: WebSocket): Promise<string> {
-  let handler = null;
-  let errorHandler = null;
-
-  return new Promise((resolve, reject) => {
-    handler = (e: MessageEvent) => {
-      const response = (typeof e.data === 'string')
-        ? parsePingResponse(e.data)
-        : null;
-      response && resolve(response.message);
-    };
-    errorHandler = reject;
-    websocket.addEventListener('message', handler);
-    websocket.addEventListener('error', errorHandler);
-
-    const data = {action: "ping"};
-    websocket.send(JSON.stringify(data));
-  })
-    .finally(() => {
-      handler && websocket.removeEventListener('message', handler);
-      errorHandler && websocket.removeEventListener('error', errorHandler);
-    });
+  websocket.send(JSON.stringify({action: 'ping'}));
+  return onMessage(websocket, (e: MessageEvent, resolve: Resolve<string>): void => {
+    const data = String(e.data);
+    const response = parsePingResponse(data);
+    response && resolve(response.message);
+  });
 }
