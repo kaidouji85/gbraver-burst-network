@@ -6,16 +6,22 @@ import type {EnterCasualMatch} from "../../../src/lambda/enter-casual-match";
 
 const enterCasualMatch: EnterCasualMatch = {action: 'enterCasualMatch', armdozerId: 'armdozerId', pilotId: 'pilotId'};
 
-test('EnterCasualMatchのJSON文字列なら正しくパースできる', t => {
-  const data = JSON.stringify(enterCasualMatch);
-  const result = parseEnterCasualMatch(data);
+test('EnterCasualMatchを正しくパースできる', t => {
+  const result = parseEnterCasualMatch(enterCasualMatch);
   t.deepEqual(result, enterCasualMatch);
 });
 
 test('余計なプロパティが含まれている場合でも問題なくパースできる', t => {
-  const addProps = {...enterCasualMatch, hp: 1000, power: 1000};
-  const data = JSON.stringify(addProps);
-  const result = parseEnterCasualMatch(data);
+  const result = parseEnterCasualMatch({...enterCasualMatch, hp: 1000, power: 1000});
   t.deepEqual(result, enterCasualMatch);
 });
 
+test('nullならパースできない', t => {
+  const result = parseEnterCasualMatch(null);
+  t.is(result, null);
+});
+
+test('undefinedならパースできない', t => {
+  const result = parseEnterCasualMatch(undefined);
+  t.is(result, null);
+});

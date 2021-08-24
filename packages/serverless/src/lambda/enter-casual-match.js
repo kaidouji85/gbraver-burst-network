@@ -1,7 +1,5 @@
 // @flow
 
-import {parseJSON} from "../json/parse";
-
 /** カジュアルマッチエントリのリクエストボディ */
 export type EnterCasualMatch = {
   action: 'enterCasualMatch',
@@ -12,19 +10,18 @@ export type EnterCasualMatch = {
 }
 
 /**
- * リクエストボディをカジュアルマッチエントリに変換する
+ * 任意オブジェクトをカジュアルマッチエントリに変換する
  * 変換でいない場合はnullを返す
  *
  * @param origin 変換元のリクエストボディ
  * @return 変換結果
  */
-export function parseEnterCasualMatch(origin: string): ?EnterCasualMatch {
-  let json = parseJSON(origin);
+export function parseEnterCasualMatch(origin: Object): ?EnterCasualMatch {
   return(
-    (json?.action  === 'enterCasualMatch')
-    && (typeof json?.armdozerId === 'string')
-    && (typeof json?.pilotId === 'string')
+    (origin?.action  === 'enterCasualMatch')
+    && (typeof origin?.armdozerId === 'string')
+    && (typeof origin?.pilotId === 'string')
   )
-    ? {action: json.action, armdozerId: json.armdozerId, pilotId: json.pilotId}
+    ? {action: origin.action, armdozerId: origin.armdozerId, pilotId: origin.pilotId}
     : null;
 }

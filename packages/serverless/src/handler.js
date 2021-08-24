@@ -14,6 +14,7 @@ import {successAuthorize} from "./lambda/authorizer-response";
 import {verifyAccessToken} from "./auth0/access-token";
 import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
+import {parseJSON} from "./json/parse";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -89,7 +90,7 @@ export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIRespon
  * @return レスポンス
  */
 export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const body = event.body ?? '';
+  const body = parseJSON(event.body);
   const data = parseEnterCasualMatch(body);
   if (!data) {
     return {statusCode: 400, body: 'invalid request body'}
