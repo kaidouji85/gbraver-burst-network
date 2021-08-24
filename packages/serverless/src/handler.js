@@ -48,9 +48,10 @@ export async function authorizer(event: AuthorizerEvent): Promise<AuthorizerResp
  * @return レスポンス
  */
 export async function connect(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
   const user = extractUser(event.requestContext.authorizer);
-  const connection = {connectionId: event.requestContext.connectionId, user};
+  const state = {type: 'None'};
+  const connection = {connectionId: event.requestContext.connectionId, user, state};
+  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
   await connections.put(connection);
   return {statusCode: 200, body: 'connected.'};
 }
@@ -62,8 +63,10 @@ export async function connect(event: WebsocketAPIEvent): Promise<WebsocketAPIRes
  * @return レスポンス
  */
 export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
   const connectionId = event.requestContext.connectionId;
+  const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
+  const connection = await connections.query(connectionId);
+  console.log(connection);
   await connections.delete(connectionId);
   return {statusCode: 200, body: 'disconnected'};
 }
