@@ -1,27 +1,34 @@
 // @flow
 
-import type {UniversalLogin, LoginCheck, Logout} from '@gbraver-burst-network/core';
+import type {UniversalLogin, LoginCheck, Logout, Ping} from '@gbraver-burst-network/core';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect';
+import {ping} from '../websocket/ping';
+import {connect} from "../websocket/connect";
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
-  _auth0Client: typeof Auth0Client;
   _ownURL: string;
+  _websocketAPIURL: string;
+  _auth0Client: typeof Auth0Client;
+  _websocket: ?WebSocket;
 
   /**
    * コンストラクタ
-   * 
-   * @param auth0Client auth0クライアント
+   *
    * @param ownURL リダイレクト元となるGブレイバーバーストのURL
+   * @param websocketAPIURL Websocket API のURL
+   * @param auth0Client auth0クライアント
    */
-  constructor(auth0Client: typeof Auth0Client, ownURL: string) {
-    this._auth0Client = auth0Client;
+  constructor(ownURL: string, websocketAPIURL: string, auth0Client: typeof Auth0Client) {
     this._ownURL = ownURL;
+    this._websocketAPIURL = websocketAPIURL;
+    this._auth0Client = auth0Client;
+    this._websocket = null;
   }
 
   /** @override */
@@ -49,18 +56,41 @@ class BrowserSDKImpl implements BrowserSDK {
   logout(): Promise<void> {
     return this._auth0Client.logout();
   }
+
+  /** @override */
+  async ping(): Promise<string> {
+    const websocket = await this._getOrCreateWebSocket();
+    return ping(websocket);
+  }
+
+  /**
+   * WebSocketクライアントの取得を行う
+   * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
+   *
+   * @return 取得、生成結果
+   */
+  async _getOrCreateWebSocket(): Promise<WebSocket> {
+    if (this._websocket) {
+      return this._websocket;
+    }
+
+    const accessToken = await this._auth0Client.getTokenSilently();
+    this._websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
+    return this._websocket;
+  }
 }
 
 /**
  * GブレイバーバーストブラウザSDKを生成する
- * 
- * @param domain auth0ドメイン
- * @param clientID auth0クライアントID
- * @param audience auth0 audience
- * @param redirectURI リダイレクト元となるGブレイバーバーストのURL
+ *
+ * @param ownURL リダイレクト元となるGブレイバーバーストのURL
+ * @param websocketAPIURL Websocket APIのURL
+ * @param auth0Domain auth0ドメイン
+ * @param auth0ClientID auth0クライアントID
+ * @param auth0Audience auth0 audience
  * @return GブレイバーバーストブラウザSDK
  */
-export async function createBrowserSDK(domain: string, clientID: string, audience: string, ownURL: string): Promise<BrowserSDK> {
-  const auth0Client = await createAuth0ClientHelper(domain, clientID, audience, ownURL);
-  return new BrowserSDKImpl(auth0Client, ownURL);
+export async function createBrowserSDK(ownURL: string, websocketAPIURL: string, auth0Domain: string, auth0ClientID: string, auth0Audience: string): Promise<BrowserSDK> {
+  const auth0Client = await createAuth0ClientHelper(auth0Domain, auth0ClientID, auth0Audience, ownURL);
+  return new BrowserSDKImpl(ownURL, websocketAPIURL, auth0Client);
 }
