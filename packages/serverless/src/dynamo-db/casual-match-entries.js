@@ -78,4 +78,17 @@ export class CasualMatchEntries {
     await this._client.batchWrite(params)
       .promise();
   }
+
+  /**
+   * ユニークキー指定で項目を削除する
+   *
+   * @param userID ユーザID
+   * @return 削除受付したら発火するPromise
+   */
+  delete(userID: string): Promise<void> {
+    return this._client.delete({
+      TableName: this._tableName,
+      Key: {userID}
+    }).promise();
+  }
 }

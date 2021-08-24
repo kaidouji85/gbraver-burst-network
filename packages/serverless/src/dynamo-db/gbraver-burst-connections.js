@@ -3,10 +3,24 @@
 import {DynamoDB} from "aws-sdk";
 import type {User} from '../dto/user';
 
+/** ユーザの状態 */
+export type UserState = None | CasualMatchMaking;
+
+/** 状態なし */
+export type None = {
+  type: 'None'
+};
+
+/** カジュアルマッチ マッチメイク中 */
+export type CasualMatchMaking = {
+  type: 'CasualMatchMaking'
+};
+
 /** gbraver_burst_connectionのスキーマ */
-type GbraverBurstConnection = {
+export type GbraverBurstConnection = {
   connectionId: string,
   user: User,
+  state: UserState,
 };
 
 /** gbraver_burst_connectionのDAO */
@@ -23,6 +37,21 @@ export class GbraverBurstConnections {
   constructor(client: typeof DynamoDB.DocumentClient, tableName: string) {
     this._client = client;
     this._tableName = tableName;
+  }
+
+  /**
+   * コネクションID指定でアイテムを検索する
+   * 検索条件に合致するアイテムがない場合は、nullを返す
+   *
+   * @param connectionId
+   * @return {Promise<*|null>}
+   */
+  async get(connectionId: string): Promise<?GbraverBurstConnection> {
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {connectionId},
+    }).promise();
+    return result?.Item ?? null;
   }
 
   /**
@@ -44,9 +73,9 @@ export class GbraverBurstConnections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    const Key = {connectionId};
-    return this._client
-      .delete({TableName: this._tableName, Key})
-      .promise();
+    return this._client.delete({
+      TableName: this._tableName,
+      Key: {connectionId}
+    }).promise();
   }
 }
