@@ -53,7 +53,7 @@ export async function authorizer(event: AuthorizerEvent): Promise<AuthorizerResp
 export async function connect(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const user = extractUser(event.requestContext.authorizer);
   const state = {type: 'None'};
-  const connection = {connectionId: event.requestContext.connectionId, user, state};
+  const connection = {connectionId: event.requestContext.connectionId, userID: user.userID, state};
   await connections.put(connection);
   return {statusCode: 200, body: 'connected.'};
 }
@@ -82,7 +82,7 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
  */
 async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
   if (connection.state.type === 'CasualMatchMaking') {
-    await casualMatchEntries.delete(connection.user.userID);
+    await casualMatchEntries.delete(connection.userID);
   }
 }
 
@@ -118,7 +118,8 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
   const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId,
     connectionID: event.requestContext.connectionId};
   const state = {type: 'CasualMatchMaking'};
-  const updatedConnection = {connectionId: event.requestContext.connectionId, user, state};
+  const updatedConnection = {connectionId: event.requestContext.connectionId, 
+    userID: user.userID, state};
   await Promise.all([
     casualMatchEntries.put(entry),
     connections.put(updatedConnection)
@@ -148,7 +149,7 @@ export async function pollingCasualMatchEntries(): Promise<void> {
       // TODO 将来的にはバトル開始などのステートに変える
       const user = {userID: v.userID};
       const state = {type: 'None'};
-      const connection = {connectionId: v.connectionID, user, state};
+      const connection = {connectionId: v.connectionID, userID: user.userID, state};
       return connections.put(connection);
     });
   await Promise.all([
