@@ -5,6 +5,7 @@ useDotenv: true
 custom:
   gbraverBurstConnections: gbraver_burst_connections-${sls:stage}
   casualMatchEntries: casual_match_entries-${sls:stage}
+  battleCommands: battle-commands-${sls:stage}
 
 plugins:
   - serverless-webpack
@@ -22,6 +23,7 @@ provider:
       Ref: WebsocketsApi
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
     CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
+    BATTLE_COMMANDS: ${self:custom.battleCommands}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
 
@@ -36,6 +38,7 @@ provider:
       Resource:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+        - Fn::GetAtt: [BattleCommandsTable, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
@@ -99,6 +102,23 @@ resources:
         KeySchema:
           - AttributeName: userID
             KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    BattleCommandsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battleCommands}
+        AttributeDefinitions:
+          - AttributeName: battleID
+            AttributeType: S
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: battleID
+            KeyType: HASH
+          - AttributeName: userID
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
