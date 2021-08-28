@@ -6,6 +6,7 @@ custom:
   gbraverBurstConnections: gbraver_burst_connections-${sls:stage}
   casualMatchEntries: casual_match_entries-${sls:stage}
   battleCommands: battle-commands-${sls:stage}
+  battles: battles-${sls:stage}
 
 plugins:
   - serverless-webpack
@@ -39,6 +40,7 @@ provider:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
         - Fn::GetAtt: [BattleCommandsTable, Arn]
+        - Fn::GetAtt: [Battles, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
@@ -119,6 +121,19 @@ resources:
             KeyType: HASH
           - AttributeName: userID
             KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    Battles:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battles}
+        AttributeDefinitions:
+          - AttributeName: battleID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: battleID
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
