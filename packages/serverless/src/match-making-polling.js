@@ -28,11 +28,11 @@ const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES
 const battles = new Battles(dynamoDB, BATTLES);
 
 /**
- * カジュアルマッチエントリテーブルをポーリングする
+ * カジュアルマッチでマッチングがないかを探す
  *
  * @return 処理完了後に発火するPromise
  */
-export async function pollingCasualMatchEntries(): Promise<void> {
+export async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
