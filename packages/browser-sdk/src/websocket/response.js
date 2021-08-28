@@ -1,13 +1,31 @@
 // @flow
 
+import type {Player} from "gbraver-burst-core";
+import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+
 /** APIサーバからのレスポンス */
-export type WebsocketAPIResponse = PingResponse;
+export type WebsocketAPIResponse = PingResponse | StartBattle;
 
 /** pingのレスポンス */
 export type PingResponse = {
   action: 'ping',
   /** メッセージ */
   message: string
+};
+
+/** バトルスタート */
+export type StartBattle = {
+  action: 'start-battle',
+  /** プレイヤー情報 */
+  player: Player,
+  /** 敵情報 */
+  enemy: Player,
+  /** ステートヒストリー */
+  stateHistory: GameState[],
+  /** 戦闘ID */
+  battleID: string,
+  /** フローID */
+  flowID: string,
 };
 
 /**

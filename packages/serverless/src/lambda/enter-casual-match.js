@@ -2,7 +2,7 @@
 
 /** カジュアルマッチエントリのリクエストボディ */
 export type EnterCasualMatch = {
-  action: 'enterCasualMatch',
+  action: 'enter-casual-match',
   /** 選択したアームドーザのID */
   armdozerId: string,
   /** 選択したパイロットのID */
@@ -18,7 +18,7 @@ export type EnterCasualMatch = {
  */
 export function parseEnterCasualMatch(origin: Object): ?EnterCasualMatch {
   return(
-    (origin?.action  === 'enterCasualMatch')
+    (origin?.action  === 'enter-casual-match')
     && (typeof origin?.armdozerId === 'string')
     && (typeof origin?.pilotId === 'string')
   )
