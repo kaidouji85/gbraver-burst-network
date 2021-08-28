@@ -21,6 +21,8 @@ import {parseJSON} from "./json/parse";
 import {Notifier} from "./api-gateway/notifier";
 import {Battles} from "./dynamo-db/battles";
 import {toPlayer} from "./dto/battle";
+import {parseSendCommand} from "./lambda/sned-command";
+import {BattleCommands} from "./dynamo-db/battle-commands";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -28,6 +30,7 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
 const BATTLES = process.env.BATTLES ?? '';
+const BATTLE_COMMAND = process.env.BATTLE_COMMAND ?? '';
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? '';
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
 
@@ -38,6 +41,7 @@ const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
 const battles = new Battles(dynamoDB, BATTLES);
+const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMAND);
 
 /**
  * オーサライザ
@@ -139,7 +143,14 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
  * @return レスポンス
  */
 export async function sendCommand(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  console.log(event);
+  const data = parseSendCommand(event.body);
+  if (!data) {
+    return {statusCode: 400, body: 'invalid request body'};
+  }
+
+  const user = extractUser(event.requestContext.authorizer);
+  const command = {userID: user.userID, battleID: data.battleID, flowID: data.flowID, command: data.command};
+  await battleCommands.put(command);
   return {statusCode: 200, body: 'send command success'};
 }
 
