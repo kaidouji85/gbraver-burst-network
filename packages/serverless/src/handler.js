@@ -19,10 +19,7 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
 import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {Notifier} from "./api-gateway/notifier";
-import type {Battle, BattleID, BattlePlayer} from "./dto/battle";
-import type {CasualMatchEntry} from "./dto/casual-match";
 import {Battles} from "./dynamo-db/battles";
-import {battle} from "gbraver-burst-core/lib/effect/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -123,7 +120,7 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 
   const user = extractUser(event.requestContext.authorizer);
   const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId,
-    connectionID: event.requestContext.connectionId};
+    connectionId: event.requestContext.connectionId};
   const state = {type: 'CasualMatchMaking'};
   const updatedConnection = {connectionId: event.requestContext.connectionId, 
     userID: user.userID, state};
@@ -142,46 +139,27 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 export async function pollingCasualMatchEntries(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
-
-  const newBattles = matchingList.map(matching => {
-    const playerList = matching.map(v => createBattlePlayer(v));
+  const startBattles = matchingList.map(async (matching): Promise<void> => {
+    const playerList = matching.map(entry => {
+      const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
+      const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
+      return {playerId: uuidv4(), userID: entry.userID, armdozer, pilot};
+    });
     const players = [playerList[0], playerList[1]];
     const core = startGbraverBurst(players);
-    return {battleID: uuidv4(), flowID: uuidv4(), stateHistory: core.stateHistory(), players};
-  });
-
-  const deleteEntries = matchingList.flat()
-    .map(v => v.userID);
-
-  const updateConnections = matchingList.flat()
-    .map(v => {
-      // TODO 将来的にはバトル開始などのステートに変える
-      const user = {userID: v.userID};
-      const state = {type: 'None'};
-      return {connectionId: v.connectionID, userID: user.userID, state};
+    const battle = {battleID: uuidv4(), flowID: uuidv4(), stateHistory: core.stateHistory(), players};
+    const updatedConnections = matching.map(v => {
+      const state = {type: 'InBattle', battleID: battle.battleID};
+      return {connectionId: v.connectionId, userID: v.userID, state};
     });
-
-  const notices = matchingList.map(matching => matching.map(v => ({
-    connectionId: v.connectionID,
-    data: {action: 'matching', matching}
-  }))).flat();
-
-  await Promise.all([
-    newBattles.map(v => battles.put(v)),
-    deleteEntries.map(v => casualMatchEntries.delete(v)),
-    updateConnections.map(v => connections.put(v)),
-    notices.map(v => notifier.notifyToClient(v.connectionId, v.data))
-  ]);
-}
-
-/**
- * カジュアルマッチエントリからプレイヤーを生成するヘルパー関数
- *
- * @param entry エントリ
- * @return 生成結果
- */
-export function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
-  const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
-  const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
-  return {playerId: uuidv4(), userID: entry.userID, armdozer, pilot};
+    const notices = matching.map(v => ({connectionId: v.connectionId, data: battle}));
+    const deleteEntryIDs = matching.map(v => v.userID);
+    await Promise.all([
+      battles.put(battle),
+      ...updatedConnections.map(v => connections.put(v)),
+      ...deleteEntryIDs.map(v => casualMatchEntries.delete(v)),
+      ...notices.map(v => notifier.notifyToClient(v.connectionId, v.data))
+    ]);
+  });
+  await Promise.all(startBattles);
 }

@@ -13,7 +13,7 @@ type CasualMatchEntriesSchema = {
   /** 選択したパイロットのID */
   pilotId: PilotId,
   /** コネクションID */
-  connectionID: string,
+  connectionId: string,
 }
 
 /** casual_match_entriesのDAO */
