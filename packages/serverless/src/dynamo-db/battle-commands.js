@@ -2,17 +2,19 @@
 
 import type {Command} from 'gbraver-burst-core';
 import {DynamoDB} from "aws-sdk";
+import type {BattleID, FlowID} from "../dto/battle";
+import type {UserID} from "../dto/user";
 
 /** battle-commands のスキーマ */
-type BattleCommand = {
+type BattleCommandsSchema = {
   /** バトルID */
-  battleID: string,
+  battleID: BattleID,
+  /** フローID */
+  flowID: FlowID,
   /** ユーザID */
-  userID: string,
+  userID: UserID,
   /** コマンド */
   command: Command,
-  /** フローID */
-  flowID: string,
 };
 
 /** battle-commandsのDAO */
@@ -37,7 +39,7 @@ export class BattleCommands {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: BattleCommand): Promise<void> {
+  put(entry: BattleCommandsSchema): Promise<void> {
     return this._client
       .put({TableName: this._tableName, Item: entry})
       .promise();

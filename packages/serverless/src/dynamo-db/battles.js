@@ -1,28 +1,10 @@
 // @flow
 
-import type {GameState, Player} from "gbraver-burst-core";
-import type {UserID} from "../dto/user";
 import {DynamoDB} from "aws-sdk";
-
-/** プレイヤー情報 */
-export type BattlePlayer = Player & {
-  userID: UserID,
-};
+import type {Battle} from "../dto/battle";
 
 /** battlesのスキーマ */
-export type Battle = {
-  /** バトルID */
-  battleID: string,
-  /** バトルに参加しているプレイヤー */
-  players: BattlePlayer,
-  /** ステートヒストリー */
-  stateHistory: GameState[],
-  /**
-   * ステップID
-   * ゲームが進行するたびに、ユニークなIDが割り振られる
-   */
-  flowID: string,
-};
+export type BattlesSchema = Battle;
 
 export class Battles {
   _client: typeof DynamoDB.DocumentClient;
@@ -45,7 +27,7 @@ export class Battles {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: Battle): Promise<void> {
+  put(entry: BattlesSchema): Promise<void> {
     return this._client
       .put({TableName: this._tableName, Item: entry})
       .promise();

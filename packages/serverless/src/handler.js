@@ -15,7 +15,7 @@ import {verifyAccessToken} from "./auth0/access-token";
 import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
-import type {GbraverBurstConnection} from "./dynamo-db/gbraver-burst-connections";
+import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {Notifier} from "./api-gateway/notifier";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -82,7 +82,7 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
  * @param connection 接続情報
  * @return クリーンアップ完了時に発火するPromise
  */
-async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
+async function cleanUp(connection: GbraverBurstConnectionsSchema): Promise<void> {
   if (connection.state.type === 'CasualMatchMaking') {
     await casualMatchEntries.delete(connection.userID);
   }
