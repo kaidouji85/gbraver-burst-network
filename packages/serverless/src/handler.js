@@ -159,9 +159,8 @@ export async function pollingCasualMatchEntries(): Promise<void> {
       const respPlayer = toPlayer(player);
       const enemy = players.find(v => v.userID !== entry.userID) ?? players[0];
       const respEnemy = toPlayer(enemy);
-      const data = {player: respPlayer, enemy: respEnemy, battleID: battle.battleID, flowID: battle.flowID};
-      console.log(entry);
-      console.log(data);
+      const data = {action: 'start-battle', player: respPlayer, enemy: respEnemy,
+        battleID: battle.battleID, flowID: battle.flowID};
       return {connectionId: entry.connectionId, data};
     });
     const deleteEntryIDs = matching.map(v => v.userID);

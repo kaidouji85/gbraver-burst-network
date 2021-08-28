@@ -74,7 +74,7 @@ functions:
     handler: src/handler.enterCasualMatch
     events:
       - websocket:
-          route: enterCasualMatch
+          route: enter-casual-match
   pollingCasualMatchEntries:
     handler: src/handler.pollingCasualMatchEntries
     events:
