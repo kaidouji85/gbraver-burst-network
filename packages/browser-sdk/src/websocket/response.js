@@ -1,7 +1,6 @@
 // @flow
 
-import type {Player} from "gbraver-burst-core";
-import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+import type {Player, GameState} from "gbraver-burst-core";
 
 /** APIサーバからのレスポンス */
 export type WebsocketAPIResponse = PingResponse | StartBattle;
@@ -38,5 +37,22 @@ export type StartBattle = {
 export function parsePingResponse(data: Object): ?PingResponse {
   return ((data?.action === 'ping') && (typeof data?.message === 'string'))
     ? ({action: data.action, message: data.message})
+    : null;
+}
+
+/**
+ * 任意のオブジェクトをStartBattleにパースする
+ * パースできない場合はnullを返す
+ *
+ * @param data パース元となる文字列
+ * @return パース結果
+ */
+export function parseStartBattle(data: Object): ?StartBattle {
+  return (data?.action === 'start-battle') && (typeof data?.battleID === 'string')
+    && (typeof data?.flowID === 'string') && Array.isArray(data?.stateHistory)
+    && (data?.player !== null) && (typeof data?.player === 'object')
+    && (data?.enemy !== null) && (typeof data?.enemy === 'object')
+    ? {action: data.action, battleID: data.battleID, flowID: data.flowID,
+      stateHistory: data.stateHistory, player: data.player, enemy: data.enemy}
     : null;
 }
