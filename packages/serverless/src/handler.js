@@ -2,9 +2,9 @@
 
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
-import type {Player} from 'gbraver-burst-core';
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
+import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
@@ -18,10 +18,9 @@ import {verifyAccessToken} from "./auth0/access-token";
 import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
-import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {Notifier} from "./api-gateway/notifier";
 import {Battles} from "./dynamo-db/battles";
-import type {BattlePlayer} from "./dto/battle";
+import {toPlayer} from "./dto/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -108,7 +107,7 @@ export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIRespon
 }
 
 /**
- * Websocket API enterCasualMatch エントリポイント
+ * Websocket API enter-casual-match エントリポイント
  *
  * @param event イベント
  * @return レスポンス
@@ -131,6 +130,17 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
     connections.put(updatedConnection)
   ]);
   return {statusCode: 200, body: 'enter casual match success'};
+}
+
+/**
+ * Websocket API send-command エントリポイント
+ *
+ * @param event イベント
+ * @return レスポンス
+ */
+export async function sendCommand(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
+  console.log(event);
+  return {statusCode: 200, body: 'send command success'};
 }
 
 /**
@@ -159,8 +169,10 @@ export async function pollingCasualMatchEntries(): Promise<void> {
       const respPlayer = toPlayer(player);
       const enemy = players.find(v => v.userID !== entry.userID) ?? players[0];
       const respEnemy = toPlayer(enemy);
-      const data = {action: 'start-battle', player: respPlayer, enemy: respEnemy,
-        battleID: battle.battleID, flowID: battle.flowID};
+      const data = {
+        action: 'start-battle', player: respPlayer, enemy: respEnemy,
+        battleID: battle.battleID, flowID: battle.flowID
+      };
       return {connectionId: entry.connectionId, data};
     });
     const deleteEntryIDs = matching.map(v => v.userID);
@@ -172,8 +184,4 @@ export async function pollingCasualMatchEntries(): Promise<void> {
     ]);
   });
   await Promise.all(startBattles);
-}
-
-function toPlayer(origin: BattlePlayer): Player {
-  return {playerId: origin.playerId, armdozer: origin.armdozer, pilot: origin.pilot};
 }

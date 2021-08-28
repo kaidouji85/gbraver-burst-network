@@ -1,8 +1,8 @@
 // @flow
 
-import type {Player} from "gbraver-burst-core/lib/player/player";
 import type {UserID} from "./user";
 import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+import type {Player} from "gbraver-burst-core";
 
 /** バトルID */
 export type BattleID = string;
@@ -26,3 +26,13 @@ export type Battle = {
   /** ステートヒストリー */
   stateHistory: GameState[],
 };
+
+/**
+ * BattlePlayerをPlayerに変換する
+ *
+ * @param origin 変換元
+ * @return 変換結果
+ */
+export function toPlayer(origin: BattlePlayer): Player {
+  return {playerId: origin.playerId, armdozer: origin.armdozer, pilot: origin.pilot};
+}

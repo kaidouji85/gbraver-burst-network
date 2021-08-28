@@ -75,6 +75,11 @@ functions:
     events:
       - websocket:
           route: enter-casual-match
+  sendCommand:
+    handler: src/handler.sendCommand
+    events:
+      - websocket:
+          route: send-command
   pollingCasualMatchEntries:
     handler: src/handler.pollingCasualMatchEntries
     events:
