@@ -50,9 +50,9 @@ provider:
 
 functions:
   auth:
-    handler: src/handler.authorizer
+    handler: src/authorizer.authorizer
   connect:
-    handler: src/handler.connect
+    handler: src/connect.connect
     events:
       - websocket:
           route: $connect
@@ -61,27 +61,27 @@ functions:
             identitySource:
               - 'route.request.querystring.token'
   disconnect:
-    handler: src/handler.disconnect
+    handler: src/disconnect.disconnect
     events:
       - websocket:
           route: $disconnect
   ping:
-    handler: src/handler.ping
+    handler: src/ping.ping
     events:
       - websocket:
           route: ping
   enterCasualMatch:
-    handler: src/handler.enterCasualMatch
+    handler: src/enter-casual-match.enterCasualMatch
     events:
       - websocket:
           route: enter-casual-match
   sendCommand:
-    handler: src/handler.sendCommand
+    handler: src/send-command.sendCommand
     events:
       - websocket:
           route: send-command
   pollingCasualMatchEntries:
-    handler: src/handler.pollingCasualMatchEntries
+    handler: src/polling-casual-match-entries.pollingCasualMatchEntries
     events:
       - schedule: rate(1 minute)
 
