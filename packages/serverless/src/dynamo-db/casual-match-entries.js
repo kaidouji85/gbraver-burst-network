@@ -55,31 +55,6 @@ export class CasualMatchEntries {
   }
 
   /**
-   * バッチ削除
-   *
-   * @param userIDs 削除する項目のユニークIO
-   * @return 処理完了したら発火するPromise
-   */
-  async batchDelete(userIDs: string[]): Promise<void> {
-    if (userIDs.length <= 0) {
-      return;
-    }
-
-    const items = userIDs.map(v => ({
-      DeleteRequest : {
-        Key : { userID : v}
-      }
-    }));
-    const params = {
-      RequestItems : {
-        [`${this._tableName}`] : items
-      }
-    };
-    await this._client.batchWrite(params)
-      .promise();
-  }
-
-  /**
    * ユニークキー指定で項目を削除する
    *
    * @param userID ユーザID

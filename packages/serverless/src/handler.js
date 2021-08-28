@@ -16,6 +16,7 @@ import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
 import type {GbraverBurstConnection} from "./dynamo-db/gbraver-burst-connections";
+import {createNotifier} from "./api-gateway/notifier";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -27,6 +28,7 @@ const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+const notify = createNotifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
@@ -94,10 +96,7 @@ async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
  */
 export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
-  const respData = JSON.stringify(data);
-  await apiGateway
-    .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
-    .promise();
+  await notify(event.requestContext.connectionId, data);
   return {statusCode: 200, body: 'ping success'};
 }
 
@@ -135,26 +134,26 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 export async function pollingCasualMatchEntries(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
-  const deleteKeys = matchingList
-    .flat()
+
+  const deleteEntries = matchingList.flat()
     .map(v => v.userID);
-  const notices = matchingList.map(matching => matching.map(v => apiGateway.postToConnection({
-    ConnectionId: v.connectionID,
-    Data: JSON.stringify({action: 'matching', matching})
-  })))
-    .flat()
-    .map(v => v.promise());
-  const updateState = matchingList.flat()
+
+  const updateConnections = matchingList.flat()
     .map(v => {
       // TODO 将来的にはバトル開始などのステートに変える
       const user = {userID: v.userID};
       const state = {type: 'None'};
-      const connection = {connectionId: v.connectionID, userID: user.userID, state};
-      return connections.put(connection);
+      return {connectionId: v.connectionID, userID: user.userID, state};
     });
+
+  const notices = matchingList.map(matching => matching.map(v => ({
+    connectionId: v.connectionID,
+    data: {action: 'matching', matching}
+  }))).flat();
+
   await Promise.all([
-    ...notices,
-    casualMatchEntries.batchDelete(deleteKeys),
-    ...updateState
+    deleteEntries.map(v => casualMatchEntries.delete(v)),
+    updateConnections.map(v => connections.put(v)),
+    notices.map(v => notify(v.connectionId, v.data))
   ]);
 }
