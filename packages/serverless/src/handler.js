@@ -2,6 +2,7 @@
 
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
+import type {Player} from 'gbraver-burst-core';
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
@@ -20,6 +21,7 @@ import {parseJSON} from "./json/parse";
 import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {Notifier} from "./api-gateway/notifier";
 import {Battles} from "./dynamo-db/battles";
+import type {BattlePlayer} from "./dto/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -152,7 +154,16 @@ export async function pollingCasualMatchEntries(): Promise<void> {
       const state = {type: 'InBattle', battleID: battle.battleID};
       return {connectionId: v.connectionId, userID: v.userID, state};
     });
-    const notices = matching.map(v => ({connectionId: v.connectionId, data: battle}));
+    const notices = matching.map(entry => {
+      const player = players.find(v => v.userID === entry.userID) ?? players[0];
+      const respPlayer = toPlayer(player);
+      const enemy = players.find(v => v.userID !== entry.userID) ?? players[0];
+      const respEnemy = toPlayer(enemy);
+      const data = {player: respPlayer, enemy: respEnemy, battleID: battle.battleID, flowID: battle.flowID};
+      console.log(entry);
+      console.log(data);
+      return {connectionId: entry.connectionId, data};
+    });
     const deleteEntryIDs = matching.map(v => v.userID);
     await Promise.all([
       battles.put(battle),
@@ -162,4 +173,8 @@ export async function pollingCasualMatchEntries(): Promise<void> {
     ]);
   });
   await Promise.all(startBattles);
+}
+
+function toPlayer(origin: BattlePlayer): Player {
+  return {playerId: origin.playerId, armdozer: origin.armdozer, pilot: origin.pilot};
 }
