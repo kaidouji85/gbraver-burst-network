@@ -16,7 +16,7 @@ import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
 import type {GbraverBurstConnection} from "./dynamo-db/gbraver-burst-connections";
-import {createNotifier} from "./api-gateway/notifier";
+import {Notifier} from "./api-gateway/notifier";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -28,7 +28,7 @@ const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
-const notify = createNotifier(apiGateway);
+const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
@@ -96,7 +96,7 @@ async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
  */
 export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
-  await notify(event.requestContext.connectionId, data);
+  await notifier.notifyToClient(event.requestContext.connectionId, data);
   return {statusCode: 200, body: 'ping success'};
 }
 
@@ -154,6 +154,6 @@ export async function pollingCasualMatchEntries(): Promise<void> {
   await Promise.all([
     deleteEntries.map(v => casualMatchEntries.delete(v)),
     updateConnections.map(v => connections.put(v)),
-    notices.map(v => notify(v.connectionId, v.data))
+    notices.map(v => notifier.notifyToClient(v.connectionId, v.data))
   ]);
 }

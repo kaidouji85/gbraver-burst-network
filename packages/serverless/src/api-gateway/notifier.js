@@ -2,22 +2,28 @@
 
 import {ApiGatewayManagementApi} from "aws-sdk";
 
-/**
- * クライアントにメッセージ送信する
- *
- * @param connectionID コネクションID
- * @param data 送信するデータ
- * @return メッセージ送信が完了したら発火するPromise
- */
-export type Notifier = (connectionID: string, data: any) => Promise<void>;
+/** メッセージ通知 */
+export class Notifier {
+  _api: typeof ApiGatewayManagementApi;
 
-/**
- * Notifierを生成する
- *
- * @param api APIGateway管理オブジェクト
- * @return 生成結果
- */
-export const createNotifier = (api: typeof ApiGatewayManagementApi): Notifier => (connectionID: string, data: any): Promise<void> => {
-  const sendData = JSON.stringify(data);
-  return api.postToConnection({ConnectionId: connectionID, Data: sendData}).promise();
+  /**
+   * コンストラクタ
+   * 
+   * @param api APIゲートウェイ管理オブジェクト
+   */
+  constructor(api: typeof ApiGatewayManagementApi) {
+    this._api = api;
+  }
+
+  /**
+   * クライアントにメッセージ送信する
+   *
+   * @param connectionID コネクションID
+   * @param data 送信するデータ
+   * @return メッセージ送信が完了したら発火するPromise
+   */
+  notifyToClient(connectionID: string, data: any): Promise<void> {
+    const sendData = JSON.stringify(data);
+    return this._api.postToConnection({ConnectionId: connectionID, Data: sendData}).promise();
+  }
 }
