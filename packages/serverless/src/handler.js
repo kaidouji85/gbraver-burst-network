@@ -1,7 +1,10 @@
 // @flow
 
+import {v4 as uuidv4} from 'uuid';
+import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
+import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
@@ -15,21 +18,30 @@ import {verifyAccessToken} from "./auth0/access-token";
 import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
-import type {GbraverBurstConnection} from "./dynamo-db/gbraver-burst-connections";
+import {Notifier} from "./api-gateway/notifier";
+import {Battles} from "./dynamo-db/battles";
+import {toPlayer} from "./dto/battle";
+import {parseSendCommand} from "./lambda/sned-command";
+import {BattleCommands} from "./dynamo-db/battle-commands";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
+const BATTLES = process.env.BATTLES ?? '';
+const BATTLE_COMMAND = process.env.BATTLE_COMMAND ?? '';
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? '';
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+const battles = new Battles(dynamoDB, BATTLES);
+const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMAND);
 
 /**
  * オーサライザ
@@ -80,7 +92,7 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
  * @param connection 接続情報
  * @return クリーンアップ完了時に発火するPromise
  */
-async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
+async function cleanUp(connection: GbraverBurstConnectionsSchema): Promise<void> {
   if (connection.state.type === 'CasualMatchMaking') {
     await casualMatchEntries.delete(connection.userID);
   }
@@ -94,15 +106,12 @@ async function cleanUp(connection: GbraverBurstConnection): Promise<void> {
  */
 export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
   const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
-  const respData = JSON.stringify(data);
-  await apiGateway
-    .postToConnection({ConnectionId: event.requestContext.connectionId, Data: respData})
-    .promise();
+  await notifier.notifyToClient(event.requestContext.connectionId, data);
   return {statusCode: 200, body: 'ping success'};
 }
 
 /**
- * Websocket API enterCasualMatch エントリポイント
+ * Websocket API enter-casual-match エントリポイント
  *
  * @param event イベント
  * @return レスポンス
@@ -116,7 +125,7 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 
   const user = extractUser(event.requestContext.authorizer);
   const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId,
-    connectionID: event.requestContext.connectionId};
+    connectionId: event.requestContext.connectionId};
   const state = {type: 'CasualMatchMaking'};
   const updatedConnection = {connectionId: event.requestContext.connectionId, 
     userID: user.userID, state};
@@ -128,6 +137,24 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 }
 
 /**
+ * Websocket API send-command エントリポイント
+ *
+ * @param event イベント
+ * @return レスポンス
+ */
+export async function sendCommand(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
+  const data = parseSendCommand(event.body);
+  if (!data) {
+    return {statusCode: 400, body: 'invalid request body'};
+  }
+
+  const user = extractUser(event.requestContext.authorizer);
+  const command = {userID: user.userID, battleID: data.battleID, flowID: data.flowID, command: data.command};
+  await battleCommands.put(command);
+  return {statusCode: 200, body: 'send command success'};
+}
+
+/**
  * カジュアルマッチエントリテーブルをポーリングする
  *
  * @return 処理完了後に発火するPromise
@@ -135,26 +162,37 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
 export async function pollingCasualMatchEntries(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
-  const deleteKeys = matchingList
-    .flat()
-    .map(v => v.userID);
-  const notices = matchingList.map(matching => matching.map(v => apiGateway.postToConnection({
-    ConnectionId: v.connectionID,
-    Data: JSON.stringify({action: 'matching', matching})
-  })))
-    .flat()
-    .map(v => v.promise());
-  const updateState = matchingList.flat()
-    .map(v => {
-      // TODO 将来的にはバトル開始などのステートに変える
-      const user = {userID: v.userID};
-      const state = {type: 'None'};
-      const connection = {connectionId: v.connectionID, userID: user.userID, state};
-      return connections.put(connection);
+  const startBattles = matchingList.map(async (matching): Promise<void> => {
+    const playerList = matching.map(entry => {
+      const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
+      const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
+      return {playerId: uuidv4(), userID: entry.userID, armdozer, pilot};
     });
-  await Promise.all([
-    ...notices,
-    casualMatchEntries.batchDelete(deleteKeys),
-    ...updateState
-  ]);
+    const players = [playerList[0], playerList[1]];
+    const core = startGbraverBurst(players);
+    const battle = {battleID: uuidv4(), flowID: uuidv4(), stateHistory: core.stateHistory(), players};
+    const updatedConnections = matching.map(v => {
+      const state = {type: 'InBattle', battleID: battle.battleID};
+      return {connectionId: v.connectionId, userID: v.userID, state};
+    });
+    const notices = matching.map(entry => {
+      const player = players.find(v => v.userID === entry.userID) ?? players[0];
+      const respPlayer = toPlayer(player);
+      const enemy = players.find(v => v.userID !== entry.userID) ?? players[0];
+      const respEnemy = toPlayer(enemy);
+      const data = {
+        action: 'start-battle', player: respPlayer, enemy: respEnemy,
+        battleID: battle.battleID, flowID: battle.flowID
+      };
+      return {connectionId: entry.connectionId, data};
+    });
+    const deleteEntryIDs = matching.map(v => v.userID);
+    await Promise.all([
+      battles.put(battle),
+      ...updatedConnections.map(v => connections.put(v)),
+      ...deleteEntryIDs.map(v => casualMatchEntries.delete(v)),
+      ...notices.map(v => notifier.notifyToClient(v.connectionId, v.data))
+    ]);
+  });
+  await Promise.all(startBattles);
 }

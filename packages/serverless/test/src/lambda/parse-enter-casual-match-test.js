@@ -4,7 +4,7 @@ import test from 'ava';
 import {parseEnterCasualMatch} from "../../../src/lambda/enter-casual-match";
 import type {EnterCasualMatch} from "../../../src/lambda/enter-casual-match";
 
-const enterCasualMatch: EnterCasualMatch = {action: 'enterCasualMatch', armdozerId: 'armdozerId', pilotId: 'pilotId'};
+const enterCasualMatch: EnterCasualMatch = {action: 'enter-casual-match', armdozerId: 'armdozerId', pilotId: 'pilotId'};
 
 test('EnterCasualMatchを正しくパースできる', t => {
   const result = parseEnterCasualMatch(enterCasualMatch);

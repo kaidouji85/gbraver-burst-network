@@ -1,17 +1,19 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
+import type {UserID} from "../dto/user";
+import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 
 /** casual_match_entriesのスキーマ */
-type CasualMatchEntry = {
+type CasualMatchEntriesSchema = {
   /** ユーザID */
-  userID: string,
+  userID: UserID,
   /** 選択したアームドーザのID */
-  armdozerId: string,
+  armdozerId: ArmDozerId,
   /** 選択したパイロットのID */
-  pilotId: string,
+  pilotId: PilotId,
   /** コネクションID */
-  connectionID: string,
+  connectionId: string,
 }
 
 /** casual_match_entriesのDAO */
@@ -36,7 +38,7 @@ export class CasualMatchEntries {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: CasualMatchEntry): Promise<void> {
+  put(entry: CasualMatchEntriesSchema): Promise<void> {
     return this._client
       .put({TableName: this._tableName, Item: entry})
       .promise();
@@ -47,36 +49,11 @@ export class CasualMatchEntries {
    *
    * @return 取得結果
    */
-  async scan(): Promise<CasualMatchEntry[]> {
+  async scan(): Promise<CasualMatchEntriesSchema[]> {
     const resp = await this._client
       .scan({TableName: this._tableName, Select: "ALL_ATTRIBUTES"})
       .promise();
     return resp?.Items ?? [];
-  }
-
-  /**
-   * バッチ削除
-   *
-   * @param userIDs 削除する項目のユニークIO
-   * @return 処理完了したら発火するPromise
-   */
-  async batchDelete(userIDs: string[]): Promise<void> {
-    if (userIDs.length <= 0) {
-      return;
-    }
-
-    const items = userIDs.map(v => ({
-      DeleteRequest : {
-        Key : { userID : v}
-      }
-    }));
-    const params = {
-      RequestItems : {
-        [`${this._tableName}`] : items
-      }
-    };
-    await this._client.batchWrite(params)
-      .promise();
   }
 
   /**

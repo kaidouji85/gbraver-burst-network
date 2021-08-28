@@ -2,24 +2,15 @@
 
 import {DynamoDB} from "aws-sdk";
 import type {UserID} from '../dto/user';
-
-/** ユーザの状態 */
-export type UserState = None | CasualMatchMaking;
-
-/** 状態なし */
-export type None = {
-  type: 'None'
-};
-
-/** カジュアルマッチ マッチメイク中 */
-export type CasualMatchMaking = {
-  type: 'CasualMatchMaking'
-};
+import type {UserState} from "../dto/user-state";
 
 /** gbraver_burst_connectionのスキーマ */
-export type GbraverBurstConnection = {
+export type GbraverBurstConnectionsSchema = {
+  /** コネクションID */
   connectionId: string,
+  /** ユーザID */
   userID: UserID,
+  /** ステート */
   state: UserState,
 };
 
@@ -46,7 +37,7 @@ export class GbraverBurstConnections {
    * @param connectionId
    * @return 検索結果
    */
-  async get(connectionId: string): Promise<?GbraverBurstConnection> {
+  async get(connectionId: string): Promise<?GbraverBurstConnectionsSchema> {
     const result = await this._client.get({
       TableName: this._tableName,
       Key: {connectionId},
@@ -60,7 +51,7 @@ export class GbraverBurstConnections {
    * @param connection 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(connection: GbraverBurstConnection): Promise<void> {
+  put(connection: GbraverBurstConnectionsSchema): Promise<void> {
     return this._client
       .put({TableName: this._tableName, Item: connection})
       .promise();

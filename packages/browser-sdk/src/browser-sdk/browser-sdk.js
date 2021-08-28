@@ -60,7 +60,8 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async ping(): Promise<string> {
     const websocket = await this._getOrCreateWebSocket();
-    return ping(websocket);
+    const resp = await ping(websocket);
+    return resp.message;
   }
 
   /**

@@ -5,6 +5,8 @@ useDotenv: true
 custom:
   gbraverBurstConnections: gbraver_burst_connections-${sls:stage}
   casualMatchEntries: casual_match_entries-${sls:stage}
+  battleCommands: battle-commands-${sls:stage}
+  battles: battles-${sls:stage}
 
 plugins:
   - serverless-webpack
@@ -22,6 +24,8 @@ provider:
       Ref: WebsocketsApi
     GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
     CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
+    BATTLE_COMMANDS: ${self:custom.battleCommands}
+    BATTLES: ${self:custom.battles}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
 
@@ -36,6 +40,8 @@ provider:
       Resource:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+        - Fn::GetAtt: [BattleCommandsTable, Arn]
+        - Fn::GetAtt: [BattlesTable, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
@@ -68,7 +74,12 @@ functions:
     handler: src/handler.enterCasualMatch
     events:
       - websocket:
-          route: enterCasualMatch
+          route: enter-casual-match
+  sendCommand:
+    handler: src/handler.sendCommand
+    events:
+      - websocket:
+          route: send-command
   pollingCasualMatchEntries:
     handler: src/handler.pollingCasualMatchEntries
     events:
@@ -98,6 +109,36 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: userID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    BattleCommandsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battleCommands}
+        AttributeDefinitions:
+          - AttributeName: battleID
+            AttributeType: S
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: battleID
+            KeyType: HASH
+          - AttributeName: userID
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    BattlesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battles}
+        AttributeDefinitions:
+          - AttributeName: battleID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: battleID
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
