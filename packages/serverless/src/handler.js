@@ -1,5 +1,7 @@
 // @flow
 
+import {v4 as uuidv4} from 'uuid';
+import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
@@ -17,12 +19,17 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {parseJSON} from "./json/parse";
 import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
 import {Notifier} from "./api-gateway/notifier";
+import type {Battle, BattleID, BattlePlayer} from "./dto/battle";
+import type {CasualMatchEntry} from "./dto/casual-match";
+import {Battles} from "./dynamo-db/battles";
+import {battle} from "gbraver-burst-core/lib/effect/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
+const BATTLES = process.env.BATTLES ?? '';
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? '';
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
 
@@ -32,6 +39,7 @@ const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+const battles = new Battles(dynamoDB, BATTLES);
 
 /**
  * オーサライザ
@@ -135,6 +143,13 @@ export async function pollingCasualMatchEntries(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
 
+  const newBattles = matchingList.map(matching => {
+    const playerList = matching.map(v => createBattlePlayer(v));
+    const players = [playerList[0], playerList[1]];
+    const core = startGbraverBurst(players);
+    return {battleID: uuidv4(), flowID: uuidv4(), stateHistory: core.stateHistory(), players};
+  });
+
   const deleteEntries = matchingList.flat()
     .map(v => v.userID);
 
@@ -152,8 +167,21 @@ export async function pollingCasualMatchEntries(): Promise<void> {
   }))).flat();
 
   await Promise.all([
+    newBattles.map(v => battles.put(v)),
     deleteEntries.map(v => casualMatchEntries.delete(v)),
     updateConnections.map(v => connections.put(v)),
     notices.map(v => notifier.notifyToClient(v.connectionId, v.data))
   ]);
+}
+
+/**
+ * カジュアルマッチエントリからプレイヤーを生成するヘルパー関数
+ *
+ * @param entry エントリ
+ * @return 生成結果
+ */
+export function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
+  const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
+  const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
+  return {playerId: uuidv4(), userID: entry.userID, armdozer, pilot};
 }
