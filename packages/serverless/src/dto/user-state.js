@@ -17,5 +17,6 @@ export type CasualMatchMaking = {
 /** 戦闘中 */
 export type InBattle = {
   type: 'InBattle',
+  /** 現在実行している戦闘のID */
   battleID: BattleID
 };

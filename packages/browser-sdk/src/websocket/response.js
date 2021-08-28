@@ -48,6 +48,7 @@ export function parsePingResponse(data: Object): ?PingResponse {
  * @return パース結果
  */
 export function parseStartBattle(data: Object): ?StartBattle {
+  // TODO player、enemy、stateHistoryの正確な型チェックを実装する
   return (data?.action === 'start-battle') && (typeof data?.battleID === 'string')
     && (typeof data?.flowID === 'string') && Array.isArray(data?.stateHistory)
     && (data?.player !== null) && (typeof data?.player === 'object')

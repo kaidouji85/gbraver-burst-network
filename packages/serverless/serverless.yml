@@ -41,7 +41,7 @@ provider:
         - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
         - Fn::GetAtt: [BattleCommandsTable, Arn]
-        - Fn::GetAtt: [Battles, Arn]
+        - Fn::GetAtt: [BattlesTable, Arn]
     - Effect: Allow
       Action:
         - 'execute-api:ManageConnections'
@@ -130,7 +130,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    Battles:
+    BattlesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         TableName: ${self:custom.battles}

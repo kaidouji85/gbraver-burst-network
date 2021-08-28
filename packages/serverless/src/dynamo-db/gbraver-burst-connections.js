@@ -6,8 +6,11 @@ import type {UserState} from "../dto/user-state";
 
 /** gbraver_burst_connectionのスキーマ */
 export type GbraverBurstConnectionsSchema = {
+  /** コネクションID */
   connectionId: string,
+  /** ユーザID */
   userID: UserID,
+  /** ステート */
   state: UserState,
 };
 

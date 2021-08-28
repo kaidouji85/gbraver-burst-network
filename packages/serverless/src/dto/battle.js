@@ -12,6 +12,7 @@ export type FlowID = string;
 
 /** バトルに参加するプレイヤー情報 */
 export type BattlePlayer = Player & {
+  /** ユーザID */
   userID: UserID
 };
 

@@ -22,6 +22,7 @@ export type SendCommand = {
  * @return パース結果
  */
 export function parseSendCommand(data: Object): ?SendCommand {
+  // TODO commandの正確な型チェックを実装する
   return (data?.action === 'send-command') && (typeof data?.battleID === 'string') && (typeof data?.flowID === 'string')
     && (data?.command !== null) && (typeof data?.command === 'object')
     ? {action: data.action, battleID: data.battleID, flowID: data.flowID, command: data.command}
