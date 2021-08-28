@@ -7,12 +7,12 @@ import type {UserID} from "../dto/user";
 
 /** battle-commands のスキーマ */
 type BattleCommandsSchema = {
+  /** ユーザID */
+  userID: UserID,
   /** バトルID */
   battleID: BattleID,
   /** フローID */
   flowID: FlowID,
-  /** ユーザID */
-  userID: UserID,
   /** コマンド */
   command: Command,
 };

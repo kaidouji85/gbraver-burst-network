@@ -118,15 +118,11 @@ resources:
       Properties:
         TableName: ${self:custom.battleCommands}
         AttributeDefinitions:
-          - AttributeName: battleID
-            AttributeType: S
           - AttributeName: userID
             AttributeType: S
         KeySchema:
-          - AttributeName: battleID
-            KeyType: HASH
           - AttributeName: userID
-            KeyType: RANGE
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
