@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/serverless",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "gbraver burst serverless",
   "private": true,
   "scripts": {
