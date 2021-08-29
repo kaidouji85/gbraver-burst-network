@@ -21,7 +21,7 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.17.0",
     "@gbraver-burst-network/core": "^0.4.8",
-    "gbraver-burst-core": "^1.8.3"
+    "gbraver-burst-core": "^1.9.0"
   },
   "devDependencies": {
     "@ava/babel": "^2.0.0",
@@ -34,7 +34,7 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "eslint": "^7.32.0",
-    "eslint-plugin-flowtype": "^5.9.0",
+    "eslint-plugin-flowtype": "^5.9.1",
     "flow-bin": "^0.158.0",
     "flow-copy-source": "^2.0.9",
     "npm-run-all": "^4.1.5",

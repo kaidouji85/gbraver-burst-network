@@ -14,8 +14,8 @@
     "upload": "sls deploy"
   },
   "dependencies": {
-    "aws-sdk": "^2.973.0",
-    "gbraver-burst-core": "^1.8.3",
+    "aws-sdk": "^2.978.0",
+    "gbraver-burst-core": "^1.9.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.4",
     "uuid": "^8.3.2"
@@ -33,11 +33,11 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-flowtype": "^5.9.0",
+    "eslint-plugin-flowtype": "^5.9.1",
     "flow-bin": "^0.158.0",
     "npm-run-all": "^4.1.5",
-    "serverless": "^2.55.0",
-    "serverless-webpack": "^5.5.1",
+    "serverless": "^2.56.0",
+    "serverless-webpack": "^5.5.2",
     "webpack": "^5.51.1"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
