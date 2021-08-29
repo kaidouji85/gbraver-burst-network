@@ -18,6 +18,7 @@
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
     "serve:monolithic-server": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve",
+    "serve:monolithic-server-production": "lerna run --scope @gbraver-burst-network/monolithic-server --stream --no-prefix serve:production",
     "serve:monolithic-stub": "lerna run --scope @gbraver-burst-network/monolithic-stub --stream --no-prefix serve",
     "serve:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub --stream --no-prefix serve",
     "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless deploy"
