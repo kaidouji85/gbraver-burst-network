@@ -12,9 +12,10 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {Notifier} from "./api-gateway/notifier";
 import {Battles} from "./dynamo-db/battles";
 import {toPlayer} from "./dto/battle";
-import type {CasualMatchEntry} from "./dto/casual-match";
-import type {Battle, BattleID, BattlePlayer, FlowID} from "./dto/battle";
+import type {BattleID, FlowID} from "./dto/battle";
 import type {UserID} from "./dto/user";
+import type {BattlesSchema, PlayerSchema} from "./dynamo-db/battles";
+import type {CasualMatchEntriesSchema} from "./dynamo-db/casual-match-entries";
 
 /** 戦闘開始 */
 type BattleStart = {
@@ -55,7 +56,7 @@ export async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
-    const players = [createBattlePlayer(matching[0]), createBattlePlayer(matching[1])];
+    const players = [createPlayerSchema(matching[0]), createPlayerSchema(matching[1])];
     const core = startGbraverBurst(players);
     const poller = players[0].userID;
     const battle = {battleID: uuidv4(), flowID: uuidv4(),
@@ -80,15 +81,15 @@ export async function matchMakingPolling(): Promise<void> {
 }
 
 /**
- * カジュアルマッチエントリからバトルプレイヤーを生成するヘルパー関数
+ * CasualMatchEntriesSchemaからPlayerSchemaを生成するヘルパー関数
  *
  * @param entry エントリ
  * @return 生成結果
  */
-function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
+function createPlayerSchema(entry: CasualMatchEntriesSchema): PlayerSchema {
   const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
   const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
-  return {playerId: uuidv4(), userID: entry.userID, armdozer, pilot};
+  return {playerId: uuidv4(), userID: entry.userID, connectionId: entry.connectionId, armdozer, pilot};
 }
 
 /**
@@ -98,7 +99,7 @@ function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
  * @param battle バトル情報
  * @return 生成結果
  */
-function createBattleStart(userID: UserID, battle: Battle): BattleStart {
+function createBattleStart(userID: UserID, battle: BattlesSchema): BattleStart {
   const player = battle.players.find(v => v.userID === userID) ?? battle.players[0];
   const respPlayer = toPlayer(player);
   const enemy = battle.players.find(v => v.userID !== userID) ?? battle.players[0];

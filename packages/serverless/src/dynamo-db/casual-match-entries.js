@@ -5,7 +5,7 @@ import type {UserID} from "../dto/user";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 
 /** casual_match_entriesのスキーマ */
-type CasualMatchEntriesSchema = {
+export type CasualMatchEntriesSchema = {
   /** ユーザID */
   userID: UserID,
   /** 選択したアームドーザのID */

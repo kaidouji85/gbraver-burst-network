@@ -1,10 +1,15 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import type {Battle} from "../dto/battle";
+import type {Battle, BattlePlayer} from "../dto/battle";
+
+/** battlesに格納するプレイヤーの情報 */
+export type PlayerSchema = BattlePlayer & {
+  connectionId: string,
+};
 
 /** battlesのスキーマ */
-export type BattlesSchema = Battle;
+export type BattlesSchema = Battle<PlayerSchema>;
 
 /** battlesのDAO*/
 export class Battles {
