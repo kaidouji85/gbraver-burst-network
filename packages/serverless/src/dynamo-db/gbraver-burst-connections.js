@@ -34,7 +34,7 @@ export class GbraverBurstConnections {
    * コネクションID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
    *
-   * @param connectionId
+   * @param connectionId コネクションID
    * @return 検索結果
    */
   async get(connectionId: string): Promise<?GbraverBurstConnectionsSchema> {

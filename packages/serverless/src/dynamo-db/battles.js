@@ -32,4 +32,19 @@ export class Battles {
       .put({TableName: this._tableName, Item: entry})
       .promise();
   }
+
+  /**
+   * コネクションID指定でアイテムを検索する
+   * 検索条件に合致するアイテムがない場合は、nullを返す
+   *
+   * @param battleID バトルID
+   * @return 検索結果
+   */
+  async get(battleID: string): Promise<?BattlesSchema> {
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {battleID},
+    }).promise();
+    return result?.Item ?? null;
+  }
 }
