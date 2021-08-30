@@ -2,30 +2,20 @@
 
 import {v4 as uuidv4} from 'uuid';
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
+import {extractUser} from "./lambda/websocket-api-event";
 import type {WebsocketAPIResponse} from "./lambda/websocket-api-response";
 import {parseBattleProgressPolling} from "./lambda/battle-progress-polling";
 import {parseJSON} from "./json/parse";
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {Battles} from "./dynamo-db/battles";
-import {extractUser} from "./lambda/websocket-api-event";
-import {BattleCommands} from "./dynamo-db/battle-commands";
 import type {BattleCommandsSchema} from "./dynamo-db/battle-commands";
+import {BattleCommands} from "./dynamo-db/battle-commands";
 import {restoreGbraverBurst} from "gbraver-burst-core";
 import {toPlayer} from "./dto/battle";
-import type {FlowID} from "./dto/battle";
-import type {GameState} from "gbraver-burst-core/lib/state/game-state";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
-
-/** バトル進行通知 */
-type BattleProgressed = {
-  action: 'battle-progressed',
-  /** 発行されたフローID */
-  flowID: FlowID,
-  /** 更新されたゲームステート */
-  update: GameState[],
-};
+import type {BattleProgressed} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';

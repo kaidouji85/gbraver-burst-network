@@ -2,35 +2,19 @@
 
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
-import type {Player} from "gbraver-burst-core";
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
+import type {CasualMatchEntriesSchema} from "./dynamo-db/casual-match-entries";
 import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
 import {matchMake} from "./match-make/match-make";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {Notifier} from "./api-gateway/notifier";
+import type {BattlesSchema, PlayerSchema} from "./dynamo-db/battles";
 import {Battles} from "./dynamo-db/battles";
 import {toPlayer} from "./dto/battle";
-import type {BattleID, FlowID} from "./dto/battle";
 import type {UserID} from "./dto/user";
-import type {BattlesSchema, PlayerSchema} from "./dynamo-db/battles";
-import type {CasualMatchEntriesSchema} from "./dynamo-db/casual-match-entries";
-
-/** 戦闘開始 */
-type BattleStart = {
-  action: 'battle-start',
-  /** プレイヤー情報 */
-  player: Player,
-  /** 敵情報 */
-  enemy: Player,
-  /** 戦闘ID */
-  battleID: BattleID,
-  /** フローID */
-  flowID: FlowID,
-  /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
-  isPoller: boolean
-};
+import type {BattleStart} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
