@@ -12,22 +12,30 @@ import {BattleCommands} from "./dynamo-db/battle-commands";
 import type {BattleCommandsSchema} from "./dynamo-db/battle-commands";
 import {restoreGbraverBurst} from "gbraver-burst-core";
 import {toPlayer} from "./dto/battle";
-//import type {FlowID} from "./dto/battle";
-//import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+import type {FlowID} from "./dto/battle";
+import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
+import {createApiGatewayManagementApi} from "./api-gateway/management";
+import {Notifier} from "./api-gateway/notifier";
 
 /** バトル進行通知 */
-// type BattleProgressed = {
-//   action: 'battle-progressed',
-//   /** 発行されたフローID */
-//   flowID: FlowID,
-//   /** 更新されたゲームステート */
-//   update: GameState[],
-// };
+type BattleProgressed = {
+  action: 'battle-progressed',
+  /** 発行されたフローID */
+  flowID: FlowID,
+  /** 更新されたゲームステート */
+  update: GameState[],
+};
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const STAGE = process.env.STAGE ?? '';
+const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const BATTLES = process.env.BATTLES ?? '';
 const BATTLE_COMMANDS = process.env.BATTLE_COMMANDS ?? '';
 
+const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const battles = new Battles(dynamoDB, BATTLES);
 const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMANDS);
@@ -81,14 +89,15 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
   const updatedState = core.progress(coreCommands);
   const updatedBattle = {...battle, flowID: uuidv4(), stateHistory: core.stateHistory()};
-
-  /*
   const notices = battle.players.map(v => {
     const data: BattleProgressed = {action: 'battle-progressed', flowID: updatedBattle.flowID, update: updatedState};
-    //return {connectionID: v.connectionID, };
+    return {connectionID: v.connectionId, data};
   });
-  */
 
-  console.log('battle progress', updatedState, updatedBattle);
+  await Promise.all([
+    ...notices.map(v => notifier.notifyToClient(v.connectionID, v.data)),
+    battles.put(updatedBattle)
+  ])
+
   return {statusCode: 200, body: 'send command success'};
 }
