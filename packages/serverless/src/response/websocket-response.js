@@ -5,15 +5,16 @@ import type {GameState} from "gbraver-burst-core/lib/state/game-state";
 import type {Player} from "gbraver-burst-core";
 
 /** websocketがクライアントに返すデータ */
-export type WebsocketResponse = BattleProgressed | BattleStart | Error;
+export type WebsocketResponse = EnteredCasualMatch | AcceptCommand | BattleStart | BattleProgressed | Error;
 
-/** バトル進行通知 */
-export type BattleProgressed = {
-  action: 'battle-progressed',
-  /** 発行されたフローID */
-  flowID: FlowID,
-  /** 更新されたゲームステート */
-  update: GameState[],
+/** カジュアルマッチ入室成功 */
+export type EnteredCasualMatch = {
+  action: 'entered-casual-match',
+};
+
+/** コマンド受取通知 */
+export type AcceptCommand = {
+  action: 'accept-command',
 };
 
 /** 戦闘開始 */
@@ -29,6 +30,15 @@ export type BattleStart = {
   flowID: FlowID,
   /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
   isPoller: boolean
+};
+
+/** バトル進行通知 */
+export type BattleProgressed = {
+  action: 'battle-progressed',
+  /** 発行されたフローID */
+  flowID: FlowID,
+  /** 更新されたゲームステート */
+  update: GameState[],
 };
 
 /** エラー */
