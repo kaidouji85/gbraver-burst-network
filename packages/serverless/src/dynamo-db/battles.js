@@ -6,6 +6,7 @@ import type {Battle} from "../dto/battle";
 /** battlesのスキーマ */
 export type BattlesSchema = Battle;
 
+/** battlesのDAO*/
 export class Battles {
   _client: typeof DynamoDB.DocumentClient;
   _tableName: string;
