@@ -2,7 +2,7 @@
 
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
-import type {Player, PlayerId} from "gbraver-burst-core";
+import type {Player} from "gbraver-burst-core";
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
@@ -57,14 +57,15 @@ export async function matchMakingPolling(): Promise<void> {
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players = [createBattlePlayer(matching[0]), createBattlePlayer(matching[1])];
     const core = startGbraverBurst(players);
-    const battle = {battleID: uuidv4(), flowID: uuidv4(), stateHistory: core.stateHistory(), players};
+    const poller = players[0].userID;
+    const battle = {battleID: uuidv4(), flowID: uuidv4(),
+      stateHistory: core.stateHistory(), players, poller};
     const updatedConnections = matching.map(v => {
       const state = {type: 'InBattle', battleID: battle.battleID};
       return {connectionId: v.connectionId, userID: v.userID, state};
     });
-    const poller = players[0].playerId;
     const notices = matching.map(entry => {
-      const data = createBattleStart(entry.userID, battle, poller);
+      const data = createBattleStart(entry.userID, battle);
       return {connectionId: entry.connectionId, data};
     });
     const deleteEntryIDs = matching.map(v => v.userID);
@@ -93,17 +94,16 @@ function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
 /**
  * 戦闘開始オブジェクトを生成するヘルパー関数
  *
- * @param userID ユーザID
+ * @param userID 戦闘開始オブジェクトを受け取るユーザのID
  * @param battle バトル情報
- * @param poller ポーリング実施プレイヤーのID
  * @return 生成結果
  */
-function createBattleStart(userID: UserID, battle: Battle, poller: PlayerId): BattleStart {
+function createBattleStart(userID: UserID, battle: Battle): BattleStart {
   const player = battle.players.find(v => v.userID === userID) ?? battle.players[0];
   const respPlayer = toPlayer(player);
   const enemy = battle.players.find(v => v.userID !== userID) ?? battle.players[0];
   const respEnemy = toPlayer(enemy);
-  const isPoller = respPlayer.playerId === poller;
+  const isPoller = userID === battle.poller;
   return {action: 'battle-start', player: respPlayer, enemy: respEnemy,
     battleID: battle.battleID, flowID: battle.flowID, isPoller};
 }
