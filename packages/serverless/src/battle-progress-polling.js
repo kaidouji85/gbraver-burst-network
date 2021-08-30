@@ -68,10 +68,10 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 
   const commands: [BattleCommandsSchema, BattleCommandsSchema] = [fetchedCommands[0], fetchedCommands[1]];
   const user = extractUser(event.requestContext.authorizer);
-  const isSameFlowID = uniq([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
-    .length === 1;
+  const isSameBattleID = isAllSameValue([data.battleID, battle.battleID, commands[0].battleID, commands[1].battleID]);
+  const isSameFlowID = isAllSameValue([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
   const isPoller = user.userID === battle.poller;
-  if (!isSameFlowID || !isPoller) {
+  if (!isSameBattleID || !isSameFlowID || !isPoller) {
     await notifier.notifyToClient(event.requestContext.connectionId, invalidRequestError);
     return invalidRequestBody;
   }
@@ -102,4 +102,14 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 function createPlayerCommand(command: BattleCommandsSchema, players: [PlayerSchema, PlayerSchema]): PlayerCommand {
   const player = players.find(v => v.userID === command.userID) ?? players[0];
   return {playerId: player.playerId, command: command.command};
+}
+
+/**
+ * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
+ *
+ * @param values 判定対象の文字列を配列で渡す
+ * @return 判定結果、trueで全て同じ値である
+ */
+function isAllSameValue(values: string[]): boolean {
+  return uniq(values).length === 1;
 }
