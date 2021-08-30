@@ -24,17 +24,17 @@ export class Battles {
   /**
    * 項目追加する
    *
-   * @param entry 追加する項目
+   * @param battle 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: BattlesSchema): Promise<void> {
+  put(battle: BattlesSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: entry})
+      .put({TableName: this._tableName, Item: battle})
       .promise();
   }
 
   /**
-   * コネクションID指定でアイテムを検索する
+   * バトルID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
    *
    * @param battleID バトルID

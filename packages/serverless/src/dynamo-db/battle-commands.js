@@ -6,7 +6,7 @@ import type {BattleID, FlowID} from "../dto/battle";
 import type {UserID} from "../dto/user";
 
 /** battle-commands のスキーマ */
-type BattleCommandsSchema = {
+export type BattleCommandsSchema = {
   /** ユーザID */
   userID: UserID,
   /** バトルID */
@@ -36,12 +36,27 @@ export class BattleCommands {
   /**
    * 項目追加する
    *
-   * @param entry 追加する項目
+   * @param command 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: BattleCommandsSchema): Promise<void> {
+  put(command: BattleCommandsSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: entry})
+      .put({TableName: this._tableName, Item: command})
       .promise();
+  }
+
+  /**
+   * ユーザID指定でアイテムを検索する
+   * 検索条件に合致するアイテムがない場合は、nullを返す
+   *
+   * @param userID ユーザID
+   * @return 検索結果
+   */
+  async get(userID: string): Promise<?BattleCommandsSchema> {
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {userID},
+    }).promise();
+    return result?.Item ?? null;
   }
 }

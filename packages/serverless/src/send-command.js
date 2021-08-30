@@ -6,12 +6,13 @@ import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/websocket-api-event';
 import {parseSendCommand} from "./lambda/sned-command";
 import {BattleCommands} from "./dynamo-db/battle-commands";
+import {parseJSON} from "./json/parse";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
-const BATTLE_COMMAND = process.env.BATTLE_COMMAND ?? '';
+const BATTLE_COMMANDS = process.env.BATTLE_COMMANDS ?? '';
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMAND);
+const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMANDS);
 
 /**
  * Websocket API send-command エントリポイント
@@ -20,7 +21,8 @@ const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMAND);
  * @return レスポンス
  */
 export async function sendCommand(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const data = parseSendCommand(event.body);
+  const body = parseJSON(event.body);
+  const data = parseSendCommand(body);
   if (!data) {
     return {statusCode: 400, body: 'invalid request body'};
   }
