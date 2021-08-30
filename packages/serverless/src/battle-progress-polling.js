@@ -1,5 +1,6 @@
 // @flow
 
+import {v4 as uuidv4} from 'uuid';
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import type {WebsocketAPIResponse} from "./lambda/websocket-api-response";
 import {parseBattleProgressPolling} from "./lambda/battle-progress-polling";
@@ -9,6 +10,8 @@ import {Battles} from "./dynamo-db/battles";
 import {extractUser} from "./lambda/websocket-api-event";
 import {BattleCommands} from "./dynamo-db/battle-commands";
 import type {BattleCommandsSchema} from "./dynamo-db/battle-commands";
+import {restoreGbraverBurst} from "gbraver-burst-core";
+import {toPlayer} from "./dto/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const BATTLES = process.env.BATTLES ?? '';
@@ -46,7 +49,6 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   if (!isIncludedPlayer || !isValidFlowID) {
     return invalidRequestBody;
   }
-  console.log('battle is valid', battle);
 
   const commands = await Promise.all(
     battle.players.map(v => battleCommands.get(v.userID))
@@ -57,6 +59,17 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   if (validCommands.length !== 2) {
     return invalidRequestBody;
   }
-  console.log('commands is valid');
+
+  const upcastedPlayers = battle.players.map(v => toPlayer(v));
+  const corePlayers = [upcastedPlayers[0], upcastedPlayers[1]];
+  const playerCommands = validCommands.map(command => {
+    const target = battle.players.find(v => v.userID === command.userID) ?? battle.players[0];
+    return {playerId: target.playerId, command: command.command};
+  });
+  const coreCommands = [playerCommands[0], playerCommands[1]];
+  const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
+  const updatedState = core.progress(coreCommands);
+  const updatedBattle = {...battle, flowID: uuidv4(), stateHistory: core.stateHistory()};
+  console.log('battle progress', updatedState, updatedBattle);
   return {statusCode: 200, body: 'send command success'};
 }
