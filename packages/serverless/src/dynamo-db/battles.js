@@ -5,6 +5,7 @@ import type {Battle, BattlePlayer} from "../dto/battle";
 
 /** battlesに格納するプレイヤーの情報 */
 export type PlayerSchema = BattlePlayer & {
+  /** コネクションID */
   connectionId: string,
 };
 

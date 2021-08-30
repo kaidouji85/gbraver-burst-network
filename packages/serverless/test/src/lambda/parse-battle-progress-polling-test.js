@@ -1,8 +1,8 @@
 // @flow
 
 import test from 'ava';
-import type {BattleProgressPolling} from "../../../src/lambda/battle-progress-polling";
-import {parseBattleProgressPolling} from "../../../src/lambda/battle-progress-polling";
+import type {BattleProgressPolling} from "../../../src/request/battle-progress-polling";
+import {parseBattleProgressPolling} from "../../../src/request/battle-progress-polling";
 
 const data: BattleProgressPolling = {action: 'battle-progress-polling', battleID: 'battleID', flowID: 'flowID'};
 

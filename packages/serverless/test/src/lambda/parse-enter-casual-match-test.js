@@ -1,8 +1,8 @@
 // @flow
 
 import test from 'ava';
-import {parseEnterCasualMatch} from "../../../src/lambda/enter-casual-match";
-import type {EnterCasualMatch} from "../../../src/lambda/enter-casual-match";
+import {parseEnterCasualMatch} from "../../../src/request/enter-casual-match";
+import type {EnterCasualMatch} from "../../../src/request/enter-casual-match";
 
 const enterCasualMatch: EnterCasualMatch = {action: 'enter-casual-match', armdozerId: 'armdozerId', pilotId: 'pilotId'};
 

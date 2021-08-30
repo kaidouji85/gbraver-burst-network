@@ -5,7 +5,7 @@ import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/websocket-api-event';
-import {parseEnterCasualMatch} from "./lambda/enter-casual-match";
+import {parseEnterCasualMatch} from "./request/enter-casual-match";
 import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
 import {parseJSON} from "./json/parse";
 

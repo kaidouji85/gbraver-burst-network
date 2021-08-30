@@ -4,7 +4,7 @@ import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/websocket-api-event';
-import {parseSendCommand} from "./lambda/sned-command";
+import {parseSendCommand} from "./request/sned-command";
 import {BattleCommands} from "./dynamo-db/battle-commands";
 import {parseJSON} from "./json/parse";
 
