@@ -103,7 +103,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
     const noticedData = createBattleProgress(flowID, update);
     return Promise.all([
       ...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)),
-      battles.put({...battle, flowID, update})
+      battles.put({...battle, flowID, stateHistory: core.stateHistory()})
     ]);
   };
 
