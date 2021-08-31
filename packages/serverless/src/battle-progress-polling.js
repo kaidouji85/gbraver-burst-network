@@ -17,8 +17,10 @@ import {toPlayer} from "./dto/battle";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
-import type {BattleProgressed, Error} from "./response/websocket-response";
+import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from "./response/websocket-response";
 import type {PlayerSchema} from "./dynamo-db/battles";
+import type {GameState} from "gbraver-burst-core/lib/state/game-state";
+import type {FlowID} from "./dto/battle";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -34,6 +36,7 @@ const battles = new Battles(dynamoDB, BATTLES);
 const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMANDS);
 const invalidRequestBody = {statusCode: 400, body: 'invalid request body'};
 const invalidRequestError: Error = {action: 'error', error: 'invalid request body'};
+const notReadyBattleProgress: NotReadyBattleProgress = {action: 'not-ready-battle-progress'};
 
 /**
  * バトル更新用のポーリング
@@ -53,7 +56,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 
   const battle = await battles.get(data.battleID);
   if (!battle) {
-    await notifier.notifyToClient(event.requestContext.connectionId, invalidRequestError);
+    await notifier.notifyToClient(event.requestContext.connectionId, notReadyBattleProgress);
     return invalidRequestBody;
   }
 
@@ -62,7 +65,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
     battleCommands.get(battle.players[1].userID),
   ]);
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
-    await notifier.notifyToClient(event.requestContext.connectionId, invalidRequestError);
+    await notifier.notifyToClient(event.requestContext.connectionId, notReadyBattleProgress);
     return invalidRequestBody;
   }
 
@@ -72,22 +75,22 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   const isSameFlowID = isAllSameValue([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
   const isPoller = user.userID === battle.poller;
   if (!isSameBattleID || !isSameFlowID || !isPoller) {
-    await notifier.notifyToClient(event.requestContext.connectionId, invalidRequestError);
+    await notifier.notifyToClient(event.requestContext.connectionId, notReadyBattleProgress);
     return invalidRequestBody;
   }
 
   const corePlayers = [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
   const coreCommands = [createPlayerCommand(commands[0], battle.players), createPlayerCommand(commands[1], battle.players)]
   const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
-  const updatedState = core.progress(coreCommands);
-  const updatedBattle = {...battle, flowID: uuidv4(), stateHistory: core.stateHistory()};
-  const notices = battle.players.map(v => {
-    const data: BattleProgressed = {action: 'battle-progressed', flowID: updatedBattle.flowID, update: updatedState};
-    return {connectionId: v.connectionId, data};
-  });
+  const update = core.progress(coreCommands);
+  const lastState = update[update.length - 1];
+  const isGameEnd = lastState.effect.name === 'GameEnd';
+  const flowID = uuidv4();
+  const noticedData = isGameEnd ? createBattleEnd(update) : createBattleProgress(flowID, update);
+  const notices = battle.players.map(v => ({connectionId: v.connectionId, data: noticedData}));
   await Promise.all([
     ...notices.map(v => notifier.notifyToClient(v.connectionId, v.data)),
-    battles.put(updatedBattle)
+    isGameEnd ? battles.delete(battle.battleID) : battles.put({...battle, flowID, update})
   ])
   return {statusCode: 200, body: 'send command success'};
 }
@@ -112,4 +115,25 @@ function createPlayerCommand(command: BattleCommandsSchema, players: [PlayerSche
  */
 function isAllSameValue(values: string[]): boolean {
   return uniq(values).length === 1;
+}
+
+/**
+ * BattleProgressedを生成するヘルパー関数
+ *
+ * @param flowID フローID
+ * @param update 更新されたステート
+ * @return 生成結果
+ */
+function createBattleProgress(flowID: FlowID, update: GameState[]): BattleProgressed {
+  return {action: 'battle-progressed', flowID, update};
+}
+
+/**
+ * BattleEndを生成するヘルパー関数
+ *
+ * @param update 更新されたステート
+ * @return 生成結果
+ */
+function createBattleEnd(update: GameState[]): BattleEnd {
+  return {action: 'battle-end', update};
 }

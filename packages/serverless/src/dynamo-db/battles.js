@@ -54,4 +54,17 @@ export class Battles {
     }).promise();
     return result?.Item ?? null;
   }
+
+  /**
+   * ユニークキー指定で項目を削除する
+   *
+   * @param battleID バトルID
+   * @return 削除受付したら発火するPromise
+   */
+  delete(battleID: string): Promise<void> {
+    return this._client.delete({
+      TableName: this._tableName,
+      Key: {battleID}
+    }).promise();
+  }
 }
