@@ -21,10 +21,12 @@ import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from ".
 import type {PlayerSchema} from "./dynamo-db/battles";
 import type {GameState} from "gbraver-burst-core/lib/state/game-state";
 import type {FlowID} from "./dto/battle";
+import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
+const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const BATTLES = process.env.BATTLES ?? '';
 const BATTLE_COMMANDS = process.env.BATTLE_COMMANDS ?? '';
 
@@ -32,6 +34,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
+const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const battles = new Battles(dynamoDB, BATTLES);
 const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMANDS);
 const invalidRequestBody = {statusCode: 400, body: 'invalid request body'};
@@ -83,15 +86,30 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   const coreCommands = [createPlayerCommand(commands[0], battle.players), createPlayerCommand(commands[1], battle.players)]
   const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
   const update = core.progress(coreCommands);
+
+  const onGameEnd = () => {
+    const noticedData = createBattleEnd(update);
+    const updatedConnectionState = {type: 'None'};
+    return Promise.all([
+      ...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)),
+      ...battle.players.map(v => connections.put({connectionId: v.connectionId, userID: v.userID,
+        state: updatedConnectionState})),
+      battles.delete(battle.battleID)
+    ]);
+  };
+
+  const onGameContinue = () => {
+    const flowID = uuidv4();
+    const noticedData = createBattleProgress(flowID, update);
+    return Promise.all([
+      ...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)),
+      battles.put({...battle, flowID, update})
+    ]);
+  };
+
   const lastState = update[update.length - 1];
   const isGameEnd = lastState.effect.name === 'GameEnd';
-  const flowID = uuidv4();
-  const noticedData = isGameEnd ? createBattleEnd(update) : createBattleProgress(flowID, update);
-  const notices = battle.players.map(v => ({connectionId: v.connectionId, data: noticedData}));
-  await Promise.all([
-    ...notices.map(v => notifier.notifyToClient(v.connectionId, v.data)),
-    isGameEnd ? battles.delete(battle.battleID) : battles.put({...battle, flowID, update})
-  ])
+  await (isGameEnd ? onGameEnd() : onGameContinue());
   return {statusCode: 200, body: 'send command success'};
 }
 
