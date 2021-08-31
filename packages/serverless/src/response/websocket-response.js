@@ -6,6 +6,7 @@ import type {Player} from "gbraver-burst-core";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
+  Pong |
   EnteredCasualMatch |
   AcceptCommand |
   BattleStart |
@@ -14,6 +15,12 @@ export type WebsocketResponse =
   BattleEnd |
   SuddenlyBattleEnd |
   Error;
+
+/** pingの応答 */
+export type Pong = {
+  action: 'pong',
+  message: string
+};
 
 /** カジュアルマッチ入室成功 */
 export type EnteredCasualMatch = {
