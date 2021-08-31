@@ -4,7 +4,7 @@ import test from 'ava';
 import type {PingResponse} from "../../../src/websocket/response";
 import {parsePingResponse} from "../../../src/websocket/response";
 
-const origin: PingResponse = {action: 'ping', message: 'test'};
+const origin: PingResponse = {action: 'pong', message: 'test'};
 
 test('PingResponseをパースすることができる', t => {
   const result = parsePingResponse(origin);

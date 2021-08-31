@@ -7,7 +7,7 @@ export type WebsocketAPIResponse = PingResponse | StartBattle;
 
 /** pingのレスポンス */
 export type PingResponse = {
-  action: 'ping',
+  action: 'pong',
   /** メッセージ */
   message: string
 };
@@ -35,7 +35,7 @@ export type StartBattle = {
  * @return パース結果
  */
 export function parsePingResponse(data: Object): ?PingResponse {
-  return ((data?.action === 'ping') && (typeof data?.message === 'string'))
+  return ((data?.action === 'pong') && (typeof data?.message === 'string'))
     ? ({action: data.action, message: data.message})
     : null;
 }
