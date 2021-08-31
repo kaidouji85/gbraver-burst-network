@@ -2,18 +2,30 @@
 
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
-import type {GbraverBurstConnectionsSchema} from "./dynamo-db/gbraver-burst-connections";
+import type {GbraverBurstConnectionsSchema, InBattle, None} from "./dynamo-db/gbraver-burst-connections";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
+import {Battles} from "./dynamo-db/battles";
+import type {SuddenlyBattleEnd} from "./response/websocket-response";
+import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
+import {createApiGatewayManagementApi} from "./api-gateway/management";
+import {Notifier} from "./api-gateway/notifier";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const STAGE = process.env.STAGE ?? '';
+const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
+const BATTLES = process.env.BATTLES ?? '';
 
+const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+const battles = new Battles(dynamoDB, BATTLES);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -38,7 +50,24 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
  * @return クリーンアップ完了時に発火するPromise
  */
 async function cleanUp(connection: GbraverBurstConnectionsSchema): Promise<void> {
-  if (connection.state.type === 'CasualMatchMaking') {
+  const inCasualMatchMaking = async () => {
     await casualMatchEntries.delete(connection.userID);
+  };
+
+  const inBattle = async (state: InBattle) => {
+    const other = (state.players[0].connectionId !== connection.connectionId) ? state.players[0] : state.players[1];
+    const noticedData: SuddenlyBattleEnd = {action: "suddenly-battle-end", battleID: state.battleID};
+    const none: None = {type: 'None'};
+    await Promise.all([
+      notifier.notifyToClient(other.connectionId, noticedData),
+      connections.put({connectionId: other.connectionId, userID: other.userID, state: none}),
+      battles.delete(state.battleID)
+    ]);
+  };
+
+  if (connection.state.type === 'CasualMatchMaking') {
+    await inCasualMatchMaking();
+  } else if (connection.state.type === 'InBattle') {
+    await inBattle(connection.state);
   }
 }

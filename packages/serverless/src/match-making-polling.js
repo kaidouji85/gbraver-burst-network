@@ -45,10 +45,9 @@ export async function matchMakingPolling(): Promise<void> {
     const poller = players[0].userID;
     const battle = {battleID: uuidv4(), flowID: uuidv4(),
       stateHistory: core.stateHistory(), players, poller};
-    const updatedConnections = matching.map(v => {
-      const state = {type: 'InBattle', battleID: battle.battleID};
-      return {connectionId: v.connectionId, userID: v.userID, state};
-    });
+    const updatedConnectionState = {type: 'InBattle', battleID: battle.battleID, players};
+    const updatedConnections = matching
+      .map(v => ({connectionId: v.connectionId, userID: v.userID, state: updatedConnectionState}));
     const notices = matching.map(entry => {
       const data = createBattleStart(entry.userID, battle);
       return {connectionId: entry.connectionId, data};

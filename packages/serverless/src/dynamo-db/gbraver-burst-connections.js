@@ -2,7 +2,40 @@
 
 import {DynamoDB} from "aws-sdk";
 import type {UserID} from '../dto/user';
-import type {UserState} from "../dto/user-state";
+import type {BattleID} from "../dto/battle";
+import type {PlayerId} from "gbraver-burst-core";
+
+/** コネクションの状態 */
+export type ConnectionState = None | CasualMatchMaking | InBattle;
+
+/** 状態なし */
+export type None = {
+  type: 'None'
+};
+
+/** カジュアルマッチ マッチメイク中 */
+export type CasualMatchMaking = {
+  type: 'CasualMatchMaking'
+};
+
+/** バトルに参加しているプレイヤー */
+export type InBattlePlayer = {
+  /** ユーザID */
+  userID: UserID,
+  /** プレイヤーID */
+  playerId: PlayerId,
+  /** コネクションID */
+  connectionId: string,
+};
+
+/** 戦闘中 */
+export type InBattle = {
+  type: 'InBattle',
+  /** 現在実行している戦闘のID */
+  battleID: BattleID,
+  /** バトルに参加しているプレイヤーの情報 */
+  players: [InBattlePlayer, InBattlePlayer],
+};
 
 /** gbraver_burst_connectionのスキーマ */
 export type GbraverBurstConnectionsSchema = {
@@ -11,7 +44,7 @@ export type GbraverBurstConnectionsSchema = {
   /** ユーザID */
   userID: UserID,
   /** ステート */
-  state: UserState,
+  state: ConnectionState,
 };
 
 /** gbraver_burst_connectionのDAO */

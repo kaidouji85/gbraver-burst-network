@@ -12,6 +12,7 @@ export type WebsocketResponse =
   NotReadyBattleProgress |
   BattleProgressed |
   BattleEnd |
+  SuddenlyBattleEnd |
   Error;
 
 /** カジュアルマッチ入室成功 */
@@ -51,6 +52,11 @@ export type BattleProgressed = {
   flowID: FlowID,
   /** 更新されたゲームステート */
   update: GameState[],
+};
+
+/** バトル強制終了 */
+export type SuddenlyBattleEnd = {
+  action: 'suddenly-battle-end',
 };
 
 /** バトル終了 */
