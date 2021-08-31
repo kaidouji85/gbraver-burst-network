@@ -1,7 +1,8 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import type {Battle, BattlePlayer} from "../dto/battle";
+import type {Battle, BattlePlayer} from "../core/battle";
+import type {UserID} from "../core/user";
 
 /** battlesに格納するプレイヤーの情報 */
 export type PlayerSchema = BattlePlayer & {
@@ -10,7 +11,13 @@ export type PlayerSchema = BattlePlayer & {
 };
 
 /** battlesのスキーマ */
-export type BattlesSchema = Battle<PlayerSchema>;
+export type BattlesSchema = Battle<PlayerSchema> & {
+  /**
+   * バトル更新ポーリングをするユーザのID
+   * playersに含まれているユーザのIDを指定すること
+   */
+  poller: UserID
+}
 
 /** battlesのDAO*/
 export class Battles {

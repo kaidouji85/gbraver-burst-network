@@ -12,8 +12,8 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {Notifier} from "./api-gateway/notifier";
 import type {BattlesSchema, PlayerSchema} from "./dynamo-db/battles";
 import {Battles} from "./dynamo-db/battles";
-import {toPlayer} from "./dto/battle";
-import type {UserID} from "./dto/user";
+import {toPlayer} from "./core/battle";
+import type {UserID} from "./core/user";
 import type {BattleStart} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';

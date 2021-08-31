@@ -29,11 +29,6 @@ export type Battle<X: BattlePlayer> = {
   players: [X, X],
   /** ステートヒストリー */
   stateHistory: GameState[],
-  /**
-   * バトル更新ポーリングをするユーザのID
-   * playersに含まれているユーザのIDを指定すること
-   */
-  poller: UserID
 };
 
 /**

@@ -1,8 +1,8 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import type {UserID} from '../dto/user';
-import type {BattleID} from "../dto/battle";
+import type {UserID} from '../core/user';
+import type {BattleID} from "../core/battle";
 import type {PlayerId} from "gbraver-burst-core";
 
 /** コネクションの状態 */

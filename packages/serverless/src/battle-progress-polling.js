@@ -13,14 +13,14 @@ import {createDynamoDBClient} from "./dynamo-db/client";
 import {Battles} from "./dynamo-db/battles";
 import type {BattleCommandsSchema} from "./dynamo-db/battle-commands";
 import {BattleCommands} from "./dynamo-db/battle-commands";
-import {toPlayer} from "./dto/battle";
+import {toPlayer} from "./core/battle";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
 import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from "./response/websocket-response";
 import type {PlayerSchema} from "./dynamo-db/battles";
 import type {GameState} from "gbraver-burst-core/lib/state/game-state";
-import type {FlowID} from "./dto/battle";
+import type {FlowID} from "./core/battle";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';

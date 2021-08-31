@@ -1,6 +1,6 @@
 // @flow
 
-import type {User} from '../dto/user';
+import type {User} from '../core/user';
 
 /** 認可情報 */
 export type Authorizer = {

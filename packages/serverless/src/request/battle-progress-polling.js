@@ -1,6 +1,6 @@
 // @flow
 
-import type {BattleID, FlowID} from "../dto/battle";
+import type {BattleID, FlowID} from "../core/battle";
 
 /** バトル進行ポーリング */
 export type BattleProgressPolling = {

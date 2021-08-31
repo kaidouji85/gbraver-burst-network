@@ -1,6 +1,6 @@
 // @flow
 
-import type {BattleID, FlowID} from "../dto/battle";
+import type {BattleID, FlowID} from "../core/battle";
 import type {GameState} from "gbraver-burst-core/lib/state/game-state";
 import type {Player} from "gbraver-burst-core";
 
