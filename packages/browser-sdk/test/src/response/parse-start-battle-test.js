@@ -1,9 +1,9 @@
 // @flow
 
 import test from 'ava';
-import type {StartBattle} from "../../../src/websocket/response";
+import type {StartBattle} from "../../../src/response/start-battle";
+import {parseStartBattle} from "../../../src/response/start-battle";
 import {EMPTY_GAME_STATE, EMPTY_PLAYER} from "gbraver-burst-core";
-import {parseStartBattle} from "../../../src/websocket/response";
 
 const startBattle: StartBattle = {
   action: 'start-battle',

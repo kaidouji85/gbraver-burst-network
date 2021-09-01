@@ -2,16 +2,6 @@
 
 import type {Player, GameState} from "gbraver-burst-core";
 
-/** APIサーバからのレスポンス */
-export type WebsocketAPIResponse = PingResponse | StartBattle;
-
-/** pingのレスポンス */
-export type PingResponse = {
-  action: 'pong',
-  /** メッセージ */
-  message: string
-};
-
 /** バトルスタート */
 export type StartBattle = {
   action: 'start-battle',
@@ -28,26 +18,13 @@ export type StartBattle = {
 };
 
 /**
- * 任意のオブジェクトをPingResponseにパースする
- * パースできない場合はnullを返す
- *
- * @param data パース元となる文字列
- * @return パース結果
- */
-export function parsePingResponse(data: Object): ?PingResponse {
-  return ((data?.action === 'pong') && (typeof data?.message === 'string'))
-    ? ({action: data.action, message: data.message})
-    : null;
-}
-
-/**
  * 任意のオブジェクトをStartBattleにパースする
  * パースできない場合はnullを返す
  *
  * @param data パース元となる文字列
  * @return パース結果
  */
-export function parseStartBattle(data: Object): ?StartBattle {
+ export function parseStartBattle(data: Object): ?StartBattle {
   // TODO player、enemy、stateHistoryの正確な型チェックを実装する
   return (data?.action === 'start-battle') && (typeof data?.battleID === 'string')
     && (typeof data?.flowID === 'string') && Array.isArray(data?.stateHistory)

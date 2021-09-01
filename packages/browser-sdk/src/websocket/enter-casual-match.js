@@ -1,11 +1,11 @@
 // @flow
 
-import type {StartBattle} from "./response";
+import type {StartBattle} from "../response/start-battle";
+import {parseStartBattle} from "../response/start-battle";
 import {onMessage} from "./message";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 import type {Resolve} from "../promise/promise";
 import {parseJSON} from "../json/parse";
-import {parseStartBattle} from "./response";
 
 /**
  * カジュアルマッチを開始する

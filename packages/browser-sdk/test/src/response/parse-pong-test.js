@@ -1,32 +1,32 @@
 // @flow
 
 import test from 'ava';
-import type {PingResponse} from "../../../src/websocket/response";
-import {parsePingResponse} from "../../../src/websocket/response";
+import type {Pong} from "../../../src/response/pong";
+import {parsePong} from "../../../src/response/pong";
 
-const origin: PingResponse = {action: 'pong', message: 'test'};
+const origin: Pong = {action: 'pong', message: 'test'};
 
 test('PingResponseをパースすることができる', t => {
-  const result = parsePingResponse(origin);
+  const result = parsePong(origin);
   t.deepEqual(result, origin);
 });
 
 test('余計なプロパティがあっても正しくパースはできる', t => {
-  const result = parsePingResponse({...origin, hp: 1000, power: 2000});
+  const result = parsePong({...origin, hp: 1000, power: 2000});
   t.deepEqual(result, origin);
 });
 
 test('PingResponseのJSON文字列はパースできない', t => {
-  const result = parsePingResponse(JSON.stringify(origin));
+  const result = parsePong(JSON.stringify(origin));
   t.is(result, null);
 });
 
 test('nullの場合はパースできない', t => {
-  const result = parsePingResponse(null);
+  const result = parsePong(null);
   t.is(result, null);
 });
 
 test('undefinedの場合はパースできない', t => {
-  const result = parsePingResponse(undefined);
+  const result = parsePong(undefined);
   t.is(result, null);
 });
