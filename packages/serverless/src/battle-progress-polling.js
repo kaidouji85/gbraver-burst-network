@@ -4,7 +4,7 @@ import {v4 as uuidv4} from 'uuid';
 import {uniq} from "ramda";
 import {restoreGbraverBurst} from "gbraver-burst-core";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
-import {extractUser} from "./lambda/websocket-api-event";
+import {extractUser} from "./lambda/extract-user";
 import type {WebsocketAPIResponse} from "./lambda/websocket-api-response";
 import {parseBattleProgressPolling} from "./request/battle-progress-polling";
 import {parseJSON} from "./json/parse";

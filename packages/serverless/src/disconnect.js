@@ -57,10 +57,10 @@ async function cleanUp(connection: GbraverBurstConnectionsSchema): Promise<void>
   const inBattle = async (state: InBattle) => {
     const other = (state.players[0].connectionId !== connection.connectionId) ? state.players[0] : state.players[1];
     const noticedData: SuddenlyBattleEnd = {action: "suddenly-battle-end", battleID: state.battleID};
-    const none: None = {type: 'None'};
+    const updatedConnctionState: None = {type: 'None'};
     await Promise.all([
       notifier.notifyToClient(other.connectionId, noticedData),
-      connections.put({connectionId: other.connectionId, userID: other.userID, state: none}),
+      connections.put({connectionId: other.connectionId, userID: other.userID, state: updatedConnctionState}),
       battles.delete(state.battleID)
     ]);
   };
