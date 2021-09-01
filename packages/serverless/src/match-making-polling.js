@@ -4,6 +4,7 @@ import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
+import type {InBattle} from './dynamo-db/gbraver-burst-connections';
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {CasualMatchEntriesSchema} from "./dynamo-db/casual-match-entries";
 import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
@@ -43,9 +44,9 @@ export async function matchMakingPolling(): Promise<void> {
     const players = [createPlayerSchema(matching[0]), createPlayerSchema(matching[1])];
     const core = startGbraverBurst(players);
     const poller = players[0].userID;
-    const battle = {battleID: uuidv4(), flowID: uuidv4(),
+    const battle: BattlesSchema = {battleID: uuidv4(), flowID: uuidv4(), 
       stateHistory: core.stateHistory(), players, poller};
-    const updatedConnectionState = {type: 'InBattle', battleID: battle.battleID, players};
+    const updatedConnectionState: InBattle = {type: 'InBattle', battleID: battle.battleID, players};
     const updatedConnections = matching
       .map(v => ({connectionId: v.connectionId, userID: v.userID, state: updatedConnectionState}));
     const notices = matching.map(entry => {
