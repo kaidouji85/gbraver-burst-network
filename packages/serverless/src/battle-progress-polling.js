@@ -3,7 +3,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {uniq} from "ramda";
 import {restoreGbraverBurst} from "gbraver-burst-core";
-import type {PlayerCommand} from "gbraver-burst-core";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from "./lambda/websocket-api-event";
 import type {WebsocketAPIResponse} from "./lambda/websocket-api-response";
@@ -18,9 +17,6 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
 import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from "./response/websocket-response";
-import type {PlayerSchema} from "./dynamo-db/battles";
-import type {GameState} from "gbraver-burst-core/lib/state/game-state";
-import type {FlowID} from "./core/battle";
 import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -73,22 +69,26 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   }
 
   const commands: [BattleCommandsSchema, BattleCommandsSchema] = [fetchedCommands[0], fetchedCommands[1]];
+  const playerOfCommand0 = battle.players.find(v => v.userID === commands[0].userID);
+  const playerOfCommand1 = battle.players.find(v => v.userID === commands[1].userID);
+  const isSameBattleIDs = isSameValues([data.battleID, battle.battleID, commands[0].battleID, commands[1].battleID]);
+  const isSameFlowIDs = isSameValues([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
   const user = extractUser(event.requestContext.authorizer);
-  const isSameBattleID = isAllSameValue([data.battleID, battle.battleID, commands[0].battleID, commands[1].battleID]);
-  const isSameFlowID = isAllSameValue([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
   const isPoller = user.userID === battle.poller;
-  if (!isSameBattleID || !isSameFlowID || !isPoller) {
+  if (!isSameBattleIDs || !isSameFlowIDs || !isPoller || !playerOfCommand0 || !playerOfCommand1) {
     await notifier.notifyToClient(event.requestContext.connectionId, notReadyBattleProgress);
     return invalidRequestBody;
   }
 
   const corePlayers = [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
-  const coreCommands = [createPlayerCommand(commands[0], battle.players), createPlayerCommand(commands[1], battle.players)]
+  const coreCommands = [
+    {command: commands[0].command, playerId: playerOfCommand0.playerId}, 
+    {command: commands[1].command, playerId: playerOfCommand1.playerId}];
   const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
   const update = core.progress(coreCommands);
 
   const onGameEnd = () => {
-    const noticedData = createBattleEnd(update);
+    const noticedData: BattleEnd = {action: 'battle-end', update};
     const updatedConnectionState = {type: 'None'};
     return Promise.all([
       ...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)),
@@ -100,7 +100,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 
   const onGameContinue = () => {
     const flowID = uuidv4();
-    const noticedData = createBattleProgress(flowID, update);
+    const noticedData: BattleProgressed = {action: 'battle-progressed', flowID, update};
     return Promise.all([
       ...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)),
       battles.put({...battle, flowID, stateHistory: core.stateHistory()})
@@ -114,44 +114,11 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 }
 
 /**
- * プレイヤーコマンドを生成するヘルパー関数
- *
- * @param command コマンド
- * @param players ゲーム参加プレイヤー
- * @return 生成結果
- */
-function createPlayerCommand(command: BattleCommandsSchema, players: [PlayerSchema, PlayerSchema]): PlayerCommand {
-  const player = players.find(v => v.userID === command.userID) ?? players[0];
-  return {playerId: player.playerId, command: command.command};
-}
-
-/**
  * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
  *
  * @param values 判定対象の文字列を配列で渡す
  * @return 判定結果、trueで全て同じ値である
  */
-function isAllSameValue(values: string[]): boolean {
+function isSameValues(values: string[]): boolean {
   return uniq(values).length === 1;
-}
-
-/**
- * BattleProgressedを生成するヘルパー関数
- *
- * @param flowID フローID
- * @param update 更新されたステート
- * @return 生成結果
- */
-function createBattleProgress(flowID: FlowID, update: GameState[]): BattleProgressed {
-  return {action: 'battle-progressed', flowID, update};
-}
-
-/**
- * BattleEndを生成するヘルパー関数
- *
- * @param update 更新されたステート
- * @return 生成結果
- */
-function createBattleEnd(update: GameState[]): BattleEnd {
-  return {action: 'battle-end', update};
 }
