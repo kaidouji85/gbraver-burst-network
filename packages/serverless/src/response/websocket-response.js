@@ -1,8 +1,7 @@
 // @flow
 
 import type {BattleID, FlowID} from "../core/battle";
-import type {GameState} from "gbraver-burst-core/lib/state/game-state";
-import type {Player} from "gbraver-burst-core";
+import type {Player, GameState} from "gbraver-burst-core";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -41,6 +40,8 @@ export type BattleStart = {
   enemy: Player,
   /** 戦闘ID */
   battleID: BattleID,
+  /** ステートヒストリー */
+  stateHistory: GameState[],
   /** フローID */
   flowID: FlowID,
   /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */

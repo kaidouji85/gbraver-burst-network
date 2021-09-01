@@ -90,5 +90,5 @@ function createBattleStart(userID: UserID, battle: BattlesSchema): BattleStart {
   const respEnemy = toPlayer(enemy);
   const isPoller = userID === battle.poller;
   return {action: 'battle-start', player: respPlayer, enemy: respEnemy,
-    battleID: battle.battleID, flowID: battle.flowID, isPoller};
+    battleID: battle.battleID, flowID: battle.flowID, stateHistory: battle.stateHistory, isPoller};
 }

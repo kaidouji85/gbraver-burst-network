@@ -11,7 +11,7 @@ export type Pong = {
  * 任意のオブジェクトをPingResponseにパースする
  * パースできない場合はnullを返す
  *
- * @param data パース元となる文字列
+ * @param data パース元となるオブジェクト
  * @return パース結果
  */
  export function parsePong(data: Object): ?Pong {
