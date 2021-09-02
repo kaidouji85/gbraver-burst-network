@@ -68,11 +68,12 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
     return invalidRequestBody;
   }
 
-  const commands: [BattleCommandsSchema, BattleCommandsSchema] = [fetchedCommands[0], fetchedCommands[1]];
-  const playerOfCommand0 = battle.players.find(v => v.userID === commands[0].userID);
-  const playerOfCommand1 = battle.players.find(v => v.userID === commands[1].userID);
-  const isSameBattleIDs = isSameValues([data.battleID, battle.battleID, commands[0].battleID, commands[1].battleID]);
-  const isSameFlowIDs = isSameValues([data.flowID, battle.flowID, commands[0].flowID, commands[1].flowID])
+  const command0: BattleCommandsSchema = fetchedCommands[0];
+  const command1: BattleCommandsSchema = fetchedCommands[1];
+  const playerOfCommand0 = battle.players.find(v => v.userID === command0.userID);
+  const playerOfCommand1 = battle.players.find(v => v.userID === command1.userID);
+  const isSameBattleIDs = isSameValues([data.battleID, battle.battleID, command0.battleID, command0.battleID]);
+  const isSameFlowIDs = isSameValues([data.flowID, battle.flowID, command0.flowID, command1.flowID])
   const user = extractUser(event.requestContext.authorizer);
   const isPoller = user.userID === battle.poller;
   if (!isSameBattleIDs || !isSameFlowIDs || !isPoller || !playerOfCommand0 || !playerOfCommand1) {
@@ -82,8 +83,8 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
 
   const corePlayers = [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
   const coreCommands = [
-    {command: commands[0].command, playerId: playerOfCommand0.playerId}, 
-    {command: commands[1].command, playerId: playerOfCommand1.playerId}];
+    {command: command0.command, playerId: playerOfCommand0.playerId},
+    {command: command1.command, playerId: playerOfCommand1.playerId}];
   const core = restoreGbraverBurst({players: corePlayers, stateHistory: battle.stateHistory});
   const update = core.progress(coreCommands);
 
