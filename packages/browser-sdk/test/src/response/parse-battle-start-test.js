@@ -5,7 +5,7 @@ import type {BattleStart} from "../../../src/response/battle-start";
 import {parseBattleStart} from "../../../src/response/battle-start";
 import {EMPTY_GAME_STATE, EMPTY_PLAYER} from "gbraver-burst-core";
 
-const startBattle: BattleStart = {
+const battleStart: BattleStart = {
   action: 'battle-start',
   battleID: 'xxxxx',
   flowID: 'xxxxx',
@@ -18,8 +18,8 @@ const startBattle: BattleStart = {
 };
 
 test('BattleStartなら正しくパースできる', t => {
-  const result = parseBattleStart(startBattle);
-  t.deepEqual(result, startBattle);
+  const result = parseBattleStart(battleStart);
+  t.deepEqual(result, battleStart);
 });
 
 test('BattleStart以外だとパースできない', t => {
