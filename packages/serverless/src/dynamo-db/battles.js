@@ -1,11 +1,25 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import type {Battle} from "../dto/battle";
+import type {Battle, BattlePlayer} from "../core/battle";
+import type {UserID} from "../core/user";
+
+/** battlesに格納するプレイヤーの情報 */
+export type PlayerSchema = BattlePlayer & {
+  /** コネクションID */
+  connectionId: string,
+};
 
 /** battlesのスキーマ */
-export type BattlesSchema = Battle;
+export type BattlesSchema = Battle<PlayerSchema> & {
+  /**
+   * バトル更新ポーリングをするユーザのID
+   * playersに含まれているユーザのIDを指定すること
+   */
+  poller: UserID
+}
 
+/** battlesのDAO*/
 export class Battles {
   _client: typeof DynamoDB.DocumentClient;
   _tableName: string;
@@ -24,12 +38,40 @@ export class Battles {
   /**
    * 項目追加する
    *
-   * @param entry 追加する項目
+   * @param battle 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: BattlesSchema): Promise<void> {
+  put(battle: BattlesSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: entry})
+      .put({TableName: this._tableName, Item: battle})
       .promise();
+  }
+
+  /**
+   * バトルID指定でアイテムを検索する
+   * 検索条件に合致するアイテムがない場合は、nullを返す
+   *
+   * @param battleID バトルID
+   * @return 検索結果
+   */
+  async get(battleID: string): Promise<?BattlesSchema> {
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {battleID},
+    }).promise();
+    return result?.Item ?? null;
+  }
+
+  /**
+   * ユニークキー指定で項目を削除する
+   *
+   * @param battleID バトルID
+   * @return 削除受付したら発火するPromise
+   */
+  delete(battleID: string): Promise<void> {
+    return this._client.delete({
+      TableName: this._tableName,
+      Key: {battleID}
+    }).promise();
   }
 }

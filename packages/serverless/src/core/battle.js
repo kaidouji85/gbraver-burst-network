@@ -16,14 +16,17 @@ export type BattlePlayer = Player & {
   userID: UserID
 };
 
-/** バトル情報 */
-export type Battle = {
+/**
+ * バトル情報
+ * @template X プレイヤー情報
+ */
+export type Battle<X: BattlePlayer> = {
   /** バトルID */
   battleID: BattleID,
   /** フローID */
   flowID: string,
   /** プレイヤー情報 */
-  players: [BattlePlayer, BattlePlayer],
+  players: [X, X],
   /** ステートヒストリー */
   stateHistory: GameState[],
 };
