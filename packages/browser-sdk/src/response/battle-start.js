@@ -9,10 +9,10 @@ export type BattleStart = {
   player: Player,
   /** 敵情報 */
   enemy: Player,
-  /** 戦闘ID */
-  battleID: string,
   /** ステートヒストリー */
   stateHistory: GameState[],
+  /** 戦闘ID */
+  battleID: string,
   /** フローID */
   flowID: string,
   /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */

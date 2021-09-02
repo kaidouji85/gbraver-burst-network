@@ -6,7 +6,7 @@ import {parsePong} from "../../../src/response/pong";
 
 const origin: Pong = {action: 'pong', message: 'test'};
 
-test('PingResponseをパースすることができる', t => {
+test('Pongをパースすることができる', t => {
   const result = parsePong(origin);
   t.deepEqual(result, origin);
 });
@@ -16,7 +16,7 @@ test('余計なプロパティがあっても正しくパースはできる', t 
   t.deepEqual(result, origin);
 });
 
-test('PingResponseのJSON文字列はパースできない', t => {
+test('PongのJSON文字列はパースできない', t => {
   const result = parsePong(JSON.stringify(origin));
   t.is(result, null);
 });

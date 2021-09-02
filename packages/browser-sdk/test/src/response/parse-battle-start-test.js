@@ -17,12 +17,12 @@ const startBattle: BattleStart = {
   isPoller: true,
 };
 
-test('StartBattleなら正しくパースできる', t => {
+test('BattleStartなら正しくパースできる', t => {
   const result = parseBattleStart(startBattle);
   t.deepEqual(result, startBattle);
 });
 
-test('StartBattle以外だとパースできない', t => {
+test('BattleStart以外だとパースできない', t => {
   const result = parseBattleStart({hp: 1000});
   t.is(result, null);
 });
