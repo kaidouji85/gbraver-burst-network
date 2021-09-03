@@ -4,7 +4,7 @@ import type {Player, GameState, Command} from "gbraver-burst-core";
 import type {Battle} from '@gbraver-burst-network/core';
 
 /** バトルSDK */
-export class BasttleSDK implements Battle {
+export class BattleSDK implements Battle {
   /** @override */
   player: Player;
   /** @override */

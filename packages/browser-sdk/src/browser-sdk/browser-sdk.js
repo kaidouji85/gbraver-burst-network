@@ -1,14 +1,17 @@
 // @flow
 
-import type {UniversalLogin, LoginCheck, Logout, Ping} from '@gbraver-burst-network/core';
+import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
+import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle} from '@gbraver-burst-network/core';
+import {BattleSDK} from './battle-sdk';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
 import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect';
 import {ping} from '../websocket/ping';
 import {connect} from "../websocket/connect";
+import {enterCasualMatch} from '../websocket/enter-casual-match';
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -62,6 +65,14 @@ class BrowserSDKImpl implements BrowserSDK {
     const websocket = await this._getOrCreateWebSocket();
     const resp = await ping(websocket);
     return resp.message;
+  }
+
+  /** @override */
+  async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle> {
+    const websocket = await this._getOrCreateWebSocket();
+    const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
+    const battle = new BattleSDK(resp.player, resp.enemy, resp.stateHistory, websocket);
+    return battle;
   }
 
   /**
