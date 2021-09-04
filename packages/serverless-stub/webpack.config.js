@@ -9,6 +9,7 @@ const BUILD_INDEX_JS_PATH = `index.js`;
 
 module.exports = {
   mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
     [BUILD_INDEX_JS_PATH]: path.resolve(__dirname, 'src/index.js')
   },

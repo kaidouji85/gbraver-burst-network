@@ -22,7 +22,6 @@ window.onload = async () => {
     new BattlePlayer01(browserSDK),
     new BattlePlayer02(browserSDK),
   ];
-  console.log(useCases);
   const loginForm = document.getElementById('login-form') ?? document.createElement('form');
   const loginButton = document.getElementById('login-button') ?? document.createElement('button');
   const logoutForm = document.getElementById('logout-form') ?? document.createElement('form');
@@ -49,14 +48,21 @@ window.onload = async () => {
     item.value = index.toString();
     useCaseSelector.appendChild(item);
   });
-  loginButton.addEventListener('click', async () => {
+  loginButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     await browserSDK.gotoLoginPage();
   });
-  logoutButton.addEventListener('click', async () => {
+  logoutButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     await browserSDK.logout();
     await updateScreen();
   });
-  useCaseExecuteButton.addEventListener('click', async () => {
+  useCaseExecuteButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const useCaseIndex = Number(useCaseSelector.value);
     if (isNaN(useCaseIndex)) {
       return;
