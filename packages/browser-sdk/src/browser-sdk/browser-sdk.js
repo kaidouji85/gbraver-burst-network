@@ -56,8 +56,8 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
   /** @override */
-  logout(): Promise<void> {
-    return this._auth0Client.logout();
+  async logout(): Promise<void> {
+    await this._auth0Client.logout({returnTo: this._ownURL});
   }
 
   /** @override */
