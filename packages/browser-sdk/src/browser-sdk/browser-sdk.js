@@ -71,8 +71,8 @@ class BrowserSDKImpl implements BrowserSDK {
   async startCasualMatch(armdozerId: ArmDozerId, pilotId: PilotId): Promise<Battle> {
     const websocket = await this._getOrCreateWebSocket();
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
-    const battle = new BattleSDK(resp.player, resp.enemy, resp.stateHistory, websocket);
-    return battle;
+    return new BattleSDK({player: resp.player, enemy: resp.enemy, initialState: resp.stateHistory,
+      battleID: resp.battleID, initialFlowID: resp.flowID, isPoller: resp.isPoller, websocket});
   }
 
   /**
