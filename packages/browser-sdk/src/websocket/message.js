@@ -10,7 +10,7 @@ import type {Reject, Resolve} from "../promise/promise";
  * @param resolve resolve関数
  * @param reject reject関数
  */
-export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: Reject) => void;
+export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: Reject) => mixed;
 
 /**
  * Websocket messageイベントを処理する
