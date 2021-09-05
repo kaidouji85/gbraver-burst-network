@@ -17,6 +17,7 @@ export class BattlePlayer01 implements UseCase {
     this._sdk = sdk;
   }
 
+  /** @override */
   name(): string {
     return 'バトル プレイヤー01';
   }

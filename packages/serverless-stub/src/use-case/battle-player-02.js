@@ -16,7 +16,8 @@ export class BattlePlayer02 implements UseCase {
   constructor(sdk: BrowserSDK) {
     this._sdk = sdk;
   }
-
+  
+  /** @override */
   name(): string {
     return 'バトル プレイヤー02';
   }
