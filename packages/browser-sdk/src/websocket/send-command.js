@@ -24,8 +24,7 @@ import {parseSuddenlyBattleEnd} from "../response/suddenly-battle-end";
  * @return サーバからのレスポンス
  */
 export function sendCommand(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
-  const data = {action: 'send-command', battleID, flowID, command};
-  sendToAPIServer(websocket, data);
+  sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
   return onMessage(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject) => {
     const data = parseJSON(e.data);
 
