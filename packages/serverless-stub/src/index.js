@@ -3,6 +3,8 @@
 import {createBrowserSDK} from '@gbraver-burst-network/browser-sdk';
 import type {UseCase} from "./use-case/use-case";
 import {PingUseCase} from "./use-case/ping";
+import {BattlePlayer01} from "./use-case/battle-player-01";
+import {BattlePlayer02} from "./use-case/battle-player-02";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? '';
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? '';
@@ -16,9 +18,10 @@ window.onload = async () => {
   }
 
   const useCases: UseCase[] = [
-    new PingUseCase(browserSDK)
+    new PingUseCase(browserSDK),
+    new BattlePlayer01(browserSDK),
+    new BattlePlayer02(browserSDK),
   ];
-  console.log(useCases);
   const loginForm = document.getElementById('login-form') ?? document.createElement('form');
   const loginButton = document.getElementById('login-button') ?? document.createElement('button');
   const logoutForm = document.getElementById('logout-form') ?? document.createElement('form');
@@ -45,14 +48,21 @@ window.onload = async () => {
     item.value = index.toString();
     useCaseSelector.appendChild(item);
   });
-  loginButton.addEventListener('click', async () => {
+  loginButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     await browserSDK.gotoLoginPage();
   });
-  logoutButton.addEventListener('click', async () => {
+  logoutButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     await browserSDK.logout();
     await updateScreen();
   });
-  useCaseExecuteButton.addEventListener('click', async () => {
+  useCaseExecuteButton.addEventListener('click', async (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const useCaseIndex = Number(useCaseSelector.value);
     if (isNaN(useCaseIndex)) {
       return;
