@@ -5,6 +5,7 @@ import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {Notifier} from "./api-gateway/notifier";
+import type {Pong} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -21,7 +22,7 @@ const notifier = new Notifier(apiGateway);
  * @return レスポンス
  */
 export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const data = {'action': 'ping', 'message': 'welcome to gbraver burst serverless'};
+  const data: Pong = {action: 'pong', message: 'welcome to gbraver burst serverless'};
   await notifier.notifyToClient(event.requestContext.connectionId, data);
   return {statusCode: 200, body: 'ping success'};
 }

@@ -1,8 +1,8 @@
 // @flow
 
 import test from 'ava';
-import type {SendCommand} from "../../../src/lambda/sned-command";
-import {parseSendCommand} from "../../../src/lambda/sned-command";
+import type {SendCommand} from "../../../src/request/sned-command";
+import {parseSendCommand} from "../../../src/request/sned-command";
 
 const sendCommand: SendCommand = {
   action: 'send-command',

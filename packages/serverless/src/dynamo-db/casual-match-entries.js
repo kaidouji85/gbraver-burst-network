@@ -1,11 +1,11 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import type {UserID} from "../dto/user";
+import type {UserID} from "../core/user";
 import type {ArmDozerId, PilotId} from "gbraver-burst-core";
 
 /** casual_match_entriesのスキーマ */
-type CasualMatchEntriesSchema = {
+export type CasualMatchEntriesSchema = {
   /** ユーザID */
   userID: UserID,
   /** 選択したアームドーザのID */

@@ -1,6 +1,6 @@
 // @flow
 
-import type {BattleID, FlowID} from "../dto/battle";
+import type {BattleID, FlowID} from "../core/battle";
 import type {Command} from "gbraver-burst-core";
 
 /** バトルコマンド送信 */

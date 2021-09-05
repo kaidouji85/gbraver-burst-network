@@ -80,8 +80,13 @@ functions:
     events:
       - websocket:
           route: send-command
-  pollingCasualMatchEntries:
-    handler: src/polling-casual-match-entries.pollingCasualMatchEntries
+  battleProgressPolling:
+    handler: src/battle-progress-polling.battleProgressPolling
+    events:
+      - websocket:
+          route: battle-progress-polling
+  matchMakingPolling:
+    handler: src/match-making-polling.matchMakingPolling
     events:
       - schedule: rate(1 minute)
 
