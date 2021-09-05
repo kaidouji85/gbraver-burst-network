@@ -59,15 +59,16 @@ export function sendCommand(websocket: WebSocket, battleID: string, flowID: stri
  * @return APIサーバからのレスポンス
  */
 export async function sendCommandWithPolling(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
-  const sendCommand = {action: 'send-command', battleID, flowID, command};
-  sendToAPIServer(websocket, sendCommand);
-
-  const battleProgressPolling = {action: 'battle-progress-polling', battleID, flowID};
-  await wait(1000);
-  sendToAPIServer(websocket, battleProgressPolling);
-
   const maxPollingCount = 100;
   let pollingCount = 1;
+  const battleProgressPolling = () => {
+    pollingCount ++;
+    sendToAPIServer(websocket, {action: 'battle-progress-polling', battleID, flowID});
+  };
+
+  sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
+  await wait(1000);
+  battleProgressPolling();
   return onMessage(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
     const data = parseJSON(e.data);
 
@@ -86,8 +87,7 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
 
     if (notReadyBattleProgress) {
       await wait(3000);
-      pollingCount ++;
-      sendToAPIServer(websocket, battleProgressPolling);
+      battleProgressPolling();
       return;
     }
 
