@@ -61,6 +61,7 @@ export function sendCommand(websocket: WebSocket, battleID: string, flowID: stri
  */
 export async function sendCommandWithPolling(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
   const maxPollingCount = 100;
+  const pollingIntervalMilliSec = 3000;
   let pollingCount = 1;
   let lastPollingTime = 0;
   const battleProgressPolling = () => {
@@ -94,7 +95,7 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
 
     if (notReadyBattleProgress) {
       const pollingTime = Date.now() - lastPollingTime;
-      const waitTime = Math.max(3000 - pollingTime, 0);
+      const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
       await wait(waitTime);
       battleProgressPolling();
       return;
