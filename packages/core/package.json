@@ -8,7 +8,7 @@
   ],
   "license": "ISC",
   "scripts": {
-    "build": "npm-run-all clean type-check lint transpile copy-type-definition",
+    "build": "run-s clean type-check lint transpile copy-type-definition",
     "type-check": "flow check",
     "lint": "eslint src",
     "transpile": "babel src -d lib/",

@@ -6,9 +6,9 @@
   "license": "ISC",
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm-run-all clean dev-server",
-    "start:production": "npm-run-all build serve",
-    "build": "npm-run-all clean type-check lint transpile",
+    "start": "run-s clean dev-server",
+    "start:production": "run-s build serve",
+    "build": "run-s clean type-check lint transpile",
     "transpile": "webpack --mode=production",
     "type-check": "flow check src",
     "lint": "eslint src",
