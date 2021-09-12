@@ -1,14 +1,14 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Y.Takeuchi",
   "license": "ISC",
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm-run-all clean dev-server",
-    "start:production": "npm-run-all build serve",
-    "build": "npm-run-all clean type-check lint transpile",
+    "start": "run-s clean dev-server",
+    "start:production": "run-s build serve",
+    "build": "run-s clean type-check lint transpile",
     "transpile": "webpack --mode=production",
     "type-check": "flow check src",
     "lint": "eslint src",
@@ -17,26 +17,26 @@
     "serve": "http-server build -p 8080 -c-1"
   },
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^0.6.0",
+    "@gbraver-burst-network/browser-sdk": "^0.6.1",
     "dotenv": "^10.0.0",
-    "gbraver-burst-core": "^1.9.0"
+    "gbraver-burst-core": "^1.10.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.4",
     "@babel/preset-flow": "^7.14.5",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "eslint": "^7.32.0",
-    "eslint-plugin-flowtype": "^5.9.1",
-    "flow-bin": "^0.158.0",
+    "eslint-plugin-flowtype": "^5.9.2",
+    "flow-bin": "^0.159.0",
     "html-webpack-plugin": "^5.3.2",
     "http-server": "^13.0.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "webpack": "^5.51.1",
+    "webpack": "^5.52.0",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.1.1"
   }
 }

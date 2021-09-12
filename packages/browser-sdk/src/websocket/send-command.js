@@ -12,6 +12,8 @@ import {parseBattleEnd} from "../response/battle-end";
 import {wait} from "../wait/wait";
 import {parseNotReadyBattleProgress} from "../response/not-ready-battle-progress";
 import {parseSuddenlyBattleEnd} from "../response/suddenly-battle-end";
+import {parseAcceptCommand} from "../response/accept-command";
+import type {AcceptCommand} from "../response/accept-command";
 
 /**
  * コマンドをAPIサーバに送信する
@@ -59,14 +61,21 @@ export function sendCommand(websocket: WebSocket, battleID: string, flowID: stri
  */
 export async function sendCommandWithPolling(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
   const maxPollingCount = 100;
+  const pollingIntervalMilliSec = 3000;
   let pollingCount = 1;
+  let lastPollingTime = 0;
   const battleProgressPolling = () => {
     pollingCount ++;
+    lastPollingTime = Date.now();
     sendToAPIServer(websocket, {action: 'battle-progress-polling', battleID, flowID});
   };
 
   sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
-  await wait(1000);
+  await onMessage(websocket, (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
+    const data = parseJSON(e.data);
+    const acceptCommand = parseAcceptCommand(data);
+    acceptCommand && resolve(acceptCommand);
+  });
   battleProgressPolling();
   return onMessage(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
     const data = parseJSON(e.data);
@@ -85,7 +94,9 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
     }
 
     if (notReadyBattleProgress) {
-      await wait(3000);
+      const pollingTime = Date.now() - lastPollingTime;
+      const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
+      await wait(waitTime);
       battleProgressPolling();
       return;
     }
