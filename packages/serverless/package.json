@@ -14,7 +14,7 @@
     "upload": "sls deploy"
   },
   "dependencies": {
-    "aws-sdk": "^2.983.0",
+    "aws-sdk": "^2.987.0",
     "gbraver-burst-core": "^1.10.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.4",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@ava/babel": "^2.0.0",
     "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
     "@babel/preset-flow": "^7.14.5",
     "@babel/register": "^7.15.3",
     "ava": "^3.15.0",
@@ -38,8 +38,8 @@
     "flow-bin": "^0.159.0",
     "npm-run-all": "^4.1.5",
     "serverless": "^2.57.0",
-    "serverless-webpack": "^5.5.3",
-    "webpack": "5.51.2"
+    "serverless-webpack": "^5.5.4",
+    "webpack": "5.52.1"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "ISC",
