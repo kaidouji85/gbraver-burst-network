@@ -16,6 +16,7 @@ import {Battles} from "./dynamo-db/battles";
 import {toPlayer} from "./core/battle";
 import type {UserID} from "./core/user";
 import type {BattleStart} from "./response/websocket-response";
+import {wait} from "./wait/wait";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -31,13 +32,27 @@ const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
 const battles = new Battles(dynamoDB, BATTLES);
+const intervalInMillisecond = 3000;
+const maxPollingCount = 28800;
+
+(async () => {
+  for(let i=0; i < maxPollingCount; i++) {
+    console.log(`${new Date().toString()} polling`);
+    const start = Date.now();
+    await matchMakingPolling();
+    const end = Date.now();
+    const executeTime = end- start;
+    const waitTime = Math.max(intervalInMillisecond - executeTime, 0);
+    await wait(waitTime);
+  }
+})();
 
 /**
  * カジュアルマッチでマッチングがないかを探す
  *
  * @return 処理完了後に発火するPromise
  */
-export async function matchMakingPolling(): Promise<void> {
+async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan();
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {

@@ -85,10 +85,6 @@ functions:
     events:
       - websocket:
           route: battle-progress-polling
-  matchMakingPolling:
-    handler: src/match-making-polling.matchMakingPolling
-    events:
-      - schedule: rate(1 minute)
 
 resources:
   Resources:
