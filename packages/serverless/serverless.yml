@@ -3,10 +3,10 @@ frameworkVersion: '2'
 useDotenv: true
 
 custom:
-  gbraverBurstConnections: gbraver_burst_connections-${sls:stage}
-  casualMatchEntries: casual_match_entries-${sls:stage}
-  battleCommands: battle-commands-${sls:stage}
-  battles: battles-${sls:stage}
+  connections: ${self:service}__${sls:stage}__connections
+  casualMatchEntries: ${self:service}__${sls:stage}__casual-match-entries
+  battleCommands: ${self:service}__${sls:stage}__battle-commands
+  battles: ${self:service}__${sls:stage}__battles
 
 plugins:
   - serverless-webpack
@@ -22,7 +22,7 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
-    GBRAVER_BURST_CONNECTIONS: ${self:custom.gbraverBurstConnections}
+    CONNECTIONS: ${self:custom.connections}
     CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
     BATTLE_COMMANDS: ${self:custom.battleCommands}
     BATTLES: ${self:custom.battles}
@@ -38,7 +38,7 @@ provider:
         - 'dynamodb:Scan'
         - 'dynamodb:BatchWrite*'
       Resource:
-        - Fn::GetAtt: [GbraverBurstConnectionsTable, Arn]
+        - Fn::GetAtt: [ConnectionsTable, Arn]
         - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
         - Fn::GetAtt: [BattleCommandsTable, Arn]
         - Fn::GetAtt: [BattlesTable, Arn]
@@ -88,10 +88,10 @@ functions:
 
 resources:
   Resources:
-    GbraverBurstConnectionsTable:
+    ConnectionsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.gbraverBurstConnections}
+        TableName: ${self:custom.connections}
         AttributeDefinitions:
           - AttributeName: connectionId
             AttributeType: S
@@ -140,10 +140,26 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
   Outputs:
     WebSocketAPIID:
       Value:
         Ref: WebsocketsApi
       Export:
         Name: ${self:service}:${sls:stage}:WebSocketAPIID
-    
+    Connections:
+      Value: ${self:custom.connections}
+      Export:
+        Name: ${self:service}:${sls:stage}:Connections
+    CasualMatchEntries:
+      Value: ${self:custom.casualMatchEntries}
+      Export:
+        Name: ${self:service}:${sls:stage}:CasualMatchEntries
+    BattleCommands:
+      Value: ${self:custom.battleCommands}
+      Export:
+        Name: ${self:service}:${sls:stage}:BattleCommands
+    Battles:
+      Value: ${self:custom.battles}
+      Export:
+        Name: ${self:service}:${sls:stage}:Battles

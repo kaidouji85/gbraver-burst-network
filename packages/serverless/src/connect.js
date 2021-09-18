@@ -7,10 +7,10 @@ import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/extract-user';
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
-const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
+const CONNECTIONS = process.env.CONNECTIONS ?? '';
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
+const connections = new GbraverBurstConnections(dynamoDB, CONNECTIONS);
 
 /**
  * Websocket API $connect エントリポイント

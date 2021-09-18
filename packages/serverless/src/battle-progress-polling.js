@@ -22,7 +22,7 @@ import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
-const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
+const CONNECTIONS = process.env.CONNECTIONS ?? '';
 const BATTLES = process.env.BATTLES ?? '';
 const BATTLE_COMMANDS = process.env.BATTLE_COMMANDS ?? '';
 
@@ -30,7 +30,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
+const connections = new GbraverBurstConnections(dynamoDB, CONNECTIONS);
 const battles = new Battles(dynamoDB, BATTLES);
 const battleCommands = new BattleCommands(dynamoDB, BATTLE_COMMANDS);
 const invalidRequestBody = {statusCode: 400, body: 'invalid request body'};

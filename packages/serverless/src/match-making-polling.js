@@ -21,7 +21,7 @@ import {wait} from "./wait/wait";
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
-const GBRAVER_BURST_CONNECTIONS = process.env.GBRAVER_BURST_CONNECTIONS ?? '';
+const CONNECTIONS = process.env.CONNECTIONS ?? '';
 const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
 const BATTLES = process.env.BATTLES ?? '';
 
@@ -29,7 +29,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = new GbraverBurstConnections(dynamoDB, GBRAVER_BURST_CONNECTIONS);
+const connections = new GbraverBurstConnections(dynamoDB, CONNECTIONS);
 const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
 const battles = new Battles(dynamoDB, BATTLES);
 const intervalInMillisecond = 3000;
