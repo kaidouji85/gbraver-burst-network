@@ -5,17 +5,18 @@
   "private": true,
   "scripts": {
     "start:match-make": "run-s build:mach-make serve:match-make",
-    "deploy": "run-s type-check lint lint:test test upload",
-    "build": "run-s type-check lint lint:test test package",
-    "build:mach-make": "run-s type-check lint lint:test test transpile:mach-make",
+    "deploy": "run-s type-check lint lint:test test deploy:api",
+    "deploy:api": "sls deploy --stage dev",
+    "build": "run-s type-check lint lint:test test package:api package:mach-make",
+    "build:api": "run-s type-check lint lint:test test package:api",
+    "build:mach-make": "run-s type-check lint lint:test test package:mach-make",
     "type-check": "flow",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "test": "ava -T 600000",
-    "package": "sls package",
-    "transpile:mach-make": "webpack --config webpack.match.make.js",
-    "upload": "sls deploy",
-    "serve:match-make": "node .webpack/match-making-polling.js.js"
+    "package:api": "sls package",
+    "package:mach-make": "webpack --config webpack.match.make.js",
+    "serve:match-make": "node .webpack/match-making-polling.js"
   },
   "dependencies": {
     "aws-sdk": "^2.987.0",
@@ -46,7 +47,7 @@
     "webpack": "5.52.1",
     "webpack-cli": "^4.8.0"
   },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "author": "Y.Takeuchi",
   "license": "ISC",
   "ava": {
     "babel": {

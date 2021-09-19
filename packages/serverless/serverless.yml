@@ -140,26 +140,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-
-  Outputs:
-    WebSocketAPIID:
-      Value:
-        Ref: WebsocketsApi
-      Export:
-        Name: ${self:service}:${sls:stage}:WebSocketAPIID
-    Connections:
-      Value: ${self:custom.connections}
-      Export:
-        Name: ${self:service}:${sls:stage}:Connections
-    CasualMatchEntries:
-      Value: ${self:custom.casualMatchEntries}
-      Export:
-        Name: ${self:service}:${sls:stage}:CasualMatchEntries
-    BattleCommands:
-      Value: ${self:custom.battleCommands}
-      Export:
-        Name: ${self:service}:${sls:stage}:BattleCommands
-    Battles:
-      Value: ${self:custom.battles}
-      Export:
-        Name: ${self:service}:${sls:stage}:Battles
