@@ -2,15 +2,16 @@
 
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
-import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/extract-user';
+import {createGbraverBurstConnections} from "./dynamo-db/dao-creator";
+import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
-const CONNECTIONS = process.env.CONNECTIONS ?? '';
+const STAGE = process.env.STAGE ?? '';
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = new GbraverBurstConnections(dynamoDB, CONNECTIONS);
+const connections = createGbraverBurstConnections(dynamoDB, SERVICE, STAGE)
 
 /**
  * Websocket API $connect エントリポイント

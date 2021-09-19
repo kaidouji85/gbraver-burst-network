@@ -2,26 +2,24 @@
 
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
-import {GbraverBurstConnections} from "./dynamo-db/gbraver-burst-connections";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/extract-user';
 import {parseEnterCasualMatch} from "./request/enter-casual-match";
-import {CasualMatchEntries} from "./dynamo-db/casual-match-entries";
 import {parseJSON} from "./json/parse";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
 import type {EnteredCasualMatch, Error} from "./response/websocket-response";
+import {createCasualMatchEntries, createGbraverBurstConnections} from "./dynamo-db/dao-creator";
+import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
-const CONNECTIONS = process.env.CONNECTIONS ?? '';
-const CASUAL_MATCH_ENTRIES = process.env.CASUAL_MATCH_ENTRIES ?? '';
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = new GbraverBurstConnections(dynamoDB, CONNECTIONS);
-const casualMatchEntries = new CasualMatchEntries(dynamoDB, CASUAL_MATCH_ENTRIES);
+const connections = createGbraverBurstConnections(dynamoDB, SERVICE, STAGE);
+const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
