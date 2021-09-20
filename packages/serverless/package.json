@@ -4,19 +4,20 @@
   "description": "gbraver burst serverless",
   "private": true,
   "scripts": {
-    "start:match-make": "run-s build:mach-make serve:match-make",
+    "start:match-make": "run-s build:match-make serve:match-make",
     "deploy": "run-s type-check lint lint:test test deploy:api",
     "deploy:api": "sls deploy --stage dev",
-    "build": "run-s type-check lint lint:test test package:api package:mach-make",
+    "build": "run-s clean type-check lint lint:test test package:api package:match-make",
     "build:api": "run-s type-check lint lint:test test package:api",
-    "build:mach-make": "run-s type-check lint lint:test test package:mach-make",
+    "build:match-make": "run-s clean type-check lint lint:test test package:match-make",
     "type-check": "flow",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "test": "ava -T 600000",
     "package:api": "sls package",
-    "package:mach-make": "webpack --config webpack.match.make.js",
-    "serve:match-make": "node .webpack/match-making-polling.js"
+    "package:match-make": "webpack --config webpack.match.make.js",
+    "serve:match-make": "node .webpack/match-making-polling.js",
+    "clean": "rimraf .webpack"
   },
   "dependencies": {
     "aws-sdk": "^2.987.0",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.4",
     "ramda": "^0.27.1",
+    "rimraf": "^3.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

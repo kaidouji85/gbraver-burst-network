@@ -2,4 +2,3 @@
 .idea/
 **/*/.env
 **/*/node_modules
-packages/monolithic-server/users.json
