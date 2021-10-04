@@ -8,10 +8,8 @@
     "build": "run-s clean build:core build:serverless build:browser-sdk build:serverless-stub",
     "build:core": "lerna run --scope @gbraver-burst-network/core build",
     "build:serverless": "lerna run --scope @gbraver-burst-network/serverless build",
-    "build:serverless:match-make": "lerna run --scope @gbraver-burst-network/serverless build:match-make",
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
-    "serve:serverless:match-make": "lerna run --scope @gbraver-burst-network/serverless --stream --no-prefix serve:match-make",
     "serve:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub --stream --no-prefix serve",
     "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless deploy"
   },

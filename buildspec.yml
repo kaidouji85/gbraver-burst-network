@@ -10,5 +10,4 @@ phases:
   build:
     commands:
       - npm run bootstrap
-      - npm run build:core
       - npm run deploy:serverless

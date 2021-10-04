@@ -1,4 +1,0 @@
-.git
-.idea/
-**/*/.env
-**/*/node_modules
