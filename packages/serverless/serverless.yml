@@ -22,10 +22,6 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
-    CONNECTIONS: ${self:custom.connections}
-    CASUAL_MATCH_ENTRIES: ${self:custom.casualMatchEntries}
-    BATTLE_COMMANDS: ${self:custom.battleCommands}
-    BATTLES: ${self:custom.battles}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
 
@@ -140,3 +136,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+  Outputs:
+    WebsoketApiId:
+      Description: "id of websocket api gateway"
+      Value:
+        Ref: WebsocketsApi
+      Export:
+        Name: ${self:service}:${sls:stage}:WebsoketApiId
