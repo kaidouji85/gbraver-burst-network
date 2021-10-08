@@ -143,3 +143,27 @@ resources:
         Ref: WebsocketsApi
       Export:
         Name: ${self:service}:${sls:stage}:WebsoketApiId
+    ConnectionsTableArn:
+      Description: "arn of connections table"
+      Value:
+        Fn::GetAtt: [ConnectionsTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:ConnectionsTableArn
+    CasualMatchEntriesTableArn:
+      Description: "arn of casual match entries table"
+      Value:
+        Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:CasualMatchEntriesTableArn
+    BattlesTableArn:
+      Description: "arn of battles table"
+      Value:
+        Fn::GetAtt: [BattlesTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:BattlesTableArn
+    BattleCommandsTableArn:
+      Description: "arn of battle commands table"
+      Value:
+        Fn::GetAtt: [BattleCommandsTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:BattleCommandsTableArn
