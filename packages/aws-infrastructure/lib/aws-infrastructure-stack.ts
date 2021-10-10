@@ -3,7 +3,6 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as ecr from "@aws-cdk/aws-ecr";
 import * as iam from '@aws-cdk/aws-iam';
-import * as uuid from 'uuid';
 
 export class AwsInfrastructureStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -58,9 +57,11 @@ export class AwsInfrastructureStack extends cdk.Stack {
     });
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: "gbraver-burst-match-make",
-    })
-    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
-      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository),
+    });
+    matchMakeTaskDefinition.addContainer(`match-make-container`, {
+      image: ecs.ContainerImage.fromAsset('../serverless', {
+        file: 'matchMake.Dockerfile'
+      }),
       environment: {
         STAGE: stage,
         WEBSOCKET_API_ID: websocketAPIID,
