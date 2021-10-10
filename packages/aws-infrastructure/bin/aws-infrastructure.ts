@@ -4,7 +4,7 @@ import * as cdk from '@aws-cdk/core';
 import { AwsInfrastructureStack } from '../lib/aws-infrastructure-stack';
 
 const app = new cdk.App();
-new AwsInfrastructureStack(app, 'gbraver-burst-aws-infrastructure', {
+new AwsInfrastructureStack(app, 'study-nat-gateway-match-make', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
