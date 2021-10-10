@@ -3,6 +3,7 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as ecr from "@aws-cdk/aws-ecr";
 import * as iam from '@aws-cdk/aws-iam';
+import * as uuid from 'uuid';
 
 export class AwsInfrastructureStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -25,7 +26,11 @@ export class AwsInfrastructureStack extends cdk.Stack {
     const matchMakePolicy = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
-          resources: [connectionsTableARN, casualMatchEntriesTableARN, battlesTableARN],
+          resources: [
+            connectionsTableARN,
+            casualMatchEntriesTableARN,
+            battlesTableARN
+          ],
           actions: [
             'dynamodb:PutItem',
             'dynamodb:GetItem',
@@ -33,7 +38,11 @@ export class AwsInfrastructureStack extends cdk.Stack {
             'dynamodb:Scan',
             'dynamodb:BatchWrite*',
           ],
-        })
+        }),
+        new iam.PolicyStatement({
+          resources: ['arn:aws:execute-api:*:*:**/@connections/*'],
+          actions: ['execute-api:ManageConnections'],
+        }),
       ],
     });
     const matchMakeServiceTaskRole = new iam.Role(this, 'match-make-service-task-role', {
@@ -50,7 +59,7 @@ export class AwsInfrastructureStack extends cdk.Stack {
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: "gbraver-burst-match-make",
     })
-    matchMakeTaskDefinition.addContainer("demo-container", {
+    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
       image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository),
       environment: {
         STAGE: stage,
