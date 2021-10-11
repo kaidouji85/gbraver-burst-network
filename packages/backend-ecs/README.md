@@ -1,14 +1,40 @@
-# Welcome to your CDK TypeScript project!
+# バックエンドECS
 
-This is a blank project for TypeScript development with CDK.
+本リポジトリはバックエンド処理用ECSのCDKスタックです。
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## 前提条件
 
-## Useful commands
+### 必須ソフト
+以下ソフトがインストールされていること
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+* node.js
+* npm
+* Docker
+
+### AWS認証設定
+aws cliの認証設定が完了していること
+https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html
+
+### AWSリソース
+以下モジュールに定義されているAWSリソースがデプロイされていること。
+
+* @gbraver-burst-network/aws-vpc
+* @gbraver-burst-network/serverless
+
+## 動かし方
+### セットアップ
+
+```shell
+cd <本リポジトリをcloneした場所>/backend-ecs
+npm ci
+cp .env.template .env
+# 環境に応じた値をセットする
+vim .env
+```
+
+### デプロイ
+
+```shell
+cd <本リポジトリをcloneした場所>/backend-ecs
+npm run deploy
+```

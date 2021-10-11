@@ -6,7 +6,7 @@
   "scripts": {
     "start:match-make": "run-s build:match-make serve:match-make",
     "deploy": "run-s type-check lint lint:test test deploy:api",
-    "deploy:api": "sls deploy --stage dev",
+    "deploy:api": "sls deploy --stage ${STAGE:-dev}",
     "build": "run-s clean type-check lint lint:test test package:api package:match-make",
     "build:api": "run-s type-check lint lint:test test package:api",
     "build:match-make": "run-s clean type-check lint lint:test test package:match-make",
