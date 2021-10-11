@@ -3,43 +3,50 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as iam from '@aws-cdk/aws-iam';
 
+/** バックエンドECSスタックのプロパティ */
+interface BackendEcsProps extends cdk.StackProps {
+  /** @gbraver-burst-network/serverless のステージ名 */
+  stage: string,
+  /** 本ECSを起動するVPCのID */
+  vpcId: string,
+  /** 本ECSを起動するサブネットのアベイラビリティゾーン */
+  privateNetAvailabilityZone: string,
+  /** 本ECSを起動するプライベートサブネットのID */
+  privateSubnetId: string,
+  /** Websocket API GatewayのID */
+  websocketAPIID: string,
+  /** DynamoDB connections テーブルのARN */
+  connectionsTableARN: string,
+  /** DynamoDB casualMatchEntries テーブルのARN */
+  casualMatchEntriesTableARN: string,
+  /** DynamoDB battles テーブルのARN */
+  battlesTableARN: string,
+}
+
 /** バックエンドECS スタック */
 export class BackendEcsStack extends cdk.Stack {
   /**
-   * コンストラクタ
-   * stageには @gbraver-burst-network/serverless で指定したステージ名をセットする
-   *
    * @constructor
    * @param scope スコープ
    * @param id スタックID
-   * @param stage ステージ名
    * @param props スタックのプロパティ
    */
-  constructor(scope: cdk.Construct, id: string, stage: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.Construct, id: string, props: BackendEcsProps) {
     super(scope, id, props);
 
-    const vpcId = cdk.Fn.importValue('gbraver-burst-vpc:VpcId');
-    const privateNetAvailabilityZone = cdk.Fn.importValue('gbraver-burst-vpc:PrivateNetAvailabilityZone');
-    const privateSubnetId = cdk.Fn.importValue('gbraver-burst-vpc:PrivateSubnetId');
-    const websocketAPIID = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:WebsoketApiId`);
-    const connectionsTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:ConnectionsTableArn`);
-    const casualMatchEntriesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:CasualMatchEntriesTableArn`);
-    const battlesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:BattlesTableArn`);
-
-    // TODO availabilityZones、privateSubnetIdsをimportValueにする
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
-      vpcId: vpcId,
-      availabilityZones: [privateNetAvailabilityZone],
-      privateSubnetIds: [privateSubnetId]
+      vpcId: props.vpcId,
+      availabilityZones: [props.privateNetAvailabilityZone],
+      privateSubnetIds: [props.privateSubnetId]
     });
 
     const matchMakePolicy = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
           resources: [
-            connectionsTableARN,
-            casualMatchEntriesTableARN,
-            battlesTableARN
+            props.connectionsTableARN,
+            props.casualMatchEntriesTableARN,
+            props.battlesTableARN
           ],
           actions: [
             'dynamodb:PutItem',
@@ -74,8 +81,8 @@ export class BackendEcsStack extends cdk.Stack {
         file: 'matchMake.Dockerfile'
       }),
       environment: {
-        STAGE: stage,
-        WEBSOCKET_API_ID: websocketAPIID,
+        STAGE: props.stage,
+        WEBSOCKET_API_ID: props.websocketAPIID,
       },
       logging: matchMakeLogging,
     });

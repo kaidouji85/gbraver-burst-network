@@ -1,5 +1,5 @@
 {
-  "name": "aws-vpc",
+  "name": "@gbraver-burst-network/aws-vpc",
   "version": "0.1.0",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
