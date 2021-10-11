@@ -1,27 +1,38 @@
 import * as cdk from '@aws-cdk/core';
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
-import * as ecr from "@aws-cdk/aws-ecr";
 import * as iam from '@aws-cdk/aws-iam';
 
-export class AwsInfrastructureStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+/** バックエンドECS スタック */
+export class BackendEcsStack extends cdk.Stack {
+  /**
+   * コンストラクタ
+   * stageには @gbraver-burst-network/serverless で指定したステージ名をセットする
+   *
+   * @constructor
+   * @param scope スコープ
+   * @param id スタックID
+   * @param stage ステージ名
+   * @param props スタックのプロパティ
+   */
+  constructor(scope: cdk.Construct, id: string, stage: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const stage = new cdk.CfnParameter(this, 'stage', {
-      type: 'String',
-      description: 'serverless stage name',
-    }).valueAsString;
+    const vpcId = cdk.Fn.importValue('gbraver-burst-vpc:VpcId');
+    const privateNetAvailabilityZone = cdk.Fn.importValue('gbraver-burst-vpc:PrivateNetAvailabilityZone');
+    const privateSubnetId = cdk.Fn.importValue('gbraver-burst-vpc:PrivateSubnetId');
     const websocketAPIID = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:WebsoketApiId`);
     const connectionsTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:ConnectionsTableArn`);
     const casualMatchEntriesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:CasualMatchEntriesTableArn`);
     const battlesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:BattlesTableArn`);
 
-    const vpc = new ec2.Vpc(this, "vpc", {
-      maxAzs: 1,
+    // TODO availabilityZones、privateSubnetIdsをimportValueにする
+    const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
+      vpcId: vpcId,
+      availabilityZones: [privateNetAvailabilityZone],
+      privateSubnetIds: [privateSubnetId]
     });
 
-    const matchMakeRepository = ecr.Repository.fromRepositoryName(this, "repo", "gbraver-burst-match-make");
     const matchMakePolicy = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
