@@ -11,7 +11,8 @@
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
     "serve:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub --stream --no-prefix serve",
-    "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless deploy"
+    "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless --stream --no-prefix deploy",
+    "deploy:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs --stream --no-prefix deploy"
   },
   "devDependencies": {
     "lerna": "^4.0.0",

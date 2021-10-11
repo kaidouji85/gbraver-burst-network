@@ -11,3 +11,4 @@ phases:
     commands:
       - npm run bootstrap
       - npm run deploy:serverless
+      - npm run deploy:backend-ecs
