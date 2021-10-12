@@ -6,9 +6,10 @@
   "scripts": {
     "start:match-make": "run-s build:match-make serve:match-make",
     "clean": "rimraf .webpack",
-    "build": "run-s type-check lint lint:test test build:api build:match-make",
+    "build": "run-s all-check build:api build:match-make",
     "build:api": "sls package",
     "build:match-make": "webpack --config webpack.match.make.js",
+    "all-check": "run-s type-check lint lint:test test",
     "type-check": "flow",
     "lint": "eslint src",
     "lint:test": "eslint test",

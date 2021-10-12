@@ -13,15 +13,8 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
-  pre_build:
-    commands:
-      - npm ci
   build:
     commands:
       - cd packages/backend-app
       - npm ci
-      - npm run type-check
-      - npm run lint
-      - npm run lint:test
-      - npm run test
       - npx sls deploy --stage ${STAGE}
