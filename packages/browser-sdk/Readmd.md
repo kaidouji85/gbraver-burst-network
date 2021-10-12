@@ -1,25 +1,25 @@
 # GブレイバーバーストブラウザSDK
 
 ## はじめに
-GブレイバーバーストのブラウザSDKです
+GブレイバーバーストのブラウザSDKです。
+本リポジトリは、バックエンドがserverless frameworkの場合のブラウザSDK実装になります。
 
-## ビルド方法
-### 前提
-「[clone直後にやること](../../Readme.md)」を予め実行している
+## 前提条件
+### monorepo セットアップ
+[monorepoのセットアップ](../../Readme.md) が完了していること
 
-## ビルドコマンド
+### 必須ソフト
+以下ソフトがインストールされていること
 
+* node.js
+* npm
+
+## コマンド例
+以降に掲載するコマンド例のカレントディレクトリは、
+```<本リポジトリをcloneした場所>/packages/browser-cdk```であるとします。
+
+### ビルド
 ```shell
 # 通常ビルド
-cd <本リポジトリのルート>
-npm run build:browser-sdk
-# or
-cd <本リポジトリのルート>/packages/browser-sdk/
 npm run build
-
-# フルビルド
-cd <本リポジトリのルート>
-npm run clean
-npm run build:core
-npm run build:browser-sdk
 ```

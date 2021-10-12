@@ -4,11 +4,11 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
     "clean": "lerna run clean",
-    "build": "run-s clean build:core build:serverless build:browser-sdk build:serverless-stub",
-    "build:core": "lerna run --scope @gbraver-burst-network/core build",
-    "build:serverless": "lerna run --scope @gbraver-burst-network/serverless build",
+    "build": "run-s clean build:core build:browser-sdk build:serverless-stub build:backend-app",
+    "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
-    "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build"
+    "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
+    "build:backend-app": "lerna run --scope @gbraver-burst-network/backend-app build"
   },
   "devDependencies": {
     "lerna": "^4.0.0",

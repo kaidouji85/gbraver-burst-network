@@ -18,7 +18,7 @@ phases:
       - npm ci
   build:
     commands:
-      - cd packages/serverless
+      - cd packages/backend-app
       - npm ci
       - npm run type-check
       - npm run lint

@@ -1,40 +1,39 @@
 # バックエンドECS
-
-本リポジトリはバックエンド処理用ECSのCDKスタックです。
+本リポジトリはバックエンド処理ECSのCDKスタックです。
 
 ## 前提条件
+### monorepo セットアップ
+[monorepoのセットアップ](../../Readme.md) が完了していること
+
+### VPC
+[@gbraver-burst-network/aws-vpc](../aws-vpc/README.md) にてVPCが生成されていること
+
+### Serverless
+[@gbraver-burst-network/backend-app/serverless.yml](../backend-app/serverless.yml)
+で定義されたserverlessアプリがデプロイされていること
 
 ### 必須ソフト
 以下ソフトがインストールされていること
 
 * node.js
 * npm
-* Docker
 
-### AWS認証設定
-aws cliの認証設定が完了していること
-https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html
+### AWS
+* 有効なAWSアカウントを所持していること
+* [aws cliの認証設定](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html) が完了していること
 
-### AWSリソース
-以下モジュールに定義されているAWSリソースがデプロイされていること。
+## コマンド例
+以降に掲載するコマンド例のカレントディレクトリは、
+```<本リポジトリをcloneした場所>/packages/backend-ecs```であるとします。
 
-* @gbraver-burst-network/aws-vpc
-* @gbraver-burst-network/serverless
-
-## 動かし方
 ### セットアップ
-
 ```shell
-cd <本リポジトリをcloneした場所>/backend-ecs
-npm ci
 cp .env.template .env
 # 環境に応じた値をセットする
 vim .env
 ```
 
 ### デプロイ
-
 ```shell
-cd <本リポジトリをcloneした場所>/backend-ecs
 npm run deploy
 ```

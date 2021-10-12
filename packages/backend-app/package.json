@@ -1,7 +1,7 @@
 {
-  "name": "@gbraver-burst-network/serverless",
+  "name": "@gbraver-burst-network/backend-app",
   "version": "0.6.1",
-  "description": "gbraver burst serverless",
+  "description": "gbraver burst backend app",
   "private": true,
   "scripts": {
     "start:match-make": "run-s build:match-make serve:match-make",
