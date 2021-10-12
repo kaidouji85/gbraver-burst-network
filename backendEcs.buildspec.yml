@@ -4,11 +4,9 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
-  pre_build:
-    commands:
-      - npm ci
   build:
     commands:
       - cd packages/backend-ecs/
       - npm ci
+      - export MATCH_MAKE_ECR_TAG=`git rev-parse HEAD`
       - npm run deploy
