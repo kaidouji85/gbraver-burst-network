@@ -1,9 +1,11 @@
-version: 0.2
-
 # codebuildに以下環境変数を設定すること
 #
-# STAGE @gbraver-burst-network/serverless で指定したステージ名
-# MATCH_MAKE_ECR_REPOSITORY_NAME マッチメイクECRリポジトリ名
+# STAGE
+#   @gbraver-burst-network/serverless で指定したステージ名
+#
+# MATCH_MAKE_ECR_REPOSITORY_NAME
+#   マッチメイクECRリポジトリ名
+version: 0.2
 phases:
   install:
     runtime-versions:

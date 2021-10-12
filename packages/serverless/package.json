@@ -5,19 +5,15 @@
   "private": true,
   "scripts": {
     "start:match-make": "run-s build:match-make serve:match-make",
-    "deploy": "run-s type-check lint lint:test test deploy:api",
-    "deploy:api": "sls deploy --stage ${STAGE:-dev}",
-    "build": "run-s clean type-check lint lint:test test package:api package:match-make",
-    "build:api": "run-s type-check lint lint:test test package:api",
-    "build:match-make": "run-s clean type-check lint lint:test test package:match-make",
+    "clean": "rimraf .webpack",
+    "build": "run-s type-check lint lint:test test build:api build:match-make",
+    "build:api": "sls package",
+    "build:match-make": "webpack --config webpack.match.make.js",
     "type-check": "flow",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "test": "ava -T 600000",
-    "package:api": "sls package",
-    "package:match-make": "webpack --config webpack.match.make.js",
-    "serve:match-make": "node .webpack/match-making-polling.js",
-    "clean": "rimraf .webpack"
+    "serve:match-make": "node .webpack/match-making-polling.js"
   },
   "dependencies": {
     "aws-sdk": "^2.987.0",
