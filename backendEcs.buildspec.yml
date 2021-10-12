@@ -1,12 +1,16 @@
 version: 0.2
 
+# codebuildに以下環境変数を設定すること
+#
+# STAGE @gbraver-burst-network/serverless で指定したステージ名
+# MATCH_MAKE_ECR_REPOSITORY_NAME マッチメイクECRリポジトリ名
 phases:
   install:
     runtime-versions:
       nodejs: 14
   build:
     commands:
-      - cd packages/backend-ecs/
+      - cd packages/backend-ecs
       - npm ci
       - export MATCH_MAKE_ECR_TAG=`git rev-parse HEAD`
       - npm run deploy
