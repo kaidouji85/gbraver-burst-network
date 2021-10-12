@@ -9,5 +9,6 @@ phases:
       - npm ci
   build:
     commands:
-      - npm run bootstrap
-      - npm run deploy:backend-ecs
+      - cd packages/backend-ecs/
+      - npm ci
+      - npm run deploy

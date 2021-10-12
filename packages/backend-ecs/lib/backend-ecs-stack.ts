@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as iam from '@aws-cdk/aws-iam';
+import * as ecr from '@aws-cdk/aws-ecr';
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends cdk.StackProps {
@@ -21,6 +22,10 @@ interface BackendEcsProps extends cdk.StackProps {
   casualMatchEntriesTableARN: string,
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string,
+  /** マッチメイクECRリポジトリ名 */
+  matchMakeEcrRepositoryName: string,
+  /** マッチメイクECRタグ */
+  matchMakeEcrTag: string,
 }
 
 /** バックエンドECS スタック */
@@ -76,10 +81,9 @@ export class BackendEcsStack extends cdk.Stack {
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: "gbraver-burst-match-make",
     });
+    const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
     matchMakeTaskDefinition.addContainer(`match-make-container`, {
-      image: ecs.ContainerImage.fromAsset('../serverless', {
-        file: 'matchMake.Dockerfile'
-      }),
+      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.matchMakeEcrTag),
       environment: {
         STAGE: props.stage,
         WEBSOCKET_API_ID: props.websocketAPIID,
@@ -87,7 +91,7 @@ export class BackendEcsStack extends cdk.Stack {
       logging: matchMakeLogging,
     });
     const cluster = new ecs.Cluster(this, "cluster", { vpc });
-    const matchMakeService = new ecs.FargateService(this, "service", {
+    new ecs.FargateService(this, "service", {
       cluster,
       taskDefinition: matchMakeTaskDefinition
     });

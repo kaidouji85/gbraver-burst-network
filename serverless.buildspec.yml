@@ -9,5 +9,6 @@ phases:
       - npm ci
   build:
     commands:
-      - npm run bootstrap
-      - npm run deploy:serverless
+      - cd packages/serverless
+      - npm ci
+      - npm run deploy

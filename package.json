@@ -3,16 +3,12 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
-    "start:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub --stream --no-prefix start:production",
     "clean": "lerna run clean",
     "build": "run-s clean build:core build:serverless build:browser-sdk build:serverless-stub",
     "build:core": "lerna run --scope @gbraver-burst-network/core build",
     "build:serverless": "lerna run --scope @gbraver-burst-network/serverless build",
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
-    "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
-    "serve:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub --stream --no-prefix serve",
-    "deploy:serverless": "lerna run --scope @gbraver-burst-network/serverless --stream --no-prefix deploy",
-    "deploy:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs --stream --no-prefix deploy"
+    "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
