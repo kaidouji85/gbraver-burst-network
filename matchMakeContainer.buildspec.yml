@@ -16,7 +16,7 @@ phases:
       - echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
   build:
     commands:
-      - export IMAGE_TAG=`git rev-parse HEAD`
+      - IMAGE_TAG=latest
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f matchMake.Dockerfile .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:

@@ -3,6 +3,7 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as iam from '@aws-cdk/aws-iam';
 import * as ecr from '@aws-cdk/aws-ecr';
+import * as uuid from 'uuid';
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends cdk.StackProps {
@@ -23,9 +24,7 @@ interface BackendEcsProps extends cdk.StackProps {
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string,
   /** マッチメイクECRリポジトリ名 */
-  matchMakeEcrRepositoryName: string,
-  /** マッチメイクECRタグ */
-  matchMakeEcrTag: string,
+  matchMakeEcrRepositoryName: string
 }
 
 /** バックエンドECS スタック */
@@ -82,8 +81,12 @@ export class BackendEcsStack extends cdk.Stack {
       streamPrefix: "gbraver-burst-match-make",
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
-    matchMakeTaskDefinition.addContainer(`match-make-container`, {
-      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.matchMakeEcrTag),
+    // デプロイのタイミングで確実に最新版コンテナを起動したい
+    // しかし、タグをlatestで固定してしまうと、Cloudformationはコンテナに変更がないと見なされる
+    // なのでコンテナのIDにランダム値を含めることで、
+    // デプロイ毎にコンテナ定義を新規作成している
+    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
+      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, 'latest'),
       environment: {
         STAGE: props.stage,
         WEBSOCKET_API_ID: props.websocketAPIID,
