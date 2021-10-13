@@ -15,6 +15,6 @@ phases:
       nodejs: 14
   build:
     commands:
-      - cd packages/backend-app
+      - cd ${CODEBUILD_SRC_DIR}/packages/backend-app
       - npm ci
       - npx sls deploy --stage ${STAGE}

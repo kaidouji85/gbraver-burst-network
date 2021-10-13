@@ -12,7 +12,6 @@ phases:
       nodejs: 14
   build:
     commands:
-      - cd packages/backend-ecs
+      - cd ${CODEBUILD_SRC_DIR}/packages/backend-ecs
       - npm ci
-      - export MATCH_MAKE_ECR_TAG=`git rev-parse HEAD`
-      - npm run deploy
+      - npx cdk deploy -f --require-approval never

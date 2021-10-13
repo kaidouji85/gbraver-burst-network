@@ -35,5 +35,5 @@ vim .env
 
 ### デプロイ
 ```shell
-npm run deploy
+npx cdk deploy
 ```

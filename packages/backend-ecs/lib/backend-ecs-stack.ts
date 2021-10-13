@@ -3,6 +3,7 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as iam from '@aws-cdk/aws-iam';
 import * as ecr from '@aws-cdk/aws-ecr';
+import * as uuid from 'uuid';
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends cdk.StackProps {
@@ -23,9 +24,7 @@ interface BackendEcsProps extends cdk.StackProps {
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string,
   /** マッチメイクECRリポジトリ名 */
-  matchMakeEcrRepositoryName: string,
-  /** マッチメイクECRタグ */
-  matchMakeEcrTag: string,
+  matchMakeEcrRepositoryName: string
 }
 
 /** バックエンドECS スタック */
@@ -82,8 +81,10 @@ export class BackendEcsStack extends cdk.Stack {
       streamPrefix: "gbraver-burst-match-make",
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
-    matchMakeTaskDefinition.addContainer(`match-make-container`, {
-      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.matchMakeEcrTag),
+    // コンテナイメージを強制的に更新するために、
+    // タスク定義にUUIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
+    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
+      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, 'latest'),
       environment: {
         STAGE: props.stage,
         WEBSOCKET_API_ID: props.websocketAPIID,
