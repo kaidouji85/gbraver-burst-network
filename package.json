@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
     "clean": "lerna run clean",
-    "build": "run-s clean build:core build:browser-sdk build:serverless-stub build:backend-app",
+    "build": "run-s clean build:browser-core build:browser-sdk build:serverless-stub build:backend-app",
     "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",

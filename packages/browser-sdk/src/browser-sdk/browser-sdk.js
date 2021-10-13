@@ -1,7 +1,7 @@
 // @flow
 
 import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
-import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle} from '@gbraver-burst-network/core';
+import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle} from '@gbraver-burst-network/browser-core';
 import {BattleSDK} from './battle-sdk';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
