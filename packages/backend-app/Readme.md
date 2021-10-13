@@ -30,7 +30,6 @@ DBアクセス、業務ロジックをバックエンドアプリ間で共有す
 
 * node.js
 * npm
-* serverless cli
 
 ### AWS関連
 * AWSアカウントを所持していること
@@ -52,7 +51,7 @@ vim .env
 ### WebSocket API
 #### デプロイ
 ```shell
-sls deploy
+npx sls deploy
 ```
 
 #### 動作確認

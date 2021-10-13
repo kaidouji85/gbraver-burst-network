@@ -12,6 +12,6 @@ phases:
       nodejs: 14
   build:
     commands:
-      - cd packages/backend-ecs
+      - cd ${CODEBUILD_SRC_DIR}/packages/backend-ecs
       - npm ci
-      - npm run deploy
+      - npx cdk deploy -f --require-approval never
