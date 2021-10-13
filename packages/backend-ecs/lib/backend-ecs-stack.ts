@@ -81,10 +81,8 @@ export class BackendEcsStack extends cdk.Stack {
       streamPrefix: "gbraver-burst-match-make",
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
-    // デプロイのタイミングで確実に最新版コンテナを起動したい
-    // しかし、タグをlatestで固定してしまうと、Cloudformationはコンテナに変更がないと見なされる
-    // なのでコンテナのIDにランダム値を含めることで、
-    // デプロイ毎にコンテナ定義を新規作成している
+    // コンテナイメージを強制的に更新するために、
+    // タスク定義にUUIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
     matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
       image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, 'latest'),
       environment: {
