@@ -6,14 +6,16 @@
   "scripts": {
     "start:match-make": "run-s build:match-make serve:match-make",
     "clean": "rimraf .webpack",
-    "build": "run-s all-check build:api build:match-make",
-    "build:api": "sls package",
-    "build:match-make": "webpack --config webpack.match.make.js",
+    "build": "run-s all-check transpile:api transpile:match-make",
+    "build:api": "run-s all-check transpile:api",
+    "build:match-make": "run-s all-check transpile:match-make" ,
     "all-check": "run-s type-check lint lint:test test",
     "type-check": "flow",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "test": "ava -T 600000",
+    "transpile:api": "sls package",
+    "transpile:match-make": "webpack --config webpack.match.make.js",
     "serve:match-make": "node .webpack/match-making-polling.js"
   },
   "dependencies": {
