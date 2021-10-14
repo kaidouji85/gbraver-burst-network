@@ -63,7 +63,10 @@ npm run build
 ```
 
 #### 6. ECRリポジトリPush
-[matchMakeContainer.buildspec.yml](./matchMakeContainer.buildspec.yml) を参考に、ECRリポジトリにPushします。
+
+```shell
+./match-make-container-push.sh
+```
 
 #### 7. バックエンド処理用ECSデプロイ
 
