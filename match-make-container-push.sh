@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if　[ -z "$DOCKER_USER" ] || [ -z "$DOCKER_TOKEN" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$MATCH_MAKE_ECR_REPOSITORY_NAME" ]; then
+if [ -z "$DOCKER_USER" ] || [ -z "$DOCKER_TOKEN" ] || [ -z "$AWS_DEFAULT_REGION" ] || [ -z "$MATCH_MAKE_ECR_REPOSITORY_NAME" ]; then
   echo 'required environment variables are not defined'
   exit 1
 fi
