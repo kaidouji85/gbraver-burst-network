@@ -26,9 +26,10 @@ npm run build
   * node.js
   * npm
   * npx
+  * Docker
 * [リポジトリセットアップ済](#repository-setup)
 * [aws cli 認証設定済](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html)
-
+* [auth0 API 作成済](https://auth0.com/docs/configure/apis)
 
 <a id="create-ecr-repository"></a>
 #### 2. ECRリポジトリの作成
@@ -42,14 +43,20 @@ npm run build
 | 環境変数名 | 記載内容 |
 | --------- | ----------- |
 | STAGE | デプロイする環境のステージ名、dev、prodなどを記入する |
+| AUTH0_JWKS_URL | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
+| AUTH0_AUDIENCE | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | マッチメイク用Dockerイメージを格納したECRリポジトリ名 |
+
 
 <a id="create-vpc"></a>
 #### 4. VPCの作成
 [ここ](./packages/aws-vpc/README.md) を参考にVPCを作成します。
 
-#### 5. APIサーバデプロイ
-[serverless.buildspec.yml](./serverless.buildspec.yml) を参考に、serverless frameworkで構成されたAPIサーバをデプロイします。
+#### 5. serverlessデプロイ
+
+```shell
+./serverless-deploy.sh
+```
 
 #### 6. ECRリポジトリPush
 [matchMakeContainer.buildspec.yml](./matchMakeContainer.buildspec.yml) を参考に、ECRリポジトリにPushします。
@@ -72,6 +79,8 @@ AWS Parameter Storeに以下の値をセットします。
 | 名前 | 種類 | 値 |
 | ---- | ---- | --- |
 | /GbraverBurst/dev/stage | String | デプロイする環境のステージ名、dev、prodなどを記入する |
+| /GbraverBurst/dev/auth0JwksUrl | SecureString | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
+| /GbraverBurst/dev/auth0Audience | SecureString | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String | マッチメイク用Dockerイメージを格納したECRリポジトリ名 |
 
 #### 3. CodeBuildの作成
