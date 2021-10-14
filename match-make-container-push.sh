@@ -9,5 +9,6 @@ AWS_ACCOUNT_ID=`aws sts get-caller-identity --query Account --output text`
 aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
 IMAGE_TAG=latest
-docker build -t $MATCH_MAKE_ECR_REPOSITORY_NAME:$IMAGE_TAG -f matchMake.Dockerfile .
-docker tag $MATCH_MAKE_ECR_REPOSITORY_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+IMAGE_REPO_NAME=$MATCH_MAKE_ECR_REPOSITORY_NAME
+docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f matchMake.Dockerfile .
+docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
