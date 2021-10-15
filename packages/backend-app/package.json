@@ -17,7 +17,7 @@
     "lint:test": "eslint test",
     "test": "ava -T 600000",
     "transpile:sls": "sls package",
-    "transpile:match-make": "webpack --config webpack.match.make.js",
+    "transpile:match-make": "webpack --config matchMake.webpack.config.js",
     "serve:match-make": "node .webpack/match-making-polling.js"
   },
   "dependencies": {
