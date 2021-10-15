@@ -20,7 +20,7 @@ NAT Gatewayの料金を節約するために、開発、本番環境で同一の
 以降に掲載するコマンド例のカレントディレクトリは、
 ```<本リポジトリをcloneした場所>/packages/aws-vpc```であるとします。
 
-<a id="deploy-coomand"></a>
+<a id="deploy-command"></a>
 ### デプロイ
 ```shell
 npm run deploy
