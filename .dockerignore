@@ -1,5 +1,5 @@
-.idea
 .git
+.idea
 **/*/.env
 **/*/node_modules
 packages/backend-ecs/.serverless
