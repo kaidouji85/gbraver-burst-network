@@ -2,13 +2,13 @@
 
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
-import type {GbraverBurstConnectionsSchema, InBattle, None} from "./dynamo-db/gbraver-burst-connections";
+import type {ConnectionsSchema, InBattle, None} from "./dynamo-db/connections";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import type {SuddenlyBattleEnd} from "./response/websocket-response";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
-import {createBattles, createCasualMatchEntries, createGbraverBurstConnections} from "./dynamo-db/dao-creator";
+import {createBattles, createCasualMatchEntries, createConnections} from "./dynamo-db/dao-creator";
 import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -19,7 +19,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = createGbraverBurstConnections(dynamoDB, SERVICE, STAGE);
+const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 
@@ -45,7 +45,7 @@ export async function disconnect(event: WebsocketAPIEvent): Promise<WebsocketAPI
  * @param connection 接続情報
  * @return クリーンアップ完了時に発火するPromise
  */
-async function cleanUp(connection: GbraverBurstConnectionsSchema): Promise<void> {
+async function cleanUp(connection: ConnectionsSchema): Promise<void> {
   const inCasualMatchMaking = async () => {
     await casualMatchEntries.delete(connection.userID);
   };

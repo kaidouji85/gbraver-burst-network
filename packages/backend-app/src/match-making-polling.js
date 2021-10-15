@@ -3,7 +3,7 @@
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
 import {createDynamoDBClient} from "./dynamo-db/client";
-import type {InBattle} from './dynamo-db/gbraver-burst-connections';
+import type {InBattle} from './dynamo-db/connections';
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import type {CasualMatchEntriesSchema} from "./dynamo-db/casual-match-entries";
 import {matchMake} from "./match-make/match-make";
@@ -14,7 +14,7 @@ import {toPlayer} from "./core/battle";
 import type {UserID} from "./core/user";
 import type {BattleStart} from "./response/websocket-response";
 import {wait} from "./wait/wait";
-import {createBattles, createCasualMatchEntries, createGbraverBurstConnections} from "./dynamo-db/dao-creator";
+import {createBattles, createCasualMatchEntries, createConnections} from "./dynamo-db/dao-creator";
 import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -25,7 +25,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = createGbraverBurstConnections(dynamoDB, SERVICE, STAGE);
+const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;

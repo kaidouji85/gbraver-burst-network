@@ -16,7 +16,7 @@ import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
 import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from "./response/websocket-response";
 import {SERVICE} from "./sls/service";
-import {createBattleCommands, createBattles, createGbraverBurstConnections} from "./dynamo-db/dao-creator";
+import {createBattleCommands, createBattles, createConnections} from "./dynamo-db/dao-creator";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const STAGE = process.env.STAGE ?? '';
@@ -26,7 +26,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
-const connections = createGbraverBurstConnections(dynamoDB, SERVICE, STAGE);
+const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 const invalidRequestBody = {statusCode: 400, body: 'invalid request body'};

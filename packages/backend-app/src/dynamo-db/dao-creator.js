@@ -1,7 +1,7 @@
 // @flow
 
 import {DynamoDB} from "aws-sdk";
-import {GbraverBurstConnections} from "./gbraver-burst-connections";
+import {Connections} from "./connections";
 import {CasualMatchEntries} from "./casual-match-entries";
 import {BattleCommands} from "./battle-commands";
 import {Battles} from "./battles";
@@ -11,12 +11,12 @@ import {Battles} from "./battles";
  *
  * @param client DynamoDBクライアント
  * @param service serverlessサービス名
- * @param stage serverless ステージ名
+ * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createGbraverBurstConnections(client: typeof DynamoDB.DocumentClient, service: string, stage: string): GbraverBurstConnections {
+export function createConnections(client: typeof DynamoDB.DocumentClient, service: string, stage: string): Connections {
   const tableName = `${service}__${stage}__connections`;
-  return new GbraverBurstConnections(client, tableName);
+  return new Connections(client, tableName);
 }
 
 /**
@@ -24,7 +24,7 @@ export function createGbraverBurstConnections(client: typeof DynamoDB.DocumentCl
  *
  * @param client DynamoDBクライアント
  * @param service serverlessサービス名
- * @param stage serverless ステージ名
+ * @param stage serverlessステージ名
  * @return 生成結果
  */
 export function createCasualMatchEntries(client: typeof DynamoDB.DocumentClient, service: string, stage: string): CasualMatchEntries {
@@ -37,7 +37,7 @@ export function createCasualMatchEntries(client: typeof DynamoDB.DocumentClient,
  *
  * @param client DynamoDBクライアント
  * @param service serverlessサービス名
- * @param stage serverless ステージ名
+ * @param stage serverlessステージ名
  * @return 生成結果
  */
 export function createBattleCommands(client: typeof DynamoDB.DocumentClient, service: string, stage: string): BattleCommands {
