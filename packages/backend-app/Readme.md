@@ -4,9 +4,23 @@
 DBアクセス、業務ロジックをバックエンドアプリ間で共有するために、
 本リポジトリには全バックエンドアプリのコードが含まれています。
 
-##　アプリ一覧
-以下が、本リポジトリに含まれているアプリの一覧です。
-アプリ種別の詳細は [こちら](#アプリ種別について) をご確認ください。
+## コマンド例のカレントディレクトリについて
+特に断りがない限り、本書のコマンド例のカレントディレクトリは```<本リポジトリをcloneした場所>/packages/backend-app```であるとします。
+
+## 前提条件
+プロジェクトルートに記載されている[前提条件](../../Readme.md#pre-required)をクリアした上で、
+以下作業を実施してください。
+
+### .env生成
+```shell
+# .envに自分の環境に応じた値を記載する
+cp .env.template .env
+vim .env
+```
+
+## アプリ一覧
+以下が本リポジトリのアプリ一覧です。
+アプリ種別については、 [こちら](#アプリ種別について) をご確認ください。
 
 |#|アプリ名|アプリ種別|概要| 
 | --- | --- | --- | --- |
@@ -21,28 +35,7 @@ DBアクセス、業務ロジックをバックエンドアプリ間で共有す
 [AWS Fargate](https://aws.amazon.com/jp/fargate/) で動作する常駐型アプリです。
 ポーリング、バッチジョブなど、時間がかかる処理を担当しています。
 
-## 前提条件
-*  以下ソフトウェアがインストールされていること
-  * node.js
-  * npm
-  * npx
-  * aws cli
-* [リポジトリセットアップ済](../../Readme.md#repository-setup)
-* [aws cli 認証設定済](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html
-* [auth0 API 作成済](https://auth0.com/docs/configure/apis)
-
-## コマンド例
-以降に掲載するコマンド例のカレントディレクトリは、
-```<本リポジトリをcloneした場所>/packages/backend-app```であるとします。
-
-### 全アプリ共有
-#### セットアップ
-```shell
-# .envに自分の環境に応じた値を記載する
-cp .env.template .env
-vim .env
-```
-
+## 各種コマンド
 ### WebSocket API
 #### デプロイ
 ```shell
@@ -73,5 +66,5 @@ npm run start:match-make
 
 #### ビルド
 ```shell
-npn run build:match-make
+npm run build:match-make
 ```
