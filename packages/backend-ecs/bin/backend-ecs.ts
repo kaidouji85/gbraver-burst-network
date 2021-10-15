@@ -18,6 +18,6 @@ const casualMatchEntriesTableARN = cdk.Fn.importValue(`${service}:${stage}:Casua
 const battlesTableARN = cdk.Fn.importValue(`${service}:${stage}:BattlesTableArn`);
 
 const app = new cdk.App();
-new BackendEcsStack(app, `${service}__${stage}__backend-ecs`, {service, stage, vpcId, privateNetAvailabilityZone, privateSubnetId,
+new BackendEcsStack(app, `${service}-${stage}-backend-ecs`, {service, stage, vpcId, privateNetAvailabilityZone, privateSubnetId,
   websocketAPIID, connectionsTableARN, casualMatchEntriesTableARN, battlesTableARN, matchMakeEcrRepositoryName
 });
