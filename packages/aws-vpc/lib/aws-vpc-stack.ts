@@ -6,7 +6,7 @@ export class AwsVpcStack extends cdk.Stack {
   /**
    * @constructor
    * @param scope スコープ
-   * @param id ID
+   * @param id スタックのID
    * @param props CDKプロパティ
    */
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {

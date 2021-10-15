@@ -10,5 +10,5 @@ NAT Gatewayの料金を節約するために、開発、本番環境で同一の
 <a id="deploy-command"></a>
 ## VPCをデプロイする
 ```shell
-npm run deploy
+npx cdk deploy
 ```
