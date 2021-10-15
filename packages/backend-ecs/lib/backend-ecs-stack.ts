@@ -93,7 +93,7 @@ export class BackendEcsStack extends cdk.Stack {
       },
       logging: matchMakeLogging,
     });
-    const cluster = new ecs.Cluster(this, "cluster", { vpc });
+    const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {
       cluster,
       taskDefinition: matchMakeTaskDefinition
