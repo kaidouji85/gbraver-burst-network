@@ -1,20 +1,13 @@
-# codebuildに以下環境変数を設定すること
-#
-# AUTH0_JWKS_URL
-#   auth0 JWKS URL
-#
-# AUTH0_AUDIENCE
-#   auth0 audience
-#
-# STAGE
-#   @gbraver-burst-network/serverless で指定したステージ名
 version: 0.2
+env:
+  parameter-store:
+    STAGE: /GbraverBurst/dev/stage
+    AUTH0_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
+    AUTH0_AUDIENCE: /GbraverBurst/dev/auth0Audience
 phases:
   install:
     runtime-versions:
       nodejs: 14
   build:
     commands:
-      - cd ${CODEBUILD_SRC_DIR}/packages/backend-app
-      - npm ci
-      - npx sls deploy --stage ${STAGE}
+      - ./serverless-deploy.sh

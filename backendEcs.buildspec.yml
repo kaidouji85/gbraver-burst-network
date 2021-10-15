@@ -1,17 +1,12 @@
-# codebuildに以下環境変数を設定すること
-#
-# STAGE
-#   @gbraver-burst-network/serverless で指定したステージ名
-#
-# MATCH_MAKE_ECR_REPOSITORY_NAME
-#   マッチメイクECRリポジトリ名
 version: 0.2
+env:
+  parameter-store:
+    STAGE: /GbraverBurst/dev/stage
+    MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
 phases:
   install:
     runtime-versions:
       nodejs: 14
   build:
     commands:
-      - cd ${CODEBUILD_SRC_DIR}/packages/backend-ecs
-      - npm ci
-      - npx cdk deploy -f --require-approval never
+      - ./backend-ecs-deploy.sh

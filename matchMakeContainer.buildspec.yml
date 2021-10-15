@@ -1,24 +1,10 @@
-# codebuildに以下環境変数を設定すること
-#
-# DOCKER_USER
-#   dockerhubユーザ
-#
-# DOCKER_TOKEN
-#   dockerhubログイントークン
-#
-# IMAGE_REPO_NAME
-#   マッチメイク ECR リポジトリ名
 version: 0.2
+env:
+  parameter-store:
+    DOCKER_USER: /GbraverBurst/dev/dockerUser
+    DOCKER_TOKEN: /GbraverBurst/dev/dockerToken
+    MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
 phases:
-  pre_build:
-    commands:
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
   build:
     commands:
-      - IMAGE_TAG=latest
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f matchMake.Dockerfile .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-  post_build:
-    commands:
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - ./match-make-container-push.sh

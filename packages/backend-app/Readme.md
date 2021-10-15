@@ -22,19 +22,14 @@ DBアクセス、業務ロジックをバックエンドアプリ間で共有す
 ポーリング、バッチジョブなど、時間がかかる処理を担当しています。
 
 ## 前提条件
-### monorepo セットアップ
-[monorepoのセットアップ](../../Readme.md) が完了していること
-
-### 必須ソフト
-以下ソフトウェアがインストールされていること
-
-* node.js
-* npm
-
-### AWS関連
-* AWSアカウントを所持していること
-* [serverless cliのAWS認証](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) が完了していること
-* マッチメイクECSが使うECRリポジトリが作成済みであること
+*  以下ソフトウェアがインストールされていること
+  * node.js
+  * npm
+  * npx
+  * aws cli
+* [リポジトリセットアップ済](../../Readme.md#repository-setup)
+* [aws cli 認証設定済](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html
+* [auth0 API 作成済](https://auth0.com/docs/configure/apis)
 
 ## コマンド例
 以降に掲載するコマンド例のカレントディレクトリは、
@@ -43,8 +38,8 @@ DBアクセス、業務ロジックをバックエンドアプリ間で共有す
 ### 全アプリ共有
 #### セットアップ
 ```shell
+# .envに自分の環境に応じた値を記載する
 cp .env.template .env
-# 自分の環境に応じた値をセットする
 vim .env
 ```
 
