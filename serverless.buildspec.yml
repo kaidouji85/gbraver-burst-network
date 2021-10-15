@@ -1,0 +1,13 @@
+version: 0.2
+env:
+  parameter-store:
+    STAGE: /GbraverBurst/dev/stage
+    AUTH0_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
+    AUTH0_AUDIENCE: /GbraverBurst/dev/auth0Audience
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+  build:
+    commands:
+      - ./serverless-deploy.sh

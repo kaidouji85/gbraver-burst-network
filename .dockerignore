@@ -1,5 +1,6 @@
 .git
-.idea/
+.idea
 **/*/.env
 **/*/node_modules
-packages/monolithic-server/users.json
+packages/backend-ecs/.serverless
+packages/backend-ecs/.webpack

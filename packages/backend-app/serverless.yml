@@ -1,0 +1,169 @@
+service: gbraver-burst-serverless
+frameworkVersion: '2'
+useDotenv: true
+
+custom:
+  connections: ${self:service}__${sls:stage}__connections
+  casualMatchEntries: ${self:service}__${sls:stage}__casual-match-entries
+  battleCommands: ${self:service}__${sls:stage}__battle-commands
+  battles: ${self:service}__${sls:stage}__battles
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-1
+  lambdaHashingVersion: 20201221
+  websocketsApiName: gbraver-burst-ws-api
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    STAGE: ${sls:stage}
+    WEBSOCKET_API_ID:
+      Ref: WebsocketsApi
+    AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
+    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 'dynamodb:PutItem'
+        - 'dynamodb:GetItem'
+        - 'dynamodb:DeleteItem'
+        - 'dynamodb:Scan'
+        - 'dynamodb:BatchWrite*'
+      Resource:
+        - Fn::GetAtt: [ConnectionsTable, Arn]
+        - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+        - Fn::GetAtt: [BattleCommandsTable, Arn]
+        - Fn::GetAtt: [BattlesTable, Arn]
+    - Effect: Allow
+      Action:
+        - 'execute-api:ManageConnections'
+      Resource:
+        - 'arn:aws:execute-api:*:*:**/@connections/*'
+
+functions:
+  auth:
+    handler: src/authorizer.authorizer
+  connect:
+    handler: src/connect.connect
+    events:
+      - websocket:
+          route: $connect
+          authorizer:
+            name: auth
+            identitySource:
+              - 'route.request.querystring.token'
+  disconnect:
+    handler: src/disconnect.disconnect
+    events:
+      - websocket:
+          route: $disconnect
+  ping:
+    handler: src/ping.ping
+    events:
+      - websocket:
+          route: ping
+  enterCasualMatch:
+    handler: src/enter-casual-match.enterCasualMatch
+    events:
+      - websocket:
+          route: enter-casual-match
+  sendCommand:
+    handler: src/send-command.sendCommand
+    events:
+      - websocket:
+          route: send-command
+  battleProgressPolling:
+    handler: src/battle-progress-polling.battleProgressPolling
+    events:
+      - websocket:
+          route: battle-progress-polling
+
+resources:
+  Resources:
+    ConnectionsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.connections}
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    CasualMatchEntriesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.casualMatchEntries}
+        AttributeDefinitions:
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    BattleCommandsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battleCommands}
+        AttributeDefinitions:
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    BattlesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.battles}
+        AttributeDefinitions:
+          - AttributeName: battleID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: battleID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+  Outputs:
+    WebsoketApiId:
+      Description: "id of websocket api gateway"
+      Value:
+        Ref: WebsocketsApi
+      Export:
+        Name: ${self:service}:${sls:stage}:WebsoketApiId
+    ConnectionsTableArn:
+      Description: "arn of connections table"
+      Value:
+        Fn::GetAtt: [ConnectionsTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:ConnectionsTableArn
+    CasualMatchEntriesTableArn:
+      Description: "arn of casual match entries table"
+      Value:
+        Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:CasualMatchEntriesTableArn
+    BattlesTableArn:
+      Description: "arn of battles table"
+      Value:
+        Fn::GetAtt: [BattlesTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:BattlesTableArn
+    BattleCommandsTableArn:
+      Description: "arn of battle commands table"
+      Value:
+        Fn::GetAtt: [BattleCommandsTable, Arn]
+      Export:
+        Name: ${self:service}:${sls:stage}:BattleCommandsTableArn
