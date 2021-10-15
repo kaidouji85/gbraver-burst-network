@@ -7,7 +7,9 @@ import * as uuid from 'uuid';
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends cdk.StackProps {
-  /** @gbraver-burst-network/serverless のステージ名 */
+  /** サービス名 */
+  service: string,
+  /** ステージ名 */
   stage: string,
   /** 本ECSを起動するVPCのID */
   vpcId: string,
@@ -71,14 +73,14 @@ export class BackendEcsStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
       inlinePolicies: {matchMakePolicy}
     });
-    const matchMakeTaskDefinition = new ecs.TaskDefinition(this, "taskdef", {
+    const matchMakeTaskDefinition = new ecs.TaskDefinition(this, ",match-make-taskdef", {
       compatibility: ecs.Compatibility.FARGATE,
       cpu: "256",
       memoryMiB: "512",
       taskRole: matchMakeServiceTaskRole
     });
     const matchMakeLogging = new ecs.AwsLogDriver({
-      streamPrefix: "gbraver-burst-match-make",
+      streamPrefix: `${props.service}__${props.stage}__match-make`,
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
     // コンテナイメージを強制的に更新するために、

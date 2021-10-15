@@ -7,6 +7,7 @@ test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
     const stack = new BackendEcsStack(app, 'MyTestStack', {
+      service: 'gbraver-burst-serverless',
       stage: 'dev',
       vpcId: 'MyVpcId',
       privateSubnetId: 'MyPrivateSubnetId',

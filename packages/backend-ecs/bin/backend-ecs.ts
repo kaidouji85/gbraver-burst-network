@@ -6,17 +6,18 @@ import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
 dotenv.config();
 
+const service = 'gbraver-burst-serverless';
 const stage = process.env.STAGE ?? 'dev';
 const matchMakeEcrRepositoryName = process.env.MATCH_MAKE_ECR_REPOSITORY_NAME ?? '';
 const vpcId = cdk.Fn.importValue('gbraver-burst-vpc:VpcId');
 const privateNetAvailabilityZone = cdk.Fn.importValue('gbraver-burst-vpc:PrivateNetAvailabilityZone');
 const privateSubnetId = cdk.Fn.importValue('gbraver-burst-vpc:PrivateSubnetId');
-const websocketAPIID = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:WebsoketApiId`);
-const connectionsTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:ConnectionsTableArn`);
-const casualMatchEntriesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:CasualMatchEntriesTableArn`);
-const battlesTableARN = cdk.Fn.importValue(`gbraver-burst-serverless:${stage}:BattlesTableArn`);
+const websocketAPIID = cdk.Fn.importValue(`${service}:${stage}:WebsoketApiId`);
+const connectionsTableARN = cdk.Fn.importValue(`${service}:${stage}:ConnectionsTableArn`);
+const casualMatchEntriesTableARN = cdk.Fn.importValue(`${service}:${stage}:CasualMatchEntriesTableArn`);
+const battlesTableARN = cdk.Fn.importValue(`${service}:${stage}:BattlesTableArn`);
 
 const app = new cdk.App();
-new BackendEcsStack(app, `gbraver-burst-backend-ecs-${stage}`, {stage, vpcId, privateNetAvailabilityZone, privateSubnetId,
+new BackendEcsStack(app, `${service}__${service}__backend-ecs`, {service, stage, vpcId, privateNetAvailabilityZone, privateSubnetId,
   websocketAPIID, connectionsTableARN, casualMatchEntriesTableARN, battlesTableARN, matchMakeEcrRepositoryName
 });
