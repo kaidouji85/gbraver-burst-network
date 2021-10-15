@@ -29,6 +29,14 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;
+// コンテナ起動から1日経過したら停止したい
+//   1日 = 86400秒
+//   ポーリング間隔 = 3秒
+// これより
+//     1日 / ポーリング間隔
+//   = 86400 / 3
+//   = 28800回
+// ポーリングしたら1日経過している
 const maxPollingCount = 28800;
 
 (async () => {
