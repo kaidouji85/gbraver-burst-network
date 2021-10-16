@@ -53,7 +53,8 @@ npm run build
 
 | 環境変数名 | 記載内容 |
 | --------- | ----------- |
-| STAGE | デプロイする環境のステージ名、dev、prodなどを記入する |
+| SERVICE | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する |
+| STAGE | デプロイする環境のステージ名、v001、v010などを記入する |
 | AUTH0_JWKS_URL | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | AUTH0_AUDIENCE | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | マッチメイク用ECRリポジトリ名 |

@@ -15,10 +15,10 @@ import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
 import {createApiGatewayManagementApi} from "./api-gateway/management";
 import {Notifier} from "./api-gateway/notifier";
 import type {BattleEnd, BattleProgressed, NotReadyBattleProgress, Error} from "./response/websocket-response";
-import {SERVICE} from "./sls/service";
 import {createBattleCommands, createBattles, createConnections} from "./dynamo-db/dao-creator";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const SERVICE = process.env.SERVICE ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 

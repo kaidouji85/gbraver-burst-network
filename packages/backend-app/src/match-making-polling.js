@@ -15,9 +15,9 @@ import type {UserID} from "./core/user";
 import type {BattleStart} from "./response/websocket-response";
 import {wait} from "./wait/wait";
 import {createBattles, createCasualMatchEntries, createConnections} from "./dynamo-db/dao-creator";
-import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const SERVICE = process.env.SERVICE ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 
