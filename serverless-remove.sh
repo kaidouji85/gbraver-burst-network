@@ -6,5 +6,5 @@ if [ -z "$SERVICE" ] || [ -z "$STAGE" ]; then
 fi
 
 OWN_PATH=`cd $(dirname ${0}) && pwd`
-cd ${OWN_PATH}/backend-app
+cd ${OWN_PATH}/packages/backend-app
 npx sls remove --stage ${STAGE}
