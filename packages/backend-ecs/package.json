@@ -1,6 +1,7 @@
 {
   "name": "@gbraver-burst-network/backend-ecs",
   "version": "0.1.0",
+  "private": true,
   "bin": {
     "backend-ecs": "bin/backend-ecs.js"
   },
