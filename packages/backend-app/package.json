@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/backend-app",
-  "version": "0.6.1",
+  "version": "1.0.0",
   "description": "gbraver burst backend app",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "clean:webpack": "rimraf .webpack",
     "build": "run-s clean all-check transpile:sls transpile:match-make",
     "build:sls": "run-s clean:sls all-check transpile:sls",
-    "build:match-make": "run-s clean:webpack all-check transpile:match-make" ,
+    "build:match-make": "run-s clean:webpack all-check transpile:match-make",
     "all-check": "run-s type-check lint lint:test test",
     "type-check": "flow",
     "lint": "eslint src",
