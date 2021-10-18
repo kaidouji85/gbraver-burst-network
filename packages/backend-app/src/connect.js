@@ -5,9 +5,9 @@ import {createDynamoDBClient} from "./dynamo-db/client";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
 import {extractUser} from './lambda/extract-user';
 import {createConnections} from "./dynamo-db/dao-creator";
-import {SERVICE} from "./sls/service";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const SERVICE = process.env.SERVICE ?? '';
 const STAGE = process.env.STAGE ?? '';
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);

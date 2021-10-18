@@ -1,4 +1,4 @@
-service: gbraver-burst-serverless
+service: ${env:SERVICE, "gbraver-burst-sls-dev"}
 frameworkVersion: '2'
 useDotenv: true
 
@@ -19,6 +19,7 @@ provider:
   websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
+    SERVICE: ${self:service}
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi

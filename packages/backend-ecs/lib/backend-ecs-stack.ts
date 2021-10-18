@@ -69,7 +69,6 @@ export class BackendEcsStack extends cdk.Stack {
       ],
     });
     const matchMakeServiceTaskRole = new iam.Role(this, 'match-make-service-task-role', {
-      roleName: 'ecs-service-task-role',
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
       inlinePolicies: {matchMakePolicy}
     });
@@ -86,8 +85,9 @@ export class BackendEcsStack extends cdk.Stack {
     // コンテナイメージを強制的に更新するために、
     // タスク定義にUUIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
     matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
-      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, 'latest'),
+      image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.stage),
       environment: {
+        SERVICE: props.service,
         STAGE: props.stage,
         WEBSOCKET_API_ID: props.websocketAPIID,
       },

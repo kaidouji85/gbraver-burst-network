@@ -6,7 +6,7 @@ import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
 dotenv.config();
 
-const service = 'gbraver-burst-serverless';
+const service = process.env.SERVICE ?? '';
 const stage = process.env.STAGE ?? 'dev';
 const matchMakeEcrRepositoryName = process.env.MATCH_MAKE_ECR_REPOSITORY_NAME ?? '';
 const vpcId = cdk.Fn.importValue('gbraver-burst-vpc:VpcId');

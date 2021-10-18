@@ -1,6 +1,7 @@
 version: 0.2
 env:
   parameter-store:
+    SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
 phases:

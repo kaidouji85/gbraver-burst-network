@@ -1,5 +1,6 @@
 // @flow
 
+import * as dotenv from 'dotenv';
 import {v4 as uuidv4} from 'uuid';
 import {ArmDozers, Pilots, startGbraverBurst} from "gbraver-burst-core";
 import {createDynamoDBClient} from "./dynamo-db/client";
@@ -15,9 +16,11 @@ import type {UserID} from "./core/user";
 import type {BattleStart} from "./response/websocket-response";
 import {wait} from "./wait/wait";
 import {createBattles, createCasualMatchEntries, createConnections} from "./dynamo-db/dao-creator";
-import {SERVICE} from "./sls/service";
+
+dotenv.config();
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
+const SERVICE = process.env.SERVICE ?? '';
 const STAGE = process.env.STAGE ?? '';
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? '';
 
@@ -41,12 +44,12 @@ const maxPollingCount = 28800;
 
 (async () => {
   for(let i=0; i < maxPollingCount; i++) {
-    console.log(`${new Date().toString()} polling`);
+    (i % 30 === 0) && console.log(`${new Date().toString()} polling`);
     const start = Date.now();
     await matchMakingPolling();
     const end = Date.now();
     const executeTime = end- start;
-    const waitTime = Math.max(intervalInMillisecond - executeTime, 0);
+    const waitTime = Math.max(intervalInMillisecond - executeTime, 1000);
     await wait(waitTime);
   }
 })();

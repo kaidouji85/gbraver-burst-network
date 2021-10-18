@@ -12,9 +12,7 @@ DBアクセス、業務ロジックをバックエンドアプリ間で共有す
 
 ### .env生成
 ```shell
-# .envに自分の環境に応じた値を記載する
 cp .env.template .env
-vim .env
 ```
 
 ## アプリ一覧
@@ -38,6 +36,8 @@ vim .env
 ### WebSocket API
 #### デプロイ
 ```shell
+# sls deploy実行時に必要な環境変数を記載する
+vim .env
 npx sls deploy
 ```
 
@@ -60,6 +60,8 @@ wscat -c "$API_URL?token=$ACCESS_TOKEN"
 ### マッチメイクECS
 #### ローカル環境での動作確認
 ```shell
+# sls deployで動的生成した値、同コマンドの実行状況の環境変数を記載する
+vim .env
 npm run start:match-make
 ```
 
