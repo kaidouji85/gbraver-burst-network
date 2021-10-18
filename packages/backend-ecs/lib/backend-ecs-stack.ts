@@ -87,6 +87,7 @@ export class BackendEcsStack extends cdk.Stack {
     matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
       image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.stage),
       environment: {
+        SERVICE: props.service,
         STAGE: props.stage,
         WEBSOCKET_API_ID: props.websocketAPIID,
       },
