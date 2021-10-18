@@ -68,6 +68,12 @@ npm run build
 ./serverless-deploy.sh
 ```
 
+#### serverless環境削除
+
+```shell
+./serverless-remove.sh
+```
+
 #### ECRリポジトリPush
 
 ```shell
@@ -77,7 +83,13 @@ npm run build
 #### バックエンド処理用ECSデプロイ
 
 ```shell
-./esc-backend-deploy.sh
+./backend-ecs-deploy.sh
+```
+
+#### バックエンド処理用ECS環境削除
+
+```shell
+./backend-ecs-remove.sh
 ```
 
 ### CodepipelineでCI/CDする
