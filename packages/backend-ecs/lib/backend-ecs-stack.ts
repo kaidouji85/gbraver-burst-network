@@ -69,7 +69,6 @@ export class BackendEcsStack extends cdk.Stack {
       ],
     });
     const matchMakeServiceTaskRole = new iam.Role(this, 'match-make-service-task-role', {
-      roleName: 'ecs-service-task-role',
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
       inlinePolicies: {matchMakePolicy}
     });
