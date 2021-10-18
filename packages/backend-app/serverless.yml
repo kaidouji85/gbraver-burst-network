@@ -1,4 +1,4 @@
-service: ${env:SERVICE, "gbraver-burst-serverless-dev"}
+service: ${env:SERVICE, "gbraver-burst-sls-dev"}
 frameworkVersion: '2'
 useDotenv: true
 
