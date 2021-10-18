@@ -1,7 +1,7 @@
 // @flow
 
 import type {Player, GameState, Command} from "gbraver-burst-core";
-import type {Battle} from '@gbraver-burst-network/core';
+import type {Battle} from '@gbraver-burst-network/browser-core';
 import {sendCommand, sendCommandWithPolling} from "../websocket/send-command";
 
 /** コンストラクタのパラメータ */

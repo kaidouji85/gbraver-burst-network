@@ -1,25 +1,15 @@
 # GブレイバーバーストブラウザSDK
 
 ## はじめに
-GブレイバーバーストのブラウザSDKです
+本リポジトリは、GブレイバーバーストのブラウザSDKです。
 
-## ビルド方法
-### 前提
-「[clone直後にやること](../../Readme.md)」を予め実行している
+## コマンド例のカレントディレクトリについて
+特に断りがない限り、本書のコマンド例のカレントディレクトリは```<本リポジトリをcloneした場所>/packages/browser-sdk```であるとします。
 
-## ビルドコマンド
+## 前提条件
+プロジェクトルートに記載されている[前提条件](../../Readme.md#pre-required)をクリアしてください。
 
+## ビルド
 ```shell
-# 通常ビルド
-cd <本リポジトリのルート>
-npm run build:browser-sdk
-# or
-cd <本リポジトリのルート>/packages/browser-sdk/
 npm run build
-
-# フルビルド
-cd <本リポジトリのルート>
-npm run clean
-npm run build:core
-npm run build:browser-sdk
 ```
