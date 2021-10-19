@@ -60,7 +60,7 @@ const maxPollingCount = 28800;
  * @return 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
-  const entries = await casualMatchEntries.scan();
+  const entries = await casualMatchEntries.scan(100);
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players = [createPlayerSchema(matching[0]), createPlayerSchema(matching[1])];
