@@ -32,6 +32,7 @@ export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: R
  *   }
  * });
  *
+ * @template X 本関数が返すデータ型
  * @param websocket messageイベントを処理するwebsocket
  * @param messageHandler messageイベントが発火した時のハンドラ
  * @return messageHandler内でresolveされたデータ
