@@ -2,6 +2,7 @@
 
 import type {GameState, Command} from "gbraver-burst-core";
 import type {Player} from "gbraver-burst-core/lib/player/player";
+import {Observable} from 'rxjs';
 
 /** 
  * バトル
@@ -22,4 +23,11 @@ export interface Battle {
    * @return ゲーム結果
    */
   progress(command: Command): Promise<GameState[]>;
+
+  /**
+   * バトル強制終了の通知ストリーム
+   * 
+   * @return {Observable<void>} 通知ストリーム
+   */
+  suddenlyBattleNotifier(): typeof Observable;
 }

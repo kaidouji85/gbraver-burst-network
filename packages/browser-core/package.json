@@ -29,6 +29,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "gbraver-burst-core": "^1.10.0"
+    "gbraver-burst-core": "^1.10.0",
+    "rxjs": "^7.4.0"
   }
 }

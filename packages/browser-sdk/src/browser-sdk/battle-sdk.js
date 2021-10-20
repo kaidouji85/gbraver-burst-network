@@ -3,6 +3,10 @@
 import type {Player, GameState, Command} from "gbraver-burst-core";
 import type {Battle} from '@gbraver-burst-network/browser-core';
 import {sendCommand, sendCommandWithPolling} from "../websocket/send-command";
+import {Observable, fromEvent, map, filter} from 'rxjs';
+import {parseJSON} from "../json/parse";
+import {parseSuddenlyBattleEnd} from "../response/suddenly-battle-end";
+import type {SuddenlyBattleEnd} from "../response/suddenly-battle-end";
 
 /** コンストラクタのパラメータ */
 type Param = {
@@ -35,6 +39,7 @@ export class BattleSDK implements Battle {
   _battleID: string;
   _flowID: string;
   _isPoller: boolean;
+  _suddenlyBattleEnd: typeof Observable;
 
   /**
    * コンストラクタ
@@ -49,6 +54,13 @@ export class BattleSDK implements Battle {
     this._battleID = param.battleID;
     this._flowID = param.initialFlowID;
     this._isPoller = param.isPoller;
+    this._suddenlyBattleEnd = fromEvent(this._websocket, 'message').pipe(
+      map((e: MessageEvent) => parseJSON(e.data)),
+      filter((data: ?Object) => data),
+      map((data: Object) => parseSuddenlyBattleEnd(data)),
+      filter((sudenlyBattleEnd: ?SuddenlyBattleEnd) => sudenlyBattleEnd),
+      map(() => {})
+    );
   }
   
   /** @override */
@@ -60,5 +72,10 @@ export class BattleSDK implements Battle {
       this._flowID = result.flowID;
     }
     return result.update;
+  }
+
+  /** @override */
+  suddenlyBattleNotifier(): typeof Observable {
+    return this._suddenlyBattleEnd;
   }
 }
