@@ -11,7 +11,6 @@ import {parseJSON} from "../json/parse";
 import {parseBattleEnd} from "../response/battle-end";
 import {wait} from "../wait/wait";
 import {parseNotReadyBattleProgress} from "../response/not-ready-battle-progress";
-import {parseSuddenlyBattleEnd} from "../response/suddenly-battle-end";
 import {parseAcceptCommand} from "../response/accept-command";
 import type {AcceptCommand} from "../response/accept-command";
 
@@ -27,14 +26,8 @@ import type {AcceptCommand} from "../response/accept-command";
  */
 export function sendCommand(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
   sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
-  return onMessage(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject) => {
+  return onMessage(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>) => {
     const data = parseJSON(e.data);
-
-    const suddenlyBattleEnd = parseSuddenlyBattleEnd(data);
-    if (suddenlyBattleEnd) {
-      reject(suddenlyBattleEnd);
-      return;
-    }
 
     const battleProgressed = parseBattleProgressed(data);
     if (battleProgressed) {
@@ -79,12 +72,6 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
   battleProgressPolling();
   return onMessage(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
     const data = parseJSON(e.data);
-
-    const suddenlyBattleEnd = parseSuddenlyBattleEnd(data);
-    if (suddenlyBattleEnd) {
-      reject(suddenlyBattleEnd);
-      return;
-    }
     
     const notReadyBattleProgress = parseNotReadyBattleProgress(data);
     const isOverPollingCount = maxPollingCount <= pollingCount;
