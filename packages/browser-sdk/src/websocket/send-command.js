@@ -4,7 +4,7 @@ import type {Command} from "gbraver-burst-core";
 import type {BattleProgressed} from "../response/battle-progressed";
 import type {BattleEnd} from "../response/battle-end";
 import {sendToAPIServer} from "./send-to-api-server";
-import {onMessage} from "./message";
+import {waitUntil} from "./wait-until";
 import type {Reject, Resolve} from "../promise/promise";
 import {parseBattleProgressed} from "../response/battle-progressed";
 import {parseJSON} from "../json/parse";
@@ -26,7 +26,7 @@ import type {AcceptCommand} from "../response/accept-command";
  */
 export function sendCommand(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
   sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
-  return onMessage(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>) => {
+  return waitUntil(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>) => {
     const data = parseJSON(e.data);
 
     const battleProgressed = parseBattleProgressed(data);
@@ -64,13 +64,13 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
   };
 
   sendToAPIServer(websocket, {action: 'send-command', battleID, flowID, command});
-  await onMessage(websocket, (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
+  await waitUntil(websocket, (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
     const data = parseJSON(e.data);
     const acceptCommand = parseAcceptCommand(data);
     acceptCommand && resolve(acceptCommand);
   });
   battleProgressPolling();
-  return onMessage(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
+  return waitUntil(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
     const data = parseJSON(e.data);
     
     const notReadyBattleProgress = parseNotReadyBattleProgress(data);
