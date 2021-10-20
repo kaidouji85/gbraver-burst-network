@@ -25,6 +25,9 @@ export class BattlePlayer01 implements UseCase {
   /** @override */
   async execute(): Promise<void> {
     const battle = await this._sdk.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
+    battle.suddenlyBattleNotifier().subscribe(() => {
+      console.log('suddenly battle end');
+    });
     console.log(battle.player, battle.enemy, battle.initialState);
     const update01 = await battle.progress({type: 'BATTERY_COMMAND', battery: 5});
     console.log(update01);

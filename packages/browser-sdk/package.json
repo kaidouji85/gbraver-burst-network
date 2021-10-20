@@ -21,7 +21,8 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.1",
     "@gbraver-burst-network/browser-core": "^1.0.0",
-    "gbraver-burst-core": "^1.10.0"
+    "gbraver-burst-core": "^1.10.0",
+    "rxjs": "^7.4.0"
   },
   "devDependencies": {
     "@ava/babel": "^2.0.0",

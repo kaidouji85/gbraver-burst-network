@@ -1,6 +1,6 @@
 // @flow
 
-import {onMessage} from "./message";
+import {waitUntil} from "./wait-until";
 import type {Resolve} from "../promise/promise";
 import {parseJSON} from "../json/parse";
 import type {Pong} from "../response/pong";
@@ -15,7 +15,7 @@ import {sendToAPIServer} from "./send-to-api-server";
  */
 export function ping(websocket: WebSocket): Promise<Pong> {
   sendToAPIServer(websocket, {action: 'ping'});
-  return onMessage(websocket, (e: MessageEvent, resolve: Resolve<Pong>): void => {
+  return waitUntil(websocket, (e: MessageEvent, resolve: Resolve<Pong>): void => {
     const data = parseJSON(e.data);
     const response = parsePong(data);
     response && resolve(response);
