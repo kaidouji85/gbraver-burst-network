@@ -52,6 +52,7 @@ const maxPollingCount = 28800;
     const waitTime = Math.max(intervalInMillisecond - executeTime, 1000);
     await wait(waitTime);
   }
+  console.log(`${new Date().toString()} end`);
 })();
 
 /**
