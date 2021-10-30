@@ -109,14 +109,21 @@ AWS Parameter Storeに以下の値をセットします。
 
 #### CodeBuildの作成
 
-以下構成のCodeBuildを作成します。
+以下がGブレイバーバーストのビルド環境です。
 
-| # | 概要 | BuildSpec |
-| - | ---- | --------- |
-| DEVCB-01 | テスト | backendAppTest.buildspec.yml |
-| DEVCB-02 | serverlessデプロイ | serverless.buildspec.yml |
-| DEVCB-03 | マッチメイクEcrPush| matchMakeContainer.buildspec.yml |
-| DEVCB-04 | バックエンドECSデプロイ| backendEcs.buildspec.yml |
+| # | ビルド環境 | 説明 |
+|---|----------|------|
+| BLD-01 | codebuild.node16.Dockerfile | [codebuild.node16.Dockerfile](./codebuild.node16.Dockerfile)から生成するカスタムイメージ |
+| BLD-02 | ubuntu/standard/5.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/5.0) を参照 |
+
+以下がGブレイバーバーストで利用するCodeBuildプロジェクトになります。
+
+| # | 概要 | BuildSpec | ビルド環境 |
+|---|------| --------- | -------- |
+| DEVCB-01 | テスト | backendAppTest.buildspec.yml | codebuild.node16.Dockerfile |
+| DEVCB-02 | serverlessデプロイ | serverless.buildspec.yml | codebuild.node16.Dockerfile |
+| DEVCB-03 | マッチメイクEcrPush| matchMakeContainer.buildspec.yml | ubuntu/standard/5.0 |
+| DEVCB-04 | バックエンドECSデプロイ| backendEcs.buildspec.yml | codebuild.node16.Dockerfile |
 
 #### CodePipelineの作成
 

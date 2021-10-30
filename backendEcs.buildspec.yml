@@ -5,9 +5,6 @@ env:
     STAGE: /GbraverBurst/dev/stage
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
 phases:
-  install:
-    runtime-versions:
-      nodejs: 14
   build:
     commands:
       - ./backend-ecs-deploy.sh
