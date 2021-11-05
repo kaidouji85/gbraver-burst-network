@@ -33,7 +33,7 @@ cp .env.template .env
 ポーリング、バッチジョブなど、時間がかかる処理を担当しています。
 
 ## 各種コマンド
-### WebSocket API
+### APIサーバ
 #### デプロイ
 ```shell
 # sls deploy実行時に必要な環境変数を記載する
@@ -41,7 +41,7 @@ vim .env
 npx sls deploy
 ```
 
-#### 動作確認
+#### WebSocketAPI 動作確認
 ```shell
 npm install -g wscat
 
@@ -55,6 +55,13 @@ ACCESS_TOKEN=<auth0 access token>
 wscat -c "$API_URL?token=$ACCESS_TOKEN"
 {"action":"ping"}
 -> サーバからメッセージが返される
+```
+
+#### RestAPI 動作確認
+```shell
+API_URL=<AWS APIGatewayのURL>
+ACCESS_TOKEN=<auth0 access token>
+curl -XDELETE -H "Authorization: Bearer ${ACCESS_TOKEN}" "${API_URL}"
 ```
 
 ### マッチメイクECS

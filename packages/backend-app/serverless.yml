@@ -16,6 +16,12 @@ provider:
   runtime: nodejs14.x
   region: ap-northeast-1
   lambdaHashingVersion: 20201221
+  httpApi:
+    authorizers:
+      restAPIAuthorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl: https://${env:AUTH0_DOMAIN}/
+        audience: ${env:AUTH0_AUDIENCE, ''}
   websocketsApiName: gbraver-burst-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -46,15 +52,23 @@ provider:
         - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
-  auth:
+  wsAPIAuthorizer:
     handler: src/authorizer.authorizer
+  deleteAccount:
+    handler: src/delete-account.deleteAccount
+    events:
+      - httpApi:
+          path: /
+          method: delete
+          authorizer:
+            name: restAPIAuthorizer
   connect:
     handler: src/connect.connect
     events:
       - websocket:
           route: $connect
           authorizer:
-            name: auth
+            name: wsAPIAuthorizer
             identitySource:
               - 'route.request.querystring.token'
   disconnect:
