@@ -4,7 +4,7 @@ import {v4 as uuidv4} from 'uuid';
 import {uniq} from "ramda";
 import {restoreGbraverBurst} from "gbraver-burst-core";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
-import {extractUser} from "./lambda/extract-user";
+import {extractUserFromWSAuthorizer} from "./lambda/extract-user";
 import type {WebsocketAPIResponse} from "./lambda/websocket-api-response";
 import {parseBattleProgressPolling} from "./request/battle-progress-polling";
 import {parseJSON} from "./json/parse";
@@ -70,7 +70,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
   const playerOfCommand1 = battle.players.find(v => v.userID === command1.userID);
   const isSameBattleIDs = isSameValues([data.battleID, battle.battleID, command0.battleID, command0.battleID]);
   const isSameFlowIDs = isSameValues([data.flowID, battle.flowID, command0.flowID, command1.flowID])
-  const user = extractUser(event.requestContext.authorizer);
+  const user = extractUserFromWSAuthorizer(event.requestContext.authorizer);
   const isPoller = user.userID === battle.poller;
   if (!isSameBattleIDs || !isSameFlowIDs || !isPoller || !playerOfCommand0 || !playerOfCommand1) {
     await notifier.notifyToClient(event.requestContext.connectionId, notReadyBattleProgress);
