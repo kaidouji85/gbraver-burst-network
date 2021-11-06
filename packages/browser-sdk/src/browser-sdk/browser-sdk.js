@@ -66,7 +66,8 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async deleteLoggedInAccount(): Promise<void> {
-    await deleteLoggedInAccount(this._restAPIURL);
+    const accessToken = await this._auth0Client.getTokenSilently();
+    await deleteLoggedInAccount(this._restAPIURL, accessToken);
   }
 
   /** @override */
