@@ -9,6 +9,7 @@ import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect
 import {ping} from '../websocket/ping';
 import {connect} from "../websocket/connect";
 import {enterCasualMatch} from '../websocket/enter-casual-match';
+import {deleteLoggedInAccount} from "../http-request/delete-logged-in-account";
 
 /** ブラウザSDK */
 export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, loggedInAccountDelete {}
@@ -65,7 +66,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async deleteLoggedInAccount(): Promise<void> {
-    console.log('deleteLoggedInAccount');
+    await deleteLoggedInAccount(this._restAPIURL);
   }
 
   /** @override */

@@ -17,12 +17,25 @@ provider:
   region: ap-northeast-1
   lambdaHashingVersion: 20201221
   httpApi:
-    authorizers:
-      restAPIAuthorizer:
-        identitySource: $request.header.Authorization
-        issuerUrl: https://${env:AUTH0_DOMAIN}/
-        audience: ${env:AUTH0_AUDIENCE, ''}
-  websocketsApiName: gbraver-burst-ws-api
+    name: ${self:service}__${sls:stage}__rest-api
+    cors:
+      allowedOrigins:
+        - ${env:ALLOW_ORIGIN, ''}
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - DELETE
+      allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+#    authorizers:
+#      restAPIAuthorizer:
+#        identitySource: $request.header.Authorization
+#        issuerUrl: https://${env:AUTH0_DOMAIN}/
+#        audience: ${env:AUTH0_AUDIENCE, ''}
+  websocketsApiName: ${self:service}__${sls:stage}__ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SERVICE: ${self:service}
@@ -60,8 +73,8 @@ functions:
       - httpApi:
           path: /
           method: delete
-          authorizer:
-            name: restAPIAuthorizer
+ #         authorizer:
+ #           name: restAPIAuthorizer
   connect:
     handler: src/connect.connect
     events:
