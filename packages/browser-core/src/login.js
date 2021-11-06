@@ -1,22 +1,5 @@
 // @flow
 
-/**
- * @deprecated
- * ID、パスワードでのログイン
- */
-export interface IdPasswordLogin {
-  /**
-   * @deprecated
-   * ユーザID、パスワードでログインを行う
-   * ログインに成功した場合はtrueを返す
-   *
-   * @param userID ユーザID
-   * @param password パスワード
-   * @return ログイン結果
-   */
-  login(userID: string, password: string): Promise<boolean>;
-}
-
 /** ユニバーサルログイン */
 export interface UniversalLogin {
   /**

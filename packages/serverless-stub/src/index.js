@@ -5,14 +5,16 @@ import type {UseCase} from "./use-case/use-case";
 import {PingUseCase} from "./use-case/ping";
 import {BattlePlayer01} from "./use-case/battle-player-01";
 import {BattlePlayer02} from "./use-case/battle-player-02";
+import {DeleteAccountCase} from "./use-case/delete-account";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? '';
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? '';
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? '';
-const API_URL = process.env.API_URL ?? '';
+const REST_API_URL = process.env.REST_API_URL ?? '';
+const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? '';
 
 window.onload = async () => {
-  const browserSDK = await createBrowserSDK(window.location.origin, API_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_AUDIENCE);
+  const browserSDK = await createBrowserSDK(window.location.origin, REST_API_URL, WEBSOCKET_API_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_AUDIENCE);
   if (browserSDK.isLoginSuccessRedirect()) {
     await browserSDK.afterLoginSuccess();
   }
@@ -21,6 +23,7 @@ window.onload = async () => {
     new PingUseCase(browserSDK),
     new BattlePlayer01(browserSDK),
     new BattlePlayer02(browserSDK),
+    new DeleteAccountCase(browserSDK),
   ];
   const loginForm = document.getElementById('login-form') ?? document.createElement('form');
   const loginButton = document.getElementById('login-button') ?? document.createElement('button');
