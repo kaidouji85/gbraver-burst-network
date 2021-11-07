@@ -3,8 +3,8 @@
 import type {UseCase} from "./use-case";
 import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
 
-/** ping ユースケース */
-export class PingUseCase implements UseCase {
+/** Websocket切断 ユースケース */
+export class DisconnectWebsocketCase implements UseCase {
   _sdk: BrowserSDK
 
   /**
@@ -18,12 +18,12 @@ export class PingUseCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'ping';
+    return 'Websocket切断';
   }
 
   /** @override */
   async execute(): Promise<void> {
-    const data = await this._sdk.ping();
-    console.log(data);
+    await this._sdk.ping();
+    await this._sdk.disconnectWebsocket();
   }
 }

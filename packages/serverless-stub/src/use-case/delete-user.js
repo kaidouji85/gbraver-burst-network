@@ -3,8 +3,8 @@
 import type {UseCase} from "./use-case";
 import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
 
-/** ping ユースケース */
-export class PingUseCase implements UseCase {
+/** ユーザ削除 ユースケース */
+export class DeleteUserCase implements UseCase {
   _sdk: BrowserSDK
 
   /**
@@ -18,12 +18,11 @@ export class PingUseCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'ping';
+    return 'ユーザ削除';
   }
 
   /** @override */
   async execute(): Promise<void> {
-    const data = await this._sdk.ping();
-    console.log(data);
+    await this._sdk.deleteLoggedInUser();
   }
 }

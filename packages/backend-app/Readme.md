@@ -33,7 +33,7 @@ cp .env.template .env
 ポーリング、バッチジョブなど、時間がかかる処理を担当しています。
 
 ## 各種コマンド
-### WebSocket API
+### APIサーバ
 #### デプロイ
 ```shell
 # sls deploy実行時に必要な環境変数を記載する
@@ -41,7 +41,7 @@ vim .env
 npx sls deploy
 ```
 
-#### 動作確認
+#### WebSocketAPI 動作確認
 ```shell
 npm install -g wscat
 
@@ -57,6 +57,13 @@ wscat -c "$API_URL?token=$ACCESS_TOKEN"
 -> サーバからメッセージが返される
 ```
 
+#### RestAPI 動作確認
+```shell
+API_URL=<AWS APIGatewayのURL>
+ACCESS_TOKEN=<auth0 access token>
+curl -X DELETE -H "Authorization: Bearer ${ACCESS_TOKEN}" "${API_URL}"
+```
+
 ### マッチメイクECS
 #### ローカル環境での動作確認
 ```shell
@@ -69,3 +76,8 @@ npm run start:match-make
 ```shell
 npm run build:match-make
 ```
+
+## superagent-proxyについて
+
+本パッケージの [package.json](./package.json) にはsuperagent-proxyが含まれているが、ソースコードでは同パッケージを直接呼び出していない。
+[auth0 sdk](https://www.npmjs.com/package/auth0) の依存パッケージであるsuperagent-proxyがインスールできないので、 package.jsonにsuperagent-proxyを含めている

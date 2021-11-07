@@ -3,7 +3,7 @@
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
-import {extractUser} from './lambda/extract-user';
+import {extractUserFromWebSocketAuthorizer} from './lambda/extract-user';
 import {parseSendCommand} from "./request/sned-command";
 import {parseJSON} from "./json/parse";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
@@ -39,7 +39,7 @@ export async function sendCommand(event: WebsocketAPIEvent): Promise<WebsocketAP
     return {statusCode: 400, body: 'invalid request body'};
   }
 
-  const user = extractUser(event.requestContext.authorizer);
+  const user = extractUserFromWebSocketAuthorizer(event.requestContext.authorizer);
   const command = {userID: user.userID, battleID: data.battleID, flowID: data.flowID, command: data.command};
   await Promise.all([
     battleCommands.put(command),
