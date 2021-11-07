@@ -33,7 +33,7 @@ provider:
     authorizers:
       restAPIAuthorizer:
         identitySource: $request.header.Authorization
-        issuerUrl: https://${env:AUTH0_DOMAIN}/
+        issuerUrl: https://${env:AUTH0_DOMAIN, ''}/
         audience: ${env:AUTH0_AUDIENCE, ''}
   websocketsApiName: ${self:service}__${sls:stage}__ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
