@@ -21,6 +21,7 @@
     "serve:match-make": "node .webpack/match-making-polling.js"
   },
   "dependencies": {
+    "auth0": "^2.37.0",
     "aws-sdk": "^2.1018.0",
     "gbraver-burst-core": "^1.11.0",
     "jsonwebtoken": "^8.5.1",

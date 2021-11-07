@@ -42,8 +42,11 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
+    AUTH0_DOMAIN: ${env:AUTH0_DOMAIN, ''}
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
+    AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_ID, ''}
+    AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET, ''}
 
   iamRoleStatements:
     - Effect: Allow
