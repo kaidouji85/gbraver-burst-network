@@ -1,5 +1,15 @@
 // @flow
 
+/** ユーザ名取得 */
+export interface UserNameGet {
+  /**
+   * ユーザ名を取得する
+   *
+   * @return ユーザ名
+   */
+  getUserName(): Promise<string>;
+}
+
 /** ユーザ削除削除 */
 export interface LoggedInUserDelete {
   /**
