@@ -70,8 +70,8 @@ provider:
 functions:
   wsAPIAuthorizer:
     handler: src/authorizer.authorizer
-  deleteAccount:
-    handler: src/delete-account.deleteAccount
+  deleteUser:
+    handler: src/delete-user.deleteUser
     events:
       - httpApi:
           path: /

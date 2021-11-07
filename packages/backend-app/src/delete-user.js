@@ -11,12 +11,12 @@ const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID = process.env.AUTH0_USER_MANAGEMENT_AP
 const AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET = process.env.AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET ?? '';
 
 /**
- * アカウント削除API
+ * ユーザ削除API
  *
  * @param event イベント
  * @return レスポンス
  */
-export async function deleteAccount(event: RestAPIEvent): Promise<RestAPIResponse> {
+export async function deleteUser(event: RestAPIEvent): Promise<RestAPIResponse> {
   const user = extractUserFromRestAPIJWT(event.requestContext.authorizer.jwt.claims);
   // auth0ユーザ削除関数にGブレイバーバーストのユーザIDを指定しているが、
   // 現状ではauth0、GブレイバーバーストのユーザIDは完全一致するので問題ない
@@ -24,6 +24,6 @@ export async function deleteAccount(event: RestAPIEvent): Promise<RestAPIRespons
     AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET, user.userID);
   return {
     statusCode: 200,
-    body: 'delete account success',
+    body: 'delete user success',
   };
 }

@@ -1,7 +1,7 @@
 // @flow
 
 import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
-import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle, loggedInAccountDelete} from '@gbraver-burst-network/browser-core';
+import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle, LoggedInUserDelete} from '@gbraver-burst-network/browser-core';
 import {BattleSDK} from './battle-sdk';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
@@ -9,10 +9,10 @@ import {isLoginSuccessRedirect, clearLoginHistory} from '../auth0/login-redirect
 import {ping} from '../websocket/ping';
 import {connect} from "../websocket/connect";
 import {enterCasualMatch} from '../websocket/enter-casual-match';
-import {deleteLoggedInAccount} from "../http-request/delete-logged-in-account";
+import {deleteLoggedInUser} from "../http-request/delete-user";
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, loggedInAccountDelete {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, LoggedInUserDelete {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -65,9 +65,9 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
   /** @override */
-  async deleteLoggedInAccount(): Promise<void> {
+  async deleteLoggedInUser(): Promise<void> {
     const accessToken = await this._auth0Client.getTokenSilently();
-    await deleteLoggedInAccount(this._restAPIURL, accessToken);
+    await deleteLoggedInUser(this._restAPIURL, accessToken);
   }
 
   /** @override */

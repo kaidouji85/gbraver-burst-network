@@ -3,8 +3,8 @@
 import type {UseCase} from "./use-case";
 import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
 
-/** アカウント削除 ユースケース */
-export class DeleteAccountCase implements UseCase {
+/** ユーザ削除 ユースケース */
+export class DeleteUserCase implements UseCase {
   _sdk: BrowserSDK
 
   /** コンストラクタ */
@@ -14,11 +14,11 @@ export class DeleteAccountCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'アカウント削除';
+    return 'ユーザ削除';
   }
 
   /** @override */
   async execute(): Promise<void> {
-    await this._sdk.deleteLoggedInAccount();
+    await this._sdk.deleteLoggedInUser();
   }
 }
