@@ -55,8 +55,12 @@ npm run build
 | --------- | ----------- |
 | SERVICE | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する |
 | STAGE | デプロイする環境のステージ名を記入する |
+| ALLOW_ORIGIN | RestAPIサーバのAccess-Control-Allow-Originを記載 |
+| AUTH0_DOMAIN | auth0のドメインを記載 |
 | AUTH0_JWKS_URL | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | AUTH0_AUDIENCE | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
+| AUTH0_USER_MANAGEMENT_APP_CLIENT_ID | Auth0 Management API に認証されたApplicationのclient id |
+| AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | Auth0 Management API に認証されたApplicationのclient secret |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | マッチメイク用ECRリポジトリ名 |
 | DOCKER_USER | dockerhubのユーザ名 |
 | DOCKER_TOKEN | dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照|
@@ -101,8 +105,12 @@ AWS Parameter Storeに以下の値をセットします。
 | ---- | ---- | --- |
 | /GbraverBurst/dev/service | String | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する |
 | /GbraverBurst/dev/stage | String | デプロイする環境のステージ名、v001、v010などを記入する |
+| /GbraverBurst/dev/allowOrigin | String | RestAPIサーバのAccess-Control-Allow-Originを記載 |
+| /GbraverBurst/dev/auth0Domain | SecureString | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | /GbraverBurst/dev/auth0JwksUrl | SecureString | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | /GbraverBurst/dev/auth0Audience | SecureString | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
+| /GbraverBurst/dev/auth0UserManagementAppClientId | SecureString | Auth0 Management API に認証されたApplicationのclient id |
+| /GbraverBurst/dev/auth0UserManagementAppClientSecret | SecureString | Auth0 Management API に認証されたApplicationのclient secret |
 | /GbraverBurst/dev/dockerUser | SecureString | dockerhubのユーザID |
 | /GbraverBurst/dev/dockerToken | SecureString |dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照  |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String | マッチメイク用ECRリポジトリ名 |

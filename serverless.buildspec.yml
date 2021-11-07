@@ -3,8 +3,12 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
+    ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
+    AUTH0_DOMAIN: /GbraverBurst/dev/auth0Domain
     AUTH0_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
     AUTH0_AUDIENCE: /GbraverBurst/dev/auth0Audience
+    AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/dev/auth0UserManagementAppClientId
+    AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: /GbraverBurst/dev/auth0UserManagementAppClientSecret
 phases:
   build:
     commands:
