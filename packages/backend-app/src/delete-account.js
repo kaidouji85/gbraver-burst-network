@@ -7,8 +7,8 @@ import {extractUserFromRestAPIJWT} from "./lambda/extract-user";
 import {deleteUser} from "./auth0/delete-user";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? '';
-const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID = process.env.AUTH0_DOMAIN ?? '';
-const AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET = process.env.AUTH0_DOMAIN ?? '';
+const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID = process.env.AUTH0_USER_MANAGEMENT_APP_CLIENT_ID ?? '';
+const AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET = process.env.AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET ?? '';
 
 /**
  * アカウント削除API
