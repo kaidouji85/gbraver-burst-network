@@ -1,7 +1,7 @@
 // @flow
 
 import type {ArmDozerId, PilotId} from 'gbraver-burst-core';
-import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle, UserNameGet, LoggedInUserDelete} from '@gbraver-burst-network/browser-core';
+import type {UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, Battle, UserNameGet, LoggedInUserDelete, WebsocketDisconnect} from '@gbraver-burst-network/browser-core';
 import {BattleSDK} from './battle-sdk';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
@@ -12,7 +12,7 @@ import {enterCasualMatch} from '../websocket/enter-casual-match';
 import {deleteLoggedInUser} from "../http-request/delete-user";
 
 /** ブラウザSDK */
-export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, UserNameGet, LoggedInUserDelete {}
+export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, UserNameGet, LoggedInUserDelete, WebsocketDisconnect {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -89,6 +89,16 @@ class BrowserSDKImpl implements BrowserSDK {
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
     return new BattleSDK({player: resp.player, enemy: resp.enemy, initialState: resp.stateHistory,
       battleID: resp.battleID, initialFlowID: resp.flowID, isPoller: resp.isPoller, websocket});
+  }
+
+  /** @override */
+  async disconnectWebsocket(): Promise<void> {
+    if (!this._websocket) {
+      return;
+    }
+
+    this._websocket.close();
+    this._websocket = null;
   }
 
   /**
