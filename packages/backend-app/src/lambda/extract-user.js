@@ -11,6 +11,8 @@ import type {JwtClaims} from "./rest-api-event";
  * @return 抽出したユーザ情報
  */
 export function extractUserFromWSAuthorizer(authorizer: Authorizer): User {
+  // authorizer.principalIdにセットされているauth0ユーザIDを
+  // GブレイバーバーストのユーザIDにセットしている
   return {userID: authorizer.principalId};
 }
 
@@ -21,5 +23,7 @@ export function extractUserFromWSAuthorizer(authorizer: Authorizer): User {
  * @return 抽出したユーザ情報
  */
 export function extractUserFromRestAPIJWT(jwtClaims: JwtClaims): User {
+  // jwtClaims.subにセットされているauth0ユーザIDを
+  // GブレイバーバーストのユーザIDにセットしている
  return {userID: jwtClaims.sub};
 }

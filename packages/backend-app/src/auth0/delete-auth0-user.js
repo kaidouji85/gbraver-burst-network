@@ -11,7 +11,7 @@ import {ManagementClient} from 'auth0';
  * @param userID 削除するユーザID
  * @return 処理が完了したら発火するPromise
  */
-export async function deleteUser(domain: string, clientID: string, clientSecret: string, userID: string): Promise<void> {
+export async function deleteAuth0User(domain: string, clientID: string, clientSecret: string, userID: string): Promise<void> {
   const management = new ManagementClient({
     domain: domain,
     clientId: clientID,
