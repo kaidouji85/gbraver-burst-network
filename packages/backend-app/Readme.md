@@ -80,5 +80,4 @@ npm run build:match-make
 ## superagent-proxyについて
 
 本パッケージの [package.json](./package.json) にはsuperagent-proxyが含まれているが、ソースコードでは同パッケージを直接呼び出していない。
-[auth0 sdk](https://www.npmjs.com/package/auth0) の依存パッケージであるsuperagent-proxyが何故かインスールできないので、
-package.jsonにsuperagent-proxyを含めないとビルドができない。
+[auth0 sdk](https://www.npmjs.com/package/auth0) の依存パッケージであるsuperagent-proxyがインスールできないので、 package.jsonにsuperagent-proxyを含めている
