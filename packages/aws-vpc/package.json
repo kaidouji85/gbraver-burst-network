@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/aws-vpc",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
   },
