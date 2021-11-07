@@ -61,7 +61,7 @@ wscat -c "$API_URL?token=$ACCESS_TOKEN"
 ```shell
 API_URL=<AWS APIGatewayのURL>
 ACCESS_TOKEN=<auth0 access token>
-curl -XDELETE -H "Authorization: Bearer ${ACCESS_TOKEN}" "${API_URL}"
+curl -X DELETE -H "Authorization: Bearer ${ACCESS_TOKEN}" "${API_URL}"
 ```
 
 ### マッチメイクECS
@@ -76,3 +76,9 @@ npm run start:match-make
 ```shell
 npm run build:match-make
 ```
+
+## superagent-proxyについて
+
+本パッケージの [package.json](./package.json) にはsuperagent-proxyが含まれているが、ソースコードでは同パッケージを直接呼び出していない。
+[auth0 sdk](https://www.npmjs.com/package/auth0) の依存パッケージであるsuperagent-proxyが何故かインスールできないので、
+package.jsonにsuperagent-proxyを含めないとビルドができない。

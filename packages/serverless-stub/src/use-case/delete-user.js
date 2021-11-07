@@ -7,7 +7,11 @@ import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
 export class DeleteUserCase implements UseCase {
   _sdk: BrowserSDK
 
-  /** コンストラクタ */
+  /**
+   * コンストラクタ
+   *
+   * @param sdk Gブレイバーバースト ブラウザSDK
+   */
   constructor(sdk: BrowserSDK) {
     this._sdk = sdk;
   }

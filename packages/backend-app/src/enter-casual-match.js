@@ -3,7 +3,7 @@
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
-import {extractUserFromWSAuthorizer} from './lambda/extract-user';
+import {extractUserFromWebSocketAuthorizer} from './lambda/extract-user';
 import {parseEnterCasualMatch} from "./request/enter-casual-match";
 import {parseJSON} from "./json/parse";
 import {createAPIGatewayEndpoint} from "./api-gateway/endpoint";
@@ -40,7 +40,7 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
     return {statusCode: 400, body: 'invalid request body'}
   }
 
-  const user = extractUserFromWSAuthorizer(event.requestContext.authorizer);
+  const user = extractUserFromWebSocketAuthorizer(event.requestContext.authorizer);
   const entry = {userID: user.userID, armdozerId: data.armdozerId, pilotId: data.pilotId,
     connectionId: event.requestContext.connectionId};
   const state = {type: 'CasualMatchMaking'};

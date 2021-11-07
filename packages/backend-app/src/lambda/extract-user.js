@@ -10,7 +10,7 @@ import type {JwtClaims} from "./rest-api-event";
  * @param authorizer 抽出元となる認可情報
  * @return 抽出したユーザ情報
  */
-export function extractUserFromWSAuthorizer(authorizer: Authorizer): User {
+export function extractUserFromWebSocketAuthorizer(authorizer: Authorizer): User {
   // authorizer.principalIdにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている
   return {userID: authorizer.principalId};

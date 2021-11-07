@@ -68,7 +68,7 @@ provider:
         - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
-  wsAPIAuthorizer:
+  webSocketAPIAuthorizer:
     handler: src/authorizer.authorizer
   deleteUser:
     handler: src/delete-user.deleteUser
@@ -84,7 +84,7 @@ functions:
       - websocket:
           route: $connect
           authorizer:
-            name: wsAPIAuthorizer
+            name: webSocketAPIAuthorizer
             identitySource:
               - 'route.request.querystring.token'
   disconnect:
