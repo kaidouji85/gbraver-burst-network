@@ -10,6 +10,16 @@ export interface UserNameGet {
   getUserName(): Promise<string>;
 }
 
+/** ユーザ画像取得 */
+export interface UserPictureGet {
+  /**
+   * ユーザ画像URLを取得する
+   *
+   * @return ユーザ画像URL
+   */
+  getUserPictureURL(): Promise<string>;
+}
+
 /** ユーザ削除削除 */
 export interface LoggedInUserDelete {
   /**
