@@ -9,6 +9,8 @@ import {DeleteUserCase} from "./use-case/delete-user";
 import {GetUserNameCase} from "./use-case/get-user-name";
 import {DisconnectWebsocketCase} from "./use-case/disconnect-websocket";
 import {GetUserPictureURLCase} from "./use-case/get-user-picture-url";
+import {MailVerifiedCase} from "./use-case/mail-verified";
+import {MailAddressGet} from "./use-case/mail-address-get";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? '';
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? '';
@@ -28,6 +30,8 @@ window.onload = async () => {
     new BattlePlayer02(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
+    new MailVerifiedCase(browserSDK),
+    new MailAddressGet(browserSDK),
     new DisconnectWebsocketCase(browserSDK),
     new DeleteUserCase(browserSDK),
   ];
