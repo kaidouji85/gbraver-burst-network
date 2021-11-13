@@ -20,6 +20,26 @@ export interface UserPictureGet {
   getUserPictureURL(): Promise<string>;
 }
 
+/** ユーザメールアドレス取得 */
+export interface UserMailGet {
+  /**
+   * メールアドレスを取得する
+   *
+   * @return メールアドレス
+   */
+  getMail(): Promise<string>;
+}
+
+/** メール認証完了 */
+export interface MailVerify {
+  /**
+   * メール認証が完了しているか否か
+   *
+   * @return 判定結果、trueでメール認証が完了している
+   */
+  isMailVerified(): Promise<boolean>;
+}
+
 /** ユーザ削除削除 */
 export interface LoggedInUserDelete {
   /**
