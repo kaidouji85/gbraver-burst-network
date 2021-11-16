@@ -38,13 +38,32 @@ npm run build
 <a id="pre-required-task"></a>
 ### 事前作業
 以下の事前作業を完了させてください。
-* [aws cli 認証設定](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html)
-* [VPCの作成](./packages/aws-vpc/README.md#deploy-command)
-* 以下ECRリポジトリの作成
-  * マッチメイク
-* [auth0 API 作成](https://auth0.com/docs/configure/apis)
-* [dockerhubアクセストークン発行](https://docs.docker.com/docker-hub/access-tokens/)
-
+1. [aws cli 認証設定](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html)
+2. [VPCの作成](./packages/aws-vpc/README.md#deploy-command)
+3. マッチメイク用ECRリポジトリの作成
+4. [dockerhubアクセストークン発行](https://docs.docker.com/docker-hub/access-tokens/)
+5. 以下設定で[auth0 API 作成](https://auth0.com/docs/configure/apis)
+    * Name -> 任意
+    * Identifier -> 任意
+    * Signing Algorithm -> RS256
+6. 以下設定で[auth0 Application 作成](https://auth0.com/docs/get-started/create-apps)
+    * Name -> 任意
+    * Choose an application type　-> Single Page Web Applications
+    * Allowed Callback URLs -> フロントエンド公開URL
+    * Allowed Logout URLs -> フロントエンド公開URL
+    * Allowed Web Origins -> フロントエンド公開URL
+7. 以下設定でauth0 Application 作成
+    * Name -> 任意
+    * Choose an application type -> Machine to Machine Applications
+    * Select an API... -> Auth0 Management API
+    * Permissions 
+      * read:users
+      * update:users
+      * delete:users
+      * update:users_app_metadata
+      * delete:users_app_metadata
+      * create:users_app_metadata
+      * read:logs_users
 ## 環境構築方法
 ### ローカル環境からデプロイする
 
