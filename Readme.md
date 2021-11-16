@@ -117,7 +117,16 @@ npm run build
 
 ### CodepipelineでCI/CDする
 
-#### AWS Parameter Storeを設定
+#### ビルド環境について
+以下がGブレイバーバーストで利用するビルド環境です。
+
+| # | ビルド環境 | 説明 |
+|---|----------|------|
+| BLD-01 | codebuild.node16.Dockerfile | [codebuild.node16.Dockerfile](./codebuild.node16.Dockerfile)から生成するカスタムイメージ |
+| BLD-02 | ubuntu/standard/5.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/5.0) を参照 |
+
+#### 開発環境でのCI/CD
+##### AWS Parameter Storeを設定
 AWS Parameter Storeに以下の値をセットします。
 
 | 名前 | 種類 | 値 |
@@ -134,16 +143,8 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/dockerToken | SecureString |dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照  |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String | マッチメイク用ECRリポジトリ名 |
 
-#### CodeBuildの作成
-
-以下がGブレイバーバーストのビルド環境です。
-
-| # | ビルド環境 | 説明 |
-|---|----------|------|
-| BLD-01 | codebuild.node16.Dockerfile | [codebuild.node16.Dockerfile](./codebuild.node16.Dockerfile)から生成するカスタムイメージ |
-| BLD-02 | ubuntu/standard/5.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/5.0) を参照 |
-
-以下がGブレイバーバーストで利用するCodeBuildプロジェクトになります。
+##### Code Build
+以下のCode Buildプロジェクトを生成します
 
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|------| --------- | -------- |
@@ -152,9 +153,9 @@ AWS Parameter Storeに以下の値をセットします。
 | DEVCB-03 | マッチメイクEcrPush| matchMakeContainer.buildspec.yml | ubuntu/standard/5.0 |
 | DEVCB-04 | バックエンドECSデプロイ| backendEcs.buildspec.yml | codebuild.node16.Dockerfile |
 
-#### CodePipelineの作成
+#### Code Pipeline
 
-以下構成のCodeBuildを作成します。
+以下構成のCodePipeLineを作成します。
 処理順番が同じものは、並列実行の設定をしてください。
 
 | 処理順番 | CodeBuild |
@@ -163,3 +164,43 @@ AWS Parameter Storeに以下の値をセットします。
 | 002 | DEVCB-02.serverlessデプロイ |
 | 002 | DEVCB-03.マッチメイクEcrPush |
 | 003 | DEVCB-04.バックエンドECSデプロイ |
+
+#### 本番環境でのCI/CD
+##### AWS Parameter Storeを設定
+AWS Parameter Storeに以下の値をセットします。
+
+| 名前 | 種類 | 値 |
+| ---- | ---- | --- |
+| /GbraverBurst/prod/service | String | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する |
+| /GbraverBurst/prod/stage | String | デプロイする環境のステージ名、v001、v010などを記入する |
+| /GbraverBurst/prod/allowOrigin | String | RestAPIサーバのAccess-Control-Allow-Originを記載 |
+| /GbraverBurst/prod/auth0Domain | SecureString | auth0のドメイン |
+| /GbraverBurst/prod/auth0JwksUrl | SecureString | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
+| /GbraverBurst/prod/auth0Audience | SecureString | auth0のaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
+| /GbraverBurst/prod/auth0UserManagementAppClientId | SecureString | Auth0 Management API に認証されたApplicationのclient id |
+| /GbraverBurst/prod/auth0UserManagementAppClientSecret | SecureString | Auth0 Management API に認証されたApplicationのclient secret |
+| /GbraverBurst/prod/dockerUser | SecureString | dockerhubのユーザID |
+| /GbraverBurst/prod/dockerToken | SecureString |dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照  |
+| /GbraverBurst/prod/matchMakeEcrRepositoryName | String | マッチメイク用ECRリポジトリ名 |
+
+##### Code Build
+以下のCode Buildプロジェクトを生成します
+
+| # | 概要 | BuildSpec | ビルド環境 |
+|---|------| --------- | -------- |
+| PROCB-01 | テスト | backendAppTest.buildspec.yml | codebuild.node16.Dockerfile |
+| PROCB-02 | serverlessデプロイ | serverless.prod.buildspec.yml | codebuild.node16.Dockerfile |
+| PROCB-03 | マッチメイクEcrPush| matchMakeContainer.prod.buildspec.yml | ubuntu/standard/5.0 |
+| PROCB-04 | バックエンドECSデプロイ| backendEcs.prod.buildspec.yml | codebuild.node16.Dockerfile |
+
+#### Code Pipeline
+
+以下構成のCodePipeLineを作成します。
+処理順番が同じものは、並列実行の設定をしてください。
+
+| 処理順番 | CodeBuild |
+| ------- | ---------- |
+| 001 | PROCB-01.テスト |
+| 002 | PROCB-02.serverlessデプロイ |
+| 002 | PROCB-03.マッチメイクEcrPush |
+| 003 | PROCB-04.バックエンドECSデプロイ |
