@@ -12,11 +12,11 @@
 <a id="pre-required-soft"></a>
 ### 必須ソフト
 ローカル環境に以下ソフトウェアをインストールしてください。
-* aws cli
-* node.js
-* npm
-* npx
-* Docker
+* aws cli(2.3.4以上)
+* node.js(v16.13.0以上)
+* npm(8.1.0以上)
+* npx(8.1.0以上)
+* Docker(20.10.8以上)
 
 <a id="repository-setup"></a>
 ### 内部パッケージの依存関係解決
