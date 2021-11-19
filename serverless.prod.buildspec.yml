@@ -4,6 +4,7 @@ env:
     SERVICE: /GbraverBurst/prod/service
     STAGE: /GbraverBurst/prod/stage
     ALLOW_ORIGIN: /GbraverBurst/prod/allowOrigin
+    TEST_ALLOW_ORIGIN: /GbraverBurst/prod/testAllowOrigin
     AUTH0_DOMAIN: /GbraverBurst/prod/auth0Domain
     AUTH0_JWKS_URL: /GbraverBurst/prod/auth0JwksUrl
     AUTH0_AUDIENCE: /GbraverBurst/prod/auth0Audience

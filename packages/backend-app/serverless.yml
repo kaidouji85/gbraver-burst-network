@@ -21,6 +21,7 @@ provider:
     cors:
       allowedOrigins:
         - ${env:ALLOW_ORIGIN, ''}
+        - ${env:TEST_ALLOW_ORIGIN, ''}
       allowedHeaders:
         - Content-Type
         - Authorization
