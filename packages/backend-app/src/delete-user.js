@@ -1,6 +1,5 @@
 // @flow
 
-
 import type {RestAPIResponse} from "./lambda/rest-api-response";
 import type {RestAPIEvent} from "./lambda/rest-api-event";
 import {extractUserFromRestAPIJWT} from "./lambda/extract-user";
