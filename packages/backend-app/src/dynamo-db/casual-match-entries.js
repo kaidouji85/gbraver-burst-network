@@ -47,11 +47,12 @@ export class CasualMatchEntries {
   /**
    * 全項目を取得する
    *
+   * @param limit 検索件数の上限
    * @return 取得結果
    */
-  async scan(): Promise<CasualMatchEntriesSchema[]> {
+  async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
     const resp = await this._client
-      .scan({TableName: this._tableName, Select: "ALL_ATTRIBUTES"})
+      .scan({TableName: this._tableName, Select: "ALL_ATTRIBUTES", ConsistentRead: true, Limit: limit})
       .promise();
     return resp?.Items ?? [];
   }

@@ -7,4 +7,5 @@ fi
 
 OWN_PATH=`cd $(dirname ${0}) && pwd`
 cd ${OWN_PATH}/packages/backend-app
+npm ci
 npx sls remove --stage ${STAGE}

@@ -3,7 +3,7 @@
 import type {WebsocketAPIResponse} from './lambda/websocket-api-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import type {WebsocketAPIEvent} from "./lambda/websocket-api-event";
-import {extractUser} from './lambda/extract-user';
+import {extractUserFromWebSocketAuthorizer} from './lambda/extract-user';
 import {createConnections} from "./dynamo-db/dao-creator";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -20,7 +20,7 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE)
  * @return レスポンス
  */
 export async function connect(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const user = extractUser(event.requestContext.authorizer);
+  const user = extractUserFromWebSocketAuthorizer(event.requestContext.authorizer);
   const state = {type: 'None'};
   const connection = {connectionId: event.requestContext.connectionId, userID: user.userID, state};
   await connections.put(connection);

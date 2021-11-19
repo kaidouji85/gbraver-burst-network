@@ -1,0 +1,10 @@
+version: 0.2
+env:
+  parameter-store:
+    SERVICE: /GbraverBurst/prod/service
+    STAGE: /GbraverBurst/prod/stage
+    MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName
+phases:
+  build:
+    commands:
+      - ./backend-ecs-deploy.sh
