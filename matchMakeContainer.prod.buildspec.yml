@@ -1,0 +1,11 @@
+version: 0.2
+env:
+  parameter-store:
+    STAGE: /GbraverBurst/prod/stage
+    DOCKER_USER: /GbraverBurst/prod/dockerUser
+    DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
+    MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName
+phases:
+  build:
+    commands:
+      - ./match-make-container-push.sh
