@@ -155,6 +155,8 @@ AWS Parameter Storeに以下の値をセットします。
 | DEVCB-02 | serverlessデプロイ | serverless.buildspec.yml | codebuild.node16.Dockerfile |
 | DEVCB-03 | マッチメイクEcrPush| matchMakeContainer.buildspec.yml | ubuntu/standard/5.0 |
 | DEVCB-04 | バックエンドECSデプロイ| backendEcs.buildspec.yml | codebuild.node16.Dockerfile |
+| DEVCB-05 | serverless削除 | serverlessRemove.buildspec.yml | codebuild.node16.Dockerfile |
+| DEVCB-06 | バックエンドECS削除 | backendECSRemove.buildspec.yml | codebuild.node16.Dockerfile |
 
 #### Code Pipeline
 
@@ -196,6 +198,8 @@ AWS Parameter Storeに以下の値をセットします。
 | PROCB-02 | serverlessデプロイ | serverless.prod.buildspec.yml | codebuild.node16.Dockerfile |
 | PROCB-03 | マッチメイクEcrPush| matchMakeContainer.prod.buildspec.yml | ubuntu/standard/5.0 |
 | PROCB-04 | バックエンドECSデプロイ| backendEcs.prod.buildspec.yml | codebuild.node16.Dockerfile |
+| PROCB-05 | serverless削除 | serverlessRemove.prod.buildspec.yml | codebuild.node16.Dockerfile |
+| PROCB-06 | バックエンドECS削除 | backendECSRemove.prod.buildspec.yml | codebuild.node16.Dockerfile |
 
 #### Code Pipeline
 
