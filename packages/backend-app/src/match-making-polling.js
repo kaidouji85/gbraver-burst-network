@@ -30,6 +30,7 @@ const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const casualMatchEntryScanLimit = 100;
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;
 // コンテナ起動から1日経過したら停止したい
@@ -61,7 +62,7 @@ const maxPollingCount = 28800;
  * @return 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
-  const entries = await casualMatchEntries.scan(100);
+  const entries = await casualMatchEntries.scan(casualMatchEntryScanLimit);
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players = [createPlayerSchema(matching[0]), createPlayerSchema(matching[1])];
