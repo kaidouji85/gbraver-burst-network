@@ -27,5 +27,14 @@ export class AwsVpcStack extends cdk.Stack {
       value: privateSubnet.subnetId,
       exportName: `${id}:PrivateSubnetId`
     });
+    const publicSubnet = vpc.publicSubnets[0];
+    new cdk.CfnOutput(this, 'PulicNetAvailabilityZone', {
+      value: publicSubnet.availabilityZone,
+      exportName: `${id}:PulicNetAvailabilityZone`
+    });
+    new cdk.CfnOutput(this, 'PulicSubnetId', {
+      value: publicSubnet.subnetId,
+      exportName: `${id}:PulicSubnetId`
+    });
   }
 }
