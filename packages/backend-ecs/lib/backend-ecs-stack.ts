@@ -13,10 +13,10 @@ interface BackendEcsProps extends cdk.StackProps {
   stage: string,
   /** 本ECSを起動するVPCのID */
   vpcId: string,
-  /** 本ECSを起動するサブネットのアベイラビリティゾーン */
-  subnetAvailabilityZone: string,
-  /** 本ECSを起動するサブネットのID */
-  subnetId: string,
+  /** 本ECSを起動するパブリックサブネットのアベイラビリティゾーン */
+  publicSubnetAvailabilityZone: string,
+  /** 本ECSを起動するパブリックサブネットのID */
+  publicSubnetId: string,
   /** Websocket API GatewayのID */
   websocketAPIID: string,
   /** DynamoDB connections テーブルのARN */
@@ -42,8 +42,8 @@ export class BackendEcsStack extends cdk.Stack {
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
       vpcId: props.vpcId,
-      availabilityZones: [props.subnetAvailabilityZone],
-      publicSubnetIds: [props.subnetId],
+      availabilityZones: [props.publicSubnetAvailabilityZone],
+      publicSubnetIds: [props.publicSubnetId],
     });
 
     const matchMakePolicy = new iam.PolicyDocument({
