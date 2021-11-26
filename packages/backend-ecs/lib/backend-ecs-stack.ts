@@ -96,7 +96,8 @@ export class BackendEcsStack extends cdk.Stack {
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {
       cluster,
-      taskDefinition: matchMakeTaskDefinition
+      taskDefinition: matchMakeTaskDefinition,
+      assignPublicIp: true
     });
   }
 }
