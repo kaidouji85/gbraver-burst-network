@@ -7,7 +7,8 @@ test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
     const stack = new AwsVpc.AwsVpcStack(app, 'MyTestStack', {
-      service: 'my-service'
+      service: 'my-service',
+      cidr: '172.16.0.0/16'
     });
     // THEN
     expectCDK(stack).to(matchTemplate({

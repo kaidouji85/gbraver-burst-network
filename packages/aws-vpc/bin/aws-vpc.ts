@@ -7,7 +7,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const service = process.env.SERVICE ?? '';
+const cidr = process.env.CIDR ?? '';
 const stackID = `${service}-vpc`;
 
 const app = new cdk.App();
-new AwsVpcStack(app, stackID, {service});
+new AwsVpcStack(app, stackID, {service, cidr});
