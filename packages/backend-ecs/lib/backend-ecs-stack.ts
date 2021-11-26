@@ -73,7 +73,7 @@ export class BackendEcsStack extends cdk.Stack {
       inlinePolicies: {matchMakePolicy}
     });
     const matchMakeTaskDefinition = new ecs.TaskDefinition(this, ",match-make-taskdef", {
-      compatibility: ecs.Compatibility.EC2,
+      compatibility: ecs.Compatibility.FARGATE,
       cpu: "256",
       memoryMiB: "512",
       taskRole: matchMakeServiceTaskRole
