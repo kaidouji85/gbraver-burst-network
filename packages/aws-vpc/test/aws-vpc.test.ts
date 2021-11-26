@@ -6,7 +6,9 @@ import * as AwsVpc from '../lib/aws-vpc-stack';
 test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new AwsVpc.AwsVpcStack(app, 'MyTestStack');
+    const stack = new AwsVpc.AwsVpcStack(app, 'MyTestStack', {
+      service: 'my-service'
+    });
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}
