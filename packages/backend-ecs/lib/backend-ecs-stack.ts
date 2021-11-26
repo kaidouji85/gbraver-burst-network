@@ -13,10 +13,10 @@ interface BackendEcsProps extends cdk.StackProps {
   stage: string,
   /** 本ECSを起動するVPCのID */
   vpcId: string,
-  /** 本ECSを起動するサブネットのアベイラビリティゾーン */
-  privateNetAvailabilityZone: string,
-  /** 本ECSを起動するプライベートサブネットのID */
-  privateSubnetId: string,
+  /** 本ECSを起動するパブリックサブネットのアベイラビリティゾーン */
+  publicSubnetAvailabilityZone: string,
+  /** 本ECSを起動するパブリックサブネットのID */
+  publicSubnetId: string,
   /** Websocket API GatewayのID */
   websocketAPIID: string,
   /** DynamoDB connections テーブルのARN */
@@ -42,8 +42,8 @@ export class BackendEcsStack extends cdk.Stack {
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
       vpcId: props.vpcId,
-      availabilityZones: [props.privateNetAvailabilityZone],
-      privateSubnetIds: [props.privateSubnetId]
+      availabilityZones: [props.publicSubnetAvailabilityZone],
+      publicSubnetIds: [props.publicSubnetId],
     });
 
     const matchMakePolicy = new iam.PolicyDocument({
@@ -96,7 +96,8 @@ export class BackendEcsStack extends cdk.Stack {
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {
       cluster,
-      taskDefinition: matchMakeTaskDefinition
+      taskDefinition: matchMakeTaskDefinition,
+      assignPublicIp: true
     });
   }
 }
