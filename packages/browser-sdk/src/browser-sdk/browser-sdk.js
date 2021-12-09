@@ -13,8 +13,11 @@ import type {
   UserPictureGet,
   UserMailGet,
   MailVerify,
-  WebsocketDisconnect
+  WebsocketDisconnect,
+  WebsocketErrorNotifier,
+  WebsocketUnintentionalCloseNotifier
 } from '@gbraver-burst-network/browser-core';
+import {Observable, Subject, fromEvent, Subscription} from 'rxjs';
 import {BattleSDK} from './battle-sdk';
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {createAuth0ClientHelper} from '../auth0/client';
@@ -26,7 +29,8 @@ import {deleteLoggedInUser} from "../http-request/delete-user";
 
 /** ブラウザSDK */
 export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch,
-  UserNameGet, UserPictureGet, UserMailGet, MailVerify, LoggedInUserDelete, WebsocketDisconnect {}
+  UserNameGet, UserPictureGet, UserMailGet, MailVerify, LoggedInUserDelete, WebsocketDisconnect,
+  WebsocketErrorNotifier, WebsocketUnintentionalCloseNotifier {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -35,6 +39,9 @@ class BrowserSDKImpl implements BrowserSDK {
   _websocketAPIURL: string;
   _auth0Client: typeof Auth0Client;
   _websocket: ?WebSocket;
+  _websocketError: typeof Subject;
+  _websocketUnintentionalCloseNotifier: typeof Subject;
+  _websocketSubscriptions: typeof Subscription[];
 
   /**
    * コンストラクタ
@@ -50,6 +57,9 @@ class BrowserSDKImpl implements BrowserSDK {
     this._websocketAPIURL = websocketAPIURL;
     this._auth0Client = auth0Client;
     this._websocket = null;
+    this._websocketError = new Subject();
+    this._websocketUnintentionalCloseNotifier = new Subject();
+    this._websocketSubscriptions = [];
   }
 
   /** @override */
@@ -124,12 +134,23 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async disconnectWebsocket(): Promise<void> {
-    if (!this._websocket) {
-      return;
-    }
-
-    this._websocket.close();
+    this._websocket && this._websocket.close();
     this._websocket = null;
+    this._websocketSubscriptions.forEach(v => {
+      v.unsubscribe();
+    });
+    this._websocketSubscriptions = [];
+
+  }
+
+  /** @override */
+  websocketErrorNotifier(): typeof Observable {
+    return this._websocketError;
+  }
+
+  /** @override */
+  websocketUnintentionalCloseNotifier(): typeof Observable {
+    return this._websocketUnintentionalCloseNotifier;
   }
 
   /**
@@ -144,8 +165,13 @@ class BrowserSDKImpl implements BrowserSDK {
     }
 
     const accessToken = await this._auth0Client.getTokenSilently();
-    this._websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
-    return this._websocket;
+    const websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
+    this._websocketSubscriptions = [
+      fromEvent(websocket, 'error').subscribe(this._websocketError),
+      fromEvent(websocket, 'close').subscribe(this._websocketError)  ,
+    ];
+    this._websocket = websocket;
+    return websocket;
   }
 }
 
