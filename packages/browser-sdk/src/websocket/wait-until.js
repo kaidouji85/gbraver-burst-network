@@ -39,17 +39,13 @@ export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: R
  */
 export function waitUntil<X>(websocket: WebSocket, messageHandler: MessageHandler<X>): Promise<X> {
   let handler = null;
-  let errorHandler = null;
   return new Promise((resolve, reject) => {
     handler = (e: MessageEvent) => {
       messageHandler(e, resolve, reject);
     };
-    errorHandler = reject;
     websocket.addEventListener('message', handler);
-    websocket.addEventListener('error', errorHandler);
   })
     .finally(() => {
       handler && websocket.removeEventListener('message', handler);
-      errorHandler && websocket.removeEventListener('error', errorHandler);
     });
 }
