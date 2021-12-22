@@ -1,8 +1,9 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from "@aws-cdk/aws-ec2";
+import {Construct} from 'constructs';
+import {Stack, StackProps, CfnOutput} from 'aws-cdk-lib';
+import {aws_ec2 as ec2} from 'aws-cdk-lib';
 
 /** VPCスタックプロパティ */
-interface VPCProps extends cdk.StackProps {
+interface VPCProps extends StackProps {
   /** サービス名 */
   service: string,
   /** VPC CIDR */
@@ -10,30 +11,30 @@ interface VPCProps extends cdk.StackProps {
 };
 
 /** VPC スタック */
-export class AwsVpcStack extends cdk.Stack {
+export class AwsVpcStack extends Stack {
   /**
    * @constructor
    * @param scope スコープ
    * @param id スタックのID
    * @param props CDKプロパティ
    */
-  constructor(scope: cdk.Construct, id: string, props: VPCProps) {
+  constructor(scope: Construct, id: string, props: VPCProps) {
     super(scope, id, props);
     const vpc = new ec2.Vpc(this, "vpc", {
       cidr: props.cidr,
       maxAzs: 1,
       natGateways: 0
     });
-    new cdk.CfnOutput(this, 'VpcId', {
+    new CfnOutput(this, 'VpcId', {
       value: vpc.vpcId,
       exportName: `${props.service}:VpcId`
     });
     const publicSubnet = vpc.publicSubnets[0];
-    new cdk.CfnOutput(this, 'PulicNetAvailabilityZone', {
+    new CfnOutput(this, 'PulicNetAvailabilityZone', {
       value: publicSubnet.availabilityZone,
       exportName: `${props.service}:PulicNetAvailabilityZone`
     });
-    new cdk.CfnOutput(this, 'PulicSubnetId', {
+    new CfnOutput(this, 'PulicSubnetId', {
       value: publicSubnet.subnetId,
       exportName: `${props.service}:PulicSubnetId`
     });
