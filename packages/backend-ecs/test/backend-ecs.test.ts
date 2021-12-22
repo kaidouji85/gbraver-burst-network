@@ -1,10 +1,11 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import {expect as expectCDK, matchTemplate, MatchStyle} from '@aws-cdk/assert';
+import {App} from 'aws-cdk-lib';
+
 import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
 // TODO テストに失敗しないようにexpectCDKを正しく定義する
 test('Empty Stack', () => {
-    const app = new cdk.App();
+    const app = new App();
     // WHEN
     const stack = new BackendEcsStack(app, 'MyTestStack', {
       service: 'gbraver-burst-serverless',
