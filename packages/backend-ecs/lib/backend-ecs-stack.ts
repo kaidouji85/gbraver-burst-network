@@ -1,12 +1,15 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from "@aws-cdk/aws-ec2";
-import * as ecs from "@aws-cdk/aws-ecs";
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
+import {Construct} from 'constructs';
+import {Stack, StackProps} from 'aws-cdk-lib';
+import {
+  aws_ec2 as ec2, 
+  aws_ecs as ecs, 
+  aws_iam as iam, 
+  aws_ecr as ecr
+} from 'aws-cdk-lib';
 import * as uuid from 'uuid';
 
 /** バックエンドECSスタックのプロパティ */
-interface BackendEcsProps extends cdk.StackProps {
+interface BackendEcsProps extends StackProps {
   /** サービス名 */
   service: string,
   /** ステージ名 */
@@ -30,14 +33,14 @@ interface BackendEcsProps extends cdk.StackProps {
 }
 
 /** バックエンドECS スタック */
-export class BackendEcsStack extends cdk.Stack {
+export class BackendEcsStack extends Stack {
   /**
    * @constructor
    * @param scope スコープ
    * @param id スタックID
    * @param props スタックのプロパティ
    */
-  constructor(scope: cdk.Construct, id: string, props: BackendEcsProps) {
+  constructor(scope: Construct, id: string, props: BackendEcsProps) {
     super(scope, id, props);
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
