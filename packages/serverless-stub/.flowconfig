@@ -2,6 +2,8 @@
 <PROJECT_ROOT>/build/.*
 
 [include]
+../../node_modules
+
 
 [libs]
 

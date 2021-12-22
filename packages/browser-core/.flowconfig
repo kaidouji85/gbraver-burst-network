@@ -2,6 +2,7 @@
 <PROJECT_ROOT>/lib/.*
 
 [include]
+../../node_modules
 
 [libs]
 
