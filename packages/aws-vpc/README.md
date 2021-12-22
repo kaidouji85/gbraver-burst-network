@@ -14,13 +14,8 @@ cp .env.template .env
 vim .env
 ```
 
-## cdk bootstrap
-```shell
-npx node-env-run -E .env --exec "cdk bootstrap"
-```
-
 <a id="deploy-command"></a>
 ## VPCをデプロイする
 ```shell
-npx node-env-run -E .env --exec "cdk deploy"
+npx cdk deploy
 ```
