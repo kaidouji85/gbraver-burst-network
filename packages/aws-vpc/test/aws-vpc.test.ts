@@ -1,4 +1,4 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
+import {expect as expectCDK, matchTemplate, MatchStyle} from '@aws-cdk/assert';
 import {App} from 'aws-cdk-lib';
 import * as AwsVpc from '../lib/aws-vpc-stack';
 

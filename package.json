@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --ci",
+    "bootstrap": "lerna bootstrap --ci --hoist",
     "clean": "lerna run clean",
     "build": "run-s clean build:browser-core build:browser-sdk build:serverless-stub build:aws-vpc build:backend-app build:backend-ecs",
     "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
