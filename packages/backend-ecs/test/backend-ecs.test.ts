@@ -6,7 +6,7 @@ test('バックエンドECSスタックがスナップショットと一致し�
     const app = new App();
     const stack = new BackendEcsStack(app, 'MyTestStack', {
       service: 'gbraver-buesr-sls-dev',
-      stage: 'v_1_5_1',
+      stage: 'v1-5-1',
       vpcId: 'MyVpcId',
       publicSubnetId: 'MyPrivateSubnetId',
       publicSubnetAvailabilityZone: 'MyPrivateNetAvailabilityZone',
