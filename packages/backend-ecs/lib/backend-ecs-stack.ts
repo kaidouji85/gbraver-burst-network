@@ -6,7 +6,6 @@ import {
   aws_iam as iam, 
   aws_ecr as ecr
 } from 'aws-cdk-lib';
-import * as uuid from 'uuid';
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends StackProps {
@@ -29,7 +28,9 @@ interface BackendEcsProps extends StackProps {
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string,
   /** マッチメイクECRリポジトリ名 */
-  matchMakeEcrRepositoryName: string
+  matchMakeEcrRepositoryName: string,
+  /** 本スタックを実行するたびに発行するUUID */
+  uuid: string
 }
 
 /** バックエンドECS スタック */
@@ -86,8 +87,8 @@ export class BackendEcsStack extends Stack {
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
     // コンテナイメージを強制的に更新するために、
-    // タスク定義にUUIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
-    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
+    // タスク定義にユニークIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
+    matchMakeTaskDefinition.addContainer(`match-make-container-${props.uuid}`, {
       image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.stage),
       environment: {
         SERVICE: props.service,

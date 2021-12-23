@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VPC生成CloudFormatonがスナップショットと一致する 1`] = `
+exports[`VPCスタックがスナップショットと一致している 1`] = `
 Object {
   "Outputs": Object {
     "PulicNetAvailabilityZone": Object {
       "Export": Object {
-        "Name": "my-service:PulicNetAvailabilityZone",
+        "Name": "gbraver-buesr-sls-dev:PulicNetAvailabilityZone",
       },
       "Value": Object {
         "Fn::Select": Array [
@@ -18,7 +18,7 @@ Object {
     },
     "PulicSubnetId": Object {
       "Export": Object {
-        "Name": "my-service:PulicSubnetId",
+        "Name": "gbraver-buesr-sls-dev:PulicSubnetId",
       },
       "Value": Object {
         "Ref": "vpcPublicSubnet1Subnet2E65531E",
@@ -26,7 +26,7 @@ Object {
     },
     "VpcId": Object {
       "Export": Object {
-        "Name": "my-service:VpcId",
+        "Name": "gbraver-buesr-sls-dev:VpcId",
       },
       "Value": Object {
         "Ref": "vpcA2121C38",
