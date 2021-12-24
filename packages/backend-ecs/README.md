@@ -19,3 +19,12 @@ vim .env
 ```shell
 npx cdk deploy
 ```
+
+## ユニットテスト
+```shell
+# ユニットテスト実行
+npm test
+
+# スナップショット
+npx jest -u
+```

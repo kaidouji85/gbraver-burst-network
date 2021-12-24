@@ -71,7 +71,7 @@ Object {
               },
               Object {
                 "Name": "STAGE",
-                "Value": "v_1_5_1",
+                "Value": "v1-5-1",
               },
               Object {
                 "Name": "WEBSOCKET_API_ID",
@@ -94,7 +94,7 @@ Object {
                   Object {
                     "Ref": "AWS::URLSuffix",
                   },
-                  "/MyMatchMakeRepositoryName:v_1_5_1",
+                  "/MyMatchMakeRepositoryName:v1-5-1",
                 ],
               ],
             },
@@ -107,7 +107,7 @@ Object {
                 "awslogs-region": Object {
                   "Ref": "AWS::Region",
                 },
-                "awslogs-stream-prefix": "gbraver-buesr-sls-dev__v_1_5_1__match-make",
+                "awslogs-stream-prefix": "gbraver-buesr-sls-dev__v1-5-1__match-make",
               },
             },
             "Name": "match-make-container-test-uuid",
