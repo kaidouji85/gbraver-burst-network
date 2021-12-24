@@ -6,6 +6,7 @@ if [ -z "$SERVICE" ] || [ -z "$STAGE" ]; then
 fi
 
 OWN_PATH=`cd $(dirname ${0}) && pwd`
-cd ${OWN_PATH}/packages/backend-ecs
 npm ci
+npm run bootstrap
+cd ${OWN_PATH}/packages/backend-ecs
 npx cdk destroy -f

@@ -2,6 +2,7 @@
 import * as dotenv from 'dotenv';
 import 'source-map-support/register';
 import {App, Fn} from 'aws-cdk-lib';
+import {v4 as uuidV4}from 'uuid';
 import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
 dotenv.config();
@@ -16,8 +17,9 @@ const websocketAPIID = Fn.importValue(`${service}:${stage}:WebsoketApiId`);
 const connectionsTableARN = Fn.importValue(`${service}:${stage}:ConnectionsTableArn`);
 const casualMatchEntriesTableARN = Fn.importValue(`${service}:${stage}:CasualMatchEntriesTableArn`);
 const battlesTableARN = Fn.importValue(`${service}:${stage}:BattlesTableArn`);
+const uuid = uuidV4();
 
 const app = new App();
 new BackendEcsStack(app, `${service}-${stage}-backend-ecs`, {service, stage, vpcId, publicSubnetAvailabilityZone, publicSubnetId,
-  websocketAPIID, connectionsTableARN, casualMatchEntriesTableARN, battlesTableARN, matchMakeEcrRepositoryName
+  websocketAPIID, connectionsTableARN, casualMatchEntriesTableARN, battlesTableARN, matchMakeEcrRepositoryName, uuid
 });

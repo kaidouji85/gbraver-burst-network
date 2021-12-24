@@ -1,17 +1,13 @@
-import {expect as expectCDK, matchTemplate, MatchStyle} from '@aws-cdk/assert';
+import {Template} from "aws-cdk-lib/assertions";
 import {App} from 'aws-cdk-lib';
-import * as AwsVpc from '../lib/aws-vpc-stack';
+import {AwsVpcStack} from '../lib/aws-vpc-stack';
 
-// TODO テストに失敗しないようにexpectCDKを正しく定義する
-test('Empty Stack', () => {
+test('VPCスタックがスナップショットと一致している', () => {
     const app = new App();
-    // WHEN
-    const stack = new AwsVpc.AwsVpcStack(app, 'MyTestStack', {
-      service: 'my-service',
+    const stack = new AwsVpcStack(app, 'MyTestStack', {
+      service: 'gbraver-buesr-sls-dev',
       cidr: '172.16.0.0/16'
     });
-    // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+    const template = Template.fromStack(stack).toJSON();
+    expect(template).toMatchSnapshot();
 });
