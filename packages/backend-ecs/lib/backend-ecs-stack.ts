@@ -1,12 +1,14 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from "@aws-cdk/aws-ec2";
-import * as ecs from "@aws-cdk/aws-ecs";
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
-import * as uuid from 'uuid';
+import {Construct} from 'constructs';
+import {Stack, StackProps} from 'aws-cdk-lib';
+import {
+  aws_ec2 as ec2, 
+  aws_ecs as ecs, 
+  aws_iam as iam, 
+  aws_ecr as ecr
+} from 'aws-cdk-lib';
 
 /** バックエンドECSスタックのプロパティ */
-interface BackendEcsProps extends cdk.StackProps {
+interface BackendEcsProps extends StackProps {
   /** サービス名 */
   service: string,
   /** ステージ名 */
@@ -26,18 +28,20 @@ interface BackendEcsProps extends cdk.StackProps {
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string,
   /** マッチメイクECRリポジトリ名 */
-  matchMakeEcrRepositoryName: string
+  matchMakeEcrRepositoryName: string,
+  /** 本スタックを実行するたびに発行するUUID */
+  uuid: string
 }
 
 /** バックエンドECS スタック */
-export class BackendEcsStack extends cdk.Stack {
+export class BackendEcsStack extends Stack {
   /**
    * @constructor
    * @param scope スコープ
    * @param id スタックID
    * @param props スタックのプロパティ
    */
-  constructor(scope: cdk.Construct, id: string, props: BackendEcsProps) {
+  constructor(scope: Construct, id: string, props: BackendEcsProps) {
     super(scope, id, props);
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'backend-ecs-vpc', {
@@ -83,8 +87,8 @@ export class BackendEcsStack extends cdk.Stack {
     });
     const matchMakeRepository = ecr.Repository.fromRepositoryName(this, 'match-make-ecr', props.matchMakeEcrRepositoryName);
     // コンテナイメージを強制的に更新するために、
-    // タスク定義にUUIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
-    matchMakeTaskDefinition.addContainer(`match-make-container-${uuid.v4()}`, {
+    // タスク定義にユニークIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
+    matchMakeTaskDefinition.addContainer(`match-make-container-${props.uuid}`, {
       image: ecs.ContainerImage.fromEcrRepository(matchMakeRepository, props.stage),
       environment: {
         SERVICE: props.service,

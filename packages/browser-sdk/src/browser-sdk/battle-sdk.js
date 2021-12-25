@@ -59,7 +59,6 @@ export class BattleSDK implements Battle {
       filter((data: ?Object) => data),
       map((data: Object) => parseSuddenlyBattleEnd(data)),
       filter((sudenlyBattleEnd: ?SuddenlyBattleEnd) => sudenlyBattleEnd),
-      map(() => {})
     );
   }
   

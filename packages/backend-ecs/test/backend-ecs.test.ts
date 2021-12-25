@@ -1,14 +1,12 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import {Template} from "aws-cdk-lib/assertions";
+import {App} from 'aws-cdk-lib';
 import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
-// TODO テストに失敗しないようにexpectCDKを正しく定義する
-test('Empty Stack', () => {
-    const app = new cdk.App();
-    // WHEN
+test('バックエンドECSスタックがスナップショットと一致している', () => {
+    const app = new App();
     const stack = new BackendEcsStack(app, 'MyTestStack', {
-      service: 'gbraver-burst-serverless',
-      stage: 'dev',
+      service: 'gbraver-buesr-sls-dev',
+      stage: 'v1-5-1',
       vpcId: 'MyVpcId',
       publicSubnetId: 'MyPrivateSubnetId',
       publicSubnetAvailabilityZone: 'MyPrivateNetAvailabilityZone',
@@ -16,10 +14,9 @@ test('Empty Stack', () => {
       connectionsTableARN: 'MyConnectionsTableARN',
       casualMatchEntriesTableARN: 'MyCasualMatchEntriesTableARN',
       battlesTableARN: 'MyBattlesTableARN',
-      matchMakeEcrRepositoryName: 'MyMatchMakeRepositoryName'
+      matchMakeEcrRepositoryName: 'MyMatchMakeRepositoryName',
+      uuid: 'test-uuid'
     });
-    // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+    const template = Template.fromStack(stack).toJSON();
+    expect(template).toMatchSnapshot();
 });

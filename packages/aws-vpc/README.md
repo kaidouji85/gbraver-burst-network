@@ -7,6 +7,18 @@ NAT Gatewayの料金を節約するために、開発、本番環境で同一の
 ## 前提条件
 プロジェクトルートに記載されている[前提条件](../../Readme.md#pre-required)をクリアしてください。
 
+## 環境変数定義
+```shell
+cp .env.template .env
+# 環境に応じた値を設定する
+vim .env
+```
+
+## ユニットテスト
+```shell
+npm test
+```
+
 <a id="deploy-command"></a>
 ## VPCをデプロイする
 ```shell

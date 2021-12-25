@@ -20,6 +20,13 @@ const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? '';
 
 window.onload = async () => {
   const browserSDK = await createBrowserSDK(window.location.origin, REST_API_URL, WEBSOCKET_API_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_AUDIENCE);
+  browserSDK.websocketUnintentionalCloseNotifier().subscribe(e => {
+    console.log('websocketUnintentionalCloseNotifier', e);
+  });
+  browserSDK.websocketErrorNotifier().subscribe(e => {
+    console.log('websocketErrorNotifier', e);
+  });
+
   if (browserSDK.isLoginSuccessRedirect()) {
     await browserSDK.afterLoginSuccess();
   }
