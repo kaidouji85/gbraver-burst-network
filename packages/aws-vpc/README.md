@@ -14,6 +14,11 @@ cp .env.template .env
 vim .env
 ```
 
+## ユニットテスト
+```shell
+npm test
+```
+
 <a id="deploy-command"></a>
 ## VPCをデプロイする
 ```shell
