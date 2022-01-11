@@ -1,22 +1,21 @@
 // @flow
 
-import test from 'ava';
 import type {NotReadyBattleProgress} from "../../../src/response/not-ready-battle-progress";
 import {parseNotReadyBattleProgress} from "../../../src/response/not-ready-battle-progress";
 
 const data: NotReadyBattleProgress = {action: 'not-ready-battle-progress'};
 
-test('NotReadyBattleProgressなら正しくパースできる', t => {
+test('NotReadyBattleProgressなら正しくパースできる', () => {
   const result = parseNotReadyBattleProgress(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual( data);
 });
 
-test('nullならパースできない', t => {
+test('nullならパースできない', () => {
   const result = parseNotReadyBattleProgress(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', t => {
+test('undefinedならパースできない', () => {
   const result = parseNotReadyBattleProgress(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

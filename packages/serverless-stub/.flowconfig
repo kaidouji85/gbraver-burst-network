@@ -1,9 +1,9 @@
 [ignore]
 <PROJECT_ROOT>/build/.*
+.*/test/.*
 
 [include]
 ../../node_modules
-
 
 [libs]
 
