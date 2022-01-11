@@ -1,22 +1,21 @@
 // @flow
 
-import test from 'ava';
 import type {EnteredCasualMatch} from "../../../src/response/entered-casual-match";
 import {parseEnteredCasualMatch} from "../../../src/response/entered-casual-match";
 
 const data: EnteredCasualMatch = {action: 'entered-casual-match'};
 
-test('EnteredCasualMatchなら正しくパースできる', t => {
+test('EnteredCasualMatchなら正しくパースできる', () => {
   const result = parseEnteredCasualMatch(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('nullならパースできない', t => {
+test('nullならパースできない', () => {
   const result = parseEnteredCasualMatch(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', t => {
+test('undefinedならパースできない', () => {
   const result = parseEnteredCasualMatch(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

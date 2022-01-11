@@ -1,22 +1,21 @@
 // @flow
 
-import test from 'ava';
 import type {BattleProgressPolling} from "../../../src/request/battle-progress-polling";
 import {parseBattleProgressPolling} from "../../../src/request/battle-progress-polling";
 
 const data: BattleProgressPolling = {action: 'battle-progress-polling', battleID: 'battleID', flowID: 'flowID'};
 
-test('BattleProgressPollingならパースできる', t => {
+test('BattleProgressPollingならパースできる', () => {
   const result = parseBattleProgressPolling(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('nullはパースできない', t => {
+test('nullはパースできない', () => {
   const result = parseBattleProgressPolling(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedはパースできない', t => {
+test('undefinedはパースできない', () => {
   const result = parseBattleProgressPolling(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
