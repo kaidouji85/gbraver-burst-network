@@ -1,6 +1,7 @@
 [ignore]
 <PROJECT_ROOT>/.serverless/.*
 <PROJECT_ROOT>/.webpack/.*
+.*/node_modules/resolve/.*
 
 [include]
 ../../node_modules
