@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --ci --hoist",
+    "bootstrap": "lerna bootstrap --ci",
     "prepublishOnly": "run-s bootstrap clean build",
     "clean": "lerna run clean",
     "build": "run-s build:browser-core build:browser-sdk build:serverless-stub build:aws-vpc build:backend-app build:backend-ecs",
