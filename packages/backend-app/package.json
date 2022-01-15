@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "auth0": "^2.37.0",
-    "aws-sdk": "^2.1055.0",
+    "aws-sdk": "^2.1058.0",
     "gbraver-burst-core": "^1.11.3",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.5",
@@ -50,7 +50,7 @@
     "serverless": "^2.71.0",
     "serverless-webpack": "^5.6.0",
     "superagent-proxy": "^3.0.0",
-    "webpack": "5.65.0",
+    "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1"
   },
   "author": "Y.Takeuchi",
