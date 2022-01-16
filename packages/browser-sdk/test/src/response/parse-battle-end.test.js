@@ -1,23 +1,22 @@
 // @flow
 
-import test from 'ava';
 import type {BattleEnd} from "../../../src/response/battle-end";
 import {EMPTY_GAME_STATE} from "gbraver-burst-core";
 import {parseBattleEnd} from "../../../src/response/battle-end";
 
 const data: BattleEnd = {action: 'battle-end', update: [EMPTY_GAME_STATE]};
 
-test('BattleEndを正しくパースできる', t => {
+test('BattleEndを正しくパースできる', () => {
   const result = parseBattleEnd(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('nullだとパースできない', t => {
+test('nullだとパースできない', () => {
   const result = parseBattleEnd(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedだとパースできない', t => {
+test('undefinedだとパースできない', () => {
   const result = parseBattleEnd(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

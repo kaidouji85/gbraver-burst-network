@@ -1,27 +1,26 @@
 // @flow
 
-import test from 'ava';
 import {parseEnterCasualMatch} from "../../../src/request/enter-casual-match";
 import type {EnterCasualMatch} from "../../../src/request/enter-casual-match";
 
 const enterCasualMatch: EnterCasualMatch = {action: 'enter-casual-match', armdozerId: 'armdozerId', pilotId: 'pilotId'};
 
-test('EnterCasualMatchを正しくパースできる', t => {
+test('EnterCasualMatchを正しくパースできる', () => {
   const result = parseEnterCasualMatch(enterCasualMatch);
-  t.deepEqual(result, enterCasualMatch);
+  expect(result).toEqual(enterCasualMatch);
 });
 
-test('余計なプロパティが含まれている場合でも問題なくパースできる', t => {
+test('余計なプロパティが含まれている場合でも問題なくパースできる', () => {
   const result = parseEnterCasualMatch({...enterCasualMatch, hp: 1000, power: 1000});
-  t.deepEqual(result, enterCasualMatch);
+  expect(result).toEqual(enterCasualMatch);
 });
 
-test('nullならパースできない', t => {
+test('nullならパースできない', () => {
   const result = parseEnterCasualMatch(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', t => {
+test('undefinedならパースできない', () => {
   const result = parseEnterCasualMatch(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

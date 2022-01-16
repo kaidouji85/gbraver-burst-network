@@ -1,9 +1,10 @@
 [ignore]
 <PROJECT_ROOT>/build/.*
+.*/node_modules/resolve/.*
+.*/test/.*
 
 [include]
 ../../node_modules
-
 
 [libs]
 

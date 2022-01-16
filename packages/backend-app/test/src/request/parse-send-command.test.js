@@ -1,6 +1,5 @@
 // @flow
 
-import test from 'ava';
 import type {SendCommand} from "../../../src/request/sned-command";
 import {parseSendCommand} from "../../../src/request/sned-command";
 
@@ -14,17 +13,17 @@ const sendCommand: SendCommand = {
   }
 };
 
-test('SendCommandなら正しくパースできる', t => {
+test('SendCommandなら正しくパースできる', () => {
   const result = parseSendCommand(sendCommand);
-  t.deepEqual(result, sendCommand);
+  expect(result).toEqual(sendCommand);
 });
 
-test('nullはパースできない', t => {
+test('nullはパースできない', () => {
   const result = parseSendCommand(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedはパースできない', t => {
+test('undefinedはパースできない', () => {
   const result = parseSendCommand(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

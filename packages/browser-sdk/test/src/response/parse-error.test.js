@@ -1,33 +1,32 @@
 // @flow
 
-import test from 'ava';
 import type {Error} from '../../../src/response/error';
 import {parseError} from "../../../src/response/error";
 
-test('Errorを正しくパースできる', t => {
+test('Errorを正しくパースできる', () => {
   const data: Error = {action: 'error', error: 'error message'};
   const result = parseError(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('errorが複雑なオブジェクトでもパースできる', t => {
+test('errorが複雑なオブジェクトでもパースできる', () => {
   const data: Error = {action: 'error', error: {test: 12}}
   const result = parseError(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('errorプロパティがないとパースできない', t => {
+test('errorプロパティがないとパースできない', () => {
   const data = {action: 'error'}
   const result = parseError(data);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('nullはパースできない', t => {
+test('nullはパースできない', () => {
   const result = parseError(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedはパースできない', t => {
+test('undefinedはパースできない', () => {
   const result = parseError(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

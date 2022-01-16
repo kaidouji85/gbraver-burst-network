@@ -1,6 +1,5 @@
 // @flow
 
-import test from 'ava';
 import type {BattleStart} from "../../../src/response/battle-start";
 import {parseBattleStart} from "../../../src/response/battle-start";
 import {EMPTY_GAME_STATE, EMPTY_PLAYER} from "gbraver-burst-core";
@@ -17,22 +16,22 @@ const battleStart: BattleStart = {
   isPoller: true,
 };
 
-test('BattleStartなら正しくパースできる', t => {
+test('BattleStartなら正しくパースできる', () => {
   const result = parseBattleStart(battleStart);
-  t.deepEqual(result, battleStart);
+  expect(result).toEqual(battleStart);
 });
 
-test('BattleStart以外だとパースできない', t => {
+test('BattleStart以外だとパースできない', () => {
   const result = parseBattleStart({hp: 1000});
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('nullはパースできない', t => {
+test('nullはパースできない', () => {
   const result = parseBattleStart(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedはパースできない', t => {
+test('undefinedはパースできない', () => {
   const result = parseBattleStart(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

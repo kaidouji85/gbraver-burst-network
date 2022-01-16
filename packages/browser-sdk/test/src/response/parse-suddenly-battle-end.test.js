@@ -1,22 +1,21 @@
 // @flow
 
-import test from 'ava';
 import type {SuddenlyBattleEnd} from "../../../src/response/suddenly-battle-end";
 import {parseSuddenlyBattleEnd} from "../../../src/response/suddenly-battle-end";
 
 const data: SuddenlyBattleEnd = {action: 'suddenly-battle-end'};
 
-test('SuddenlyBattleEndなら正しくパースできる', t => {
+test('SuddenlyBattleEndなら正しくパースできる', () => {
   const result = parseSuddenlyBattleEnd(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual( data);
 });
 
-test('nullならパースできない', t => {
+test('nullならパースできない', () => {
   const result = parseSuddenlyBattleEnd(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', t => {
+test('undefinedならパースできない', () => {
   const result = parseSuddenlyBattleEnd(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });

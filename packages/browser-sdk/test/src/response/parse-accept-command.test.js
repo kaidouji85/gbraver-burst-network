@@ -1,22 +1,21 @@
 // @flow
 
-import test from 'ava';
 import {parseAcceptCommand} from "../../../src/response/accept-command";
 import type {AcceptCommand} from "../../../src/response/accept-command";
 
 const data: AcceptCommand = {action: 'accept-command'};
 
-test('AcceptCommandなら正しくパースできる', t => {
+test('AcceptCommandなら正しくパースできる', () => {
   const result = parseAcceptCommand(data);
-  t.deepEqual(result, data);
+  expect(result).toEqual(data);
 });
 
-test('nullならパースできない', t => {
+test('nullならパースできない', () => {
   const result = parseAcceptCommand(null);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', t => {
+test('undefinedならパースできない', () => {
   const result = parseAcceptCommand(undefined);
-  t.is(result, null);
+  expect(result).toBe(null);
 });
