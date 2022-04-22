@@ -43,7 +43,7 @@ npm run build
 3. [VPCの作成](./packages/aws-vpc/README.md#deploy-command)
 4. マッチメイク用ECRリポジトリの作成
 5. [dockerhubアクセストークン発行](https://docs.docker.com/docker-hub/access-tokens/)
-6. 以下設定で[auth0 API 作成](https://auth0.com/docs/configure/apis)
+6. 以下設定で[auth0 API 作成](https://auth0.com/docs/get-started/auth0-overview/set-up-apis)
     * Name -> 任意
     * Identifier -> 任意
     * Signing Algorithm -> RS256
@@ -81,9 +81,9 @@ npm run build
 | TEST_ALLOW_ORIGIN | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する |
 | AUTH0_DOMAIN | auth0のドメインを記載 |
 | AUTH0_JWKS_URL | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
-| AUTH0_AUDIENCE | [事前作業](#pre-required-task) 5. で作成したAuth0 APIのaudieceを記載する、詳細は[ここ](https://auth0.com/docs/security/tokens/access-tokens/get-access-tokens#control-access-token-audience)を参照 |
-| AUTH0_USER_MANAGEMENT_APP_CLIENT_ID | [事前作業](#pre-required-task) 7. で作成したAuth0 Applicationのclient id |
-| AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 7. で作成したAuth0 Applicationのclient secret |
+| AUTH0_AUDIENCE | [事前作業](#pre-required-task) 6. で作成したAuth0 APIのIdentifierを記載する |
+| AUTH0_USER_MANAGEMENT_APP_CLIENT_ID | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient idを記載する |
+| AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名 |
 | DOCKER_USER | dockerhubのユーザ名 |
 | DOCKER_TOKEN | dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照|
