@@ -43,7 +43,7 @@ npm run build
 3. [VPCの作成](./packages/aws-vpc/README.md#deploy-command)
 4. マッチメイク用ECRリポジトリの作成
 5. [dockerhubアクセストークン発行](https://docs.docker.com/docker-hub/access-tokens/)
-6. 以下設定で[auth0 API 作成](https://auth0.com/docs/configure/apis)
+6. 以下設定で[auth0 API 作成](https://auth0.com/docs/get-started/auth0-overview/set-up-apis)
     * Name -> 任意
     * Identifier -> 任意
     * Signing Algorithm -> RS256
