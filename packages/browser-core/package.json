@@ -21,9 +21,9 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-flow": "^7.16.7",
-    "eslint": "^8.13.0",
+    "eslint": "^8.14.0",
     "eslint-plugin-flowtype": "^8.0.3",
-    "flow-bin": "^0.175.1",
+    "flow-bin": "^0.176.3",
     "flow-copy-source": "^2.0.9",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2"
