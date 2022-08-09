@@ -6,6 +6,9 @@ env:
     DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName
 phases:
+  install:
+    runtime-versions:
+      nodejs: 16
   build:
     commands:
       - ./match-make-container-push.sh

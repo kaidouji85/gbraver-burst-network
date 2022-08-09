@@ -4,6 +4,9 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
 phases:
+  install:
+    runtime-versions:
+      nodejs: 16
   build:
     commands:
       - ./serverless-remove.sh

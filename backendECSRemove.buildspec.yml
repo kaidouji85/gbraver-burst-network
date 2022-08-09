@@ -4,6 +4,9 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
 phases:
+  install:
+    runtime-versions:
+      nodejs: 16
   build:
     commands:
       - ./backend-ecs-remove.sh
