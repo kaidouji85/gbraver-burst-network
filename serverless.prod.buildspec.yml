@@ -11,6 +11,9 @@ env:
     AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/prod/auth0UserManagementAppClientId
     AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: /GbraverBurst/prod/auth0UserManagementAppClientSecret
 phases:
+  install:
+    runtime-versions:
+      nodejs: 16
   build:
     commands:
       - ./serverless-deploy.sh
