@@ -124,10 +124,9 @@ npm run build
 #### ビルド環境について
 以下がGブレイバーバーストで利用するビルド環境です。
 
-| # | ビルド環境 | 説明 |
-|---|----------|------|
-| BLD-01 | codebuild.node16.Dockerfile | [codebuild.node16.Dockerfile](./codebuild.node16.Dockerfile)から生成するカスタムイメージ |
-| BLD-02 | ubuntu/standard/5.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/5.0) を参照 |
+| #      | ビルド環境               | 説明 |
+|--------|---------------------|------|
+| BLD-01 | ubuntu/standard/6.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/6.0) を参照 |
 
 #### 開発環境でのCI/CD
 ##### AWS Parameter Storeを設定
@@ -195,13 +194,13 @@ AWS Parameter Storeに以下の値をセットします。
 以下のCode Buildプロジェクトを生成します
 
 | # | 概要 | BuildSpec | ビルド環境 |
-|---|------| --------- | -------- |
-| PROCB-01 | テスト | backendAppTest.buildspec.yml | codebuild.node16.Dockerfile |
-| PROCB-02 | serverlessデプロイ | serverless.prod.buildspec.yml | codebuild.node16.Dockerfile |
-| PROCB-03 | マッチメイクEcrPush| matchMakeContainer.prod.buildspec.yml | ubuntu/standard/5.0 |
-| PROCB-04 | バックエンドECSデプロイ| backendEcs.prod.buildspec.yml | codebuild.node16.Dockerfile |
-| PROCB-05 | serverless削除 | serverlessRemove.prod.buildspec.yml | codebuild.node16.Dockerfile |
-| PROCB-06 | バックエンドECS削除 | backendECSRemove.prod.buildspec.yml | codebuild.node16.Dockerfile |
+|---|------| --------- | ------- |
+| PROCB-01 | テスト | backendAppTest.buildspec.yml | BLD-01 |
+| PROCB-02 | serverlessデプロイ | serverless.prod.buildspec.yml | BLD-01 |
+| PROCB-03 | マッチメイクEcrPush| matchMakeContainer.prod.buildspec.yml | BLD-01 |
+| PROCB-04 | バックエンドECSデプロイ| backendEcs.prod.buildspec.yml | BLD-01 |
+| PROCB-05 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
+| PROCB-06 | バックエンドECS削除 | backendECSRemove.prod.buildspec.yml | BLD-01 |
 
 #### Code Pipeline
 
