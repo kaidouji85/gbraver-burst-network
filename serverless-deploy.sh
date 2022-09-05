@@ -6,7 +6,5 @@ if [ -z "${SERVICE}" ] || [ -z "${STAGE}" ] ||  [ -z "${ALLOW_ORIGIN}" ] || [ -z
 fi
 
 OWN_PATH=`cd $(dirname ${0}) && pwd`
-npm ci
-npm run bootstrap
 cd ${OWN_PATH}/packages/backend-app
 npx sls deploy --stage ${STAGE}

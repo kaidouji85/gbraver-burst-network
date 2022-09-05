@@ -89,6 +89,12 @@ npm run build
 | DOCKER_TOKEN | dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照|
 | AWS_DEFAULT_REGION | デプロイ先のAWSリージョン |
 
+#### プロジェクトセットアップ
+```shell
+npm ci
+npm run bootstrap
+```
+
 #### serverlessデプロイ
 
 ```shell
@@ -151,25 +157,10 @@ AWS Parameter Storeに以下の値をセットします。
 以下のCode Buildプロジェクトを生成します
 
 | # | 概要 | BuildSpec | ビルド環境 |
-|---|------| --------- | -------- |
-| DEVCB-01 | テスト | backendAppTest.buildspec.yml | codebuild.node16.Dockerfile |
-| DEVCB-02 | serverlessデプロイ | serverless.buildspec.yml | codebuild.node16.Dockerfile |
-| DEVCB-03 | マッチメイクEcrPush| matchMakeContainer.buildspec.yml | ubuntu/standard/5.0 |
-| DEVCB-04 | バックエンドECSデプロイ| backendEcs.buildspec.yml | codebuild.node16.Dockerfile |
-| DEVCB-05 | serverless削除 | serverlessRemove.buildspec.yml | codebuild.node16.Dockerfile |
-| DEVCB-06 | バックエンドECS削除 | backendECSRemove.buildspec.yml | codebuild.node16.Dockerfile |
-
-#### Code Pipeline
-
-以下構成のCodePipeLineを作成します。
-処理順番が同じものは、並列実行の設定をしてください。
-
-| 処理順番 | CodeBuild |
-| ------- | ---------- |
-| 001 | DEVCB-01.テスト |
-| 002 | DEVCB-02.serverlessデプロイ |
-| 002 | DEVCB-03.マッチメイクEcrPush |
-| 003 | DEVCB-04.バックエンドECSデプロイ |
+|---|--| --------- | -------- |
+| DEVCB-01 | デプロイ | buildspec.yml | BLD-01 |
+| DEVCB-02 | serverless削除 | serverlessRemove.buildspec.yml | BLD-01 |
+| DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
 
 #### 本番環境でのCI/CD
 ##### AWS Parameter Storeを設定
@@ -193,23 +184,8 @@ AWS Parameter Storeに以下の値をセットします。
 ##### Code Build
 以下のCode Buildプロジェクトを生成します
 
-| # | 概要 | BuildSpec | ビルド環境 |
-|---|------| --------- | ------- |
-| PROCB-01 | テスト | backendAppTest.buildspec.yml | BLD-01 |
-| PROCB-02 | serverlessデプロイ | serverless.prod.buildspec.yml | BLD-01 |
-| PROCB-03 | マッチメイクEcrPush| matchMakeContainer.prod.buildspec.yml | BLD-01 |
-| PROCB-04 | バックエンドECSデプロイ| backendEcs.prod.buildspec.yml | BLD-01 |
-| PROCB-05 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
-| PROCB-06 | バックエンドECS削除 | backendECSRemove.prod.buildspec.yml | BLD-01 |
-
-#### Code Pipeline
-
-以下構成のCodePipeLineを作成します。
-処理順番が同じものは、並列実行の設定をしてください。
-
-| 処理順番 | CodeBuild |
-| ------- | ---------- |
-| 001 | PROCB-01.テスト |
-| 002 | PROCB-02.serverlessデプロイ |
-| 002 | PROCB-03.マッチメイクEcrPush |
-| 003 | PROCB-04.バックエンドECSデプロイ |
+| #        | 概要           | BuildSpec                           | ビルド環境 |
+|----------|--------------|-------------------------------------| ------- |
+| PROCB-01 | デプロイ         | buildspec.prod.yml                  | BLD-01 |
+| PROCB-02 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
+| PROCB-03 | バックエンドECS削除  | backendECSRemove.prod.buildspec.yml | BLD-01 |
