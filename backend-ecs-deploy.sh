@@ -6,7 +6,5 @@ if [ -z "$STAGE" ] || [ -z "$MATCH_MAKE_ECR_REPOSITORY_NAME" ]; then
 fi
 
 OWN_PATH=`cd $(dirname ${0}) && pwd`
-npm ci
-npm run bootstrap
 cd ${OWN_PATH}/packages/backend-ecs
 npx cdk deploy -f --require-approval never
