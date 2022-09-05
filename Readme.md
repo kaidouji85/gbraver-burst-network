@@ -89,12 +89,6 @@ npm run build
 | DOCKER_TOKEN | dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照|
 | AWS_DEFAULT_REGION | デプロイ先のAWSリージョン |
 
-#### プロジェクトセットアップ
-```shell
-npm ci
-npm run bootstrap
-```
-
 #### serverlessデプロイ
 
 ```shell
@@ -189,3 +183,9 @@ AWS Parameter Storeに以下の値をセットします。
 | PROCB-01 | デプロイ         | buildspec.prod.yml                  | BLD-01 |
 | PROCB-02 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
 | PROCB-03 | バックエンドECS削除  | backendECSRemove.prod.buildspec.yml | BLD-01 |
+
+## パッケージ公開
+```shell
+npx lerna x.x.x --no-push
+npx lerna publish from-package
+```
