@@ -89,6 +89,12 @@ npm run build
 | DOCKER_TOKEN | dcoekrhudのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照|
 | AWS_DEFAULT_REGION | デプロイ先のAWSリージョン |
 
+#### プロジェクトセットアップ
+```shell
+npm ci
+npm run bootstrap
+```
+
 #### serverlessデプロイ
 
 ```shell
