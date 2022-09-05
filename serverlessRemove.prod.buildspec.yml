@@ -7,6 +7,10 @@ phases:
   install:
     runtime-versions:
       nodejs: 16
+  pre_build:
+    commands:
+      - npm ci
+      - npm run bootstrap
   build:
     commands:
       - ./serverless-remove.sh
