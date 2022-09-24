@@ -1,54 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VPCスタックがスナップショットと一致している 1`] = `
-Object {
-  "Outputs": Object {
-    "PulicNetAvailabilityZone": Object {
-      "Export": Object {
+{
+  "Outputs": {
+    "PulicNetAvailabilityZone": {
+      "Export": {
         "Name": "gbraver-buesr-sls-dev:PulicNetAvailabilityZone",
       },
-      "Value": Object {
-        "Fn::Select": Array [
+      "Value": {
+        "Fn::Select": [
           0,
-          Object {
+          {
             "Fn::GetAZs": "",
           },
         ],
       },
     },
-    "PulicSubnetId": Object {
-      "Export": Object {
+    "PulicSubnetId": {
+      "Export": {
         "Name": "gbraver-buesr-sls-dev:PulicSubnetId",
       },
-      "Value": Object {
+      "Value": {
         "Ref": "vpcPublicSubnet1Subnet2E65531E",
       },
     },
-    "VpcId": Object {
-      "Export": Object {
+    "VpcId": {
+      "Export": {
         "Name": "gbraver-buesr-sls-dev:VpcId",
       },
-      "Value": Object {
+      "Value": {
         "Ref": "vpcA2121C38",
       },
     },
   },
-  "Parameters": Object {
-    "BootstrapVersion": Object {
+  "Parameters": {
+    "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "vpcA2121C38": Object {
-      "Properties": Object {
+  "Resources": {
+    "vpcA2121C38": {
+      "Properties": {
         "CidrBlock": "172.16.0.0/16",
         "EnableDnsHostnames": true,
         "EnableDnsSupport": true,
         "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc",
           },
@@ -56,10 +56,10 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "vpcIGWE57CBDCA": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "vpcIGWE57CBDCA": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc",
           },
@@ -67,163 +67,163 @@ Object {
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "vpcIsolatedSubnet1RouteTable0D6B2D3D": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "vpcIsolatedSubnet1RouteTable0D6B2D3D": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc/IsolatedSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcIsolatedSubnet1RouteTableAssociation172210D4": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "vpcIsolatedSubnet1RouteTableAssociation172210D4": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcIsolatedSubnet1RouteTable0D6B2D3D",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcIsolatedSubnet1Subnet8B28CEB3",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcIsolatedSubnet1Subnet8B28CEB3": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
+    "vpcIsolatedSubnet1Subnet8B28CEB3": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
             0,
-            Object {
+            {
               "Fn::GetAZs": "",
             },
           ],
         },
         "CidrBlock": "172.16.128.0/17",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Isolated",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Isolated",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc/IsolatedSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcPublicSubnet1DefaultRoute10708846": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1DefaultRoute10708846": {
+      "DependsOn": [
         "vpcVPCGW7984C166",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "vpcIGWE57CBDCA",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPublicSubnet1RouteTable48A2DF9B": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "vpcPublicSubnet1RouteTable48A2DF9B": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPublicSubnet1RouteTableAssociation5D3F4579": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "vpcPublicSubnet1RouteTableAssociation5D3F4579": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPublicSubnet1Subnet2E65531E",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPublicSubnet1Subnet2E65531E": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
+    "vpcPublicSubnet1Subnet2E65531E": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
             0,
-            Object {
+            {
               "Fn::GetAZs": "",
             },
           ],
         },
         "CidrBlock": "172.16.0.0/17",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "MyTestStack/vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcVPCGW7984C166": Object {
-      "Properties": Object {
-        "InternetGatewayId": Object {
+    "vpcVPCGW7984C166": {
+      "Properties": {
+        "InternetGatewayId": {
           "Ref": "vpcIGWE57CBDCA",
         },
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
     },
   },
-  "Rules": Object {
-    "CheckBootstrapVersion": Object {
-      "Assertions": Array [
-        Object {
-          "Assert": Object {
-            "Fn::Not": Array [
-              Object {
-                "Fn::Contains": Array [
-                  Array [
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
                     "1",
                     "2",
                     "3",
                     "4",
                     "5",
                   ],
-                  Object {
+                  {
                     "Ref": "BootstrapVersion",
                   },
                 ],

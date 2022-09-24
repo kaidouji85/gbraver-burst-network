@@ -1,38 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`バックエンドECSスタックがスナップショットと一致している 1`] = `
-Object {
-  "Parameters": Object {
-    "BootstrapVersion": Object {
+{
+  "Parameters": {
+    "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "backendecscluster8F4B4819": Object {
+  "Resources": {
+    "backendecscluster8F4B4819": {
       "Type": "AWS::ECS::Cluster",
     },
-    "matchmakeservicetaskrole7B5E20D2": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "matchmakeservicetaskrole7B5E20D2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ecs-tasks.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "dynamodb:PutItem",
                     "dynamodb:GetItem",
                     "dynamodb:DeleteItem",
@@ -40,13 +40,13 @@ Object {
                     "dynamodb:BatchWrite*",
                   ],
                   "Effect": "Allow",
-                  "Resource": Array [
+                  "Resource": [
                     "MyConnectionsTableARN",
                     "MyCasualMatchEntriesTableARN",
                     "MyBattlesTableARN",
                   ],
                 },
-                Object {
+                {
                   "Action": "execute-api:ManageConnections",
                   "Effect": "Allow",
                   "Resource": "arn:aws:execute-api:*:*:**/@connections/*",
@@ -60,51 +60,51 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "matchmaketaskdef9DD39F0A": Object {
-      "Properties": Object {
-        "ContainerDefinitions": Array [
-          Object {
-            "Environment": Array [
-              Object {
+    "matchmaketaskdef9DD39F0A": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
                 "Name": "SERVICE",
                 "Value": "gbraver-buesr-sls-dev",
               },
-              Object {
+              {
                 "Name": "STAGE",
                 "Value": "v1-5-1",
               },
-              Object {
+              {
                 "Name": "WEBSOCKET_API_ID",
                 "Value": "MyWebsocketAPIID",
               },
             ],
             "Essential": true,
-            "Image": Object {
-              "Fn::Join": Array [
+            "Image": {
+              "Fn::Join": [
                 "",
-                Array [
-                  Object {
+                [
+                  {
                     "Ref": "AWS::AccountId",
                   },
                   ".dkr.ecr.",
-                  Object {
+                  {
                     "Ref": "AWS::Region",
                   },
                   ".",
-                  Object {
+                  {
                     "Ref": "AWS::URLSuffix",
                   },
                   "/MyMatchMakeRepositoryName:v1-5-1",
                 ],
               ],
             },
-            "LogConfiguration": Object {
+            "LogConfiguration": {
               "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
+              "Options": {
+                "awslogs-group": {
                   "Ref": "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E",
                 },
-                "awslogs-region": Object {
+                "awslogs-region": {
                   "Ref": "AWS::Region",
                 },
                 "awslogs-stream-prefix": "gbraver-buesr-sls-dev__v1-5-1__match-make",
@@ -114,8 +114,8 @@ Object {
           },
         ],
         "Cpu": "256",
-        "ExecutionRoleArn": Object {
-          "Fn::GetAtt": Array [
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
             "matchmaketaskdefExecutionRoleABBC5ED2",
             "Arn",
           ],
@@ -123,11 +123,11 @@ Object {
         "Family": "MyTestStackmatchmaketaskdef1B2FC70A",
         "Memory": "512",
         "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": Array [
+        "RequiresCompatibilities": [
           "FARGATE",
         ],
-        "TaskRoleArn": Object {
-          "Fn::GetAtt": Array [
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
             "matchmakeservicetaskrole7B5E20D2",
             "Arn",
           ],
@@ -135,14 +135,14 @@ Object {
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "matchmaketaskdefExecutionRoleABBC5ED2": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "matchmaketaskdefExecutionRoleABBC5ED2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ecs-tasks.amazonaws.com",
               },
             },
@@ -152,31 +152,31 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "matchmaketaskdefExecutionRoleDefaultPolicy4AFB354E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "matchmaketaskdefExecutionRoleDefaultPolicy4AFB354E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ecr:BatchCheckLayerAvailability",
                 "ecr:GetDownloadUrlForLayer",
                 "ecr:BatchGetImage",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:",
-                    Object {
+                    {
                       "Ref": "AWS::Partition",
                     },
                     ":ecr:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":repository/MyMatchMakeRepositoryName",
@@ -184,19 +184,19 @@ Object {
                 ],
               },
             },
-            Object {
+            {
               "Action": "ecr:GetAuthorizationToken",
               "Effect": "Allow",
               "Resource": "*",
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
+              "Resource": {
+                "Fn::GetAtt": [
                   "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E",
                   "Arn",
                 ],
@@ -206,24 +206,24 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "matchmaketaskdefExecutionRoleDefaultPolicy4AFB354E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "matchmaketaskdefExecutionRoleABBC5ED2",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E": Object {
+    "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E": {
       "DeletionPolicy": "Retain",
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
     },
-    "serviceSecurityGroupF051F0EB": Object {
-      "Properties": Object {
+    "serviceSecurityGroupF051F0EB": {
+      "Properties": {
         "GroupDescription": "MyTestStack/service/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1",
@@ -233,56 +233,56 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "serviceService7DDC3B7C": Object {
-      "Properties": Object {
-        "Cluster": Object {
+    "serviceService7DDC3B7C": {
+      "Properties": {
+        "Cluster": {
           "Ref": "backendecscluster8F4B4819",
         },
-        "DeploymentConfiguration": Object {
+        "DeploymentConfiguration": {
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
         "EnableECSManagedTags": false,
         "LaunchType": "FARGATE",
-        "NetworkConfiguration": Object {
-          "AwsvpcConfiguration": Object {
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
             "AssignPublicIp": "ENABLED",
-            "SecurityGroups": Array [
-              Object {
-                "Fn::GetAtt": Array [
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
                   "serviceSecurityGroupF051F0EB",
                   "GroupId",
                 ],
               },
             ],
-            "Subnets": Array [
+            "Subnets": [
               "MyPrivateSubnetId",
             ],
           },
         },
-        "TaskDefinition": Object {
+        "TaskDefinition": {
           "Ref": "matchmaketaskdef9DD39F0A",
         },
       },
       "Type": "AWS::ECS::Service",
     },
   },
-  "Rules": Object {
-    "CheckBootstrapVersion": Object {
-      "Assertions": Array [
-        Object {
-          "Assert": Object {
-            "Fn::Not": Array [
-              Object {
-                "Fn::Contains": Array [
-                  Array [
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
                     "1",
                     "2",
                     "3",
                     "4",
                     "5",
                   ],
-                  Object {
+                  {
                     "Ref": "BootstrapVersion",
                   },
                 ],
