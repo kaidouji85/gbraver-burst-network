@@ -16,7 +16,11 @@ vim .env
 
 ## ユニットテスト
 ```shell
+# テスト実行
 npm test
+
+# スナップショット更新
+npx jest -u
 ```
 
 <a id="deploy-command"></a>
