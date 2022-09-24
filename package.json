@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
-    "prepublishOnly": "run-s bootstrap clean build",
     "publish": "run-s bootstrap clean build lerna publish:npm",
     "publish:npm": "lerna publish from-package",
     "clean": "lerna run clean",
