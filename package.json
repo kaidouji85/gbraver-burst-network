@@ -12,7 +12,7 @@
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
     "build:aws-vpc": "lerna run --scope @gbraver-burst-network/aws-vpc build",
     "build:backend-app": "lerna run --scope @gbraver-burst-network/backend-app build",
-    "build:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs build",
+    "build:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs build"
   },
   "devDependencies": {
     "lerna": "^5.5.2",
