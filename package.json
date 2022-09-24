@@ -4,6 +4,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
     "prepublishOnly": "run-s bootstrap clean build",
+    "publish": "run-s bootstrap clean build lerna publish:npm",
+    "publish:npm": "lerna publish from-package",
     "clean": "lerna run clean",
     "build": "run-s build:browser-core build:browser-sdk build:serverless-stub build:aws-vpc build:backend-app build:backend-ecs",
     "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
@@ -11,7 +13,7 @@
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
     "build:aws-vpc": "lerna run --scope @gbraver-burst-network/aws-vpc build",
     "build:backend-app": "lerna run --scope @gbraver-burst-network/backend-app build",
-    "build:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs build"
+    "build:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs build",
   },
   "devDependencies": {
     "lerna": "^5.5.2",
