@@ -1,7 +1,7 @@
 // @flow
 
 import type {UseCase} from "./use-case";
-import {ArmDozerIdList, PilotIds} from 'gbraver-burst-core';
+import {ArmDozerIds, PilotIds} from 'gbraver-burst-core';
 import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
 
 /** バトル プレイヤー01 */
@@ -24,7 +24,7 @@ export class BattlePlayer01 implements UseCase {
 
   /** @override */
   async execute(): Promise<void> {
-    const battle = await this._sdk.startCasualMatch(ArmDozerIdList.SHIN_BRAVER, PilotIds.SHINYA);
+    const battle = await this._sdk.startCasualMatch(ArmDozerIds.SHIN_BRAVER, PilotIds.SHINYA);
     battle.suddenlyBattleNotifier().subscribe(() => {
       console.log('suddenly battle end');
     });
