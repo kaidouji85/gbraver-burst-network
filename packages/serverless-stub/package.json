@@ -19,7 +19,7 @@
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "^1.5.8",
     "dotenv": "^16.0.2",
-    "gbraver-burst-core": "^1.14.1"
+    "gbraver-burst-core": "^1.14.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
