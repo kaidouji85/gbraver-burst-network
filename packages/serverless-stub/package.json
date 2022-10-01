@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
   "private": true,
-  "version": "1.5.8",
+  "version": "1.5.9",
   "author": "Y.Takeuchi",
   "license": "ISC",
   "main": "lib/index.js",
@@ -17,15 +17,15 @@
     "serve": "http-server build -p 8080 -c-1"
   },
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^1.5.8",
+    "@gbraver-burst-network/browser-sdk": "^1.5.9",
     "dotenv": "^16.0.2",
-    "gbraver-burst-core": "^1.13.0"
+    "gbraver-burst-core": "^1.14.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.19.1",
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.19.1",
-    "@babel/preset-env": "^7.19.1",
+    "@babel/preset-env": "^7.19.3",
     "@babel/preset-flow": "^7.18.6",
     "babel-loader": "^8.2.5",
     "eslint": "^8.24.0",
