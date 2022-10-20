@@ -3,7 +3,7 @@
 /** クエリパラメータをセットしたオブジェクト */
 export type QueryStringParameters = {
   /** トークン */
-  token: string
+  token: string,
 };
 
 /** オーサライザ リクエストコンテクスト */
@@ -13,7 +13,7 @@ export type AuthorizerRequestContext = {
   /** ドメイン名 */
   domainName: string,
   /** ステージ名 */
-  stage: string
+  stage: string,
 };
 
 /** オーサライザのイベント */

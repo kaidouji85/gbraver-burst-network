@@ -1,21 +1,21 @@
 // @flow
 
-import {DynamoDB} from "aws-sdk";
-import type {UserID} from '../core/user';
-import type {BattleID} from "../core/battle";
-import type {PlayerId} from "gbraver-burst-core";
+import { DynamoDB } from "aws-sdk";
+import type { UserID } from "../core/user";
+import type { BattleID } from "../core/battle";
+import type { PlayerId } from "gbraver-burst-core";
 
 /** コネクションの状態 */
 export type ConnectionState = None | CasualMatchMaking | InBattle;
 
 /** 状態なし */
 export type None = {
-  type: 'None'
+  type: "None",
 };
 
 /** カジュアルマッチ マッチメイク中 */
 export type CasualMatchMaking = {
-  type: 'CasualMatchMaking'
+  type: "CasualMatchMaking",
 };
 
 /** バトルに参加しているプレイヤー */
@@ -30,7 +30,7 @@ export type InBattlePlayer = {
 
 /** 戦闘中 */
 export type InBattle = {
-  type: 'InBattle',
+  type: "InBattle",
   /** 現在実行している戦闘のID */
   battleID: BattleID,
   /** バトルに参加しているプレイヤーの情報 */
@@ -51,7 +51,7 @@ export type ConnectionsSchema = {
 export class Connections {
   _client: typeof DynamoDB.DocumentClient;
   _tableName: string;
-  
+
   /**
    * コンストラクタ
    *
@@ -62,7 +62,7 @@ export class Connections {
     this._client = client;
     this._tableName = tableName;
   }
-  
+
   /**
    * コネクションID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
@@ -71,15 +71,15 @@ export class Connections {
    * @return 検索結果
    */
   async get(connectionId: string): Promise<?ConnectionsSchema> {
-    const result = await this._client.get(
-      {
+    const result = await this._client
+      .get({
         TableName: this._tableName,
         Key: { connectionId },
-      },
-    ).promise();
+      })
+      .promise();
     return result?.Item ?? null;
   }
-  
+
   /**
    * gbraver_burst_connectionに項目追加する
    *
@@ -87,9 +87,11 @@ export class Connections {
    * @return 処理が完了したら発火するPromise
    */
   put(connection: ConnectionsSchema): Promise<void> {
-    return this._client.put({ TableName: this._tableName, Item: connection }).promise();
+    return this._client
+      .put({ TableName: this._tableName, Item: connection })
+      .promise();
   }
-  
+
   /**
    * gbraver_burst_connectionの項目を削除する
    *
@@ -97,11 +99,11 @@ export class Connections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    return this._client.delete(
-      {
+    return this._client
+      .delete({
         TableName: this._tableName,
         Key: { connectionId },
-      },
-    ).promise();
+      })
+      .promise();
   }
 }

@@ -1,7 +1,7 @@
 // @flow
 
-import {ApiGatewayManagementApi} from "aws-sdk";
-import type {WebsocketResponse} from "../response/websocket-response";
+import { ApiGatewayManagementApi } from "aws-sdk";
+import type { WebsocketResponse } from "../response/websocket-response";
 
 /** メッセージ通知 */
 export class Notifier {
@@ -9,7 +9,7 @@ export class Notifier {
 
   /**
    * コンストラクタ
-   * 
+   *
    * @param api APIゲートウェイ管理オブジェクト
    */
   constructor(api: typeof ApiGatewayManagementApi) {
@@ -25,6 +25,8 @@ export class Notifier {
    */
   notifyToClient(connectionID: string, data: WebsocketResponse): Promise<void> {
     const sendData = JSON.stringify(data);
-    return this._api.postToConnection({ConnectionId: connectionID, Data: sendData}).promise();
+    return this._api
+      .postToConnection({ ConnectionId: connectionID, Data: sendData })
+      .promise();
   }
 }

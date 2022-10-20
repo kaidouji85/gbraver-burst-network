@@ -1,17 +1,17 @@
 // @flow
 
-import type {BattleID, FlowID} from "../core/battle";
-import type {Command} from "gbraver-burst-core";
+import type { BattleID, FlowID } from "../core/battle";
+import type { Command } from "gbraver-burst-core";
 
 /** バトルコマンド送信 */
 export type SendCommand = {
-  action: 'send-command',
+  action: "send-command",
   /** バトルID */
   battleID: BattleID,
   /** フローID */
   flowID: FlowID,
   /** コマンド */
-  command: Command
+  command: Command,
 };
 
 /**
@@ -23,8 +23,16 @@ export type SendCommand = {
  */
 export function parseSendCommand(data: Object): ?SendCommand {
   // TODO commandの正確な型チェックを実装する
-  return (data?.action === 'send-command') && (typeof data?.battleID === 'string') && (typeof data?.flowID === 'string')
-    && (data?.command !== null) && (typeof data?.command === 'object')
-    ? {action: data.action, battleID: data.battleID, flowID: data.flowID, command: data.command}
+  return data?.action === "send-command" &&
+    typeof data?.battleID === "string" &&
+    typeof data?.flowID === "string" &&
+    data?.command !== null &&
+    typeof data?.command === "object"
+    ? {
+        action: data.action,
+        battleID: data.battleID,
+        flowID: data.flowID,
+        command: data.command,
+      }
     : null;
 }

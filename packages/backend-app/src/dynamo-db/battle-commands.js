@@ -1,9 +1,9 @@
 // @flow
 
-import type {Command} from 'gbraver-burst-core';
-import {DynamoDB} from "aws-sdk";
-import type {BattleID, FlowID} from "../core/battle";
-import type {UserID} from "../core/user";
+import type { Command } from "gbraver-burst-core";
+import { DynamoDB } from "aws-sdk";
+import type { BattleID, FlowID } from "../core/battle";
+import type { UserID } from "../core/user";
 
 /** battle-commands のスキーマ */
 export type BattleCommandsSchema = {
@@ -41,7 +41,7 @@ export class BattleCommands {
    */
   put(command: BattleCommandsSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: command})
+      .put({ TableName: this._tableName, Item: command })
       .promise();
   }
 
@@ -53,10 +53,12 @@ export class BattleCommands {
    * @return 検索結果
    */
   async get(userID: string): Promise<?BattleCommandsSchema> {
-    const result = await this._client.get({
-      TableName: this._tableName,
-      Key: {userID},
-    }).promise();
+    const result = await this._client
+      .get({
+        TableName: this._tableName,
+        Key: { userID },
+      })
+      .promise();
     return result?.Item ?? null;
   }
 }
