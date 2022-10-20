@@ -1,8 +1,9 @@
 // @flow
 
-import {DynamoDB} from "aws-sdk";
-import type {UserID} from "../core/user";
-import type {ArmDozerId, PilotId} from "gbraver-burst-core";
+import { DynamoDB } from "aws-sdk";
+import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+
+import type { UserID } from "../core/user";
 
 /** casual_match_entriesのスキーマ */
 export type CasualMatchEntriesSchema = {
@@ -14,7 +15,7 @@ export type CasualMatchEntriesSchema = {
   pilotId: PilotId,
   /** コネクションID */
   connectionId: string,
-}
+};
 
 /** casual_match_entriesのDAO */
 export class CasualMatchEntries {
@@ -40,7 +41,7 @@ export class CasualMatchEntries {
    */
   put(entry: CasualMatchEntriesSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: entry})
+      .put({ TableName: this._tableName, Item: entry })
       .promise();
   }
 
@@ -52,7 +53,12 @@ export class CasualMatchEntries {
    */
   async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
     const resp = await this._client
-      .scan({TableName: this._tableName, Select: "ALL_ATTRIBUTES", ConsistentRead: true, Limit: limit})
+      .scan({
+        TableName: this._tableName,
+        Select: "ALL_ATTRIBUTES",
+        ConsistentRead: true,
+        Limit: limit,
+      })
       .promise();
     return resp?.Items ?? [];
   }
@@ -64,9 +70,11 @@ export class CasualMatchEntries {
    * @return 削除受付したら発火するPromise
    */
   delete(userID: string): Promise<void> {
-    return this._client.delete({
-      TableName: this._tableName,
-      Key: {userID}
-    }).promise();
+    return this._client
+      .delete({
+        TableName: this._tableName,
+        Key: { userID },
+      })
+      .promise();
   }
 }

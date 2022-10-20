@@ -1,6 +1,6 @@
 // @flow
 
-import type {CasualMatchEntry} from "../core/casual-match";
+import type { CasualMatchEntry } from "../core/casual-match";
 
 /**
  * マッチング
@@ -17,14 +17,20 @@ export type Matching<X: CasualMatchEntry> = [X, X];
  */
 export function matchMake<X: CasualMatchEntry>(entries: X[]): Matching<X>[] {
   if (entries.length <= 1) {
-    return  [];
+    return [];
   }
 
-  const result = entries.reduce((result: {working: X[], matchingList: Matching<X>[]}, entry: X) => {
-    const matching = (result.working.length) === 1 ? [result.working[0], entry] : null;
-    const updatedRemainder = matching ? [] : [entry];
-    const updatedMatchingList = matching ? [...result.matchingList, matching] : result.matchingList;
-    return {working: updatedRemainder, matchingList: updatedMatchingList};
-  }, {working: [], matchingList: []});
+  const result = entries.reduce(
+    (result: { working: X[], matchingList: Matching<X>[] }, entry: X) => {
+      const matching =
+        result.working.length === 1 ? [result.working[0], entry] : null;
+      const updatedRemainder = matching ? [] : [entry];
+      const updatedMatchingList = matching
+        ? [...result.matchingList, matching]
+        : result.matchingList;
+      return { working: updatedRemainder, matchingList: updatedMatchingList };
+    },
+    { working: [], matchingList: [] }
+  );
   return result.matchingList;
 }

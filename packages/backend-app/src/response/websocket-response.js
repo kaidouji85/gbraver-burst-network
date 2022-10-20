@@ -1,39 +1,40 @@
 // @flow
 
-import type {BattleID, FlowID} from "../core/battle";
-import type {Player, GameState} from "gbraver-burst-core";
+import type { GameState, Player } from "gbraver-burst-core";
+
+import type { BattleID, FlowID } from "../core/battle";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
-  Pong |
-  EnteredCasualMatch |
-  AcceptCommand |
-  BattleStart |
-  NotReadyBattleProgress |
-  BattleProgressed |
-  BattleEnd |
-  SuddenlyBattleEnd |
-  Error;
+  | Pong
+  | EnteredCasualMatch
+  | AcceptCommand
+  | BattleStart
+  | NotReadyBattleProgress
+  | BattleProgressed
+  | BattleEnd
+  | SuddenlyBattleEnd
+  | Error;
 
 /** pingの応答 */
 export type Pong = {
-  action: 'pong',
-  message: string
+  action: "pong",
+  message: string,
 };
 
 /** カジュアルマッチ入室成功 */
 export type EnteredCasualMatch = {
-  action: 'entered-casual-match',
+  action: "entered-casual-match",
 };
 
 /** コマンド受取通知 */
 export type AcceptCommand = {
-  action: 'accept-command',
+  action: "accept-command",
 };
 
 /** 戦闘開始 */
 export type BattleStart = {
-  action: 'battle-start',
+  action: "battle-start",
   /** プレイヤー情報 */
   player: Player,
   /** 敵情報 */
@@ -45,17 +46,17 @@ export type BattleStart = {
   /** フローID */
   flowID: FlowID,
   /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
-  isPoller: boolean
+  isPoller: boolean,
 };
 
 /** バトル進行の準備ができていない */
 export type NotReadyBattleProgress = {
-  action: 'not-ready-battle-progress',
+  action: "not-ready-battle-progress",
 };
 
 /** バトル進行通知 */
 export type BattleProgressed = {
-  action: 'battle-progressed',
+  action: "battle-progressed",
   /** 発行されたフローID */
   flowID: FlowID,
   /** 更新されたゲームステート */
@@ -64,18 +65,18 @@ export type BattleProgressed = {
 
 /** バトル強制終了 */
 export type SuddenlyBattleEnd = {
-  action: 'suddenly-battle-end',
+  action: "suddenly-battle-end",
 };
 
 /** バトル終了 */
 export type BattleEnd = {
-  action: 'battle-end',
+  action: "battle-end",
   /** 更新されたゲームステート */
   update: GameState[],
 };
 
 /** エラー */
 export type Error = {
-  action: 'error',
+  action: "error",
   error: any,
 };

@@ -2,12 +2,12 @@
 
 /** カジュアルマッチエントリのリクエストボディ */
 export type EnterCasualMatch = {
-  action: 'enter-casual-match',
+  action: "enter-casual-match",
   /** 選択したアームドーザのID */
   armdozerId: string,
   /** 選択したパイロットのID */
   pilotId: string,
-}
+};
 
 /**
  * 任意オブジェクトをカジュアルマッチエントリに変換する
@@ -17,11 +17,13 @@ export type EnterCasualMatch = {
  * @return 変換結果
  */
 export function parseEnterCasualMatch(origin: Object): ?EnterCasualMatch {
-  return(
-    (origin?.action  === 'enter-casual-match')
-    && (typeof origin?.armdozerId === 'string')
-    && (typeof origin?.pilotId === 'string')
-  )
-    ? {action: origin.action, armdozerId: origin.armdozerId, pilotId: origin.pilotId}
+  return origin?.action === "enter-casual-match" &&
+    typeof origin?.armdozerId === "string" &&
+    typeof origin?.pilotId === "string"
+    ? {
+        action: origin.action,
+        armdozerId: origin.armdozerId,
+        pilotId: origin.pilotId,
+      }
     : null;
 }

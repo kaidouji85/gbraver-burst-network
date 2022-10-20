@@ -8,16 +8,16 @@ export type JwtClaims = {
   iat: string,
   iss: string,
   scope: string,
-  sub: string
+  sub: string,
 };
 
 /** RestAPIのリクエストコンテキスト */
 export type RestAPIRequestContext = {
   authorizer: {
     jwt: {
-      claims: JwtClaims
-    }
-  }
+      claims: JwtClaims,
+    },
+  },
 };
 
 /** RestAPIのイベント */

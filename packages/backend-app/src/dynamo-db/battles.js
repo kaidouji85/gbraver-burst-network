@@ -1,8 +1,9 @@
 // @flow
 
-import {DynamoDB} from "aws-sdk";
-import type {Battle, BattlePlayer} from "../core/battle";
-import type {UserID} from "../core/user";
+import { DynamoDB } from "aws-sdk";
+
+import type { Battle, BattlePlayer } from "../core/battle";
+import type { UserID } from "../core/user";
 
 /** battlesに格納するプレイヤーの情報 */
 export type PlayerSchema = BattlePlayer & {
@@ -16,8 +17,8 @@ export type BattlesSchema = Battle<PlayerSchema> & {
    * バトル更新ポーリングをするユーザのID
    * playersに含まれているユーザのIDを指定すること
    */
-  poller: UserID
-}
+  poller: UserID,
+};
 
 /** battlesのDAO*/
 export class Battles {
@@ -43,7 +44,7 @@ export class Battles {
    */
   put(battle: BattlesSchema): Promise<void> {
     return this._client
-      .put({TableName: this._tableName, Item: battle})
+      .put({ TableName: this._tableName, Item: battle })
       .promise();
   }
 
@@ -55,10 +56,12 @@ export class Battles {
    * @return 検索結果
    */
   async get(battleID: string): Promise<?BattlesSchema> {
-    const result = await this._client.get({
-      TableName: this._tableName,
-      Key: {battleID},
-    }).promise();
+    const result = await this._client
+      .get({
+        TableName: this._tableName,
+        Key: { battleID },
+      })
+      .promise();
     return result?.Item ?? null;
   }
 
@@ -69,9 +72,11 @@ export class Battles {
    * @return 削除受付したら発火するPromise
    */
   delete(battleID: string): Promise<void> {
-    return this._client.delete({
-      TableName: this._tableName,
-      Key: {battleID}
-    }).promise();
+    return this._client
+      .delete({
+        TableName: this._tableName,
+        Key: { battleID },
+      })
+      .promise();
   }
 }

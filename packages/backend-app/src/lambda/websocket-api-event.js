@@ -15,7 +15,7 @@ export type WebsocketAPIRequestContext = {
   /** ステージ名 */
   stage: string,
   /** 認可情報 */
-  authorizer: Authorizer
+  authorizer: Authorizer,
 };
 
 /** websocket api イベント */
@@ -23,5 +23,5 @@ export type WebsocketAPIEvent = {
   /** リクエストボディ */
   body?: string,
   /** リクエストコンテクスト */
-  requestContext: WebsocketAPIRequestContext
+  requestContext: WebsocketAPIRequestContext,
 };

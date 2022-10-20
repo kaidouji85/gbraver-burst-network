@@ -1,8 +1,9 @@
 // @flow
 
-import type {UserID} from "./user";
-import type {GameState} from "gbraver-burst-core/lib/state/game-state";
-import type {Player} from "gbraver-burst-core";
+import type { Player } from "gbraver-burst-core";
+import type { GameState } from "gbraver-burst-core/lib/state/game-state";
+
+import type { UserID } from "./user";
 
 /** バトルID */
 export type BattleID = string;
@@ -13,7 +14,7 @@ export type FlowID = string;
 /** バトルに参加するプレイヤー情報 */
 export type BattlePlayer = Player & {
   /** ユーザID */
-  userID: UserID
+  userID: UserID,
 };
 
 /**
@@ -38,5 +39,9 @@ export type Battle<X: BattlePlayer> = {
  * @return 変換結果
  */
 export function toPlayer(origin: BattlePlayer): Player {
-  return {playerId: origin.playerId, armdozer: origin.armdozer, pilot: origin.pilot};
+  return {
+    playerId: origin.playerId,
+    armdozer: origin.armdozer,
+    pilot: origin.pilot,
+  };
 }

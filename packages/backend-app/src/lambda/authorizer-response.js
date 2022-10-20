@@ -1,7 +1,7 @@
 // @flow
 
 /** 許可、拒否 */
-export type Effect = 'Allow' | 'Deny';
+export type Effect = "Allow" | "Deny";
 
 /** ポリシードキュメントのステートメント */
 export type Statement = {
@@ -9,14 +9,14 @@ export type Statement = {
   /** 効果 */
   Effect: Effect,
   /** リソース */
-  Resource: string
+  Resource: string,
 };
 
 /** ポリシードキュメント */
 export type PolicyDocument = {
-  Version: '2012-10-17',
+  Version: "2012-10-17",
   /** ステートメント */
-  Statement: Statement[]
+  Statement: Statement[],
 };
 
 /** オーサライザが返すデータ */
@@ -24,7 +24,7 @@ export type AuthorizerResponse = {
   /** プリンシパルID */
   principalId: string,
   /** ポリシードキュメント */
-  policyDocument: PolicyDocument
+  policyDocument: PolicyDocument,
 };
 
 /**
@@ -35,17 +35,23 @@ export type AuthorizerResponse = {
  * @param effect エフェクト
  * @return レスポンス
  */
-function createAuthorizeResponse(principalId: string, resource: string, effect: Effect): AuthorizerResponse {
+function createAuthorizeResponse(
+  principalId: string,
+  resource: string,
+  effect: Effect
+): AuthorizerResponse {
   return {
     principalId,
     policyDocument: {
-      Version: '2012-10-17',
-      Statement: [{
-        Action: "execute-api:Invoke",
-        Effect: effect,
-        Resource: resource
-      }]
-    }
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: "execute-api:Invoke",
+          Effect: effect,
+          Resource: resource,
+        },
+      ],
+    },
   };
 }
 
@@ -56,8 +62,11 @@ function createAuthorizeResponse(principalId: string, resource: string, effect: 
  * @param resource リソース
  * @return レスポンス
  */
-export function successAuthorize(principalId: string, resource: string): AuthorizerResponse {
- return createAuthorizeResponse(principalId, resource, 'Allow');
+export function successAuthorize(
+  principalId: string,
+  resource: string
+): AuthorizerResponse {
+  return createAuthorizeResponse(principalId, resource, "Allow");
 }
 
 /**
@@ -67,6 +76,9 @@ export function successAuthorize(principalId: string, resource: string): Authori
  * @param resource リソース
  * @return レスポンス
  */
-export function failedAuthorize(principalId: string, resource: string): AuthorizerResponse {
-  return createAuthorizeResponse(principalId, resource, 'Deny');
+export function failedAuthorize(
+  principalId: string,
+  resource: string
+): AuthorizerResponse {
+  return createAuthorizeResponse(principalId, resource, "Deny");
 }
