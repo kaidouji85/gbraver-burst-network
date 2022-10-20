@@ -1,5 +1,5 @@
 // @flow
-import {Observable} from 'rxjs';
+import { Observable } from "rxjs";
 
 /** Websocket切断 */
 export interface WebsocketDisconnect {
