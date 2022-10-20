@@ -2,9 +2,9 @@
 
 /** pingのレスポンス */
 export type Pong = {
-  action: 'pong',
+  action: "pong",
   /** メッセージ */
-  message: string
+  message: string,
 };
 
 /**
@@ -14,8 +14,8 @@ export type Pong = {
  * @param data パース元となるオブジェクト
  * @return パース結果
  */
- export function parsePong(data: Object): ?Pong {
-  return ((data?.action === 'pong') && (typeof data?.message === 'string'))
-    ? ({action: data.action, message: data.message})
+export function parsePong(data: Object): ?Pong {
+  return data?.action === "pong" && typeof data?.message === "string"
+    ? { action: data.action, message: data.message }
     : null;
 }

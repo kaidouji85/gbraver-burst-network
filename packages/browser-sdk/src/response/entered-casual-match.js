@@ -2,7 +2,7 @@
 
 /** カジュアルマッチ入室成功 */
 export type EnteredCasualMatch = {
-  action: 'entered-casual-match',
+  action: "entered-casual-match",
 };
 
 /**
@@ -13,7 +13,7 @@ export type EnteredCasualMatch = {
  * @return パース結果
  */
 export function parseEnteredCasualMatch(data: Object): ?EnteredCasualMatch {
-  return (data?.action === 'entered-casual-match')
-    ? {action: data.action}
+  return data?.action === "entered-casual-match"
+    ? { action: data.action }
     : null;
 }

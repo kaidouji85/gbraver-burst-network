@@ -2,7 +2,7 @@
 
 /** コマンド受取通知 */
 export type AcceptCommand = {
-  action: 'accept-command',
+  action: "accept-command",
 };
 
 /**
@@ -13,7 +13,5 @@ export type AcceptCommand = {
  * @return パース結果
  */
 export function parseAcceptCommand(data: Object): ?AcceptCommand {
-  return (data?.action === 'accept-command')
-    ? {action: data.action}
-    : null;
+  return data?.action === "accept-command" ? { action: data.action } : null;
 }

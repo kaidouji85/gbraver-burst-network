@@ -1,22 +1,26 @@
 // @flow
 
-import type {BattleProgressed} from "../../../src/response/battle-progressed";
-import {EMPTY_GAME_STATE} from "gbraver-burst-core";
-import {parseBattleProgressed} from "../../../src/response/battle-progressed";
+import type { BattleProgressed } from "../../../src/response/battle-progressed";
+import { EMPTY_GAME_STATE } from "gbraver-burst-core";
+import { parseBattleProgressed } from "../../../src/response/battle-progressed";
 
-const data: BattleProgressed = {action: 'battle-progressed', flowID: 'flowID', update: [EMPTY_GAME_STATE]};
+const data: BattleProgressed = {
+  action: "battle-progressed",
+  flowID: "flowID",
+  update: [EMPTY_GAME_STATE],
+};
 
-test('BattleProgressedを正しくパースできる', () => {
+test("BattleProgressedを正しくパースできる", () => {
   const result = parseBattleProgressed(data);
   expect(result).toEqual(data);
 });
 
-test('nullはパースできない', () => {
+test("nullはパースできない", () => {
   const result = parseBattleProgressed(null);
   expect(result).toBe(null);
 });
 
-test('undefinedはパースできない', () => {
+test("undefinedはパースできない", () => {
   const result = parseBattleProgressed(undefined);
   expect(result).toBe(null);
 });

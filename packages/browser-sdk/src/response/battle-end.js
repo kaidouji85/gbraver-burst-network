@@ -1,10 +1,10 @@
 // @flow
 
-import type {GameState} from "gbraver-burst-core";
+import type { GameState } from "gbraver-burst-core";
 
 /** バトル終了 */
 export type BattleEnd = {
-  action: 'battle-end',
+  action: "battle-end",
   /** 更新されたゲームステート */
   update: GameState[],
 };
@@ -18,7 +18,7 @@ export type BattleEnd = {
  */
 export function parseBattleEnd(data: Object): ?BattleEnd {
   // TODO updateを正確に型チェックする
-  return (data?.action === 'battle-end') && (Array.isArray(data?.update))
-    ? {action: data.action, update: data.update}
+  return data?.action === "battle-end" && Array.isArray(data?.update)
+    ? { action: data.action, update: data.update }
     : null;
 }

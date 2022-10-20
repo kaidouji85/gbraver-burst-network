@@ -2,7 +2,7 @@
 
 /** バトル進行の準備ができていない */
 export type NotReadyBattleProgress = {
-  action: 'not-ready-battle-progress',
+  action: "not-ready-battle-progress",
 };
 
 /**
@@ -12,8 +12,10 @@ export type NotReadyBattleProgress = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseNotReadyBattleProgress(data: Object): ?NotReadyBattleProgress  {
-  return (data?.action === 'not-ready-battle-progress')
-    ? {action: data.action}
+export function parseNotReadyBattleProgress(
+  data: Object
+): ?NotReadyBattleProgress {
+  return data?.action === "not-ready-battle-progress"
+    ? { action: data.action }
     : null;
 }
