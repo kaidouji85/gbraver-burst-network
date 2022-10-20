@@ -1,30 +1,31 @@
 // @flow
 
-import { v4 as uuidv4 } from "uuid";
-import { uniq } from "ramda";
 import { restoreGbraverBurst } from "gbraver-burst-core";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { parseBattleProgressPolling } from "./request/battle-progress-polling";
-import { parseJSON } from "./json/parse";
-import { createDynamoDBClient } from "./dynamo-db/client";
-import type { BattleCommandsSchema } from "./dynamo-db/battle-commands";
-import { toPlayer } from "./core/battle";
+import { uniq } from "ramda";
+import { v4 as uuidv4 } from "uuid";
+
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import type {
-  BattleEnd,
-  BattleProgressed,
-  NotReadyBattleProgress,
-  Error,
-} from "./response/websocket-response";
+import { toPlayer } from "./core/battle";
+import type { BattleCommandsSchema } from "./dynamo-db/battle-commands";
+import { createDynamoDBClient } from "./dynamo-db/client";
 import {
   createBattleCommands,
   createBattles,
   createConnections,
 } from "./dynamo-db/dao-creator";
+import { parseJSON } from "./json/parse";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
+import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { parseBattleProgressPolling } from "./request/battle-progress-polling";
+import type {
+  BattleEnd,
+  BattleProgressed,
+  Error,
+  NotReadyBattleProgress,
+} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

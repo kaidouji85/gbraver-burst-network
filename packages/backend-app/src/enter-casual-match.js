@@ -1,19 +1,19 @@
 // @flow
 
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { createDynamoDBClient } from "./dynamo-db/client";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
-import { parseEnterCasualMatch } from "./request/enter-casual-match";
-import { parseJSON } from "./json/parse";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import type { EnteredCasualMatch, Error } from "./response/websocket-response";
+import { createDynamoDBClient } from "./dynamo-db/client";
 import {
   createCasualMatchEntries,
   createConnections,
 } from "./dynamo-db/dao-creator";
+import { parseJSON } from "./json/parse";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
+import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { parseEnterCasualMatch } from "./request/enter-casual-match";
+import type { EnteredCasualMatch, Error } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

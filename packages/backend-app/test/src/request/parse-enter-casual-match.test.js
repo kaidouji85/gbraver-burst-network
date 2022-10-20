@@ -1,7 +1,7 @@
 // @flow
 
-import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 import type { EnterCasualMatch } from "../../../src/request/enter-casual-match";
+import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 
 const enterCasualMatch: EnterCasualMatch = {
   action: "enter-casual-match",

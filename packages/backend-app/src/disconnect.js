@@ -1,22 +1,22 @@
 // @flow
 
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./api-gateway/management";
+import { Notifier } from "./api-gateway/notifier";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type {
   ConnectionsSchema,
   InBattle,
   None,
 } from "./dynamo-db/connections";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import type { SuddenlyBattleEnd } from "./response/websocket-response";
-import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import { Notifier } from "./api-gateway/notifier";
 import {
   createBattles,
   createCasualMatchEntries,
   createConnections,
 } from "./dynamo-db/dao-creator";
+import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import type { SuddenlyBattleEnd } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

@@ -1,25 +1,26 @@
 // @flow
 
 import * as dotenv from "dotenv";
-import { v4 as uuidv4 } from "uuid";
 import { ArmDozers, Pilots, startGbraverBurst } from "gbraver-burst-core";
-import { createDynamoDBClient } from "./dynamo-db/client";
-import type { InBattle } from "./dynamo-db/connections";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import type { CasualMatchEntriesSchema } from "./dynamo-db/casual-match-entries";
-import { matchMake } from "./match-make/match-make";
+import { v4 as uuidv4 } from "uuid";
+
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import type { BattlesSchema, PlayerSchema } from "./dynamo-db/battles";
 import { toPlayer } from "./core/battle";
 import type { UserID } from "./core/user";
-import type { BattleStart } from "./response/websocket-response";
-import { wait } from "./wait/wait";
+import type { BattlesSchema, PlayerSchema } from "./dynamo-db/battles";
+import type { CasualMatchEntriesSchema } from "./dynamo-db/casual-match-entries";
+import { createDynamoDBClient } from "./dynamo-db/client";
+import type { InBattle } from "./dynamo-db/connections";
 import {
   createBattles,
   createCasualMatchEntries,
   createConnections,
 } from "./dynamo-db/dao-creator";
+import { matchMake } from "./match-make/match-make";
+import type { BattleStart } from "./response/websocket-response";
+import { wait } from "./wait/wait";
 
 dotenv.config();
 

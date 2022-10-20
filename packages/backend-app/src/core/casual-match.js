@@ -1,7 +1,8 @@
 // @flow
 
-import type { UserID } from "./user";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+
+import type { UserID } from "./user";
 
 /** カジュアルマッチエントリ */
 export type CasualMatchEntry = {

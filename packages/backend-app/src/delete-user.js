@@ -1,9 +1,10 @@
 // @flow
 
-import type { RestAPIResponse } from "./lambda/rest-api-response";
-import type { RestAPIEvent } from "./lambda/rest-api-event";
-import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import { ManagementClient } from "auth0";
+
+import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
+import type { RestAPIEvent } from "./lambda/rest-api-event";
+import type { RestAPIResponse } from "./lambda/rest-api-response";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID =

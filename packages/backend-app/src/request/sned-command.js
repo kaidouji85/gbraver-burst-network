@@ -1,7 +1,8 @@
 // @flow
 
-import type { BattleID, FlowID } from "../core/battle";
 import type { Command } from "gbraver-burst-core";
+
+import type { BattleID, FlowID } from "../core/battle";
 
 /** バトルコマンド送信 */
 export type SendCommand = {

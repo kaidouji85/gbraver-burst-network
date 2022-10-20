@@ -1,10 +1,10 @@
 // @flow
 
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import type { Pong } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";

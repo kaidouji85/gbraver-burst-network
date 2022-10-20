@@ -1,10 +1,10 @@
 // @flow
 
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { createConnections } from "./dynamo-db/dao-creator";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
+import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

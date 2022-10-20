@@ -1,6 +1,7 @@
 // @flow
 
 import { DynamoDB } from "aws-sdk";
+
 import type { Battle, BattlePlayer } from "../core/battle";
 import type { UserID } from "../core/user";
 

@@ -1,6 +1,7 @@
 // @flow
 
 import { ApiGatewayManagementApi } from "aws-sdk";
+
 import type { WebsocketResponse } from "../response/websocket-response";
 
 /** メッセージ通知 */

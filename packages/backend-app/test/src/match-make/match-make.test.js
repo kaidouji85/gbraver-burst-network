@@ -1,7 +1,7 @@
 // @flow
 
-import { EMPTY_CASUAL_MATCH_ENTRY } from "../../data/casual-match";
 import { matchMake } from "../../../src/match-make/match-make";
+import { EMPTY_CASUAL_MATCH_ENTRY } from "../../data/casual-match";
 
 const entry1 = { ...EMPTY_CASUAL_MATCH_ENTRY, userID: "user01" };
 const entry2 = { ...EMPTY_CASUAL_MATCH_ENTRY, userID: "user02" };

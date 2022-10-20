@@ -1,8 +1,8 @@
 // @flow
 
-import type { Authorizer } from "./websocket-api-event";
 import type { User } from "../core/user";
 import type { JwtClaims } from "./rest-api-event";
+import type { Authorizer } from "./websocket-api-event";
 
 /**
  * Websocket API 認可情報からユーザ情報を抽出する

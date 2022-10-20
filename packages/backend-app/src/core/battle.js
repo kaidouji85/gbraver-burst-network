@@ -1,8 +1,9 @@
 // @flow
 
-import type { UserID } from "./user";
-import type { GameState } from "gbraver-burst-core/lib/state/game-state";
 import type { Player } from "gbraver-burst-core";
+import type { GameState } from "gbraver-burst-core/lib/state/game-state";
+
+import type { UserID } from "./user";
 
 /** バトルID */
 export type BattleID = string;

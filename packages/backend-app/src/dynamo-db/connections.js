@@ -1,9 +1,10 @@
 // @flow
 
 import { DynamoDB } from "aws-sdk";
-import type { UserID } from "../core/user";
-import type { BattleID } from "../core/battle";
 import type { PlayerId } from "gbraver-burst-core";
+
+import type { BattleID } from "../core/battle";
+import type { UserID } from "../core/user";
 
 /** コネクションの状態 */
 export type ConnectionState = None | CasualMatchMaking | InBattle;

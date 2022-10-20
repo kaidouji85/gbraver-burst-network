@@ -1,10 +1,11 @@
 // @flow
 
 import { DynamoDB } from "aws-sdk";
-import { Connections } from "./connections";
-import { CasualMatchEntries } from "./casual-match-entries";
+
 import { BattleCommands } from "./battle-commands";
 import { Battles } from "./battles";
+import { CasualMatchEntries } from "./casual-match-entries";
+import { Connections } from "./connections";
 
 /**
  * connections テーブル DAO を生成する
