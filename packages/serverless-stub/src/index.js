@@ -1,16 +1,17 @@
 // @flow
 
 import { createBrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import type { UseCase } from "./use-case/use-case";
-import { PingUseCase } from "./use-case/ping";
+
 import { BattlePlayer01 } from "./use-case/battle-player-01";
 import { BattlePlayer02 } from "./use-case/battle-player-02";
 import { DeleteUserCase } from "./use-case/delete-user";
-import { GetUserNameCase } from "./use-case/get-user-name";
 import { DisconnectWebsocketCase } from "./use-case/disconnect-websocket";
+import { GetUserNameCase } from "./use-case/get-user-name";
 import { GetUserPictureURLCase } from "./use-case/get-user-picture-url";
-import { MailVerifiedCase } from "./use-case/mail-verified";
 import { MailAddressGet } from "./use-case/mail-address-get";
+import { MailVerifiedCase } from "./use-case/mail-verified";
+import { PingUseCase } from "./use-case/ping";
+import type { UseCase } from "./use-case/use-case";
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";

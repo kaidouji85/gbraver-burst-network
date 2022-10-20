@@ -1,7 +1,8 @@
 // @flow
 
-import type { UseCase } from "./use-case";
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+
+import type { UseCase } from "./use-case";
 
 /** Websocket切断 ユースケース */
 export class DisconnectWebsocketCase implements UseCase {

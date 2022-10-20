@@ -1,8 +1,9 @@
 // @flow
 
-import type { UseCase } from "./use-case";
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+
+import type { UseCase } from "./use-case";
 
 /** バトル プレイヤー01 */
 export class BattlePlayer01 implements UseCase {
