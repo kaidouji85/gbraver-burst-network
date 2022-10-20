@@ -12,6 +12,7 @@
     "transpile": "webpack --mode=production",
     "type-check": "flow check src",
     "lint": "eslint src",
+    "code-analysis": "codehawk src",
     "clean": "rimraf build",
     "dev-server": "webpack serve",
     "serve": "http-server build -p 8080 -c-1"
@@ -28,6 +29,7 @@
     "@babel/preset-env": "^7.19.3",
     "@babel/preset-flow": "^7.18.6",
     "babel-loader": "^8.2.5",
+    "codehawk-cli": "^10.0.1",
     "eslint": "^8.24.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "flow-bin": "^0.187.1",
