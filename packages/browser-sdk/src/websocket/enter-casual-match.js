@@ -1,12 +1,13 @@
 // @flow
 
+import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+
+import { parseJSON } from "../json/parse";
+import type { Resolve } from "../promise/promise";
 import type { BattleStart } from "../response/battle-start";
 import { parseBattleStart } from "../response/battle-start";
-import { waitUntil } from "./wait-until";
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
-import type { Resolve } from "../promise/promise";
-import { parseJSON } from "../json/parse";
 import { sendToAPIServer } from "./send-to-api-server";
+import { waitUntil } from "./wait-until";
 
 /**
  * カジュアルマッチを開始する

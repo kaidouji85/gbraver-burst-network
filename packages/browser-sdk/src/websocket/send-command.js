@@ -1,18 +1,19 @@
 // @flow
 
 import type { Command } from "gbraver-burst-core";
-import type { BattleProgressed } from "../response/battle-progressed";
+
+import { parseJSON } from "../json/parse";
+import type { Reject, Resolve } from "../promise/promise";
+import type { AcceptCommand } from "../response/accept-command";
+import { parseAcceptCommand } from "../response/accept-command";
 import type { BattleEnd } from "../response/battle-end";
+import { parseBattleEnd } from "../response/battle-end";
+import type { BattleProgressed } from "../response/battle-progressed";
+import { parseBattleProgressed } from "../response/battle-progressed";
+import { parseNotReadyBattleProgress } from "../response/not-ready-battle-progress";
+import { wait } from "../wait/wait";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
-import type { Reject, Resolve } from "../promise/promise";
-import { parseBattleProgressed } from "../response/battle-progressed";
-import { parseJSON } from "../json/parse";
-import { parseBattleEnd } from "../response/battle-end";
-import { wait } from "../wait/wait";
-import { parseNotReadyBattleProgress } from "../response/not-ready-battle-progress";
-import { parseAcceptCommand } from "../response/accept-command";
-import type { AcceptCommand } from "../response/accept-command";
 
 /**
  * コマンドをAPIサーバに送信する

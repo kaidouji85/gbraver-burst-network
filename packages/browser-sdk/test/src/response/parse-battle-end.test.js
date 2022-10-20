@@ -1,7 +1,8 @@
 // @flow
 
-import type { BattleEnd } from "../../../src/response/battle-end";
 import { EMPTY_GAME_STATE } from "gbraver-burst-core";
+
+import type { BattleEnd } from "../../../src/response/battle-end";
 import { parseBattleEnd } from "../../../src/response/battle-end";
 
 const data: BattleEnd = { action: "battle-end", update: [EMPTY_GAME_STATE] };

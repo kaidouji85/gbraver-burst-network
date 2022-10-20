@@ -1,7 +1,8 @@
 // @flow
 
-import type { BattleProgressed } from "../../../src/response/battle-progressed";
 import { EMPTY_GAME_STATE } from "gbraver-burst-core";
+
+import type { BattleProgressed } from "../../../src/response/battle-progressed";
 import { parseBattleProgressed } from "../../../src/response/battle-progressed";
 
 const data: BattleProgressed = {

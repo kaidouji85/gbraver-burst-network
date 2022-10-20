@@ -1,11 +1,11 @@
 // @flow
 
-import { waitUntil } from "./wait-until";
-import type { Resolve } from "../promise/promise";
 import { parseJSON } from "../json/parse";
+import type { Resolve } from "../promise/promise";
 import type { Pong } from "../response/pong";
 import { parsePong } from "../response/pong";
 import { sendToAPIServer } from "./send-to-api-server";
+import { waitUntil } from "./wait-until";
 
 /**
  * API サーバへの疎通確認

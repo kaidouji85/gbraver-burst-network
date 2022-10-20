@@ -1,6 +1,6 @@
 // @flow
 
-import type { Player, GameState } from "gbraver-burst-core";
+import type { GameState,Player } from "gbraver-burst-core";
 
 /** バトルスタート */
 export type BattleStart = {

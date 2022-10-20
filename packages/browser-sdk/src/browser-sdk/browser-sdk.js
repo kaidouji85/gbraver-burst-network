@@ -1,34 +1,35 @@
 // @flow
 
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 import type {
   Battle,
   CasualMatch,
   LoggedInUserDelete,
   LoginCheck,
   Logout,
+  MailVerify,
   Ping,
   UniversalLogin,
+  UserMailGet,
   UserNameGet,
   UserPictureGet,
-  UserMailGet,
-  MailVerify,
   WebsocketDisconnect,
   WebsocketErrorNotifier,
   WebsocketUnintentionalCloseNotifier,
 } from "@gbraver-burst-network/browser-core";
-import { Observable, Subject, fromEvent, Subscription } from "rxjs";
-import { BattleSDK } from "./battle-sdk";
-import { Auth0Client } from "@auth0/auth0-spa-js";
+import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { fromEvent, Observable, Subject, Subscription } from "rxjs";
+
 import { createAuth0ClientHelper } from "../auth0/client";
 import {
   clearLoginHistory,
   isLoginSuccessRedirect,
 } from "../auth0/login-redirect";
-import { ping } from "../websocket/ping";
+import { deleteLoggedInUser } from "../http-request/delete-user";
 import { connect } from "../websocket/connect";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
-import { deleteLoggedInUser } from "../http-request/delete-user";
+import { ping } from "../websocket/ping";
+import { BattleSDK } from "./battle-sdk";
 
 /** ブラウザSDK */
 export interface BrowserSDK
