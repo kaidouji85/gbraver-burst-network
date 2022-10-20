@@ -1,11 +1,12 @@
 // @flow
 
-import type {UseCase} from "./use-case";
-import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
+import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+
+import type { UseCase } from "./use-case";
 
 /** メール認証状態取得 ユースケース */
 export class MailVerifiedCase implements UseCase {
-  _sdk: BrowserSDK
+  _sdk: BrowserSDK;
 
   /**
    * コンストラクタ
@@ -18,7 +19,7 @@ export class MailVerifiedCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'メール認証状態取得';
+    return "メール認証状態取得";
   }
 
   /** @override */

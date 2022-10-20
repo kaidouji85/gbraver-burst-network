@@ -1,10 +1,10 @@
 // @flow
 
-import type {GameState} from "gbraver-burst-core";
+import type { GameState } from "gbraver-burst-core";
 
 /** バトル進行通知 */
 export type BattleProgressed = {
-  action: 'battle-progressed',
+  action: "battle-progressed",
   /** 発行されたフローID */
   flowID: string,
   /** 更新されたゲームステート */
@@ -20,8 +20,9 @@ export type BattleProgressed = {
  */
 export function parseBattleProgressed(data: Object): ?BattleProgressed {
   // TODO updateを正確に型チェックする
-  return (data?.action === 'battle-progressed') && (typeof data?.flowID === 'string')
-    && (Array.isArray(data?.update))
-    ? {action: data.action, flowID: data.flowID, update: data.update}
+  return data?.action === "battle-progressed" &&
+    typeof data?.flowID === "string" &&
+    Array.isArray(data?.update)
+    ? { action: data.action, flowID: data.flowID, update: data.update }
     : null;
 }

@@ -1,10 +1,10 @@
 // @flow
 
-import type {GameState, Command} from "gbraver-burst-core";
-import type {Player} from "gbraver-burst-core/lib/player/player";
-import {Observable} from 'rxjs';
+import type { Command,GameState } from "gbraver-burst-core";
+import type { Player } from "gbraver-burst-core/lib/player/player";
+import { Observable } from "rxjs";
 
-/** 
+/**
  * バトル
  * 本操作はログイン後に実行することを想定している
  */
@@ -26,7 +26,7 @@ export interface Battle {
 
   /**
    * バトル強制終了の通知ストリーム
-   * 
+   *
    * @return {Observable<void>} 通知ストリーム
    */
   suddenlyBattleNotifier(): typeof Observable;

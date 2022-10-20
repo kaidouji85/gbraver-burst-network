@@ -3,7 +3,7 @@
 /**
  * ログイン成功時のリダイレクトか否かを判定する
  * trueでログイン成功時のリダイレクトである
- * 
+ *
  * @return 判定結果
  */
 export function isLoginSuccessRedirect(): boolean {

@@ -1,11 +1,12 @@
 // @flow
 
-import type {UseCase} from "./use-case";
-import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
+import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+
+import type { UseCase } from "./use-case";
 
 /** ユーザ削除 ユースケース */
 export class DeleteUserCase implements UseCase {
-  _sdk: BrowserSDK
+  _sdk: BrowserSDK;
 
   /**
    * コンストラクタ
@@ -18,7 +19,7 @@ export class DeleteUserCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'ユーザ削除';
+    return "ユーザ削除";
   }
 
   /** @override */

@@ -2,5 +2,5 @@
 
 /** ping */
 export type Ping = {
-  action: 'ping'
+  action: "ping",
 };
