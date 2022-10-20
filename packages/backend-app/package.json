@@ -18,7 +18,8 @@
     "test": "jest",
     "transpile:sls": "sls package",
     "transpile:match-make": "webpack --config matchMake.webpack.config.js",
-    "serve:match-make": "node .webpack/match-making-polling.js"
+    "serve:match-make": "node .webpack/match-making-polling.js",
+    "code-analysis": "codehawk src"
   },
   "dependencies": {
     "auth0": "^2.42.0",
@@ -40,6 +41,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "codehawk-cli": "^10.0.1",
     "eslint": "^8.24.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-jest": "^27.0.4",
