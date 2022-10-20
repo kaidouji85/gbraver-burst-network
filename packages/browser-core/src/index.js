@@ -1,16 +1,16 @@
 // @flow
 
+export type { Battle } from "./battle";
+export type { CasualMatch } from "./casual-match";
+export type { LoginCheck, Logout,UniversalLogin } from "./login";
 export type { Ping } from "./ping";
-export type { UniversalLogin, LoginCheck, Logout } from "./login";
 export type {
+  LoggedInUserDelete,
+  MailVerify,
+  UserMailGet,
   UserNameGet,
   UserPictureGet,
-  UserMailGet,
-  MailVerify,
-  LoggedInUserDelete,
 } from "./user";
-export type { CasualMatch } from "./casual-match";
-export type { Battle } from "./battle";
 export type {
   WebsocketDisconnect,
   WebsocketErrorNotifier,

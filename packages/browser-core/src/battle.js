@@ -1,6 +1,6 @@
 // @flow
 
-import type { GameState, Command } from "gbraver-burst-core";
+import type { Command,GameState } from "gbraver-burst-core";
 import type { Player } from "gbraver-burst-core/lib/player/player";
 import { Observable } from "rxjs";
 
