@@ -1,11 +1,11 @@
 // @flow
 
-import type {UseCase} from "./use-case";
-import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
+import type { UseCase } from "./use-case";
+import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 /** ping ユースケース */
 export class PingUseCase implements UseCase {
-  _sdk: BrowserSDK
+  _sdk: BrowserSDK;
 
   /**
    * コンストラクタ
@@ -18,7 +18,7 @@ export class PingUseCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'ping';
+    return "ping";
   }
 
   /** @override */

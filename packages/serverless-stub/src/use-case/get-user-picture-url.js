@@ -1,11 +1,11 @@
 // @flow
 
-import type {UseCase} from "./use-case";
-import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
+import type { UseCase } from "./use-case";
+import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 /** ユーザ画像URL取得 ユースケース */
 export class GetUserPictureURLCase implements UseCase {
-  _sdk: BrowserSDK
+  _sdk: BrowserSDK;
 
   /**
    * コンストラクタ
@@ -18,7 +18,7 @@ export class GetUserPictureURLCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'ユーザ画像URL取得';
+    return "ユーザ画像URL取得";
   }
 
   /** @override */

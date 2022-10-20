@@ -1,11 +1,11 @@
 // @flow
 
-import type {UseCase} from "./use-case";
-import type {BrowserSDK} from "@gbraver-burst-network/browser-sdk";
+import type { UseCase } from "./use-case";
+import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 /** Websocket切断 ユースケース */
 export class DisconnectWebsocketCase implements UseCase {
-  _sdk: BrowserSDK
+  _sdk: BrowserSDK;
 
   /**
    * コンストラクタ
@@ -18,7 +18,7 @@ export class DisconnectWebsocketCase implements UseCase {
 
   /** @override */
   name(): string {
-    return 'Websocket切断';
+    return "Websocket切断";
   }
 
   /** @override */
