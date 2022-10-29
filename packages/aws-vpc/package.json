@@ -6,7 +6,7 @@
     "aws-vpc": "bin/aws-vpc.js"
   },
   "scripts": {
-    "build": "run-s transpile test",
+    "build": "run-s lint transpile test",
     "transpile": "tsc",
     "lint": "run-s lint:lib lint:bin lint:test",
     "lint:lib": "eslint lib",

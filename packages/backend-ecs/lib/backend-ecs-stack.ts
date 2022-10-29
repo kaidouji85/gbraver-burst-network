@@ -1,11 +1,11 @@
-import { Construct } from "constructs";
 import { Stack, StackProps } from "aws-cdk-lib";
 import {
   aws_ec2 as ec2,
+  aws_ecr as ecr,
   aws_ecs as ecs,
   aws_iam as iam,
-  aws_ecr as ecr,
 } from "aws-cdk-lib";
+import { Construct } from "constructs";
 
 /** バックエンドECSスタックのプロパティ */
 interface BackendEcsProps extends StackProps {

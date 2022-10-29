@@ -1,5 +1,6 @@
-import {Template} from "aws-cdk-lib/assertions";
 import {App} from 'aws-cdk-lib';
+import {Template} from "aws-cdk-lib/assertions";
+
 import {BackendEcsStack} from '../lib/backend-ecs-stack';
 
 test('バックエンドECSスタックがスナップショットと一致している', () => {

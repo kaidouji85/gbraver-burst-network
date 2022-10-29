@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-import * as dotenv from "dotenv";
 import "source-map-support/register";
+
 import { App, Fn } from "aws-cdk-lib";
+import * as dotenv from "dotenv";
 import { v4 as uuidV4 } from "uuid";
+
 import { BackendEcsStack } from "../lib/backend-ecs-stack";
 
 dotenv.config();
