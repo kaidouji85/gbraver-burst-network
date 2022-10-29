@@ -21,7 +21,7 @@ export class AwsVpcStack extends Stack {
   constructor(scope: Construct, id: string, props: VPCProps) {
     super(scope, id, props);
     const vpc = new ec2.Vpc(this, "vpc", {
-      cidr: props.cidr,
+      ipAddresses: ec2.IpAddresses.cidr(props.cidr),
       maxAzs: 1,
       natGateways: 0,
     });
