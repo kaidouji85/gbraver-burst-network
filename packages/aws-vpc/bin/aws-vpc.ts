@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import "source-map-support/register";
+
 import { App } from "aws-cdk-lib";
-import { AwsVpcStack } from "../lib/aws-vpc-stack";
 import * as dotenv from "dotenv";
+
+import { AwsVpcStack } from "../lib/aws-vpc-stack";
 
 dotenv.config();
 

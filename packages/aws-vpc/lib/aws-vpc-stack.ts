@@ -1,6 +1,6 @@
-import { Construct } from "constructs";
-import { Stack, StackProps, CfnOutput } from "aws-cdk-lib";
+import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { aws_ec2 as ec2 } from "aws-cdk-lib";
+import { Construct } from "constructs";
 
 /** VPCスタックプロパティ */
 interface VPCProps extends StackProps {

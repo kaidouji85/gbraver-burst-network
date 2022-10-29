@@ -1,5 +1,6 @@
-import {Template} from "aws-cdk-lib/assertions";
 import {App} from 'aws-cdk-lib';
+import {Template} from "aws-cdk-lib/assertions";
+
 import {AwsVpcStack} from '../lib/aws-vpc-stack';
 
 test('VPCスタックがスナップショットと一致している', () => {
