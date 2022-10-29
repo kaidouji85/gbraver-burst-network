@@ -1,6 +1,5 @@
 *.js
 !jest.config.js
-!.eslintrc.js
 *.d.ts
 node_modules
 .env
