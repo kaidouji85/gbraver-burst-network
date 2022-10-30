@@ -1,6 +1,6 @@
 // @flow
 
-import createAuth0Client, { Auth0Client } from "@auth0/auth0-spa-js";
+import { Auth0Client, createAuth0Client } from "@auth0/auth0-spa-js";
 
 /**
  * Auth0Clientを生成するヘルパー関数
@@ -19,9 +19,10 @@ export function createAuth0ClientHelper(
 ): Promise<typeof Auth0Client> {
   return createAuth0Client({
     domain: domain,
-    client_id: clientID,
-    responseType: "token id_token",
-    audience: audience,
-    redirectUri: redirectURI,
+    clientId: clientID,
+    authorizationParams: {
+      redirect_uri: redirectURI,
+      audience: audience,
+    },
   });
 }
