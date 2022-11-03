@@ -2,7 +2,7 @@
 
 /** エラー */
 export type Error = {
-  action: 'error',
+  action: "error",
   error: any,
 };
 
@@ -14,7 +14,7 @@ export type Error = {
  * @return パース結果
  */
 export function parseError(data: Object): ?Error {
-  return (data?.action === 'error') && (typeof data?.error !== 'undefined')
-    ? {action: data.action, error: data.error}
+  return data?.action === "error" && typeof data?.error !== "undefined"
+    ? { action: data.action, error: data.error }
     : null;
 }

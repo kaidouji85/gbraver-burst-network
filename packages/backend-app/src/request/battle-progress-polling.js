@@ -1,14 +1,14 @@
 // @flow
 
-import type {BattleID, FlowID} from "../core/battle";
+import type { BattleID, FlowID } from "../core/battle";
 
 /** バトル進行ポーリング */
 export type BattleProgressPolling = {
-  action: 'battle-progress-polling',
+  action: "battle-progress-polling",
   /** バトルID */
   battleID: BattleID,
   /** フローID */
-  flowID: FlowID
+  flowID: FlowID,
 };
 
 /**
@@ -18,9 +18,16 @@ export type BattleProgressPolling = {
  * @param origin パース元
  * @return パース結果
  */
-export function parseBattleProgressPolling(origin: Object): ?BattleProgressPolling {
-  return (origin?.action === 'battle-progress-polling') && (typeof origin?.battleID === 'string')
-    && (typeof origin?.flowID === 'string')
-    ? {action: origin.action, battleID: origin.battleID, flowID: origin.flowID}
+export function parseBattleProgressPolling(
+  origin: Object
+): ?BattleProgressPolling {
+  return origin?.action === "battle-progress-polling" &&
+    typeof origin?.battleID === "string" &&
+    typeof origin?.flowID === "string"
+    ? {
+        action: origin.action,
+        battleID: origin.battleID,
+        flowID: origin.flowID,
+      }
     : null;
 }

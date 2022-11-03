@@ -1,9 +1,10 @@
 // @flow
 
-import type {Battle} from "./battle";
-import type {ArmDozerId, PilotId} from "gbraver-burst-core";
+import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 
-/** 
+import type { Battle } from "./battle";
+
+/**
  * カジュアルマッチ
  * 本操作はログイン後に実行することを想定している
  */

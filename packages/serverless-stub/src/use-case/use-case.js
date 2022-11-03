@@ -10,5 +10,5 @@ export interface UseCase {
    *
    * @return ユースケースが完了したら発火するPromise
    */
-  execute(): Promise<void>
+  execute(): Promise<void>;
 }

@@ -7,12 +7,15 @@
  * @param accessToken Auth0 アクセストークン
  * @return 処理が完了したら発火するPromise
  */
-export async function deleteLoggedInUser(restAPIURL: string, accessToken: string): Promise<void> {
+export async function deleteLoggedInUser(
+  restAPIURL: string,
+  accessToken: string
+): Promise<void> {
   await fetch(`${restAPIURL}`, {
-    mode: 'cors',
+    mode: "cors",
     headers: {
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
     },
-    method: 'DELETE'
+    method: "DELETE",
   });
 }

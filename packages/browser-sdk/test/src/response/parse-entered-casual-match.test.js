@@ -1,21 +1,21 @@
 // @flow
 
-import type {EnteredCasualMatch} from "../../../src/response/entered-casual-match";
-import {parseEnteredCasualMatch} from "../../../src/response/entered-casual-match";
+import type { EnteredCasualMatch } from "../../../src/response/entered-casual-match";
+import { parseEnteredCasualMatch } from "../../../src/response/entered-casual-match";
 
-const data: EnteredCasualMatch = {action: 'entered-casual-match'};
+const data: EnteredCasualMatch = { action: "entered-casual-match" };
 
-test('EnteredCasualMatchなら正しくパースできる', () => {
+test("EnteredCasualMatchなら正しくパースできる", () => {
   const result = parseEnteredCasualMatch(data);
   expect(result).toEqual(data);
 });
 
-test('nullならパースできない', () => {
+test("nullならパースできない", () => {
   const result = parseEnteredCasualMatch(null);
   expect(result).toBe(null);
 });
 
-test('undefinedならパースできない', () => {
+test("undefinedならパースできない", () => {
   const result = parseEnteredCasualMatch(undefined);
   expect(result).toBe(null);
 });

@@ -15,11 +15,10 @@ export function connect(url: string): Promise<WebSocket> {
       resolve(websocket);
     };
     errorHandler = reject;
-    websocket.addEventListener('open', handler);
-    websocket.addEventListener('error', errorHandler);
-  })
-    .finally(() => {
-      handler && websocket.removeEventListener('open', handler);
-      errorHandler && websocket.removeEventListener('error', errorHandler);
-    });
+    websocket.addEventListener("open", handler);
+    websocket.addEventListener("error", errorHandler);
+  }).finally(() => {
+    handler && websocket.removeEventListener("open", handler);
+    errorHandler && websocket.removeEventListener("error", errorHandler);
+  });
 }

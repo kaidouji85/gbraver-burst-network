@@ -1,10 +1,10 @@
 // @flow
 
-import type {Player, GameState} from "gbraver-burst-core";
+import type { GameState, Player } from "gbraver-burst-core";
 
 /** バトルスタート */
 export type BattleStart = {
-  action: 'battle-start',
+  action: "battle-start",
   /** プレイヤー情報 */
   player: Player,
   /** 敵情報 */
@@ -16,7 +16,7 @@ export type BattleStart = {
   /** フローID */
   flowID: string,
   /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
-  isPoller: boolean
+  isPoller: boolean,
 };
 
 /**
@@ -26,14 +26,25 @@ export type BattleStart = {
  * @param data パース元となる文字列
  * @return パース結果
  */
- export function parseBattleStart(data: Object): ?BattleStart {
+export function parseBattleStart(data: Object): ?BattleStart {
   // TODO player、enemy、stateHistoryの正確な型チェックを実装する
-  return (data?.action === 'battle-start') && (typeof data?.battleID === 'string')
-    && (typeof data?.flowID === 'string') && Array.isArray(data?.stateHistory)
-    && (data?.player !== null) && (typeof data?.player === 'object')
-    && (data?.enemy !== null) && (typeof data?.enemy === 'object')
-    && (typeof data?.isPoller === 'boolean')
-    ? {action: data.action, battleID: data.battleID, flowID: data.flowID,
-      stateHistory: data.stateHistory, player: data.player, enemy: data.enemy, isPoller: data.isPoller}
+  return data?.action === "battle-start" &&
+    typeof data?.battleID === "string" &&
+    typeof data?.flowID === "string" &&
+    Array.isArray(data?.stateHistory) &&
+    data?.player !== null &&
+    typeof data?.player === "object" &&
+    data?.enemy !== null &&
+    typeof data?.enemy === "object" &&
+    typeof data?.isPoller === "boolean"
+    ? {
+        action: data.action,
+        battleID: data.battleID,
+        flowID: data.flowID,
+        stateHistory: data.stateHistory,
+        player: data.player,
+        enemy: data.enemy,
+        isPoller: data.isPoller,
+      }
     : null;
 }

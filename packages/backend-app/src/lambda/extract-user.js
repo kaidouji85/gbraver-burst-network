@@ -1,19 +1,21 @@
 // @flow
 
-import type {Authorizer} from "./websocket-api-event";
-import type {User} from '../core/user';
-import type {JwtClaims} from "./rest-api-event";
+import type { User } from "../core/user";
+import type { JwtClaims } from "./rest-api-event";
+import type { Authorizer } from "./websocket-api-event";
 
 /**
  * Websocket API 認可情報からユーザ情報を抽出する
- * 
+ *
  * @param authorizer 抽出元となる認可情報
  * @return 抽出したユーザ情報
  */
-export function extractUserFromWebSocketAuthorizer(authorizer: Authorizer): User {
+export function extractUserFromWebSocketAuthorizer(
+  authorizer: Authorizer
+): User {
   // authorizer.principalIdにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている
-  return {userID: authorizer.principalId};
+  return { userID: authorizer.principalId };
 }
 
 /**
@@ -25,5 +27,5 @@ export function extractUserFromWebSocketAuthorizer(authorizer: Authorizer): User
 export function extractUserFromRestAPIJWT(jwtClaims: JwtClaims): User {
   // jwtClaims.subにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている
- return {userID: jwtClaims.sub};
+  return { userID: jwtClaims.sub };
 }

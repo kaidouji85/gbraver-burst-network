@@ -1,22 +1,23 @@
 // @flow
 
-import type {BattleEnd} from "../../../src/response/battle-end";
-import {EMPTY_GAME_STATE} from "gbraver-burst-core";
-import {parseBattleEnd} from "../../../src/response/battle-end";
+import { EMPTY_GAME_STATE } from "gbraver-burst-core";
 
-const data: BattleEnd = {action: 'battle-end', update: [EMPTY_GAME_STATE]};
+import type { BattleEnd } from "../../../src/response/battle-end";
+import { parseBattleEnd } from "../../../src/response/battle-end";
 
-test('BattleEndを正しくパースできる', () => {
+const data: BattleEnd = { action: "battle-end", update: [EMPTY_GAME_STATE] };
+
+test("BattleEndを正しくパースできる", () => {
   const result = parseBattleEnd(data);
   expect(result).toEqual(data);
 });
 
-test('nullだとパースできない', () => {
+test("nullだとパースできない", () => {
   const result = parseBattleEnd(null);
   expect(result).toBe(null);
 });
 
-test('undefinedだとパースできない', () => {
+test("undefinedだとパースできない", () => {
   const result = parseBattleEnd(undefined);
   expect(result).toBe(null);
 });
