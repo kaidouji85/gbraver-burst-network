@@ -1,14 +1,10 @@
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { aws_ec2 as ec2 } from "aws-cdk-lib";
 import { Construct } from "constructs";
-
-/** Cloud Formation Output プレフィックス */
-const CFN_OUTPUT_PREFIX = 'VpcV2';
+import { SubnetType } from "aws-cdk-lib/aws-ec2";
 
 /** VPCスタックプロパティ */
 interface VPCProps extends StackProps {
-  /** サービス名 */
-  service: string;
   /** VPC CIDR */
   cidr: string;
   /** AZ数 */
@@ -20,29 +16,36 @@ export class AwsVpcStack extends Stack {
   /**
    * @constructor
    * @param scope スコープ
-   * @param id スタックのID
+   * @param stackID スタックのID
    * @param props CDKプロパティ
    */
-  constructor(scope: Construct, id: string, props: VPCProps) {
-    super(scope, id, props);
+  constructor(scope: Construct, stackID: string, props: VPCProps) {
+    super(scope, stackID, props);
     const vpc = new ec2.Vpc(this, "vpc", {
       ipAddresses: ec2.IpAddresses.cidr(props.cidr),
-      maxAzs: props.maxAzs,
+      maxAzs: 3,
       natGateways: 0,
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: 'PublicSubnet',
+          subnetType: SubnetType.PUBLIC,
+        },
+      ],
     });
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
-      exportName: `${props.service}:${CFN_OUTPUT_PREFIX}:VpcId`,
+      exportName: `${stackID}:VpcId`,
     });
 
     vpc.publicSubnets.forEach((subnets, index) => {
       new CfnOutput(this, `PublicNetAvailabilityZone${index}`, {
         value: subnets.availabilityZone,
-        exportName: `${props.service}:${CFN_OUTPUT_PREFIX}:PublicNetAvailabilityZone${index}`,
+        exportName: `${stackID}:PublicNetAvailabilityZone${index}`,
       });
       new CfnOutput(this, `PublicSubnetId${index}`, {
         value: subnets.subnetId,
-        exportName: `${props.service}:${CFN_OUTPUT_PREFIX}:PublicSubnetId${index}`,
+        exportName: `${stackID}:PublicSubnetId${index}`,
       });
     });
   }
