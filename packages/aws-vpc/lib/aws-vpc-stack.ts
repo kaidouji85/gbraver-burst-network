@@ -9,6 +9,8 @@ interface VPCProps extends StackProps {
   cidr: string;
   /** AZ数 */
   maxAzs: number;
+  /** サブネットのCIDRマスク */
+  subnetCidrMask: number;
 }
 
 /** VPC スタック */
@@ -27,7 +29,7 @@ export class AwsVpcStack extends Stack {
       natGateways: 0,
       subnetConfiguration: [
         {
-          cidrMask: 24,
+          cidrMask: props.subnetCidrMask,
           name: "PublicSubnet",
           subnetType: SubnetType.PUBLIC,
         },

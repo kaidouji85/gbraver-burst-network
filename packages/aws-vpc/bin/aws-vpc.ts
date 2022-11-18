@@ -20,8 +20,14 @@ dotenv.config();
 const service = process.env.SERVICE ?? "";
 const cidr = process.env.CIDR ?? "";
 const maxAzs = Number.parseInt(process.env.MAX_AZS ?? "");
+const subnetCidrMask = Number.parseInt(process.env.SUBNET_CIDR_MASK ?? "");
 const account = process.env.CDK_DEFAULT_ACCOUNT ?? "";
 const region = process.env.CDK_DEFAULT_REGION ?? "";
 const stackID = `${service}-vpc-g${VPC_GENERATION}`;
 const app = new App();
-new AwsVpcStack(app, stackID, { env: { account, region }, cidr, maxAzs });
+new AwsVpcStack(app, stackID, {
+  env: { account, region },
+  cidr,
+  maxAzs,
+  subnetCidrMask,
+});
