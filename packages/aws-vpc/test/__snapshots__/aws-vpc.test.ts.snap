@@ -5,7 +5,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
   "Outputs": {
     "PublicNetAvailabilityZone0": {
       "Export": {
-        "Name": "gbraver-buesr-sls-dev:VpcV2:PublicNetAvailabilityZone0",
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:PublicNetAvailabilityZone0",
       },
       "Value": {
         "Fn::Select": [
@@ -18,7 +18,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
     },
     "PublicNetAvailabilityZone1": {
       "Export": {
-        "Name": "gbraver-buesr-sls-dev:VpcV2:PublicNetAvailabilityZone1",
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:PublicNetAvailabilityZone1",
       },
       "Value": {
         "Fn::Select": [
@@ -31,23 +31,29 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
     },
     "PublicSubnetId0": {
       "Export": {
-        "Name": "gbraver-buesr-sls-dev:VpcV2:PublicSubnetId0",
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:PublicSubnetId0",
       },
       "Value": {
-        "Ref": "vpcPublicSubnet1Subnet2E65531E",
+        "Ref": "vpcPublicSubnetSubnet1Subnet031C8F62",
       },
     },
     "PublicSubnetId1": {
       "Export": {
-        "Name": "gbraver-buesr-sls-dev:VpcV2:PublicSubnetId1",
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:PublicSubnetId1",
       },
       "Value": {
-        "Ref": "vpcPublicSubnet2Subnet009B674F",
+        "Ref": "vpcPublicSubnetSubnet2Subnet591FB8AD",
       },
+    },
+    "SubnetCount": {
+      "Export": {
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:SubnetCount",
+      },
+      "Value": "2",
     },
     "VpcId": {
       "Export": {
-        "Name": "gbraver-buesr-sls-dev:VpcV2:VpcId",
+        "Name": "gbraver-buesr-sls-dev-gXXXXX:VpcId",
       },
       "Value": {
         "Ref": "vpcA2121C38",
@@ -71,7 +77,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
         "Tags": [
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc",
           },
         ],
       },
@@ -82,127 +88,13 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
         "Tags": [
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc",
           },
         ],
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "vpcIsolatedSubnet1RouteTable0D6B2D3D": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "MyTestStack/vpc/IsolatedSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "vpcA2121C38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "vpcIsolatedSubnet1RouteTableAssociation172210D4": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "vpcIsolatedSubnet1RouteTable0D6B2D3D",
-        },
-        "SubnetId": {
-          "Ref": "vpcIsolatedSubnet1Subnet8B28CEB3",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "vpcIsolatedSubnet1Subnet8B28CEB3": {
-      "Properties": {
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "172.16.128.0/18",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "Name",
-            "Value": "MyTestStack/vpc/IsolatedSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "vpcA2121C38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "vpcIsolatedSubnet2RouteTable3455CBFC": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "MyTestStack/vpc/IsolatedSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "vpcA2121C38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "vpcIsolatedSubnet2RouteTableAssociation8A8FAF70": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "vpcIsolatedSubnet2RouteTable3455CBFC",
-        },
-        "SubnetId": {
-          "Ref": "vpcIsolatedSubnet2Subnet2C6B375C",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "vpcIsolatedSubnet2Subnet2C6B375C": {
-      "Properties": {
-        "AvailabilityZone": {
-          "Fn::Select": [
-            1,
-            {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "172.16.192.0/18",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          {
-            "Key": "Name",
-            "Value": "MyTestStack/vpc/IsolatedSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "vpcA2121C38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "vpcPublicSubnet1DefaultRoute10708846": {
+    "vpcPublicSubnetSubnet1DefaultRoute88AEC4F6": {
       "DependsOn": [
         "vpcVPCGW7984C166",
       ],
@@ -212,17 +104,17 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
           "Ref": "vpcIGWE57CBDCA",
         },
         "RouteTableId": {
-          "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
+          "Ref": "vpcPublicSubnetSubnet1RouteTable8370FADE",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPublicSubnet1RouteTable48A2DF9B": {
+    "vpcPublicSubnetSubnet1RouteTable8370FADE": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc/PublicSubnet1",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc/PublicSubnetSubnet1",
           },
         ],
         "VpcId": {
@@ -231,18 +123,18 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPublicSubnet1RouteTableAssociation5D3F4579": {
+    "vpcPublicSubnetSubnet1RouteTableAssociation03099B2F": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
+          "Ref": "vpcPublicSubnetSubnet1RouteTable8370FADE",
         },
         "SubnetId": {
-          "Ref": "vpcPublicSubnet1Subnet2E65531E",
+          "Ref": "vpcPublicSubnetSubnet1Subnet031C8F62",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPublicSubnet1Subnet2E65531E": {
+    "vpcPublicSubnetSubnet1Subnet031C8F62": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -252,12 +144,12 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
             },
           ],
         },
-        "CidrBlock": "172.16.0.0/18",
+        "CidrBlock": "172.16.0.0/24",
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
             "Key": "aws-cdk:subnet-name",
-            "Value": "Public",
+            "Value": "PublicSubnet",
           },
           {
             "Key": "aws-cdk:subnet-type",
@@ -265,7 +157,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc/PublicSubnet1",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc/PublicSubnetSubnet1",
           },
         ],
         "VpcId": {
@@ -274,7 +166,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcPublicSubnet2DefaultRouteA1EC0F60": {
+    "vpcPublicSubnetSubnet2DefaultRoute24DE7C87": {
       "DependsOn": [
         "vpcVPCGW7984C166",
       ],
@@ -284,28 +176,17 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
           "Ref": "vpcIGWE57CBDCA",
         },
         "RouteTableId": {
-          "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
+          "Ref": "vpcPublicSubnetSubnet2RouteTable187EC9B4",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPublicSubnet2RouteTableAssociation21F81B59": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
-        },
-        "SubnetId": {
-          "Ref": "vpcPublicSubnet2Subnet009B674F",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "vpcPublicSubnet2RouteTableEB40D4CB": {
+    "vpcPublicSubnetSubnet2RouteTable187EC9B4": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc/PublicSubnet2",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc/PublicSubnetSubnet2",
           },
         ],
         "VpcId": {
@@ -314,7 +195,18 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPublicSubnet2Subnet009B674F": {
+    "vpcPublicSubnetSubnet2RouteTableAssociation86760EC0": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "vpcPublicSubnetSubnet2RouteTable187EC9B4",
+        },
+        "SubnetId": {
+          "Ref": "vpcPublicSubnetSubnet2Subnet591FB8AD",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcPublicSubnetSubnet2Subnet591FB8AD": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -324,12 +216,12 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
             },
           ],
         },
-        "CidrBlock": "172.16.64.0/18",
+        "CidrBlock": "172.16.1.0/24",
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
             "Key": "aws-cdk:subnet-name",
-            "Value": "Public",
+            "Value": "PublicSubnet",
           },
           {
             "Key": "aws-cdk:subnet-type",
@@ -337,7 +229,7 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "MyTestStack/vpc/PublicSubnet2",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc/PublicSubnetSubnet2",
           },
         ],
         "VpcId": {
