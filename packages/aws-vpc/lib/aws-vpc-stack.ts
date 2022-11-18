@@ -1,7 +1,7 @@
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { aws_ec2 as ec2 } from "aws-cdk-lib";
-import { Construct } from "constructs";
 import { SubnetType } from "aws-cdk-lib/aws-ec2";
+import { Construct } from "constructs";
 
 /** VPCスタックプロパティ */
 interface VPCProps extends StackProps {
@@ -23,12 +23,12 @@ export class AwsVpcStack extends Stack {
     super(scope, stackID, props);
     const vpc = new ec2.Vpc(this, "vpc", {
       ipAddresses: ec2.IpAddresses.cidr(props.cidr),
-      maxAzs: 3,
+      maxAzs: props.maxAzs,
       natGateways: 0,
       subnetConfiguration: [
         {
           cidrMask: 24,
-          name: 'PublicSubnet',
+          name: "PublicSubnet",
           subnetType: SubnetType.PUBLIC,
         },
       ],
@@ -36,6 +36,10 @@ export class AwsVpcStack extends Stack {
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
       exportName: `${stackID}:VpcId`,
+    });
+    new CfnOutput(this, "SubnetCount", {
+      value: `${vpc.publicSubnets.length}`,
+      exportName: `${stackID}:SubnetCount`,
     });
 
     vpc.publicSubnets.forEach((subnets, index) => {
