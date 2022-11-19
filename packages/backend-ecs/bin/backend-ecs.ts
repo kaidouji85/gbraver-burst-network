@@ -27,7 +27,7 @@ const subnetAzs = R.times(R.identity, vpcSubnetCount).map((index) =>
 const publicSubnetIds = R.times(R.identity, vpcSubnetCount).map((index) =>
   Fn.importValue(`${vpcStackId}:PublicSubnetId${index}`)
 );
-const websocketAPIID = Fn.importValue(`${service}:${stage}:WebsoketApiId`);
+const websocketAPIID = Fn.importValue(`${service}:${stage}:WebsocketApiId`);
 const connectionsTableARN = Fn.importValue(
   `${service}:${stage}:ConnectionsTableArn`
 );

@@ -169,12 +169,12 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
   Outputs:
-    WebsoketApiId:
+    WebsocketApiId:
       Description: "id of websocket api gateway"
       Value:
         Ref: WebsocketsApi
       Export:
-        Name: ${self:service}:${sls:stage}:WebsoketApiId
+        Name: ${self:service}:${sls:stage}:WebsocketApiId
     ConnectionsTableArn:
       Description: "arn of connections table"
       Value:
