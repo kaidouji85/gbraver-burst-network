@@ -8,8 +8,7 @@ if [ -z "${SERVICE}" ] ||
   [ -z "$AUTH0_JWKS_URL" ] ||
   [ -z "$AUTH0_AUDIENCE" ] ||
   [ -z "${AUTH0_USER_MANAGEMENT_APP_CLIENT_ID}" ] ||
-  [ -z "${AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET}" ] ||
-  [ -z "${VPC_SUBNET_COUNT}" ]; then
+  [ -z "${AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET}" ]; then
   echo 'required environment variables are not defined'
   exit 1
 fi
