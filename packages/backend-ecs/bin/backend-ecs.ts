@@ -17,7 +17,7 @@ const service = process.env.SERVICE ?? "";
 const stage = process.env.STAGE ?? "dev";
 const matchMakeEcrRepositoryName =
   process.env.MATCH_MAKE_ECR_REPOSITORY_NAME ?? "";
-const vpcSubnetCount = Number.parseInt(process.env.SUBNET_COUNT ?? "");
+const vpcSubnetCount = Number.parseInt(process.env.VPC_SUBNET_COUNT ?? "");
 
 const vpcStackId = `${service}-vpc-g${VPC_GENERATION}`;
 const vpcId = Fn.importValue(`${vpcStackId}:VpcId`);
