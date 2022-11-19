@@ -13,6 +13,7 @@ env:
     DOCKER_USER: /GbraverBurst/dev/dockerUser
     DOCKER_TOKEN: /GbraverBurst/dev/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
+    VPC_SUBNET_COUNT: /GbraverBurst/dev/vpcSubnetCount
 phases:
   install:
     runtime-versions:
