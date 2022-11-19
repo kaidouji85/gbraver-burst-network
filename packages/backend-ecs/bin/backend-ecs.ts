@@ -8,19 +8,31 @@ import { v4 as uuidV4 } from "uuid";
 
 import { BackendEcsStack } from "../lib/backend-ecs-stack";
 
-dotenv.config();
+/** VPC世代数 */
 const VPC_GENERATION = 2;
+/**
+ * サブネット個数
+ * VPCのCloudFormationはサブネット個数を出力している
+ * しかし、それをCDKコード中でNumber型にパースすることができないので、
+ * ハードコーディングをしている
+ */
+const VPC_SUBNET_COUNT = 3;
+
+dotenv.config();
+
 const service = process.env.SERVICE ?? "";
 const stage = process.env.STAGE ?? "dev";
 const matchMakeEcrRepositoryName =
   process.env.MATCH_MAKE_ECR_REPOSITORY_NAME ?? "";
-const vpcStackId = `${service}-g${VPC_GENERATION}`;
+
+const vpcStackId = `${service}-vpc-g${VPC_GENERATION}`;
 const vpcId = Fn.importValue(`${vpcStackId}:VpcId`);
-const subnetCount = Number.parseInt(Fn.importValue(`${vpcStackId}:SubnetCount`));
-const subnetAzs: string[] = R.times(R.identity, subnetCount)
-    .map(index => Fn.importValue(`${vpcStackId}:PublicNetAvailabilityZone${index}`));
-const publicSubnetIds: string[] = R.times(R.identity, subnetCount)
-    .map(index => Fn.importValue(`${vpcStackId}:PublicSubnetId${index}`));
+const subnetAzs = R.times(R.identity, VPC_SUBNET_COUNT).map((index) =>
+  Fn.importValue(`${vpcStackId}:PublicNetAvailabilityZone${index}`)
+);
+const publicSubnetIds = R.times(R.identity, VPC_SUBNET_COUNT).map((index) =>
+  Fn.importValue(`${vpcStackId}:PublicSubnetId${index}`)
+);
 const websocketAPIID = Fn.importValue(`${service}:${stage}:WebsoketApiId`);
 const connectionsTableARN = Fn.importValue(
   `${service}:${stage}:ConnectionsTableArn`
