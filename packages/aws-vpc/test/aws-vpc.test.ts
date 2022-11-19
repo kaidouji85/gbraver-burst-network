@@ -5,9 +5,10 @@ import {AwsVpcStack} from '../lib/aws-vpc-stack';
 
 test('VPCスタックがスナップショットと一致している', () => {
     const app = new App();
-    const stack = new AwsVpcStack(app, 'MyTestStack', {
-      service: 'gbraver-buesr-sls-dev',
-      cidr: '172.16.0.0/16'
+    const stack = new AwsVpcStack(app, 'gbraver-buesr-sls-dev-gXXXXX', {
+      maxAzs: 3,
+      cidr: '172.16.0.0/16',
+      subnetCidrMask: 24,
     });
     const template = Template.fromStack(stack).toJSON();
     expect(template).toMatchSnapshot();

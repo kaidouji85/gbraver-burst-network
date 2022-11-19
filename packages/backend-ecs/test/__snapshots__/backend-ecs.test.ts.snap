@@ -259,7 +259,9 @@ exports[`バックエンドECSスタックがスナップショットと一致�
               },
             ],
             "Subnets": [
-              "MyPrivateSubnetId",
+              "subnet-id-0",
+              "subnet-id-1",
+              "subnet-id-2",
             ],
           },
         },

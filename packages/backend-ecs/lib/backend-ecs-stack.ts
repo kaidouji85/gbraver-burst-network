@@ -15,10 +15,10 @@ interface BackendEcsProps extends StackProps {
   stage: string;
   /** 本ECSを起動するVPCのID */
   vpcId: string;
-  /** 本ECSを起動するパブリックサブネットのアベイラビリティゾーン */
-  publicSubnetAvailabilityZone: string;
-  /** 本ECSを起動するパブリックサブネットのID */
-  publicSubnetId: string;
+  /** サブネットのAZ */
+  subnetAzs: string[];
+  /** PublicサブネットのID */
+  publicSubnetIds: string[];
   /** Websocket API GatewayのID */
   websocketAPIID: string;
   /** DynamoDB connections テーブルのARN */
@@ -46,8 +46,8 @@ export class BackendEcsStack extends Stack {
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, "backend-ecs-vpc", {
       vpcId: props.vpcId,
-      availabilityZones: [props.publicSubnetAvailabilityZone],
-      publicSubnetIds: [props.publicSubnetId],
+      availabilityZones: props.subnetAzs,
+      publicSubnetIds: props.publicSubnetIds,
     });
 
     const matchMakePolicy = new iam.PolicyDocument({
