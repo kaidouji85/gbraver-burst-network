@@ -3,6 +3,7 @@ env:
   # プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
+    VPC_SUBNET_COUNT: /GbraverBurst/prod/vpcSubnetCount
 phases:
   install:
     runtime-versions:
