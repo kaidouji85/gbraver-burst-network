@@ -242,6 +242,9 @@ exports[`バックエンドECSスタックがスナップショットと一致�
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
+        "DeploymentController": {
+          "Type": "ECS",
+        },
         "EnableECSManagedTags": false,
         "LaunchType": "FARGATE",
         "NetworkConfiguration": {
@@ -256,7 +259,9 @@ exports[`バックエンドECSスタックがスナップショットと一致�
               },
             ],
             "Subnets": [
-              "MyPrivateSubnetId",
+              "subnet-id-0",
+              "subnet-id-1",
+              "subnet-id-2",
             ],
           },
         },

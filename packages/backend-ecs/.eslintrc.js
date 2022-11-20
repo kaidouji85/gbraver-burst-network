@@ -19,7 +19,8 @@ module.exports = {
     "simple-import-sort"
   ],
   "ignorePatterns": [
-    "**/*.js"
+    "**/*.js",
+    "**/*.d.ts"
   ],
   "rules": {
     "simple-import-sort/imports": "error",
