@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/browser-core",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "main": "lib/index.js",
   "author": "Y.Takeuchi",
   "files": [
@@ -38,5 +38,5 @@
     "gbraver-burst-core": "^1.15.1",
     "rxjs": "^7.6.0"
   },
-  "gitHead": "5ccd4900815cb8073b96d4920c14a6130fe0800d"
+  "gitHead": "e561690503b92966d1f6f139a083a2ca8c5a5b0c"
 }

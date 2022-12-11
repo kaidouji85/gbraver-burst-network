@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/backend-app",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "description": "gbraver burst backend app",
   "private": true,
   "scripts": {
