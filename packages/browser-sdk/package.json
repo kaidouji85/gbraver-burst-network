@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "description": "gbraver burst browser sdk",
   "main": "lib/index.js",
   "files": [
@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.1",
-    "@gbraver-burst-network/browser-core": "^1.5.12",
+    "@gbraver-burst-network/browser-core": "^1.5.13",
     "gbraver-burst-core": "^1.15.1",
     "rxjs": "^7.6.0"
   },

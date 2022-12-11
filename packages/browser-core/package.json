@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/browser-core",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "main": "lib/index.js",
   "author": "Y.Takeuchi",
   "files": [
