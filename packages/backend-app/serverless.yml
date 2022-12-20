@@ -15,7 +15,6 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: ap-northeast-1
-  lambdaHashingVersion: 20201221
   httpApi:
     name: ${self:service}__${sls:stage}__rest-api
     cors:
