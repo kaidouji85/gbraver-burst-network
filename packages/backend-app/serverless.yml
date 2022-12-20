@@ -49,24 +49,26 @@ provider:
     AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_ID, ''}
     AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET, ''}
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - 'dynamodb:PutItem'
-        - 'dynamodb:GetItem'
-        - 'dynamodb:DeleteItem'
-        - 'dynamodb:Scan'
-        - 'dynamodb:BatchWrite*'
-      Resource:
-        - Fn::GetAtt: [ConnectionsTable, Arn]
-        - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
-        - Fn::GetAtt: [BattleCommandsTable, Arn]
-        - Fn::GetAtt: [BattlesTable, Arn]
-    - Effect: Allow
-      Action:
-        - 'execute-api:ManageConnections'
-      Resource:
-        - 'arn:aws:execute-api:*:*:**/@connections/*'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:GetItem'
+            - 'dynamodb:DeleteItem'
+            - 'dynamodb:Scan'
+            - 'dynamodb:BatchWrite*'
+          Resource:
+            - Fn::GetAtt: [ConnectionsTable, Arn]
+            - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+            - Fn::GetAtt: [BattleCommandsTable, Arn]
+            - Fn::GetAtt: [BattlesTable, Arn]
+        - Effect: Allow
+          Action:
+            - 'execute-api:ManageConnections'
+          Resource:
+            - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
   webSocketAPIAuthorizer:
