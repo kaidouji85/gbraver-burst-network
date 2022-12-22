@@ -1,16 +1,14 @@
 // @flow
 
 import * as dotenv from "dotenv";
-import { ArmDozers, Pilots, startGbraverBurst } from "gbraver-burst-core";
+import { startGbraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { toPlayer } from "./core/battle";
-import type { UserID } from "./core/user";
-import type { BattlesSchema, PlayerSchema } from "./dynamo-db/battles";
-import type { CasualMatchEntriesSchema } from "./dynamo-db/casual-match-entries";
+import { createBattleStart } from "./battle/create-battle-start";
+import type { BattlesSchema } from "./dynamo-db/battles";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type { InBattle } from "./dynamo-db/connections";
 import {
@@ -18,8 +16,8 @@ import {
   createCasualMatchEntries,
   createConnections,
 } from "./dynamo-db/dao-creator";
+import { createPlayerSchema } from "./match-make/create-player-schema";
 import { matchMake } from "./match-make/match-make";
-import type { BattleStart } from "./response/websocket-response";
 import { wait } from "./wait/wait";
 
 dotenv.config();
@@ -110,49 +108,4 @@ async function matchMakingPolling(): Promise<void> {
     ]);
   });
   await Promise.all(startBattles);
-}
-
-/**
- * CasualMatchEntriesSchemaからPlayerSchemaを生成するヘルパー関数
- *
- * @param entry エントリ
- * @return 生成結果
- */
-function createPlayerSchema(entry: CasualMatchEntriesSchema): PlayerSchema {
-  const armdozer =
-    ArmDozers.find((v) => v.id === entry.armdozerId) ?? ArmDozers[0];
-  const pilot = Pilots.find((v) => v.id === entry.pilotId) ?? Pilots[0];
-  return {
-    playerId: uuidv4(),
-    userID: entry.userID,
-    connectionId: entry.connectionId,
-    armdozer,
-    pilot,
-  };
-}
-
-/**
- * 戦闘開始オブジェクトを生成するヘルパー関数
- *
- * @param userID 戦闘開始オブジェクトを受け取るユーザのID
- * @param battle バトル情報
- * @return 生成結果
- */
-function createBattleStart(userID: UserID, battle: BattlesSchema): BattleStart {
-  const player =
-    battle.players.find((v) => v.userID === userID) ?? battle.players[0];
-  const respPlayer = toPlayer(player);
-  const enemy =
-    battle.players.find((v) => v.userID !== userID) ?? battle.players[0];
-  const respEnemy = toPlayer(enemy);
-  const isPoller = userID === battle.poller;
-  return {
-    action: "battle-start",
-    player: respPlayer,
-    enemy: respEnemy,
-    battleID: battle.battleID,
-    flowID: battle.flowID,
-    stateHistory: battle.stateHistory,
-    isPoller,
-  };
 }
