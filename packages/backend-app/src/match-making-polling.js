@@ -7,16 +7,16 @@ import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { matchMake } from "./core/match-make";
 import type { BattlesSchema } from "./dynamo-db/battles";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type { InBattle } from "./dynamo-db/connections";
+import { createPlayerSchema } from "./dynamo-db/create-player-schema";
 import {
   createBattles,
   createCasualMatchEntries,
   createConnections,
 } from "./dynamo-db/dao-creator";
-import { createPlayerSchema } from "./match-make/create-player-schema";
-import { matchMake } from "./match-make/match-make";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
 

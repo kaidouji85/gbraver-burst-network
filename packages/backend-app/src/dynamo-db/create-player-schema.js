@@ -3,8 +3,8 @@
 import { ArmDozers, Pilots } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import type { PlayerSchema } from "../dynamo-db/battles";
-import type { CasualMatchEntriesSchema } from "../dynamo-db/casual-match-entries";
+import type { PlayerSchema } from "./battles";
+import type { CasualMatchEntriesSchema } from "./casual-match-entries";
 
 /**
  * CasualMatchEntriesSchemaからPlayerSchemaを生成するヘルパー関数
