@@ -1,6 +1,6 @@
 // @flow
 
-import type { CasualMatchEntry } from "../core/casual-match";
+import type { CasualMatchEntry } from "./casual-match";
 
 /**
  * マッチング
