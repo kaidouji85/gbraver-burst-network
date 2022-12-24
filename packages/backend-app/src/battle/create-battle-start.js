@@ -1,20 +1,20 @@
 // @flow
 
+import type { Battle, BattlePlayer } from "../core/battle";
 import { toPlayer } from "../core/battle";
 import type { UserID } from "../core/user";
-import type { BattlesSchema } from "../dynamo-db/battles";
 import type { BattleStart } from "../response/websocket-response";
 
 /**
  * 戦闘開始オブジェクトを生成するヘルパー関数
- *
+ * @template X プレイヤー情報のデータ型
  * @param userID 戦闘開始オブジェクトを受け取るユーザのID
  * @param battle バトル情報
  * @return 生成結果
  */
-export function createBattleStart(
+export function createBattleStart<X: BattlePlayer>(
   userID: UserID,
-  battle: BattlesSchema
+  battle: Battle<X>
 ): BattleStart {
   const player =
     battle.players.find((v) => v.userID === userID) ?? battle.players[0];

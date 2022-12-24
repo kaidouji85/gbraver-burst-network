@@ -28,6 +28,11 @@ export type Battle<X: BattlePlayer> = {
   flowID: string,
   /** プレイヤー情報 */
   players: [X, X],
+  /**
+   * バトル更新ポーリングをするユーザのID
+   * playersに含まれているユーザのIDを指定すること
+   */
+  poller: UserID,
   /** ステートヒストリー */
   stateHistory: GameState[],
 };
