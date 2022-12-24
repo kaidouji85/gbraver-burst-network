@@ -1,7 +1,7 @@
 // @flow
 
 import { createDynamoDBClient } from "./dynamo-db/client";
-import { createConnections } from "./dynamo-db/dao-creator";
+import { createConnections } from "./dynamo-db/create-connections";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";

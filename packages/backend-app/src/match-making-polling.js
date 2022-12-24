@@ -11,12 +11,10 @@ import { matchMake } from "./core/match-make";
 import type { BattlesSchema } from "./dynamo-db/battles";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type { InBattle } from "./dynamo-db/connections";
+import { createBattles } from "./dynamo-db/create-battles";
+import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
+import { createConnections } from "./dynamo-db/create-connections";
 import { createPlayerSchema } from "./dynamo-db/create-player-schema";
-import {
-  createBattles,
-  createCasualMatchEntries,
-  createConnections,
-} from "./dynamo-db/dao-creator";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
 

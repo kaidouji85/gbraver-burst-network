@@ -9,11 +9,9 @@ import type {
   InBattle,
   None,
 } from "./dynamo-db/connections";
-import {
-  createBattles,
-  createCasualMatchEntries,
-  createConnections,
-} from "./dynamo-db/dao-creator";
+import { createBattles } from "./dynamo-db/create-battles";
+import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
+import { createConnections } from "./dynamo-db/create-connections";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import type { SuddenlyBattleEnd } from "./response/websocket-response";

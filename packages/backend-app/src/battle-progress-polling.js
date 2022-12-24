@@ -10,11 +10,9 @@ import { Notifier } from "./api-gateway/notifier";
 import { toPlayer } from "./core/to-player";
 import type { BattleCommandsSchema } from "./dynamo-db/battle-commands";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import {
-  createBattleCommands,
-  createBattles,
-  createConnections,
-} from "./dynamo-db/dao-creator";
+import { createBattleCommands } from "./dynamo-db/create-battle-commands";
+import { createBattles } from "./dynamo-db/create-battles";
+import { createConnections } from "./dynamo-db/create-connections";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
