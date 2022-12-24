@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { toPlayer } from "./core/battle";
+import { toPlayer } from "./core/to-player";
 import type { BattleCommandsSchema } from "./dynamo-db/battle-commands";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import {

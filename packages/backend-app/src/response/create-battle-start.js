@@ -1,9 +1,9 @@
 // @flow
 
 import type { Battle, BattlePlayer } from "../core/battle";
-import { toPlayer } from "../core/battle";
+import { toPlayer } from "../core/to-player";
 import type { UserID } from "../core/user";
-import type { BattleStart } from "../response/websocket-response";
+import type { BattleStart } from "./websocket-response";
 
 /**
  * 戦闘開始オブジェクトを生成するヘルパー関数

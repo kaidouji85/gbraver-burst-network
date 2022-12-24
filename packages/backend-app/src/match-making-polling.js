@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createBattleStart } from "./battle/create-battle-start";
 import type { BattlesSchema } from "./dynamo-db/battles";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type { InBattle } from "./dynamo-db/connections";
@@ -18,6 +17,7 @@ import {
 } from "./dynamo-db/dao-creator";
 import { createPlayerSchema } from "./match-make/create-player-schema";
 import { matchMake } from "./match-make/match-make";
+import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
 
 dotenv.config();
@@ -65,7 +65,6 @@ const maxPollingCount = 28800;
 
 /**
  * カジュアルマッチでマッチングがないかを探す
- *
  * @return 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
