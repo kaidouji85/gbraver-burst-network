@@ -4,14 +4,8 @@ import { DynamoDB } from "aws-sdk";
 
 import type { Battle, BattlePlayer } from "../core/battle";
 
-/** battlesに格納するプレイヤーの情報 */
-export type PlayerSchema = BattlePlayer & {
-  /** コネクションID */
-  connectionId: string,
-};
-
 /** battlesのスキーマ */
-export type BattlesSchema = Battle<PlayerSchema>;
+export type BattlesSchema = Battle<BattlePlayer>;
 
 /** battlesのDAO*/
 export class Battles {

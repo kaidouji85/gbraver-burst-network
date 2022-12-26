@@ -3,6 +3,7 @@
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 
 import type { UserID } from "./user";
+import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
 /** カジュアルマッチエントリ */
 export type CasualMatchEntry = {
@@ -12,4 +13,6 @@ export type CasualMatchEntry = {
   armdozerId: ArmDozerId,
   /** 選択したパイロットID */
   pilotId: PilotId,
+  /** コネクションID */
+  connectionId: WSAPIGatewayConnectionId,
 };

@@ -3,18 +3,16 @@
 import { ArmDozers, Pilots } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import type { PlayerSchema } from "./battles";
-import type { CasualMatchEntriesSchema } from "./casual-match-entries";
+import type { BattlePlayer } from "./battle";
+import type { CasualMatchEntry } from "./casual-match";
 
 /**
- * CasualMatchEntriesSchemaからPlayerSchemaを生成するヘルパー関数
+ * CasualMatchEntryからBattlePlayerを生成するヘルパー関数
  *
  * @param entry エントリ
  * @return 生成結果
  */
-export function createPlayerSchema(
-  entry: CasualMatchEntriesSchema
-): PlayerSchema {
+export function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
   const armdozer =
     ArmDozers.find((v) => v.id === entry.armdozerId) ?? ArmDozers[0];
   const pilot = Pilots.find((v) => v.id === entry.pilotId) ?? Pilots[0];

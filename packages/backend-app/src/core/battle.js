@@ -4,6 +4,7 @@ import type { Player } from "gbraver-burst-core";
 import type { GameState } from "gbraver-burst-core/lib/state/game-state";
 
 import type { UserID } from "./user";
+import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
 /** バトルID */
 export type BattleID = string;
@@ -15,6 +16,8 @@ export type FlowID = string;
 export type BattlePlayer = Player & {
   /** ユーザID */
   userID: UserID,
+  /** コネクションID */
+  connectionId: WSAPIGatewayConnectionId,
 };
 
 /**
@@ -25,7 +28,7 @@ export type Battle<X: BattlePlayer> = {
   /** バトルID */
   battleID: BattleID,
   /** フローID */
-  flowID: string,
+  flowID: FlowID,
   /** プレイヤー情報 */
   players: [X, X],
   /**

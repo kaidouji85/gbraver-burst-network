@@ -7,4 +7,5 @@ export const EMPTY_CASUAL_MATCH_ENTRY: CasualMatchEntry = {
   userID: "userID",
   armdozerId: "armdozerId",
   pilotId: "pilotId",
+  connectionId: "connection-id"
 };
