@@ -4,6 +4,7 @@ import type { Player } from "gbraver-burst-core";
 import type { GameState } from "gbraver-burst-core/lib/state/game-state";
 
 import type { UserID } from "./user";
+import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
 /** バトルID */
 export type BattleID = string;
@@ -15,12 +16,8 @@ export type FlowID = string;
 export type BattlePlayer = Player & {
   /** ユーザID */
   userID: UserID,
-  /**
-   * AWS Websocket API Gateway コネクションID
-   * 本プロパティは、ユーザへの告知に利用する
-   * API Gateway、Dynamo DBなど複数レイヤーで本要素を利用するので、coreに含めている
-   */
-  connectionId: string,
+  /** コネクションID */
+  connectionId: WSAPIGatewayConnectionId,
 };
 
 /**
