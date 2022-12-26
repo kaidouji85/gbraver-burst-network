@@ -1,15 +1,13 @@
 // @flow
 
 import * as dotenv from "dotenv";
-import { startGbraverBurst } from "gbraver-burst-core";
-import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
 import { matchMake } from "./core/match-make";
-import type { BattlesSchema } from "./dynamo-db/battles";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type { InBattle } from "./dynamo-db/connections";
 import { createBattles } from "./dynamo-db/create-battles";
@@ -73,15 +71,7 @@ async function matchMakingPolling(): Promise<void> {
       createBattlePlayer(matching[0]),
       createBattlePlayer(matching[1]),
     ];
-    const core = startGbraverBurst(players);
-    const poller = players[0].userID;
-    const battle: BattlesSchema = {
-      battleID: uuidv4(),
-      flowID: uuidv4(),
-      stateHistory: core.stateHistory(),
-      players,
-      poller,
-    };
+    const battle = createBattle(players);
     const updatedConnectionState: InBattle = {
       type: "InBattle",
       battleID: battle.battleID,
