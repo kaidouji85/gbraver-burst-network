@@ -15,6 +15,12 @@ export type FlowID = string;
 export type BattlePlayer = Player & {
   /** ユーザID */
   userID: UserID,
+  /**
+   * AWS Websocket API Gateway コネクションID
+   * 本プロパティは、ユーザへの告知に利用する
+   * API Gateway、Dynamo DBなど複数レイヤーで本要素を利用するので、coreに含めている
+   */
+  connectionId: string,
 };
 
 /**
@@ -25,7 +31,7 @@ export type Battle<X: BattlePlayer> = {
   /** バトルID */
   battleID: BattleID,
   /** フローID */
-  flowID: string,
+  flowID: FlowID,
   /** プレイヤー情報 */
   players: [X, X],
   /**
