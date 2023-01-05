@@ -13,7 +13,7 @@ const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
  */
 export async function authorizer(event: AuthorizerEvent): Promise<AuthorizerResponse> {
   const token = await verifyAccessToken(event.queryStringParameters.token, AUTH0_JWKS_URL, AUTH0_AUDIENCE);
-  const principalId = token.sub;
+  const principalId = token.sub ?? "";
   const resource: string = event.methodArn;
   return successAuthorize(principalId, resource);
 }
