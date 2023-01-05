@@ -20,7 +20,7 @@ export type BattleCommandsSchema = {
 
 /** battle-commandsのDAO */
 export class BattleCommands {
-  _client: typeof DynamoDB.DocumentClient;
+  _client: DynamoDB.DocumentClient;
   _tableName: string;
 
   /**
@@ -29,7 +29,7 @@ export class BattleCommands {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: typeof DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDB.DocumentClient, tableName: string) {
     this._client = client;
     this._tableName = tableName;
   }
@@ -40,8 +40,8 @@ export class BattleCommands {
    * @param command 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(command: BattleCommandsSchema): Promise<void> {
-    return this._client.put({
+  async put(command: BattleCommandsSchema): Promise<void> {
+    await this._client.put({
       TableName: this._tableName,
       Item: command
     }).promise();
@@ -54,14 +54,15 @@ export class BattleCommands {
    * @param userID ユーザID
    * @return 検索結果
    */
-  async get(userID: string): Promise<BattleCommandsSchema | null | undefined> {
+  async get(userID: string): Promise<BattleCommandsSchema | null> {
     const result = await this._client.get({
       TableName: this._tableName,
       Key: {
         userID
       }
     }).promise();
-    return result?.Item ?? null;
+    return result.Item
+      ? result.Item as BattleCommandsSchema
+      : null;
   }
-
 }
