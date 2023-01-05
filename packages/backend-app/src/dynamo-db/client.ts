@@ -6,7 +6,7 @@ import { DynamoDB } from "aws-sdk";
  * @return region AWSのリージョン
  * @return DynamoDBクライアント
  */
-export function createDynamoDBClient(region: string): typeof DynamoDB.DocumentClient {
+export function createDynamoDBClient(region: string): DynamoDB.DocumentClient {
   return new DynamoDB.DocumentClient({
     apiVersion: "2012-08-10",
     region
