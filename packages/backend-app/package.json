@@ -37,6 +37,8 @@
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
+    "@types/ramda": "^0.28.20",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
     "codehawk-cli": "^10.0.1",
