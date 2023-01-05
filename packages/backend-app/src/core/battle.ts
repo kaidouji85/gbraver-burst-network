@@ -1,5 +1,4 @@
-import type { Player } from "gbraver-burst-core";
-import type { GameState } from "gbraver-burst-core/lib/state/game-state";
+import type { GameState, Player } from "gbraver-burst-core";
 import type { UserID } from "./user";
 import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
