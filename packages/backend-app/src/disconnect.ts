@@ -4,8 +4,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import type {
   ConnectionsSchema,
-  InBattle,
-  None,
+  InBattle
 } from "./dynamo-db/connections";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
