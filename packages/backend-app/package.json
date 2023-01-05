@@ -36,6 +36,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/auth0": "^2.35.8",
     "@types/jest": "^29.2.5",
     "@types/ramda": "^0.28.20",
     "@types/uuid": "^9.0.0",
