@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { JwksClient } from "jwks-rsa";
 
 /**
@@ -7,11 +7,11 @@ import { JwksClient } from "jwks-rsa";
  * @param client jwksRsaクライアント
  * @return 公開鍵取得関数
  */
-const createKeyGetter = (client: typeof JwksClient): (...args: Array<any>) => any => (header: {
+const createKeyGetter = (client: JwksClient): (...args: Array<any>) => any => (header: {
   kid: string;
 }, callback: (...args: Array<any>) => any): void => {
   client.getSigningKey(header.kid).then(key => {
-    const signingKey = key.publicKey || key.rsaPublicKey;
+    const signingKey = key.getPublicKey();
     callback(null, signingKey);
   }).catch(err => {
     callback(err, null);
@@ -19,15 +19,7 @@ const createKeyGetter = (client: typeof JwksClient): (...args: Array<any>) => an
 };
 
 /** auth0 アクセストークン */
-export type Auth0AccessToken = {
-  iss: string;
-  sub: string;
-  aud: string[];
-  azp: string;
-  exp: number;
-  iat: number;
-  scope: string;
-};
+export type Auth0AccessToken = JwtPayload;
 
 /**
  * auth0アクセストークンの検証
@@ -44,12 +36,17 @@ export function verifyAccessToken(accessToken: string, jwksURL: string, audience
   });
   const keyGetter = createKeyGetter(client);
   return new Promise((resolve, reject) => {
-    const algorithms = "RS256";
     jwt.verify(accessToken, keyGetter, {
-      algorithms,
+      algorithms: ["RS256"],
       audience
     }, (err, decodedToken) => {
-      err ? reject(err) : resolve(decodedToken);
+      if (err) {
+        reject(err);
+      } else if (decodedToken === undefined || typeof decodedToken === "string") {
+        reject("invalid jwt token.");
+      } else {
+        resolve(decodedToken);
+      }
     });
   });
 }
