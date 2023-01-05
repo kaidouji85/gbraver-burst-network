@@ -52,7 +52,6 @@ async function cleanUp(connection: ConnectionsSchema): Promise<void> {
     const other = state.players[0].connectionId !== connection.connectionId ? state.players[0] : state.players[1];
     const noticedData: SuddenlyBattleEnd = {
       action: "suddenly-battle-end",
-      battleID: state.battleID
     };
     const updatedConnctionState: None = {
       type: "None"
