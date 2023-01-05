@@ -10,7 +10,11 @@ import { Connections } from "./connections";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createConnections(client: DynamoDB.DocumentClient, service: string, stage: string): Connections {
+export function createConnections(
+  client: DynamoDB.DocumentClient,
+  service: string,
+  stage: string
+): Connections {
   const tableName = `${service}__${stage}__connections`;
   return new Connections(client, tableName);
 }

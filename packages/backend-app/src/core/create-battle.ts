@@ -10,7 +10,9 @@ import { toPlayer } from "./to-player";
  * @param players プレイヤー情報
  * @return 生成結果
  */
-export function createBattle<X extends BattlePlayer>(players: [X, X]): Battle<X> {
+export function createBattle<X extends BattlePlayer>(
+  players: [X, X]
+): Battle<X> {
   const core = startGbraverBurst([toPlayer(players[0]), toPlayer(players[1])]);
   const poller = players[0].userID;
   return {
@@ -18,6 +20,6 @@ export function createBattle<X extends BattlePlayer>(players: [X, X]): Battle<X>
     flowID: uuidv4(),
     stateHistory: core.stateHistory(),
     players,
-    poller
+    poller,
   };
 }

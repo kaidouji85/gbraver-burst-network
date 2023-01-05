@@ -11,13 +11,14 @@ import type { CasualMatchEntry } from "./casual-match";
  * @return 生成結果
  */
 export function createBattlePlayer(entry: CasualMatchEntry): BattlePlayer {
-  const armdozer = ArmDozers.find(v => v.id === entry.armdozerId) ?? ArmDozers[0];
-  const pilot = Pilots.find(v => v.id === entry.pilotId) ?? Pilots[0];
+  const armdozer =
+    ArmDozers.find((v) => v.id === entry.armdozerId) ?? ArmDozers[0];
+  const pilot = Pilots.find((v) => v.id === entry.pilotId) ?? Pilots[0];
   return {
     playerId: uuidv4(),
     userID: entry.userID,
     connectionId: entry.connectionId,
     armdozer,
-    pilot
+    pilot,
   };
 }

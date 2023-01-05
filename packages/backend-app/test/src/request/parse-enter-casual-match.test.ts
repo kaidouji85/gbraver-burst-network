@@ -4,7 +4,7 @@ import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 const enterCasualMatch: EnterCasualMatch = {
   action: "enter-casual-match",
   armdozerId: "armdozerId",
-  pilotId: "pilotId"
+  pilotId: "pilotId",
 };
 
 test("EnterCasualMatchを正しくパースできる", () => {
@@ -13,9 +13,10 @@ test("EnterCasualMatchを正しくパースできる", () => {
 });
 
 test("余計なプロパティが含まれている場合でも問題なくパースできる", () => {
-  const result = parseEnterCasualMatch({ ...enterCasualMatch,
+  const result = parseEnterCasualMatch({
+    ...enterCasualMatch,
     hp: 1000,
-    power: 1000
+    power: 1000,
   });
   expect(result).toEqual(enterCasualMatch);
 });

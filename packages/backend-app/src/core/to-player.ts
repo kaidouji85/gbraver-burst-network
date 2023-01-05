@@ -12,6 +12,6 @@ export function toPlayer(origin: BattlePlayer): Player {
   return {
     playerId: origin.playerId,
     armdozer: origin.armdozer,
-    pilot: origin.pilot
+    pilot: origin.pilot,
   };
 }

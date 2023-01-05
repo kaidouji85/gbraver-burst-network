@@ -76,15 +76,15 @@ export class Connections {
    * @return 検索結果
    */
   async get(connectionId: string): Promise<ConnectionsSchema | null> {
-    const result = await this._client.get({
-      TableName: this._tableName,
-      Key: {
-        connectionId
-      }
-    }).promise();
-    return result.Item
-      ? result.Item as ConnectionsSchema
-      : null;
+    const result = await this._client
+      .get({
+        TableName: this._tableName,
+        Key: {
+          connectionId,
+        },
+      })
+      .promise();
+    return result.Item ? (result.Item as ConnectionsSchema) : null;
   }
 
   /**
@@ -94,10 +94,12 @@ export class Connections {
    * @return 処理が完了したら発火するPromise
    */
   async put(connection: ConnectionsSchema): Promise<void> {
-    await this._client.put({
-      TableName: this._tableName,
-      Item: connection
-    }).promise();
+    await this._client
+      .put({
+        TableName: this._tableName,
+        Item: connection,
+      })
+      .promise();
   }
 
   /**
@@ -107,11 +109,13 @@ export class Connections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    await this._client.delete({
-      TableName: this._tableName,
-      Key: {
-        connectionId
-      }
-    }).promise();
+    await this._client
+      .delete({
+        TableName: this._tableName,
+        Key: {
+          connectionId,
+        },
+      })
+      .promise();
   }
 }

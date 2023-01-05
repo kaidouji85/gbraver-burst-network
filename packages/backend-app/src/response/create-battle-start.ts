@@ -10,10 +10,15 @@ import type { BattleStart } from "./websocket-response";
  * @param battle バトル情報
  * @return 生成結果
  */
-export function createBattleStart<X extends BattlePlayer>(userID: UserID, battle: Battle<X>): BattleStart {
-  const player = battle.players.find(v => v.userID === userID) ?? battle.players[0];
+export function createBattleStart<X extends BattlePlayer>(
+  userID: UserID,
+  battle: Battle<X>
+): BattleStart {
+  const player =
+    battle.players.find((v) => v.userID === userID) ?? battle.players[0];
   const respPlayer = toPlayer(player);
-  const enemy = battle.players.find(v => v.userID !== userID) ?? battle.players[0];
+  const enemy =
+    battle.players.find((v) => v.userID !== userID) ?? battle.players[0];
   const respEnemy = toPlayer(enemy);
   const isPoller = userID === battle.poller;
   return {
@@ -23,6 +28,6 @@ export function createBattleStart<X extends BattlePlayer>(userID: UserID, battle
     battleID: battle.battleID,
     flowID: battle.flowID,
     stateHistory: battle.stateHistory,
-    isPoller
+    isPoller,
   };
 }

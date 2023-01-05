@@ -28,10 +28,12 @@ export class CasualMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: CasualMatchEntriesSchema): Promise<void> {
-    await this._client.put({
-      TableName: this._tableName,
-      Item: entry
-    }).promise();
+    await this._client
+      .put({
+        TableName: this._tableName,
+        Item: entry,
+      })
+      .promise();
   }
 
   /**
@@ -41,15 +43,15 @@ export class CasualMatchEntries {
    * @return 取得結果
    */
   async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
-    const resp = await this._client.scan({
-      TableName: this._tableName,
-      Select: "ALL_ATTRIBUTES",
-      ConsistentRead: true,
-      Limit: limit
-    }).promise();
-    return resp.Items
-      ? resp.Items as CasualMatchEntriesSchema[]
-      : [];
+    const resp = await this._client
+      .scan({
+        TableName: this._tableName,
+        Select: "ALL_ATTRIBUTES",
+        ConsistentRead: true,
+        Limit: limit,
+      })
+      .promise();
+    return resp.Items ? (resp.Items as CasualMatchEntriesSchema[]) : [];
   }
 
   /**
@@ -59,12 +61,13 @@ export class CasualMatchEntries {
    * @return 削除受付したら発火するPromise
    */
   async delete(userID: string): Promise<void> {
-    await this._client.delete({
-      TableName: this._tableName,
-      Key: {
-        userID
-      }
-    }).promise();
+    await this._client
+      .delete({
+        TableName: this._tableName,
+        Key: {
+          userID,
+        },
+      })
+      .promise();
   }
-
 }

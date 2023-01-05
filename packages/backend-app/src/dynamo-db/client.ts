@@ -9,6 +9,6 @@ import { DynamoDB } from "aws-sdk";
 export function createDynamoDBClient(region: string): DynamoDB.DocumentClient {
   return new DynamoDB.DocumentClient({
     apiVersion: "2012-08-10",
-    region
+    region,
   });
 }

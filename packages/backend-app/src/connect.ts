@@ -15,17 +15,21 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
  * @param event イベント
  * @return レスポンス
  */
-export async function connect(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
-  const user = extractUserFromWebSocketAuthorizer(event.requestContext.authorizer);
+export async function connect(
+  event: WebsocketAPIEvent
+): Promise<WebsocketAPIResponse> {
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer
+  );
   await connections.put({
     connectionId: event.requestContext.connectionId,
     userID: user.userID,
     state: {
-      type: "None"
-    }
+      type: "None",
+    },
   });
   return {
     statusCode: 200,
-    body: "connected."
+    body: "connected.",
   };
 }

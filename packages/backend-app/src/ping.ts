@@ -7,7 +7,11 @@ import type { Pong } from "./response/websocket-response";
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
-const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGatewayEndpoint = createAPIGatewayEndpoint(
+  WEBSOCKET_API_ID,
+  AWS_REGION,
+  STAGE
+);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 
@@ -17,14 +21,16 @@ const notifier = new Notifier(apiGateway);
  * @param event イベント
  * @return レスポンス
  */
-export async function ping(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
+export async function ping(
+  event: WebsocketAPIEvent
+): Promise<WebsocketAPIResponse> {
   const data: Pong = {
     action: "pong",
-    message: "welcome to gbraver burst serverless"
+    message: "welcome to gbraver burst serverless",
   };
   await notifier.notifyToClient(event.requestContext.connectionId, data);
   return {
     statusCode: 200,
-    body: "ping success"
+    body: "ping success",
   };
 }

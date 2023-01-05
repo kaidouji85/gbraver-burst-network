@@ -17,15 +17,19 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
-const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGatewayEndpoint = createAPIGatewayEndpoint(
+  WEBSOCKET_API_ID,
+  AWS_REGION,
+  STAGE
+);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const invalidRequestBodyError: Error = {
   action: "error",
-  error: "invalid request body"
+  error: "invalid request body",
 };
 const enteredCasualMatch: EnteredCasualMatch = {
-  action: "entered-casual-match"
+  action: "entered-casual-match",
 };
 
 /**
@@ -34,34 +38,48 @@ const enteredCasualMatch: EnteredCasualMatch = {
  * @param event イベント
  * @return レスポンス
  */
-export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<WebsocketAPIResponse> {
+export async function enterCasualMatch(
+  event: WebsocketAPIEvent
+): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseEnterCasualMatch(body);
 
   if (!data) {
-    await notifier.notifyToClient(event.requestContext.connectionId, invalidRequestBodyError);
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      invalidRequestBodyError
+    );
     return {
       statusCode: 400,
-      body: "invalid request body"
+      body: "invalid request body",
     };
   }
 
-  const user = extractUserFromWebSocketAuthorizer(event.requestContext.authorizer);
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer
+  );
   const entry = {
     userID: user.userID,
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
-    connectionId: event.requestContext.connectionId
-  };
-  await Promise.all([casualMatchEntries.put(entry), connections.put({
     connectionId: event.requestContext.connectionId,
-    userID: user.userID,
-    state: {
-      type: "CasualMatchMaking"
-    }
-  }), notifier.notifyToClient(event.requestContext.connectionId, enteredCasualMatch)]);
+  };
+  await Promise.all([
+    casualMatchEntries.put(entry),
+    connections.put({
+      connectionId: event.requestContext.connectionId,
+      userID: user.userID,
+      state: {
+        type: "CasualMatchMaking",
+      },
+    }),
+    notifier.notifyToClient(
+      event.requestContext.connectionId,
+      enteredCasualMatch
+    ),
+  ]);
   return {
     statusCode: 200,
-    body: "enter casual match success"
+    body: "enter casual match success",
   };
 }

@@ -20,7 +20,11 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
-const apiGatewayEndpoint = createAPIGatewayEndpoint(WEBSOCKET_API_ID, AWS_REGION, STAGE);
+const apiGatewayEndpoint = createAPIGatewayEndpoint(
+  WEBSOCKET_API_ID,
+  AWS_REGION,
+  STAGE
+);
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBClient(AWS_REGION);
@@ -61,27 +65,35 @@ async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan(casualMatchEntryScanLimit);
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
-    const players: [BattlePlayer, BattlePlayer] = [createBattlePlayer(matching[0]), createBattlePlayer(matching[1])];
+    const players: [BattlePlayer, BattlePlayer] = [
+      createBattlePlayer(matching[0]),
+      createBattlePlayer(matching[1]),
+    ];
     const battle = createBattle(players);
     const updatedConnectionState: InBattle = {
       type: "InBattle",
       battleID: battle.battleID,
-      players
+      players,
     };
-    const updatedConnections = matching.map(v => ({
+    const updatedConnections = matching.map((v) => ({
       connectionId: v.connectionId,
       userID: v.userID,
-      state: updatedConnectionState
+      state: updatedConnectionState,
     }));
-    const notices = matching.map(entry => {
+    const notices = matching.map((entry) => {
       const data = createBattleStart(entry.userID, battle);
       return {
         connectionId: entry.connectionId,
-        data
+        data,
       };
     });
-    const deleteEntryIDs = matching.map(v => v.userID);
-    await Promise.all([battles.put(battle), ...updatedConnections.map(v => connections.put(v)), ...deleteEntryIDs.map(v => casualMatchEntries.delete(v)), ...notices.map(v => notifier.notifyToClient(v.connectionId, v.data))]);
+    const deleteEntryIDs = matching.map((v) => v.userID);
+    await Promise.all([
+      battles.put(battle),
+      ...updatedConnections.map((v) => connections.put(v)),
+      ...deleteEntryIDs.map((v) => casualMatchEntries.delete(v)),
+      ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+    ]);
   });
   await Promise.all(startBattles);
 }

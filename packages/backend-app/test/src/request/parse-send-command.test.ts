@@ -7,8 +7,8 @@ const sendCommand: SendCommand = {
   flowID: "xxxxx",
   command: {
     type: "BATTERY_COMMAND",
-    battery: 3
-  }
+    battery: 3,
+  },
 };
 
 test("SendCommandなら正しくパースできる", () => {

@@ -8,11 +8,13 @@ import type { Authorizer } from "./websocket-api-event";
  * @param authorizer 抽出元となる認可情報
  * @return 抽出したユーザ情報
  */
-export function extractUserFromWebSocketAuthorizer(authorizer: Authorizer): User {
+export function extractUserFromWebSocketAuthorizer(
+  authorizer: Authorizer
+): User {
   // authorizer.principalIdにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている
   return {
-    userID: authorizer.principalId
+    userID: authorizer.principalId,
   };
 }
 
@@ -26,6 +28,6 @@ export function extractUserFromRestAPIJWT(jwtClaims: JwtClaims): User {
   // jwtClaims.subにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている
   return {
-    userID: jwtClaims.sub
+    userID: jwtClaims.sub,
   };
 }

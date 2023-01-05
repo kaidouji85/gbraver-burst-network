@@ -22,11 +22,16 @@ export class Notifier {
    * @param data 送信するデータ
    * @return メッセージ送信が完了したら発火するPromise
    */
-  async notifyToClient(connectionID: string, data: WebsocketResponse): Promise<void> {
+  async notifyToClient(
+    connectionID: string,
+    data: WebsocketResponse
+  ): Promise<void> {
     const sendData = JSON.stringify(data);
-    await this._api.postToConnection({
-      ConnectionId: connectionID,
-      Data: sendData
-    }).promise();
+    await this._api
+      .postToConnection({
+        ConnectionId: connectionID,
+        Data: sendData,
+      })
+      .promise();
   }
 }

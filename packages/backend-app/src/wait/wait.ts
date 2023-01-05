@@ -5,7 +5,7 @@
  * @return 待ち時間が終了したら発火するPromise
  */
 export function wait(ms: number): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }

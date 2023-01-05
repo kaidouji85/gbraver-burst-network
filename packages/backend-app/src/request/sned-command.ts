@@ -25,10 +25,16 @@ export type SendCommand = {
  */
 export function parseSendCommand(data: any): SendCommand | null | undefined {
   // TODO commandの正確な型チェックを実装する
-  return data?.action === "send-command" && typeof data?.battleID === "string" && typeof data?.flowID === "string" && data?.command !== null && typeof data?.command === "object" ? {
-    action: data.action,
-    battleID: data.battleID,
-    flowID: data.flowID,
-    command: data.command
-  } : null;
+  return data?.action === "send-command" &&
+    typeof data?.battleID === "string" &&
+    typeof data?.flowID === "string" &&
+    data?.command !== null &&
+    typeof data?.command === "object"
+    ? {
+        action: data.action,
+        battleID: data.battleID,
+        flowID: data.flowID,
+        command: data.command,
+      }
+    : null;
 }

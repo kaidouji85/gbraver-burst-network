@@ -37,17 +37,23 @@ export type AuthorizerResponse = {
  * @param effect エフェクト
  * @return レスポンス
  */
-function createAuthorizeResponse(principalId: string, resource: string, effect: Effect): AuthorizerResponse {
+function createAuthorizeResponse(
+  principalId: string,
+  resource: string,
+  effect: Effect
+): AuthorizerResponse {
   return {
     principalId,
     policyDocument: {
       Version: "2012-10-17",
-      Statement: [{
-        Action: "execute-api:Invoke",
-        Effect: effect,
-        Resource: resource
-      }]
-    }
+      Statement: [
+        {
+          Action: "execute-api:Invoke",
+          Effect: effect,
+          Resource: resource,
+        },
+      ],
+    },
   };
 }
 
@@ -58,7 +64,10 @@ function createAuthorizeResponse(principalId: string, resource: string, effect: 
  * @param resource リソース
  * @return レスポンス
  */
-export function successAuthorize(principalId: string, resource: string): AuthorizerResponse {
+export function successAuthorize(
+  principalId: string,
+  resource: string
+): AuthorizerResponse {
   return createAuthorizeResponse(principalId, resource, "Allow");
 }
 
@@ -69,6 +78,9 @@ export function successAuthorize(principalId: string, resource: string): Authori
  * @param resource リソース
  * @return レスポンス
  */
-export function failedAuthorize(principalId: string, resource: string): AuthorizerResponse {
+export function failedAuthorize(
+  principalId: string,
+  resource: string
+): AuthorizerResponse {
   return createAuthorizeResponse(principalId, resource, "Deny");
 }

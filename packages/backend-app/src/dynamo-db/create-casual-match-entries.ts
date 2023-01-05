@@ -10,7 +10,11 @@ import { CasualMatchEntries } from "./casual-match-entries";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createCasualMatchEntries(client: DynamoDB.DocumentClient, service: string, stage: string): CasualMatchEntries {
+export function createCasualMatchEntries(
+  client: DynamoDB.DocumentClient,
+  service: string,
+  stage: string
+): CasualMatchEntries {
   const tableName = `${service}__${stage}__casual-match-entries`;
   return new CasualMatchEntries(client, tableName);
 }

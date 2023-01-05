@@ -4,7 +4,7 @@ import { parseBattleProgressPolling } from "../../../src/request/battle-progress
 const data: BattleProgressPolling = {
   action: "battle-progress-polling",
   battleID: "battleID",
-  flowID: "flowID"
+  flowID: "flowID",
 };
 
 test("BattleProgressPollingならパースできる", () => {

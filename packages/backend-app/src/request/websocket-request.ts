@@ -4,4 +4,8 @@ import type { Ping } from "./ping";
 import type { SendCommand } from "./sned-command";
 
 /** websocketのリクエストボディ */
-export type WebsocketRequest = Ping | EnterCasualMatch | SendCommand | BattleProgressPolling;
+export type WebsocketRequest =
+  | Ping
+  | EnterCasualMatch
+  | SendCommand
+  | BattleProgressPolling;
