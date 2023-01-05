@@ -8,7 +8,7 @@ import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entrie
 import { createConnections } from "./dynamo-db/create-connections";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import type { SuddenlyBattleEnd } from "./response/websocket-response";
+
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
@@ -50,16 +50,12 @@ async function cleanUp(connection: ConnectionsSchema): Promise<void> {
 
   const inBattle = async (state: InBattle) => {
     const other = state.players[0].connectionId !== connection.connectionId ? state.players[0] : state.players[1];
-    const noticedData: SuddenlyBattleEnd = {
-      action: "suddenly-battle-end",
-    };
-    const updatedConnctionState: None = {
-      type: "None"
-    };
-    await Promise.all([notifier.notifyToClient(other.connectionId, noticedData), connections.put({
+    await Promise.all([notifier.notifyToClient(other.connectionId, {action: "suddenly-battle-end"}), connections.put({
       connectionId: other.connectionId,
       userID: other.userID,
-      state: updatedConnctionState
+      state: {
+        type: "None"
+      }
     }), battles.delete(state.battleID)]);
   };
 
