@@ -28,7 +28,7 @@
   "dependencies": {
     "auth0": "^2.44.1",
     "aws-sdk": "^2.1278.0",
-    "gbraver-burst-core": "^1.16.0-beta",
+    "gbraver-burst-core": "^1.16.1-beta",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^3.0.0",
     "ramda": "^0.28.0",
