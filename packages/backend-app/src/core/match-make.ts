@@ -6,6 +6,15 @@ import type { CasualMatchEntry } from "./casual-match";
  */
 export type Matching<X extends CasualMatchEntry> = [X, X];
 
+/** 
+ * マッチング集計結果
+ * @template X エントリのデータ型
+ */
+type Result<X extends CasualMatchEntry> = {
+  working: X[];
+  matchingList: Matching<X>[];
+}
+
 /**
  * マッチメイクを行う
  *
@@ -18,13 +27,10 @@ export function matchMake<X extends CasualMatchEntry>(entries: X[]): Matching<X>
     return [];
   }
 
-  const result = entries.reduce((result: {
-    working: X[];
-    matchingList: Matching<X>[];
-  }, entry: X) => {
-    const matching = result.working.length === 1 ? [result.working[0], entry] : null;
-    const updatedRemainder = matching ? [] : [entry];
-    const updatedMatchingList = matching ? [...result.matchingList, matching] : result.matchingList;
+  const result = entries.reduce((result: Result<X>, entry: X) => {
+    const matching: Matching<X> | null = result.working.length === 1 ? [result.working[0], entry] : null;
+    const updatedRemainder: X[] = matching ? [] : [entry];
+    const updatedMatchingList: Matching<X>[] = matching ? [...result.matchingList, matching] : result.matchingList;
     return {
       working: updatedRemainder,
       matchingList: updatedMatchingList
