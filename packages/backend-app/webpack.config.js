@@ -13,12 +13,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/, // include .js files
-        enforce: 'pre', // preload the jshint loader
-        exclude: /node_modules/, // exclude any and all files in the node_modules folder
+        test: /\.ts$/,
+        enforce: 'pre',
+        exclude: /node_modules/,
         include: __dirname,
-        use: 'babel-loader'
+        use: 'ts-loader'
       },
+    ],
+  },
+  resolve: {
+    extensions: [
+      '.ts', '.js',
     ],
   },
 };
