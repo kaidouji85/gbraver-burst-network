@@ -12,7 +12,7 @@
     "build:sls": "run-s clean:sls all-check transpile:sls",
     "build:match-make": "run-s clean:webpack all-check transpile:match-make",
     "all-check": "run-s type-check lint lint:test test",
-    "type-check": "flow",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "lint-fix": "eslint --fix src",
