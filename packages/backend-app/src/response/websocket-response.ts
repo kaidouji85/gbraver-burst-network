@@ -85,5 +85,7 @@ export type BattleEnd = {
 /** エラー */
 export type Error = {
   action: "error";
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   error: any;
+  /* eslint-enable */
 };

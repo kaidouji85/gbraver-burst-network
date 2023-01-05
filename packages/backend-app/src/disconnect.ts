@@ -2,10 +2,7 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import type {
-  ConnectionsSchema,
-  InBattle
-} from "./dynamo-db/connections";
+import type { ConnectionsSchema, InBattle } from "./dynamo-db/connections";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";

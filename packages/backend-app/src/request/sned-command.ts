@@ -23,7 +23,9 @@ export type SendCommand = {
  * @param data パース元
  * @return パース結果
  */
-export function parseSendCommand(data: any): SendCommand | null | undefined {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function parseSendCommand(data: any): SendCommand | null {
+  /* eslint-enable */
   // TODO commandの正確な型チェックを実装する
   return data?.action === "send-command" &&
     typeof data?.battleID === "string" &&

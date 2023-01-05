@@ -16,9 +16,9 @@ export type EnterCasualMatch = {
  * @param origin 変換元のリクエストボディ
  * @return 変換結果
  */
-export function parseEnterCasualMatch(
-  origin: any
-): EnterCasualMatch | null | undefined {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function parseEnterCasualMatch(origin: any): EnterCasualMatch | null {
+  /* eslint-enable */
   return origin?.action === "enter-casual-match" &&
     typeof origin?.armdozerId === "string" &&
     typeof origin?.pilotId === "string"

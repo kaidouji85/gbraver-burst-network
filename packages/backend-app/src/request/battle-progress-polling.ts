@@ -18,9 +18,11 @@ export type BattleProgressPolling = {
  * @param origin パース元
  * @return パース結果
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseBattleProgressPolling(
   origin: any
 ): BattleProgressPolling | null {
+  /* eslint-enable */
   return origin?.action === "battle-progress-polling" &&
     typeof origin?.battleID === "string" &&
     typeof origin?.flowID === "string"
