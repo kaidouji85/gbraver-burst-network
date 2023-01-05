@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { BattlePlayer } from "./core/battle";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
 import { matchMake } from "./core/match-make";
@@ -12,6 +13,7 @@ import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entrie
 import { createConnections } from "./dynamo-db/create-connections";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
+
 dotenv.config();
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -58,7 +60,7 @@ async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan(casualMatchEntryScanLimit);
   const matchingList = matchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
-    const players = [createBattlePlayer(matching[0]), createBattlePlayer(matching[1])];
+    const players: [BattlePlayer, BattlePlayer] = [createBattlePlayer(matching[0]), createBattlePlayer(matching[1])];
     const battle = createBattle(players);
     const updatedConnectionState: InBattle = {
       type: "InBattle",
