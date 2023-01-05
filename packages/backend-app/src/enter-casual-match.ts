@@ -53,15 +53,13 @@ export async function enterCasualMatch(event: WebsocketAPIEvent): Promise<Websoc
     pilotId: data.pilotId,
     connectionId: event.requestContext.connectionId
   };
-  const state = {
-    type: "CasualMatchMaking"
-  };
-  const updatedConnection = {
+  await Promise.all([casualMatchEntries.put(entry), connections.put({
     connectionId: event.requestContext.connectionId,
     userID: user.userID,
-    state
-  };
-  await Promise.all([casualMatchEntries.put(entry), connections.put(updatedConnection), notifier.notifyToClient(event.requestContext.connectionId, enteredCasualMatch)]);
+    state: {
+      type: "CasualMatchMaking"
+    }
+  }), notifier.notifyToClient(event.requestContext.connectionId, enteredCasualMatch)]);
   return {
     statusCode: 200,
     body: "enter casual match success"

@@ -9,7 +9,7 @@ import { BattleCommands } from "./battle-commands";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createBattleCommands(client: typeof DynamoDB.DocumentClient, service: string, stage: string): BattleCommands {
+export function createBattleCommands(client: DynamoDB.DocumentClient, service: string, stage: string): BattleCommands {
   const tableName = `${service}__${stage}__battle-commands`;
   return new BattleCommands(client, tableName);
 }
