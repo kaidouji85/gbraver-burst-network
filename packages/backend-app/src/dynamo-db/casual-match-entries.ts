@@ -6,7 +6,7 @@ export type CasualMatchEntriesSchema = CasualMatchEntry;
 
 /** casual_match_entriesのDAO */
 export class CasualMatchEntries {
-  _client: typeof DynamoDB.DocumentClient;
+  _client: DynamoDB.DocumentClient;
   _tableName: string;
 
   /**
@@ -15,7 +15,7 @@ export class CasualMatchEntries {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: typeof DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDB.DocumentClient, tableName: string) {
     this._client = client;
     this._tableName = tableName;
   }
@@ -26,8 +26,8 @@ export class CasualMatchEntries {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  put(entry: CasualMatchEntriesSchema): Promise<void> {
-    return this._client.put({
+  async put(entry: CasualMatchEntriesSchema): Promise<void> {
+    await this._client.put({
       TableName: this._tableName,
       Item: entry
     }).promise();
@@ -46,7 +46,9 @@ export class CasualMatchEntries {
       ConsistentRead: true,
       Limit: limit
     }).promise();
-    return resp?.Items ?? [];
+    return resp.Items
+      ? resp.Items as CasualMatchEntriesSchema[]
+      : [];
   }
 
   /**
@@ -55,8 +57,8 @@ export class CasualMatchEntries {
    * @param userID ユーザID
    * @return 削除受付したら発火するPromise
    */
-  delete(userID: string): Promise<void> {
-    return this._client.delete({
+  async delete(userID: string): Promise<void> {
+    await this._client.delete({
       TableName: this._tableName,
       Key: {
         userID
