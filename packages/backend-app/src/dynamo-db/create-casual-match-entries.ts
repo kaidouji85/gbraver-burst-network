@@ -1,4 +1,5 @@
 import { DynamoDB } from "aws-sdk";
+
 import { CasualMatchEntries } from "./casual-match-entries";
 
 /**

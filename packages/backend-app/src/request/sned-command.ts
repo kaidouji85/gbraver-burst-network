@@ -1,4 +1,5 @@
 import type { Command } from "gbraver-burst-core";
+
 import type { BattleID, FlowID } from "../core/battle";
 
 /** バトルコマンド送信 */

@@ -1,4 +1,5 @@
 import type { Player } from "gbraver-burst-core";
+
 import type { BattlePlayer } from "./battle";
 
 /**

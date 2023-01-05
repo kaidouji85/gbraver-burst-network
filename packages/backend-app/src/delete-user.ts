@@ -1,4 +1,5 @@
 import { ManagementClient } from "auth0";
+
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import type { RestAPIEvent } from "./lambda/rest-api-event";
 import type { RestAPIResponse } from "./lambda/rest-api-response";

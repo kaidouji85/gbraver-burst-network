@@ -1,4 +1,5 @@
 import type { GameState, Player } from "gbraver-burst-core";
+
 import type { BattleID, FlowID } from "../core/battle";
 
 /** websocketがクライアントに返すデータ */

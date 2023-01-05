@@ -1,4 +1,5 @@
 import { DynamoDB } from "aws-sdk";
+
 import type { Battle, BattlePlayer } from "../core/battle";
 
 /** battlesのスキーマ */

@@ -1,5 +1,6 @@
 import { DynamoDB } from "aws-sdk";
 import type { Command } from "gbraver-burst-core";
+
 import type { BattleID, FlowID } from "../core/battle";
 import type { UserID } from "../core/user";
 

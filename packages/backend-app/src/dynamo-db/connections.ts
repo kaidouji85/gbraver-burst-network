@@ -1,5 +1,6 @@
 import { DynamoDB } from "aws-sdk";
 import type { PlayerId } from "gbraver-burst-core";
+
 import type { BattleID } from "../core/battle";
 import type { UserID } from "../core/user";
 
