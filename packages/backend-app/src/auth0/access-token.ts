@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { GetPublicKeyOrSecret, JwtPayload } from "jsonwebtoken";
 import { JwksClient } from "jwks-rsa";
 
 /**
@@ -8,13 +8,8 @@ import { JwksClient } from "jwks-rsa";
  * @return 公開鍵取得関数
  */
 const createKeyGetter =
-  (client: JwksClient): ((...args: Array<any>) => any) =>
-  (
-    header: {
-      kid: string;
-    },
-    callback: (...args: Array<any>) => any
-  ): void => {
+  (client: JwksClient): GetPublicKeyOrSecret =>
+  (header, callback): void => {
     client
       .getSigningKey(header.kid)
       .then((key) => {
@@ -22,7 +17,7 @@ const createKeyGetter =
         callback(null, signingKey);
       })
       .catch((err) => {
-        callback(err, null);
+        callback(err);
       });
   };
 
