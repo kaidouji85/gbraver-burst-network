@@ -1,4 +1,4 @@
-import { restoreGbraverBurst } from "gbraver-burst-core";
+import { Player, PlayerCommand, restoreGbraverBurst } from "gbraver-burst-core";
 import { uniq } from "ramda";
 import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
@@ -7,6 +7,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { toPlayer } from "./core/to-player";
 import type { BattleCommandsSchema } from "./dynamo-db/battle-commands";
 import { createDynamoDBClient } from "./dynamo-db/client";
+import { None } from "./dynamo-db/connections";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -16,6 +17,7 @@ import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import type { BattleEnd, BattleProgressed, Error, NotReadyBattleProgress } from "./response/websocket-response";
+
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
@@ -84,8 +86,8 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
     return invalidRequestBody;
   }
 
-  const corePlayers = [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
-  const coreCommands = [{
+  const corePlayers: [Player, Player] = [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
+  const coreCommands: [PlayerCommand, PlayerCommand] = [{
     command: command0.command,
     playerId: playerOfCommand0.playerId
   }, {
@@ -103,7 +105,7 @@ export async function battleProgressPolling(event: WebsocketAPIEvent): Promise<W
       action: "battle-end",
       update
     };
-    const updatedConnectionState = {
+    const updatedConnectionState: None = {
       type: "None"
     };
     return Promise.all([...battle.players.map(v => notifier.notifyToClient(v.connectionId, noticedData)), ...battle.players.map(v => connections.put({
