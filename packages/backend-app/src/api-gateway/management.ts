@@ -6,7 +6,7 @@ import { ApiGatewayManagementApi } from "aws-sdk";
  * @param endpoint APIゲートウェイのエンドポイント
  * @return APIゲートウェイ管理オブジェクト
  */
-export function createApiGatewayManagementApi(endpoint: string): typeof ApiGatewayManagementApi {
+export function createApiGatewayManagementApi(endpoint: string): ApiGatewayManagementApi {
   return new ApiGatewayManagementApi({
     apiVersion: "2018-11-29",
     endpoint
