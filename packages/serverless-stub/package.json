@@ -10,7 +10,7 @@
     "start:production": "run-s build serve",
     "build": "run-s clean type-check lint transpile",
     "transpile": "webpack --mode=production",
-    "type-check": "flow check src",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
     "code-format": "prettier --write src",
