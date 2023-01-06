@@ -10,7 +10,7 @@ export type AcceptCommand = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseAcceptCommand(data: Record<string, any>): AcceptCommand | null | undefined {
+export function parseAcceptCommand(data: any): AcceptCommand | null {
   return data?.action === "accept-command" ? {
     action: data.action
   } : null;
