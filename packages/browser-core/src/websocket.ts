@@ -1,4 +1,3 @@
-// @flow
 import { Observable } from "rxjs";
 
 /** Websocket切断 */
