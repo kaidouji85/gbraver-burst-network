@@ -30,7 +30,7 @@ export type BattleStart = {
  * @param data パース元となる文字列
  * @return パース結果
  */
-export function parseBattleStart(data: Record<string, any>): BattleStart | null | undefined {
+export function parseBattleStart(data: any): BattleStart | null {
   // TODO player、enemy、stateHistoryの正確な型チェックを実装する
   return data?.action === "battle-start" && typeof data?.battleID === "string" && typeof data?.flowID === "string" && Array.isArray(data?.stateHistory) && data?.player !== null && typeof data?.player === "object" && data?.enemy !== null && typeof data?.enemy === "object" && typeof data?.isPoller === "boolean" ? {
     action: data.action,
