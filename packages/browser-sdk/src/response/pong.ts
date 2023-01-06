@@ -13,7 +13,7 @@ export type Pong = {
  * @param data パース元となるオブジェクト
  * @return パース結果
  */
-export function parsePong(data: Record<string, any>): Pong | null | undefined {
+export function parsePong(data: any): Pong | null {
   return data?.action === "pong" && typeof data?.message === "string" ? {
     action: data.action,
     message: data.message
