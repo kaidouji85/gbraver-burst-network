@@ -1,11 +1,11 @@
 module.exports = {
-    "parser": "@babel/eslint-parser",
+    "parser": "@typescript-eslint/parser",
     "extends": [
         "eslint:recommended",
-        "plugin:flowtype/recommended"
+        "plugin:@typescript-eslint/recommended",
     ],
     "plugins": [
-        "flowtype",
+        "@typescript-eslint",
         "simple-import-sort"
     ],
     "rules": {
