@@ -60,17 +60,29 @@ export class BattleSDK implements Battle {
     this._flowID = param.initialFlowID;
     this._isPoller = param.isPoller;
     this._suddenlyBattleEnd = fromEvent(this._websocket, "message").pipe(
-      map(e => e as MessageEvent),
-      map((e) => parseJSON(e.data)), 
-      filter((data) => data), 
-      map((data) => parseSuddenlyBattleEnd(data)), 
-      filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
+      map((e) => e as MessageEvent),
+      map((e) => parseJSON(e.data)),
+      filter((data) => data),
+      map((data) => parseSuddenlyBattleEnd(data)),
+      filter((sudenlyBattleEnd) => !!sudenlyBattleEnd)
     );
   }
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
-    const result = this._isPoller ? await sendCommandWithPolling(this._websocket, this._battleID, this._flowID, command) : await sendCommand(this._websocket, this._battleID, this._flowID, command);
+    const result = this._isPoller
+      ? await sendCommandWithPolling(
+          this._websocket,
+          this._battleID,
+          this._flowID,
+          command
+        )
+      : await sendCommand(
+          this._websocket,
+          this._battleID,
+          this._flowID,
+          command
+        );
 
     if (result.action === "battle-progressed") {
       this._flowID = result.flowID;

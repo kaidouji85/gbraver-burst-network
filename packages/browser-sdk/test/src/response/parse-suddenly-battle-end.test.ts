@@ -2,7 +2,7 @@ import type { SuddenlyBattleEnd } from "../../../src/response/suddenly-battle-en
 import { parseSuddenlyBattleEnd } from "../../../src/response/suddenly-battle-end";
 
 const data: SuddenlyBattleEnd = {
-  action: "suddenly-battle-end"
+  action: "suddenly-battle-end",
 };
 
 test("SuddenlyBattleEndなら正しくパースできる", () => {

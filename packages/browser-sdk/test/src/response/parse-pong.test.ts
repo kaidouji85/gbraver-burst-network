@@ -3,7 +3,7 @@ import { parsePong } from "../../../src/response/pong";
 
 const origin: Pong = {
   action: "pong",
-  message: "test"
+  message: "test",
 };
 
 test("Pongをパースすることができる", () => {
@@ -12,10 +12,7 @@ test("Pongをパースすることができる", () => {
 });
 
 test("余計なプロパティがあっても正しくパースはできる", () => {
-  const result = parsePong({ ...origin,
-    hp: 1000,
-    power: 2000
-  });
+  const result = parsePong({ ...origin, hp: 1000, power: 2000 });
   expect(result).toEqual(origin);
 });
 

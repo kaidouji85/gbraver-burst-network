@@ -22,9 +22,13 @@ export type BattleProgressed = {
 export function parseBattleProgressed(data: any): BattleProgressed | null {
   /* eslint-enable */
   // TODO updateを正確に型チェックする
-  return data?.action === "battle-progressed" && typeof data?.flowID === "string" && Array.isArray(data?.update) ? {
-    action: data.action,
-    flowID: data.flowID,
-    update: data.update
-  } : null;
+  return data?.action === "battle-progressed" &&
+    typeof data?.flowID === "string" &&
+    Array.isArray(data?.update)
+    ? {
+        action: data.action,
+        flowID: data.flowID,
+        update: data.update,
+      }
+    : null;
 }

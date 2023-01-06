@@ -6,7 +6,7 @@ import { parseBattleProgressed } from "../../../src/response/battle-progressed";
 const data: BattleProgressed = {
   action: "battle-progressed",
   flowID: "flowID",
-  update: [EMPTY_GAME_STATE]
+  update: [EMPTY_GAME_STATE],
 };
 
 test("BattleProgressedを正しくパースできる", () => {

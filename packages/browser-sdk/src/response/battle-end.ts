@@ -19,8 +19,10 @@ export type BattleEnd = {
 export function parseBattleEnd(data: any): BattleEnd | null {
   /* eslint-enable */
   // TODO updateを正確に型チェックする
-  return data?.action === "battle-end" && Array.isArray(data?.update) ? {
-    action: data.action,
-    update: data.update
-  } : null;
+  return data?.action === "battle-end" && Array.isArray(data?.update)
+    ? {
+        action: data.action,
+        update: data.update,
+      }
+    : null;
 }

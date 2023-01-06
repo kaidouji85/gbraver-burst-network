@@ -16,8 +16,10 @@ export type Pong = {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parsePong(data: any): Pong | null {
   /* eslint-enable */
-  return data?.action === "pong" && typeof data?.message === "string" ? {
-    action: data.action,
-    message: data.message
-  } : null;
+  return data?.action === "pong" && typeof data?.message === "string"
+    ? {
+        action: data.action,
+        message: data.message,
+      }
+    : null;
 }

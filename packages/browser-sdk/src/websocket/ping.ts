@@ -13,11 +13,14 @@ import { waitUntil } from "./wait-until";
  */
 export function ping(websocket: WebSocket): Promise<Pong> {
   sendToAPIServer(websocket, {
-    action: "ping"
+    action: "ping",
   });
-  return waitUntil(websocket, (e: MessageEvent, resolve: Resolve<Pong>): void => {
-    const data = parseJSON(e.data);
-    const response = parsePong(data);
-    response && resolve(response);
-  });
+  return waitUntil(
+    websocket,
+    (e: MessageEvent, resolve: Resolve<Pong>): void => {
+      const data = parseJSON(e.data);
+      const response = parsePong(data);
+      response && resolve(response);
+    }
+  );
 }

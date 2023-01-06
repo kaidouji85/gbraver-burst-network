@@ -2,7 +2,7 @@ import type { AcceptCommand } from "../../../src/response/accept-command";
 import { parseAcceptCommand } from "../../../src/response/accept-command";
 
 const data: AcceptCommand = {
-  action: "accept-command"
+  action: "accept-command",
 };
 
 test("AcceptCommandなら正しくパースできる", () => {

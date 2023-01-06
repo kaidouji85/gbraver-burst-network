@@ -23,29 +23,37 @@ import { waitUntil } from "./wait-until";
  * @param command コマンド
  * @return サーバからのレスポンス
  */
-export function sendCommand(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
+export function sendCommand(
+  websocket: WebSocket,
+  battleID: string,
+  flowID: string,
+  command: Command
+): Promise<BattleProgressed | BattleEnd> {
   sendToAPIServer(websocket, {
     action: "send-command",
     battleID,
     flowID,
-    command
+    command,
   });
-  return waitUntil(websocket, (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>) => {
-    const data = parseJSON(e.data);
-    const battleProgressed = parseBattleProgressed(data);
+  return waitUntil(
+    websocket,
+    (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>) => {
+      const data = parseJSON(e.data);
+      const battleProgressed = parseBattleProgressed(data);
 
-    if (battleProgressed) {
-      resolve(battleProgressed);
-      return;
+      if (battleProgressed) {
+        resolve(battleProgressed);
+        return;
+      }
+
+      const battleEnd = parseBattleEnd(data);
+
+      if (battleEnd) {
+        resolve(battleEnd);
+        return;
+      }
     }
-
-    const battleEnd = parseBattleEnd(data);
-
-    if (battleEnd) {
-      resolve(battleEnd);
-      return;
-    }
-  });
+  );
 }
 
 /**
@@ -57,7 +65,12 @@ export function sendCommand(websocket: WebSocket, battleID: string, flowID: stri
  * @param command コマンド
  * @return APIサーバからのレスポンス
  */
-export async function sendCommandWithPolling(websocket: WebSocket, battleID: string, flowID: string, command: Command): Promise<BattleProgressed | BattleEnd> {
+export async function sendCommandWithPolling(
+  websocket: WebSocket,
+  battleID: string,
+  flowID: string,
+  command: Command
+): Promise<BattleProgressed | BattleEnd> {
   const maxPollingCount = 100;
   const pollingIntervalMilliSec = 3000;
   let pollingCount = 1;
@@ -69,7 +82,7 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
     sendToAPIServer(websocket, {
       action: "battle-progress-polling",
       battleID,
-      flowID
+      flowID,
     });
   };
 
@@ -77,44 +90,54 @@ export async function sendCommandWithPolling(websocket: WebSocket, battleID: str
     action: "send-command",
     battleID,
     flowID,
-    command
+    command,
   });
-  await waitUntil(websocket, (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
-    const data = parseJSON(e.data);
-    const acceptCommand = parseAcceptCommand(data);
-    acceptCommand && resolve(acceptCommand);
-  });
+  await waitUntil(
+    websocket,
+    (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
+      const data = parseJSON(e.data);
+      const acceptCommand = parseAcceptCommand(data);
+      acceptCommand && resolve(acceptCommand);
+    }
+  );
   battleProgressPolling();
-  return waitUntil(websocket, async (e: MessageEvent, resolve: Resolve<BattleProgressed | BattleEnd>, reject: Reject): Promise<void> => {
-    const data = parseJSON(e.data);
-    const notReadyBattleProgress = parseNotReadyBattleProgress(data);
-    const isOverPollingCount = maxPollingCount <= pollingCount;
+  return waitUntil(
+    websocket,
+    async (
+      e: MessageEvent,
+      resolve: Resolve<BattleProgressed | BattleEnd>,
+      reject: Reject
+    ): Promise<void> => {
+      const data = parseJSON(e.data);
+      const notReadyBattleProgress = parseNotReadyBattleProgress(data);
+      const isOverPollingCount = maxPollingCount <= pollingCount;
 
-    if (notReadyBattleProgress && isOverPollingCount) {
-      reject(new Error("max polling count over"));
-      return;
+      if (notReadyBattleProgress && isOverPollingCount) {
+        reject(new Error("max polling count over"));
+        return;
+      }
+
+      if (notReadyBattleProgress) {
+        const pollingTime = Date.now() - lastPollingTime;
+        const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
+        await wait(waitTime);
+        battleProgressPolling();
+        return;
+      }
+
+      const battleProgressed = parseBattleProgressed(data);
+
+      if (battleProgressed) {
+        resolve(battleProgressed);
+        return;
+      }
+
+      const battleEnd = parseBattleEnd(data);
+
+      if (battleEnd) {
+        resolve(battleEnd);
+        return;
+      }
     }
-
-    if (notReadyBattleProgress) {
-      const pollingTime = Date.now() - lastPollingTime;
-      const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
-      await wait(waitTime);
-      battleProgressPolling();
-      return;
-    }
-
-    const battleProgressed = parseBattleProgressed(data);
-
-    if (battleProgressed) {
-      resolve(battleProgressed);
-      return;
-    }
-
-    const battleEnd = parseBattleEnd(data);
-
-    if (battleEnd) {
-      resolve(battleEnd);
-      return;
-    }
-  });
+  );
 }

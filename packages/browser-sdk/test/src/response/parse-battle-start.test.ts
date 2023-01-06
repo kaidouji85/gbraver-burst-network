@@ -7,14 +7,10 @@ const battleStart: BattleStart = {
   action: "battle-start",
   battleID: "xxxxx",
   flowID: "xxxxx",
-  player: { ...EMPTY_PLAYER,
-    playerId: "player"
-  },
-  enemy: { ...EMPTY_PLAYER,
-    playerId: "player"
-  },
+  player: { ...EMPTY_PLAYER, playerId: "player" },
+  enemy: { ...EMPTY_PLAYER, playerId: "player" },
   stateHistory: [EMPTY_GAME_STATE],
-  isPoller: true
+  isPoller: true,
 };
 
 test("BattleStartなら正しくパースできる", () => {
@@ -24,7 +20,7 @@ test("BattleStartなら正しくパースできる", () => {
 
 test("BattleStart以外だとパースできない", () => {
   const result = parseBattleStart({
-    hp: 1000
+    hp: 1000,
   });
   expect(result).toBe(null);
 });

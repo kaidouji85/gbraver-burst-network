@@ -2,7 +2,7 @@ import type { NotReadyBattleProgress } from "../../../src/response/not-ready-bat
 import { parseNotReadyBattleProgress } from "../../../src/response/not-ready-battle-progress";
 
 const data: NotReadyBattleProgress = {
-  action: "not-ready-battle-progress"
+  action: "not-ready-battle-progress",
 };
 
 test("NotReadyBattleProgressなら正しくパースできる", () => {

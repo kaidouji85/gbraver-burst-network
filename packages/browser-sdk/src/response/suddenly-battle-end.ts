@@ -13,7 +13,9 @@ export type SuddenlyBattleEnd = {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseSuddenlyBattleEnd(data: any): SuddenlyBattleEnd | null {
   /* eslint-enable */
-  return data?.action === "suddenly-battle-end" ? {
-    action: data.action
-  } : null;
+  return data?.action === "suddenly-battle-end"
+    ? {
+        action: data.action,
+      }
+    : null;
 }

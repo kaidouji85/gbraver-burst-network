@@ -8,7 +8,11 @@ import type { Reject, Resolve } from "../promise/promise";
  * @param resolve resolve関数
  * @param reject reject関数
  */
-export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: Reject) => unknown;
+export type MessageHandler<X> = (
+  e: MessageEvent,
+  resolve: Resolve<X>,
+  reject: Reject
+) => unknown;
 
 /**
  * Websocketで特定メッセージを受信するまで待機する
@@ -35,7 +39,10 @@ export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: R
  * @param messageHandler messageイベントが発火した時のハンドラ
  * @return messageHandler内でresolveされたデータ
  */
-export function waitUntil<X>(websocket: WebSocket, messageHandler: MessageHandler<X>): Promise<X> {
+export function waitUntil<X>(
+  websocket: WebSocket,
+  messageHandler: MessageHandler<X>
+): Promise<X> {
   let handler: ((e: MessageEvent) => void) | null = null;
   return new Promise<X>((resolve, reject) => {
     handler = (e: MessageEvent) => {

@@ -6,6 +6,9 @@ import type { APIServerRequest } from "../request/request";
  * @param websocket WebSocketクライアント
  * @param data 送信内容
  */
-export function sendToAPIServer(websocket: WebSocket, data: APIServerRequest): void {
+export function sendToAPIServer(
+  websocket: WebSocket,
+  data: APIServerRequest
+): void {
   websocket.send(JSON.stringify(data));
 }

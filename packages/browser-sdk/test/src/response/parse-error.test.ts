@@ -4,7 +4,7 @@ import { parseError } from "../../../src/response/error";
 test("Errorを正しくパースできる", () => {
   const data: Error = {
     action: "error",
-    error: "error message"
+    error: "error message",
   };
   const result = parseError(data);
   expect(result).toEqual(data);
@@ -14,8 +14,8 @@ test("errorが複雑なオブジェクトでもパースできる", () => {
   const data: Error = {
     action: "error",
     error: {
-      test: 12
-    }
+      test: 12,
+    },
   };
   const result = parseError(data);
   expect(result).toEqual(data);
@@ -23,7 +23,7 @@ test("errorが複雑なオブジェクトでもパースできる", () => {
 
 test("errorプロパティがないとパースできない", () => {
   const data = {
-    action: "error"
+    action: "error",
   };
   const result = parseError(data);
   expect(result).toBe(null);

@@ -2,7 +2,7 @@ import type { EnteredCasualMatch } from "../../../src/response/entered-casual-ma
 import { parseEnteredCasualMatch } from "../../../src/response/entered-casual-match";
 
 const data: EnteredCasualMatch = {
-  action: "entered-casual-match"
+  action: "entered-casual-match",
 };
 
 test("EnteredCasualMatchなら正しくパースできる", () => {

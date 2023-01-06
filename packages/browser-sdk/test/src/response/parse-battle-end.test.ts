@@ -5,7 +5,7 @@ import { parseBattleEnd } from "../../../src/response/battle-end";
 
 const data: BattleEnd = {
   action: "battle-end",
-  update: [EMPTY_GAME_STATE]
+  update: [EMPTY_GAME_STATE],
 };
 
 test("BattleEndを正しくパースできる", () => {

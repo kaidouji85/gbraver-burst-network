@@ -9,4 +9,13 @@ import type { Pong } from "./pong";
 import type { SuddenlyBattleEnd } from "./suddenly-battle-end";
 
 /** APIサーバからのレスポンス */
-export type WebsocketAPIResponse = Pong | EnteredCasualMatch | AcceptCommand | BattleStart | NotReadyBattleProgress | BattleProgressed | BattleEnd | SuddenlyBattleEnd | Error;
+export type WebsocketAPIResponse =
+  | Pong
+  | EnteredCasualMatch
+  | AcceptCommand
+  | BattleStart
+  | NotReadyBattleProgress
+  | BattleProgressed
+  | BattleEnd
+  | SuddenlyBattleEnd
+  | Error;

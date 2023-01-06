@@ -15,15 +15,22 @@ import { waitUntil } from "./wait-until";
  * @param pilotId パイロットID
  * @return バトル情報
  */
-export function enterCasualMatch(websocket: WebSocket, armdozerId: ArmDozerId, pilotId: PilotId): Promise<BattleStart> {
+export function enterCasualMatch(
+  websocket: WebSocket,
+  armdozerId: ArmDozerId,
+  pilotId: PilotId
+): Promise<BattleStart> {
   sendToAPIServer(websocket, {
     action: "enter-casual-match",
     armdozerId,
-    pilotId
+    pilotId,
   });
-  return waitUntil(websocket, (e: MessageEvent, resolve: Resolve<BattleStart>): void => {
-    const data = parseJSON(e.data);
-    const response = parseBattleStart(data);
-    response && resolve(response);
-  });
+  return waitUntil(
+    websocket,
+    (e: MessageEvent, resolve: Resolve<BattleStart>): void => {
+      const data = parseJSON(e.data);
+      const response = parseBattleStart(data);
+      response && resolve(response);
+    }
+  );
 }

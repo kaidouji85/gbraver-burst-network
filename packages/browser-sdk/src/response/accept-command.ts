@@ -13,7 +13,9 @@ export type AcceptCommand = {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseAcceptCommand(data: any): AcceptCommand | null {
   /* eslint-enable */
-  return data?.action === "accept-command" ? {
-    action: data.action
-  } : null;
+  return data?.action === "accept-command"
+    ? {
+        action: data.action,
+      }
+    : null;
 }

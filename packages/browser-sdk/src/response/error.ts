@@ -14,8 +14,10 @@ export type Error = {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseError(data: any): Error | null {
   /* eslint-enable */
-  return data?.action === "error" && typeof data?.error !== "undefined" ? {
-    action: data.action,
-    error: data.error
-  } : null;
+  return data?.action === "error" && typeof data?.error !== "undefined"
+    ? {
+        action: data.action,
+        error: data.error,
+      }
+    : null;
 }
