@@ -10,7 +10,7 @@ export type NotReadyBattleProgress = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseNotReadyBattleProgress(data: Record<string, any>): NotReadyBattleProgress | null | undefined {
+export function parseNotReadyBattleProgress(data: any): NotReadyBattleProgress | null {
   return data?.action === "not-ready-battle-progress" ? {
     action: data.action
   } : null;
