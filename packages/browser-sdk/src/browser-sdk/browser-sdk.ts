@@ -1,7 +1,7 @@
 import { Auth0Client } from "@auth0/auth0-spa-js";
 import type { Battle, CasualMatch, LoggedInUserDelete, LoginCheck, Logout, MailVerify, Ping, UniversalLogin, UserMailGet, UserNameGet, UserPictureGet, WebsocketDisconnect, WebsocketErrorNotifier, WebsocketUnintentionalCloseNotifier } from "@gbraver-burst-network/browser-core";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
-import { fromEvent, Observable, Subject, Subscription } from "rxjs";
+import { fromEvent, map, Observable, Subject, Subscription } from "rxjs";
 import { createAuth0ClientHelper } from "../auth0/client";
 import { clearLoginHistory, isLoginSuccessRedirect } from "../auth0/login-redirect";
 import { deleteLoggedInUser } from "../http-request/delete-user";
@@ -19,7 +19,7 @@ class BrowserSDKImpl implements BrowserSDK {
   _restAPIURL: string;
   _websocketAPIURL: string;
   _auth0Client: Auth0Client;
-  _websocket: WebSocket | null | undefined;
+  _websocket: WebSocket | null;
   _websocketError: Subject<void>;
   _websocketUnintentionalCloseNotifier: Subject<void>;
   _websocketSubscriptions: Subscription[];
@@ -164,7 +164,13 @@ class BrowserSDKImpl implements BrowserSDK {
 
     const accessToken = await this._auth0Client.getTokenSilently();
     const websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
-    this._websocketSubscriptions = [fromEvent(websocket, "error").subscribe(this._websocketError), fromEvent(websocket, "close").subscribe(this._websocketError)];
+    this._websocketSubscriptions = [
+      fromEvent(websocket, "error")
+        .pipe(map(() => {}))
+        .subscribe(this._websocketError), 
+      fromEvent(websocket, "close")
+        .pipe(map(() => {}))
+        .subscribe(this._websocketError)];
     this._websocket = websocket;
     return websocket;
   }
