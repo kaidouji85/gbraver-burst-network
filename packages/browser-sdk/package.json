@@ -7,7 +7,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "run-s clean type-check lint test transpile copy-type-definition",
+    "build": "run-s clean type-check lint test transpile",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint:test": "eslint test",
@@ -17,8 +17,7 @@
     "code-format:test": "prettier --write test",
     "code-analysis": "codehawk src",
     "test": "jest",
-    "transpile": "babel src -d lib/",
-    "copy-type-definition": "flow-copy-source src lib",
+    "transpile": "tsc -d --outDir lib",
     "clean": "rimraf lib"
   },
   "author": "Y.Takeuchi",
