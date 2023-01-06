@@ -167,10 +167,8 @@ class BrowserSDKImpl implements BrowserSDK {
     const websocket = await connect(`${this._websocketAPIURL}?token=${accessToken}`);
     this._websocketSubscriptions = [
       fromEvent(websocket, "error")
-        .pipe(map(() => {}))
         .subscribe(this._websocketError), 
       fromEvent(websocket, "close")
-        .pipe(map(() => {}))
         .subscribe(this._websocketError)];
     this._websocket = websocket;
     return websocket;
