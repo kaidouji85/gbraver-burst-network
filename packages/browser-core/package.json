@@ -8,14 +8,13 @@
   ],
   "license": "ISC",
   "scripts": {
-    "build": "run-s clean type-check lint transpile copy-type-definition",
-    "type-check": "flow check",
+    "build": "run-s clean type-check lint transpile",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
     "code-format": "prettier --write src",
     "code-analysis": "codehawk src",
-    "transpile": "babel src -d lib/",
-    "copy-type-definition": "flow-copy-source src lib",
+    "transpile": "tsc -d --outDir lib",
     "clean": "rimraf lib"
   },
   "devDependencies": {
