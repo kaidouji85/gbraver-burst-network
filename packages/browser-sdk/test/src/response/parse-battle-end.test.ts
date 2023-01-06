@@ -1,4 +1,5 @@
 import { EMPTY_GAME_STATE } from "gbraver-burst-core";
+
 import type { BattleEnd } from "../../../src/response/battle-end";
 import { parseBattleEnd } from "../../../src/response/battle-end";
 

@@ -1,4 +1,5 @@
 import { EMPTY_GAME_STATE, EMPTY_PLAYER } from "gbraver-burst-core";
+
 import type { BattleStart } from "../../../src/response/battle-start";
 import { parseBattleStart } from "../../../src/response/battle-start";
 
