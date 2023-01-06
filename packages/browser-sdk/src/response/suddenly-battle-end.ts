@@ -10,7 +10,7 @@ export type SuddenlyBattleEnd = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseSuddenlyBattleEnd(data: Record<string, any>): SuddenlyBattleEnd | null | undefined {
+export function parseSuddenlyBattleEnd(data: any): SuddenlyBattleEnd | null {
   return data?.action === "suddenly-battle-end" ? {
     action: data.action
   } : null;
