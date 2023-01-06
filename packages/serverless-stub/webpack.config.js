@@ -11,7 +11,7 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   entry: {
-    [BUILD_INDEX_JS_PATH]: path.resolve(__dirname, 'src/index.js')
+    [BUILD_INDEX_JS_PATH]: path.resolve(__dirname, 'src/index.ts')
   },
   output: {
     path: path.resolve(__dirname, BUILD_PATH),
@@ -25,14 +25,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js/,
+        test: /\.ts/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: 'ts-loader'
       }
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.ts']
   },
   plugins: [
     new HtmlWebpackPlugin({
