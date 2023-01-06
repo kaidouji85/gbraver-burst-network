@@ -10,7 +10,7 @@ export type EnteredCasualMatch = {
  * @param data パース元となるオブジェクト
  * @return パース結果
  */
-export function parseEnteredCasualMatch(data: Record<string, any>): EnteredCasualMatch | null | undefined {
+export function parseEnteredCasualMatch(data: any): EnteredCasualMatch | null {
   return data?.action === "entered-casual-match" ? {
     action: data.action
   } : null;
