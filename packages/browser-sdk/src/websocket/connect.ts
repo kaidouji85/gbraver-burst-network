@@ -5,10 +5,10 @@
  * @return WebSocket
  */
 export function connect(url: string): Promise<WebSocket> {
-  let handler = null;
-  let errorHandler = null;
+  let handler: (() => void) | null = null;
+  let errorHandler: ((error: any) => void) | null = null;
   const websocket = new WebSocket(url);
-  return new Promise((resolve, reject) => {
+  return new Promise<WebSocket>((resolve, reject) => {
     handler = () => {
       resolve(websocket);
     };
