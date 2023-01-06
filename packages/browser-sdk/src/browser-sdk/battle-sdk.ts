@@ -3,7 +3,6 @@ import type { Command, GameState, Player } from "gbraver-burst-core";
 import { filter, fromEvent, map, Observable } from "rxjs";
 
 import { parseJSON } from "../json/parse";
-import type { SuddenlyBattleEnd } from "../response/suddenly-battle-end";
 import { parseSuddenlyBattleEnd } from "../response/suddenly-battle-end";
 import { sendCommand, sendCommandWithPolling } from "../websocket/send-command";
 
@@ -66,7 +65,7 @@ export class BattleSDK implements Battle {
       filter((data) => data), 
       map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), 
       filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
-      map(v => {})
+      map(v => v as void)
     );
   }
 
@@ -85,5 +84,4 @@ export class BattleSDK implements Battle {
   suddenlyBattleNotifier(): Observable<void> {
     return this._suddenlyBattleEnd;
   }
-
 }
