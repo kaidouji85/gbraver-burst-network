@@ -12,8 +12,8 @@ import { BattleSDK } from "./battle-sdk";
 
 /** ブラウザSDK */
 export interface BrowserSDK extends UniversalLogin, LoginCheck, Logout, Ping, CasualMatch, UserNameGet, UserPictureGet, UserMailGet, MailVerify, LoggedInUserDelete, WebsocketDisconnect, WebsocketErrorNotifier, WebsocketUnintentionalCloseNotifier {}
-/** ブラウザSDK実装 */
 
+/** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
   _ownURL: string;
   _restAPIURL: string;
@@ -98,7 +98,7 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async isMailVerified(): Promise<boolean> {
     const user = await this._auth0Client.getUser();
-    return user?.email_verified;
+    return user?.email_verified ?? false;
   }
 
   /** @override */
