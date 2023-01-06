@@ -36,8 +36,8 @@ export type MessageHandler<X> = (e: MessageEvent, resolve: Resolve<X>, reject: R
  * @return messageHandler内でresolveされたデータ
  */
 export function waitUntil<X>(websocket: WebSocket, messageHandler: MessageHandler<X>): Promise<X> {
-  let handler = null;
-  return new Promise((resolve, reject) => {
+  let handler: ((e: MessageEvent) => void) | null = null;
+  return new Promise<X>((resolve, reject) => {
     handler = (e: MessageEvent) => {
       messageHandler(e, resolve, reject);
     };
