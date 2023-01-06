@@ -15,7 +15,7 @@ export type BattleEnd = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseBattleEnd(data: Record<string, any>): BattleEnd | null | undefined {
+export function parseBattleEnd(data: any): BattleEnd | null {
   // TODO updateを正確に型チェックする
   return data?.action === "battle-end" && Array.isArray(data?.update) ? {
     action: data.action,
