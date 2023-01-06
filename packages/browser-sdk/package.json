@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "run-s clean type-check lint test transpile copy-type-definition",
-    "type-check": "flow",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "lint-fix": "eslint --fix src",
