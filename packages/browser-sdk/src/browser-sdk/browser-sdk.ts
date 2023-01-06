@@ -57,7 +57,9 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async gotoLoginPage(): Promise<void> {
     await this._auth0Client.loginWithRedirect({
-      redirect_uri: this._ownURL
+      authorizationParams: {
+        redirect_uri: this._ownURL
+      }
     });
   }
 
@@ -69,7 +71,9 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async logout(): Promise<void> {
     await this._auth0Client.logout({
-      returnTo: this._ownURL
+      logoutParams: {
+        returnTo: this._ownURL
+      }
     });
   }
 
