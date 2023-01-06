@@ -1,11 +1,8 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-
 import type { UseCase } from "./use-case";
 
-/** ユーザ名取得 ユースケース */
-export class GetUserNameCase implements UseCase {
+/** Websocket切断 ユースケース */
+export class DisconnectWebsocketCase implements UseCase {
   _sdk: BrowserSDK;
 
   /**
@@ -19,12 +16,13 @@ export class GetUserNameCase implements UseCase {
 
   /** @override */
   name(): string {
-    return "ユーザ名取得";
+    return "Websocket切断";
   }
 
   /** @override */
   async execute(): Promise<void> {
-    const userName = await this._sdk.getUserName();
-    console.log(userName);
+    await this._sdk.ping();
+    await this._sdk.disconnectWebsocket();
   }
+
 }

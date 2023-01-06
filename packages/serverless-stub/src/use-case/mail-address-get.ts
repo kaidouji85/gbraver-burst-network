@@ -1,7 +1,4 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-
 import type { UseCase } from "./use-case";
 
 /** メールアドレス取得 ユースケース */
@@ -27,4 +24,5 @@ export class MailAddressGet implements UseCase {
     const isMailVerified = await this._sdk.getMail();
     console.log(isMailVerified);
   }
+
 }
