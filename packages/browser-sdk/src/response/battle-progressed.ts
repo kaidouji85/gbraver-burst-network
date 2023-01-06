@@ -18,7 +18,9 @@ export type BattleProgressed = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseBattleProgressed(data: any): BattleProgressed | null {
+  /* eslint-enable */
   // TODO updateを正確に型チェックする
   return data?.action === "battle-progressed" && typeof data?.flowID === "string" && Array.isArray(data?.update) ? {
     action: data.action,

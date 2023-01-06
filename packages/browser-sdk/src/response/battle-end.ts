@@ -15,7 +15,9 @@ export type BattleEnd = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseBattleEnd(data: any): BattleEnd | null {
+  /* eslint-enable */
   // TODO updateを正確に型チェックする
   return data?.action === "battle-end" && Array.isArray(data?.update) ? {
     action: data.action,
