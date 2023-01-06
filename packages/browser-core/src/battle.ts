@@ -1,5 +1,4 @@
-import type { Command, GameState } from "gbraver-burst-core";
-import type { Player } from "gbraver-burst-core/lib/player/player";
+import type { Command, GameState, Player } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 /**

@@ -27,7 +27,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "gbraver-burst-core": "^1.15.2",
+    "gbraver-burst-core": "^1.16.2-beta",
     "rxjs": "^7.8.0"
   },
   "gitHead": "e561690503b92966d1f6f139a083a2ca8c5a5b0c"
