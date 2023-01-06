@@ -18,7 +18,7 @@ export type BattleProgressed = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseBattleProgressed(data: Record<string, any>): BattleProgressed | null | undefined {
+export function parseBattleProgressed(data: any): BattleProgressed | null {
   // TODO updateを正確に型チェックする
   return data?.action === "battle-progressed" && typeof data?.flowID === "string" && Array.isArray(data?.update) ? {
     action: data.action,
