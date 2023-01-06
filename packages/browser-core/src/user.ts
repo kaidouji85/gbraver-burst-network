@@ -1,5 +1,3 @@
-// @flow
-
 /** ユーザ名取得 */
 export interface UserNameGet {
   /**

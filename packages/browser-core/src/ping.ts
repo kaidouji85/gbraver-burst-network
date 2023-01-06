@@ -1,5 +1,3 @@
-// @flow
-
 export interface Ping {
   /**
    * APIサーバと疎通確認を行う

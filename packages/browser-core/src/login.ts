@@ -1,5 +1,3 @@
-// @flow
-
 /** ユニバーサルログイン */
 export interface UniversalLogin {
   /**
