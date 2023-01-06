@@ -26,7 +26,7 @@ export interface Battle {
   /**
    * バトル強制終了の通知ストリーム
    *
-   * @return {Observable<void>} 通知ストリーム
+   * @return 通知ストリーム
    */
-  suddenlyBattleNotifier(): typeof Observable;
+  suddenlyBattleNotifier(): Observable<void>;
 }

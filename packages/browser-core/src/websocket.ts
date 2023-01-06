@@ -17,7 +17,7 @@ export interface WebsocketErrorNotifier {
    *
    * @return 通知ストリーム
    */
-  websocketErrorNotifier(): typeof Observable;
+  websocketErrorNotifier(): Observable<void>;
 }
 
 /** Websocket 意図しない切断通知 */
@@ -27,5 +27,5 @@ export interface WebsocketUnintentionalCloseNotifier {
    *
    * @return 通知ストリーム
    */
-  websocketUnintentionalCloseNotifier(): typeof Observable;
+  websocketUnintentionalCloseNotifier(): Observable<void>;
 }

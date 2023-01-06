@@ -44,7 +44,7 @@ export class BattleSDK implements Battle {
   _battleID: string;
   _flowID: string;
   _isPoller: boolean;
-  _suddenlyBattleEnd: typeof Observable;
+  _suddenlyBattleEnd: Observable<void>;
 
   /**
    * コンストラクタ
@@ -59,7 +59,11 @@ export class BattleSDK implements Battle {
     this._battleID = param.battleID;
     this._flowID = param.initialFlowID;
     this._isPoller = param.isPoller;
-    this._suddenlyBattleEnd = fromEvent(this._websocket, "message").pipe(map((e: MessageEvent) => parseJSON(e.data)), filter((data: Record<string, any> | null | undefined) => data), map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), filter((sudenlyBattleEnd: SuddenlyBattleEnd | null | undefined) => sudenlyBattleEnd));
+    this._suddenlyBattleEnd = fromEvent(this._websocket, "message").pipe(
+      map((e: MessageEvent) => parseJSON(e.data)), 
+      filter((data: Record<string, any> | null | undefined) => data), 
+      map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), filter((sudenlyBattleEnd: SuddenlyBattleEnd | null | undefined) => sudenlyBattleEnd)
+    );
   }
 
   /** @override */
@@ -74,7 +78,7 @@ export class BattleSDK implements Battle {
   }
 
   /** @override */
-  suddenlyBattleNotifier(): typeof Observable {
+  suddenlyBattleNotifier(): Observable<void> {
     return this._suddenlyBattleEnd;
   }
 
