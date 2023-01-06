@@ -60,9 +60,12 @@ export class BattleSDK implements Battle {
     this._flowID = param.initialFlowID;
     this._isPoller = param.isPoller;
     this._suddenlyBattleEnd = fromEvent(this._websocket, "message").pipe(
-      map((e: MessageEvent) => parseJSON(e.data)), 
-      filter((data: Record<string, any> | null | undefined) => data), 
-      map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), filter((sudenlyBattleEnd: SuddenlyBattleEnd | null | undefined) => sudenlyBattleEnd)
+      map(e => e as MessageEvent),
+      map((e) => parseJSON(e.data)), 
+      filter((data) => data), 
+      map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), 
+      filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
+      map(v => {})
     );
   }
 
