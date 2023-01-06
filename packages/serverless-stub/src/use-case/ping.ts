@@ -25,5 +25,4 @@ export class PingUseCase implements UseCase {
     const data = await this._sdk.ping();
     console.log(data);
   }
-
 }

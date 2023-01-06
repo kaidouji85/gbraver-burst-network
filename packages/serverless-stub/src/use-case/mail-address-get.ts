@@ -25,5 +25,4 @@ export class MailAddressGet implements UseCase {
     const isMailVerified = await this._sdk.getMail();
     console.log(isMailVerified);
   }
-
 }

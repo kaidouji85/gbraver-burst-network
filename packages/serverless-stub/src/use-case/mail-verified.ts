@@ -25,5 +25,4 @@ export class MailVerifiedCase implements UseCase {
     const isMailVerified = await this._sdk.isMailVerified();
     console.log(isMailVerified);
   }
-
 }

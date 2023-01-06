@@ -25,5 +25,4 @@ export class GetUserNameCase implements UseCase {
     const userName = await this._sdk.getUserName();
     console.log(userName);
   }
-
 }

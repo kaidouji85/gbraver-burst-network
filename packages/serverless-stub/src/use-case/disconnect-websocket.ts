@@ -25,5 +25,4 @@ export class DisconnectWebsocketCase implements UseCase {
     await this._sdk.ping();
     await this._sdk.disconnectWebsocket();
   }
-
 }

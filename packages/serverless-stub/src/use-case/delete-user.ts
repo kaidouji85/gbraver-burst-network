@@ -24,5 +24,4 @@ export class DeleteUserCase implements UseCase {
   async execute(): Promise<void> {
     await this._sdk.deleteLoggedInUser();
   }
-
 }

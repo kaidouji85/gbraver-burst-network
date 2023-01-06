@@ -17,11 +17,18 @@ const REST_API_URL = process.env.REST_API_URL ?? "";
 const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? "";
 
 window.onload = async () => {
-  const browserSDK = await createBrowserSDK(window.location.origin, REST_API_URL, WEBSOCKET_API_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_AUDIENCE);
-  browserSDK.websocketUnintentionalCloseNotifier().subscribe(e => {
+  const browserSDK = await createBrowserSDK(
+    window.location.origin,
+    REST_API_URL,
+    WEBSOCKET_API_URL,
+    AUTH0_DOMAIN,
+    AUTH0_CLIENT_ID,
+    AUTH0_AUDIENCE
+  );
+  browserSDK.websocketUnintentionalCloseNotifier().subscribe((e) => {
     console.log("websocketUnintentionalCloseNotifier", e);
   });
-  browserSDK.websocketErrorNotifier().subscribe(e => {
+  browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);
   });
 
@@ -29,16 +36,41 @@ window.onload = async () => {
     await browserSDK.afterLoginSuccess();
   }
 
-  const useCases: UseCase[] = [new PingUseCase(browserSDK), new BattlePlayer01(browserSDK), new BattlePlayer02(browserSDK), new GetUserNameCase(browserSDK), new GetUserPictureURLCase(browserSDK), new MailVerifiedCase(browserSDK), new MailAddressGet(browserSDK), new DisconnectWebsocketCase(browserSDK), new DeleteUserCase(browserSDK)];
-  const loginForm = document.getElementById("login-form") ?? document.createElement("form");
-  const loginButton = document.getElementById("login-button") ?? document.createElement("button");
-  const logoutForm = document.getElementById("logout-form") ?? document.createElement("form");
-  const logoutButton = document.getElementById("logout-button") ?? document.createElement("button");
-  const useCaseForm = document.getElementById("use-case-form") ?? document.createElement("form");
-  const useCaseSelectorSearchResult = document.getElementById("use-case-selector");
-  const useCaseSelector: HTMLSelectElement = useCaseSelectorSearchResult instanceof HTMLSelectElement ? useCaseSelectorSearchResult : document.createElement("select");
-  const useCaseExecuteButtonSearchResult = document.getElementById("use-case-execute-button");
-  const useCaseExecuteButton: HTMLButtonElement = useCaseExecuteButtonSearchResult instanceof HTMLButtonElement ? useCaseExecuteButtonSearchResult : document.createElement("button");
+  const useCases: UseCase[] = [
+    new PingUseCase(browserSDK),
+    new BattlePlayer01(browserSDK),
+    new BattlePlayer02(browserSDK),
+    new GetUserNameCase(browserSDK),
+    new GetUserPictureURLCase(browserSDK),
+    new MailVerifiedCase(browserSDK),
+    new MailAddressGet(browserSDK),
+    new DisconnectWebsocketCase(browserSDK),
+    new DeleteUserCase(browserSDK),
+  ];
+  const loginForm =
+    document.getElementById("login-form") ?? document.createElement("form");
+  const loginButton =
+    document.getElementById("login-button") ?? document.createElement("button");
+  const logoutForm =
+    document.getElementById("logout-form") ?? document.createElement("form");
+  const logoutButton =
+    document.getElementById("logout-button") ??
+    document.createElement("button");
+  const useCaseForm =
+    document.getElementById("use-case-form") ?? document.createElement("form");
+  const useCaseSelectorSearchResult =
+    document.getElementById("use-case-selector");
+  const useCaseSelector: HTMLSelectElement =
+    useCaseSelectorSearchResult instanceof HTMLSelectElement
+      ? useCaseSelectorSearchResult
+      : document.createElement("select");
+  const useCaseExecuteButtonSearchResult = document.getElementById(
+    "use-case-execute-button"
+  );
+  const useCaseExecuteButton: HTMLButtonElement =
+    useCaseExecuteButtonSearchResult instanceof HTMLButtonElement
+      ? useCaseExecuteButtonSearchResult
+      : document.createElement("button");
 
   const updateScreen = async () => {
     const isLogin = await browserSDK.isLogin();

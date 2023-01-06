@@ -25,5 +25,4 @@ export class GetUserPictureURLCase implements UseCase {
     const userPictureURL = await this._sdk.getUserPictureURL();
     console.log(userPictureURL);
   }
-
 }
