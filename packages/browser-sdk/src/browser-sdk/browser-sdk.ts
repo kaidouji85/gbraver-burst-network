@@ -18,11 +18,11 @@ class BrowserSDKImpl implements BrowserSDK {
   _ownURL: string;
   _restAPIURL: string;
   _websocketAPIURL: string;
-  _auth0Client: typeof Auth0Client;
+  _auth0Client: Auth0Client;
   _websocket: WebSocket | null | undefined;
-  _websocketError: typeof Subject;
-  _websocketUnintentionalCloseNotifier: typeof Subject;
-  _websocketSubscriptions: typeof Subscription[];
+  _websocketError: Subject<void>;
+  _websocketUnintentionalCloseNotifier: Subject<void>;
+  _websocketSubscriptions: Subscription[];
 
   /**
    * コンストラクタ
@@ -32,7 +32,7 @@ class BrowserSDKImpl implements BrowserSDK {
    * @param websocketAPIURL Websocket API のURL
    * @param auth0Client auth0クライアント
    */
-  constructor(ownURL: string, restAPIURL: string, websocketAPIURL: string, auth0Client: typeof Auth0Client) {
+  constructor(ownURL: string, restAPIURL: string, websocketAPIURL: string, auth0Client: Auth0Client) {
     this._ownURL = ownURL;
     this._restAPIURL = restAPIURL;
     this._websocketAPIURL = websocketAPIURL;
@@ -138,12 +138,12 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
   /** @override */
-  websocketErrorNotifier(): typeof Observable {
+  websocketErrorNotifier(): Observable<void> {
     return this._websocketError;
   }
 
   /** @override */
-  websocketUnintentionalCloseNotifier(): typeof Observable {
+  websocketUnintentionalCloseNotifier(): Observable<void> {
     return this._websocketUnintentionalCloseNotifier;
   }
 
@@ -166,6 +166,7 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
 }
+
 /**
  * GブレイバーバーストブラウザSDKを生成する
  *
@@ -177,8 +178,6 @@ class BrowserSDKImpl implements BrowserSDK {
  * @param auth0Audience auth0 audience
  * @return GブレイバーバーストブラウザSDK
  */
-
-
 export async function createBrowserSDK(ownURL: string, restAPIURL: string, websocketAPIURL: string, auth0Domain: string, auth0ClientID: string, auth0Audience: string): Promise<BrowserSDK> {
   const auth0Client = await createAuth0ClientHelper(auth0Domain, auth0ClientID, auth0Audience, ownURL);
   return new BrowserSDKImpl(ownURL, restAPIURL, websocketAPIURL, auth0Client);
