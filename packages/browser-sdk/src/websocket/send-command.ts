@@ -1,4 +1,5 @@
 import type { Command } from "gbraver-burst-core";
+
 import { parseJSON } from "../json/parse";
 import type { Reject, Resolve } from "../promise/promise";
 import type { AcceptCommand } from "../response/accept-command";

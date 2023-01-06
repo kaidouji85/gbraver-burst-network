@@ -1,4 +1,5 @@
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+
 import { parseJSON } from "../json/parse";
 import type { Resolve } from "../promise/promise";
 import type { BattleStart } from "../response/battle-start";
