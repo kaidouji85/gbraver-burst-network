@@ -11,7 +11,7 @@ export type Error = {
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseError(data: Record<string, any>): Error | null | undefined {
+export function parseError(data: any): Error | null {
   return data?.action === "error" && typeof data?.error !== "undefined" ? {
     action: data.action,
     error: data.error
