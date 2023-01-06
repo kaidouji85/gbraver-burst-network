@@ -1,3 +1,5 @@
+import { Reject } from "../promise/promise";
+
 /**
  * 接続完了したWebSocketを返す
  *
@@ -6,7 +8,7 @@
  */
 export function connect(url: string): Promise<WebSocket> {
   let handler: (() => void) | null = null;
-  let errorHandler: ((error: any) => void) | null = null;
+  let errorHandler: Reject | null = null;
   const websocket = new WebSocket(url);
   return new Promise<WebSocket>((resolve, reject) => {
     handler = () => {
