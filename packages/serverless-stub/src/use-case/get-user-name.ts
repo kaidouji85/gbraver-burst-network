@@ -1,4 +1,5 @@
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+
 import type { UseCase } from "./use-case";
 
 /** ユーザ名取得 ユースケース */

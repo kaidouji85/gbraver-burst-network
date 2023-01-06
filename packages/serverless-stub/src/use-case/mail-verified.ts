@@ -1,4 +1,5 @@
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+
 import type { UseCase } from "./use-case";
 
 /** メール認証状態取得 ユースケース */

@@ -1,5 +1,6 @@
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+
 import type { UseCase } from "./use-case";
 
 /** バトル プレイヤー01 */
