@@ -28,5 +28,5 @@ export interface Battle {
    *
    * @return 通知ストリーム
    */
-  suddenlyBattleNotifier(): Observable<void>;
+  suddenlyBattleNotifier(): Observable<unknown>;
 }

@@ -7,7 +7,7 @@ export interface WebsocketDisconnect {
    *
    * @return 処理が完了したら発火するPromise
    */
-  disconnectWebsocket(): Promise<void>;
+  disconnectWebsocket(): Promise<unknown>;
 }
 
 /** Websocket エラー通知 */
@@ -17,7 +17,7 @@ export interface WebsocketErrorNotifier {
    *
    * @return 通知ストリーム
    */
-  websocketErrorNotifier(): Observable<void>;
+  websocketErrorNotifier(): Observable<unknown>;
 }
 
 /** Websocket 意図しない切断通知 */
@@ -27,5 +27,5 @@ export interface WebsocketUnintentionalCloseNotifier {
    *
    * @return 通知ストリーム
    */
-  websocketUnintentionalCloseNotifier(): Observable<void>;
+  websocketUnintentionalCloseNotifier(): Observable<unknown>;
 }
