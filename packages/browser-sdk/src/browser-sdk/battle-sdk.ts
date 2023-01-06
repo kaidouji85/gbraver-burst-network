@@ -63,7 +63,7 @@ export class BattleSDK implements Battle {
       map(e => e as MessageEvent),
       map((e) => parseJSON(e.data)), 
       filter((data) => data), 
-      map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), 
+      map((data) => parseSuddenlyBattleEnd(data)), 
       filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
     );
   }

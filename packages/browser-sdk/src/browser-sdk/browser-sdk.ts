@@ -1,7 +1,7 @@
 import { Auth0Client } from "@auth0/auth0-spa-js";
 import type { Battle, CasualMatch, LoggedInUserDelete, LoginCheck, Logout, MailVerify, Ping, UniversalLogin, UserMailGet, UserNameGet, UserPictureGet, WebsocketDisconnect, WebsocketErrorNotifier, WebsocketUnintentionalCloseNotifier } from "@gbraver-burst-network/browser-core";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
-import { fromEvent, map, Observable, Subject, Subscription } from "rxjs";
+import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
 import { createAuth0ClientHelper } from "../auth0/client";
 import { clearLoginHistory, isLoginSuccessRedirect } from "../auth0/login-redirect";
@@ -173,7 +173,6 @@ class BrowserSDKImpl implements BrowserSDK {
     this._websocket = websocket;
     return websocket;
   }
-
 }
 
 /**
