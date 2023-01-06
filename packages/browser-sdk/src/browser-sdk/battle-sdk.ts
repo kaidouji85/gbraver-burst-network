@@ -44,7 +44,7 @@ export class BattleSDK implements Battle {
   _battleID: string;
   _flowID: string;
   _isPoller: boolean;
-  _suddenlyBattleEnd: Observable<void>;
+  _suddenlyBattleEnd: Observable<unknown>;
 
   /**
    * コンストラクタ
@@ -65,7 +65,6 @@ export class BattleSDK implements Battle {
       filter((data) => data), 
       map((data: Record<string, any>) => parseSuddenlyBattleEnd(data)), 
       filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
-      map(v => v as void)
     );
   }
 
@@ -81,7 +80,7 @@ export class BattleSDK implements Battle {
   }
 
   /** @override */
-  suddenlyBattleNotifier(): Observable<void> {
+  suddenlyBattleNotifier(): Observable<unknown> {
     return this._suddenlyBattleEnd;
   }
 }

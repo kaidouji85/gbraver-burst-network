@@ -21,8 +21,8 @@ class BrowserSDKImpl implements BrowserSDK {
   _websocketAPIURL: string;
   _auth0Client: Auth0Client;
   _websocket: WebSocket | null;
-  _websocketError: Subject<void>;
-  _websocketUnintentionalCloseNotifier: Subject<void>;
+  _websocketError: Subject<unknown>;
+  _websocketUnintentionalCloseNotifier: Subject<unknown>;
   _websocketSubscriptions: Subscription[];
 
   /**
@@ -143,12 +143,12 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
   /** @override */
-  websocketErrorNotifier(): Observable<void> {
+  websocketErrorNotifier(): Observable<unknown> {
     return this._websocketError;
   }
 
   /** @override */
-  websocketUnintentionalCloseNotifier(): Observable<void> {
+  websocketUnintentionalCloseNotifier(): Observable<unknown> {
     return this._websocketUnintentionalCloseNotifier;
   }
 
