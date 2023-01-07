@@ -1,5 +1,3 @@
-// @flow
-
 import { createBrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 import { BattlePlayer01 } from "./use-case/battle-player-01";
@@ -12,7 +10,6 @@ import { MailAddressGet } from "./use-case/mail-address-get";
 import { MailVerifiedCase } from "./use-case/mail-verified";
 import { PingUseCase } from "./use-case/ping";
 import type { UseCase } from "./use-case/use-case";
-
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
@@ -81,6 +78,7 @@ window.onload = async () => {
     logoutForm.style.display = isLogin ? "block" : "none";
     useCaseForm.style.display = isLogin ? "block" : "none";
   };
+
   useCases.forEach((v, index) => {
     const item = document.createElement("option");
     item.innerText = v.name();
@@ -101,13 +99,14 @@ window.onload = async () => {
   useCaseExecuteButton.addEventListener("click", async (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
-
     const useCaseIndex = Number(useCaseSelector.value);
+
     if (isNaN(useCaseIndex)) {
       return;
     }
 
     const useCase = useCases[useCaseIndex];
+
     if (!useCase) {
       return;
     }
@@ -116,6 +115,5 @@ window.onload = async () => {
     await useCase.execute();
     useCaseExecuteButton.disabled = false;
   });
-
   updateScreen();
 };

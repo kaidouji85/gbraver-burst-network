@@ -1,12 +1,10 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
 
 import type { UseCase } from "./use-case";
 
-/** バトル プレイヤー02 */
-export class BattlePlayer02 implements UseCase {
+/** バトル プレイヤー01 */
+export class BattlePlayer01 implements UseCase {
   _sdk: BrowserSDK;
 
   /**
@@ -20,14 +18,14 @@ export class BattlePlayer02 implements UseCase {
 
   /** @override */
   name(): string {
-    return "バトル プレイヤー02";
+    return "バトル プレイヤー01";
   }
 
   /** @override */
   async execute(): Promise<void> {
     const battle = await this._sdk.startCasualMatch(
-      ArmDozerIds.NEO_LANDOZER,
-      PilotIds.GAI
+      ArmDozerIds.SHIN_BRAVER,
+      PilotIds.SHINYA
     );
     battle.suddenlyBattleNotifier().subscribe(() => {
       console.log("suddenly battle end");
@@ -35,12 +33,11 @@ export class BattlePlayer02 implements UseCase {
     console.log(battle.player, battle.enemy, battle.initialState);
     const update01 = await battle.progress({
       type: "BATTERY_COMMAND",
-      battery: 3,
+      battery: 5,
     });
     console.log(update01);
     const update02 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
+      type: "BURST_COMMAND",
     });
     console.log(update02);
     const update03 = await battle.progress({
@@ -49,13 +46,12 @@ export class BattlePlayer02 implements UseCase {
     });
     console.log(update03);
     const update04 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 0,
+      type: "PILOT_SKILL_COMMAND",
     });
     console.log(update04);
     const update05 = await battle.progress({
       type: "BATTERY_COMMAND",
-      battery: 0,
+      battery: 5,
     });
     console.log(update05);
   }

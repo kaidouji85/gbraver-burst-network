@@ -1,5 +1,3 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 import type { UseCase } from "./use-case";

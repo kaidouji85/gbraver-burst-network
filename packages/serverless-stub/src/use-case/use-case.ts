@@ -1,5 +1,3 @@
-// @flow
-
 /** ユースケース */
 export interface UseCase {
   /** ユースケース名 */

@@ -1,11 +1,9 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 import type { UseCase } from "./use-case";
 
-/** メール認証状態取得 ユースケース */
-export class MailVerifiedCase implements UseCase {
+/** ユーザ名取得 ユースケース */
+export class GetUserNameCase implements UseCase {
   _sdk: BrowserSDK;
 
   /**
@@ -19,12 +17,12 @@ export class MailVerifiedCase implements UseCase {
 
   /** @override */
   name(): string {
-    return "メール認証状態取得";
+    return "ユーザ名取得";
   }
 
   /** @override */
   async execute(): Promise<void> {
-    const isMailVerified = await this._sdk.isMailVerified();
-    console.log(isMailVerified);
+    const userName = await this._sdk.getUserName();
+    console.log(userName);
   }
 }

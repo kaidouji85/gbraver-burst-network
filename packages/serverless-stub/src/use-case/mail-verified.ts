@@ -1,11 +1,9 @@
-// @flow
-
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
 import type { UseCase } from "./use-case";
 
-/** ユーザ削除 ユースケース */
-export class DeleteUserCase implements UseCase {
+/** メール認証状態取得 ユースケース */
+export class MailVerifiedCase implements UseCase {
   _sdk: BrowserSDK;
 
   /**
@@ -19,11 +17,12 @@ export class DeleteUserCase implements UseCase {
 
   /** @override */
   name(): string {
-    return "ユーザ削除";
+    return "メール認証状態取得";
   }
 
   /** @override */
   async execute(): Promise<void> {
-    await this._sdk.deleteLoggedInUser();
+    const isMailVerified = await this._sdk.isMailVerified();
+    console.log(isMailVerified);
   }
 }
