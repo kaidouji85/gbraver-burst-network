@@ -29,7 +29,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "gbraver-burst-core": "^1.16.2-beta",
+    "gbraver-burst-core": "^1.16.3",
     "rxjs": "^7.8.0"
   },
   "gitHead": "f8040d633c42a8bd94873a663eacbdfd83b9b31c"
