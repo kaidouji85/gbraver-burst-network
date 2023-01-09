@@ -1,4 +1,5 @@
 {
+  "extensions": [".ts"],
   "skipDirectories": [
     "/node_modules", 
     "coverage",

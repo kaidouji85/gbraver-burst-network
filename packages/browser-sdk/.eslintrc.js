@@ -1,16 +1,16 @@
 module.exports = {
-  parser: "@babel/eslint-parser",
+  parser: "@typescript-eslint/parser",
   env: {
     browser: true,
     node: true,
   },
   extends: [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
-    "plugin:flowtype/recommended"
   ],
   plugins: [
-    "flowtype",
+    "@typescript-eslint",
     "jest",
     "simple-import-sort"
   ],
