@@ -13,9 +13,8 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   region: ap-northeast-1
-  lambdaHashingVersion: 20201221
   httpApi:
     name: ${self:service}__${sls:stage}__rest-api
     cors:
@@ -35,7 +34,7 @@ provider:
       restAPIAuthorizer:
         identitySource: $request.header.Authorization
         issuerUrl: https://${env:AUTH0_DOMAIN, ''}/
-        audience: $env:AUTH0_AUDIENCE
+        audience: ${env:AUTH0_AUDIENCE, ''}
   websocketsApiName: ${self:service}__${sls:stage}__ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -49,24 +48,26 @@ provider:
     AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_ID, ''}
     AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET, ''}
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - 'dynamodb:PutItem'
-        - 'dynamodb:GetItem'
-        - 'dynamodb:DeleteItem'
-        - 'dynamodb:Scan'
-        - 'dynamodb:BatchWrite*'
-      Resource:
-        - Fn::GetAtt: [ConnectionsTable, Arn]
-        - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
-        - Fn::GetAtt: [BattleCommandsTable, Arn]
-        - Fn::GetAtt: [BattlesTable, Arn]
-    - Effect: Allow
-      Action:
-        - 'execute-api:ManageConnections'
-      Resource:
-        - 'arn:aws:execute-api:*:*:**/@connections/*'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:GetItem'
+            - 'dynamodb:DeleteItem'
+            - 'dynamodb:Scan'
+            - 'dynamodb:BatchWrite*'
+          Resource:
+            - Fn::GetAtt: [ConnectionsTable, Arn]
+            - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+            - Fn::GetAtt: [BattleCommandsTable, Arn]
+            - Fn::GetAtt: [BattlesTable, Arn]
+        - Effect: Allow
+          Action:
+            - 'execute-api:ManageConnections'
+          Resource:
+            - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
   webSocketAPIAuthorizer:

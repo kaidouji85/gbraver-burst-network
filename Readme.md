@@ -190,5 +190,6 @@ AWS Parameter Storeに以下の値をセットします。
 ## パッケージ公開
 ```shell
 npx lerna version x.x.x --no-push
-npm run publish
+npm run build
+npx lerna publish from-package -y
 ```

@@ -1,14 +1,14 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
-  "version": "1.5.13",
+  "version": "1.6.2",
   "description": "gbraver burst browser sdk",
-  "main": "lib/index.js",
+  "main": "lib/src/index.js",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "run-s clean type-check lint test transpile copy-type-definition",
-    "type-check": "flow",
+    "build": "run-s clean type-check lint test transpile",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint:test": "eslint test",
     "lint-fix": "eslint --fix src",
@@ -17,40 +17,33 @@
     "code-format:test": "prettier --write test",
     "code-analysis": "codehawk src",
     "test": "jest",
-    "transpile": "babel src -d lib/",
-    "copy-type-definition": "flow-copy-source src lib",
+    "transpile": "tsc -d --outDir lib",
     "clean": "rimraf lib"
   },
   "author": "Y.Takeuchi",
   "license": "ISC",
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.1",
-    "@gbraver-burst-network/browser-core": "^1.5.13",
-    "gbraver-burst-core": "^1.15.1",
-    "rxjs": "^7.6.0"
+    "@gbraver-burst-network/browser-core": "^1.6.2",
+    "gbraver-burst-core": "^1.16.3",
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.5",
-    "@babel/eslint-parser": "^7.19.1",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-flow": "^7.18.6",
-    "@babel/register": "^7.18.9",
-    "babel-loader": "^9.1.0",
+    "@types/jest": "^29.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
     "codehawk-cli": "^10.0.1",
-    "eslint": "^8.29.0",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-jest": "^27.1.6",
+    "eslint": "^8.30.0",
+    "eslint-plugin-jest": "^27.1.7",
     "eslint-plugin-simple-import-sort": "^8.0.0",
-    "flow-bin": "^0.195.1",
-    "flow-copy-source": "^2.0.9",
-    "flow-typed": "^3.8.0",
     "jest": "^29.3.1",
     "npm-run-all": "^4.1.5",
     "prettier": "2.8.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
-  "gitHead": "e561690503b92966d1f6f139a083a2ca8c5a5b0c"
+  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58"
 }

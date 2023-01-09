@@ -38,7 +38,7 @@ cp .env.template .env
 ```shell
 # sls deploy実行時に必要な環境変数を記載する
 vim .env
-npx sls deploy
+npx sls deploy --stage <ステージ名>
 ```
 
 #### WebSocketAPI 動作確認

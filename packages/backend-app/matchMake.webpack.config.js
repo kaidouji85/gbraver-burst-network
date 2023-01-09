@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    'match-making-polling.js': path.resolve(__dirname, 'src/match-making-polling.js')
+    'match-making-polling.js': path.resolve(__dirname, 'src/match-making-polling.ts')
   },
   output: {
     libraryTarget: 'commonjs',
@@ -14,11 +14,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         include: __dirname,
-        use: 'babel-loader'
+        use: 'ts-loader'
       },
+    ],
+  },
+  resolve: {
+    extensions: [
+      '.ts', '.js',
     ],
   },
 };
