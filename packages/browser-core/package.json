@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/browser-core",
-  "version": "1.6.0-beta",
+  "version": "1.6.2",
   "main": "lib/index.js",
   "author": "Y.Takeuchi",
   "files": [
@@ -29,8 +29,8 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "gbraver-burst-core": "^1.16.2-beta",
+    "gbraver-burst-core": "^1.16.3",
     "rxjs": "^7.8.0"
   },
-  "gitHead": "e561690503b92966d1f6f139a083a2ca8c5a5b0c"
+  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58"
 }

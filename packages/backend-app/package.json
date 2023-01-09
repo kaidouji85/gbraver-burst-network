@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/backend-app",
-  "version": "1.6.0-beta",
+  "version": "1.6.2",
   "description": "gbraver burst backend app",
   "private": true,
   "scripts": {
@@ -28,7 +28,7 @@
   "dependencies": {
     "auth0": "^2.44.1",
     "aws-sdk": "^2.1278.0",
-    "gbraver-burst-core": "^1.16.2-beta",
+    "gbraver-burst-core": "^1.16.3",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^3.0.0",
     "ramda": "^0.28.0",
