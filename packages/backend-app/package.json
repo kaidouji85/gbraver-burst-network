@@ -1,30 +1,8 @@
 {
   "name": "@gbraver-burst-network/backend-app",
-  "version": "1.6.2",
   "description": "gbraver burst backend app",
-  "private": true,
-  "scripts": {
-    "start:match-make": "run-s build:match-make serve:match-make",
-    "clean": "run-s clean:sls clean:webpack",
-    "clean:sls": "rimraf .serverless",
-    "clean:webpack": "rimraf .webpack",
-    "build": "run-s clean all-check transpile:sls transpile:match-make",
-    "build:sls": "run-s clean:sls all-check transpile:sls",
-    "build:match-make": "run-s clean:webpack all-check transpile:match-make",
-    "all-check": "run-s type-check lint lint:test test",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint:test": "eslint test",
-    "lint-fix": "eslint --fix src",
-    "lint-fix:test": "eslint --fix test",
-    "test": "jest",
-    "transpile:sls": "sls package",
-    "transpile:match-make": "webpack --config matchMake.webpack.config.js",
-    "serve:match-make": "node .webpack/match-making-polling.js",
-    "code-format": "prettier --write src",
-    "code-format:test": "prettier --write test",
-    "code-analysis": "codehawk src"
-  },
+  "version": "1.6.2",
+  "author": "Y.Takeuchi",
   "dependencies": {
     "auth0": "^3.0.1",
     "aws-sdk": "^2.1292.0",
@@ -58,6 +36,28 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
-  "author": "Y.Takeuchi",
-  "license": "ISC"
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "all-check": "run-s type-check lint lint:test test",
+    "build": "run-s clean all-check transpile:sls transpile:match-make",
+    "build:match-make": "run-s clean:webpack all-check transpile:match-make",
+    "build:sls": "run-s clean:sls all-check transpile:sls",
+    "clean": "run-s clean:sls clean:webpack",
+    "clean:sls": "rimraf .serverless",
+    "clean:webpack": "rimraf .webpack",
+    "code-analysis": "codehawk src",
+    "code-format": "prettier --write src",
+    "code-format:test": "prettier --write test",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
+    "lint-fix:test": "eslint --fix test",
+    "lint:test": "eslint test",
+    "serve:match-make": "node .webpack/match-making-polling.js",
+    "start:match-make": "run-s build:match-make serve:match-make",
+    "test": "jest",
+    "transpile:match-make": "webpack --config matchMake.webpack.config.js",
+    "transpile:sls": "sls package",
+    "type-check": "tsc --noEmit"
+  }
 }

@@ -1,21 +1,15 @@
 {
   "name": "@gbraver-burst-network/browser-core",
+  "description": "gbraver burst browser module core.",
   "version": "1.6.2",
-  "main": "lib/index.js",
   "author": "Y.Takeuchi",
-  "files": [
-    "lib"
-  ],
-  "license": "ISC",
-  "scripts": {
-    "build": "run-s clean type-check lint transpile",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint-fix": "eslint --fix src",
-    "code-format": "prettier --write src",
-    "code-analysis": "codehawk src",
-    "transpile": "tsc -d --outDir lib",
-    "clean": "rimraf lib"
+  "bugs": {
+    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
+    "email": "kaidouji85@gmail.com"
+  },
+  "dependencies": {
+    "gbraver-burst-core": "^1.16.3",
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.1",
@@ -28,9 +22,25 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.9.4"
   },
-  "dependencies": {
-    "gbraver-burst-core": "^1.16.3",
-    "rxjs": "^7.8.0"
-  },
-  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58"
+  "files": [
+    "lib"
+  ],
+  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58",
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-core#readme",
+  "keywords": [
+    "gbraver-burst", "browser"
+  ],
+  "license": "ISC",
+  "main": "lib/index.js",
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-core",
+  "scripts": {
+    "build": "run-s clean type-check lint transpile",
+    "clean": "rimraf lib",
+    "code-analysis": "codehawk src",
+    "code-format": "prettier --write src",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
+    "transpile": "tsc -d --outDir lib",
+    "type-check": "tsc --noEmit"
+  }
 }

@@ -193,3 +193,16 @@ npx lerna version x.x.x --no-push
 npm run build
 npx lerna publish from-package -y
 ```
+
+## その他コマンド
+```shell
+# packages配下のnpm auditを一括で修正
+# 本コマンドの実行にはlerna-auditが必要
+# https://www.npmjs.com/package/lerna-audit
+lerna-audit
+
+# package.jsonフォーマット
+# 本コマンドの実行にはfixpackが必要
+# https://www.npmjs.com/package/fixpack
+fixpack
+```

@@ -1,27 +1,12 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
-  "version": "1.6.2",
   "description": "gbraver burst browser sdk",
-  "main": "lib/src/index.js",
-  "files": [
-    "lib"
-  ],
-  "scripts": {
-    "build": "run-s clean type-check lint test transpile",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint:test": "eslint test",
-    "lint-fix": "eslint --fix src",
-    "lint-fix:test": "eslint --fix test",
-    "code-format": "prettier --write src",
-    "code-format:test": "prettier --write test",
-    "code-analysis": "codehawk src",
-    "test": "jest",
-    "transpile": "tsc -d --outDir lib",
-    "clean": "rimraf lib"
-  },
+  "version": "1.6.2",
   "author": "Y.Takeuchi",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
+    "email": "kaidouji85@gmail.com"
+  },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.1",
     "@gbraver-burst-network/browser-core": "^1.6.2",
@@ -45,5 +30,31 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
-  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58"
+  "files": [
+    "lib"
+  ],
+  "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58",
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk#readme",
+  "keywords": [
+    "browser",
+    "gbraver-burst",
+    "sdk"
+  ],
+  "license": "ISC",
+  "main": "lib/src/index.js",
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk",
+  "scripts": {
+    "build": "run-s clean type-check lint test transpile",
+    "clean": "rimraf lib",
+    "code-analysis": "codehawk src",
+    "code-format": "prettier --write src",
+    "code-format:test": "prettier --write test",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
+    "lint-fix:test": "eslint --fix test",
+    "lint:test": "eslint test",
+    "test": "jest",
+    "transpile": "tsc -d --outDir lib",
+    "type-check": "tsc --noEmit"
+  }
 }
