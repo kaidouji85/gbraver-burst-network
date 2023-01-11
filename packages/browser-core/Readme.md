@@ -26,4 +26,4 @@ npm audit --omit=dev
 # 本コマンドの実行にはfixpackが必要
 # https://www.npmjs.com/package/fixpack
 fixpack
-``` 
+```
