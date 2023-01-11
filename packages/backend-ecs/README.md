@@ -28,3 +28,15 @@ npm test
 # スナップショット
 npx jest -u
 ```
+
+## 脆弱性チェック
+```shell
+npm audit --omit=dev
+```
+
+## package.jsonフォーマット
+```shell
+# 本コマンドの実行にはfixpackが必要
+# https://www.npmjs.com/package/fixpack
+fixpack
+``` 
