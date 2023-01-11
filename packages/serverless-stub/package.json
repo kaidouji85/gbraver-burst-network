@@ -1,24 +1,8 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
-  "private": true,
+  "description": "gbraver burst network stub.",
   "version": "1.6.2",
   "author": "Y.Takeuchi",
-  "license": "ISC",
-  "main": "lib/index.js",
-  "scripts": {
-    "start": "run-s clean dev-server",
-    "start:production": "run-s build serve",
-    "build": "run-s clean type-check lint transpile",
-    "transpile": "webpack --mode=production",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint-fix": "eslint --fix src",
-    "code-format": "prettier --write src",
-    "code-analysis": "codehawk src",
-    "clean": "rimraf build",
-    "dev-server": "webpack serve",
-    "serve": "http-server build -p 8080 -c-1"
-  },
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "^1.6.2",
     "dotenv": "^16.0.3",
@@ -40,5 +24,22 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
+  },
+  "license": "ISC",
+  "main": "lib/index.js",
+  "private": true,
+  "scripts": {
+    "build": "run-s clean type-check lint transpile",
+    "clean": "rimraf build",
+    "code-analysis": "codehawk src",
+    "code-format": "prettier --write src",
+    "dev-server": "webpack serve",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
+    "serve": "http-server build -p 8080 -c-1",
+    "start": "run-s clean dev-server",
+    "start:production": "run-s build serve",
+    "transpile": "webpack --mode=production",
+    "type-check": "tsc --noEmit"
   }
 }
