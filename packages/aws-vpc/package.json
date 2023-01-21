@@ -28,7 +28,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "run-s lint transpile test",
+    "build": "tsc",
     "cdk": "cdk",
     "code-format": "run-s code-format:lib code-format:bin code-format:test",
     "code-format:bin": "prettier --write bin",
@@ -43,7 +43,6 @@
     "lint:lib": "eslint lib",
     "lint:test": "eslint test",
     "test": "jest",
-    "transpile": "tsc",
     "watch": "tsc -w"
   }
 }

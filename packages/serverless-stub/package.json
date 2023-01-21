@@ -29,7 +29,7 @@
   "main": "lib/index.js",
   "private": true,
   "scripts": {
-    "build": "run-s clean type-check lint transpile",
+    "build": "run-s clean transpile",
     "clean": "rimraf build",
     "code-analysis": "codehawk src",
     "code-format": "prettier --write src",
