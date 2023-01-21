@@ -15,8 +15,8 @@
     "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
     "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
     "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
+    "clean": "lerna run clean",
     "lint": "lerna run lint",
-    "test": "lerna run test",
-    "clean": "lerna run clean"
+    "test": "lerna run test"
   }
 }
