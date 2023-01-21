@@ -28,8 +28,8 @@
   "gitHead": "7a9919704584fa49b2b163dbc9ba6df3e096af58",
   "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-core#readme",
   "keywords": [
-    "gbraver-burst",
-    "browser"
+    "browser",
+    "gbraver-burst"
   ],
   "license": "ISC",
   "main": "lib/index.js",
