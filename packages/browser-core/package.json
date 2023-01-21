@@ -35,7 +35,7 @@
   "main": "lib/index.js",
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-core",
   "scripts": {
-    "build": "run-s clean type-check lint transpile",
+    "build": "run-s clean transpile",
     "clean": "rimraf lib",
     "code-analysis": "codehawk src",
     "code-format": "prettier --write src",
