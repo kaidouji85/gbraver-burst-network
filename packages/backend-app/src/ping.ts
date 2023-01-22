@@ -4,6 +4,7 @@ import { Notifier } from "./api-gateway/notifier";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import type { Pong } from "./response/websocket-response";
+
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
