@@ -7,6 +7,7 @@ custom:
   casualMatchEntries: ${self:service}__${sls:stage}__casual-match-entries
   battleCommands: ${self:service}__${sls:stage}__battle-commands
   battles: ${self:service}__${sls:stage}__battles
+  privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
 
 plugins:
   - serverless-webpack
@@ -170,6 +171,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: battleID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    PrivateMatchRoomsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.privateMatchRooms}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
