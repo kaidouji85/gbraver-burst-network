@@ -1,14 +1,14 @@
-import {ArmDozerId, PilotId} from "gbraver-burst-core";
+import { ArmDozerId, PilotId } from "gbraver-burst-core";
 
-import {UserID} from "./user";
+import { UserID } from "./user";
 
 /** ルームID */
-export type RoomID = string;
+export type PrivateMatchRoomID = string;
 
 /** プライベートマッチルーム */
 export type PrivateMatchRoom = {
   /** ルームID */
-  roomID: RoomID;
+  roomID: PrivateMatchRoomID;
   /** ルーム作成者 */
   owner: UserID;
   /** ルーム作成者が選択したアームドーザID */
