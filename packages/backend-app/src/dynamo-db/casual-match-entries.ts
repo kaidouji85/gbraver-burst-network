@@ -2,7 +2,10 @@ import { DynamoDB } from "aws-sdk";
 
 import type { CasualMatchEntry } from "../core/casual-match";
 
-/** casual_match_entriesのスキーマ */
+/**
+ * casual_match_entriesのスキーマ
+ * パーティションキー userID
+ */
 export type CasualMatchEntriesSchema = CasualMatchEntry;
 
 /** casual_match_entriesのDAO */
