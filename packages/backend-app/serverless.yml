@@ -64,6 +64,7 @@ provider:
             - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
+            - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
