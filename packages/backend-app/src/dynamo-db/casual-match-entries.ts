@@ -4,7 +4,7 @@ import type { CasualMatchEntry } from "../core/casual-match";
 
 /**
  * casual_match_entriesのスキーマ
- * パーティションキー UserID
+ * パーティションキー userID
  */
 export type CasualMatchEntriesSchema = CasualMatchEntry;
 
