@@ -4,7 +4,7 @@ import {BattleCommand} from "../core/battle-command";
 
 /**
  * battle-commands のスキーマ
- * UserIDがパーティションキーである
+ * パーティションキー UserID
  */
 export type BattleCommandsSchema = BattleCommand;
 
