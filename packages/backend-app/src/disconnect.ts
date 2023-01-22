@@ -1,8 +1,8 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { Connection, InBattle } from "./core/connection";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import type { ConnectionsSchema, InBattle } from "./dynamo-db/connections";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -52,7 +52,7 @@ export async function disconnect(
  * @param connection 接続情報
  * @return クリーンアップ完了時に発火するPromise
  */
-async function cleanUp(connection: ConnectionsSchema): Promise<void> {
+async function cleanUp(connection: Connection): Promise<void> {
   const inCasualMatchMaking = async () => {
     await casualMatchEntries.delete(connection.userID);
   };

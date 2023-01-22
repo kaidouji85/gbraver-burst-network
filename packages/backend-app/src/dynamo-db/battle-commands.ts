@@ -1,6 +1,6 @@
 import { DynamoDB } from "aws-sdk";
 
-import {BattleCommand} from "../core/battle-command";
+import { BattleCommand } from "../core/battle-command";
 
 /**
  * battle-commands のスキーマ
