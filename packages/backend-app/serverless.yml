@@ -114,6 +114,11 @@ functions:
     events:
       - websocket:
           route: battle-progress-polling
+  createPrivateMatchRoom:
+    handler: src/create-private-match-room.createPrivateMatchRoom
+    events:
+      - websocket:
+          route: create-private-match-room
 
 resources:
   Resources:
