@@ -10,18 +10,26 @@ export type CreatePrivateMatchRoom = {
 };
 
 /**
- * CreatePrivateMatchRoomか否かを判定する
- * @param origin 判定元
- * @return 判定結果、trueでCreatePrivateMatchRoomである
+ * 任意オブジェクトをCreatePrivateMatchRoomにパースする
+ * パースできない場合はnullを返す
+ * @param origin パース元
+ * @return パース結果
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function isCreatePrivateMatchRoom(
+export function parseCreatePrivateMatchRoom(
   origin: any
-): origin is CreatePrivateMatchRoom {
+): CreatePrivateMatchRoom | null {
   /* eslint-enable */
-  return (
+  if (
     origin?.action === "create-private-match-room" &&
     typeof origin?.armdozerId === "string" &&
     typeof origin?.pilotId === "string"
-  );
+  ) {
+    return {
+      action: "create-private-match-room",
+      armdozerId: origin.armdozerId,
+      pilotId: origin.pilotId,
+    };
+  }
+  return null;
 }
