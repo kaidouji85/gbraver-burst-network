@@ -2,8 +2,11 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { generatePrivateMatchRoomID } from "./core/generate-private-match-room-id";
+import { PrivateMatchRoom } from "./core/private-match-room";
 import { createDynamoDBClient } from "./dynamo-db/client";
+import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { parseJSON } from "./json/parse";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseCreatePrivateMatchRoom } from "./request/create-private-match-room";
@@ -15,6 +18,7 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
+const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -49,10 +53,19 @@ export async function createPrivateMatchRoom(
       body: "invalid request body",
     };
   }
-
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer
+  );
+  const room: PrivateMatchRoom = {
+    roomID: generatePrivateMatchRoomID(),
+    owner: user.userID,
+    armdozerId: data.armdozerId,
+    pilotId: data.pilotId,
+  };
+  await privateMatchRooms.put(room);
   await notifier.notifyToClient(event.requestContext.connectionId, {
     action: "created-private-match-room",
-    roomID: generatePrivateMatchRoomID(),
+    roomID: room.roomID,
   });
   return {
     statusCode: 200,
