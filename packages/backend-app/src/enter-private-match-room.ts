@@ -4,7 +4,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { parseJSON } from "./json/parse";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { parseEnterCasualMatch } from "./request/enter-casual-match";
+import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
 import type { Error } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -33,7 +33,7 @@ export async function enterPrivateMatchRoom(
   event: WebsocketAPIEvent
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
-  const data = parseEnterCasualMatch(body);
+  const data = parseEnterPrivateMatchRoom(body);
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
