@@ -8,6 +8,7 @@ custom:
   battleCommands: ${self:service}__${sls:stage}__battle-commands
   battles: ${self:service}__${sls:stage}__battles
   privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
+  privateMatchEntries: ${self:service}__${sls:stage}__private-match-entries
 
 plugins:
   - serverless-webpack
@@ -65,6 +66,7 @@ provider:
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
             - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
+            - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -191,6 +193,23 @@ resources:
         KeySchema:
           - AttributeName: owner
             KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    PrivateMatchEntriesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.privateMatchEntries}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
+            KeyType: HASH
+          - AttributeName: userID
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
