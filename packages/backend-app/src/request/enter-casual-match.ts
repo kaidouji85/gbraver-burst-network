@@ -11,7 +11,7 @@ export type EnterCasualMatch = {
 
 /**
  * 任意オブジェクトをカジュアルマッチエントリに変換する
- * 変換でいない場合はnullを返す
+ * 変換できない場合はnullを返す
  *
  * @param origin 変換元のリクエストボディ
  * @return 変換結果
