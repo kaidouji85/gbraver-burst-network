@@ -5,7 +5,11 @@ import { BattleID } from "./battle";
 import { UserID } from "./user";
 
 /** コネクションの状態 */
-export type ConnectionState = None | CasualMatchMaking | InBattle | HoldPrvateMatch;
+export type ConnectionState =
+  | None
+  | CasualMatchMaking
+  | InBattle
+  | HoldPrvateMatch;
 
 /** 状態なし */
 export type None = {
