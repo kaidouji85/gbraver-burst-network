@@ -1,3 +1,4 @@
+import { RoomID } from "aws-sdk/clients/ivschat";
 import type { GameState, Player } from "gbraver-burst-core";
 
 import type { BattleID, FlowID } from "../core/battle";
@@ -12,6 +13,7 @@ export type WebsocketResponse =
   | BattleProgressed
   | BattleEnd
   | SuddenlyBattleEnd
+  | CreatedPrivateMatchRoom
   | Error;
 
 /** pingの応答 */
@@ -80,6 +82,13 @@ export type BattleEnd = {
 
   /** 更新されたゲームステート */
   update: GameState[];
+};
+
+/** プライベートマッチルーム作成 */
+export type CreatedPrivateMatchRoom = {
+  action: "created-private-match-room";
+  /** 作成したルームID */
+  roomID: RoomID;
 };
 
 /** エラー */

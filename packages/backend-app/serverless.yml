@@ -7,6 +7,7 @@ custom:
   casualMatchEntries: ${self:service}__${sls:stage}__casual-match-entries
   battleCommands: ${self:service}__${sls:stage}__battle-commands
   battles: ${self:service}__${sls:stage}__battles
+  privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
 
 plugins:
   - serverless-webpack
@@ -63,6 +64,7 @@ provider:
             - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
+            - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -114,6 +116,11 @@ functions:
     events:
       - websocket:
           route: battle-progress-polling
+  createPrivateMatchRoom:
+    handler: src/create-private-match-room.createPrivateMatchRoom
+    events:
+      - websocket:
+          route: create-private-match-room
 
 resources:
   Resources:
@@ -165,6 +172,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: battleID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    PrivateMatchRoomsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.privateMatchRooms}
+        AttributeDefinitions:
+          - AttributeName: owner
+            AttributeType: S
+        KeySchema:
+          - AttributeName: owner
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

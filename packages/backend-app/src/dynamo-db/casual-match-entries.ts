@@ -58,7 +58,7 @@ export class CasualMatchEntries {
   }
 
   /**
-   * ユニークキー指定で項目を削除する
+   * パーティションキー指定で項目を削除する
    *
    * @param userID ユーザID
    * @return 削除受付したら発火するPromise

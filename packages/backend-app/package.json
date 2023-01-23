@@ -9,6 +9,7 @@
     "gbraver-burst-core": "^1.16.4",
     "jsonwebtoken": "^9.0.0",
     "jwks-rsa": "^3.0.1",
+    "nanoid": "^4.0.0",
     "ramda": "^0.28.0",
     "rimraf": "^4.1.1",
     "uuid": "^9.0.0"
