@@ -47,9 +47,6 @@ export type InBattle = {
 /** プライベートマッチ開催 */
 export type HoldPrvateMatch = {
   type: "HoldPrivateMatch";
-
-  /** プライベートマッチのルームID */
-  roomID: RoomID;
 };
 
 /** WebsocketAPI コネクションステート */

@@ -42,7 +42,6 @@ export class PrivateMatchRooms {
 
   /**
    * パーティションキー指定で項目を削除する
-   *
    * @param owner プライベートマッチルーム作成者
    * @return 削除受付したら発火するPromise
    */
