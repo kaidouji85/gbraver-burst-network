@@ -1,4 +1,3 @@
-import { RoomID } from "aws-sdk/clients/ivschat";
 import { PlayerId } from "gbraver-burst-core";
 
 import { BattleID } from "./battle";
