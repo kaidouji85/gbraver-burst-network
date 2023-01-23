@@ -1,10 +1,11 @@
+import { RoomID } from "aws-sdk/clients/ivschat";
 import { PlayerId } from "gbraver-burst-core";
 
 import { BattleID } from "./battle";
 import { UserID } from "./user";
 
 /** コネクションの状態 */
-export type ConnectionState = None | CasualMatchMaking | InBattle;
+export type ConnectionState = None | CasualMatchMaking | InBattle | HoldPrvateMatch;
 
 /** 状態なし */
 export type None = {
@@ -37,6 +38,14 @@ export type InBattle = {
 
   /** バトルに参加しているプレイヤーの情報 */
   players: [InBattlePlayer, InBattlePlayer];
+};
+
+/** プライベートマッチ開催 */
+export type HoldPrvateMatch = {
+  type: "HoldPrivateMatch";
+
+  /** プライベートマッチのルームID */
+  roomID: RoomID;
 };
 
 /** WebsocketAPI コネクションステート */

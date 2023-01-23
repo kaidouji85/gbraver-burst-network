@@ -53,6 +53,7 @@ export async function createPrivateMatchRoom(
       body: "invalid request body",
     };
   }
+
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
