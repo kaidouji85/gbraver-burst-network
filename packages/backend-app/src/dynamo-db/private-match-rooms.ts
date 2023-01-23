@@ -1,4 +1,5 @@
 import { DynamoDB } from "aws-sdk";
+import { UserID } from "aws-sdk/clients/personalizeruntime";
 
 import { PrivateMatchRoom } from "../core/private-match-room";
 
@@ -35,6 +36,23 @@ export class PrivateMatchRooms {
       .put({
         TableName: this.#tableName,
         Item: room,
+      })
+      .promise();
+  }
+
+  /**
+   * パーティションキー指定で項目を削除する
+   *
+   * @param owner プライベートマッチルーム作成者
+   * @return 削除受付したら発火するPromise
+   */
+  async delete(owner: UserID): Promise<void> {
+    await this.#client
+      .delete({
+        TableName: this.#tableName,
+        Key: {
+          owner,
+        },
       })
       .promise();
   }

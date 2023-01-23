@@ -59,7 +59,7 @@ export class Battles {
   }
 
   /**
-   * ユニークキー指定で項目を削除する
+   * パーティションキー指定で項目を削除する
    *
    * @param battleID バトルID
    * @return 削除受付したら発火するPromise

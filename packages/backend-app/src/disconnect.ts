@@ -6,6 +6,7 @@ import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
@@ -13,6 +14,7 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
@@ -20,10 +22,12 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
+
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -77,9 +81,15 @@ async function cleanUp(connection: Connection): Promise<void> {
     ]);
   };
 
+  const holdPrivateMatch = async () => {
+    await privateMatchRooms.delete(connection.userID);
+  };
+
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
   } else if (connection.state.type === "InBattle") {
     await inBattle(connection.state);
+  } else if (connection.state.type === "HoldPrivateMatch") {
+    await holdPrivateMatch();
   }
 }
