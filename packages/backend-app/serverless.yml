@@ -121,6 +121,8 @@ functions:
     events:
       - websocket:
           route: create-private-match-room
+  enterPrivateMatchRoom:
+    handler: src/enter-private-match-room.enterPrivateMatchRoom        
 
 resources:
   Resources:
