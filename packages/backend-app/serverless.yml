@@ -181,10 +181,10 @@ resources:
       Properties:
         TableName: ${self:custom.privateMatchRooms}
         AttributeDefinitions:
-          - AttributeName: roomID
+          - AttributeName: owner
             AttributeType: S
         KeySchema:
-          - AttributeName: roomID
+          - AttributeName: owner
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

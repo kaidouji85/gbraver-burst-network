@@ -4,7 +4,7 @@ import { PrivateMatchRoom } from "../core/private-match-room";
 
 /**
  * private-match-rooms スキーマ
- * パーティションキー roomID
+ * パーティションキー owner
  */
 export type PrivateMatchRoomsSchema = PrivateMatchRoom;
 
