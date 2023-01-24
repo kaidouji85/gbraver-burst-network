@@ -62,6 +62,13 @@ export async function enterPrivateMatchRoom(
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
   };
+  await Promise.all([
+    privateMatchEntries.put(entry),
+    notifier.notifyToClient(event.requestContext.connectionId, {
+      action: "entered-private-match-room",
+    }),
+  ]);
+
   await privateMatchEntries.put(entry);
 
   return {

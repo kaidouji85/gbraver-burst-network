@@ -14,6 +14,7 @@ export type WebsocketResponse =
   | BattleEnd
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
+  | EnteredPrivateMatchRoom
   | Error;
 
 /** pingの応答 */
@@ -89,6 +90,11 @@ export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
   /** 作成したルームID */
   roomID: RoomID;
+};
+
+/** プライベートマッチルームエントリ成功 */
+export type EnteredPrivateMatchRoom = {
+  action: "entered-private-match-room";
 };
 
 /** エラー */
