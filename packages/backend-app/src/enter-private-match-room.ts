@@ -1,15 +1,23 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { PrivateMatchEntry } from "./core/private-match-entry";
+import { createDynamoDBClient } from "./dynamo-db/client";
+import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { parseJSON } from "./json/parse";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
 import type { Error } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
+const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
+const dynamoDB = createDynamoDBClient(AWS_REGION);
+const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -44,6 +52,17 @@ export async function enterPrivateMatchRoom(
       body: "invalid request body",
     };
   }
+
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer
+  );
+  const entry: PrivateMatchEntry = {
+    roomID: data.roomID,
+    userID: user.userID,
+    armdozerId: data.armdozerId,
+    pilotId: data.pilotId,
+  };
+  await privateMatchEntries.put(entry);
 
   return {
     statusCode: 200,

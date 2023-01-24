@@ -29,7 +29,7 @@ export class PrivateMatchEntries {
 
   /**
    * 項目追加する
-   * @param command 追加する項目
+   * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: PrivateMatchEntriesSchema): Promise<void> {

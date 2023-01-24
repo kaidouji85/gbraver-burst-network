@@ -9,7 +9,7 @@ import { PrivateMatchEntries } from "./private-match-entries";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createPrivateMatchRooms(
+export function createPrivateMatchEntries(
   client: DynamoDB.DocumentClient,
   service: string,
   stage: string
