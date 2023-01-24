@@ -15,6 +15,7 @@ export type WebsocketResponse =
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
   | EnteredPrivateMatchRoom
+  | NotFoundPrivateMatchRoom
   | Error;
 
 /** pingの応答 */
@@ -95,6 +96,11 @@ export type CreatedPrivateMatchRoom = {
 /** プライベートマッチルームエントリ成功 */
 export type EnteredPrivateMatchRoom = {
   action: "entered-private-match-room";
+};
+
+/** エントリしようとしたプライベートマッチルームが見つからない */
+export type NotFoundPrivateMatchRoom = {
+  action: "not-found-private-match-room"
 };
 
 /** エラー */
