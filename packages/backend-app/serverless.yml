@@ -67,6 +67,7 @@ provider:
             - Fn::GetAtt: [BattlesTable, Arn]
             - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
             - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
+            - Fn::Join: ['/', ["Fn::GetAtt": [ PrivateMatchRoomsTable, Arn ], 'index', 'roomID']]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
