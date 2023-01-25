@@ -4,6 +4,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { PrivateMatchEntry } from "./core/private-match-entry";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
+import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
@@ -17,6 +18,7 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
+const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
@@ -47,6 +49,17 @@ export async function enterPrivateMatchRoom(
       event.requestContext.connectionId,
       invalidRequestBodyError
     );
+    return {
+      statusCode: 400,
+      body: "invalid request body",
+    };
+  }
+
+  const isExistRoom = await privateMatchRooms.isExistRoom(data.roomID);
+  if (!isExistRoom) {
+    await notifier.notifyToClient(event.requestContext.connectionId, {
+      action: "not-found-private-match-room",
+    });
     return {
       statusCode: 400,
       body: "invalid request body",
