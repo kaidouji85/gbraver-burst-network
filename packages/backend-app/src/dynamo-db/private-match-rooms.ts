@@ -1,7 +1,10 @@
 import { DynamoDB } from "aws-sdk";
-import { UserID } from "aws-sdk/clients/personalizeruntime";
 
-import { PrivateMatchRoom } from "../core/private-match-room";
+import {
+  PrivateMatchRoom,
+  PrivateMatchRoomID,
+} from "../core/private-match-room";
+import { UserID } from "../core/user";
 
 /**
  * private-match-rooms スキーマ
@@ -54,5 +57,24 @@ export class PrivateMatchRooms {
         },
       })
       .promise();
+  }
+
+  /**
+   * 指定したプライベートマッチルームが存在するか否かを判定する
+   * @param roomID プライベートルームID
+   * @return 判定結果、trueで存在する
+   */
+  async isExistRoom(roomID: PrivateMatchRoomID): Promise<boolean> {
+    const result = await this.#client
+      .query({
+        TableName: this.#tableName,
+        IndexName: "roomID",
+        KeyConditionExpression: "roomID = :roomID",
+        ExpressionAttributeValues: {
+          ":roomID": roomID,
+        },
+      })
+      .promise();
+    return result?.Items ? 0 < result.Items.length : false;
   }
 }

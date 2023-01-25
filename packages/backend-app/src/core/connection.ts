@@ -1,6 +1,7 @@
 import { PlayerId } from "gbraver-burst-core";
 
 import { BattleID } from "./battle";
+import { PrivateMatchRoomID } from "./private-match-room";
 import { UserID } from "./user";
 
 /** コネクションの状態 */
@@ -8,7 +9,8 @@ export type ConnectionState =
   | None
   | CasualMatchMaking
   | InBattle
-  | HoldPrvateMatch;
+  | HoldPrvateMatch
+  | PrivateMatchMaking;
 
 /** 状態なし */
 export type None = {
@@ -46,6 +48,14 @@ export type InBattle = {
 /** プライベートマッチ開催 */
 export type HoldPrvateMatch = {
   type: "HoldPrivateMatch";
+};
+
+/** プライベートマッチメイク中 */
+export type PrivateMatchMaking = {
+  type: "PrivateMatchMaking";
+
+  /** ルームID */
+  roomID: PrivateMatchRoomID;
 };
 
 /** WebsocketAPI コネクションステート */

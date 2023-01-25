@@ -1,11 +1,12 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { Connection, InBattle } from "./core/connection";
+import { Connection, InBattle, PrivateMatchMaking } from "./core/connection";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
@@ -28,6 +29,7 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
+const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -85,11 +87,17 @@ async function cleanUp(connection: Connection): Promise<void> {
     await privateMatchRooms.delete(connection.userID);
   };
 
+  const privateMatchMaking = async (state: PrivateMatchMaking) => {
+    await privateMatchEntries.delete(state.roomID, connection.userID);
+  };
+
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
   } else if (connection.state.type === "InBattle") {
     await inBattle(connection.state);
   } else if (connection.state.type === "HoldPrivateMatch") {
     await holdPrivateMatch();
+  } else if (connection.state.type === "PrivateMatchMaking") {
+    await privateMatchMaking(connection.state);
   }
 }

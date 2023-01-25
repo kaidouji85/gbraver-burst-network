@@ -1,15 +1,17 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { PrivateMatchEntry } from "./core/private-match-entry";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
+import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { parseEnterCasualMatch } from "./request/enter-casual-match";
-import type { EnteredCasualMatch, Error } from "./response/websocket-response";
+import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
+import type { Error } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -18,7 +20,8 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
+const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -32,22 +35,17 @@ const invalidRequestBodyError: Error = {
   action: "error",
   error: "invalid request body",
 };
-const enteredCasualMatch: EnteredCasualMatch = {
-  action: "entered-casual-match",
-};
 
 /**
- * Websocket API enter-casual-match エントリポイント
- *
+ * プライベートマッチルームエントリー
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
-export async function enterCasualMatch(
+export async function enterPrivateMatchRoom(
   event: WebsocketAPIEvent
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
-  const data = parseEnterCasualMatch(body);
-
+  const data = parseEnterPrivateMatchRoom(body);
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -59,31 +57,43 @@ export async function enterCasualMatch(
     };
   }
 
+  const isExistRoom = await privateMatchRooms.isExistRoom(data.roomID);
+  if (!isExistRoom) {
+    await notifier.notifyToClient(event.requestContext.connectionId, {
+      action: "not-found-private-match-room",
+    });
+    return {
+      statusCode: 400,
+      body: "invalid request body",
+    };
+  }
+
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
-  const entry = {
+  const entry: PrivateMatchEntry = {
+    roomID: data.roomID,
     userID: user.userID,
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
-    connectionId: event.requestContext.connectionId,
   };
   await Promise.all([
-    casualMatchEntries.put(entry),
+    privateMatchEntries.put(entry),
+    notifier.notifyToClient(event.requestContext.connectionId, {
+      action: "entered-private-match-room",
+    }),
     connections.put({
       connectionId: event.requestContext.connectionId,
       userID: user.userID,
       state: {
-        type: "CasualMatchMaking",
+        type: "PrivateMatchMaking",
+        roomID: data.roomID,
       },
     }),
-    notifier.notifyToClient(
-      event.requestContext.connectionId,
-      enteredCasualMatch
-    ),
   ]);
+
   return {
     statusCode: 200,
-    body: "enter casual match success",
+    body: "enter private match room",
   };
 }
