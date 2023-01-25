@@ -82,8 +82,6 @@ export async function enterPrivateMatchRoom(
     }),
   ]);
 
-  await privateMatchEntries.put(entry);
-
   return {
     statusCode: 200,
     body: "enter private match room",
