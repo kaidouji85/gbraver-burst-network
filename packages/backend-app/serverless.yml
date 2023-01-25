@@ -130,6 +130,11 @@ functions:
     events:
       - websocket:
           route: enter-private-match-room
+  privateMatchMakingPolling:
+    handler: src/private-match-make-polling.privateMatchMakePolling
+    events:
+      - websocket:
+          route: private-match-make-polling
 
 resources:
   Resources:
