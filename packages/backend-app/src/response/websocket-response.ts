@@ -100,7 +100,7 @@ export type EnteredPrivateMatchRoom = {
 
 /** エントリしようとしたプライベートマッチルームが見つからない */
 export type NotFoundPrivateMatchRoom = {
-  action: "not-found-private-match-room"
+  action: "not-found-private-match-room";
 };
 
 /** エラー */
