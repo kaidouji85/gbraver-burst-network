@@ -52,7 +52,7 @@ export type HoldPrvateMatch = {
 
 /** プライベートマッチメイク中 */
 export type PrivateMatchMaking = {
-  type: "private-match-making";
+  type: "PrivateMatchMaking";
 
   /** ルームID */
   roomID: PrivateMatchRoomID;

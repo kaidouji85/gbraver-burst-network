@@ -86,7 +86,7 @@ export async function enterPrivateMatchRoom(
       connectionId: event.requestContext.connectionId,
       userID: user.userID,
       state: {
-        type: "private-match-making",
+        type: "PrivateMatchMaking",
         roomID: data.roomID,
       },
     }),
