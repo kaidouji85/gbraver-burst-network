@@ -1,11 +1,12 @@
-import { RoomID } from "aws-sdk/clients/ivschat";
 import { ArmDozerId, PilotId } from "gbraver-burst-core";
+
+import { PrivateMatchRoomID } from "../core/private-match-room";
 
 /** プライベートマッチルームエントリ */
 export type EnterPrivateMatchRoom = {
   action: "enter-private-match-room";
   /** ルームID */
-  roomID: RoomID;
+  roomID: PrivateMatchRoomID;
   /** 選択したアームドーザID */
   armdozerId: ArmDozerId;
   /** 選択したパイロットID */

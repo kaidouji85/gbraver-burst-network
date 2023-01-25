@@ -1,8 +1,10 @@
 import { DynamoDB } from "aws-sdk";
-import { RoomID } from "aws-sdk/clients/ivschat";
-import { UserID } from "aws-sdk/clients/personalizeruntime";
 
-import { PrivateMatchRoom } from "../core/private-match-room";
+import {
+  PrivateMatchRoom,
+  PrivateMatchRoomID,
+} from "../core/private-match-room";
+import { UserID } from "../core/user";
 
 /**
  * private-match-rooms スキーマ
@@ -62,7 +64,7 @@ export class PrivateMatchRooms {
    * @param roomID プライベートルームID
    * @return 判定結果、trueで存在する
    */
-  async isExistRoom(roomID: RoomID): Promise<boolean> {
+  async isExistRoom(roomID: PrivateMatchRoomID): Promise<boolean> {
     const result = await this.#client
       .query({
         TableName: this.#tableName,
