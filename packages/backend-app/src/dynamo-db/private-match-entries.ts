@@ -30,28 +30,6 @@ export class PrivateMatchEntries {
   }
 
   /**
-   * エントリを検索する
-   * @param roomID ルームID
-   * @param userID ユーザID
-   * @return 検索結果、見つからない場合はnullを返す
-   */
-  async get(
-    roomID: PrivateMatchRoomID,
-    userID: UserID
-  ): Promise<PrivateMatchEntriesSchema | null> {
-    const result = await this.#client
-      .get({
-        TableName: this.#tableName,
-        Key: {
-          roomID,
-          userID,
-        },
-      })
-      .promise();
-    return result.Item ? (result.Item as PrivateMatchEntriesSchema) : null;
-  }
-
-  /**
    * 項目追加する
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
@@ -61,6 +39,24 @@ export class PrivateMatchEntries {
       .put({
         TableName: this.#tableName,
         Item: entry,
+      })
+      .promise();
+  }
+
+  /**
+   * エントリを削除する
+   * @param roomID ルームID
+   * @param userID ユーザID
+   * @return 処理が完了したら発火するPromise
+   */
+  async delete(roomID: PrivateMatchRoomID, userID: UserID): Promise<void> {
+    await this.#client
+      .delete({
+        TableName: this.#tableName,
+        Key: {
+          roomID,
+          userID,
+        },
       })
       .promise();
   }
