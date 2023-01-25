@@ -3,6 +3,7 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { PrivateMatchEntry } from "./core/private-match-entry";
 import { createDynamoDBClient } from "./dynamo-db/client";
+import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { parseJSON } from "./json/parse";
@@ -18,6 +19,7 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBClient(AWS_REGION);
+const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
@@ -79,6 +81,14 @@ export async function enterPrivateMatchRoom(
     privateMatchEntries.put(entry),
     notifier.notifyToClient(event.requestContext.connectionId, {
       action: "entered-private-match-room",
+    }),
+    connections.put({
+      connectionId: event.requestContext.connectionId,
+      userID: user.userID,
+      state: {
+        type: "private-match-making",
+        roomID: data.roomID,
+      },
     }),
   ]);
 
