@@ -58,6 +58,7 @@ provider:
             - 'dynamodb:PutItem'
             - 'dynamodb:GetItem'
             - 'dynamodb:DeleteItem'
+            - 'dynamodb:Query'
             - 'dynamodb:Scan'
             - 'dynamodb:BatchWrite*'
           Resource:
