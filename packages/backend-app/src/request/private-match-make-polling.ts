@@ -21,7 +21,7 @@ export function parsePrivateMatchMakePolling(
   /* eslint-enable */
   if (
     origin?.action === "private-match-make-polling" &&
-    typeof origin?.roomID === "number"
+    typeof origin?.roomID === "string"
   ) {
     return {
       action: "private-match-make-polling",
