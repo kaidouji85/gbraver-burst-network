@@ -37,6 +37,15 @@ const cloudNotPrivateMatchMake: CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making",
 };
 
+const invalidRequestBody: WebsocketAPIResponse = {
+  statusCode: 400,
+  body: "invalid request body",
+};
+const endPrivateMatchMakePolling: WebsocketAPIResponse = {
+  statusCode: 200,
+  body: "end private match make polling",
+};
+
 /**
  * プライベートマッチメイクポーリング
  * @param event イベント
@@ -52,18 +61,20 @@ export async function privateMatchMakePolling(
       event.requestContext.connectionId,
       invalidRequestBodyError
     );
-    return {
-      statusCode: 400,
-      body: "invalid request body",
-    };
+    return invalidRequestBody;
   }
 
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
+  const privateMatchRoom = await privateMatchRooms.get(user.userID);
+  if (!privateMatchRoom) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      cloudNotPrivateMatchMake
+    );
+    return endPrivateMatchMakePolling;
+  }
 
-  return {
-    statusCode: 200,
-    body: "end private match make polling",
-  };
+  return endPrivateMatchMakePolling;
 }
