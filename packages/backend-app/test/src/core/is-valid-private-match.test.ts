@@ -16,6 +16,7 @@ const EmptyEntry: PrivateMatchEntry = {
   userID: "",
   armdozerId: ArmDozerIds.NEO_LANDOZER,
   pilotId: PilotIds.GAI,
+  connectionId: "",
 };
 
 test("有効なプライベートマッチ関連オブジェクトであることを判定できる", () => {

@@ -76,6 +76,7 @@ export async function enterPrivateMatchRoom(
     userID: user.userID,
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
+    connectionId: event.requestContext.connectionId,
   };
   await Promise.all([
     privateMatchEntries.put(entry),

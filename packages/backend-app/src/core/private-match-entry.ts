@@ -1,16 +1,8 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
-
+import { BattleEntry } from "./battle-entry";
 import { PrivateMatchRoomID } from "./private-match-room";
-import { UserID } from "./user";
 
 /** プライベートマッチエントリ */
-export type PrivateMatchEntry = {
+export type PrivateMatchEntry = BattleEntry & {
   /** エントリするルームID */
   roomID: PrivateMatchRoomID;
-  /** エントリするユーザID */
-  userID: UserID;
-  /** 選択したアームドーザのID */
-  armdozerId: ArmDozerId;
-  /** 選択したパイロットのID */
-  pilotId: PilotId;
 };
