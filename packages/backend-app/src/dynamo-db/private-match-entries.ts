@@ -42,7 +42,7 @@ export class PrivateMatchEntries {
         TableName: this.#tableName,
         KeyConditionExpression: "#hash = :roomID",
         ExpressionAttributeNames: {
-          "#hash": roomID,
+          "#hash": "roomID",
         },
         ExpressionAttributeValues: {
           ":roomID": roomID,

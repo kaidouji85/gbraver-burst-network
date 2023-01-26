@@ -69,8 +69,12 @@ export async function privateMatchMakePolling(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
-  const privateMatchRoom = await privateMatchRooms.get(user.userID);
-  if (!privateMatchRoom) {
+  const [room, entries] = await Promise.all([
+    privateMatchRooms.get(user.userID),
+    privateMatchEntries.getEntries(data.roomID),
+  ]);
+
+  if (!room || entries.length <= 0) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       cloudNotPrivateMatchMake
