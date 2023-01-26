@@ -22,7 +22,7 @@ export function privateMatchMake(
 
   const ownerEntry: BattleEntry = {
     userID: room.owner,
-    connectionId: room.ownerConnextionId,
+    connectionId: room.ownerConnectionId,
     armdozerId: room.armdozerId,
     pilotId: room.pilotId,
   };

@@ -13,7 +13,7 @@ export type PrivateMatchRoom = {
   /** ルーム作成者 */
   owner: UserID;
   /** ルーム作成者のWebsocketAPIコネクションID */
-  ownerConnextionId: WSAPIGatewayConnectionId;
+  ownerConnectionId: WSAPIGatewayConnectionId;
   /** ルーム作成者が選択したアームドーザID */
   armdozerId: ArmDozerId;
   /** ルーム作成者が選択したパイロットID */
