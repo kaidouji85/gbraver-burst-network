@@ -1,4 +1,4 @@
-import type { CasualMatchEntry } from "../../src/core/casual-match";
+import type { CasualMatchEntry } from "../../src/core/casual-match-entry";
 
 /** 空のカジュアルマッチエントリ */
 export const EMPTY_CASUAL_MATCH_ENTRY: CasualMatchEntry = {
