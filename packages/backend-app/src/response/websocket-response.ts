@@ -16,6 +16,7 @@ export type WebsocketResponse =
   | CreatedPrivateMatchRoom
   | EnteredPrivateMatchRoom
   | NotFoundPrivateMatchRoom
+  | CouldNotPrivateMatching
   | Error;
 
 /** pingの応答 */
@@ -101,6 +102,11 @@ export type EnteredPrivateMatchRoom = {
 /** エントリしようとしたプライベートマッチルームが見つからない */
 export type NotFoundPrivateMatchRoom = {
   action: "not-found-private-match-room";
+};
+
+/** プライベートマッチングできなかった */
+export type CouldNotPrivateMatching = {
+  action: "CouldNotMatch";
 };
 
 /** エラー */
