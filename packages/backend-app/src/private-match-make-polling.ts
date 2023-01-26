@@ -8,7 +8,10 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
-import type { CouldNotPrivateMatchMaking, Error } from "./response/websocket-response";
+import type {
+  CouldNotPrivateMatchMaking,
+  Error,
+} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -58,7 +61,7 @@ export async function privateMatchMakePolling(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
-  
+
   return {
     statusCode: 200,
     body: "end private match make polling",
