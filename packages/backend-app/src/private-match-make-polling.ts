@@ -1,6 +1,9 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { isValidPrivateMatch } from "./core/is-valid-private-match";
+import { PrivateMatchEntry } from "./core/private-match-entry";
+import { PrivateMatchRoom } from "./core/private-match-room";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
@@ -69,12 +72,21 @@ export async function privateMatchMakePolling(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer
   );
-  const [room, entries] = await Promise.all([
+  const [fetchedRoom, fetchedEntries] = await Promise.all([
     privateMatchRooms.get(user.userID),
     privateMatchEntries.getEntries(data.roomID),
   ]);
+  if (!fetchedRoom || fetchedEntries.length <= 0) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      cloudNotPrivateMatchMake
+    );
+    return endPrivateMatchMakePolling;
+  }
 
-  if (!room || entries.length <= 0) {
+  const room: PrivateMatchRoom = fetchedRoom;
+  const entries: PrivateMatchEntry[] = fetchedEntries;
+  if (!isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       cloudNotPrivateMatchMake
