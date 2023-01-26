@@ -21,6 +21,9 @@ export function isValidPrivateMatch(param: Param): boolean {
   const { owner, room, entries } = param;
   return (
     owner.userID === room.owner &&
-    entries.map((v) => v.roomID === room.roomID).reduce((a, b) => a && b, true)
+    entries
+      .map((v) => v.roomID === room.roomID)
+      .reduce((a, b) => a && b, true) &&
+    entries.map((v) => v.userID !== owner.userID).reduce((a, b) => a && b, true)
   );
 }

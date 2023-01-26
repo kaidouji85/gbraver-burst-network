@@ -85,3 +85,25 @@ test("entriesとroomのroomIDが一致しない場合、データ不整合であ
   ];
   expect(isValidPrivateMatch({ owner, room, entries })).toBe(false);
 });
+
+test("entriesにownerが含まれる場合、データ不整合である", () => {
+  const owner: User = { userID: "test-owner" };
+  const room: PrivateMatchRoom = {
+    ...EmptyRoom,
+    roomID: "test-room",
+    owner: owner.userID,
+  };
+  const entries: PrivateMatchEntry[] = [
+    {
+      ...EmptyEntry,
+      roomID: room.roomID,
+      userID: "participant-01",
+    },
+    {
+      ...EmptyEntry,
+      roomID: room.roomID,
+      userID: owner.userID,
+    },
+  ];
+  expect(isValidPrivateMatch({ owner, room, entries })).toBe(false);
+});
