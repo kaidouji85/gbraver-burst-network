@@ -1,4 +1,5 @@
 import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+
 import { BattleEntry } from "../../../src/core/battle-entry";
 import { PrivateMatchEntry } from "../../../src/core/private-match-entry";
 import { privateMatchMake } from "../../../src/core/private-match-make";
@@ -9,11 +10,11 @@ const room: PrivateMatchRoom = {
   owner: "owner",
   ownerConnectionId: "owner-connection",
   armdozerId: ArmDozerIds.SHIN_BRAVER,
-  pilotId: PilotIds.SHINYA
+  pilotId: PilotIds.SHINYA,
 };
 const ownerEntry: BattleEntry = {
-  userID: room.owner, 
-  connectionId: room.ownerConnectionId, 
+  userID: room.owner,
+  connectionId: room.ownerConnectionId,
   armdozerId: room.armdozerId,
   pilotId: room.pilotId,
 };
@@ -39,7 +40,17 @@ const entry03: PrivateMatchEntry = {
   pilotId: PilotIds.RAITO,
 };
 
-test("正しくプライベートマッチングできる", () => {
-  expect(privateMatchMake(room, [entry01, entry02, entry03]))
-    .toEqual([ownerEntry, entry01]);
+test("ルーム作成者、エントリ先頭でマッチングされる", () => {
+  expect(privateMatchMake(room, [entry01, entry02, entry03])).toEqual([
+    ownerEntry,
+    entry01,
+  ]);
+});
+
+test("エントリが1件でも、マッチングされる", () => {
+  expect(privateMatchMake(room, [entry03])).toEqual([ownerEntry, entry03]);
+});
+
+test("エントリが0件の場合、マッチングしない", () => {
+  expect(privateMatchMake(room, [])).toEqual(null);
 });
