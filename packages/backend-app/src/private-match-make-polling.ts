@@ -76,7 +76,7 @@ export async function privateMatchMakePolling(
     privateMatchRooms.get(user.userID),
     privateMatchEntries.getEntries(data.roomID),
   ]);
-  if (!fetchedRoom || fetchedEntries.length <= 0) {
+  if (!fetchedRoom) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       cloudNotPrivateMatchMake
@@ -87,9 +87,10 @@ export async function privateMatchMakePolling(
   const room: PrivateMatchRoom = fetchedRoom;
   const entries: PrivateMatchEntry[] = fetchedEntries;
   if (!isValidPrivateMatch({ owner: user, room, entries })) {
+    const testData = {...cloudNotPrivateMatchMake, message: "is not valid private match."};
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake
+      testData
     );
     return endPrivateMatchMakePolling;
   }
