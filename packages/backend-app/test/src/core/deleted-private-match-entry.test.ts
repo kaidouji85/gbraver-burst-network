@@ -26,14 +26,14 @@ const matchedPlayerEntry: PrivateMatchEntry = {
 const unmatchedEntry01: PrivateMatchEntry = {
   roomID,
   userID: "unmatched-player-01",
-  connectionId: "matched-player-01-connection",
+  connectionId: "unmatched-player-01-connection",
   armdozerId: ArmDozerIds.WING_DOZER,
   pilotId: PilotIds.TSUBASA,
 };
 const unmatchedEntry02: PrivateMatchEntry = {
   roomID,
   userID: "unmatched-player-02",
-  connectionId: "matched-player-02-connection",
+  connectionId: "unmatched-player-02-connection",
   armdozerId: ArmDozerIds.LIGHTNING_DOZER,
   pilotId: PilotIds.RAITO,
 };
