@@ -17,6 +17,7 @@ export type WebsocketResponse =
   | EnteredPrivateMatchRoom
   | NotFoundPrivateMatchRoom
   | CouldNotPrivateMatchMaking
+  | NotChosenAsPrivateMatchPartner
   | Error;
 
 /** pingの応答 */

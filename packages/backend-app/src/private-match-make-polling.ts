@@ -5,6 +5,7 @@ import { BattlePlayer } from "./core/battle";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
+import { deletedPrivateMatchEntries } from "./core/deleted-private-match-entries";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
 import { privateMatchMake } from "./core/private-match-make";
 import { createDynamoDBClient } from "./dynamo-db/client";
@@ -21,6 +22,7 @@ import { createBattleStart } from "./response/create-battle-start";
 import type {
   CouldNotPrivateMatchMaking,
   Error,
+  NotChosenAsPrivateMatchPartner,
 } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -48,6 +50,9 @@ const invalidRequestBodyError: Error = {
 };
 const cloudNotPrivateMatchMake: CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making",
+};
+const notChosenAsPrivateMatchPartner: NotChosenAsPrivateMatchPartner = {
+  action: "not-chosen-as-private-match-partner",
 };
 
 const invalidRequestBody: WebsocketAPIResponse = {
@@ -128,6 +133,7 @@ export async function privateMatchMakePolling(
     connectionId: entry.connectionId,
     data: createBattleStart(entry.userID, battle),
   }));
+  const deletedEntries = deletedPrivateMatchEntries(matching, entries);
   await Promise.all([
     battles.put(battle),
     ...updatedConnections.map((v) => connections.put(v)),
@@ -136,6 +142,9 @@ export async function privateMatchMakePolling(
     ),
     privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
+    ...deletedEntries.map((v) =>
+      notifier.notifyToClient(v.connectionId, notChosenAsPrivateMatchPartner)
+    ),
   ]);
 
   return endPrivateMatchMakePolling;
