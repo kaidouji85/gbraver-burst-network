@@ -47,7 +47,6 @@ export function sendCommand(
       }
 
       const battleEnd = parseBattleEnd(data);
-
       if (battleEnd) {
         resolve(battleEnd);
         return;
@@ -126,14 +125,12 @@ export async function sendCommandWithPolling(
       }
 
       const battleProgressed = parseBattleProgressed(data);
-
       if (battleProgressed) {
         resolve(battleProgressed);
         return;
       }
 
       const battleEnd = parseBattleEnd(data);
-
       if (battleEnd) {
         resolve(battleEnd);
         return;
