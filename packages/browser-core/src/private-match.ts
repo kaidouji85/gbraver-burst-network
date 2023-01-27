@@ -30,3 +30,18 @@ export interface PrivateMatchRoom {
    */
   waitUntilMatching(): Promise<Battle>;
 }
+
+/** プライベートマッチルーム入室 */
+export interface PrivateMatchRoomEnter {
+  /**
+   * プライベートマッチルームに入室する
+   * マッチングに選ばれた場合はBattleを返すが、選ばれなかった場合はnullを返す
+   * @param armdozerId 選択したアームドーザ
+   * @param pilotId 選択したパイロット
+   * @return マッチング結果
+   */
+  enterPrivateMatchRoom(
+    armdozerId: ArmDozerId,
+    pilotId: PilotId
+  ): Promise<Battle | null>;
+}
