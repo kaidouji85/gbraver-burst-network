@@ -5,7 +5,7 @@ import { BattlePlayer } from "./core/battle";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { deletedPrivateMatchEntries } from "./core/deleted-private-match-entries";
+import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
 import { privateMatchMake } from "./core/private-match-make";
 import { createDynamoDBClient } from "./dynamo-db/client";
@@ -133,7 +133,7 @@ export async function privateMatchMakePolling(
     connectionId: entry.connectionId,
     data: createBattleStart(entry.userID, battle),
   }));
-  const deletedEntries = deletedPrivateMatchEntries(matching, entries);
+  const notChosenEntries = notChosenPrivateMatchEntries(matching, entries);
   await Promise.all([
     battles.put(battle),
     ...updatedConnections.map((v) => connections.put(v)),
@@ -142,7 +142,7 @@ export async function privateMatchMakePolling(
     ),
     privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
-    ...deletedEntries.map((v) =>
+    ...notChosenEntries.map((v) =>
       notifier.notifyToClient(v.connectionId, notChosenAsPrivateMatchPartner)
     ),
   ]);
