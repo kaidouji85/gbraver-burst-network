@@ -1,4 +1,5 @@
 import type { BattleProgressPolling } from "./battle-progress-polling";
+import { CreatePrivateMatchRoom } from "./create-private-match-room";
 import type { EnterCasualMatch } from "./enter-casual-match";
 import type { Ping } from "./ping";
 import type { SendCommand } from "./send-command";
@@ -8,4 +9,5 @@ export type APIServerRequest =
   | Ping
   | EnterCasualMatch
   | SendCommand
-  | BattleProgressPolling;
+  | BattleProgressPolling
+  | CreatePrivateMatchRoom;
