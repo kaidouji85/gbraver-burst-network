@@ -2,11 +2,11 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { BattlePlayer } from "./core/battle";
-import { InBattle } from "./core/connection";
+import { InBattle, None } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
+import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { privateMatchMake } from "./core/private-match-make";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattles } from "./dynamo-db/create-battles";
@@ -119,24 +119,32 @@ export async function privateMatchMakePolling(
     createBattlePlayer(matching[1]),
   ];
   const battle = createBattle(players);
-  const updatedConnectionState: InBattle = {
+  const inBattleState: InBattle = {
     type: "InBattle",
     battleID: battle.battleID,
     players,
   };
-  const updatedConnections = matching.map((v) => ({
+  const battleConnections = matching.map((v) => ({
     connectionId: v.connectionId,
     userID: v.userID,
-    state: updatedConnectionState,
+    state: inBattleState,
   }));
   const battleStartNotices = matching.map((entry) => ({
     connectionId: entry.connectionId,
     data: createBattleStart(entry.userID, battle),
   }));
   const notChosenEntries = notChosenPrivateMatchEntries(matching, entries);
+  const noneState: None = {
+    type: "None",
+  };
+  const notChonsenConnections = notChosenEntries.map((v) => ({
+    connectionId: v.connectionId,
+    userID: v.userID,
+    state: noneState,
+  }));
   await Promise.all([
     battles.put(battle),
-    ...updatedConnections.map((v) => connections.put(v)),
+    ...battleConnections.map((v) => connections.put(v)),
     ...battleStartNotices.map((v) =>
       notifier.notifyToClient(v.connectionId, v.data)
     ),
@@ -145,6 +153,7 @@ export async function privateMatchMakePolling(
     ...notChosenEntries.map((v) =>
       notifier.notifyToClient(v.connectionId, notChosenAsPrivateMatchPartner)
     ),
+    ...notChonsenConnections.map((v) => connections.put(v)),
   ]);
 
   return endPrivateMatchMakePolling;
