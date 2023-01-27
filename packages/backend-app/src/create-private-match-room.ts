@@ -62,6 +62,7 @@ export async function createPrivateMatchRoom(
   const room: PrivateMatchRoom = {
     roomID: generatePrivateMatchRoomID(),
     owner: user.userID,
+    ownerConnectionId: event.requestContext.connectionId,
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
   };

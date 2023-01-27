@@ -1,6 +1,6 @@
 import { DynamoDB } from "aws-sdk";
 
-import type { CasualMatchEntry } from "../core/casual-match";
+import type { CasualMatchEntry } from "../core/casual-match-entry";
 
 /**
  * casual_match_entriesのスキーマ

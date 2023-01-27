@@ -30,6 +30,29 @@ export class PrivateMatchEntries {
   }
 
   /**
+   * ルーム配下のエントリを取得する
+   * @param roomID ルームID
+   * @return 取得結果
+   */
+  async getEntries(
+    roomID: PrivateMatchRoomID
+  ): Promise<PrivateMatchEntriesSchema[]> {
+    const result = await this.#client
+      .query({
+        TableName: this.#tableName,
+        KeyConditionExpression: "#hash = :roomID",
+        ExpressionAttributeNames: {
+          "#hash": "roomID",
+        },
+        ExpressionAttributeValues: {
+          ":roomID": roomID,
+        },
+      })
+      .promise();
+    return result.Items ? (result.Items as PrivateMatchEntriesSchema[]) : [];
+  }
+
+  /**
    * 項目追加する
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise

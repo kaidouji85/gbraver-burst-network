@@ -4,10 +4,10 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { BattlePlayer } from "./core/battle";
+import { casualMatchMake } from "./core/casual-match-make";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { matchMake } from "./core/match-make";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
@@ -63,7 +63,7 @@ const maxPollingCount = 28800;
  */
 async function matchMakingPolling(): Promise<void> {
   const entries = await casualMatchEntries.scan(casualMatchEntryScanLimit);
-  const matchingList = matchMake(entries);
+  const matchingList = casualMatchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players: [BattlePlayer, BattlePlayer] = [
       createBattlePlayer(matching[0]),

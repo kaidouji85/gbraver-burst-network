@@ -30,6 +30,24 @@ export class PrivateMatchRooms {
   }
 
   /**
+   * パーティションキー指定で検索
+   * データが存在しない場合はnullを返す
+   * @param owner ルーム作成者のユーザID
+   * @return 検索結果
+   */
+  async get(owner: UserID): Promise<PrivateMatchRoomsSchema | null> {
+    const result = await this.#client
+      .get({
+        TableName: this.#tableName,
+        Key: {
+          owner,
+        },
+      })
+      .promise();
+    return result.Item ? (result.Item as PrivateMatchRoomsSchema) : null;
+  }
+
+  /**
    * 項目追加する
    * @param room 追加する項目
    * @return 処理が完了したら発火するPromise
