@@ -1,7 +1,11 @@
 import { ArmDozerId, PilotId } from "gbraver-burst-core";
 
+import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
-import { CreatedPrivateMatchRoom } from "../response/created-private-match-room";
+import {
+  CreatedPrivateMatchRoom,
+  parseCreatedPrivateMatchRoom,
+} from "../response/created-private-match-room";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
 
@@ -25,7 +29,9 @@ export function createPrivateMatchRoom(
   return waitUntil(
     websocket,
     (e: MessageEvent, resolve: Resolve<CreatedPrivateMatchRoom>) => {
-      // TODO 実装する
+      const data = parseJSON(e.data);
+      const response = parseCreatedPrivateMatchRoom(data);
+      response && resolve(response);
     }
   );
 }
