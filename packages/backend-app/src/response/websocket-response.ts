@@ -109,6 +109,11 @@ export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
 
+/** プライベートマッチの相手に選べれなかった */
+export type NotChosenAsPrivateMatchPartner = {
+  action: "not-chosen-as-private-match-partner",
+};
+
 /** エラー */
 export type Error = {
   action: "error";
