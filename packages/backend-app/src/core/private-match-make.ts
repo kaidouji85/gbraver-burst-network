@@ -3,7 +3,7 @@ import { PrivateMatchEntry } from "./private-match-entry";
 import { PrivateMatchRoom } from "./private-match-room";
 
 /** マッチング結果 */
-export type Matching = [BattleEntry, BattleEntry];
+export type PrivateMatching = [BattleEntry, BattleEntry];
 
 /**
  * プライベートマッチメイクを行う
@@ -15,7 +15,7 @@ export type Matching = [BattleEntry, BattleEntry];
 export function privateMatchMake(
   room: PrivateMatchRoom,
   entries: PrivateMatchEntry[]
-): Matching | null {
+): PrivateMatching | null {
   if (entries.length <= 0) {
     return null;
   }
