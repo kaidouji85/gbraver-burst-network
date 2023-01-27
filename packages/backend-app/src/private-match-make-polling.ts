@@ -124,17 +124,16 @@ export async function privateMatchMakePolling(
     userID: v.userID,
     state: updatedConnectionState,
   }));
-  const notices = matching.map((entry) => {
-    const data = createBattleStart(entry.userID, battle);
-    return {
-      connectionId: entry.connectionId,
-      data,
-    };
-  });
+  const notices = matching.map((entry) => ({
+    connectionId: entry.connectionId,
+    data: createBattleStart(entry.userID, battle),
+  }));
   await Promise.all([
     battles.put(battle),
     ...updatedConnections.map((v) => connections.put(v)),
     ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+    privateMatchRooms.delete(room.roomID),
+    ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
   ]);
 
   return endPrivateMatchMakePolling;
