@@ -1,10 +1,9 @@
 import { ArmDozerId, PilotId } from "gbraver-burst-core";
 
-/** プライベートマッチルームID */
-export type PrivateMatchRoomID = string;
+import { Battle } from "./battle";
 
 /** プライベートマッチルーム生成 */
-export interface PrivateMatchCreator {
+export interface PrivateMatchCreate {
   /**
    * プライベートマッチルームを生成する
    * @param armdozerId 選択したアームドーザのID
@@ -14,5 +13,20 @@ export interface PrivateMatchCreator {
   createPrivateMatchRoom(
     armdozerId: ArmDozerId,
     pilotId: PilotId
-  ): Promise<PrivateMatchRoomID>;
+  ): Promise<PrivateMatchRoom>;
+}
+
+/** プライベートマッチルームID */
+export type PrivateMatchRoomID = string;
+
+/** プライベートマッチルーム */
+export interface PrivateMatchRoom {
+  /** ルームID、本プロパティを招待するユーザに共有する */
+  roomID: PrivateMatchRoomID;
+
+  /**
+   * マッチングが成立するまで待機する
+   * @return バトル
+   */
+  waitUntilMatching(): Promise<Battle>;
 }
