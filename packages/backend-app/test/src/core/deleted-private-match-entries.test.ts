@@ -1,7 +1,7 @@
 import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
 
 import { BattleEntry } from "../../../src/core/battle-entry";
-import { deletedPrivateMatchEntry } from "../../../src/core/deleted-private-match-entry";
+import { deletedPrivateMatchEntries } from "../../../src/core/deleted-private-match-entries";
 import { PrivateMatchEntry } from "../../../src/core/private-match-entry";
 import { PrivateMatching } from "../../../src/core/private-match-make";
 
@@ -45,7 +45,7 @@ test("マッチングしたユーザ以外が削除対象", () => {
     unmatchedEntry01,
     unmatchedEntry02,
   ];
-  expect(deletedPrivateMatchEntry(matching, entries)).toEqual([
+  expect(deletedPrivateMatchEntries(matching, entries)).toEqual([
     unmatchedEntry01,
     unmatchedEntry02,
   ]);
@@ -54,11 +54,11 @@ test("マッチングしたユーザ以外が削除対象", () => {
 test("エントリにマッチングユーザしか存在しない場合でも、正しく動く", () => {
   const matching: PrivateMatching = [owner, matchedPlayer];
   const entries: PrivateMatchEntry[] = [matchedPlayerEntry];
-  expect(deletedPrivateMatchEntry(matching, entries)).toEqual([]);
+  expect(deletedPrivateMatchEntries(matching, entries)).toEqual([]);
 });
 
 test("エントリが空の場合、空配列を返す", () => {
   const matching: PrivateMatching = [owner, matchedPlayer];
   const entries: PrivateMatchEntry[] = [];
-  expect(deletedPrivateMatchEntry(matching, entries)).toEqual([]);
+  expect(deletedPrivateMatchEntries(matching, entries)).toEqual([]);
 });

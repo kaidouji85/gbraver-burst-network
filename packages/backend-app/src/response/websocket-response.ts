@@ -111,7 +111,7 @@ export type CouldNotPrivateMatchMaking = {
 
 /** プライベートマッチの相手に選べれなかった */
 export type NotChosenAsPrivateMatchPartner = {
-  action: "not-chosen-as-private-match-partner",
+  action: "not-chosen-as-private-match-partner";
 };
 
 /** エラー */

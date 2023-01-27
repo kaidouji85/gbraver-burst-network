@@ -7,7 +7,7 @@ import { PrivateMatching } from "./private-match-make";
  * @param entries プライベートマッチエントリ
  * @return 削除するプライベートマッチエントリ
  */
-export function deletedPrivateMatchEntry(
+export function deletedPrivateMatchEntries(
   matching: PrivateMatching,
   entries: PrivateMatchEntry[]
 ): PrivateMatchEntry[] {
