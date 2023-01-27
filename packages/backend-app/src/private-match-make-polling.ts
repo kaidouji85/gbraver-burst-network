@@ -129,10 +129,6 @@ export async function privateMatchMakePolling(
     userID: v.userID,
     state: inBattleState,
   }));
-  const battleStartNotices = matching.map((entry) => ({
-    connectionId: entry.connectionId,
-    data: createBattleStart(entry.userID, battle),
-  }));
   const notChosenEntries = notChosenPrivateMatchEntries(matching, entries);
   const noneState: None = {
     type: "None",
@@ -145,8 +141,11 @@ export async function privateMatchMakePolling(
   await Promise.all([
     battles.put(battle),
     ...battleConnections.map((v) => connections.put(v)),
-    ...battleStartNotices.map((v) =>
-      notifier.notifyToClient(v.connectionId, v.data)
+    ...matching.map((v) =>
+      notifier.notifyToClient(
+        v.connectionId,
+        createBattleStart(v.userID, battle)
+      )
     ),
     privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
