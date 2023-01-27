@@ -132,7 +132,7 @@ export async function privateMatchMakePolling(
     battles.put(battle),
     ...updatedConnections.map((v) => connections.put(v)),
     ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
-    privateMatchRooms.delete(room.roomID),
+    privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
   ]);
 
