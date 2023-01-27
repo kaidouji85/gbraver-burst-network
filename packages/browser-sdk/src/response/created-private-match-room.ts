@@ -16,6 +16,7 @@ export type CreatedPrivateMatchRoom = {
 export function parseCreatedPrivateMatchRoom(
   data: any
 ): CreatedPrivateMatchRoom | null {
+  /* eslint-enable */
   if (
     data?.action === "created-private-match-room" &&
     typeof data?.roomID === "string"
@@ -25,6 +26,5 @@ export function parseCreatedPrivateMatchRoom(
       roomID: data.roomID,
     };
   }
-  /* eslint-enable */
   return null;
 }
