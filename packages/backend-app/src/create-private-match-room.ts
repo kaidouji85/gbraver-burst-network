@@ -73,6 +73,7 @@ export async function createPrivateMatchRoom(
       userID: user.userID,
       state: {
         type: "HoldPrivateMatch",
+        roomID: room.roomID,
       },
     }),
     notifier.notifyToClient(event.requestContext.connectionId, {

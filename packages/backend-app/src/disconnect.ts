@@ -1,7 +1,12 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { Connection, InBattle, PrivateMatchMaking } from "./core/connection";
+import {
+  Connection,
+  HoldPrivateMatch,
+  InBattle,
+  PrivateMatchMaking,
+} from "./core/connection";
 import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
@@ -83,8 +88,19 @@ async function cleanUp(connection: Connection): Promise<void> {
     ]);
   };
 
-  const holdPrivateMatch = async () => {
-    await privateMatchRooms.delete(connection.userID);
+  const holdPrivateMatch = async (state: HoldPrivateMatch) => {
+    const [entries] = await Promise.all([
+      privateMatchEntries.getEntries(state.roomID),
+      privateMatchRooms.delete(connection.userID),
+    ]);
+    await Promise.all([
+      ...entries.map((v) =>
+        notifier.notifyToClient(v.connectionId, {
+          action: "destroy-private-match-room",
+          roomID: state.roomID,
+        })
+      ),
+    ]);
   };
 
   const privateMatchMaking = async (state: PrivateMatchMaking) => {
@@ -96,7 +112,7 @@ async function cleanUp(connection: Connection): Promise<void> {
   } else if (connection.state.type === "InBattle") {
     await inBattle(connection.state);
   } else if (connection.state.type === "HoldPrivateMatch") {
-    await holdPrivateMatch();
+    await holdPrivateMatch(connection.state);
   } else if (connection.state.type === "PrivateMatchMaking") {
     await privateMatchMaking(connection.state);
   }

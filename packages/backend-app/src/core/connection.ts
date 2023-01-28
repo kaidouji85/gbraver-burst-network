@@ -9,7 +9,7 @@ export type ConnectionState =
   | None
   | CasualMatchMaking
   | InBattle
-  | HoldPrvateMatch
+  | HoldPrivateMatch
   | PrivateMatchMaking;
 
 /** 状態なし */
@@ -46,8 +46,11 @@ export type InBattle = {
 };
 
 /** プライベートマッチ開催 */
-export type HoldPrvateMatch = {
+export type HoldPrivateMatch = {
   type: "HoldPrivateMatch";
+
+  /** 作成したルームのID */
+  roomID: PrivateMatchRoomID;
 };
 
 /** プライベートマッチメイク中 */
