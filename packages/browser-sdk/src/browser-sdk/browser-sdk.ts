@@ -15,7 +15,10 @@ import type {
   WebsocketErrorNotifier,
   WebsocketUnintentionalCloseNotifier,
 } from "@gbraver-burst-network/browser-core";
-import {PrivateMatchCreate, PrivateMatchRoom} from "@gbraver-burst-network/browser-core/src";
+import {
+  PrivateMatchCreate,
+  PrivateMatchRoom,
+} from "@gbraver-burst-network/browser-core/src";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
@@ -26,11 +29,11 @@ import {
 } from "../auth0/login-redirect";
 import { deleteLoggedInUser } from "../http-request/delete-user";
 import { connect } from "../websocket/connect";
-import {createPrivateMatchRoom} from "../websocket/create-private-match-room";
+import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { ping } from "../websocket/ping";
 import { BattleSDK } from "./battle-sdk";
-import {PrivateMatchRoomSDK} from "./private-match-room-sdk";
+import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
 
 /** ブラウザSDK */
 export interface BrowserSDK
@@ -174,7 +177,10 @@ class BrowserSDKImpl implements BrowserSDK {
   }
 
   /** @override */
-  async createPrivateMatchRoom(armdozerId: ArmDozerId, pilotId: PilotId): Promise<PrivateMatchRoom> {
+  async createPrivateMatchRoom(
+    armdozerId: ArmDozerId,
+    pilotId: PilotId
+  ): Promise<PrivateMatchRoom> {
     const websocket = await this._getOrCreateWebSocket();
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
     return new PrivateMatchRoomSDK(resp.roomID);
