@@ -5,6 +5,7 @@ import { UseCase } from "./use-case";
 
 /** プライベートマッチオーナー */
 export class PrivateMatchRoomOwner implements UseCase {
+  /** ブラウザSDK */
   #sdk: BrowserSDK;
 
   /**
