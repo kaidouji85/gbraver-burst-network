@@ -18,6 +18,7 @@ export type WebsocketResponse =
   | NotFoundPrivateMatchRoom
   | CouldNotPrivateMatchMaking
   | NotChosenAsPrivateMatchPartner
+  | DestroyPrivateMatchRoom
   | Error;
 
 /** pingの応答 */
@@ -113,6 +114,14 @@ export type CouldNotPrivateMatchMaking = {
 /** プライベートマッチの相手に選べれなかった */
 export type NotChosenAsPrivateMatchPartner = {
   action: "not-chosen-as-private-match-partner";
+};
+
+/** プライベートマッチルーム破棄 */
+export type DestroyPrivateMatchRoom = {
+  action: "destroy-private-match-room";
+
+  /** ルームID */
+  roomID: PrivateMatchRoomID;
 };
 
 /** エラー */
