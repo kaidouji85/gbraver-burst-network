@@ -9,6 +9,7 @@ import { GetUserPictureURLCase } from "./use-case/get-user-picture-url";
 import { MailAddressGet } from "./use-case/mail-address-get";
 import { MailVerifiedCase } from "./use-case/mail-verified";
 import { PingUseCase } from "./use-case/ping";
+import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
 import type { UseCase } from "./use-case/use-case";
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";
@@ -40,6 +41,7 @@ window.onload = async () => {
     new PingUseCase(browserSDK),
     new BattlePlayer01(browserSDK),
     new BattlePlayer02(browserSDK),
+    new PrivateMatchRoomOwner(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
     new MailVerifiedCase(browserSDK),
