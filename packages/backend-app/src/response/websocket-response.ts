@@ -111,7 +111,7 @@ export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
 
-/** プライベートマッチの相手に選べれなかった */
+/** プライベートマッチの相手に選ばれなかった */
 export type NotChosenAsPrivateMatchPartner = {
   action: "not-chosen-as-private-match-partner";
 };
