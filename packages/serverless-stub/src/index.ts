@@ -26,9 +26,6 @@ window.onload = async () => {
     AUTH0_CLIENT_ID,
     AUTH0_AUDIENCE
   );
-  browserSDK.websocketUnintentionalCloseNotifier().subscribe((e) => {
-    console.log("websocketUnintentionalCloseNotifier", e);
-  });
   browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);
   });

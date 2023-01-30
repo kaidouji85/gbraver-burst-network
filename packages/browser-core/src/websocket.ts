@@ -19,13 +19,3 @@ export interface WebsocketErrorNotifier {
    */
   websocketErrorNotifier(): Observable<unknown>;
 }
-
-/** Websocket 意図しない切断通知 */
-export interface WebsocketUnintentionalCloseNotifier {
-  /**
-   * Websocketが意図せず切断したことを通知する
-   *
-   * @return 通知ストリーム
-   */
-  websocketUnintentionalCloseNotifier(): Observable<unknown>;
-}
