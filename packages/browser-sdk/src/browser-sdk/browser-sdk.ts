@@ -13,7 +13,6 @@ import type {
   UserPictureGet,
   WebsocketDisconnect,
   WebsocketErrorNotifier,
-  WebsocketUnintentionalCloseNotifier,
 } from "@gbraver-burst-network/browser-core";
 import {
   PrivateMatchCreate,
@@ -49,7 +48,6 @@ export interface BrowserSDK
     LoggedInUserDelete,
     WebsocketDisconnect,
     WebsocketErrorNotifier,
-    WebsocketUnintentionalCloseNotifier,
     PrivateMatchCreate {}
 
 /** ブラウザSDK実装 */
@@ -60,7 +58,6 @@ class BrowserSDKImpl implements BrowserSDK {
   _auth0Client: Auth0Client;
   _websocket: WebSocket | null;
   _websocketError: Subject<unknown>;
-  _websocketUnintentionalCloseNotifier: Subject<unknown>;
   _websocketSubscriptions: Subscription[];
 
   /**
@@ -83,7 +80,6 @@ class BrowserSDKImpl implements BrowserSDK {
     this._auth0Client = auth0Client;
     this._websocket = null;
     this._websocketError = new Subject();
-    this._websocketUnintentionalCloseNotifier = new Subject();
     this._websocketSubscriptions = [];
   }
 
@@ -201,11 +197,6 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
     return this._websocketError;
-  }
-
-  /** @override */
-  websocketUnintentionalCloseNotifier(): Observable<unknown> {
-    return this._websocketUnintentionalCloseNotifier;
   }
 
   /**
