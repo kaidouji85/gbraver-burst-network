@@ -106,12 +106,12 @@ export type NotFoundPrivateMatchRoom = {
   action: "not-found-private-match-room";
 };
 
-/** プライベートマッチングできなかった */
+/** オーナーがプライベートマッチングできなかった */
 export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
 
-/** プライベートマッチの相手に選ばれなかった */
+/** 参加者がプライベートマッチの相手に選ばれなかった */
 export type NotChosenAsPrivateMatchPartner = {
   action: "not-chosen-as-private-match-partner";
 };
