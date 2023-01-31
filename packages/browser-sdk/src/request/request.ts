@@ -3,6 +3,7 @@ import { CreatePrivateMatchRoom } from "./create-private-match-room";
 import type { EnterCasualMatch } from "./enter-casual-match";
 import { EnterPrivateMatchRoom } from "./enter-private-match-room";
 import type { Ping } from "./ping";
+import { PrivateMatchMakePolling } from "./private-match-make-polling";
 import type { SendCommand } from "./send-command";
 
 /** APIサーバへのリクエスト */
@@ -12,4 +13,5 @@ export type APIServerRequest =
   | SendCommand
   | BattleProgressPolling
   | CreatePrivateMatchRoom
-  | EnterPrivateMatchRoom;
+  | EnterPrivateMatchRoom
+  | PrivateMatchMakePolling;
