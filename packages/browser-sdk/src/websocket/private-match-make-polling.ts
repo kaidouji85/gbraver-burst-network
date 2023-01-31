@@ -18,7 +18,7 @@ export async function privateMatchMakePolling(
   websocket: WebSocket,
   roomID: PrivateMatchRoomID
 ): Promise<BattleStart> {
-  const maxPollingCount = 100;
+  const maxPollingCount = 200;
   const pollingIntervalMilliSec = 3000;
   let pollingCount = 1;
   let lastPollingTime = 0;

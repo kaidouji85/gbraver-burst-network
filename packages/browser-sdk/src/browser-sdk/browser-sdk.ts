@@ -183,7 +183,7 @@ class BrowserSDKImpl implements BrowserSDK {
   ): Promise<PrivateMatchRoom> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
-    return new PrivateMatchRoomSDK(resp.roomID);
+    return new PrivateMatchRoomSDK(resp.roomID, websocket);
   }
 
   /** @override */
