@@ -15,7 +15,4 @@ export type {
   UserNameGet,
   UserPictureGet,
 } from "./user";
-export type {
-  WebsocketDisconnect,
-  WebsocketErrorNotifier,
-} from "./websocket";
+export type { WebsocketDisconnect, WebsocketErrorNotifier } from "./websocket";
