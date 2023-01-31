@@ -10,7 +10,9 @@ import { MailAddressGet } from "./use-case/mail-address-get";
 import { MailVerifiedCase } from "./use-case/mail-verified";
 import { PingUseCase } from "./use-case/ping";
 import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
+import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
 import type { UseCase } from "./use-case/use-case";
+
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
@@ -39,6 +41,7 @@ window.onload = async () => {
     new BattlePlayer01(browserSDK),
     new BattlePlayer02(browserSDK),
     new PrivateMatchRoomOwner(browserSDK),
+    new PrivateMatchRoomPlayer(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
     new MailVerifiedCase(browserSDK),
@@ -63,6 +66,13 @@ window.onload = async () => {
     useCaseSelectorSearchResult instanceof HTMLSelectElement
       ? useCaseSelectorSearchResult
       : document.createElement("select");
+  const privateMatchRoomIDSearchResult = document.getElementById(
+    "private-match-room-id"
+  );
+  const privateMatchRoomID: HTMLInputElement =
+    privateMatchRoomIDSearchResult instanceof HTMLInputElement
+      ? privateMatchRoomIDSearchResult
+      : document.createElement("input");
   const useCaseExecuteButtonSearchResult = document.getElementById(
     "use-case-execute-button"
   );
@@ -109,7 +119,9 @@ window.onload = async () => {
     }
 
     useCaseExecuteButton.disabled = true;
-    await useCase.execute();
+    await useCase.execute({
+      privateMatchRoomID: privateMatchRoomID.value,
+    });
     useCaseExecuteButton.disabled = false;
   });
   updateScreen();

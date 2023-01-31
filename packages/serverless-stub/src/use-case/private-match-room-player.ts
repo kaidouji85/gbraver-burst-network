@@ -1,21 +1,19 @@
 import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
-import { UseCase } from "./use-case";
 
-/** プライベートマッチ　参加者 */
+import { UseCase, UseCaseContext } from "./use-case";
+
+/** プライベートマッチ参加者 */
 export class PrivateMatchRoomPlayer implements UseCase {
   /** ブラウザSDK */
   #sdk: BrowserSDK;
-  /** プライベートマッチルームID */
-  #roomID: string;
 
   /**
    * コンストラクタ
    * @param sdk ブラウザSDK
    */
-  constructor(sdk: Readonly<BrowserSDK>, roomID: string) {
+  constructor(sdk: Readonly<BrowserSDK>) {
     this.#sdk = sdk;
-    this.#roomID = roomID;
   }
 
   /** @override */
@@ -24,8 +22,12 @@ export class PrivateMatchRoomPlayer implements UseCase {
   }
 
   /** @override */
-  async execute(): Promise<void> {
-    const battle = await this.#sdk.enterPrivateMatchRoom(this.#roomID, ArmDozerIds.NEO_LANDOZER, PilotIds.GAI);
+  async execute(context: UseCaseContext): Promise<void> {
+    const battle = await this.#sdk.enterPrivateMatchRoom(
+      context.privateMatchRoomID,
+      ArmDozerIds.NEO_LANDOZER,
+      PilotIds.GAI
+    );
     if (!battle) {
       console.log("cloud not matching");
       return;
