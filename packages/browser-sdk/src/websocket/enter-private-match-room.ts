@@ -5,10 +5,6 @@ import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
 import {
-  CouldNotPrivateMatchMaking,
-  parseCouldNotPrivateMatchMaking,
-} from "../response/cloud-not-private-match-making";
-import {
   DestroyPrivateMatchRoom,
   parseDestroyPrivateMatchRoom,
 } from "../response/destroy-private-match-room";
@@ -27,7 +23,6 @@ import { waitUntil } from "./wait-until";
 type EnterPrivateMatchRoomResponse =
   | BattleStart
   | NotFoundPrivateMatchRoom
-  | CouldNotPrivateMatchMaking
   | NotChosenAsPrivateMatchPartner
   | DestroyPrivateMatchRoom;
 
@@ -64,11 +59,6 @@ export function enterPrivateMatchRoom(
       const notFoundPrivateMatchRoom = parseNotFoundPrivateMatchRoom(data);
       if (notFoundPrivateMatchRoom) {
         resolve(notFoundPrivateMatchRoom);
-      }
-
-      const couldNotPrivateMatchMaking = parseCouldNotPrivateMatchMaking(data);
-      if (couldNotPrivateMatchMaking) {
-        resolve(couldNotPrivateMatchMaking);
       }
 
       const notChosenAsPrivateMatchPartner =
