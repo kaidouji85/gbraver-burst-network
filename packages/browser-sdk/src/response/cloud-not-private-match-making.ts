@@ -1,4 +1,4 @@
-/** プライベートマッチングできなかった */
+/** オーナーがプライベートマッチングできなかった */
 export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };

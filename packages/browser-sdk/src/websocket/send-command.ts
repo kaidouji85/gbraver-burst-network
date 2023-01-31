@@ -110,7 +110,6 @@ export async function sendCommandWithPolling(
       const data = parseJSON(e.data);
       const notReadyBattleProgress = parseNotReadyBattleProgress(data);
       const isOverPollingCount = maxPollingCount <= pollingCount;
-
       if (notReadyBattleProgress && isOverPollingCount) {
         reject(new Error("max polling count over"));
         return;
