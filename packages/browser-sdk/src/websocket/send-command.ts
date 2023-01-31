@@ -70,21 +70,6 @@ export async function sendCommandWithPolling(
   flowID: string,
   command: Command
 ): Promise<BattleProgressed | BattleEnd> {
-  const maxPollingCount = 100;
-  const pollingIntervalMilliSec = 3000;
-  let pollingCount = 1;
-  let lastPollingTime = 0;
-
-  const battleProgressPolling = () => {
-    pollingCount++;
-    lastPollingTime = Date.now();
-    sendToAPIServer(websocket, {
-      action: "battle-progress-polling",
-      battleID,
-      flowID,
-    });
-  };
-
   sendToAPIServer(websocket, {
     action: "send-command",
     battleID,
@@ -99,6 +84,21 @@ export async function sendCommandWithPolling(
       acceptCommand && resolve(acceptCommand);
     }
   );
+
+  const maxPollingCount = 100;
+  const pollingIntervalMilliSec = 3000;
+  let pollingCount = 1;
+  let lastPollingTime = 0;
+  const battleProgressPolling = () => {
+    pollingCount++;
+    lastPollingTime = Date.now();
+    sendToAPIServer(websocket, {
+      action: "battle-progress-polling",
+      battleID,
+      flowID,
+    });
+  };
+
   battleProgressPolling();
   return waitUntil(
     websocket,
