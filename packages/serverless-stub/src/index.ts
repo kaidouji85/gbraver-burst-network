@@ -99,13 +99,11 @@ window.onload = async () => {
     e.preventDefault();
     e.stopPropagation();
     const useCaseIndex = Number(useCaseSelector.value);
-
     if (isNaN(useCaseIndex)) {
       return;
     }
 
     const useCase = useCases[useCaseIndex];
-
     if (!useCase) {
       return;
     }
