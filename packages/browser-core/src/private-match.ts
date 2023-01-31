@@ -36,11 +36,13 @@ export interface PrivateMatchRoomEnter {
   /**
    * プライベートマッチルームに入室する
    * マッチングに選ばれた場合はBattleを返すが、選ばれなかった場合はnullを返す
+   * @param private 入室するルームのID
    * @param armdozerId 選択したアームドーザ
    * @param pilotId 選択したパイロット
    * @return マッチング結果
    */
   enterPrivateMatchRoom(
+    roomID: PrivateMatchRoomID,
     armdozerId: ArmDozerId,
     pilotId: PilotId
   ): Promise<Battle | null>;

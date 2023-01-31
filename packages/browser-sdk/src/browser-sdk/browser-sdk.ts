@@ -7,6 +7,8 @@ import type {
   Logout,
   MailVerify,
   Ping,
+  PrivateMatchRoomEnter,
+  PrivateMatchRoomID,
   UniversalLogin,
   UserMailGet,
   UserNameGet,
@@ -30,6 +32,7 @@ import { deleteLoggedInUser } from "../http-request/delete-user";
 import { connect } from "../websocket/connect";
 import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
+import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
 import { BattleSDK } from "./battle-sdk";
 import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
@@ -48,7 +51,8 @@ export interface BrowserSDK
     LoggedInUserDelete,
     WebsocketDisconnect,
     WebsocketErrorNotifier,
-    PrivateMatchCreate {}
+    PrivateMatchCreate,
+    PrivateMatchRoomEnter {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
@@ -180,6 +184,34 @@ class BrowserSDKImpl implements BrowserSDK {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
     return new PrivateMatchRoomSDK(resp.roomID);
+  }
+
+  /** @override */
+  async enterPrivateMatchRoom(
+    roomID: PrivateMatchRoomID,
+    armdozerId: string,
+    pilotId: string
+  ): Promise<Battle | null> {
+    const websocket = await this.#getOrCreateWebSocket();
+    const resp = await enterPrivateMatchRoom(
+      websocket,
+      roomID,
+      armdozerId,
+      pilotId
+    );
+    if (resp.action !== "battle-start") {
+      return null;
+    }
+
+    return new BattleSDK({
+      player: resp.player,
+      enemy: resp.enemy,
+      initialState: resp.stateHistory,
+      battleID: resp.battleID,
+      initialFlowID: resp.flowID,
+      isPoller: resp.isPoller,
+      websocket,
+    });
   }
 
   /** @override */
