@@ -18,5 +18,4 @@ export type {
 export type {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
-  WebsocketUnintentionalCloseNotifier,
 } from "./websocket";
