@@ -7,6 +7,8 @@ import type {
   Logout,
   MailVerify,
   Ping,
+  PrivateMatchCreate,
+  PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
   UniversalLogin,
@@ -16,10 +18,6 @@ import type {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
 } from "@gbraver-burst-network/browser-core";
-import {
-  PrivateMatchCreate,
-  PrivateMatchRoom,
-} from "@gbraver-burst-network/browser-core/src";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 

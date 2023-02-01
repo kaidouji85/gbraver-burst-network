@@ -1,8 +1,8 @@
-import { PrivateMatchRoom } from "@gbraver-burst-network/browser-core";
 import {
   Battle,
+  PrivateMatchRoom,
   PrivateMatchRoomID,
-} from "@gbraver-burst-network/browser-core/src";
+} from "@gbraver-burst-network/browser-core";
 
 import { privateMatchMakePolling } from "../websocket/private-match-make-polling";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
