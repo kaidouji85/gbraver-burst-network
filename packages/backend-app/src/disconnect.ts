@@ -96,8 +96,7 @@ async function cleanUp(connection: Connection): Promise<void> {
     await Promise.all([
       ...entries.map((v) =>
         notifier.notifyToClient(v.connectionId, {
-          action: "destroy-private-match-room",
-          roomID: state.roomID,
+          action: "reject-private-match-entry",
         })
       ),
     ]);

@@ -15,7 +15,6 @@ export type WebsocketResponse =
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
   | CouldNotPrivateMatchMaking
-  | DestroyPrivateMatchRoom
   | RejectPrivateMatchEntry
   | Error;
 
@@ -97,15 +96,6 @@ export type CreatedPrivateMatchRoom = {
 /** オーナーがプライベートマッチングできなかった */
 export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
-};
-
-/** @deprecated */
-/** プライベートマッチルーム破棄 */
-export type DestroyPrivateMatchRoom = {
-  action: "destroy-private-match-room";
-
-  /** ルームID */
-  roomID: PrivateMatchRoomID;
 };
 
 /** 何らかの理由でプライベートマッチに参加できなかった */
