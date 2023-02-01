@@ -96,11 +96,13 @@ export type CreatedPrivateMatchRoom = {
   roomID: PrivateMatchRoomID;
 };
 
+/** @deprecated */
 /** プライベートマッチルームエントリ成功 */
 export type EnteredPrivateMatchRoom = {
   action: "entered-private-match-room";
 };
 
+/** @deprecated */
 /** エントリしようとしたプライベートマッチルームが見つからない */
 export type NotFoundPrivateMatchRoom = {
   action: "not-found-private-match-room";
@@ -111,17 +113,24 @@ export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
 
+/** @deprecated */
 /** 参加者がプライベートマッチの相手に選ばれなかった */
 export type NotChosenAsPrivateMatchPartner = {
   action: "not-chosen-as-private-match-partner";
 };
 
+/** @deprecated */
 /** プライベートマッチルーム破棄 */
 export type DestroyPrivateMatchRoom = {
   action: "destroy-private-match-room";
 
   /** ルームID */
   roomID: PrivateMatchRoomID;
+};
+
+/** 何らかの理由でプライベートマッチに参加できなかった */
+export type RejectPrivateMatchEntry = {
+  action: "reject-private-match-entry"
 };
 
 /** エラー */
