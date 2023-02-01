@@ -5,26 +5,11 @@ import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
 import {
-  DestroyPrivateMatchRoom,
-  parseDestroyPrivateMatchRoom,
-} from "../response/destroy-private-match-room";
-import {
-  NotChosenAsPrivateMatchPartner,
-  parseNotChosenAsPrivateMatchPartner,
-} from "../response/not-chosen-as-private-match-partner";
-import {
-  NotFoundPrivateMatchRoom,
-  parseNotFoundPrivateMatchRoom,
-} from "../response/not-found-private-match-room";
+  parseRejectPrivateMatchEntry,
+  RejectPrivateMatchEntry,
+} from "../response/reject-private-match-entry";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
-
-/** プライベートマッチルームの入室結果 */
-type EnterPrivateMatchRoomResponse =
-  | BattleStart
-  | NotFoundPrivateMatchRoom
-  | NotChosenAsPrivateMatchPartner
-  | DestroyPrivateMatchRoom;
 
 /**
  * プライベートマッチルームに入室する
@@ -39,7 +24,7 @@ export function enterPrivateMatchRoom(
   roomID: PrivateMatchRoomID,
   armdozerId: ArmDozerId,
   pilotId: PilotId
-): Promise<EnterPrivateMatchRoomResponse> {
+): Promise<BattleStart | RejectPrivateMatchEntry> {
   sendToAPIServer(websocket, {
     action: "enter-private-match-room",
     roomID,
@@ -48,7 +33,10 @@ export function enterPrivateMatchRoom(
   });
   return waitUntil(
     websocket,
-    (e: MessageEvent, resolve: Resolve<EnterPrivateMatchRoomResponse>) => {
+    (
+      e: MessageEvent,
+      resolve: Resolve<BattleStart | RejectPrivateMatchEntry>
+    ) => {
       const data = parseJSON(e.data);
 
       const battleStart = parseBattleStart(data);
@@ -56,20 +44,9 @@ export function enterPrivateMatchRoom(
         resolve(battleStart);
       }
 
-      const notFoundPrivateMatchRoom = parseNotFoundPrivateMatchRoom(data);
-      if (notFoundPrivateMatchRoom) {
-        resolve(notFoundPrivateMatchRoom);
-      }
-
-      const notChosenAsPrivateMatchPartner =
-        parseNotChosenAsPrivateMatchPartner(data);
-      if (notChosenAsPrivateMatchPartner) {
-        resolve(notChosenAsPrivateMatchPartner);
-      }
-
-      const destroyPrivateMatchRoom = parseDestroyPrivateMatchRoom(data);
-      if (destroyPrivateMatchRoom) {
-        resolve(destroyPrivateMatchRoom);
+      const rejectPrivateMatchEntry = parseRejectPrivateMatchEntry(data);
+      if (rejectPrivateMatchEntry) {
+        resolve(rejectPrivateMatchEntry);
       }
     }
   );

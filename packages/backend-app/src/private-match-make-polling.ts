@@ -22,7 +22,7 @@ import { createBattleStart } from "./response/create-battle-start";
 import type {
   CouldNotPrivateMatchMaking,
   Error,
-  NotChosenAsPrivateMatchPartner,
+  RejectPrivateMatchEntry,
 } from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -51,8 +51,8 @@ const invalidRequestBodyError: Error = {
 const cloudNotPrivateMatchMake: CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making",
 };
-const notChosenAsPrivateMatchPartner: NotChosenAsPrivateMatchPartner = {
-  action: "not-chosen-as-private-match-partner",
+const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
+  action: "reject-private-match-entry",
 };
 
 const invalidRequestBody: WebsocketAPIResponse = {
@@ -150,7 +150,7 @@ export async function privateMatchMakePolling(
     privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
     ...notChosenEntries.map((v) =>
-      notifier.notifyToClient(v.connectionId, notChosenAsPrivateMatchPartner)
+      notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry)
     ),
     ...notChonsenConnections.map((v) => connections.put(v)),
   ]);

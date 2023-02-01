@@ -14,11 +14,8 @@ export type WebsocketResponse =
   | BattleEnd
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
-  | EnteredPrivateMatchRoom
-  | NotFoundPrivateMatchRoom
   | CouldNotPrivateMatchMaking
-  | NotChosenAsPrivateMatchPartner
-  | DestroyPrivateMatchRoom
+  | RejectPrivateMatchEntry
   | Error;
 
 /** pingの応答 */
@@ -89,21 +86,11 @@ export type BattleEnd = {
   update: GameState[];
 };
 
-/** プライベートマッチルーム作成 */
+/** オーナーがプライベートマッチルーム作成に成功した */
 export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
   /** 作成したルームID */
   roomID: PrivateMatchRoomID;
-};
-
-/** プライベートマッチルームエントリ成功 */
-export type EnteredPrivateMatchRoom = {
-  action: "entered-private-match-room";
-};
-
-/** エントリしようとしたプライベートマッチルームが見つからない */
-export type NotFoundPrivateMatchRoom = {
-  action: "not-found-private-match-room";
 };
 
 /** オーナーがプライベートマッチングできなかった */
@@ -111,17 +98,9 @@ export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
 
-/** 参加者がプライベートマッチの相手に選ばれなかった */
-export type NotChosenAsPrivateMatchPartner = {
-  action: "not-chosen-as-private-match-partner";
-};
-
-/** プライベートマッチルーム破棄 */
-export type DestroyPrivateMatchRoom = {
-  action: "destroy-private-match-room";
-
-  /** ルームID */
-  roomID: PrivateMatchRoomID;
+/** 何らかの理由でプライベートマッチに参加できなかった */
+export type RejectPrivateMatchEntry = {
+  action: "reject-private-match-entry";
 };
 
 /** エラー */
