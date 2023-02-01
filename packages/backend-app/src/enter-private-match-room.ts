@@ -60,7 +60,7 @@ export async function enterPrivateMatchRoom(
   const isExistRoom = await privateMatchRooms.isExistRoom(data.roomID);
   if (!isExistRoom) {
     await notifier.notifyToClient(event.requestContext.connectionId, {
-      action: "not-found-private-match-room",
+      action: "reject-private-match-entry",
     });
     return {
       statusCode: 400,

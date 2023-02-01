@@ -14,10 +14,10 @@ export type WebsocketResponse =
   | BattleEnd
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
-  | NotFoundPrivateMatchRoom
   | CouldNotPrivateMatchMaking
   | NotChosenAsPrivateMatchPartner
   | DestroyPrivateMatchRoom
+  | RejectPrivateMatchEntry
   | Error;
 
 /** pingの応答 */
@@ -93,12 +93,6 @@ export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
   /** 作成したルームID */
   roomID: PrivateMatchRoomID;
-};
-
-/** @deprecated */
-/** エントリしようとしたプライベートマッチルームが見つからない */
-export type NotFoundPrivateMatchRoom = {
-  action: "not-found-private-match-room";
 };
 
 /** オーナーがプライベートマッチングできなかった */
