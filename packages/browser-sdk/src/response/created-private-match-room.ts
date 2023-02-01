@@ -1,4 +1,4 @@
-/** プライベートマッチルーム作成 */
+/** オーナーがプライベートマッチルーム作成に成功した */
 export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
 
