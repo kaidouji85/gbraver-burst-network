@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/backend-app",
   "description": "gbraver burst backend app",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "author": "Y.Takeuchi",
   "dependencies": {
     "auth0": "^3.1.2",
