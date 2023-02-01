@@ -80,9 +80,6 @@ export async function enterPrivateMatchRoom(
   };
   await Promise.all([
     privateMatchEntries.put(entry),
-    notifier.notifyToClient(event.requestContext.connectionId, {
-      action: "entered-private-match-room",
-    }),
     connections.put({
       connectionId: event.requestContext.connectionId,
       userID: user.userID,

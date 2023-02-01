@@ -14,7 +14,6 @@ export type WebsocketResponse =
   | BattleEnd
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
-  | EnteredPrivateMatchRoom
   | NotFoundPrivateMatchRoom
   | CouldNotPrivateMatchMaking
   | NotChosenAsPrivateMatchPartner
@@ -94,12 +93,6 @@ export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
   /** 作成したルームID */
   roomID: PrivateMatchRoomID;
-};
-
-/** @deprecated */
-/** プライベートマッチルームエントリ成功 */
-export type EnteredPrivateMatchRoom = {
-  action: "entered-private-match-room";
 };
 
 /** @deprecated */
