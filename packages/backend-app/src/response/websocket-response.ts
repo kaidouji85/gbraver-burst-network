@@ -15,7 +15,6 @@ export type WebsocketResponse =
   | SuddenlyBattleEnd
   | CreatedPrivateMatchRoom
   | CouldNotPrivateMatchMaking
-  | NotChosenAsPrivateMatchPartner
   | DestroyPrivateMatchRoom
   | RejectPrivateMatchEntry
   | Error;
@@ -101,12 +100,6 @@ export type CouldNotPrivateMatchMaking = {
 };
 
 /** @deprecated */
-/** 参加者がプライベートマッチの相手に選ばれなかった */
-export type NotChosenAsPrivateMatchPartner = {
-  action: "not-chosen-as-private-match-partner";
-};
-
-/** @deprecated */
 /** プライベートマッチルーム破棄 */
 export type DestroyPrivateMatchRoom = {
   action: "destroy-private-match-room";
@@ -117,7 +110,7 @@ export type DestroyPrivateMatchRoom = {
 
 /** 何らかの理由でプライベートマッチに参加できなかった */
 export type RejectPrivateMatchEntry = {
-  action: "reject-private-match-entry"
+  action: "reject-private-match-entry";
 };
 
 /** エラー */
