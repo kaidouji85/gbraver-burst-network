@@ -34,7 +34,7 @@ import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import { BattleSDK } from "./battle-sdk";
+import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
 
 /** ブラウザSDK */
@@ -165,15 +165,7 @@ class BrowserSDKImpl implements BrowserSDK {
   ): Promise<Battle> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
-    return new BattleSDK({
-      player: resp.player,
-      enemy: resp.enemy,
-      initialState: resp.stateHistory,
-      battleID: resp.battleID,
-      initialFlowID: resp.flowID,
-      isPoller: resp.isPoller,
-      websocket,
-    });
+    return createBattleSDKFromBattleStart(resp, websocket);
   }
 
   /** @override */
@@ -203,15 +195,7 @@ class BrowserSDKImpl implements BrowserSDK {
       return null;
     }
 
-    return new BattleSDK({
-      player: resp.player,
-      enemy: resp.enemy,
-      initialState: resp.stateHistory,
-      battleID: resp.battleID,
-      initialFlowID: resp.flowID,
-      isPoller: resp.isPoller,
-      websocket,
-    });
+    return createBattleSDKFromBattleStart(resp, websocket);
   }
 
   /** @override */

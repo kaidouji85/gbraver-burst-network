@@ -5,7 +5,7 @@ import {
 } from "@gbraver-burst-network/browser-core/src";
 
 import { privateMatchMakePolling } from "../websocket/private-match-make-polling";
-import { BattleSDK } from "./battle-sdk";
+import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 
 /** プライベートマッチSDK */
 export class PrivateMatchRoomSDK implements PrivateMatchRoom {
@@ -27,14 +27,6 @@ export class PrivateMatchRoomSDK implements PrivateMatchRoom {
   /** @override */
   async waitUntilMatching(): Promise<Battle> {
     const resp = await privateMatchMakePolling(this.#websocket, this.roomID);
-    return new BattleSDK({
-      player: resp.player,
-      enemy: resp.enemy,
-      initialState: resp.stateHistory,
-      battleID: resp.battleID,
-      initialFlowID: resp.flowID,
-      isPoller: resp.isPoller,
-      websocket: this.#websocket,
-    });
+    return createBattleSDKFromBattleStart(resp, this.#websocket);
   }
 }
