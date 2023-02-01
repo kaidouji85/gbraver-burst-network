@@ -4,10 +4,12 @@ import { ArmDozerId, PilotId } from "gbraver-burst-core";
 import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
-import { parseRejectPrivateMatchEntry, RejectPrivateMatchEntry } from "../response/reject-private-match-entry";
+import {
+  parseRejectPrivateMatchEntry,
+  RejectPrivateMatchEntry,
+} from "../response/reject-private-match-entry";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
-
 
 /**
  * プライベートマッチルームに入室する
@@ -31,7 +33,10 @@ export function enterPrivateMatchRoom(
   });
   return waitUntil(
     websocket,
-    (e: MessageEvent, resolve: Resolve<BattleStart | RejectPrivateMatchEntry>) => {
+    (
+      e: MessageEvent,
+      resolve: Resolve<BattleStart | RejectPrivateMatchEntry>
+    ) => {
       const data = parseJSON(e.data);
 
       const battleStart = parseBattleStart(data);
