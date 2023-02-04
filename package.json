@@ -1,20 +1,18 @@
 {
   "name": "root",
-  "description": "gbraver burst network mdule.",
+  "description": "gbraver burst network module.",
   "devDependencies": {
-    "lerna": "^6.4.0",
+    "lerna": "^6.4.1",
     "npm-run-all": "^4.1.5"
   },
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --ci",
-    "build": "run-s build:browser-core build:browser-sdk build:serverless-stub build:aws-vpc build:backend-app build:backend-ecs",
-    "build:aws-vpc": "lerna run --scope @gbraver-burst-network/aws-vpc build",
-    "build:backend-app": "lerna run --scope @gbraver-burst-network/backend-app build",
-    "build:backend-ecs": "lerna run --scope @gbraver-burst-network/backend-ecs build",
-    "build:browser-core": "lerna run --scope @gbraver-burst-network/browser-core build",
-    "build:browser-sdk": "lerna run --scope @gbraver-burst-network/browser-sdk build",
-    "build:serverless-stub": "lerna run --scope @gbraver-burst-network/serverless-stub build",
-    "clean": "lerna run clean"
+    "build": "lerna run build",
+    "clean": "lerna run clean",
+    "code-format": "lerna run code-format",
+    "lint": "lerna run lint",
+    "lint-fix": "lerna run lint-fix",
+    "test": "lerna run test"
   }
 }

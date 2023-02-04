@@ -1,3 +1,9 @@
+/** ユースケース実行条件 */
+export type UseCaseContext = {
+  /** プライベートマッチルームのID */
+  privateMatchRoomID: string;
+};
+
 /** ユースケース */
 export interface UseCase {
   /** ユースケース名 */
@@ -5,8 +11,8 @@ export interface UseCase {
 
   /**
    * ユースケースを実行する
-   *
+   * @param context コンテクスト
    * @return ユースケースが完了したら発火するPromise
    */
-  execute(): Promise<void>;
+  execute(context: UseCaseContext): Promise<void>;
 }

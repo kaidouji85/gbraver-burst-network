@@ -2,7 +2,10 @@ import { DynamoDB } from "aws-sdk";
 
 import type { Battle, BattlePlayer } from "../core/battle";
 
-/** battlesのスキーマ */
+/**
+ * battlesのスキーマ
+ * パーティションキー battleID
+ */
 export type BattlesSchema = Battle<BattlePlayer>;
 
 /** battlesのDAO*/
@@ -56,7 +59,7 @@ export class Battles {
   }
 
   /**
-   * ユニークキー指定で項目を削除する
+   * パーティションキー指定で項目を削除する
    *
    * @param battleID バトルID
    * @return 削除受付したら発火するPromise

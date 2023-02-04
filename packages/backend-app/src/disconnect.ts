@@ -1,11 +1,18 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import {
+  Connection,
+  HoldPrivateMatch,
+  InBattle,
+  PrivateMatchMaking,
+} from "./core/connection";
 import { createDynamoDBClient } from "./dynamo-db/client";
-import type { ConnectionsSchema, InBattle } from "./dynamo-db/connections";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
+import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
@@ -13,6 +20,7 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
@@ -20,10 +28,13 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
+
 const dynamoDB = createDynamoDBClient(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
+const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -52,7 +63,7 @@ export async function disconnect(
  * @param connection 接続情報
  * @return クリーンアップ完了時に発火するPromise
  */
-async function cleanUp(connection: ConnectionsSchema): Promise<void> {
+async function cleanUp(connection: Connection): Promise<void> {
   const inCasualMatchMaking = async () => {
     await casualMatchEntries.delete(connection.userID);
   };
@@ -77,9 +88,31 @@ async function cleanUp(connection: ConnectionsSchema): Promise<void> {
     ]);
   };
 
+  const holdPrivateMatch = async (state: HoldPrivateMatch) => {
+    const [entries] = await Promise.all([
+      privateMatchEntries.getEntries(state.roomID),
+      privateMatchRooms.delete(connection.userID),
+    ]);
+    await Promise.all([
+      ...entries.map((v) =>
+        notifier.notifyToClient(v.connectionId, {
+          action: "reject-private-match-entry",
+        })
+      ),
+    ]);
+  };
+
+  const privateMatchMaking = async (state: PrivateMatchMaking) => {
+    await privateMatchEntries.delete(state.roomID, connection.userID);
+  };
+
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
   } else if (connection.state.type === "InBattle") {
     await inBattle(connection.state);
+  } else if (connection.state.type === "HoldPrivateMatch") {
+    await holdPrivateMatch(connection.state);
+  } else if (connection.state.type === "PrivateMatchMaking") {
+    await privateMatchMaking(connection.state);
   }
 }

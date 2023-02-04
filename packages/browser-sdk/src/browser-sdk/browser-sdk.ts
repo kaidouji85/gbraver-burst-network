@@ -7,13 +7,16 @@ import type {
   Logout,
   MailVerify,
   Ping,
+  PrivateMatchCreate,
+  PrivateMatchRoom,
+  PrivateMatchRoomEnter,
+  PrivateMatchRoomID,
   UniversalLogin,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
   WebsocketDisconnect,
   WebsocketErrorNotifier,
-  WebsocketUnintentionalCloseNotifier,
 } from "@gbraver-burst-network/browser-core";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
@@ -25,9 +28,12 @@ import {
 } from "../auth0/login-redirect";
 import { deleteLoggedInUser } from "../http-request/delete-user";
 import { connect } from "../websocket/connect";
+import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
+import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import { BattleSDK } from "./battle-sdk";
+import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
+import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
 
 /** ブラウザSDK */
 export interface BrowserSDK
@@ -43,18 +49,18 @@ export interface BrowserSDK
     LoggedInUserDelete,
     WebsocketDisconnect,
     WebsocketErrorNotifier,
-    WebsocketUnintentionalCloseNotifier {}
+    PrivateMatchCreate,
+    PrivateMatchRoomEnter {}
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
-  _ownURL: string;
-  _restAPIURL: string;
-  _websocketAPIURL: string;
-  _auth0Client: Auth0Client;
-  _websocket: WebSocket | null;
-  _websocketError: Subject<unknown>;
-  _websocketUnintentionalCloseNotifier: Subject<unknown>;
-  _websocketSubscriptions: Subscription[];
+  #ownURL: string;
+  #restAPIURL: string;
+  #websocketAPIURL: string;
+  #auth0Client: Auth0Client;
+  #websocket: WebSocket | null;
+  #websocketError: Subject<unknown>;
+  #websocketSubscriptions: Subscription[];
 
   /**
    * コンストラクタ
@@ -70,14 +76,13 @@ class BrowserSDKImpl implements BrowserSDK {
     websocketAPIURL: string,
     auth0Client: Auth0Client
   ) {
-    this._ownURL = ownURL;
-    this._restAPIURL = restAPIURL;
-    this._websocketAPIURL = websocketAPIURL;
-    this._auth0Client = auth0Client;
-    this._websocket = null;
-    this._websocketError = new Subject();
-    this._websocketUnintentionalCloseNotifier = new Subject();
-    this._websocketSubscriptions = [];
+    this.#ownURL = ownURL;
+    this.#restAPIURL = restAPIURL;
+    this.#websocketAPIURL = websocketAPIURL;
+    this.#auth0Client = auth0Client;
+    this.#websocket = null;
+    this.#websocketError = new Subject();
+    this.#websocketSubscriptions = [];
   }
 
   /** @override */
@@ -87,66 +92,66 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async afterLoginSuccess(): Promise<void> {
-    await this._auth0Client.handleRedirectCallback();
+    await this.#auth0Client.handleRedirectCallback();
     clearLoginHistory();
   }
 
   /** @override */
   async gotoLoginPage(): Promise<void> {
-    await this._auth0Client.loginWithRedirect({
+    await this.#auth0Client.loginWithRedirect({
       authorizationParams: {
-        redirect_uri: this._ownURL,
+        redirect_uri: this.#ownURL,
       },
     });
   }
 
   /** @override */
   isLogin(): Promise<boolean> {
-    return this._auth0Client.isAuthenticated();
+    return this.#auth0Client.isAuthenticated();
   }
 
   /** @override */
   async logout(): Promise<void> {
-    await this._auth0Client.logout({
+    await this.#auth0Client.logout({
       logoutParams: {
-        returnTo: this._ownURL,
+        returnTo: this.#ownURL,
       },
     });
   }
 
   /** @override */
   async getUserName(): Promise<string> {
-    const user = await this._auth0Client.getUser();
+    const user = await this.#auth0Client.getUser();
     return user?.nickname ?? "";
   }
 
   /** @override */
   async getUserPictureURL(): Promise<string> {
-    const user = await this._auth0Client.getUser();
+    const user = await this.#auth0Client.getUser();
     return user?.picture ?? "";
   }
 
   /** @override */
   async getMail(): Promise<string> {
-    const user = await this._auth0Client.getUser();
+    const user = await this.#auth0Client.getUser();
     return user?.email ?? "";
   }
 
   /** @override */
   async isMailVerified(): Promise<boolean> {
-    const user = await this._auth0Client.getUser();
+    const user = await this.#auth0Client.getUser();
     return user?.email_verified ?? false;
   }
 
   /** @override */
   async deleteLoggedInUser(): Promise<void> {
-    const accessToken = await this._auth0Client.getTokenSilently();
-    await deleteLoggedInUser(this._restAPIURL, accessToken);
+    const accessToken = await this.#auth0Client.getTokenSilently();
+    await deleteLoggedInUser(this.#restAPIURL, accessToken);
   }
 
   /** @override */
   async ping(): Promise<string> {
-    const websocket = await this._getOrCreateWebSocket();
+    const websocket = await this.#getOrCreateWebSocket();
     const resp = await ping(websocket);
     return resp.message;
   }
@@ -156,39 +161,56 @@ class BrowserSDKImpl implements BrowserSDK {
     armdozerId: ArmDozerId,
     pilotId: PilotId
   ): Promise<Battle> {
-    const websocket = await this._getOrCreateWebSocket();
+    const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
-    return new BattleSDK({
-      player: resp.player,
-      enemy: resp.enemy,
-      initialState: resp.stateHistory,
-      battleID: resp.battleID,
-      initialFlowID: resp.flowID,
-      isPoller: resp.isPoller,
+    return createBattleSDKFromBattleStart(resp, websocket);
+  }
+
+  /** @override */
+  async createPrivateMatchRoom(
+    armdozerId: ArmDozerId,
+    pilotId: PilotId
+  ): Promise<PrivateMatchRoom> {
+    const websocket = await this.#getOrCreateWebSocket();
+    const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
+    return new PrivateMatchRoomSDK(resp.roomID, websocket);
+  }
+
+  /** @override */
+  async enterPrivateMatchRoom(
+    roomID: PrivateMatchRoomID,
+    armdozerId: string,
+    pilotId: string
+  ): Promise<Battle | null> {
+    const websocket = await this.#getOrCreateWebSocket();
+    const resp = await enterPrivateMatchRoom(
       websocket,
-    });
+      roomID,
+      armdozerId,
+      pilotId
+    );
+    if (resp.action !== "battle-start") {
+      return null;
+    }
+
+    return createBattleSDKFromBattleStart(resp, websocket);
   }
 
   /** @override */
   async disconnectWebsocket(): Promise<void> {
-    this._websocket && this._websocket.close();
-    this._websocket = null;
+    this.#websocket && this.#websocket.close();
+    this.#websocket = null;
 
-    this._websocketSubscriptions.forEach((v) => {
+    this.#websocketSubscriptions.forEach((v) => {
       v.unsubscribe();
     });
 
-    this._websocketSubscriptions = [];
+    this.#websocketSubscriptions = [];
   }
 
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
-    return this._websocketError;
-  }
-
-  /** @override */
-  websocketUnintentionalCloseNotifier(): Observable<unknown> {
-    return this._websocketUnintentionalCloseNotifier;
+    return this.#websocketError;
   }
 
   /**
@@ -197,20 +219,20 @@ class BrowserSDKImpl implements BrowserSDK {
    *
    * @return 取得、生成結果
    */
-  async _getOrCreateWebSocket(): Promise<WebSocket> {
-    if (this._websocket) {
-      return this._websocket;
+  async #getOrCreateWebSocket(): Promise<WebSocket> {
+    if (this.#websocket) {
+      return this.#websocket;
     }
 
-    const accessToken = await this._auth0Client.getTokenSilently();
+    const accessToken = await this.#auth0Client.getTokenSilently();
     const websocket = await connect(
-      `${this._websocketAPIURL}?token=${accessToken}`
+      `${this.#websocketAPIURL}?token=${accessToken}`
     );
-    this._websocketSubscriptions = [
-      fromEvent(websocket, "error").subscribe(this._websocketError),
-      fromEvent(websocket, "close").subscribe(this._websocketError),
+    this.#websocketSubscriptions = [
+      fromEvent(websocket, "error").subscribe(this.#websocketError),
+      fromEvent(websocket, "close").subscribe(this.#websocketError),
     ];
-    this._websocket = websocket;
+    this.#websocket = websocket;
     return websocket;
   }
 }

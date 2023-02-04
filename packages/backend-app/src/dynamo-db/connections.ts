@@ -1,56 +1,12 @@
 import { DynamoDB } from "aws-sdk";
-import type { PlayerId } from "gbraver-burst-core";
 
-import type { BattleID } from "../core/battle";
-import type { UserID } from "../core/user";
+import { Connection } from "../core/connection";
 
-/** コネクションの状態 */
-export type ConnectionState = None | CasualMatchMaking | InBattle;
-
-/** 状態なし */
-export type None = {
-  type: "None";
-};
-
-/** カジュアルマッチ マッチメイク中 */
-export type CasualMatchMaking = {
-  type: "CasualMatchMaking";
-};
-
-/** バトルに参加しているプレイヤー */
-export type InBattlePlayer = {
-  /** ユーザID */
-  userID: UserID;
-
-  /** プレイヤーID */
-  playerId: PlayerId;
-
-  /** コネクションID */
-  connectionId: string;
-};
-
-/** 戦闘中 */
-export type InBattle = {
-  type: "InBattle";
-
-  /** 現在実行している戦闘のID */
-  battleID: BattleID;
-
-  /** バトルに参加しているプレイヤーの情報 */
-  players: [InBattlePlayer, InBattlePlayer];
-};
-
-/** connectionsのスキーマ */
-export type ConnectionsSchema = {
-  /** コネクションID */
-  connectionId: string;
-
-  /** ユーザID */
-  userID: UserID;
-
-  /** ステート */
-  state: ConnectionState;
-};
+/**
+ * connectionsのスキーマ
+ * パーティションキー connectionId
+ */
+export type ConnectionsSchema = Connection;
 
 /** connectionsのDAO */
 export class Connections {

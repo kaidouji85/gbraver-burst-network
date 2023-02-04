@@ -3,8 +3,12 @@ import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 import type { UserID } from "./user";
 import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
-/** カジュアルマッチエントリ */
-export type CasualMatchEntry = {
+/**
+ * ネット対戦エントリ
+ * カジュアルマッチ、プライベートマッチ等、全ケースのエントリで
+ * 必要最小限の情報をあつめた
+ */
+export type BattleEntry = {
   /** エントリーするユーザのID */
   userID: UserID;
 

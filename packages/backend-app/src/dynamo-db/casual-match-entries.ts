@@ -1,8 +1,11 @@
 import { DynamoDB } from "aws-sdk";
 
-import type { CasualMatchEntry } from "../core/casual-match";
+import type { CasualMatchEntry } from "../core/casual-match-entry";
 
-/** casual_match_entriesのスキーマ */
+/**
+ * casual_match_entriesのスキーマ
+ * パーティションキー userID
+ */
 export type CasualMatchEntriesSchema = CasualMatchEntry;
 
 /** casual_match_entriesのDAO */
@@ -55,7 +58,7 @@ export class CasualMatchEntries {
   }
 
   /**
-   * ユニークキー指定で項目を削除する
+   * パーティションキー指定で項目を削除する
    *
    * @param userID ユーザID
    * @return 削除受付したら発火するPromise

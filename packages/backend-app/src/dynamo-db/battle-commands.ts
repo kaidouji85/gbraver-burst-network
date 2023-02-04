@@ -1,23 +1,12 @@
 import { DynamoDB } from "aws-sdk";
-import type { Command } from "gbraver-burst-core";
 
-import type { BattleID, FlowID } from "../core/battle";
-import type { UserID } from "../core/user";
+import { BattleCommand } from "../core/battle-command";
 
-/** battle-commands のスキーマ */
-export type BattleCommandsSchema = {
-  /** ユーザID */
-  userID: UserID;
-
-  /** バトルID */
-  battleID: BattleID;
-
-  /** フローID */
-  flowID: FlowID;
-
-  /** コマンド */
-  command: Command;
-};
+/**
+ * battle-commands のスキーマ
+ * パーティションキー userID
+ */
+export type BattleCommandsSchema = BattleCommand;
 
 /** battle-commandsのDAO */
 export class BattleCommands {

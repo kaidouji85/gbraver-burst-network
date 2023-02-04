@@ -1,6 +1,7 @@
 import type { GameState, Player } from "gbraver-burst-core";
 
 import type { BattleID, FlowID } from "../core/battle";
+import { PrivateMatchRoomID } from "../core/private-match-room";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -12,6 +13,9 @@ export type WebsocketResponse =
   | BattleProgressed
   | BattleEnd
   | SuddenlyBattleEnd
+  | CreatedPrivateMatchRoom
+  | CouldNotPrivateMatchMaking
+  | RejectPrivateMatchEntry
   | Error;
 
 /** pingの応答 */
@@ -80,6 +84,23 @@ export type BattleEnd = {
 
   /** 更新されたゲームステート */
   update: GameState[];
+};
+
+/** オーナーがプライベートマッチルーム作成に成功した */
+export type CreatedPrivateMatchRoom = {
+  action: "created-private-match-room";
+  /** 作成したルームID */
+  roomID: PrivateMatchRoomID;
+};
+
+/** オーナーがプライベートマッチングできなかった */
+export type CouldNotPrivateMatchMaking = {
+  action: "cloud-not-private-match-making";
+};
+
+/** 何らかの理由でプライベートマッチに参加できなかった */
+export type RejectPrivateMatchEntry = {
+  action: "reject-private-match-entry";
 };
 
 /** エラー */

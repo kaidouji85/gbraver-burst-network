@@ -7,6 +7,8 @@ custom:
   casualMatchEntries: ${self:service}__${sls:stage}__casual-match-entries
   battleCommands: ${self:service}__${sls:stage}__battle-commands
   battles: ${self:service}__${sls:stage}__battles
+  privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
+  privateMatchEntries: ${self:service}__${sls:stage}__private-match-entries
 
 plugins:
   - serverless-webpack
@@ -56,6 +58,7 @@ provider:
             - 'dynamodb:PutItem'
             - 'dynamodb:GetItem'
             - 'dynamodb:DeleteItem'
+            - 'dynamodb:Query'
             - 'dynamodb:Scan'
             - 'dynamodb:BatchWrite*'
           Resource:
@@ -63,6 +66,9 @@ provider:
             - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
+            - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
+            - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
+            - Fn::Join: ['/', ["Fn::GetAtt": [ PrivateMatchRoomsTable, Arn ], 'index', 'roomID']]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -114,6 +120,21 @@ functions:
     events:
       - websocket:
           route: battle-progress-polling
+  createPrivateMatchRoom:
+    handler: src/create-private-match-room.createPrivateMatchRoom
+    events:
+      - websocket:
+          route: create-private-match-room
+  enterPrivateMatchRoom:
+    handler: src/enter-private-match-room.enterPrivateMatchRoom
+    events:
+      - websocket:
+          route: enter-private-match-room
+  privateMatchMakingPolling:
+    handler: src/private-match-make-polling.privateMatchMakePolling
+    events:
+      - websocket:
+          route: private-match-make-polling
 
 resources:
   Resources:
@@ -169,6 +190,48 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    PrivateMatchRoomsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.privateMatchRooms}
+        AttributeDefinitions:
+          - AttributeName: owner
+            AttributeType: S
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: owner
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: "roomID"
+            KeySchema:
+              - AttributeName: "roomID"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "KEYS_ONLY"
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1            
+    PrivateMatchEntriesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.privateMatchEntries}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
+            KeyType: HASH
+          - AttributeName: userID
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1  
   Outputs:
     WebsocketApiId:
       Description: "id of websocket api gateway"
