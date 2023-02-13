@@ -11,7 +11,10 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
-import type { Error } from "./response/websocket-response";
+import type {
+  Error,
+  RejectPrivateMatchEntry,
+} from "./response/websocket-response";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -31,9 +34,17 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 
+const invalidRequestBody: WebsocketAPIResponse = {
+  statusCode: 400,
+  body: "invalid request body",
+};
+
 const invalidRequestBodyError: Error = {
   action: "error",
   error: "invalid request body",
+};
+const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
+  action: "reject-private-match-entry",
 };
 
 /**
@@ -51,21 +62,24 @@ export async function enterPrivateMatchRoom(
       event.requestContext.connectionId,
       invalidRequestBodyError
     );
-    return {
-      statusCode: 400,
-      body: "invalid request body",
-    };
+    return invalidRequestBody;
+  }
+
+  if (data.roomID === "") {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      rejectPrivateMatchEntry
+    );
+    return invalidRequestBody;
   }
 
   const isExistRoom = await privateMatchRooms.isExistRoom(data.roomID);
   if (!isExistRoom) {
-    await notifier.notifyToClient(event.requestContext.connectionId, {
-      action: "reject-private-match-entry",
-    });
-    return {
-      statusCode: 400,
-      body: "invalid request body",
-    };
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      rejectPrivateMatchEntry
+    );
+    return invalidRequestBody;
   }
 
   const user = extractUserFromWebSocketAuthorizer(
