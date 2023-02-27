@@ -1,23 +1,4 @@
 import { Auth0Client } from "@auth0/auth0-spa-js";
-import type {
-  Battle,
-  CasualMatch,
-  LoggedInUserDelete,
-  LoginCheck,
-  Logout,
-  MailVerify,
-  Ping,
-  PrivateMatchCreate,
-  PrivateMatchRoom,
-  PrivateMatchRoomEnter,
-  PrivateMatchRoomID,
-  UniversalLogin,
-  UserMailGet,
-  UserNameGet,
-  UserPictureGet,
-  WebsocketDisconnect,
-  WebsocketErrorNotifier,
-} from "@gbraver-burst-network/browser-core";
 import type { ArmDozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
@@ -34,6 +15,13 @@ import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
+import {LoginCheck, Logout, UniversalLogin} from "../login";
+import {Ping} from "../ping";
+import {CasualMatch} from "../casual-match";
+import {LoggedInUserDelete, MailVerify, UserMailGet, UserNameGet, UserPictureGet} from "../user";
+import {WebsocketDisconnect, WebsocketErrorNotifier} from "../websocket";
+import {PrivateMatchCreate, PrivateMatchRoom, PrivateMatchRoomEnter, PrivateMatchRoomID} from "../private-match";
+import {Battle} from "../battle";
 
 /** ブラウザSDK */
 export interface BrowserSDK

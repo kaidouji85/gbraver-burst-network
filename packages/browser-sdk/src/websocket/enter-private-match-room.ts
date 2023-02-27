@@ -1,4 +1,3 @@
-import { PrivateMatchRoomID } from "@gbraver-burst-network/browser-core";
 import { ArmDozerId, PilotId } from "gbraver-burst-core";
 
 import { parseJSON } from "../json/parse";
@@ -10,6 +9,7 @@ import {
 } from "../response/reject-private-match-entry";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
+import {PrivateMatchRoomID} from "../private-match";
 
 /**
  * プライベートマッチルームに入室する

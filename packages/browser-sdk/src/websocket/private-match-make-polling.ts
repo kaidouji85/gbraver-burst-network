@@ -1,5 +1,3 @@
-import { PrivateMatchRoomID } from "@gbraver-burst-network/browser-core";
-
 import { parseJSON } from "../json/parse";
 import { Reject, Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
@@ -7,6 +5,7 @@ import { parseCouldNotPrivateMatchMaking } from "../response/cloud-not-private-m
 import { wait } from "../wait/wait";
 import { sendToAPIServer } from "./send-to-api-server";
 import { waitUntil } from "./wait-until";
+import {PrivateMatchRoomID} from "../private-match";
 
 /**
  * プライベートマッチングポーリング
