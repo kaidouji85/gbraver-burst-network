@@ -7,32 +7,35 @@ import {
   clearLoginHistory,
   isLoginSuccessRedirect,
 } from "../auth0/login-redirect";
-import { Battle } from "../battle";
-import { CasualMatch } from "../casual-match";
 import { deleteLoggedInUser } from "../http-request/delete-user";
-import { LoginCheck, Logout, UniversalLogin } from "../login";
-import { Ping } from "../ping";
+import { connect } from "../websocket/connect";
+import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
+import { enterCasualMatch } from "../websocket/enter-casual-match";
+import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
+import { ping } from "../websocket/ping";
+import {
+  WebsocketDisconnect,
+  WebsocketErrorNotifier,
+} from "../websocket/websocket";
+import { Battle } from "./battle";
+import { CasualMatch } from "./casual-match";
+import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
+import { LoginCheck, Logout, UniversalLogin } from "./login";
+import { Ping } from "./ping";
 import {
   PrivateMatchCreate,
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "../private-match";
+} from "./private-match";
+import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
 import {
   LoggedInUserDelete,
   MailVerify,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
-} from "../user";
-import { WebsocketDisconnect, WebsocketErrorNotifier } from "../websocket";
-import { connect } from "../websocket/connect";
-import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
-import { enterCasualMatch } from "../websocket/enter-casual-match";
-import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
-import { ping } from "../websocket/ping";
-import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
-import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
+} from "./user";
 
 /** ブラウザSDK */
 export interface BrowserSDK

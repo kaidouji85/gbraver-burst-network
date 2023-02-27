@@ -1,5 +1,5 @@
 /** プライベートルームマッチポーリング */
-import { PrivateMatchRoomID } from "../private-match";
+import { PrivateMatchRoomID } from "../browser-sdk/private-match";
 
 export type PrivateMatchMakePolling = {
   action: "private-match-make-polling";
