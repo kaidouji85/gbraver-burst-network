@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.4",
-    "@gbraver-burst-network/browser-core": "^1.8.2",
     "gbraver-burst-core": "^1.16.4",
     "rxjs": "^7.8.0"
   },

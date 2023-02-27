@@ -1,10 +1,10 @@
-import type { Battle } from "@gbraver-burst-network/browser-core";
 import type { Command, GameState, Player } from "gbraver-burst-core";
 import { filter, fromEvent, map, Observable } from "rxjs";
 
 import { parseJSON } from "../json/parse";
 import { parseSuddenlyBattleEnd } from "../response/suddenly-battle-end";
 import { sendCommand, sendCommandWithPolling } from "../websocket/send-command";
+import { Battle } from "./battle";
 
 /** コンストラクタのパラメータ */
 type Param = {
