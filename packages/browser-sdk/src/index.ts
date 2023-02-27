@@ -20,4 +20,4 @@ export type {
 export type {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
-} from "./websocket/websocket";
+} from "./browser-sdk/websocket";

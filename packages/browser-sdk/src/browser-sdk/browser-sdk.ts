@@ -13,10 +13,6 @@ import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import {
-  WebsocketDisconnect,
-  WebsocketErrorNotifier,
-} from "../websocket/websocket";
 import { Battle } from "./battle";
 import { CasualMatch } from "./casual-match";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
@@ -36,6 +32,7 @@ import {
   UserNameGet,
   UserPictureGet,
 } from "./user";
+import { WebsocketDisconnect, WebsocketErrorNotifier } from "./websocket";
 
 /** ブラウザSDK */
 export interface BrowserSDK
