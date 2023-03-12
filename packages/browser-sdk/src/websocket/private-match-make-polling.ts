@@ -1,5 +1,4 @@
-import { PrivateMatchRoomID } from "@gbraver-burst-network/browser-core";
-
+import { PrivateMatchRoomID } from "../browser-sdk/private-match";
 import { parseJSON } from "../json/parse";
 import { Reject, Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
