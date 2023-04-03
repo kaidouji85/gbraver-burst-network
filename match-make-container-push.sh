@@ -11,7 +11,6 @@ fi
 
 OWN_PATH=$(cd "$(dirname "${0}")" && pwd)
 cd "${OWN_PATH}/packages/backend-app" || exit
-npm ci
 npm run build:match-make
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
