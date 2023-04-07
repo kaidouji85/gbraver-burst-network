@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import type { CasualMatchEntry } from "../core/casual-match-entry";
 
@@ -10,18 +10,18 @@ export type CasualMatchEntriesSchema = CasualMatchEntry;
 
 /** casual_match_entriesのDAO */
 export class CasualMatchEntries {
-  _client: DynamoDB.DocumentClient;
-  _tableName: string;
+  #dynamoDB: DynamoDBDocument;
+  #tableName: string;
 
   /**
    * コンストラクタ
    *
-   * @param client DynamoDBクライアント
+   * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDB.DocumentClient, tableName: string) {
-    this._client = client;
-    this._tableName = tableName;
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
+    this.#dynamoDB = dynamoDB;
+    this.#tableName = tableName;
   }
 
   /**
@@ -31,12 +31,10 @@ export class CasualMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: CasualMatchEntriesSchema): Promise<void> {
-    await this._client
-      .put({
-        TableName: this._tableName,
-        Item: entry,
-      })
-      .promise();
+    await this.#dynamoDB.put({
+      TableName: this.#tableName,
+      Item: entry,
+    });
   }
 
   /**
@@ -46,14 +44,12 @@ export class CasualMatchEntries {
    * @return 取得結果
    */
   async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
-    const resp = await this._client
-      .scan({
-        TableName: this._tableName,
-        Select: "ALL_ATTRIBUTES",
-        ConsistentRead: true,
-        Limit: limit,
-      })
-      .promise();
+    const resp = await this.#dynamoDB.scan({
+      TableName: this.#tableName,
+      Select: "ALL_ATTRIBUTES",
+      ConsistentRead: true,
+      Limit: limit,
+    });
     return resp.Items ? (resp.Items as CasualMatchEntriesSchema[]) : [];
   }
 
@@ -64,13 +60,11 @@ export class CasualMatchEntries {
    * @return 削除受付したら発火するPromise
    */
   async delete(userID: string): Promise<void> {
-    await this._client
-      .delete({
-        TableName: this._tableName,
-        Key: {
-          userID,
-        },
-      })
-      .promise();
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
+      Key: {
+        userID,
+      },
+    });
   }
 }
