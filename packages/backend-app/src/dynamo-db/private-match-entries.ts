@@ -1,7 +1,8 @@
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
 import { PrivateMatchEntry } from "../core/private-match-entry";
 import { PrivateMatchRoomID } from "../core/private-match-room";
 import { UserID } from "../core/user";
-import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * private-match-entries スキーマ
@@ -36,17 +37,16 @@ export class PrivateMatchEntries {
   async getEntries(
     roomID: PrivateMatchRoomID
   ): Promise<PrivateMatchEntriesSchema[]> {
-    const result = await this.#client
-      .query({
-        TableName: this.#tableName,
-        KeyConditionExpression: "#hash = :roomID",
-        ExpressionAttributeNames: {
-          "#hash": "roomID",
-        },
-        ExpressionAttributeValues: {
-          ":roomID": roomID,
-        },
-      });
+    const result = await this.#client.query({
+      TableName: this.#tableName,
+      KeyConditionExpression: "#hash = :roomID",
+      ExpressionAttributeNames: {
+        "#hash": "roomID",
+      },
+      ExpressionAttributeValues: {
+        ":roomID": roomID,
+      },
+    });
     return result.Items ? (result.Items as PrivateMatchEntriesSchema[]) : [];
   }
 
@@ -56,11 +56,10 @@ export class PrivateMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: PrivateMatchEntriesSchema): Promise<void> {
-    await this.#client
-      .put({
-        TableName: this.#tableName,
-        Item: entry,
-      });
+    await this.#client.put({
+      TableName: this.#tableName,
+      Item: entry,
+    });
   }
 
   /**
@@ -70,13 +69,12 @@ export class PrivateMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async delete(roomID: PrivateMatchRoomID, userID: UserID): Promise<void> {
-    await this.#client
-      .delete({
-        TableName: this.#tableName,
-        Key: {
-          roomID,
-          userID,
-        },
-      });
+    await this.#client.delete({
+      TableName: this.#tableName,
+      Key: {
+        roomID,
+        userID,
+      },
+    });
   }
 }

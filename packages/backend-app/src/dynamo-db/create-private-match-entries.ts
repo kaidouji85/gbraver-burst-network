@@ -1,5 +1,6 @@
-import { PrivateMatchEntries } from "./private-match-entries";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { PrivateMatchEntries } from "./private-match-entries";
 
 /**
  * private-match-entries テーブル DAO を生成する

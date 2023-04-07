@@ -1,9 +1,10 @@
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
 import {
   PrivateMatchRoom,
   PrivateMatchRoomID,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
-import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * private-match-rooms スキーマ
@@ -35,13 +36,12 @@ export class PrivateMatchRooms {
    * @return 検索結果
    */
   async get(owner: UserID): Promise<PrivateMatchRoomsSchema | null> {
-    const result = await this.#client
-      .get({
-        TableName: this.#tableName,
-        Key: {
-          owner,
-        },
-      });
+    const result = await this.#client.get({
+      TableName: this.#tableName,
+      Key: {
+        owner,
+      },
+    });
     return result.Item ? (result.Item as PrivateMatchRoomsSchema) : null;
   }
 
@@ -51,11 +51,10 @@ export class PrivateMatchRooms {
    * @return 処理が完了したら発火するPromise
    */
   async put(room: PrivateMatchRoomsSchema): Promise<void> {
-    await this.#client
-      .put({
-        TableName: this.#tableName,
-        Item: room,
-      });
+    await this.#client.put({
+      TableName: this.#tableName,
+      Item: room,
+    });
   }
 
   /**
@@ -64,13 +63,12 @@ export class PrivateMatchRooms {
    * @return 削除受付したら発火するPromise
    */
   async delete(owner: UserID): Promise<void> {
-    await this.#client
-      .delete({
-        TableName: this.#tableName,
-        Key: {
-          owner,
-        },
-      });
+    await this.#client.delete({
+      TableName: this.#tableName,
+      Key: {
+        owner,
+      },
+    });
   }
 
   /**
@@ -79,15 +77,14 @@ export class PrivateMatchRooms {
    * @return 判定結果、trueで存在する
    */
   async isExistRoom(roomID: PrivateMatchRoomID): Promise<boolean> {
-    const result = await this.#client
-      .query({
-        TableName: this.#tableName,
-        IndexName: "roomID",
-        KeyConditionExpression: "roomID = :roomID",
-        ExpressionAttributeValues: {
-          ":roomID": roomID,
-        },
-      });
+    const result = await this.#client.query({
+      TableName: this.#tableName,
+      IndexName: "roomID",
+      KeyConditionExpression: "roomID = :roomID",
+      ExpressionAttributeValues: {
+        ":roomID": roomID,
+      },
+    });
     return result?.Items ? 0 < result.Items.length : false;
   }
 }

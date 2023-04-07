@@ -1,4 +1,4 @@
-import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import { BattleCommands } from "./battle-commands";
 

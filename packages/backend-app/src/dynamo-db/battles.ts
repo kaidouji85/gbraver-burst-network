@@ -1,4 +1,4 @@
-import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import type { Battle, BattlePlayer } from "../core/battle";
 
@@ -31,11 +31,10 @@ export class Battles {
    * @return 処理が完了したら発火するPromise
    */
   async put(battle: BattlesSchema): Promise<void> {
-    await this._client
-      .put({
-        TableName: this._tableName,
-        Item: battle,
-      });
+    await this._client.put({
+      TableName: this._tableName,
+      Item: battle,
+    });
   }
 
   /**
@@ -46,13 +45,12 @@ export class Battles {
    * @return 検索結果
    */
   async get(battleID: string): Promise<BattlesSchema | null> {
-    const result = await this._client
-      .get({
-        TableName: this._tableName,
-        Key: {
-          battleID,
-        },
-      });
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {
+        battleID,
+      },
+    });
     return result.Item ? (result.Item as BattlesSchema) : null;
   }
 
@@ -63,12 +61,11 @@ export class Battles {
    * @return 削除受付したら発火するPromise
    */
   async delete(battleID: string): Promise<void> {
-    await this._client
-      .delete({
-        TableName: this._tableName,
-        Key: {
-          battleID,
-        },
-      });
+    await this._client.delete({
+      TableName: this._tableName,
+      Key: {
+        battleID,
+      },
+    });
   }
 }

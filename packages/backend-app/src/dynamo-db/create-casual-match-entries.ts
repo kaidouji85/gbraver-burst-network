@@ -1,5 +1,6 @@
-import { CasualMatchEntries } from "./casual-match-entries";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { CasualMatchEntries } from "./casual-match-entries";
 
 /**
  * casual-match-entries テーブル DAO を生成する

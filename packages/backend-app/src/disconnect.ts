@@ -7,12 +7,12 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 

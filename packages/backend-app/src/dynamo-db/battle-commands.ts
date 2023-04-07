@@ -1,4 +1,4 @@
-import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import { BattleCommand } from "../core/battle-command";
 
@@ -31,11 +31,10 @@ export class BattleCommands {
    * @return 処理が完了したら発火するPromise
    */
   async put(command: BattleCommandsSchema): Promise<void> {
-    await this._client
-      .put({
-        TableName: this._tableName,
-        Item: command,
-      });
+    await this._client.put({
+      TableName: this._tableName,
+      Item: command,
+    });
   }
 
   /**
@@ -46,13 +45,12 @@ export class BattleCommands {
    * @return 検索結果
    */
   async get(userID: string): Promise<BattleCommandsSchema | null> {
-    const result = await this._client
-      .get({
-        TableName: this._tableName,
-        Key: {
-          userID,
-        },
-      });
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {
+        userID,
+      },
+    });
     return result.Item ? (result.Item as BattleCommandsSchema) : null;
   }
 }

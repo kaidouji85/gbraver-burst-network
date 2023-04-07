@@ -8,10 +8,10 @@ import { casualMatchMake } from "./core/casual-match-make";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
 

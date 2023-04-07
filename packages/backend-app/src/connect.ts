@@ -1,5 +1,5 @@
-import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";

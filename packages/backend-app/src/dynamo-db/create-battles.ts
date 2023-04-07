@@ -1,5 +1,6 @@
-import { Battles } from "./battles";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { Battles } from "./battles";
 
 /**
  * battles テーブル DAO を生成する

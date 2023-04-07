@@ -1,5 +1,6 @@
-import { Connection } from "../core/connection";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { Connection } from "../core/connection";
 
 /**
  * connectionsのスキーマ
@@ -31,13 +32,12 @@ export class Connections {
    * @return 検索結果
    */
   async get(connectionId: string): Promise<ConnectionsSchema | null> {
-    const result = await this._client
-      .get({
-        TableName: this._tableName,
-        Key: {
-          connectionId,
-        },
-      });
+    const result = await this._client.get({
+      TableName: this._tableName,
+      Key: {
+        connectionId,
+      },
+    });
     return result.Item ? (result.Item as ConnectionsSchema) : null;
   }
 
@@ -48,11 +48,10 @@ export class Connections {
    * @return 処理が完了したら発火するPromise
    */
   async put(connection: ConnectionsSchema): Promise<void> {
-    await this._client
-      .put({
-        TableName: this._tableName,
-        Item: connection,
-      });
+    await this._client.put({
+      TableName: this._tableName,
+      Item: connection,
+    });
   }
 
   /**
@@ -62,12 +61,11 @@ export class Connections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    await this._client
-      .delete({
-        TableName: this._tableName,
-        Key: {
-          connectionId,
-        },
-      });
+    await this._client.delete({
+      TableName: this._tableName,
+      Key: {
+        connectionId,
+      },
+    });
   }
 }

@@ -1,5 +1,6 @@
-import { Connections } from "./connections";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { Connections } from "./connections";
 
 /**
  * connections テーブル DAO を生成する

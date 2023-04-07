@@ -1,9 +1,9 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";

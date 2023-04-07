@@ -1,5 +1,6 @@
-import { PrivateMatchRooms } from "./private-match-rooms";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+import { PrivateMatchRooms } from "./private-match-rooms";
 
 /**
  * private-match-rooms テーブル DAO を生成する
