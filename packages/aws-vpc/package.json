@@ -30,6 +30,7 @@
   "scripts": {
     "build": "tsc",
     "cdk": "cdk",
+    "clean": "tsc --build --clean",
     "code-format": "run-s code-format:lib code-format:bin code-format:test",
     "code-format:bin": "prettier --write bin",
     "code-format:lib": "prettier --write lib",
