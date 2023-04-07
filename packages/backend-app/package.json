@@ -9,7 +9,6 @@
     "@aws-sdk/lib-dynamodb": "^3.306.0",
     "@aws-sdk/signature-v4-crt": "^3.306.0",
     "auth0": "^3.3.0",
-    "aws-sdk": "^2.1348.0",
     "gbraver-burst-core": "^1.16.4",
     "jsonwebtoken": "^9.0.0",
     "jwks-rsa": "^3.0.1",
