@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { Battles } from "./battles";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * battles テーブル DAO を生成する
@@ -11,7 +10,7 @@ import { Battles } from "./battles";
  * @return 生成結果
  */
 export function createBattles(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): Battles {

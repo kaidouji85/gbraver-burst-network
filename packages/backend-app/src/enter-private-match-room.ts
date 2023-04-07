@@ -2,7 +2,7 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { PrivateMatchEntry } from "./core/private-match-entry";
-import { createDynamoDBClient } from "./dynamo-db/client";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
@@ -21,7 +21,7 @@ const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);

@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { Connection } from "../core/connection";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * connectionsのスキーマ
@@ -10,7 +9,7 @@ export type ConnectionsSchema = Connection;
 
 /** connectionsのDAO */
 export class Connections {
-  _client: DynamoDB.DocumentClient;
+  _client: DynamoDBDocument;
   _tableName: string;
 
   /**
@@ -19,7 +18,7 @@ export class Connections {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDBDocument, tableName: string) {
     this._client = client;
     this._tableName = tableName;
   }
@@ -38,8 +37,7 @@ export class Connections {
         Key: {
           connectionId,
         },
-      })
-      .promise();
+      });
     return result.Item ? (result.Item as ConnectionsSchema) : null;
   }
 
@@ -54,8 +52,7 @@ export class Connections {
       .put({
         TableName: this._tableName,
         Item: connection,
-      })
-      .promise();
+      });
   }
 
   /**
@@ -71,7 +68,6 @@ export class Connections {
         Key: {
           connectionId,
         },
-      })
-      .promise();
+      });
   }
 }

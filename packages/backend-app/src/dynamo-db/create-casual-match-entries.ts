@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { CasualMatchEntries } from "./casual-match-entries";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * casual-match-entries テーブル DAO を生成する
@@ -11,7 +10,7 @@ import { CasualMatchEntries } from "./casual-match-entries";
  * @return 生成結果
  */
 export function createCasualMatchEntries(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): CasualMatchEntries {

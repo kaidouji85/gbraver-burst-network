@@ -1,4 +1,5 @@
-import { ApiGatewayManagementApi } from "aws-sdk";
+import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
+import {TextEncoder} from "util";
 
 import type { WebsocketResponse } from "../response/websocket-response";
 
@@ -26,12 +27,11 @@ export class Notifier {
     connectionID: string,
     data: WebsocketResponse
   ): Promise<void> {
-    const sendData = JSON.stringify(data);
+    const sendData = new TextEncoder().encode(JSON.stringify(data));
     await this._api
       .postToConnection({
         ConnectionId: connectionID,
         Data: sendData,
-      })
-      .promise();
+      });
   }
 }

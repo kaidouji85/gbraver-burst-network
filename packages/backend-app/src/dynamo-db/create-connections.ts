@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { Connections } from "./connections";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * connections テーブル DAO を生成する
@@ -11,7 +10,7 @@ import { Connections } from "./connections";
  * @return 生成結果
  */
 export function createConnections(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): Connections {

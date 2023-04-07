@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { PrivateMatchRooms } from "./private-match-rooms";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * private-match-rooms テーブル DAO を生成する
@@ -10,7 +9,7 @@ import { PrivateMatchRooms } from "./private-match-rooms";
  * @return 生成結果
  */
 export function createPrivateMatchRooms(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): PrivateMatchRooms {

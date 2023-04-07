@@ -4,6 +4,10 @@
   "version": "1.9.0",
   "author": "Y.Takeuchi",
   "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.306.0",
+    "@aws-sdk/client-dynamodb": "^3.306.0",
+    "@aws-sdk/lib-dynamodb": "^3.306.0",
+    "@aws-sdk/signature-v4-crt": "^3.306.0",
     "auth0": "^3.3.0",
     "aws-sdk": "^2.1348.0",
     "gbraver-burst-core": "^1.16.4",

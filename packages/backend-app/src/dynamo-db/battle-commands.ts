@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
 
 import { BattleCommand } from "../core/battle-command";
 
@@ -10,7 +10,7 @@ export type BattleCommandsSchema = BattleCommand;
 
 /** battle-commandsのDAO */
 export class BattleCommands {
-  _client: DynamoDB.DocumentClient;
+  _client: DynamoDBDocument;
   _tableName: string;
 
   /**
@@ -19,7 +19,7 @@ export class BattleCommands {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDBDocument, tableName: string) {
     this._client = client;
     this._tableName = tableName;
   }
@@ -35,8 +35,7 @@ export class BattleCommands {
       .put({
         TableName: this._tableName,
         Item: command,
-      })
-      .promise();
+      });
   }
 
   /**
@@ -53,8 +52,7 @@ export class BattleCommands {
         Key: {
           userID,
         },
-      })
-      .promise();
+      });
     return result.Item ? (result.Item as BattleCommandsSchema) : null;
   }
 }

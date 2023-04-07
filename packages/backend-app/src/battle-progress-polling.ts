@@ -8,7 +8,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { BattleCommand } from "./core/battle-command";
 import { None } from "./core/connection";
 import { toPlayer } from "./core/to-player";
-import { createDynamoDBClient } from "./dynamo-db/client";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -35,7 +35,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);

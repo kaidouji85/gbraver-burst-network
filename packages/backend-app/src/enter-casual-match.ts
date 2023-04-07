@@ -1,7 +1,7 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createDynamoDBClient } from "./dynamo-db/client";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
 import { parseJSON } from "./json/parse";
@@ -16,7 +16,7 @@ const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 

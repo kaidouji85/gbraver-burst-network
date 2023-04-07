@@ -1,10 +1,9 @@
-import { DynamoDB } from "aws-sdk";
-
 import {
   PrivateMatchRoom,
   PrivateMatchRoomID,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * private-match-rooms スキーマ
@@ -15,7 +14,7 @@ export type PrivateMatchRoomsSchema = PrivateMatchRoom;
 /** private-match-roomsのDAO */
 export class PrivateMatchRooms {
   /** DynamoDB Client */
-  #client: DynamoDB.DocumentClient;
+  #client: DynamoDBDocument;
   /** テーブル物理名 */
   #tableName: string;
 
@@ -24,7 +23,7 @@ export class PrivateMatchRooms {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDBDocument, tableName: string) {
     this.#client = client;
     this.#tableName = tableName;
   }
@@ -42,8 +41,7 @@ export class PrivateMatchRooms {
         Key: {
           owner,
         },
-      })
-      .promise();
+      });
     return result.Item ? (result.Item as PrivateMatchRoomsSchema) : null;
   }
 
@@ -57,8 +55,7 @@ export class PrivateMatchRooms {
       .put({
         TableName: this.#tableName,
         Item: room,
-      })
-      .promise();
+      });
   }
 
   /**
@@ -73,8 +70,7 @@ export class PrivateMatchRooms {
         Key: {
           owner,
         },
-      })
-      .promise();
+      });
   }
 
   /**
@@ -91,8 +87,7 @@ export class PrivateMatchRooms {
         ExpressionAttributeValues: {
           ":roomID": roomID,
         },
-      })
-      .promise();
+      });
     return result?.Items ? 0 < result.Items.length : false;
   }
 }

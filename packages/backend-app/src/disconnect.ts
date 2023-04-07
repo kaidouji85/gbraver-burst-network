@@ -7,7 +7,7 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createDynamoDBClient } from "./dynamo-db/client";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -29,7 +29,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);

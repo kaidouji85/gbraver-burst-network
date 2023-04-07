@@ -8,7 +8,7 @@ import { createBattlePlayer } from "./core/create-battle-player";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
 import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { privateMatchMake } from "./core/private-match-make";
-import { createDynamoDBClient } from "./dynamo-db/client";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
@@ -30,7 +30,7 @@ const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);

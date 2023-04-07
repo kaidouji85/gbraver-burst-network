@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
 
 import { BattleCommands } from "./battle-commands";
 
@@ -11,7 +11,7 @@ import { BattleCommands } from "./battle-commands";
  * @return 生成結果
  */
 export function createBattleCommands(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): BattleCommands {

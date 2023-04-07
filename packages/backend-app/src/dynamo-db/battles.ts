@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import { DynamoDBDocument  } from "@aws-sdk/lib-dynamodb";
 
 import type { Battle, BattlePlayer } from "../core/battle";
 
@@ -10,7 +10,7 @@ export type BattlesSchema = Battle<BattlePlayer>;
 
 /** battlesのDAO*/
 export class Battles {
-  _client: DynamoDB.DocumentClient;
+  _client: DynamoDBDocument;
   _tableName: string;
 
   /**
@@ -19,7 +19,7 @@ export class Battles {
    * @param client DynamoDBクライアント
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDB.DocumentClient, tableName: string) {
+  constructor(client: DynamoDBDocument, tableName: string) {
     this._client = client;
     this._tableName = tableName;
   }
@@ -35,8 +35,7 @@ export class Battles {
       .put({
         TableName: this._tableName,
         Item: battle,
-      })
-      .promise();
+      });
   }
 
   /**
@@ -53,8 +52,7 @@ export class Battles {
         Key: {
           battleID,
         },
-      })
-      .promise();
+      });
     return result.Item ? (result.Item as BattlesSchema) : null;
   }
 
@@ -71,7 +69,6 @@ export class Battles {
         Key: {
           battleID,
         },
-      })
-      .promise();
+      });
   }
 }

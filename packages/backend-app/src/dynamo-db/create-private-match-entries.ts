@@ -1,6 +1,5 @@
-import { DynamoDB } from "aws-sdk";
-
 import { PrivateMatchEntries } from "./private-match-entries";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 /**
  * private-match-entries テーブル DAO を生成する
@@ -10,7 +9,7 @@ import { PrivateMatchEntries } from "./private-match-entries";
  * @return 生成結果
  */
 export function createPrivateMatchEntries(
-  client: DynamoDB.DocumentClient,
+  client: DynamoDBDocument,
   service: string,
   stage: string
 ): PrivateMatchEntries {
