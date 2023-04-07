@@ -10,18 +10,18 @@ export type ConnectionsSchema = Connection;
 
 /** connectionsのDAO */
 export class Connections {
-  _client: DynamoDBDocument;
-  _tableName: string;
+  #dynamoDB: DynamoDBDocument;
+  #tableName: string;
 
   /**
    * コンストラクタ
    *
-   * @param client DynamoDBクライアント
+   * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDBDocument, tableName: string) {
-    this._client = client;
-    this._tableName = tableName;
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
+    this.#dynamoDB = dynamoDB;
+    this.#tableName = tableName;
   }
 
   /**
@@ -32,8 +32,8 @@ export class Connections {
    * @return 検索結果
    */
   async get(connectionId: string): Promise<ConnectionsSchema | null> {
-    const result = await this._client.get({
-      TableName: this._tableName,
+    const result = await this.#dynamoDB.get({
+      TableName: this.#tableName,
       Key: {
         connectionId,
       },
@@ -48,8 +48,8 @@ export class Connections {
    * @return 処理が完了したら発火するPromise
    */
   async put(connection: ConnectionsSchema): Promise<void> {
-    await this._client.put({
-      TableName: this._tableName,
+    await this.#dynamoDB.put({
+      TableName: this.#tableName,
       Item: connection,
     });
   }
@@ -61,8 +61,8 @@ export class Connections {
    * @return 項目削除が完了したら発火するPromise
    */
   async delete(connectionId: string): Promise<void> {
-    await this._client.delete({
-      TableName: this._tableName,
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
       Key: {
         connectionId,
       },

@@ -14,18 +14,18 @@ export type PrivateMatchRoomsSchema = PrivateMatchRoom;
 
 /** private-match-roomsのDAO */
 export class PrivateMatchRooms {
-  /** DynamoDB Client */
-  #client: DynamoDBDocument;
+  /** DynamoDBDocument */
+  #dynamoDB: DynamoDBDocument;
   /** テーブル物理名 */
   #tableName: string;
 
   /**
    * コンストラクタ
-   * @param client DynamoDBクライアント
+   * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDBDocument, tableName: string) {
-    this.#client = client;
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
+    this.#dynamoDB = dynamoDB;
     this.#tableName = tableName;
   }
 
@@ -36,7 +36,7 @@ export class PrivateMatchRooms {
    * @return 検索結果
    */
   async get(owner: UserID): Promise<PrivateMatchRoomsSchema | null> {
-    const result = await this.#client.get({
+    const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: {
         owner,
@@ -51,7 +51,7 @@ export class PrivateMatchRooms {
    * @return 処理が完了したら発火するPromise
    */
   async put(room: PrivateMatchRoomsSchema): Promise<void> {
-    await this.#client.put({
+    await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: room,
     });
@@ -63,7 +63,7 @@ export class PrivateMatchRooms {
    * @return 削除受付したら発火するPromise
    */
   async delete(owner: UserID): Promise<void> {
-    await this.#client.delete({
+    await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: {
         owner,
@@ -77,7 +77,7 @@ export class PrivateMatchRooms {
    * @return 判定結果、trueで存在する
    */
   async isExistRoom(roomID: PrivateMatchRoomID): Promise<boolean> {
-    const result = await this.#client.query({
+    const result = await this.#dynamoDB.query({
       TableName: this.#tableName,
       IndexName: "roomID",
       KeyConditionExpression: "roomID = :roomID",

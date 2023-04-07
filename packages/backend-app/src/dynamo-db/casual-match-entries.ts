@@ -10,18 +10,18 @@ export type CasualMatchEntriesSchema = CasualMatchEntry;
 
 /** casual_match_entriesのDAO */
 export class CasualMatchEntries {
-  _client: DynamoDBDocument;
-  _tableName: string;
+  #dynamoDB: DynamoDBDocument;
+  #tableName: string;
 
   /**
    * コンストラクタ
    *
-   * @param client DynamoDBクライアント
+   * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDBDocument, tableName: string) {
-    this._client = client;
-    this._tableName = tableName;
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
+    this.#dynamoDB = dynamoDB;
+    this.#tableName = tableName;
   }
 
   /**
@@ -31,8 +31,8 @@ export class CasualMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: CasualMatchEntriesSchema): Promise<void> {
-    await this._client.put({
-      TableName: this._tableName,
+    await this.#dynamoDB.put({
+      TableName: this.#tableName,
       Item: entry,
     });
   }
@@ -44,8 +44,8 @@ export class CasualMatchEntries {
    * @return 取得結果
    */
   async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
-    const resp = await this._client.scan({
-      TableName: this._tableName,
+    const resp = await this.#dynamoDB.scan({
+      TableName: this.#tableName,
       Select: "ALL_ATTRIBUTES",
       ConsistentRead: true,
       Limit: limit,
@@ -60,8 +60,8 @@ export class CasualMatchEntries {
    * @return 削除受付したら発火するPromise
    */
   async delete(userID: string): Promise<void> {
-    await this._client.delete({
-      TableName: this._tableName,
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
       Key: {
         userID,
       },

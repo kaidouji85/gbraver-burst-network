@@ -13,19 +13,19 @@ export type PrivateMatchEntriesSchema = PrivateMatchEntry;
 
 /** private-match-entries DAO */
 export class PrivateMatchEntries {
-  /** DynamoDBクライアント */
-  #client: DynamoDBDocument;
+  /** DynamoDBDocument */
+  #dynamoDB: DynamoDBDocument;
   /** テーブル名 */
   #tableName: string;
 
   /**
    * コンストラクタ
    *
-   * @param client DynamoDBクライアント
+   * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
-  constructor(client: DynamoDBDocument, tableName: string) {
-    this.#client = client;
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
+    this.#dynamoDB = dynamoDB;
     this.#tableName = tableName;
   }
 
@@ -37,7 +37,7 @@ export class PrivateMatchEntries {
   async getEntries(
     roomID: PrivateMatchRoomID
   ): Promise<PrivateMatchEntriesSchema[]> {
-    const result = await this.#client.query({
+    const result = await this.#dynamoDB.query({
       TableName: this.#tableName,
       KeyConditionExpression: "#hash = :roomID",
       ExpressionAttributeNames: {
@@ -56,7 +56,7 @@ export class PrivateMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async put(entry: PrivateMatchEntriesSchema): Promise<void> {
-    await this.#client.put({
+    await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: entry,
     });
@@ -69,7 +69,7 @@ export class PrivateMatchEntries {
    * @return 処理が完了したら発火するPromise
    */
   async delete(roomID: PrivateMatchRoomID, userID: UserID): Promise<void> {
-    await this.#client.delete({
+    await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: {
         roomID,
