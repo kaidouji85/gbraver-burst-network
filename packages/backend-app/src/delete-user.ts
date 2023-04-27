@@ -1,4 +1,4 @@
-import { ManagementClient } from "auth0";
+const ManagementClient = require("auth0/src/management");
 
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import type { RestAPIEvent } from "./lambda/rest-api-event";
