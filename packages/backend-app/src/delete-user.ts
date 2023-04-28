@@ -1,8 +1,13 @@
-import { ManagementClient } from "auth0";
+// auth0 v3.3.0の不具合で、ES Moduleとしてimportすることができない
+// 回避策として同パッケージのcommonJSであるauth0/src/index.jsをrequireしている
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { ManagementClient } = require("auth0/src/index.js");
+/* eslint-enable */
 
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import type { RestAPIEvent } from "./lambda/rest-api-event";
 import type { RestAPIResponse } from "./lambda/rest-api-response";
+
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID =
   process.env.AUTH0_USER_MANAGEMENT_APP_CLIENT_ID ?? "";
