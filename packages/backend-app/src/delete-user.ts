@@ -1,7 +1,7 @@
-// auth0 v3.3.0のES Moduleに不具合があり、auth0/src/index.mjsをimportすることができない
-// 回避策として利用するJavaScriptを直接requireしている
+// auth0 v3.3.0の不具合で、ES Moduleとしてimportすることができない
+// 回避策として同パッケージのcommonJSであるauth0/src/index.jsをrequireしている
 /* eslint-disable @typescript-eslint/no-var-requires */
-const ManagementClient = require("auth0/src/management");
+const { ManagementClient } = require("auth0/src/index.js");
 /* eslint-enable */
 
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
