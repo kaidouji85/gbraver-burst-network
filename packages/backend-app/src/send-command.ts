@@ -1,8 +1,8 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createDynamoDBClient } from "./dynamo-db/client";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
@@ -13,7 +13,7 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
-const dynamoDB = createDynamoDBClient(AWS_REGION);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,

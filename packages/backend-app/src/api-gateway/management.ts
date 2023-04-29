@@ -1,4 +1,4 @@
-import { ApiGatewayManagementApi } from "aws-sdk";
+import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 
 /**
  * APIゲートウェイ管理オブジェクトを生成するヘルパー関数
