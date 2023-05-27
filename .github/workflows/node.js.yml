@@ -29,4 +29,5 @@ jobs:
     - run: npm run bootstrap
     - run: npm run build
     - run: npm run lint
+    - run: npm run detect-circular
     - run: npm test
