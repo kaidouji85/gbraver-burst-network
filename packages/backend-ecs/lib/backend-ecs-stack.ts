@@ -29,6 +29,8 @@ interface BackendEcsProps extends StackProps {
   battlesTableARN: string;
   /** マッチメイクECRリポジトリ名 */
   matchMakeEcrRepositoryName: string;
+  /** Dockerイメージのタグ */
+  dockerImageTag: string;
   /** 本スタックを実行するたびに発行するUUID */
   uuid: string;
 }
@@ -103,7 +105,7 @@ export class BackendEcsStack extends Stack {
     matchMakeTaskDefinition.addContainer(`match-make-container-${props.uuid}`, {
       image: ecs.ContainerImage.fromEcrRepository(
         matchMakeRepository,
-        props.stage
+        props.dockerImageTag
       ),
       environment: {
         SERVICE: props.service,
