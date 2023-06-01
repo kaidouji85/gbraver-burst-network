@@ -4,7 +4,6 @@ import "source-map-support/register";
 import { App, Fn } from "aws-cdk-lib";
 import * as dotenv from "dotenv";
 import * as R from "ramda";
-import { v4 as uuidV4 } from "uuid";
 
 import { BackendEcsStack } from "../lib/backend-ecs-stack";
 
@@ -18,6 +17,7 @@ const stage = process.env.STAGE ?? "dev";
 const matchMakeEcrRepositoryName =
   process.env.MATCH_MAKE_ECR_REPOSITORY_NAME ?? "";
 const vpcSubnetCount = Number.parseInt(process.env.VPC_SUBNET_COUNT ?? "");
+const dockerImageTag = process.env.DOCKER_IMAGE_TAG ?? "";
 
 const vpcStackId = `${service}-vpc-g${VPC_GENERATION}`;
 const vpcId = Fn.importValue(`${vpcStackId}:VpcId`);
@@ -35,7 +35,6 @@ const casualMatchEntriesTableARN = Fn.importValue(
   `${service}:${stage}:CasualMatchEntriesTableArn`
 );
 const battlesTableARN = Fn.importValue(`${service}:${stage}:BattlesTableArn`);
-const uuid = uuidV4();
 
 const app = new App();
 new BackendEcsStack(app, `${service}-${stage}-backend-ecs`, {
@@ -49,5 +48,5 @@ new BackendEcsStack(app, `${service}-${stage}-backend-ecs`, {
   casualMatchEntriesTableARN,
   battlesTableARN,
   matchMakeEcrRepositoryName,
-  uuid,
+  dockerImageTag,
 });

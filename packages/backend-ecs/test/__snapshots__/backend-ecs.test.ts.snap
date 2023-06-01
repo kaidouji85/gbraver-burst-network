@@ -94,7 +94,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
                   {
                     "Ref": "AWS::URLSuffix",
                   },
-                  "/MyMatchMakeRepositoryName:v1-5-1",
+                  "/MyMatchMakeRepositoryName:MyDockerImageTag",
                 ],
               ],
             },
@@ -102,7 +102,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
               "LogDriver": "awslogs",
               "Options": {
                 "awslogs-group": {
-                  "Ref": "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E",
+                  "Ref": "matchmaketaskdefmatchmakecontainerLogGroup37FA7290",
                 },
                 "awslogs-region": {
                   "Ref": "AWS::Region",
@@ -110,7 +110,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
                 "awslogs-stream-prefix": "gbraver-buesr-sls-dev__v1-5-1__match-make",
               },
             },
-            "Name": "match-make-container-test-uuid",
+            "Name": "match-make-container",
           },
         ],
         "Cpu": "256",
@@ -197,7 +197,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E",
+                  "matchmaketaskdefmatchmakecontainerLogGroup37FA7290",
                   "Arn",
                 ],
               },
@@ -214,7 +214,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
       },
       "Type": "AWS::IAM::Policy",
     },
-    "matchmaketaskdefmatchmakecontainertestuuidLogGroupB86F6A3E": {
+    "matchmaketaskdefmatchmakecontainerLogGroup37FA7290": {
       "DeletionPolicy": "Retain",
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
