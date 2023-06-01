@@ -98,8 +98,6 @@ export class BackendEcsStack extends Stack {
       "match-make-ecr",
       props.matchMakeEcrRepositoryName
     );
-    // コンテナイメージを強制的に更新するために、
-    // タスク定義にユニークIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
     matchMakeTaskDefinition.addContainer(`match-make-container`, {
       image: ecs.ContainerImage.fromEcrRepository(
         matchMakeRepository,
