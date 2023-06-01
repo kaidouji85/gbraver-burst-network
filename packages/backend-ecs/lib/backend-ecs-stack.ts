@@ -31,8 +31,6 @@ interface BackendEcsProps extends StackProps {
   matchMakeEcrRepositoryName: string;
   /** Dockerイメージのタグ */
   dockerImageTag: string;
-  /** 本スタックを実行するたびに発行するUUID */
-  uuid: string;
 }
 
 /** バックエンドECS スタック */
@@ -102,7 +100,7 @@ export class BackendEcsStack extends Stack {
     );
     // コンテナイメージを強制的に更新するために、
     // タスク定義にユニークIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
-    matchMakeTaskDefinition.addContainer(`match-make-container-${props.uuid}`, {
+    matchMakeTaskDefinition.addContainer(`match-make-container`, {
       image: ecs.ContainerImage.fromEcrRepository(
         matchMakeRepository,
         props.dockerImageTag

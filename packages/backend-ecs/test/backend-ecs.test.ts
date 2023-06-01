@@ -17,7 +17,6 @@ test('バックエンドECSスタックがスナップショットと一致し�
       battlesTableARN: 'MyBattlesTableARN',
       matchMakeEcrRepositoryName: 'MyMatchMakeRepositoryName',
       dockerImageTag: 'MyDockerImageTag',
-      uuid: 'test-uuid'
     });
     const template = Template.fromStack(stack).toJSON();
     expect(template).toMatchSnapshot();
