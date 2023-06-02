@@ -2,4 +2,7 @@
 FROM node:18
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app
-CMD [ "npm", "run", "serve:match-make" ]
+# SIGTERMを適切に処理できるように、
+# あえてnpm run serve:match-make を使わないで、 
+# nodeからスクリプトを直接起動している
+CMD [ "node", ".webpack/match-making-polling.js" ]

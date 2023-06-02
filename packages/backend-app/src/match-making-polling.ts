@@ -101,5 +101,5 @@ async function matchMakingPolling(): Promise<void> {
 
 process.on('SIGTERM', () => {
   console.log("SIGTERM");
-  process.exit(1);
+  process.exit(0);
 });
