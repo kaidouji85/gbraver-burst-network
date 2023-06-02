@@ -43,20 +43,6 @@ const intervalInMillisecond = 3000;
 // ポーリングしたら1日経過している
 const maxPollingCount = 28800;
 
-(async () => {
-  for (let i = 0; i < maxPollingCount; i++) {
-    i % 30 === 0 && console.log(`${new Date().toString()} polling`);
-    const start = Date.now();
-    await matchMakingPolling();
-    const end = Date.now();
-    const executeTime = end - start;
-    const waitTime = Math.max(intervalInMillisecond - executeTime, 1000);
-    await wait(waitTime);
-  }
-
-  console.log(`${new Date().toString()} end`);
-})();
-
 /**
  * カジュアルマッチでマッチングがないかを探す
  * @return 処理完了後に発火するPromise
@@ -97,3 +83,18 @@ async function matchMakingPolling(): Promise<void> {
   });
   await Promise.all(startBattles);
 }
+
+/** エントリポイント */
+(async () => {
+  for (let i = 0; i < maxPollingCount; i++) {
+    i % 30 === 0 && console.log(`${new Date().toString()} polling`);
+    const start = Date.now();
+    await matchMakingPolling();
+    const end = Date.now();
+    const executeTime = end - start;
+    const waitTime = Math.max(intervalInMillisecond - executeTime, 1000);
+    await wait(waitTime);
+  }
+
+  console.log(`${new Date().toString()} end`);
+})();
