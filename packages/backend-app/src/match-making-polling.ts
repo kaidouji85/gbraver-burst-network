@@ -98,3 +98,8 @@ async function matchMakingPolling(): Promise<void> {
 
   console.log(`${new Date().toString()} end`);
 })();
+
+process.on('SIGTERM', () => {
+  console.log("SIGTERM");
+  process.exit(1);
+});
