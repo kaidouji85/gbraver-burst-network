@@ -79,6 +79,15 @@ exports[`バックエンドECSスタックがスナップショットと一致�
               },
             ],
             "Essential": true,
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "test -f match-make-health-check || exit 1",
+              ],
+              "Interval": 5,
+              "Retries": 3,
+              "Timeout": 5,
+            },
             "Image": {
               "Fn::Join": [
                 "",

@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+import * as fs from "fs";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
@@ -42,6 +43,15 @@ const intervalInMillisecond = 3000;
 //   = 28800回
 // ポーリングしたら1日経過している
 const maxPollingCount = 28800;
+const healthCheckFilePath = "match-make-health-check";
+
+/**
+ * ヘルスチェック用のファイルを作成する
+ * @return 処理完了後に発火するPromise
+ */
+async function createHeathCheckFile(): Promise<void> {
+  await fs.promises.writeFile(healthCheckFilePath, "ok");
+}
 
 /**
  * カジュアルマッチでマッチングがないかを探す
@@ -86,6 +96,8 @@ async function matchMakingPolling(): Promise<void> {
 
 /** エントリポイント */
 (async () => {
+  console.log(`${new Date().toString()} start`);
+  await createHeathCheckFile();
   for (let i = 0; i < maxPollingCount; i++) {
     i % 30 === 0 && console.log(`${new Date().toString()} polling`);
     const start = Date.now();
@@ -95,7 +107,6 @@ async function matchMakingPolling(): Promise<void> {
     const waitTime = Math.max(intervalInMillisecond - executeTime, 1000);
     await wait(waitTime);
   }
-
   console.log(`${new Date().toString()} end`);
 })();
 
