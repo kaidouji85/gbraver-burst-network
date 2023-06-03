@@ -114,7 +114,7 @@ export class BackendEcsStack extends Stack {
         command: ["CMD-SHELL", "test -f match-make-health-check || exit 1"],
         interval: Duration.seconds(5),
         retries: 3,
-      }
+      },
     });
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {
