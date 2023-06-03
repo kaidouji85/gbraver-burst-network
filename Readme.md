@@ -86,6 +86,7 @@ npm run build
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する                                               |
 | MATCH_MAKE_ECR_REPOSITORY_NAME          | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名                                                                  |
 | DOCKER_IMAGE_TAG                        | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                |
+| SHOULD_ECS_HOTSWAP | AWS ECSをhotswapデプロイするか否か、trueでhotswapデプロイをして、falseでしない                                                                |
 | DOCKER_USER                             | dockerhubのユーザ名                                                                                                        |
 | DOCKER_TOKEN                            | dockerhubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                      |
 | AWS_DEFAULT_REGION                      | デプロイ先のAWSリージョン                                                                                                        |

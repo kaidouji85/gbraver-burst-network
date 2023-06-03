@@ -1,5 +1,7 @@
 version: 0.2
 env:
+  variables:
+    SHOULD_ECS_HOTSWAP: false
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
     STAGE: /GbraverBurst/prod/stage
