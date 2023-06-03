@@ -6,3 +6,4 @@ COPY ./ /usr/src/app
 # あえてnpm run serve:match-make を使わないで、 
 # nodeからスクリプトを直接起動している
 CMD [ "node", ".webpack/match-making-polling.js" ]
+HEALTHCHECK --interval=5s --retries=2 CMD test -f match-make-health-check || exit 1
