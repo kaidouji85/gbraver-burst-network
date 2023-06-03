@@ -43,13 +43,14 @@ const intervalInMillisecond = 3000;
 //   = 28800回
 // ポーリングしたら1日経過している
 const maxPollingCount = 28800;
+const healthCheckFilePath = "match-make-health-check";
 
 /**
  * ヘルスチェック用のファイルを作成する
  * @return 処理完了後に発火するPromise
  */
 async function createHeathCheckFile(): Promise<void> {
-  await fs.promises.writeFile("match-make-health-check", "ok");
+  await fs.promises.writeFile(healthCheckFilePath, "ok");
 }
 
 /**
