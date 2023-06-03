@@ -4,6 +4,7 @@ import {
   aws_ecr as ecr,
   aws_ecs as ecs,
   aws_iam as iam,
+  Duration,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
@@ -109,6 +110,11 @@ export class BackendEcsStack extends Stack {
         WEBSOCKET_API_ID: props.websocketAPIID,
       },
       logging: matchMakeLogging,
+      healthCheck: {
+        command: ["CMD-SHELL", "test -f match-make-health-check || exit 1"],
+        interval: Duration.seconds(5),
+        retries: 3,
+      }
     });
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {
