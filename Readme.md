@@ -86,15 +86,15 @@ npm run build
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する                                               |
 | MATCH_MAKE_ECR_REPOSITORY_NAME          | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名                                                                  |
 | DOCKER_IMAGE_TAG                        | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                |
-| SHOULD_ECS_HOTSWAP | AWS ECSを[^hotswapデプロイ]するか否か、trueでhotswapデプロイをして、falseでしない                                                             |
+| SHOULD_ECS_HOTSWAP | AWS ECSをhotswapデプロイ[^hotswap]するか否か、trueでhotswapデプロイをして、falseでしない                                                      |
 | DOCKER_USER                             | dockerhubのユーザ名                                                                                                        |
 | DOCKER_TOKEN                            | dockerhubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                      |
 | AWS_DEFAULT_REGION                      | デプロイ先のAWSリージョン                                                                                                        |
 | VPC_SUBNET_COUNT                        | FARGATEが動作するVPCのPublicサブネット個数                                                                                         |                                                                                                                      |
 
-[^hotswapデプロイ]: hotswapデプロイは、スタックを更新する場合にのみ利用できます。
+[^hotswap]: hotswapデプロイは、スタックを更新する場合にのみ利用できます。
 新しいスタックをデプロイする場合は必ず```SHOULD_ECS_HOTSWAP```に```false``をセットしてください。
-https://github.com/aws/aws-cdk/blob/v1-main/packages/aws-cdk/README.md#hotswap-deployments-for-faster-development
+詳細はhotswapデプロイの[公式ドキュメント](https://github.com/aws/aws-cdk/blob/v1-main/packages/aws-cdk/README.md#hotswap-deployments-for-faster-development)を参照。
 
 #### serverlessデプロイ
 
