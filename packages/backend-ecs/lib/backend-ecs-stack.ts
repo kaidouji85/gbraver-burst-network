@@ -4,6 +4,7 @@ import {
   aws_ecr as ecr,
   aws_ecs as ecs,
   aws_iam as iam,
+  Duration,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
@@ -29,8 +30,8 @@ interface BackendEcsProps extends StackProps {
   battlesTableARN: string;
   /** マッチメイクECRリポジトリ名 */
   matchMakeEcrRepositoryName: string;
-  /** 本スタックを実行するたびに発行するUUID */
-  uuid: string;
+  /** Dockerイメージのタグ */
+  dockerImageTag: string;
 }
 
 /** バックエンドECS スタック */
@@ -98,12 +99,10 @@ export class BackendEcsStack extends Stack {
       "match-make-ecr",
       props.matchMakeEcrRepositoryName
     );
-    // コンテナイメージを強制的に更新するために、
-    // タスク定義にユニークIDを含めてCloudFormation上は新規タスク定義に見えるようにしている
-    matchMakeTaskDefinition.addContainer(`match-make-container-${props.uuid}`, {
+    matchMakeTaskDefinition.addContainer(`match-make-container`, {
       image: ecs.ContainerImage.fromEcrRepository(
         matchMakeRepository,
-        props.stage
+        props.dockerImageTag
       ),
       environment: {
         SERVICE: props.service,
@@ -111,6 +110,11 @@ export class BackendEcsStack extends Stack {
         WEBSOCKET_API_ID: props.websocketAPIID,
       },
       logging: matchMakeLogging,
+      healthCheck: {
+        command: ["CMD-SHELL", "test -f match-make-health-check || exit 1"],
+        interval: Duration.seconds(5),
+        retries: 3,
+      },
     });
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
     new ecs.FargateService(this, "service", {

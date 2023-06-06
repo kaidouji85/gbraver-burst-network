@@ -2,7 +2,8 @@
 
 if [ -z "$STAGE" ] ||
   [ -z "$MATCH_MAKE_ECR_REPOSITORY_NAME" ] ||
-  [ -z "$VPC_SUBNET_COUNT" ]; then
+  [ -z "$VPC_SUBNET_COUNT" ] ||
+  [ -z "$DOCKER_IMAGE_TAG" ]; then
   echo 'required environment variables are not defined'
   exit 1
 fi
