@@ -1,9 +1,9 @@
 import type { Command } from "gbraver-burst-core";
+import { CommandSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
 import type { BattleID, FlowID } from "../core/battle";
-import {BattleIDSchema, FlowIDSchema} from "../core/battle";
-import {CommandSchema} from "gbraver-burst-core";
+import { BattleIDSchema, FlowIDSchema } from "../core/battle";
 
 /** バトルコマンド送信 */
 export type SendCommand = {
@@ -22,7 +22,7 @@ export const SendCommandSchema = z.object({
   battleID: BattleIDSchema,
   flowID: FlowIDSchema,
   command: CommandSchema,
-})
+});
 
 /**
  * 任意オブジェクトをSendCommandにパースする
