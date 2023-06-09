@@ -121,6 +121,7 @@ export class BackendEcsStack extends Stack {
       cluster,
       taskDefinition: matchMakeTaskDefinition,
       assignPublicIp: true,
+      minHealthyPercent: 0,
     });
   }
 }
