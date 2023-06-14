@@ -7,7 +7,6 @@
   },
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --ci",
     "build": "lerna run build",
     "clean": "lerna run clean",
     "code-format": "lerna run code-format",

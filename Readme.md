@@ -24,7 +24,6 @@
 
 ```shell
 pm ci
-npm run bootstrap
 npm run build
 ```
 
