@@ -15,5 +15,12 @@
     "lint": "lerna run lint",
     "lint-fix": "lerna run lint-fix",
     "test": "lerna run test"
-  }
+  },
+  "workspaces": [
+    "packages/aws-vpc",
+    "packages/backend-app",
+    "packages/backend-ecs",
+    "packages/browser-sdk",
+    "packages/serverless-stub"
+  ]
 }
