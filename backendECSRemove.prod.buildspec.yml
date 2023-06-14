@@ -7,11 +7,10 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 16
+      nodejs: 18
   pre_build:
     commands:
       - npm ci
-      - npm run bootstrap
   build:
     commands:
       - ./backend-ecs-remove.sh
