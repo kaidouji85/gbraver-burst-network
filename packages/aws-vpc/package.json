@@ -42,12 +42,12 @@
     "detect-circular:test": "madge --extensions ts -c test",
     "lint": "run-s lint:lib lint:bin lint:test",
     "lint-fix": "run-s lint-fix:lib lint-fix:bin lint-fix:test",
-    "lint-fix:bin": "eslint --fix bin",
-    "lint-fix:lib": "eslint --fix lib",
-    "lint-fix:test": "eslint --fix test",
-    "lint:bin": "eslint bin",
-    "lint:lib": "eslint lib",
-    "lint:test": "eslint test",
+    "lint-fix:bin": "eslint --fix --max-warnings 0 bin",
+    "lint-fix:lib": "eslint --fix --max-warnings 0 lib",
+    "lint-fix:test": "eslint --fix --max-warnings 0 test",
+    "lint:bin": "eslint --max-warnings 0 bin",
+    "lint:lib": "eslint --max-warnings 0 lib",
+    "lint:test": "eslint --max-warnings 0 test",
     "test": "jest",
     "watch": "tsc -w"
   }
