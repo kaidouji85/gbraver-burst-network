@@ -36,7 +36,10 @@ module.exports = {
     // 以下のissueによるとformidableも併せて alias false に設定する必要があるらしい
     // https://github.com/auth0/node-auth0/issues/798#issuecomment-1493858162
     //
-    //
+    // superagent-proxy、formidableの利用状況を```npm ls <パッケージ名>```で調べたが、
+    // auth0、serverless frameworkでのみ利用されているようだった。
+    // serverless frameworkはビルド時のみ実行される認識であり、
+    // webpackの設定でalias falseにしても問題ないと判断した。
     alias: {
       'superagent-proxy': false,
       'formidable': false,
