@@ -25,5 +25,9 @@ module.exports = {
     extensions: [
       '.ts', '.js', 'mjs', 'cjs'
     ],
+    alias: {
+      'superagent-proxy': false,
+      'formidable': false,
+    }
   },
 };
