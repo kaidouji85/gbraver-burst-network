@@ -86,9 +86,4 @@ npm audit --omit=dev
 # 本コマンドの実行にはfixpackが必要
 # https://www.npmjs.com/package/fixpack
 fixpack
-``` 
-
-## superagent-proxyについて
-
-本パッケージの [package.json](./package.json) にはsuperagent-proxyが含まれているが、ソースコードでは同パッケージを直接呼び出していない。
-[auth0 sdk](https://www.npmjs.com/package/auth0) の依存パッケージであるsuperagent-proxyがインスールできないので、 package.jsonにsuperagent-proxyを含めている
+```
