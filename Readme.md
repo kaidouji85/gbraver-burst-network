@@ -13,9 +13,9 @@
 ### 必須ソフト
 ローカル環境に以下ソフトウェアをインストールしてください。
 * aws cli(2.3.4以上)
-* node.js(v16.13.0以上)
-* npm(8.1.0以上)
-* npx(8.1.0以上)
+* node.js(v18.16.0以上)
+* npm(9.5.1以上)
+* npx(9.5.1以上)
 * Docker(20.10.8以上)
 
 <a id="repository-setup"></a>
@@ -24,7 +24,6 @@
 
 ```shell
 pm ci
-npm run bootstrap
 npm run build
 ```
 
@@ -128,7 +127,7 @@ npm run build
 
 | #      | ビルド環境               | 説明 |
 |--------|---------------------|------|
-| BLD-01 | ubuntu/standard/6.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/6.0) を参照 |
+| BLD-01 | ubuntu/standard/7.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) を参照 |
 
 #### 開発環境でのCI/CD
 ##### AWS Parameter Storeを設定

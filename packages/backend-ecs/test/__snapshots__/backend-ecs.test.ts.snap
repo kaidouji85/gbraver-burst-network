@@ -249,7 +249,7 @@ exports[`バックエンドECSスタックがスナップショットと一致�
         },
         "DeploymentConfiguration": {
           "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50,
+          "MinimumHealthyPercent": 0,
         },
         "EnableECSManagedTags": false,
         "LaunchType": "FARGATE",

@@ -1,20 +1,28 @@
 import type { Command } from "gbraver-burst-core";
+import { CommandSchema } from "gbraver-burst-core";
+import { z } from "zod";
 
 import type { BattleID, FlowID } from "../core/battle";
+import { BattleIDSchema, FlowIDSchema } from "../core/battle";
 
 /** バトルコマンド送信 */
 export type SendCommand = {
   action: "send-command";
-
   /** バトルID */
   battleID: BattleID;
-
   /** フローID */
   flowID: FlowID;
-
   /** コマンド */
   command: Command;
 };
+
+/** SendCommand zodスキーマ */
+export const SendCommandSchema = z.object({
+  action: z.literal("send-command"),
+  battleID: BattleIDSchema,
+  flowID: FlowIDSchema,
+  command: CommandSchema,
+});
 
 /**
  * 任意オブジェクトをSendCommandにパースする
@@ -23,20 +31,7 @@ export type SendCommand = {
  * @param data パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function parseSendCommand(data: any): SendCommand | null {
-  /* eslint-enable */
-  // TODO commandの正確な型チェックを実装する
-  return data?.action === "send-command" &&
-    typeof data?.battleID === "string" &&
-    typeof data?.flowID === "string" &&
-    data?.command !== null &&
-    typeof data?.command === "object"
-    ? {
-        action: data.action,
-        battleID: data.battleID,
-        flowID: data.flowID,
-        command: data.command,
-      }
-    : null;
+export function parseSendCommand(data: unknown): SendCommand | null {
+  const result = SendCommandSchema.safeParse(data);
+  return result.success ? result.data : null;
 }
