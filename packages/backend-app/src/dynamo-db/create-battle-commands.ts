@@ -13,7 +13,7 @@ import { BattleCommands } from "./battle-commands";
 export function createBattleCommands(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): BattleCommands {
   const tableName = `${service}__${stage}__battle-commands`;
   return new BattleCommands(dynamoDB, tableName);

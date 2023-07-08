@@ -16,7 +16,7 @@ export type PrivateMatchMakePolling = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parsePrivateMatchMakePolling(
-  origin: any
+  origin: any,
 ): PrivateMatchMakePolling | null {
   /* eslint-enable */
   if (

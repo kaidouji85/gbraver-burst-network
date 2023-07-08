@@ -73,7 +73,7 @@ class BrowserSDKImpl implements BrowserSDK {
     ownURL: string,
     restAPIURL: string,
     websocketAPIURL: string,
-    auth0Client: Auth0Client
+    auth0Client: Auth0Client,
   ) {
     this.#ownURL = ownURL;
     this.#restAPIURL = restAPIURL;
@@ -158,7 +158,7 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async startCasualMatch(
     armdozerId: ArmDozerId,
-    pilotId: PilotId
+    pilotId: PilotId,
   ): Promise<Battle> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
@@ -168,7 +168,7 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async createPrivateMatchRoom(
     armdozerId: ArmDozerId,
-    pilotId: PilotId
+    pilotId: PilotId,
   ): Promise<PrivateMatchRoom> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
@@ -179,14 +179,14 @@ class BrowserSDKImpl implements BrowserSDK {
   async enterPrivateMatchRoom(
     roomID: PrivateMatchRoomID,
     armdozerId: string,
-    pilotId: string
+    pilotId: string,
   ): Promise<Battle | null> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterPrivateMatchRoom(
       websocket,
       roomID,
       armdozerId,
-      pilotId
+      pilotId,
     );
     if (resp.action !== "battle-start") {
       return null;
@@ -225,7 +225,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
     const accessToken = await this.#auth0Client.getTokenSilently();
     const websocket = await connect(
-      `${this.#websocketAPIURL}?token=${accessToken}`
+      `${this.#websocketAPIURL}?token=${accessToken}`,
     );
     this.#websocketSubscriptions = [
       fromEvent(websocket, "error").subscribe(this.#websocketError),
@@ -253,13 +253,13 @@ export async function createBrowserSDK(
   websocketAPIURL: string,
   auth0Domain: string,
   auth0ClientID: string,
-  auth0Audience: string
+  auth0Audience: string,
 ): Promise<BrowserSDK> {
   const auth0Client = await createAuth0ClientHelper(
     auth0Domain,
     auth0ClientID,
     auth0Audience,
-    ownURL
+    ownURL,
   );
   return new BrowserSDKImpl(ownURL, restAPIURL, websocketAPIURL, auth0Client);
 }

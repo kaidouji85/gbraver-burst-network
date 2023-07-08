@@ -25,7 +25,7 @@ const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -41,14 +41,14 @@ const invalidRequestBodyError: Error = {
  * @return レスポンス
  */
 export async function createPrivateMatchRoom(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseCreatePrivateMatchRoom(body);
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError
+      invalidRequestBodyError,
     );
     return {
       statusCode: 400,
@@ -57,7 +57,7 @@ export async function createPrivateMatchRoom(
   }
 
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const room: PrivateMatchRoom = {
     roomID: generatePrivateMatchRoomID(),

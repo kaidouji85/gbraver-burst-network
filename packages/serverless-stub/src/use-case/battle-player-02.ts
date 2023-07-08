@@ -25,7 +25,7 @@ export class BattlePlayer02 implements UseCase {
   async execute(): Promise<void> {
     const battle = await this._sdk.startCasualMatch(
       ArmDozerIds.NEO_LANDOZER,
-      PilotIds.GAI
+      PilotIds.GAI,
     );
     battle.suddenlyBattleNotifier().subscribe(() => {
       console.log("suddenly battle end");

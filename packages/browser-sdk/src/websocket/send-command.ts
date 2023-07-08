@@ -27,7 +27,7 @@ export function sendCommand(
   websocket: WebSocket,
   battleID: string,
   flowID: string,
-  command: Command
+  command: Command,
 ): Promise<BattleProgressed | BattleEnd> {
   sendToAPIServer(websocket, {
     action: "send-command",
@@ -51,7 +51,7 @@ export function sendCommand(
         resolve(battleEnd);
         return;
       }
-    }
+    },
   );
 }
 
@@ -68,7 +68,7 @@ export async function sendCommandWithPolling(
   websocket: WebSocket,
   battleID: string,
   flowID: string,
-  command: Command
+  command: Command,
 ): Promise<BattleProgressed | BattleEnd> {
   sendToAPIServer(websocket, {
     action: "send-command",
@@ -82,7 +82,7 @@ export async function sendCommandWithPolling(
       const data = parseJSON(e.data);
       const acceptCommand = parseAcceptCommand(data);
       acceptCommand && resolve(acceptCommand);
-    }
+    },
   );
 
   const maxPollingCount = 100;
@@ -105,7 +105,7 @@ export async function sendCommandWithPolling(
     async (
       e: MessageEvent,
       resolve: Resolve<BattleProgressed | BattleEnd>,
-      reject: Reject
+      reject: Reject,
     ): Promise<void> => {
       const data = parseJSON(e.data);
       const notReadyBattleProgress = parseNotReadyBattleProgress(data);
@@ -134,6 +134,6 @@ export async function sendCommandWithPolling(
         resolve(battleEnd);
         return;
       }
-    }
+    },
   );
 }

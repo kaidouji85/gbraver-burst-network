@@ -64,7 +64,7 @@ export class BattleSDK implements Battle {
       map((e) => parseJSON(e.data)),
       filter((data) => data),
       map((data) => parseSuddenlyBattleEnd(data)),
-      filter((sudenlyBattleEnd) => !!sudenlyBattleEnd)
+      filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
     );
   }
 
@@ -75,13 +75,13 @@ export class BattleSDK implements Battle {
           this._websocket,
           this._battleID,
           this._flowID,
-          command
+          command,
         )
       : await sendCommand(
           this._websocket,
           this._battleID,
           this._flowID,
-          command
+          command,
         );
 
     if (result.action === "battle-progressed") {

@@ -23,7 +23,7 @@ const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -43,7 +43,7 @@ const enteredCasualMatch: EnteredCasualMatch = {
  * @return レスポンス
  */
 export async function enterCasualMatch(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseEnterCasualMatch(body);
@@ -51,7 +51,7 @@ export async function enterCasualMatch(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError
+      invalidRequestBodyError,
     );
     return {
       statusCode: 400,
@@ -60,7 +60,7 @@ export async function enterCasualMatch(
   }
 
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const entry = {
     userID: user.userID,
@@ -79,7 +79,7 @@ export async function enterCasualMatch(
     }),
     notifier.notifyToClient(
       event.requestContext.connectionId,
-      enteredCasualMatch
+      enteredCasualMatch,
     ),
   ]);
   return {

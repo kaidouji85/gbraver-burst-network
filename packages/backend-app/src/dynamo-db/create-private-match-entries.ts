@@ -12,7 +12,7 @@ import { PrivateMatchEntries } from "./private-match-entries";
 export function createPrivateMatchEntries(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): PrivateMatchEntries {
   const tableName = `${service}__${stage}__private-match-entries`;
   return new PrivateMatchEntries(dynamoDB, tableName);

@@ -18,7 +18,7 @@ import { waitUntil } from "./wait-until";
 export function enterCasualMatch(
   websocket: WebSocket,
   armdozerId: ArmDozerId,
-  pilotId: PilotId
+  pilotId: PilotId,
 ): Promise<BattleStart> {
   sendToAPIServer(websocket, {
     action: "enter-casual-match",
@@ -31,6 +31,6 @@ export function enterCasualMatch(
       const data = parseJSON(e.data);
       const response = parseBattleStart(data);
       response && resolve(response);
-    }
+    },
   );
 }

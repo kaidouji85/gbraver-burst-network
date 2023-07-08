@@ -15,7 +15,7 @@ import { waitUntil } from "./wait-until";
  */
 export async function privateMatchMakePolling(
   websocket: WebSocket,
-  roomID: PrivateMatchRoomID
+  roomID: PrivateMatchRoomID,
 ): Promise<BattleStart> {
   const maxPollingCount = 200;
   const pollingIntervalMilliSec = 3000;
@@ -54,6 +54,6 @@ export async function privateMatchMakePolling(
       if (battleStart) {
         resolve(battleStart);
       }
-    }
+    },
   );
 }

@@ -23,7 +23,7 @@ export function enterPrivateMatchRoom(
   websocket: WebSocket,
   roomID: PrivateMatchRoomID,
   armdozerId: ArmDozerId,
-  pilotId: PilotId
+  pilotId: PilotId,
 ): Promise<BattleStart | RejectPrivateMatchEntry> {
   sendToAPIServer(websocket, {
     action: "enter-private-match-room",
@@ -35,7 +35,7 @@ export function enterPrivateMatchRoom(
     websocket,
     (
       e: MessageEvent,
-      resolve: Resolve<BattleStart | RejectPrivateMatchEntry>
+      resolve: Resolve<BattleStart | RejectPrivateMatchEntry>,
     ) => {
       const data = parseJSON(e.data);
 
@@ -48,6 +48,6 @@ export function enterPrivateMatchRoom(
       if (rejectPrivateMatchEntry) {
         resolve(rejectPrivateMatchEntry);
       }
-    }
+    },
   );
 }

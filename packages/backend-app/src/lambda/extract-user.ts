@@ -9,7 +9,7 @@ import type { Authorizer } from "./websocket-api-event";
  * @return 抽出したユーザ情報
  */
 export function extractUserFromWebSocketAuthorizer(
-  authorizer: Authorizer
+  authorizer: Authorizer,
 ): User {
   // authorizer.principalIdにセットされているauth0ユーザIDを
   // GブレイバーバーストのユーザIDにセットしている

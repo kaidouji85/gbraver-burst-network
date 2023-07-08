@@ -40,7 +40,7 @@ export type AuthorizerResponse = {
 function createAuthorizeResponse(
   principalId: string,
   resource: string,
-  effect: Effect
+  effect: Effect,
 ): AuthorizerResponse {
   return {
     principalId,
@@ -66,7 +66,7 @@ function createAuthorizeResponse(
  */
 export function successAuthorize(
   principalId: string,
-  resource: string
+  resource: string,
 ): AuthorizerResponse {
   return createAuthorizeResponse(principalId, resource, "Allow");
 }
@@ -80,7 +80,7 @@ export function successAuthorize(
  */
 export function failedAuthorize(
   principalId: string,
-  resource: string
+  resource: string,
 ): AuthorizerResponse {
   return createAuthorizeResponse(principalId, resource, "Deny");
 }

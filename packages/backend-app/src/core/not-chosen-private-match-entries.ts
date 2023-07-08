@@ -9,7 +9,7 @@ import { PrivateMatching } from "./private-match-make";
  */
 export function notChosenPrivateMatchEntries(
   matching: PrivateMatching,
-  entries: PrivateMatchEntry[]
+  entries: PrivateMatchEntry[],
 ): PrivateMatchEntry[] {
   const matcingUserIDs = matching.map((v) => v.userID);
   return entries.filter((v) => !matcingUserIDs.includes(v.userID));

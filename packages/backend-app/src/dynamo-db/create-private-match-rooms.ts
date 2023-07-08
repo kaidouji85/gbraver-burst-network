@@ -12,7 +12,7 @@ import { PrivateMatchRooms } from "./private-match-rooms";
 export function createPrivateMatchRooms(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): PrivateMatchRooms {
   const tableName = `${service}__${stage}__private-match-rooms`;
   return new PrivateMatchRooms(dynamoDB, tableName);

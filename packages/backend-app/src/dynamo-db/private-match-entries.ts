@@ -35,7 +35,7 @@ export class PrivateMatchEntries {
    * @return 取得結果
    */
   async getEntries(
-    roomID: PrivateMatchRoomID
+    roomID: PrivateMatchRoomID,
   ): Promise<PrivateMatchEntriesSchema[]> {
     const result = await this.#dynamoDB.query({
       TableName: this.#tableName,

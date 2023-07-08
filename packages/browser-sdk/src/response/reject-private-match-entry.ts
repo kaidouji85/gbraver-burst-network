@@ -11,7 +11,7 @@ export type RejectPrivateMatchEntry = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseRejectPrivateMatchEntry(
-  origin: any
+  origin: any,
 ): RejectPrivateMatchEntry | null {
   /* eslint-enable */
   if (origin?.action === "reject-private-match-entry") {

@@ -31,7 +31,7 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -60,7 +60,7 @@ const notReadyBattleProgress: NotReadyBattleProgress = {
  * @return 本関数が終了したら発火するPromise
  */
 export async function battleProgressPolling(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseBattleProgressPolling(body);
@@ -68,7 +68,7 @@ export async function battleProgressPolling(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestError
+      invalidRequestError,
     );
     return invalidRequestBody;
   }
@@ -78,7 +78,7 @@ export async function battleProgressPolling(
   if (!battle) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      notReadyBattleProgress
+      notReadyBattleProgress,
     );
     return invalidRequestBody;
   }
@@ -91,7 +91,7 @@ export async function battleProgressPolling(
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      notReadyBattleProgress
+      notReadyBattleProgress,
     );
     return invalidRequestBody;
   }
@@ -99,10 +99,10 @@ export async function battleProgressPolling(
   const command0: BattleCommand = fetchedCommands[0];
   const command1: BattleCommand = fetchedCommands[1];
   const playerOfCommand0 = battle.players.find(
-    (v) => v.userID === command0.userID
+    (v) => v.userID === command0.userID,
   );
   const playerOfCommand1 = battle.players.find(
-    (v) => v.userID === command1.userID
+    (v) => v.userID === command1.userID,
   );
   const isSameBattleIDs = isSameValues([
     data.battleID,
@@ -117,7 +117,7 @@ export async function battleProgressPolling(
     command1.flowID,
   ]);
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const isPoller = user.userID === battle.poller;
 
@@ -130,7 +130,7 @@ export async function battleProgressPolling(
   ) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      notReadyBattleProgress
+      notReadyBattleProgress,
     );
     return invalidRequestBody;
   }
@@ -165,14 +165,14 @@ export async function battleProgressPolling(
     };
     return Promise.all([
       ...battle.players.map((v) =>
-        notifier.notifyToClient(v.connectionId, noticedData)
+        notifier.notifyToClient(v.connectionId, noticedData),
       ),
       ...battle.players.map((v) =>
         connections.put({
           connectionId: v.connectionId,
           userID: v.userID,
           state: updatedConnectionState,
-        })
+        }),
       ),
       battles.delete(battle.battleID),
     ]);
@@ -187,7 +187,7 @@ export async function battleProgressPolling(
     };
     return Promise.all([
       ...battle.players.map((v) =>
-        notifier.notifyToClient(v.connectionId, noticedData)
+        notifier.notifyToClient(v.connectionId, noticedData),
       ),
       battles.put({ ...battle, flowID, stateHistory: core.stateHistory() }),
     ]);
