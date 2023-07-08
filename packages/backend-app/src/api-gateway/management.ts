@@ -7,7 +7,7 @@ import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi
  * @return APIゲートウェイ管理オブジェクト
  */
 export function createApiGatewayManagementApi(
-  endpoint: string
+  endpoint: string,
 ): ApiGatewayManagementApi {
   return new ApiGatewayManagementApi({
     apiVersion: "2018-11-29",

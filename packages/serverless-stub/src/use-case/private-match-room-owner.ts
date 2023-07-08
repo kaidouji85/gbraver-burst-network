@@ -25,7 +25,7 @@ export class PrivateMatchRoomOwner implements UseCase {
   async execute(): Promise<void> {
     const room = await this.#sdk.createPrivateMatchRoom(
       ArmDozerIds.SHIN_BRAVER,
-      PilotIds.SHINYA
+      PilotIds.SHINYA,
     );
     console.log(room.roomID);
     const battle = await room.waitUntilMatching();

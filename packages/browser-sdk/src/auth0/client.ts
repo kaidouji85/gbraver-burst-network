@@ -13,7 +13,7 @@ export function createAuth0ClientHelper(
   domain: string,
   clientID: string,
   audience: string,
-  redirectURI: string
+  redirectURI: string,
 ): Promise<Auth0Client> {
   return createAuth0Client({
     domain: domain,

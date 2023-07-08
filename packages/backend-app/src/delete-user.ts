@@ -23,10 +23,10 @@ const auth0ManagementClient = new ManagementClient({
  * @return レスポンス
  */
 export async function deleteUser(
-  event: RestAPIEvent
+  event: RestAPIEvent,
 ): Promise<RestAPIResponse> {
   const user = extractUserFromRestAPIJWT(
-    event.requestContext.authorizer.jwt.claims
+    event.requestContext.authorizer.jwt.claims,
   );
   // auth0ユーザ削除関数にGブレイバーバーストのユーザIDを指定しているが、
   // 現状ではauth0、GブレイバーバーストのユーザIDは完全一致するので問題ない

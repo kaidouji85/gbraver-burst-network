@@ -29,7 +29,7 @@ const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -53,14 +53,14 @@ const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
  * @returns レスポンス
  */
 export async function enterPrivateMatchRoom(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseEnterPrivateMatchRoom(body);
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError
+      invalidRequestBodyError,
     );
     return invalidRequestBody;
   }
@@ -68,7 +68,7 @@ export async function enterPrivateMatchRoom(
   if (data.roomID === "") {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      rejectPrivateMatchEntry
+      rejectPrivateMatchEntry,
     );
     return invalidRequestBody;
   }
@@ -77,13 +77,13 @@ export async function enterPrivateMatchRoom(
   if (!isExistRoom) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      rejectPrivateMatchEntry
+      rejectPrivateMatchEntry,
     );
     return invalidRequestBody;
   }
 
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const entry: PrivateMatchEntry = {
     roomID: data.roomID,

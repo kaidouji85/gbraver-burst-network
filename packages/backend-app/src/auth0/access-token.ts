@@ -36,7 +36,7 @@ export type Auth0AccessToken = JwtPayload;
 export function verifyAccessToken(
   accessToken: string,
   jwksURL: string,
-  audience: string
+  audience: string,
 ): Promise<Auth0AccessToken> {
   const client = new JwksClient({
     jwksUri: jwksURL,
@@ -61,7 +61,7 @@ export function verifyAccessToken(
         } else {
           resolve(decodedToken);
         }
-      }
+      },
     );
   });
 }

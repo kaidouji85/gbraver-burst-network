@@ -26,7 +26,7 @@ export class PrivateMatchRoomPlayer implements UseCase {
     const battle = await this.#sdk.enterPrivateMatchRoom(
       context.privateMatchRoomID,
       ArmDozerIds.NEO_LANDOZER,
-      PilotIds.GAI
+      PilotIds.GAI,
     );
     if (!battle) {
       console.log("cloud not matching");

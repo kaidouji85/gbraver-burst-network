@@ -19,7 +19,7 @@ import { waitUntil } from "./wait-until";
 export function createPrivateMatchRoom(
   websocket: WebSocket,
   armdozerId: ArmDozerId,
-  pilotId: PilotId
+  pilotId: PilotId,
 ): Promise<CreatedPrivateMatchRoom> {
   sendToAPIServer(websocket, {
     action: "create-private-match-room",
@@ -32,6 +32,6 @@ export function createPrivateMatchRoom(
       const data = parseJSON(e.data);
       const response = parseCreatedPrivateMatchRoom(data);
       response && resolve(response);
-    }
+    },
   );
 }

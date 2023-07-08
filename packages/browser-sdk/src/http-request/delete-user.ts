@@ -7,7 +7,7 @@
  */
 export async function deleteLoggedInUser(
   restAPIURL: string,
-  accessToken: string
+  accessToken: string,
 ): Promise<void> {
   await fetch(`${restAPIURL}`, {
     mode: "cors",

@@ -14,7 +14,7 @@ export type PrivateMatching = [BattleEntry, BattleEntry];
  */
 export function privateMatchMake(
   room: PrivateMatchRoom,
-  entries: PrivateMatchEntry[]
+  entries: PrivateMatchEntry[],
 ): PrivateMatching | null {
   if (entries.length <= 0) {
     return null;

@@ -21,7 +21,7 @@ export type EnterPrivateMatchRoom = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseEnterPrivateMatchRoom(
-  origin: any
+  origin: any,
 ): EnterPrivateMatchRoom | null {
   /* eslint-enable */
   if (

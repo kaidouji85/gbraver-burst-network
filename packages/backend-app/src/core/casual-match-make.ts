@@ -22,7 +22,7 @@ type Result<X extends CasualMatchEntry> = {
  * @return マッチメイク結果
  */
 export function casualMatchMake<X extends CasualMatchEntry>(
-  entries: X[]
+  entries: X[],
 ): CasualMatching<X>[] {
   if (entries.length <= 1) {
     return [];
@@ -44,7 +44,7 @@ export function casualMatchMake<X extends CasualMatchEntry>(
     {
       working: [],
       matchingList: [],
-    }
+    },
   );
   return result.matchingList;
 }

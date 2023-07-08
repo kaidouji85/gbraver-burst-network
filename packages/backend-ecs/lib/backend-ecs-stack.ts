@@ -79,7 +79,7 @@ export class BackendEcsStack extends Stack {
       {
         assumedBy: new iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
         inlinePolicies: { matchMakePolicy },
-      }
+      },
     );
     const matchMakeTaskDefinition = new ecs.TaskDefinition(
       this,
@@ -89,7 +89,7 @@ export class BackendEcsStack extends Stack {
         cpu: "256",
         memoryMiB: "512",
         taskRole: matchMakeServiceTaskRole,
-      }
+      },
     );
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: `${props.service}__${props.stage}__match-make`,
@@ -97,12 +97,12 @@ export class BackendEcsStack extends Stack {
     const matchMakeRepository = ecr.Repository.fromRepositoryName(
       this,
       "match-make-ecr",
-      props.matchMakeEcrRepositoryName
+      props.matchMakeEcrRepositoryName,
     );
     matchMakeTaskDefinition.addContainer(`match-make-container`, {
       image: ecs.ContainerImage.fromEcrRepository(
         matchMakeRepository,
-        props.dockerImageTag
+        props.dockerImageTag,
       ),
       environment: {
         SERVICE: props.service,

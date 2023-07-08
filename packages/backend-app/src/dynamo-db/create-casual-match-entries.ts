@@ -13,7 +13,7 @@ import { CasualMatchEntries } from "./casual-match-entries";
 export function createCasualMatchEntries(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): CasualMatchEntries {
   const tableName = `${service}__${stage}__casual-match-entries`;
   return new CasualMatchEntries(dynamoDB, tableName);

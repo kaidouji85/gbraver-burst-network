@@ -13,7 +13,7 @@ import { Connections } from "./connections";
 export function createConnections(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): Connections {
   const tableName = `${service}__${stage}__connections`;
   return new Connections(dynamoDB, tableName);

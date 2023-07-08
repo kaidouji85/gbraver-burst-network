@@ -24,7 +24,7 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -43,7 +43,7 @@ const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
  * @return レスポンス
  */
 export async function disconnect(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const connectionId = event.requestContext.connectionId;
   const connection = await connections.get(connectionId);
@@ -97,7 +97,7 @@ async function cleanUp(connection: Connection): Promise<void> {
       ...entries.map((v) =>
         notifier.notifyToClient(v.connectionId, {
           action: "reject-private-match-entry",
-        })
+        }),
       ),
     ]);
   };

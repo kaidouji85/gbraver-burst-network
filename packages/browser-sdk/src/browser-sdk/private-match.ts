@@ -12,7 +12,7 @@ export interface PrivateMatchCreate {
    */
   createPrivateMatchRoom(
     armdozerId: ArmDozerId,
-    pilotId: PilotId
+    pilotId: PilotId,
   ): Promise<PrivateMatchRoom>;
 }
 
@@ -44,6 +44,6 @@ export interface PrivateMatchRoomEnter {
   enterPrivateMatchRoom(
     roomID: PrivateMatchRoomID,
     armdozerId: ArmDozerId,
-    pilotId: PilotId
+    pilotId: PilotId,
   ): Promise<Battle | null>;
 }

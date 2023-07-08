@@ -9,7 +9,7 @@
 export function createAPIGatewayEndpoint(
   apiID: string,
   region: string,
-  stage: string
+  stage: string,
 ): string {
   return `https://${apiID}.execute-api.${region}.amazonaws.com/${stage}`;
 }

@@ -11,7 +11,7 @@ import { toPlayer } from "./to-player";
  * @return 生成結果
  */
 export function createBattle<X extends BattlePlayer>(
-  players: [X, X]
+  players: [X, X],
 ): Battle<X> {
   const core = startGbraverBurst([toPlayer(players[0]), toPlayer(players[1])]);
   const poller = players[0].userID;

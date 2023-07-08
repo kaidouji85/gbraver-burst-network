@@ -12,7 +12,7 @@ export type NotReadyBattleProgress = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseNotReadyBattleProgress(
-  data: any
+  data: any,
 ): NotReadyBattleProgress | null {
   /* eslint-enable */
   return data?.action === "not-ready-battle-progress"
