@@ -254,6 +254,11 @@ exports[`バックエンドECSスタックがスナップショットと一致�
           "Ref": "backendecscluster8F4B4819",
         },
         "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 0,
         },
