@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
   "description": "gbraver burst browser sdk",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
