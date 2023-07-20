@@ -1,21 +1,21 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
   "description": "gbraver burst browser sdk",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
     "email": "kaidouji85@gmail.com"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^2.1.0",
-    "gbraver-burst-core": "^1.18.0",
+    "@auth0/auth0-spa-js": "^2.1.1",
+    "gbraver-burst-core": "^1.19.0",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.3",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "codehawk-cli": "^10.1.0",
     "eslint": "^8.45.0",
     "eslint-plugin-jest": "^27.2.3",
@@ -27,7 +27,7 @@
     "rimraf": "^5.0.1",
     "ts-jest": "^29.1.1",
     "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   },
   "files": [

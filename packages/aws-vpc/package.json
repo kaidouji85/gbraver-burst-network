@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/aws-vpc",
   "description": "gbraver burst backend vpc.",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
   },
@@ -14,8 +14,8 @@
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/node": "20.4.2",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "aws-cdk": "2.87.0",
     "eslint": "^8.45.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
