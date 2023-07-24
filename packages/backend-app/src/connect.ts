@@ -16,10 +16,10 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
  * @return レスポンス
  */
 export async function connect(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   await connections.put({
     connectionId: event.requestContext.connectionId,

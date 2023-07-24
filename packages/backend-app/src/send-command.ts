@@ -18,7 +18,7 @@ const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -37,7 +37,7 @@ const acceptCommand: AcceptCommand = {
  * @return レスポンス
  */
 export async function sendCommand(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseSendCommand(body);
@@ -45,7 +45,7 @@ export async function sendCommand(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError
+      invalidRequestBodyError,
     );
     return {
       statusCode: 400,
@@ -54,7 +54,7 @@ export async function sendCommand(
   }
 
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const command = {
     userID: user.userID,

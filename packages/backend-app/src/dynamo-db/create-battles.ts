@@ -13,7 +13,7 @@ import { Battles } from "./battles";
 export function createBattles(
   dynamoDB: DynamoDBDocument,
   service: string,
-  stage: string
+  stage: string,
 ): Battles {
   const tableName = `${service}__${stage}__battles`;
   return new Battles(dynamoDB, tableName);

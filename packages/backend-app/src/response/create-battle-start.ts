@@ -12,7 +12,7 @@ import type { BattleStart } from "./websocket-response";
  */
 export function createBattleStart<X extends BattlePlayer>(
   userID: UserID,
-  battle: Battle<X>
+  battle: Battle<X>,
 ): BattleStart {
   const player =
     battle.players.find((v) => v.userID === userID) ?? battle.players[0];

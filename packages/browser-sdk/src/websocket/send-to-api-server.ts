@@ -8,7 +8,7 @@ import type { APIServerRequest } from "../request/request";
  */
 export function sendToAPIServer(
   websocket: WebSocket,
-  data: APIServerRequest
+  data: APIServerRequest,
 ): void {
   websocket.send(JSON.stringify(data));
 }

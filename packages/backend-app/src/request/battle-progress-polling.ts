@@ -20,7 +20,7 @@ export type BattleProgressPolling = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseBattleProgressPolling(
-  origin: any
+  origin: any,
 ): BattleProgressPolling | null {
   /* eslint-enable */
   return origin?.action === "battle-progress-polling" &&

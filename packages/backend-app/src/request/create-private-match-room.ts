@@ -17,7 +17,7 @@ export type CreatePrivateMatchRoom = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseCreatePrivateMatchRoom(
-  origin: any
+  origin: any,
 ): CreatePrivateMatchRoom | null {
   /* eslint-enable */
   if (

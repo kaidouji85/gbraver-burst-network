@@ -11,7 +11,7 @@ import type { Reject, Resolve } from "../promise/promise";
 export type MessageHandler<X> = (
   e: MessageEvent,
   resolve: Resolve<X>,
-  reject: Reject
+  reject: Reject,
 ) => unknown;
 
 /**
@@ -41,7 +41,7 @@ export type MessageHandler<X> = (
  */
 export function waitUntil<X>(
   websocket: WebSocket,
-  messageHandler: MessageHandler<X>
+  messageHandler: MessageHandler<X>,
 ): Promise<X> {
   let handler: ((e: MessageEvent) => void) | null = null;
   return new Promise<X>((resolve, reject) => {

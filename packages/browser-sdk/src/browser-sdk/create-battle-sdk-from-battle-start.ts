@@ -9,7 +9,7 @@ import { BattleSDK } from "./battle-sdk";
  */
 export function createBattleSDKFromBattleStart(
   battleStart: BattleStart,
-  websocket: WebSocket
+  websocket: WebSocket,
 ): BattleSDK {
   return new BattleSDK({
     player: battleStart.player,

@@ -21,6 +21,6 @@ export function ping(websocket: WebSocket): Promise<Pong> {
       const data = parseJSON(e.data);
       const response = parsePong(data);
       response && resolve(response);
-    }
+    },
   );
 }

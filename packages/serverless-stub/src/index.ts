@@ -26,7 +26,7 @@ window.onload = async () => {
     WEBSOCKET_API_URL,
     AUTH0_DOMAIN,
     AUTH0_CLIENT_ID,
-    AUTH0_AUDIENCE
+    AUTH0_AUDIENCE,
   );
   browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);
@@ -67,14 +67,14 @@ window.onload = async () => {
       ? useCaseSelectorSearchResult
       : document.createElement("select");
   const privateMatchRoomIDSearchResult = document.getElementById(
-    "private-match-room-id"
+    "private-match-room-id",
   );
   const privateMatchRoomID: HTMLInputElement =
     privateMatchRoomIDSearchResult instanceof HTMLInputElement
       ? privateMatchRoomIDSearchResult
       : document.createElement("input");
   const useCaseExecuteButtonSearchResult = document.getElementById(
-    "use-case-execute-button"
+    "use-case-execute-button",
   );
   const useCaseExecuteButton: HTMLButtonElement =
     useCaseExecuteButtonSearchResult instanceof HTMLButtonElement

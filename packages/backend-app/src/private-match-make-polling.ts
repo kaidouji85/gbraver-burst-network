@@ -39,7 +39,7 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
-  STAGE
+  STAGE,
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
@@ -70,20 +70,20 @@ const endPrivateMatchMakePolling: WebsocketAPIResponse = {
  * @return レスポンス
  */
 export async function privateMatchMakePolling(
-  event: WebsocketAPIEvent
+  event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parsePrivateMatchMakePolling(body);
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError
+      invalidRequestBodyError,
     );
     return invalidRequestBody;
   }
 
   const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer
+    event.requestContext.authorizer,
   );
   const [room, entries] = await Promise.all([
     privateMatchRooms.get(user.userID),
@@ -92,7 +92,7 @@ export async function privateMatchMakePolling(
   if (!room) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake
+      cloudNotPrivateMatchMake,
     );
     return endPrivateMatchMakePolling;
   }
@@ -100,7 +100,7 @@ export async function privateMatchMakePolling(
   if (!isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake
+      cloudNotPrivateMatchMake,
     );
     return endPrivateMatchMakePolling;
   }
@@ -109,7 +109,7 @@ export async function privateMatchMakePolling(
   if (!matching) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake
+      cloudNotPrivateMatchMake,
     );
     return endPrivateMatchMakePolling;
   }
@@ -144,13 +144,13 @@ export async function privateMatchMakePolling(
     ...matching.map((v) =>
       notifier.notifyToClient(
         v.connectionId,
-        createBattleStart(v.userID, battle)
-      )
+        createBattleStart(v.userID, battle),
+      ),
     ),
     privateMatchRooms.delete(user.userID),
     ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
     ...notChosenEntries.map((v) =>
-      notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry)
+      notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry),
     ),
     ...notChonsenConnections.map((v) => connections.put(v)),
   ]);

@@ -229,6 +229,9 @@ exports[`バックエンドECSスタックがスナップショットと一致�
       "UpdateReplacePolicy": "Retain",
     },
     "serviceSecurityGroupF051F0EB": {
+      "DependsOn": [
+        "matchmakeservicetaskrole7B5E20D2",
+      ],
       "Properties": {
         "GroupDescription": "MyTestStack/service/SecurityGroup",
         "SecurityGroupEgress": [
@@ -243,11 +246,19 @@ exports[`バックエンドECSスタックがスナップショットと一致�
       "Type": "AWS::EC2::SecurityGroup",
     },
     "serviceService7DDC3B7C": {
+      "DependsOn": [
+        "matchmakeservicetaskrole7B5E20D2",
+      ],
       "Properties": {
         "Cluster": {
           "Ref": "backendecscluster8F4B4819",
         },
         "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 0,
         },

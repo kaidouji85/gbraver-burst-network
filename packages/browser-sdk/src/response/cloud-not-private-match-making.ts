@@ -11,7 +11,7 @@ export type CouldNotPrivateMatchMaking = {
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseCouldNotPrivateMatchMaking(
-  origin: any
+  origin: any,
 ): CouldNotPrivateMatchMaking | null {
   /* eslint-enable */
   if (origin?.action === "cloud-not-private-match-making") {

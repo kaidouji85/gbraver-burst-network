@@ -25,7 +25,7 @@ export class Notifier {
    */
   async notifyToClient(
     connectionID: string,
-    data: WebsocketResponse
+    data: WebsocketResponse,
   ): Promise<void> {
     const sendData = new TextEncoder().encode(JSON.stringify(data));
     await this._api.postToConnection({

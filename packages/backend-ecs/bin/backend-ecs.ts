@@ -22,17 +22,17 @@ const dockerImageTag = process.env.DOCKER_IMAGE_TAG ?? "";
 const vpcStackId = `${service}-vpc-g${VPC_GENERATION}`;
 const vpcId = Fn.importValue(`${vpcStackId}:VpcId`);
 const subnetAzs = R.times(R.identity, vpcSubnetCount).map((index) =>
-  Fn.importValue(`${vpcStackId}:PublicNetAvailabilityZone${index}`)
+  Fn.importValue(`${vpcStackId}:PublicNetAvailabilityZone${index}`),
 );
 const publicSubnetIds = R.times(R.identity, vpcSubnetCount).map((index) =>
-  Fn.importValue(`${vpcStackId}:PublicSubnetId${index}`)
+  Fn.importValue(`${vpcStackId}:PublicSubnetId${index}`),
 );
 const websocketAPIID = Fn.importValue(`${service}:${stage}:WebsocketApiId`);
 const connectionsTableARN = Fn.importValue(
-  `${service}:${stage}:ConnectionsTableArn`
+  `${service}:${stage}:ConnectionsTableArn`,
 );
 const casualMatchEntriesTableARN = Fn.importValue(
-  `${service}:${stage}:CasualMatchEntriesTableArn`
+  `${service}:${stage}:CasualMatchEntriesTableArn`,
 );
 const battlesTableARN = Fn.importValue(`${service}:${stage}:BattlesTableArn`);
 
