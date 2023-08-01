@@ -81,6 +81,7 @@ npm run build
 | AUTH0_DOMAIN                            | auth0のドメインを記載                                                                                                         |
 | AUTH0_JWKS_URL                          | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | AUTH0_AUDIENCE                          | [事前作業](#pre-required-task) 6. で作成したAuth0 APIのIdentifierを記載する                                                          |
+| AUTH0_USER_MANAGEMENT_DOMAIN            | auth0のドメインを記載（カスタムドメインは利用不可、本来のドメイン名を指定）                                                                              |
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_ID     | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient idを記載する                                                   |
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する                                               |
 | MATCH_MAKE_ECR_REPOSITORY_NAME          | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名                                                                  |
@@ -142,6 +143,7 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/auth0Domain                        | SecureString | [環境変数定義の定義](#env-config) AUTH0_DOMAIN を参照                            |
 | /GbraverBurst/dev/auth0JwksUrl                       | SecureString | [環境変数定義の定義](#env-config) AUTH0_JWKS_URL を参照                          |
 | /GbraverBurst/dev/auth0Audience                      | SecureString | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                          |
+| /GbraverBurst/dev/auth0UserManagementDomain          | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照    |
 | /GbraverBurst/dev/auth0UserManagementAppClientId     | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_ID を参照     |
 | /GbraverBurst/dev/auth0UserManagementAppClientSecret | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET を参照 |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName         | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照          |
@@ -171,6 +173,7 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/prod/auth0Domain                        | SecureString  | [環境変数定義の定義](#env-config) AUTH0_DOMAIN を参照                            |
 | /GbraverBurst/prod/auth0JwksUrl                       | SecureString  | [環境変数定義の定義](#env-config) AUTH0_JWKS_URL を参照                          |
 | /GbraverBurst/prod/auth0Audience                      | SecureString  | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                          |
+| /GbraverBurst/prod/auth0UserManagementDomain          | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照     |
 | /GbraverBurst/prod/auth0UserManagementAppClientId     | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_ID を参照     |
 | /GbraverBurst/prod/auth0UserManagementAppClientSecret | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET を参照 |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName         | String        | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照          |
