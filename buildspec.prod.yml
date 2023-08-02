@@ -8,6 +8,7 @@ env:
     AUTH0_DOMAIN: /GbraverBurst/prod/auth0Domain
     AUTH0_JWKS_URL: /GbraverBurst/prod/auth0JwksUrl
     AUTH0_AUDIENCE: /GbraverBurst/prod/auth0Audience
+    AUTH0_USER_MANAGEMENT_DOMAIN: /GbraverBurst/prod/auth0UserManagementDomain
     AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/prod/auth0UserManagementAppClientId
     AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: /GbraverBurst/prod/auth0UserManagementAppClientSecret
     DOCKER_USER: /GbraverBurst/prod/dockerUser
