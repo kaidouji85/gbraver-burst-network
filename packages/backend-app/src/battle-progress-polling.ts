@@ -28,6 +28,7 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
@@ -35,18 +36,22 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
+
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
+
 const invalidRequestBody = {
   statusCode: 400,
   body: "invalid request body",
 };
+
 const invalidRequestError: Error = {
   action: "error",
   error: "invalid request body",
 };
+
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };
