@@ -143,12 +143,6 @@ export async function battleProgressPolling(
 
   const command0: BattleCommand = fetchedCommands[0];
   const command1: BattleCommand = fetchedCommands[1];
-  const playerOfCommand0 = battle.players.find(
-    (v) => v.userID === command0.userID,
-  );
-  const playerOfCommand1 = battle.players.find(
-    (v) => v.userID === command1.userID,
-  );
   const isSameBattleIDs = isSameValues([
     data.battleID,
     battle.battleID,
@@ -161,12 +155,21 @@ export async function battleProgressPolling(
     command0.flowID,
     command1.flowID,
   ]);
-  if (
-    !isSameBattleIDs ||
-    !isSameFlowIDs ||
-    !playerOfCommand0 ||
-    !playerOfCommand1
-  ) {
+  if (!isSameBattleIDs || !isSameFlowIDs) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      notReadyBattleProgress,
+    );
+    return webSocketAPIResponseOfNotReadyBattleProgress;
+  }
+
+  const playerOfCommand0 = battle.players.find(
+    (v) => v.userID === command0.userID,
+  );
+  const playerOfCommand1 = battle.players.find(
+    (v) => v.userID === command1.userID,
+  );
+  if (!playerOfCommand0 || !playerOfCommand1) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       notReadyBattleProgress,
