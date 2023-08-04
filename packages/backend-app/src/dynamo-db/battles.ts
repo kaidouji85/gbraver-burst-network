@@ -46,6 +46,7 @@ export class Battles {
   async get(battleID: string): Promise<BattlesSchema | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
+      ConsistentRead: true,
       Key: {
         battleID,
       },
