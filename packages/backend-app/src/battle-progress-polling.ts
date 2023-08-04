@@ -1,14 +1,14 @@
-import { Player, PlayerCommand, restoreGbraverBurst } from "gbraver-burst-core";
+import { restoreGbraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommand } from "./core/battle-command";
 import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
-import { toPlayer } from "./core/to-player";
+import { createPlayerCommands } from "./core/create-player-commands";
+import { createPlayers } from "./core/create-players";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -81,49 +81,6 @@ const notReadyBattleProgress: NotReadyBattleProgress = {
 };
 
 /**
- * Gブレイバーバーストコアのプレイヤー情報を生成する
- * @param battle バトル情報
- * @return 生成結果
- */
-function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
-  return [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
-}
-
-/**
- * プレイヤーコマンドを生成する
- * @param battle バトル情報
- * @param command バトルコマンド
- * @return 生成結果、生成できない場合はnullを返す
- */
-function createPlayerCommand(
-  battle: Battle<BattlePlayer>,
-  command: BattleCommand,
-): PlayerCommand | null {
-  const foundPlayer = battle.players.find((v) => v.userID === command.userID);
-  return foundPlayer
-    ? {
-        command: command.command,
-        playerId: foundPlayer.playerId,
-      }
-    : null;
-}
-
-/**
- * GBraverBurstCoreに渡すコマンドを生成する
- * @param battle バトル情報
- * @param commands すべてのプレイヤーのバトルコマンド
- * @return 生成結果、生成できない場合はnullを返す
- */
-function createCoreCommands(
-  battle: Battle<BattlePlayer>,
-  commands: [BattleCommand, BattleCommand],
-): [PlayerCommand, PlayerCommand] | null {
-  const coreCommand0 = createPlayerCommand(battle, commands[0]);
-  const coreCommand1 = createPlayerCommand(battle, commands[1]);
-  return coreCommand0 && coreCommand1 ? [coreCommand0, coreCommand1] : null;
-}
-
-/**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
@@ -188,8 +145,8 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const corePlayers = createCorePlayers(battle);
-  const coreCommands = createCoreCommands(battle, commands);
+  const corePlayers = createPlayers(battle);
+  const coreCommands = createPlayerCommands(battle, commands);
   if (!coreCommands) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
