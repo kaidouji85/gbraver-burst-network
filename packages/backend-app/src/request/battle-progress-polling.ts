@@ -1,7 +1,7 @@
-import { BattleProgressQuery } from "../core/battle-progress-query";
+import { CanBattleProgressQuery } from "../core/can-battle-progress";
 
 /** バトル進行ポーリング */
-export type BattleProgressPolling = BattleProgressQuery & {
+export type BattleProgressPolling = CanBattleProgressQuery & {
   action: "battle-progress-polling";
 };
 

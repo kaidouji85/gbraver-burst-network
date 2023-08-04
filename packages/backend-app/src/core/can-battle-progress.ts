@@ -1,8 +1,7 @@
 import { uniq } from "ramda";
 
-import { Battle, BattlePlayer } from "./battle";
+import { Battle, BattleID, BattlePlayer, FlowID } from "./battle";
 import { BattleCommand } from "./battle-command";
-import { BattleProgressQuery } from "./battle-progress-query";
 
 /**
  * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
@@ -13,15 +12,23 @@ function isSameValues(values: string[]): boolean {
   return uniq(values).length === 1;
 }
 
+/** バトル進行可否のクエリ */
+export type CanBattleProgressQuery = {
+  /** バトルID */
+  battleID: BattleID;
+  /** フローID */
+  flowID: FlowID;
+};
+
 /**
  * バトル進行が出来るか否かを判定する
- * @param data バトル進行ポーリング
+ * @param query バトル進行クエリ
  * @param battle バトル情報
  * @param commands すべてのプレイヤーのバトルコマンド
  * @return 判定結果、trueでバトル進行ができる
  */
 export function canProgressBattle(
-  query: BattleProgressQuery,
+  query: CanBattleProgressQuery,
   battle: Battle<BattlePlayer>,
   commands: [BattleCommand, BattleCommand],
 ): boolean {

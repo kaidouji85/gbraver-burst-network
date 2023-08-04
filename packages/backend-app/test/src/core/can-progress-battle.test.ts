@@ -2,8 +2,7 @@ import { EMPTY_PLAYER } from "gbraver-burst-core";
 
 import { Battle, BattleID, BattlePlayer, FlowID } from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
-import { BattleProgressQuery } from "../../../src/core/battle-progress-query";
-import { canProgressBattle } from "../../../src/core/can-battle-progress";
+import { CanBattleProgressQuery, canProgressBattle } from "../../../src/core/can-battle-progress";
 import { UserID } from "../../../src/core/user";
 
 /** ポーリング実行プレイヤー */
@@ -66,7 +65,7 @@ const createBattleCommand = (params: CreateCommandParams): BattleCommand => ({
 });
 
 /** バトル進行クエリ */
-const query: BattleProgressQuery = {
+const query: CanBattleProgressQuery = {
   battleID: "query-battle",
   flowID: "query-flow",
 };
