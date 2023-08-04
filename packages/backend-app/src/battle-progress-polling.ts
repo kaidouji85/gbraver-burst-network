@@ -93,27 +93,25 @@ function isSameValues(values: string[]): boolean {
  * バトル進行が出来るか否かを判定する
  * @param data バトル進行ポーリング
  * @param battle バトル情報
- * @param command0 バトルコマンド0 
- * @param command1 バトルコマンド1
+ * @param commands すべてのプレイヤーのバトルコマンド
  * @return 判定結果、trueでバトル進行ができる
  */
 function canProgressBattle(
   data: BattleProgressPolling, 
   battle: Battle<BattlePlayer>,
-  command0: BattleCommand,
-  command1: BattleCommand
+  commands: [BattleCommand, BattleCommand],
 ): boolean {
   const isSameBattleIDs = isSameValues([
     data.battleID,
     battle.battleID,
-    command0.battleID,
-    command0.battleID,
+    commands[0].battleID,
+    commands[1].battleID,
   ]);
   const isSameFlowIDs = isSameValues([
     data.flowID,
     battle.flowID,
-    command0.flowID,
-    command1.flowID,
+    commands[0].flowID,
+    commands[1].flowID,
   ]);
   return isSameBattleIDs && isSameFlowIDs;
 }
@@ -152,17 +150,15 @@ function createPlayerCommand(
 /**
  * GBraverBurstCoreに渡すコマンドを生成する
  * @param battle バトル情報
- * @param command0 バトルコマンド0
- * @param command1 バトルコマンド1
+ * @param commands すべてのプレイヤーのバトルコマンド
  * @return 生成結果、生成できない場合はnullを返す
  */
 function createCoreCommands(
   battle: Battle<BattlePlayer>, 
-  command0: BattleCommand,
-  command1: BattleCommand
+  commands: [BattleCommand, BattleCommand],
 ): [PlayerCommand, PlayerCommand] | null {
-  const coreCommand0 = createPlayerCommand(battle, command0);
-  const coreCommand1 = createPlayerCommand(battle, command1);
+  const coreCommand0 = createPlayerCommand(battle, commands[0]);
+  const coreCommand1 = createPlayerCommand(battle, commands[1]);
   return coreCommand0 && coreCommand1
     ? [coreCommand0, coreCommand1]
     : null;
@@ -221,9 +217,8 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const command0: BattleCommand = fetchedCommands[0];
-  const command1: BattleCommand = fetchedCommands[1];
-  if (!canProgressBattle(data, battle, command0, command1)) {
+  const commands: [BattleCommand, BattleCommand] = [fetchedCommands[0], fetchedCommands[1]];
+  if (!canProgressBattle(data, battle, commands)) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       notReadyBattleProgress,
@@ -232,7 +227,7 @@ export async function battleProgressPolling(
   }
 
   const corePlayers = createCorePlayers(battle);
-  const coreCommands = createCoreCommands(battle, command0, command1);
+  const coreCommands = createCoreCommands(battle, commands);
   if (!coreCommands) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
