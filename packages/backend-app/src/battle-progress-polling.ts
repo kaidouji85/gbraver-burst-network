@@ -119,6 +119,18 @@ function canProgressBattle(
 }
 
 /**
+ * Gブレイバーバーストコアのプレイヤー情報を生成する
+ * @param battle バトル情報
+ * @return 生成結果
+ */
+function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
+  return [
+    toPlayer(battle.players[0]),
+    toPlayer(battle.players[1]),
+  ];
+}
+
+/**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
@@ -195,10 +207,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const corePlayers: [Player, Player] = [
-    toPlayer(battle.players[0]),
-    toPlayer(battle.players[1]),
-  ];
+  const corePlayers = createCorePlayers(battle);
   const coreCommands: [PlayerCommand, PlayerCommand] = [
     {
       command: command0.command,
