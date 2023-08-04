@@ -83,3 +83,16 @@ test("バトルID、フローIDが一致してりればバトル進行できる"
   });
   expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(true);
 });
+
+test("フローIDが一致していなければバトル進行できない", () => {
+  const battle = createBattle({...query, flowID: "non-matched-flow"});
+  const pollerPlayerCommand = createBattleCommand({
+    ...query,
+    userID: pollerPlayer.userID,
+  });
+  const otherPlayerCommand = createBattleCommand({
+    ...query,
+    userID: otherPlayer.userID,
+  });
+  expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(false);
+});
