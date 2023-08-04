@@ -1,4 +1,4 @@
-import { Player, PlayerCommand, restoreGbraverBurst } from "gbraver-burst-core";
+import { PlayerCommand, restoreGbraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
@@ -8,7 +8,7 @@ import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommand } from "./core/battle-command";
 import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
-import { toPlayer } from "./core/to-player";
+import { createPlayers } from "./core/create-players";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
@@ -79,15 +79,6 @@ const invalidRequestError: Error = {
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };
-
-/**
- * Gブレイバーバーストコアのプレイヤー情報を生成する
- * @param battle バトル情報
- * @return 生成結果
- */
-function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
-  return [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
-}
 
 /**
  * プレイヤーコマンドを生成する
@@ -188,7 +179,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const corePlayers = createCorePlayers(battle);
+  const corePlayers = createPlayers(battle);
   const coreCommands = createCoreCommands(battle, commands);
   if (!coreCommands) {
     await notifier.notifyToClient(
