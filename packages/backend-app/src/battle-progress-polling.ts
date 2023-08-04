@@ -117,6 +117,18 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer,
+  );
+  const isPoller = user.userID === battle.poller;
+  if (!isPoller) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      notReadyBattleProgress,
+    );
+    return webSocketAPIResponseOfNotReadyBattleProgress;
+  }
+
   const fetchedCommands = await Promise.all([
     battleCommands.get(battle.players[0].userID),
     battleCommands.get(battle.players[1].userID),
@@ -149,14 +161,9 @@ export async function battleProgressPolling(
     command0.flowID,
     command1.flowID,
   ]);
-  const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer,
-  );
-  const isPoller = user.userID === battle.poller;
   if (
     !isSameBattleIDs ||
     !isSameFlowIDs ||
-    !isPoller ||
     !playerOfCommand0 ||
     !playerOfCommand1
   ) {
