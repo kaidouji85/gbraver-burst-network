@@ -1,5 +1,4 @@
 import { Player, PlayerCommand, restoreGbraverBurst } from "gbraver-burst-core";
-import { uniq } from "ramda";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
@@ -7,6 +6,7 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommand } from "./core/battle-command";
+import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
 import { toPlayer } from "./core/to-player";
 import { createBattleCommands } from "./dynamo-db/create-battle-commands";
@@ -17,10 +17,7 @@ import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import {
-  BattleProgressPolling,
-  parseBattleProgressPolling,
-} from "./request/battle-progress-polling";
+import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import type {
   BattleEnd,
   BattleProgressed,
@@ -82,42 +79,6 @@ const invalidRequestError: Error = {
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };
-
-/**
- * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
- * @param values 判定対象の文字列を配列で渡す
- * @return 判定結果、trueで全て同じ値である
- */
-function isSameValues(values: string[]): boolean {
-  return uniq(values).length === 1;
-}
-
-/**
- * バトル進行が出来るか否かを判定する
- * @param data バトル進行ポーリング
- * @param battle バトル情報
- * @param commands すべてのプレイヤーのバトルコマンド
- * @return 判定結果、trueでバトル進行ができる
- */
-function canProgressBattle(
-  data: BattleProgressPolling,
-  battle: Battle<BattlePlayer>,
-  commands: [BattleCommand, BattleCommand],
-): boolean {
-  const isSameBattleIDs = isSameValues([
-    data.battleID,
-    battle.battleID,
-    commands[0].battleID,
-    commands[1].battleID,
-  ]);
-  const isSameFlowIDs = isSameValues([
-    data.flowID,
-    battle.flowID,
-    commands[0].flowID,
-    commands[1].flowID,
-  ]);
-  return isSameBattleIDs && isSameFlowIDs;
-}
 
 /**
  * Gブレイバーバーストコアのプレイヤー情報を生成する
