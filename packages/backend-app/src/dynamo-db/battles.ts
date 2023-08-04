@@ -10,12 +10,13 @@ export type BattlesSchema = Battle<BattlePlayer>;
 
 /** battlesのDAO*/
 export class Battles {
+  /** DynamoDBドキュメント */
   #dynamoDB: DynamoDBDocument;
+  /** テーブル名 */
   #tableName: string;
 
   /**
    * コンストラクタ
-   *
    * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
@@ -26,7 +27,6 @@ export class Battles {
 
   /**
    * 項目追加する
-   *
    * @param battle 追加する項目
    * @return 処理が完了したら発火するPromise
    */
@@ -40,7 +40,6 @@ export class Battles {
   /**
    * バトルID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
-   *
    * @param battleID バトルID
    * @return 検索結果
    */
@@ -56,7 +55,6 @@ export class Battles {
 
   /**
    * パーティションキー指定で項目を削除する
-   *
    * @param battleID バトルID
    * @return 削除受付したら発火するPromise
    */

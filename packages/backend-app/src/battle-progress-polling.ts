@@ -52,10 +52,18 @@ const notReadyBattleProgress: NotReadyBattleProgress = {
 };
 
 /**
+ * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
+ * @param values 判定対象の文字列を配列で渡す
+ * @return 判定結果、trueで全て同じ値である
+ */
+function isSameValues(values: string[]): boolean {
+  return uniq(values).length === 1;
+}
+
+/**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
- *
  * @param event イベント
  * @return 本関数が終了したら発火するPromise
  */
@@ -64,7 +72,6 @@ export async function battleProgressPolling(
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseBattleProgressPolling(body);
-
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -74,7 +81,6 @@ export async function battleProgressPolling(
   }
 
   const battle = await battles.get(data.battleID);
-
   if (!battle) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -87,7 +93,6 @@ export async function battleProgressPolling(
     battleCommands.get(battle.players[0].userID),
     battleCommands.get(battle.players[1].userID),
   ]);
-
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -120,7 +125,6 @@ export async function battleProgressPolling(
     event.requestContext.authorizer,
   );
   const isPoller = user.userID === battle.poller;
-
   if (
     !isSameBattleIDs ||
     !isSameFlowIDs ||
@@ -200,14 +204,4 @@ export async function battleProgressPolling(
     statusCode: 200,
     body: "send command success",
   };
-}
-
-/**
- * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
- *
- * @param values 判定対象の文字列を配列で渡す
- * @return 判定結果、trueで全て同じ値である
- */
-function isSameValues(values: string[]): boolean {
-  return uniq(values).length === 1;
 }
