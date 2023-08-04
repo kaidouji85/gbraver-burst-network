@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommand } from "./core/battle-command";
 import { None } from "./core/connection";
 import { toPlayer } from "./core/to-player";
@@ -16,7 +17,10 @@ import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { parseBattleProgressPolling } from "./request/battle-progress-polling";
+import {
+  BattleProgressPolling,
+  parseBattleProgressPolling,
+} from "./request/battle-progress-polling";
 import type {
   BattleEnd,
   BattleProgressed,
@@ -89,6 +93,76 @@ function isSameValues(values: string[]): boolean {
 }
 
 /**
+ * バトル進行が出来るか否かを判定する
+ * @param data バトル進行ポーリング
+ * @param battle バトル情報
+ * @param commands すべてのプレイヤーのバトルコマンド
+ * @return 判定結果、trueでバトル進行ができる
+ */
+function canProgressBattle(
+  data: BattleProgressPolling,
+  battle: Battle<BattlePlayer>,
+  commands: [BattleCommand, BattleCommand],
+): boolean {
+  const isSameBattleIDs = isSameValues([
+    data.battleID,
+    battle.battleID,
+    commands[0].battleID,
+    commands[1].battleID,
+  ]);
+  const isSameFlowIDs = isSameValues([
+    data.flowID,
+    battle.flowID,
+    commands[0].flowID,
+    commands[1].flowID,
+  ]);
+  return isSameBattleIDs && isSameFlowIDs;
+}
+
+/**
+ * Gブレイバーバーストコアのプレイヤー情報を生成する
+ * @param battle バトル情報
+ * @return 生成結果
+ */
+function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
+  return [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
+}
+
+/**
+ * プレイヤーコマンドを生成する
+ * @param battle バトル情報
+ * @param command バトルコマンド
+ * @return 生成結果、生成できない場合はnullを返す
+ */
+function createPlayerCommand(
+  battle: Battle<BattlePlayer>,
+  command: BattleCommand,
+): PlayerCommand | null {
+  const foundPlayer = battle.players.find((v) => v.userID === command.userID);
+  return foundPlayer
+    ? {
+        command: command.command,
+        playerId: foundPlayer.playerId,
+      }
+    : null;
+}
+
+/**
+ * GBraverBurstCoreに渡すコマンドを生成する
+ * @param battle バトル情報
+ * @param commands すべてのプレイヤーのバトルコマンド
+ * @return 生成結果、生成できない場合はnullを返す
+ */
+function createCoreCommands(
+  battle: Battle<BattlePlayer>,
+  commands: [BattleCommand, BattleCommand],
+): [PlayerCommand, PlayerCommand] | null {
+  const coreCommand0 = createPlayerCommand(battle, commands[0]);
+  const coreCommand1 = createPlayerCommand(battle, commands[1]);
+  return coreCommand0 && coreCommand1 ? [coreCommand0, coreCommand1] : null;
+}
+
+/**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
@@ -117,6 +191,18 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer,
+  );
+  const isPoller = user.userID === battle.poller;
+  if (!isPoller) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      notReadyBattleProgress,
+    );
+    return webSocketAPIResponseOfNotReadyBattleProgress;
+  }
+
   const fetchedCommands = await Promise.all([
     battleCommands.get(battle.players[0].userID),
     battleCommands.get(battle.players[1].userID),
@@ -129,37 +215,11 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const command0: BattleCommand = fetchedCommands[0];
-  const command1: BattleCommand = fetchedCommands[1];
-  const playerOfCommand0 = battle.players.find(
-    (v) => v.userID === command0.userID,
-  );
-  const playerOfCommand1 = battle.players.find(
-    (v) => v.userID === command1.userID,
-  );
-  const isSameBattleIDs = isSameValues([
-    data.battleID,
-    battle.battleID,
-    command0.battleID,
-    command0.battleID,
-  ]);
-  const isSameFlowIDs = isSameValues([
-    data.flowID,
-    battle.flowID,
-    command0.flowID,
-    command1.flowID,
-  ]);
-  const user = extractUserFromWebSocketAuthorizer(
-    event.requestContext.authorizer,
-  );
-  const isPoller = user.userID === battle.poller;
-  if (
-    !isSameBattleIDs ||
-    !isSameFlowIDs ||
-    !isPoller ||
-    !playerOfCommand0 ||
-    !playerOfCommand1
-  ) {
+  const commands: [BattleCommand, BattleCommand] = [
+    fetchedCommands[0],
+    fetchedCommands[1],
+  ];
+  if (!canProgressBattle(data, battle, commands)) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       notReadyBattleProgress,
@@ -167,20 +227,16 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const corePlayers: [Player, Player] = [
-    toPlayer(battle.players[0]),
-    toPlayer(battle.players[1]),
-  ];
-  const coreCommands: [PlayerCommand, PlayerCommand] = [
-    {
-      command: command0.command,
-      playerId: playerOfCommand0.playerId,
-    },
-    {
-      command: command1.command,
-      playerId: playerOfCommand1.playerId,
-    },
-  ];
+  const corePlayers = createCorePlayers(battle);
+  const coreCommands = createCoreCommands(battle, commands);
+  if (!coreCommands) {
+    await notifier.notifyToClient(
+      event.requestContext.connectionId,
+      notReadyBattleProgress,
+    );
+    return webSocketAPIResponseOfNotReadyBattleProgress;
+  }
+
   const core = restoreGbraverBurst({
     players: corePlayers,
     stateHistory: battle.stateHistory,
