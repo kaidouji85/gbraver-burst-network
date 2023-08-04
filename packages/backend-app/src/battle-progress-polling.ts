@@ -17,7 +17,10 @@ import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { BattleProgressPolling, parseBattleProgressPolling } from "./request/battle-progress-polling";
+import {
+  BattleProgressPolling,
+  parseBattleProgressPolling,
+} from "./request/battle-progress-polling";
 import type {
   BattleEnd,
   BattleProgressed,
@@ -97,7 +100,7 @@ function isSameValues(values: string[]): boolean {
  * @return 判定結果、trueでバトル進行ができる
  */
 function canProgressBattle(
-  data: BattleProgressPolling, 
+  data: BattleProgressPolling,
   battle: Battle<BattlePlayer>,
   commands: [BattleCommand, BattleCommand],
 ): boolean {
@@ -122,10 +125,7 @@ function canProgressBattle(
  * @return 生成結果
  */
 function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
-  return [
-    toPlayer(battle.players[0]),
-    toPlayer(battle.players[1]),
-  ];
+  return [toPlayer(battle.players[0]), toPlayer(battle.players[1])];
 }
 
 /**
@@ -135,15 +135,15 @@ function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
  * @return 生成結果、生成できない場合はnullを返す
  */
 function createPlayerCommand(
-  battle: Battle<BattlePlayer>, 
-  command: BattleCommand
+  battle: Battle<BattlePlayer>,
+  command: BattleCommand,
 ): PlayerCommand | null {
   const foundPlayer = battle.players.find((v) => v.userID === command.userID);
-  return foundPlayer 
+  return foundPlayer
     ? {
-      command: command.command,
-      playerId: foundPlayer.playerId,
-    }
+        command: command.command,
+        playerId: foundPlayer.playerId,
+      }
     : null;
 }
 
@@ -154,14 +154,12 @@ function createPlayerCommand(
  * @return 生成結果、生成できない場合はnullを返す
  */
 function createCoreCommands(
-  battle: Battle<BattlePlayer>, 
+  battle: Battle<BattlePlayer>,
   commands: [BattleCommand, BattleCommand],
 ): [PlayerCommand, PlayerCommand] | null {
   const coreCommand0 = createPlayerCommand(battle, commands[0]);
   const coreCommand1 = createPlayerCommand(battle, commands[1]);
-  return coreCommand0 && coreCommand1
-    ? [coreCommand0, coreCommand1]
-    : null;
+  return coreCommand0 && coreCommand1 ? [coreCommand0, coreCommand1] : null;
 }
 
 /**
@@ -217,7 +215,10 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const commands: [BattleCommand, BattleCommand] = [fetchedCommands[0], fetchedCommands[1]];
+  const commands: [BattleCommand, BattleCommand] = [
+    fetchedCommands[0],
+    fetchedCommands[1],
+  ];
   if (!canProgressBattle(data, battle, commands)) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
