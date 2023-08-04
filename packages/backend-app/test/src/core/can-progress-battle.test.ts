@@ -1,31 +1,39 @@
 import { EMPTY_PLAYER } from "gbraver-burst-core";
 
-import { Battle, BattleID, BattlePlayer, FlowID } from "../../../src/core/battle";
+import {
+  Battle,
+  BattleID,
+  BattlePlayer,
+  FlowID,
+} from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
-import { CanBattleProgressQuery, canProgressBattle } from "../../../src/core/can-battle-progress";
+import {
+  CanBattleProgressCondition,
+  canProgressBattle,
+} from "../../../src/core/can-battle-progress";
 import { UserID } from "../../../src/core/user";
 
 /** ポーリング実行プレイヤー */
-const pollerPlayer: BattlePlayer = { 
-  ...EMPTY_PLAYER, 
+const pollerPlayer: BattlePlayer = {
+  ...EMPTY_PLAYER,
   playerId: "poller",
   userID: "poller",
-  connectionId: "poller-connection"
+  connectionId: "poller-connection",
 };
 
 /** ゲームに参加しているだけのプレイヤー */
-const otherPlayer: BattlePlayer = { 
-  ...EMPTY_PLAYER, 
+const otherPlayer: BattlePlayer = {
+  ...EMPTY_PLAYER,
   playerId: "other-player",
   userID: "other-player",
-  connectionId: "other-player-connection"
+  connectionId: "other-player-connection",
 };
 
 /** バトル情報生成パラメータ */
 type CreateBattleParams = {
   /** バトルID */
   battleID: BattleID;
-  /** フローID */ 
+  /** フローID */
   flowID: FlowID;
 };
 
@@ -38,7 +46,7 @@ const createBattle = (params: CreateBattleParams): Battle<BattlePlayer> => ({
   ...params,
   players: [pollerPlayer, otherPlayer],
   poller: pollerPlayer.playerId,
-  stateHistory: []
+  stateHistory: [],
 });
 
 /** バトルコマンド生成パラメータ */
@@ -60,51 +68,66 @@ const createBattleCommand = (params: CreateCommandParams): BattleCommand => ({
   ...params,
   command: {
     type: "BATTERY_COMMAND",
-    battery: 0
-  }
+    battery: 0,
+  },
 });
 
-/** バトル進行クエリ */
-const query: CanBattleProgressQuery = {
+/** バトル進行条件 */
+const condition: CanBattleProgressCondition = {
   battleID: "query-battle",
   flowID: "query-flow",
 };
 
 test("バトルID、フローIDが一致していればバトル進行できる", () => {
-  const battle = createBattle(query);
+  const battle = createBattle(condition);
   const pollerPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: pollerPlayer.userID,
   });
   const otherPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: otherPlayer.userID,
   });
-  expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(true);
+  expect(
+    canProgressBattle(condition, battle, [
+      pollerPlayerCommand,
+      otherPlayerCommand,
+    ]),
+  ).toBe(true);
 });
 
 test("フローIDが一致していなければバトル進行できない", () => {
-  const battle = createBattle({...query, flowID: "non-matched-flow"});
+  const battle = createBattle({ ...condition, flowID: "non-matched-flow" });
   const pollerPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: pollerPlayer.userID,
   });
   const otherPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: otherPlayer.userID,
   });
-  expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(false);
+  expect(
+    canProgressBattle(condition, battle, [
+      pollerPlayerCommand,
+      otherPlayerCommand,
+    ]),
+  ).toBe(false);
 });
 
 test("バトルIDが一致していなければバトル進行できない", () => {
-  const battle = createBattle({ ...query, battleID: "non-matched-battle" });
+  const battle = createBattle({ ...condition, battleID: "non-matched-battle" });
   const pollerPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: pollerPlayer.userID,
   });
   const otherPlayerCommand = createBattleCommand({
-    ...query,
+    ...condition,
     userID: otherPlayer.userID,
   });
-  expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(false);
+  expect(
+    canProgressBattle(condition, battle, [
+      pollerPlayerCommand,
+      otherPlayerCommand,
+    ]),
+  ).toBe(false);
 });
