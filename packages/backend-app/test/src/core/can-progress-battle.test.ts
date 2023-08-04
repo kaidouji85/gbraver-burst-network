@@ -71,7 +71,7 @@ const query: BattleProgressQuery = {
   flowID: "query-flow",
 };
 
-test("バトルID、フローIDが一致してりればバトル進行できる", () => {
+test("バトルID、フローIDが一致していればバトル進行できる", () => {
   const battle = createBattle(query);
   const pollerPlayerCommand = createBattleCommand({
     ...query,
@@ -86,6 +86,19 @@ test("バトルID、フローIDが一致してりればバトル進行できる"
 
 test("フローIDが一致していなければバトル進行できない", () => {
   const battle = createBattle({...query, flowID: "non-matched-flow"});
+  const pollerPlayerCommand = createBattleCommand({
+    ...query,
+    userID: pollerPlayer.userID,
+  });
+  const otherPlayerCommand = createBattleCommand({
+    ...query,
+    userID: otherPlayer.userID,
+  });
+  expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(false);
+});
+
+test("バトルIDが一致していなければバトル進行できない", () => {
+  const battle = createBattle({ ...query, battleID: "non-matched-battle" });
   const pollerPlayerCommand = createBattleCommand({
     ...query,
     userID: pollerPlayer.userID,
