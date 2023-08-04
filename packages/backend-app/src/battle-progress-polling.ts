@@ -130,6 +130,12 @@ function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
   ];
 }
 
+/**
+ * プレイヤーコマンドを生成する
+ * @param battle バトル情報
+ * @param command バトルコマンド
+ * @return 生成結果、生成できない場合はnullを返す
+ */
 function createPlayerCommand(
   battle: Battle<BattlePlayer>, 
   command: BattleCommand
@@ -143,7 +149,14 @@ function createPlayerCommand(
     : null;
 }
 
-function createPlayerCommands(
+/**
+ * GBraverBurstCoreに渡すコマンドを生成する
+ * @param battle バトル情報
+ * @param command0 バトルコマンド0
+ * @param command1 バトルコマンド1
+ * @return 生成結果、生成できない場合はnullを返す
+ */
+function createCoreCommands(
   battle: Battle<BattlePlayer>, 
   command0: BattleCommand,
   command1: BattleCommand
@@ -218,13 +231,9 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const playerOfCommand0 = battle.players.find(
-    (v) => v.userID === command0.userID,
-  );
-  const playerOfCommand1 = battle.players.find(
-    (v) => v.userID === command1.userID,
-  );
-  if (!playerOfCommand0 || !playerOfCommand1) {
+  const corePlayers = createCorePlayers(battle);
+  const coreCommands = createCoreCommands(battle, command0, command1);
+  if (!coreCommands) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       notReadyBattleProgress,
@@ -232,17 +241,6 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const corePlayers = createCorePlayers(battle);
-  const coreCommands: [PlayerCommand, PlayerCommand] = [
-    {
-      command: command0.command,
-      playerId: playerOfCommand0.playerId,
-    },
-    {
-      command: command1.command,
-      playerId: playerOfCommand1.playerId,
-    },
-  ];
   const core = restoreGbraverBurst({
     players: corePlayers,
     stateHistory: battle.stateHistory,
