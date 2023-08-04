@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommand } from "./core/battle-command";
 import { None } from "./core/connection";
 import { toPlayer } from "./core/to-player";
@@ -16,7 +17,7 @@ import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
-import { parseBattleProgressPolling } from "./request/battle-progress-polling";
+import { BattleProgressPolling, parseBattleProgressPolling } from "./request/battle-progress-polling";
 import type {
   BattleEnd,
   BattleProgressed,
@@ -89,6 +90,35 @@ function isSameValues(values: string[]): boolean {
 }
 
 /**
+ * バトル進行が出来るか否かを判定する
+ * @param data バトル進行ポーリング
+ * @param battle バトル情報
+ * @param command0 バトルコマンド0 
+ * @param command1 バトルコマンド1
+ * @return 判定結果、trueでバトル進行ができる
+ */
+function canProgressBattle(
+  data: BattleProgressPolling, 
+  battle: Battle<BattlePlayer>,
+  command0: BattleCommand,
+  command1: BattleCommand
+): boolean {
+  const isSameBattleIDs = isSameValues([
+    data.battleID,
+    battle.battleID,
+    command0.battleID,
+    command0.battleID,
+  ]);
+  const isSameFlowIDs = isSameValues([
+    data.flowID,
+    battle.flowID,
+    command0.flowID,
+    command1.flowID,
+  ]);
+  return isSameBattleIDs && isSameFlowIDs;
+}
+
+/**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
@@ -143,19 +173,7 @@ export async function battleProgressPolling(
 
   const command0: BattleCommand = fetchedCommands[0];
   const command1: BattleCommand = fetchedCommands[1];
-  const isSameBattleIDs = isSameValues([
-    data.battleID,
-    battle.battleID,
-    command0.battleID,
-    command0.battleID,
-  ]);
-  const isSameFlowIDs = isSameValues([
-    data.flowID,
-    battle.flowID,
-    command0.flowID,
-    command1.flowID,
-  ]);
-  if (!isSameBattleIDs || !isSameFlowIDs) {
+  if (!canProgressBattle(data, battle, command0, command1)) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       notReadyBattleProgress,
