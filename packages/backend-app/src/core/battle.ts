@@ -20,7 +20,6 @@ export const FlowIDSchema = z.string();
 export type BattlePlayer = Player & {
   /** ユーザID */
   userID: UserID;
-
   /** コネクションID */
   connectionId: WSAPIGatewayConnectionId;
 };
