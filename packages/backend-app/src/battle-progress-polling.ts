@@ -53,18 +53,28 @@ const battles = createBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO を生成する */
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 
-/** ハンドラ関数レスポンス 不正なリクエストボディ */
-const invalidRequestBody = {
+/** WebSocketAPI レスポンス 不正なリクエストボディ */
+const webSocketAPIResponseOfInvalidRequestBody = {
   statusCode: 400,
   body: "invalid request body",
 };
+/** WebSocketAPI レスポンス コマンド入力が完了していない */
+const webSocketAPIResponseOfNotReadyBattleProgress = {
+  statusCode: 200,
+  body: "not-ready-battle-progress",
+};
+/** WebSocketAPI レスポンス コマンド送信成功 */
+const webSocketAPIResponseOfSendCommandSuccess = {
+  statusCode: 200,
+  body: "send command success",
+};
 
-/** WebSocket レスポンス 不正なリクエストボディ */
+/** クライアント通知 不正なリクエストボディ */
 const invalidRequestError: Error = {
   action: "error",
   error: "invalid request body",
 };
-/** WebSocket レスポンス コマンド入力が完了していない */
+/** クライアント通知 コマンド入力が完了していない */
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };
@@ -95,7 +105,7 @@ export async function battleProgressPolling(
       event.requestContext.connectionId,
       invalidRequestError,
     );
-    return invalidRequestBody;
+    return webSocketAPIResponseOfInvalidRequestBody;
   }
 
   const battle = await battles.get(data.battleID);
@@ -104,7 +114,7 @@ export async function battleProgressPolling(
       event.requestContext.connectionId,
       notReadyBattleProgress,
     );
-    return invalidRequestBody;
+    return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
   const fetchedCommands = await Promise.all([
@@ -116,7 +126,7 @@ export async function battleProgressPolling(
       event.requestContext.connectionId,
       notReadyBattleProgress,
     );
-    return invalidRequestBody;
+    return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
   const command0: BattleCommand = fetchedCommands[0];
@@ -154,7 +164,7 @@ export async function battleProgressPolling(
       event.requestContext.connectionId,
       notReadyBattleProgress,
     );
-    return invalidRequestBody;
+    return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
   const corePlayers: [Player, Player] = [
@@ -218,8 +228,5 @@ export async function battleProgressPolling(
   const lastState = update[update.length - 1];
   const isGameEnd = lastState.effect.name === "GameEnd";
   await (isGameEnd ? onGameEnd() : onGameContinue());
-  return {
-    statusCode: 200,
-    body: "send command success",
-  };
+  return webSocketAPIResponseOfSendCommandSuccess;
 }
