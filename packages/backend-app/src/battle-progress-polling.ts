@@ -24,34 +24,47 @@ import type {
   NotReadyBattleProgress,
 } from "./response/websocket-response";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API Gateway のID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** WebSocket API Gatewayエンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** WebSocket API Gateway 管理オブジェクト */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** クライアントへのメッセージ通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** Dynamo DB ドキュメント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** connections テーブル DAO */
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
+/** battles テーブル DAO */
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
+/** battle-commands テーブル DAO を生成する */
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 
+/** ハンドラ関数レスポンス 不正なリクエストボディ */
 const invalidRequestBody = {
   statusCode: 400,
   body: "invalid request body",
 };
 
+/** WebSocket レスポンス 不正なリクエストボディ */
 const invalidRequestError: Error = {
   action: "error",
   error: "invalid request body",
 };
-
+/** WebSocket レスポンス コマンド入力が完了していない */
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };
