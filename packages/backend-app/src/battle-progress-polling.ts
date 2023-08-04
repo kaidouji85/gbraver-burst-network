@@ -50,7 +50,7 @@ const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
-/** battle-commands テーブル DAO を生成する */
+/** battle-commands テーブル DAO */
 const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
 
 /** WebSocketAPI レスポンス 不正なリクエストボディ */
