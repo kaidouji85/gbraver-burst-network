@@ -1,9 +1,10 @@
-import { Command, EMPTY_PLAYER } from "gbraver-burst-core";
+import { EMPTY_PLAYER } from "gbraver-burst-core";
 
 import { Battle, BattleID, BattlePlayer, FlowID } from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
 import { BattleProgressQuery } from "../../../src/core/battle-progress-query";
 import { canProgressBattle } from "../../../src/core/can-battle-progress";
+import { UserID } from "../../../src/core/user";
 
 /** ポーリング実行プレイヤー */
 const pollerPlayer: BattlePlayer = { 
@@ -24,9 +25,9 @@ const otherPlayer: BattlePlayer = {
 /** バトル情報生成パラメータ */
 type CreateBattleParams = {
   /** バトルID */
-  battleID: BattleID,
+  battleID: BattleID;
   /** フローID */ 
-  flowID: FlowID
+  flowID: FlowID;
 };
 
 /**
@@ -41,29 +42,44 @@ const createBattle = (params: CreateBattleParams): Battle<BattlePlayer> => ({
   stateHistory: []
 });
 
+/** バトルコマンド生成パラメータ */
+type CreateCommandParams = {
+  /** ユーザID */
+  userID: UserID;
+  /** バトルID */
+  battleID: BattleID;
+  /** フローID */
+  flowID: FlowID;
+};
+
+/**
+ * バトルコマンドを生成する
+ * @param params 生成パラメータ
+ * @return 生成結果
+ */
+const createBattleCommand = (params: CreateCommandParams): BattleCommand => ({
+  ...params,
+  command: {
+    type: "BATTERY_COMMAND",
+    battery: 0
+  }
+});
+
 /** バトル進行クエリ */
 const query: BattleProgressQuery = {
   battleID: "query-battle",
   flowID: "query-flow",
 };
 
-/** 入力するコマンド */
-const command: Command = {
-  type: "BATTERY_COMMAND",
-  battery: 0
-};
-
 test("バトルID、フローIDが一致してりればバトル進行できる", () => {
   const battle = createBattle(query);
-  const pollerPlayerCommand: BattleCommand = {
+  const pollerPlayerCommand = createBattleCommand({
     ...query,
     userID: pollerPlayer.userID,
-    command
-  };
-  const otherPlayerCommand: BattleCommand = {
+  });
+  const otherPlayerCommand = createBattleCommand({
     ...query,
     userID: otherPlayer.userID,
-    command,
-  };
+  });
   expect(canProgressBattle(query, battle, [pollerPlayerCommand, otherPlayerCommand])).toBe(true);
 });
