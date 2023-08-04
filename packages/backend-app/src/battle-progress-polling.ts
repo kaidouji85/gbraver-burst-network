@@ -130,6 +130,31 @@ function createCorePlayers(battle: Battle<BattlePlayer>): [Player, Player] {
   ];
 }
 
+function createPlayerCommand(
+  battle: Battle<BattlePlayer>, 
+  command: BattleCommand
+): PlayerCommand | null {
+  const foundPlayer = battle.players.find((v) => v.userID === command.userID);
+  return foundPlayer 
+    ? {
+      command: command.command,
+      playerId: foundPlayer.playerId,
+    }
+    : null;
+}
+
+function createPlayerCommands(
+  battle: Battle<BattlePlayer>, 
+  command0: BattleCommand,
+  command1: BattleCommand
+): [PlayerCommand, PlayerCommand] | null {
+  const coreCommand0 = createPlayerCommand(battle, command0);
+  const coreCommand1 = createPlayerCommand(battle, command1);
+  return coreCommand0 && coreCommand1
+    ? [coreCommand0, coreCommand1]
+    : null;
+}
+
 /**
  * バトル更新用のポーリング
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
