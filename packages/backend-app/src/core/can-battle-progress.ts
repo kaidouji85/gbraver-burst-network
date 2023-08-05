@@ -12,11 +12,8 @@ function isSameValues(values: string[]): boolean {
   return uniq(values).length === 1;
 }
 
-/**
- * バトル進行可否の判断条件
- * 関連するオブジェクトが本プロパティの値と一致していればバトル進行ができる
- */
-export type CanBattleProgressCondition = {
+/** ポーリング実行者が送信したバトル進行チェックの問い合わせ */
+export type CanBattleProgressQueryFromPoller = {
   /** バトルID */
   battleID: BattleID;
   /** フローID */
@@ -25,17 +22,17 @@ export type CanBattleProgressCondition = {
 
 /**
  * バトル進行が出来るか否かを判定する
- * @param condition バトル進行クエリ
+ * @param query バトル進行クエリ
  * @param battle バトル情報
  * @param commands すべてのプレイヤーのバトルコマンド
  * @return 判定結果、trueでバトル進行ができる
  */
 export function canProgressBattle(
-  condition: CanBattleProgressCondition,
+  query: CanBattleProgressQueryFromPoller,
   battle: Battle<BattlePlayer>,
   commands: [BattleCommand, BattleCommand],
 ): boolean {
-  const objects = [condition, battle, ...commands];
+  const objects = [query, battle, ...commands];
   const isSameBattleIDs = isSameValues(objects.map((v) => v.battleID));
   const isSameFlowIDs = isSameValues(objects.map((v) => v.flowID));
   return isSameBattleIDs && isSameFlowIDs;
