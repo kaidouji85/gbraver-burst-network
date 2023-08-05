@@ -1,14 +1,8 @@
-import type { BattleID, FlowID } from "../core/battle";
+import { CanBattleProgressQueryFromPoller } from "../core/can-battle-progress";
 
 /** バトル進行ポーリング */
-export type BattleProgressPolling = {
+export type BattleProgressPolling = CanBattleProgressQueryFromPoller & {
   action: "battle-progress-polling";
-
-  /** バトルID */
-  battleID: BattleID;
-
-  /** フローID */
-  flowID: FlowID;
 };
 
 /**
