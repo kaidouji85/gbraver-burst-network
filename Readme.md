@@ -64,6 +64,12 @@ npm run build
       * delete:users_app_metadata
       * create:users_app_metadata
       * read:logs_users
+9. 以下設定でテスト環境のAWS Secret Managerを作成する
+  * シークレットのタイプ -> その他のシークレットタイプ
+  * キー/値のペア
+    * auth0UserManagementAppClientSecret
+    * [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する 
+  * 上記以外の項目は任意
 
 ## 環境構築方法
 ### ローカル環境からデプロイする
@@ -83,7 +89,7 @@ npm run build
 | AUTH0_AUDIENCE                          | [事前作業](#pre-required-task) 6. で作成したAuth0 APIのIdentifierを記載する                                                          |
 | AUTH0_USER_MANAGEMENT_DOMAIN            | auth0のドメインを記載（カスタムドメインは利用不可、本来のドメイン名を指定）                                                                              |
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_ID     | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient idを記載する                                                   |
-| AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する                                               |
+| AUTH0_SECRET_NAME | [事前作業](#pre-required-task) 9. で作成したAuth0用Secret Managerのシークレット名を記載する                                               |
 | MATCH_MAKE_ECR_REPOSITORY_NAME          | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名                                                                  |
 | DOCKER_IMAGE_TAG                        | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                |
 | DOCKER_USER                             | dockerhubのユーザ名                                                                                                        |
@@ -131,6 +137,14 @@ npm run build
 | BLD-01 | ubuntu/standard/7.0 | AWS管理イメージ、詳細は[ここ](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) を参照 |
 
 #### 開発環境でのCI/CD
+
+##### AWS Secret Managerを設定
+AwS Secret Managerに以下をセットします。
+
+| シークレット名 | 設定内容 |
+| ------------- | -------- |
+| /GbraverBurst/dev/auth0 | [事前作業](#pre-required-task)9.を参照 |
+
 ##### AWS Parameter Storeを設定
 AWS Parameter Storeに以下の値をセットします。
 
@@ -161,6 +175,13 @@ AWS Parameter Storeに以下の値をセットします。
 | DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
 
 #### 本番環境でのCI/CD
+##### AWS Secret Managerを設定
+AwS Secret Managerに以下をセットします。
+
+| シークレット名 | 設定内容 |
+| ------------- | -------- |
+| /GbraverBurst/prod/auth0 | [事前作業](#pre-required-task)9.を参照 
+
 ##### AWS Parameter Storeを設定
 AWS Parameter Storeに以下の値をセットします。
 
