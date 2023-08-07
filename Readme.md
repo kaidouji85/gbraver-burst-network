@@ -138,7 +138,7 @@ npm run build
 
 #### 開発環境でのCI/CD
 
-##### AWS Serret Managerを設定
+##### AWS Secret Managerを設定
 AwS Secret Managerに以下をセットします。
 
 | シークレット名 | 設定内容 |
@@ -175,7 +175,7 @@ AWS Parameter Storeに以下の値をセットします。
 | DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
 
 #### 本番環境でのCI/CD
-##### AWS Serret Managerを設定
+##### AWS Secret Managerを設定
 AwS Secret Managerに以下をセットします。
 
 | シークレット名 | 設定内容 |
