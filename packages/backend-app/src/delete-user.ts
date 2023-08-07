@@ -4,6 +4,7 @@ import {
 } from "@aws-sdk/client-secrets-manager";
 import { ManagementClient } from "auth0";
 
+import { parseAuth0Secret } from "./aws-secret-manager/auth0-secret";
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import type { RestAPIEvent } from "./lambda/rest-api-event";
 import type { RestAPIResponse } from "./lambda/rest-api-response";
@@ -17,13 +18,18 @@ const AUTH0_USER_MANAGEMENT_DOMAIN =
 const AUTH0_USER_MANAGEMENT_APP_CLIENT_ID =
   process.env.AUTH0_USER_MANAGEMENT_APP_CLIENT_ID ?? "";
 /** Auth0シークレット情報をセットした AWS Secret Managerのシークレット名 */
-const AUTH0_SECRET_NAME = 
-  process.env.AUTH0_SECRET_NAME ?? "";
+const AUTH0_SECRET_NAME = process.env.AUTH0_SECRET_NAME ?? "";
 
 /** AWSシークレットマネジャークライアント */
 const secretManagerClient = new SecretsManagerClient({
   region: AWS_REGION,
 });
+
+/** HTTP 500 レスポンス */
+const responseHTTP500 = {
+  statusCode: 500,
+  body: "something went wrong",
+};
 
 /**
  * ユーザ削除API
@@ -37,22 +43,21 @@ export async function deleteUser(
     new GetSecretValueCommand({
       SecretId: AUTH0_SECRET_NAME,
       VersionStage: "AWSCURRENT",
-    })
+    }),
   );
   if (!response.SecretString) {
-    return {
-      statusCode: 500,
-      body: "auth0 secret not found",
-    };
+    return responseHTTP500;
   }
 
-  // TODO zodで正しくパースする
-  const auth0UserManagementAppClientSecret = JSON.parse(response.SecretString)
-    .auth0UserManagementAppClientSecret;
+  const auth0Secret = parseAuth0Secret(response.SecretString);
+  if (!auth0Secret) {
+    return responseHTTP500;
+  }
+
   const auth0ManagementClient = new ManagementClient({
     domain: AUTH0_USER_MANAGEMENT_DOMAIN,
     clientId: AUTH0_USER_MANAGEMENT_APP_CLIENT_ID,
-    clientSecret: auth0UserManagementAppClientSecret,
+    clientSecret: auth0Secret.auth0UserManagementAppClientSecret,
     scope: "delete:users",
   });
   const user = extractUserFromRestAPIJWT(

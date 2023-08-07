@@ -17,7 +17,7 @@ export const Auth0SecretSchema = z.object({
  * @param origin パース元
  * @returns パース結果
  */
-export function parseAuth0SecretSchema(origin: unknown): Auth0Secret | null {
+export function parseAuth0Secret(origin: unknown): Auth0Secret | null {
   const result = Auth0SecretSchema.safeParse(origin);
   return result.success ? result.data : null;
 }
