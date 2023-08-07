@@ -64,6 +64,12 @@ npm run build
       * delete:users_app_metadata
       * create:users_app_metadata
       * read:logs_users
+9. 以下設定でテスト環境のAWS Secret Managerを作成する
+  * シークレットのタイプ -> その他のシークレットタイプ
+  * キー/値のペア
+    * auth0UserManagementAppClientSecret
+    * [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する 
+  * 上記以外の項目は任意
 
 ## 環境構築方法
 ### ローカル環境からデプロイする
