@@ -74,6 +74,15 @@ provider:
             - 'execute-api:ManageConnections'
           Resource:
             - 'arn:aws:execute-api:*:*:**/@connections/*'
+        - Effect: Allow
+          Action:
+            - 'secretsmanager:GetResourcePolicy'
+            - 'secretsmanager:GetSecretValue'
+            - 'secretsmanager:DescribeSecret'
+            - 'secretsmanager:ListSecretVersionIds'
+          Resource:
+            - "arn:aws:secretsmanager:*:*:secret:*"
+
   logs:
     httpApi: true
     websocket: true
