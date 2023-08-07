@@ -89,7 +89,7 @@ npm run build
 | AUTH0_AUDIENCE                          | [事前作業](#pre-required-task) 6. で作成したAuth0 APIのIdentifierを記載する                                                          |
 | AUTH0_USER_MANAGEMENT_DOMAIN            | auth0のドメインを記載（カスタムドメインは利用不可、本来のドメイン名を指定）                                                                              |
 | AUTH0_USER_MANAGEMENT_APP_CLIENT_ID     | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient idを記載する                                                   |
-| AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET | [事前作業](#pre-required-task) 8. で作成したAuth0 Applicationのclient secretを記載する                                               |
+| AUTH0_SECRET_NAME | [事前作業](#pre-required-task) 9. で作成したAuth0用Secret Managerのシークレット名を記載する                                               |
 | MATCH_MAKE_ECR_REPOSITORY_NAME          | [事前作業](#pre-required-task) 3. で作成したマッチメイク用ECRのリポジトリ名                                                                  |
 | DOCKER_IMAGE_TAG                        | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                |
 | DOCKER_USER                             | dockerhubのユーザ名                                                                                                        |
