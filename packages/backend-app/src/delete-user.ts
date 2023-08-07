@@ -5,6 +5,7 @@ import {
 import { ManagementClient } from "auth0";
 
 import { parseAuth0Secret } from "./aws-secret-manager/auth0-secret";
+import { parseJSON } from "./json/parse";
 import { extractUserFromRestAPIJWT } from "./lambda/extract-user";
 import type { RestAPIEvent } from "./lambda/rest-api-event";
 import type { RestAPIResponse } from "./lambda/rest-api-response";
@@ -39,17 +40,19 @@ const responseHTTP500 = {
 export async function deleteUser(
   event: RestAPIEvent,
 ): Promise<RestAPIResponse> {
-  const response = await secretManagerClient.send(
+  const secretManagerResponse = await secretManagerClient.send(
     new GetSecretValueCommand({
       SecretId: AUTH0_SECRET_NAME,
       VersionStage: "AWSCURRENT",
     }),
   );
-  if (!response.SecretString) {
+
+  const parsedSecureString = parseJSON(secretManagerResponse.SecretString);
+  if (!parsedSecureString) {
     return responseHTTP500;
   }
 
-  const auth0Secret = parseAuth0Secret(response.SecretString);
+  const auth0Secret = parseAuth0Secret(parsedSecureString);
   if (!auth0Secret) {
     return responseHTTP500;
   }
