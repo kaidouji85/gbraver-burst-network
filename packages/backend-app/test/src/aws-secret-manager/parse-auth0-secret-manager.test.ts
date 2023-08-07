@@ -1,8 +1,11 @@
-import { Auth0Secret, parseAuth0Secret } from "../../../src/aws-secret-manager/auth0-secret";
+import {
+  Auth0Secret,
+  parseAuth0Secret,
+} from "../../../src/aws-secret-manager/auth0-secret";
 
 /** 正常なAuth0Secret */
 const validAuth0Secret: Auth0Secret = {
-  auth0UserManagementAppClientSecret: "hogehoge"
+  auth0UserManagementAppClientSecret: "hogehoge",
 };
 
 test("Auth0Secretを正しくパースできる", () => {
@@ -10,12 +13,12 @@ test("Auth0Secretを正しくパースできる", () => {
 });
 
 test("余計なプロパティがある場合は削除してパースする", () => {
-  const data = {...validAuth0Secret, hp: 1000};
+  const data = { ...validAuth0Secret, hp: 1000 };
   expect(parseAuth0Secret(data)).toEqual(validAuth0Secret);
 });
 
 test("Auth0Secretでないオブジェクトはパースできない", () => {
-  const data = {hp: 100};
+  const data = { hp: 100 };
   expect(parseAuth0Secret(data)).toBe(null);
 });
 
