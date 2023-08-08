@@ -14,7 +14,7 @@ test("BattleProgressPollingならパースできる", () => {
 });
 
 test("余計なプロパティは削除してパースする", () => {
-  const result = parseBattleProgressPolling({ ...data, hp: 1000});
+  const result = parseBattleProgressPolling({ ...data, hp: 1000 });
   expect(result).toEqual(data);
 });
 

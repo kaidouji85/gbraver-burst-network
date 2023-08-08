@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { CanBattleProgressQueryFromPoller, CanBattleProgressQueryFromPollerSchema } from "../core/can-battle-progress";
+import {
+  CanBattleProgressQueryFromPoller,
+  CanBattleProgressQueryFromPollerSchema,
+} from "../core/can-battle-progress";
 
 /** バトル進行ポーリング */
 export type BattleProgressPolling = CanBattleProgressQueryFromPoller & {
@@ -8,9 +11,10 @@ export type BattleProgressPolling = CanBattleProgressQueryFromPoller & {
 };
 
 /** バトル進行ポーリング zodスキーマ */
-export const BattleProgressPollingSchema = CanBattleProgressQueryFromPollerSchema.extend({
-  action: z.literal("battle-progress-polling"),
-});
+export const BattleProgressPollingSchema =
+  CanBattleProgressQueryFromPollerSchema.extend({
+    action: z.literal("battle-progress-polling"),
+  });
 
 /**
  * 任意オブジェクトをBattleProgressPollingにパースする
