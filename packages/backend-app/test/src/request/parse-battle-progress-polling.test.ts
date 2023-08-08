@@ -1,6 +1,7 @@
 import type { BattleProgressPolling } from "../../../src/request/battle-progress-polling";
 import { parseBattleProgressPolling } from "../../../src/request/battle-progress-polling";
 
+/** 有効なバトル進行ポーリング */
 const data: BattleProgressPolling = {
   action: "battle-progress-polling",
   battleID: "battleID",
@@ -9,6 +10,11 @@ const data: BattleProgressPolling = {
 
 test("BattleProgressPollingならパースできる", () => {
   const result = parseBattleProgressPolling(data);
+  expect(result).toEqual(data);
+});
+
+test("余計なプロパティは削除してパースする", () => {
+  const result = parseBattleProgressPolling({ ...data, hp: 1000 });
   expect(result).toEqual(data);
 });
 
