@@ -1,29 +1,26 @@
-import { CanBattleProgressQueryFromPoller } from "../core/can-battle-progress";
+import { z } from "zod";
+
+import { CanBattleProgressQueryFromPoller, CanBattleProgressQueryFromPollerSchema } from "../core/can-battle-progress";
 
 /** バトル進行ポーリング */
 export type BattleProgressPolling = CanBattleProgressQueryFromPoller & {
   action: "battle-progress-polling";
 };
 
+/** バトル進行ポーリング zodスキーマ */
+export const BattleProgressPollingSchema = CanBattleProgressQueryFromPollerSchema.extend({
+  action: z.literal("battle-progress-polling"),
+});
+
 /**
  * 任意オブジェクトをBattleProgressPollingにパースする
  * パースできない場合はnullを返す
- *
  * @param origin パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseBattleProgressPolling(
-  origin: any,
+  origin: unknown,
 ): BattleProgressPolling | null {
-  /* eslint-enable */
-  return origin?.action === "battle-progress-polling" &&
-    typeof origin?.battleID === "string" &&
-    typeof origin?.flowID === "string"
-    ? {
-        action: origin.action,
-        battleID: origin.battleID,
-        flowID: origin.flowID,
-      }
-    : null;
+  const result = BattleProgressPollingSchema.safeParse(origin);
+  return result.success ? result.data : null;
 }
