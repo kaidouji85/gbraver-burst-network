@@ -1,6 +1,7 @@
 import { uniq } from "ramda";
+import { z } from "zod";
 
-import { Battle, BattleID, BattlePlayer, FlowID } from "./battle";
+import { Battle, BattleID, BattleIDSchema, BattlePlayer, FlowID, FlowIDSchema } from "./battle";
 import { BattleCommand } from "./battle-command";
 
 /**
@@ -19,6 +20,12 @@ export type CanBattleProgressQueryFromPoller = {
   /** フローID */
   flowID: FlowID;
 };
+
+/** ポーリング実行者が送信したバトル進行チェックの問い合わせ zodスキーマ */
+export const CanBattleProgressQueryFromPollerSchema = z.object({
+  battleID: BattleIDSchema,
+  flowID: FlowIDSchema,
+});
 
 /**
  * バトル進行が出来るか否かを判定する
