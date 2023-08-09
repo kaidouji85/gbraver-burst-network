@@ -13,11 +13,15 @@ const createPrivateMatchRoom: CreatePrivateMatchRoom = {
 };
 
 test("CreatePrivateMatchRoomならパースできる", () => {
-  expect(parseCreatePrivateMatchRoom(createPrivateMatchRoom)).toEqual(createPrivateMatchRoom);
+  expect(parseCreatePrivateMatchRoom(createPrivateMatchRoom)).toEqual(
+    createPrivateMatchRoom,
+  );
 });
 
 test("余計なパラメータは削除してパースする", () => {
-  expect(parseCreatePrivateMatchRoom({ ...createPrivateMatchRoom, hp: 1000 })).toEqual(createPrivateMatchRoom);
+  expect(
+    parseCreatePrivateMatchRoom({ ...createPrivateMatchRoom, hp: 1000 }),
+  ).toEqual(createPrivateMatchRoom);
 });
 
 test("データ型が異なるとパースできない", () => {
