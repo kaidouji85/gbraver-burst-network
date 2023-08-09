@@ -23,7 +23,9 @@ export const EnterCasualMatchSchema = z.object({
  * @param origin 変換元のリクエストボディ
  * @return 変換結果
  */
-export function parseEnterCasualMatch(origin: unknown): EnterCasualMatch | null {
+export function parseEnterCasualMatch(
+  origin: unknown,
+): EnterCasualMatch | null {
   const result = EnterCasualMatchSchema.safeParse(origin);
   return result.success ? result.data : null;
 }

@@ -1,7 +1,8 @@
+import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 import {
-  parseEnterCasualMatch,
-} from "../../../src/request/enter-casual-match";
-import { EnterPrivateMatchRoom, parseEnterPrivateMatchRoom } from "../../../src/request/enter-private-match-room";
+  EnterPrivateMatchRoom,
+  parseEnterPrivateMatchRoom,
+} from "../../../src/request/enter-private-match-room";
 
 /** 有効なプライベートマッチルームエントリ */
 const enterPrivateMatchRoom: EnterPrivateMatchRoom = {
@@ -12,11 +13,15 @@ const enterPrivateMatchRoom: EnterPrivateMatchRoom = {
 };
 
 test("EnterPrivateMatchRoomはパースできる", () => {
-  expect(parseEnterPrivateMatchRoom(enterPrivateMatchRoom)).toEqual(enterPrivateMatchRoom);
+  expect(parseEnterPrivateMatchRoom(enterPrivateMatchRoom)).toEqual(
+    enterPrivateMatchRoom,
+  );
 });
 
 test("余計なプロパティは削除してからパースする", () => {
-  expect(parseEnterPrivateMatchRoom({ ...enterPrivateMatchRoom, hp: 1000 })).toEqual(enterPrivateMatchRoom);
+  expect(
+    parseEnterPrivateMatchRoom({ ...enterPrivateMatchRoom, hp: 1000 }),
+  ).toEqual(enterPrivateMatchRoom);
 });
 
 test("データ型が異なるとパースできない", () => {
