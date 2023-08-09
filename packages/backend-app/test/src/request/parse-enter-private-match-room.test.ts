@@ -1,22 +1,28 @@
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
-
 import {
-  EnterCasualMatch,
   parseEnterCasualMatch,
 } from "../../../src/request/enter-casual-match";
+import { EnterPrivateMatchRoom, parseEnterPrivateMatchRoom } from "../../../src/request/enter-private-match-room";
 
-test("EnterCasualMatchはパースできる", () => {
-  const data: EnterCasualMatch = {
-    action: "enter-casual-match",
-    armdozerId: ArmDozerIds.SHIN_BRAVER,
-    pilotId: PilotIds.SHINYA,
-  };
-  expect(parseEnterCasualMatch(data)).toEqual(data);
+/** 有効なプライベートマッチルームエントリ */
+const enterPrivateMatchRoom: EnterPrivateMatchRoom = {
+  action: "enter-private-match-room",
+  roomID: "room-id",
+  armdozerId: "armdozer-id",
+  pilotId: "pilot-id",
+};
+
+test("EnterPrivateMatchRoomはパースできる", () => {
+  expect(parseEnterPrivateMatchRoom(enterPrivateMatchRoom)).toEqual(enterPrivateMatchRoom);
+});
+
+test("余計なプロパティは削除してからパースする", () => {
+  expect(parseEnterPrivateMatchRoom({ ...enterPrivateMatchRoom, hp: 1000 })).toEqual(enterPrivateMatchRoom);
 });
 
 test("データ型が異なるとパースできない", () => {
   const data = {
-    action: "enter-casual-match",
+    action: "enter-private-match-room",
+    roomID: 100,
     armdozerId: 100,
     pilotId: 100,
   };

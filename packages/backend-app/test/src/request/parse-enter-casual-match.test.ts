@@ -1,6 +1,7 @@
 import type { EnterCasualMatch } from "../../../src/request/enter-casual-match";
 import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 
+/** 有効なカジュアルマッチエントリのリクエストボディ */
 const enterCasualMatch: EnterCasualMatch = {
   action: "enter-casual-match",
   armdozerId: "armdozerId",
@@ -19,6 +20,15 @@ test("余計なプロパティが含まれている場合でも問題なくパ�
     power: 1000,
   });
   expect(result).toEqual(enterCasualMatch);
+});
+
+test("データ型が異なればパースできない", () => {
+  const result = parseEnterCasualMatch({
+    ...enterCasualMatch,
+    armdozerId: 1000,
+    pilotId: 1000,
+  });
+  expect(result).toEqual(null);
 });
 
 test("nullならパースできない", () => {
