@@ -1,12 +1,20 @@
+import { z } from "zod";
+
 import { PrivateMatchRoomID } from "../core/private-match-room";
 
 /** プライベートルームマッチポーリング */
 export type PrivateMatchMakePolling = {
   action: "private-match-make-polling";
-
   /** ルームID */
   roomID: PrivateMatchRoomID;
 };
+
+/** プライベートルームマッチポーリング zodスキーマ */
+export const privateMatchMakePollingSchema: z.ZodSchema<PrivateMatchMakePolling> =
+  z.object({
+    action: z.literal("private-match-make-polling"),
+    roomID: z.string(),
+  });
 
 /**
  * PrivateMatchMakePollingにパースする
@@ -14,19 +22,9 @@ export type PrivateMatchMakePolling = {
  * @param origin パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parsePrivateMatchMakePolling(
-  origin: any,
+  origin: unknown,
 ): PrivateMatchMakePolling | null {
-  /* eslint-enable */
-  if (
-    origin?.action === "private-match-make-polling" &&
-    typeof origin?.roomID === "string"
-  ) {
-    return {
-      action: "private-match-make-polling",
-      roomID: origin.roomID,
-    };
-  }
-  return null;
+  const result = privateMatchMakePollingSchema.safeParse(origin);
+  return result.success ? result.data : null;
 }
