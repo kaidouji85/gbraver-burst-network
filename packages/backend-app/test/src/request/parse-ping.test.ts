@@ -2,7 +2,7 @@ import { parsePing, Ping } from "../../../src/request/ping";
 
 /** 有効なping */
 const ping: Ping = {
-  action: "ping"
+  action: "ping",
 };
 
 test("pingはパースできる", () => {

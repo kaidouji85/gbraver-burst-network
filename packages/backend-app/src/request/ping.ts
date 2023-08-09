@@ -16,9 +16,7 @@ export const PingSchema = z.object({
  * @param origin パース元
  * @return パース結果
  */
-export function parsePing(
-  origin: unknown
-): Ping | null {
+export function parsePing(origin: unknown): Ping | null {
   const result = PingSchema.safeParse(origin);
   return result.success ? result.data : null;
 }
