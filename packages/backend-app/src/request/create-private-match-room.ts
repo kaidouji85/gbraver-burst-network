@@ -1,13 +1,20 @@
+import { z } from "zod";
+
 /** プライベートマッチルーム生成 */
 export type CreatePrivateMatchRoom = {
   action: "create-private-match-room";
-
   /** 選択したアームドーザのID */
   armdozerId: string;
-
   /** 選択したパイロットのID */
   pilotId: string;
 };
+
+/** プライベートマッチルーム生成 zodスキーマ */
+export const CreatePrivateMatchRoomSchema = z.object({
+  action: z.literal("create-private-match-room"),
+  armdozerId: z.string(),
+  pilotId: z.string(),
+});
 
 /**
  * 任意オブジェクトをCreatePrivateMatchRoomにパースする
@@ -15,21 +22,9 @@ export type CreatePrivateMatchRoom = {
  * @param origin パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseCreatePrivateMatchRoom(
-  origin: any,
+  origin: unknown,
 ): CreatePrivateMatchRoom | null {
-  /* eslint-enable */
-  if (
-    origin?.action === "create-private-match-room" &&
-    typeof origin?.armdozerId === "string" &&
-    typeof origin?.pilotId === "string"
-  ) {
-    return {
-      action: "create-private-match-room",
-      armdozerId: origin.armdozerId,
-      pilotId: origin.pilotId,
-    };
-  }
-  return null;
+  const result = CreatePrivateMatchRoomSchema.safeParse(origin);
+  return result.success ? result.data : null;
 }

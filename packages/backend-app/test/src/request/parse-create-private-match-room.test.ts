@@ -5,13 +5,23 @@ import {
   parseCreatePrivateMatchRoom,
 } from "../../../src/request/create-private-match-room";
 
+/** 有効なプライベートマッチルーム生成 */
+const createPrivateMatchRoom: CreatePrivateMatchRoom = {
+  action: "create-private-match-room",
+  armdozerId: ArmDozerIds.SHIN_BRAVER,
+  pilotId: PilotIds.SHINYA,
+};
+
 test("CreatePrivateMatchRoomならパースできる", () => {
-  const data: CreatePrivateMatchRoom = {
-    action: "create-private-match-room",
-    armdozerId: ArmDozerIds.SHIN_BRAVER,
-    pilotId: PilotIds.SHINYA,
-  };
-  expect(parseCreatePrivateMatchRoom(data)).toEqual(data);
+  expect(parseCreatePrivateMatchRoom(createPrivateMatchRoom)).toEqual(
+    createPrivateMatchRoom,
+  );
+});
+
+test("余計なパラメータは削除してパースする", () => {
+  expect(
+    parseCreatePrivateMatchRoom({ ...createPrivateMatchRoom, hp: 1000 }),
+  ).toEqual(createPrivateMatchRoom);
 });
 
 test("データ型が異なるとパースできない", () => {
