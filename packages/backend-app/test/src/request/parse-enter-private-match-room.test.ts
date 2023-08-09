@@ -1,4 +1,3 @@
-import { parseEnterCasualMatch } from "../../../src/request/enter-casual-match";
 import {
   EnterPrivateMatchRoom,
   parseEnterPrivateMatchRoom,
@@ -31,15 +30,15 @@ test("データ型が異なるとパースできない", () => {
     armdozerId: 100,
     pilotId: 100,
   };
-  expect(parseEnterCasualMatch(data)).toBe(null);
+  expect(parseEnterPrivateMatchRoom(data)).toBe(null);
 });
 
 test("nullはパースできない", () => {
   const data = null;
-  expect(parseEnterCasualMatch(data)).toBe(null);
+  expect(parseEnterPrivateMatchRoom(data)).toBe(null);
 });
 
 test("undefinedはパースできない", () => {
   const data = undefined;
-  expect(parseEnterCasualMatch(data)).toBe(null);
+  expect(parseEnterPrivateMatchRoom(data)).toBe(null);
 });

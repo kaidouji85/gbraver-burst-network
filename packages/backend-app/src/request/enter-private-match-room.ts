@@ -1,4 +1,5 @@
 import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { z } from "zod";
 
 import { PrivateMatchRoomID } from "../core/private-match-room";
 
@@ -13,29 +14,23 @@ export type EnterPrivateMatchRoom = {
   pilotId: PilotId;
 };
 
+/** プライベートマッチルームエントリ zodスキーマ */
+export const EnterPrivateMatchRoomSchema = z.object({
+  action: z.literal("enter-private-match-room"),
+  roomID: z.string(),
+  armdozerId: z.string(),
+  pilotId: z.string(),
+});
+
 /**
  * EnterPrivateMatchRoomにパースする
  * パースできない場合はnullを返す
  * @param origin パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseEnterPrivateMatchRoom(
-  origin: any,
+  origin: unknown,
 ): EnterPrivateMatchRoom | null {
-  /* eslint-enable */
-  if (
-    origin?.action === "enter-private-match-room" &&
-    typeof origin?.roomID === "string" &&
-    typeof origin?.armdozerId === "string" &&
-    typeof origin?.pilotId === "string"
-  ) {
-    return {
-      action: "enter-private-match-room",
-      roomID: origin?.roomID,
-      armdozerId: origin?.armdozerId,
-      pilotId: origin?.pilotId,
-    };
-  }
-  return null;
+  const result = EnterPrivateMatchRoomSchema.safeParse(origin);
+  return result.success ? result.data : null;
 }
