@@ -10,11 +10,10 @@ export type PrivateMatchMakePolling = {
 };
 
 /** プライベートルームマッチポーリング zodスキーマ */
-export const privateMatchMakePollingSchema: z.ZodSchema<PrivateMatchMakePolling> =
-  z.object({
-    action: z.literal("private-match-make-polling"),
-    roomID: z.string(),
-  });
+export const privateMatchMakePollingSchema = z.object({
+  action: z.literal("private-match-make-polling"),
+  roomID: z.string(),
+});
 
 /**
  * PrivateMatchMakePollingにパースする
