@@ -3,21 +3,34 @@ import {
   PrivateMatchMakePolling,
 } from "../../../src/request/private-match-make-polling";
 
+/** 有効なプライベートルームマッチポーリング */
+const privateMatchMakePolling: PrivateMatchMakePolling = {
+  action: "private-match-make-polling",
+  roomID: "roomID",
+};
+
 test("PrivateMatchMakePollingはパースできる", () => {
-  const data: PrivateMatchMakePolling = {
-    action: "private-match-make-polling",
-    roomID: "roomID",
-  };
-  expect(parsePrivateMatchMakePolling(data)).toEqual(data);
+  expect(parsePrivateMatchMakePolling(privateMatchMakePolling)).toEqual(
+    privateMatchMakePolling,
+  );
 });
 
 test("余計なプロパティは削除される", () => {
-  const origin: PrivateMatchMakePolling = {
+  expect(
+    parsePrivateMatchMakePolling({
+      ...privateMatchMakePolling,
+      propA: 12,
+      propB: 12,
+    }),
+  ).toEqual(privateMatchMakePolling);
+});
+
+test("データ型が異なるとパースできない", () => {
+  const data = {
     action: "private-match-make-polling",
-    roomID: "roomID",
+    roomID: 1000,
   };
-  const data = { ...origin, propA: 12, propB: 12 };
-  expect(parsePrivateMatchMakePolling(data)).toEqual(origin);
+  expect(parsePrivateMatchMakePolling(data)).toBe(null);
 });
 
 test("nullはパースできない", () => {

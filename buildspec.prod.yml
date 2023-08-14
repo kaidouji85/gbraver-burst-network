@@ -1,5 +1,7 @@
 version: 0.2
 env:
+  variables:
+    AUTH0_SECRET_NAME: /GbraverBurst/prod/auth0
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
     STAGE: /GbraverBurst/prod/stage
