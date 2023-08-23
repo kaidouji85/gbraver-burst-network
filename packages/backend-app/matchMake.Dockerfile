@@ -1,5 +1,5 @@
 # docker buildの前にbuild:match-makeを実行すること
-FROM node:18.17.0-bullseye-slim
+FROM node:18.17.1-bullseye-slim
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app
 # SIGTERMを適切に処理できるように、
