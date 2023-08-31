@@ -3,8 +3,8 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { generatePrivateMatchRoomID } from "./core/generate-private-match-room-id";
 import { PrivateMatchRoom } from "./core/private-match-room";
-import { createConnections } from "./dynamo-db/create-connections";
-import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -19,8 +19,12 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -67,8 +71,8 @@ export async function createPrivateMatchRoom(
     pilotId: data.pilotId,
   };
   await Promise.all([
-    privateMatchRooms.put(room),
-    connections.put({
+    dynamoPrivateMatchRooms.put(room),
+    dynamoConnections.put({
       connectionId: event.requestContext.connectionId,
       userID: user.userID,
       state: {

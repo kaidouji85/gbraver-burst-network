@@ -9,9 +9,9 @@ import { casualMatchMake } from "./core/casual-match-make";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { createBattles } from "./dynamo-db/create-battles";
-import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
-import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
@@ -29,10 +29,14 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 const casualMatchEntryScanLimit = 100;
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;
 // コンテナ起動から1日経過したら停止したい
 //   1日 = 86400秒
@@ -58,7 +62,9 @@ async function createHeathCheckFile(): Promise<void> {
  * @return 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
-  const entries = await casualMatchEntries.scan(casualMatchEntryScanLimit);
+  const entries = await dynamoCasualMatchEntries.scan(
+    casualMatchEntryScanLimit,
+  );
   const matchingList = casualMatchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players: [BattlePlayer, BattlePlayer] = [
@@ -85,9 +91,9 @@ async function matchMakingPolling(): Promise<void> {
     });
     const deleteEntryIDs = matching.map((v) => v.userID);
     await Promise.all([
-      battles.put(battle),
-      ...updatedConnections.map((v) => connections.put(v)),
-      ...deleteEntryIDs.map((v) => casualMatchEntries.delete(v)),
+      dynamoBattles.put(battle),
+      ...updatedConnections.map((v) => dynamoConnections.put(v)),
+      ...deleteEntryIDs.map((v) => dynamoCasualMatchEntries.delete(v)),
       ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
     ]);
   });

@@ -8,10 +8,10 @@ import { createBattlePlayer } from "./core/create-battle-player";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
 import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { privateMatchMake } from "./core/private-match-make";
-import { createBattles } from "./dynamo-db/create-battles";
-import { createConnections } from "./dynamo-db/create-connections";
-import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
-import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
+import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -31,10 +31,18 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -86,8 +94,8 @@ export async function privateMatchMakePolling(
     event.requestContext.authorizer,
   );
   const [room, entries] = await Promise.all([
-    privateMatchRooms.get(user.userID),
-    privateMatchEntries.getEntries(data.roomID),
+    dynamoPrivateMatchRooms.get(user.userID),
+    dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
   if (!room) {
     await notifier.notifyToClient(
@@ -139,20 +147,20 @@ export async function privateMatchMakePolling(
     state: noneState,
   }));
   await Promise.all([
-    battles.put(battle),
-    ...battleConnections.map((v) => connections.put(v)),
+    dynamoBattles.put(battle),
+    ...battleConnections.map((v) => dynamoConnections.put(v)),
     ...matching.map((v) =>
       notifier.notifyToClient(
         v.connectionId,
         createBattleStart(v.userID, battle),
       ),
     ),
-    privateMatchRooms.delete(user.userID),
-    ...entries.map((v) => privateMatchEntries.delete(v.roomID, v.userID)),
+    dynamoPrivateMatchRooms.delete(user.userID),
+    ...entries.map((v) => dynamoPrivateMatchEntries.delete(v.roomID, v.userID)),
     ...notChosenEntries.map((v) =>
       notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry),
     ),
-    ...notChonsenConnections.map((v) => connections.put(v)),
+    ...notChonsenConnections.map((v) => dynamoConnections.put(v)),
   ]);
 
   return endPrivateMatchMakePolling;

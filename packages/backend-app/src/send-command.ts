@@ -1,7 +1,7 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createBattleCommands } from "./dynamo-db/create-battle-commands";
+import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -9,12 +9,19 @@ import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseSendCommand } from "./request/sned-command";
 import type { AcceptCommand, Error } from "./response/websocket-response";
+
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
 const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
+const dynamoBattleCommands = createDynamoBattleCommands(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
@@ -22,6 +29,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
+
 const invalidRequestBodyError: Error = {
   action: "error",
   error: "invalid request body",
@@ -63,7 +71,7 @@ export async function sendCommand(
     command: data.command,
   };
   await Promise.all([
-    battleCommands.put(command),
+    dynamoBattleCommands.put(command),
     notifier.notifyToClient(event.requestContext.connectionId, acceptCommand),
   ]);
   return {

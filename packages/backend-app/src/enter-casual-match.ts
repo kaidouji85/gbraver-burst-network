@@ -1,8 +1,8 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
-import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -17,8 +17,12 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -69,8 +73,8 @@ export async function enterCasualMatch(
     connectionId: event.requestContext.connectionId,
   };
   await Promise.all([
-    casualMatchEntries.put(entry),
-    connections.put({
+    dynamoCasualMatchEntries.put(entry),
+    dynamoConnections.put({
       connectionId: event.requestContext.connectionId,
       userID: user.userID,
       state: {
