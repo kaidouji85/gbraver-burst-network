@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { PrivateMatchRoomID } from "../browser-sdk/private-match";
 import { parseJSON } from "../json/parse";
@@ -22,7 +22,7 @@ import { waitUntil } from "./wait-until";
 export function enterPrivateMatchRoom(
   websocket: WebSocket,
   roomID: PrivateMatchRoomID,
-  armdozerId: ArmDozerId,
+  armdozerId: ArmdozerId,
   pilotId: PilotId,
 ): Promise<BattleStart | RejectPrivateMatchEntry> {
   sendToAPIServer(websocket, {

@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
@@ -18,7 +18,7 @@ import { waitUntil } from "./wait-until";
  */
 export function createPrivateMatchRoom(
   websocket: WebSocket,
-  armdozerId: ArmDozerId,
+  armdozerId: ArmdozerId,
   pilotId: PilotId,
 ): Promise<CreatedPrivateMatchRoom> {
   sendToAPIServer(websocket, {

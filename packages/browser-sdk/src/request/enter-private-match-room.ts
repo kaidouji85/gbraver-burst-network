@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { PrivateMatchRoomID } from "../browser-sdk/private-match";
 
@@ -8,7 +8,7 @@ export type EnterPrivateMatchRoom = {
   /** ルームID */
   roomID: PrivateMatchRoomID;
   /** 選択したアームドーザID */
-  armdozerId: ArmDozerId;
+  armdozerId: ArmdozerId;
   /** 選択したパイロットID */
   pilotId: PilotId;
 };
