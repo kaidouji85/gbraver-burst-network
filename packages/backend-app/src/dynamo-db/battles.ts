@@ -1,12 +1,22 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
-import type { Battle, BattlePlayer } from "../core/battle";
+import { Battle, BattleIDSchema, BattlePlayer, BattlePlayerSchema,FlowIDSchema } from "../core/battle";
 
 /**
- * battlesのスキーマ
+ * battlesのDynamoDBスキーマ
  * パーティションキー battleID
  */
-export type BattlesSchema = Battle<BattlePlayer>;
+export type DynamoBattles = Battle<BattlePlayer>;
+
+/** DynamoBattles zodスキーマ */
+export const DynamoBattlesSchema = z.object({
+  battleID: BattleIDSchema,
+  flowID: FlowIDSchema,
+  players: z.tuple([BattlePlayerSchema, BattlePlayerSchema]),
+  poller: z.string(),
+  stateHistory: z.array(z.any()),
+});
 
 /** battlesのDAO*/
 export class Battles {
@@ -30,7 +40,7 @@ export class Battles {
    * @param battle 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(battle: BattlesSchema): Promise<void> {
+  async put(battle: DynamoBattles): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: battle,
@@ -43,14 +53,14 @@ export class Battles {
    * @param battleID バトルID
    * @return 検索結果
    */
-  async get(battleID: string): Promise<BattlesSchema | null> {
+  async get(battleID: string): Promise<DynamoBattles | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: {
         battleID,
       },
     });
-    return result.Item ? (result.Item as BattlesSchema) : null;
+    return result.Item ? (DynamoBattlesSchema.parse(result.Item)) : null;
   }
 
   /**
