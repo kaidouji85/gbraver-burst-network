@@ -1,10 +1,14 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { z } from "zod";
 
 import { UserID } from "./user";
 import { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
 /** ルームID */
 export type PrivateMatchRoomID = string;
+
+/** PrivateMatchRoomID zodスキーマ */
+export const PrivateMatchRoomIDSchema = z.string();
 
 /** プライベートマッチルーム */
 export type PrivateMatchRoom = {
