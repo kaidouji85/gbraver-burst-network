@@ -39,7 +39,7 @@ export class DynamoConnections {
         connectionId,
       },
     });
-    return result.Item ? (DynamoConnectionSchema.parse(result.Item)) : null;
+    return result.Item ? DynamoConnectionSchema.parse(result.Item) : null;
   }
 
   /**

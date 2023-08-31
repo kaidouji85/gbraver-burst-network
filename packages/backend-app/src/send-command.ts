@@ -16,7 +16,11 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const dynamoBattleCommands = createDynamoBattleCommands(dynamoDB, SERVICE, STAGE);
+const dynamoBattleCommands = createDynamoBattleCommands(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,

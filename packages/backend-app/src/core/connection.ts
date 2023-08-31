@@ -2,7 +2,10 @@ import { PlayerId, PlayerIdSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
 import { BattleID, BattleIDSchema } from "./battle";
-import { PrivateMatchRoomID, PrivateMatchRoomIDSchema } from "./private-match-room";
+import {
+  PrivateMatchRoomID,
+  PrivateMatchRoomIDSchema,
+} from "./private-match-room";
 import { UserID, UserIDSchema } from "./user";
 
 /** 状態なし */

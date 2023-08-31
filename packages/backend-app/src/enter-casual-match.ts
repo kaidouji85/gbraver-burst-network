@@ -18,7 +18,11 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
-const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,

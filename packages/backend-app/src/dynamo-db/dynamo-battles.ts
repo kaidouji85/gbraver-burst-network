@@ -1,7 +1,13 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 
-import { Battle, BattleIDSchema, BattlePlayer, BattlePlayerSchema,FlowIDSchema } from "../core/battle";
+import {
+  Battle,
+  BattleIDSchema,
+  BattlePlayer,
+  BattlePlayerSchema,
+  FlowIDSchema,
+} from "../core/battle";
 
 /**
  * DynamoDB スキーマ battles
@@ -60,7 +66,7 @@ export class DynamoBattles {
         battleID,
       },
     });
-    return result.Item ? (DynamoBattlesSchema.parse(result.Item)) : null;
+    return result.Item ? DynamoBattlesSchema.parse(result.Item) : null;
   }
 
   /**

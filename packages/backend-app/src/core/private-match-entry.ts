@@ -1,5 +1,8 @@
 import { BattleEntry, BattleEntrySchema } from "./battle-entry";
-import { PrivateMatchRoomID, PrivateMatchRoomIDSchema } from "./private-match-room";
+import {
+  PrivateMatchRoomID,
+  PrivateMatchRoomIDSchema,
+} from "./private-match-room";
 
 /** プライベートマッチエントリ */
 export type PrivateMatchEntry = BattleEntry & {

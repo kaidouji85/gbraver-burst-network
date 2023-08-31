@@ -53,7 +53,11 @@ const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO */
-const dynamoBattleCommands = createDynamoBattleCommands(dynamoDB, SERVICE, STAGE);
+const dynamoBattleCommands = createDynamoBattleCommands(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 /** WebSocketAPI レスポンス 不正なリクエストボディ */
 const webSocketAPIResponseOfInvalidRequestBody = {

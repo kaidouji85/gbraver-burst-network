@@ -31,8 +31,16 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 

@@ -1,7 +1,10 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 
-import { CasualMatchEntry,CasualMatchEntrySchema } from "../core/casual-match-entry";
+import {
+  CasualMatchEntry,
+  CasualMatchEntrySchema,
+} from "../core/casual-match-entry";
 
 /**
  * DynamoDB スキーマ casual_match_entries
@@ -54,7 +57,9 @@ export class DynamoCasualMatchEntries {
       ConsistentRead: true,
       Limit: limit,
     });
-    return resp.Items ? (z.array(DynamoCasualMatchEntrySchema).parse(resp.Items)) : [];
+    return resp.Items
+      ? z.array(DynamoCasualMatchEntrySchema).parse(resp.Items)
+      : [];
   }
 
   /**

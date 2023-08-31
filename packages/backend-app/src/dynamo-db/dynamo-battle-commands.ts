@@ -51,6 +51,6 @@ export class DynamoBattleCommands {
         userID,
       },
     });
-    return result.Item ? (DynamoBattleCommandSchema.parse(result.Item)) : null;
+    return result.Item ? DynamoBattleCommandSchema.parse(result.Item) : null;
   }
 }

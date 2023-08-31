@@ -46,7 +46,7 @@ export class DynamoPrivateMatchRooms {
         owner,
       },
     });
-    return result.Item ? (DynamoPrivateMatchRoomSchema.parse(result.Item)) : null;
+    return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
   }
 
   /**

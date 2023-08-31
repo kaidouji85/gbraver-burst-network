@@ -1,8 +1,16 @@
-import { ArmdozerId, ArmdozerIdSchema, PilotId, PilotIdSchema } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  ArmdozerIdSchema,
+  PilotId,
+  PilotIdSchema,
+} from "gbraver-burst-core";
 import { z } from "zod";
 
-import { UserID,UserIDSchema } from "./user";
-import { WSAPIGatewayConnectionId,WSAPIGatewayConnectionIdSchema } from "./ws-api-gateway-connection";
+import { UserID, UserIDSchema } from "./user";
+import {
+  WSAPIGatewayConnectionId,
+  WSAPIGatewayConnectionIdSchema,
+} from "./ws-api-gateway-connection";
 
 /**
  * ネット対戦エントリ

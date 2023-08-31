@@ -1,7 +1,10 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 
-import { PrivateMatchEntry, PrivateMatchEntrySchema } from "../core/private-match-entry";
+import {
+  PrivateMatchEntry,
+  PrivateMatchEntrySchema,
+} from "../core/private-match-entry";
 import { PrivateMatchRoomID } from "../core/private-match-room";
 import { UserID } from "../core/user";
 
@@ -50,7 +53,9 @@ export class DynamoPrivateMatchEntries {
         ":roomID": roomID,
       },
     });
-    return result.Items ? (z.array(DynamoPrivateMatchEntrySchema).parse(result.Items)) : [];
+    return result.Items
+      ? z.array(DynamoPrivateMatchEntrySchema).parse(result.Items)
+      : [];
   }
 
   /**

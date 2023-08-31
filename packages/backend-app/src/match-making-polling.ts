@@ -30,7 +30,11 @@ const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
-const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 const casualMatchEntryScanLimit = 100;
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;
@@ -58,7 +62,9 @@ async function createHeathCheckFile(): Promise<void> {
  * @return 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
-  const entries = await dynamoCasualMatchEntries.scan(casualMatchEntryScanLimit);
+  const entries = await dynamoCasualMatchEntries.scan(
+    casualMatchEntryScanLimit,
+  );
   const matchingList = casualMatchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const players: [BattlePlayer, BattlePlayer] = [

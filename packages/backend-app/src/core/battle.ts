@@ -1,7 +1,7 @@
 import { GameState, Player, PlayerSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
-import { UserID,UserIDSchema } from "./user";
+import { UserID, UserIDSchema } from "./user";
 import { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 
 /** バトルID */

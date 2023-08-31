@@ -31,10 +31,22 @@ const notifier = new Notifier(apiGateway);
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
-const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
-const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 /**
  * Websocket API $disconnect エントリポイント
