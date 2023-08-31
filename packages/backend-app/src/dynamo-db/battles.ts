@@ -19,7 +19,7 @@ export const DynamoBattlesSchema = z.object({
 });
 
 /** battlesのDAO*/
-export class Battles {
+export class DynamoBattles {
   /** DynamoDBドキュメント */
   #dynamoDB: DynamoDBDocument;
   /** テーブル名 */
