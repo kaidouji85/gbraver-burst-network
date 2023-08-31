@@ -7,9 +7,9 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
@@ -30,7 +30,7 @@ const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
@@ -46,9 +46,9 @@ export async function disconnect(
   event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const connectionId = event.requestContext.connectionId;
-  const connection = await connections.get(connectionId);
+  const connection = await dynamoConnections.get(connectionId);
   await Promise.all([
-    connections.delete(connectionId),
+    dynamoConnections.delete(connectionId),
     connection ? cleanUp(connection) : Promise.resolve(),
   ]);
   return {
@@ -77,7 +77,7 @@ async function cleanUp(connection: Connection): Promise<void> {
       notifier.notifyToClient(other.connectionId, {
         action: "suddenly-battle-end",
       }),
-      connections.put({
+      dynamoConnections.put({
         connectionId: other.connectionId,
         userID: other.userID,
         state: {

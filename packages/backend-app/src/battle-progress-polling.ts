@@ -10,9 +10,9 @@ import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
 import { createPlayerCommands } from "./core/create-player-commands";
 import { createPlayers } from "./core/create-players";
-import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -49,7 +49,7 @@ const notifier = new Notifier(apiGateway);
 /** Dynamo DB ドキュメント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** connections テーブル DAO */
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO */
@@ -108,7 +108,7 @@ async function onGameEnd(params: OnGameEndParams): Promise<void> {
       notifier.notifyToClient(v.connectionId, noticedData),
     ),
     ...battle.players.map((v) =>
-      connections.put({
+      dynamoConnections.put({
         connectionId: v.connectionId,
         userID: v.userID,
         state: updatedConnectionState,

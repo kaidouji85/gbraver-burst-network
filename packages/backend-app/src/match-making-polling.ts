@@ -9,9 +9,9 @@ import { casualMatchMake } from "./core/casual-match-make";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { createBattleStart } from "./response/create-battle-start";
 import { wait } from "./wait/wait";
@@ -29,7 +29,7 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const casualMatchEntryScanLimit = 100;
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
@@ -86,7 +86,7 @@ async function matchMakingPolling(): Promise<void> {
     const deleteEntryIDs = matching.map((v) => v.userID);
     await Promise.all([
       dynamoBattles.put(battle),
-      ...updatedConnections.map((v) => connections.put(v)),
+      ...updatedConnections.map((v) => dynamoConnections.put(v)),
       ...deleteEntryIDs.map((v) => dynamoCasualMatchEntries.delete(v)),
       ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
     ]);
