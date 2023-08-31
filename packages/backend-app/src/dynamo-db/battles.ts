@@ -7,7 +7,7 @@ import { Battle, BattleIDSchema, BattlePlayer, BattlePlayerSchema,FlowIDSchema }
  * battlesのDynamoDBスキーマ
  * パーティションキー battleID
  */
-export type DynamoBattles = Battle<BattlePlayer>;
+export type DynamoBattle = Battle<BattlePlayer>;
 
 /** DynamoBattles zodスキーマ */
 export const DynamoBattlesSchema = z.object({
@@ -40,7 +40,7 @@ export class Battles {
    * @param battle 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(battle: DynamoBattles): Promise<void> {
+  async put(battle: DynamoBattle): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: battle,
@@ -53,7 +53,7 @@ export class Battles {
    * @param battleID バトルID
    * @return 検索結果
    */
-  async get(battleID: string): Promise<DynamoBattles | null> {
+  async get(battleID: string): Promise<DynamoBattle | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: {
