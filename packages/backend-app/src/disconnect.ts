@@ -7,9 +7,9 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
@@ -31,7 +31,7 @@ const notifier = new Notifier(apiGateway);
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
@@ -65,7 +65,7 @@ export async function disconnect(
  */
 async function cleanUp(connection: Connection): Promise<void> {
   const inCasualMatchMaking = async () => {
-    await casualMatchEntries.delete(connection.userID);
+    await dynamoCasualMatchEntries.delete(connection.userID);
   };
 
   const inBattle = async (state: InBattle) => {
