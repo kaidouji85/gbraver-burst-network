@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { UserID } from "./user";
 import { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
@@ -15,7 +15,7 @@ export type PrivateMatchRoom = {
   /** ルーム作成者のWebsocketAPIコネクションID */
   ownerConnectionId: WSAPIGatewayConnectionId;
   /** ルーム作成者が選択したアームドーザID */
-  armdozerId: ArmDozerId;
+  armdozerId: ArmdozerId;
   /** ルーム作成者が選択したパイロットID */
   pilotId: PilotId;
 };

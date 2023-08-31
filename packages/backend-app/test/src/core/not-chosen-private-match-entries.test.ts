@@ -1,4 +1,4 @@
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { BattleEntry } from "../../../src/core/battle-entry";
 import { notChosenPrivateMatchEntries } from "../../../src/core/not-chosen-private-match-entries";
@@ -8,13 +8,13 @@ import { PrivateMatching } from "../../../src/core/private-match-make";
 const owner: BattleEntry = {
   userID: "owner",
   connectionId: "owner-connection",
-  armdozerId: ArmDozerIds.SHIN_BRAVER,
+  armdozerId: ArmdozerIds.SHIN_BRAVER,
   pilotId: PilotIds.SHINYA,
 };
 const matchedPlayer: BattleEntry = {
   userID: "matched-player",
   connectionId: "matched-player-connection",
-  armdozerId: ArmDozerIds.NEO_LANDOZER,
+  armdozerId: ArmdozerIds.NEO_LANDOZER,
   pilotId: PilotIds.GAI,
 };
 
@@ -27,14 +27,14 @@ const unmatchedEntry01: PrivateMatchEntry = {
   roomID,
   userID: "unmatched-player-01",
   connectionId: "unmatched-player-01-connection",
-  armdozerId: ArmDozerIds.WING_DOZER,
+  armdozerId: ArmdozerIds.WING_DOZER,
   pilotId: PilotIds.TSUBASA,
 };
 const unmatchedEntry02: PrivateMatchEntry = {
   roomID,
   userID: "unmatched-player-02",
   connectionId: "unmatched-player-02-connection",
-  armdozerId: ArmDozerIds.LIGHTNING_DOZER,
+  armdozerId: ArmdozerIds.LIGHTNING_DOZER,
   pilotId: PilotIds.RAITO,
 };
 

@@ -1,4 +1,4 @@
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import {
   CreatePrivateMatchRoom,
@@ -8,7 +8,7 @@ import {
 /** 有効なプライベートマッチルーム生成 */
 const createPrivateMatchRoom: CreatePrivateMatchRoom = {
   action: "create-private-match-room",
-  armdozerId: ArmDozerIds.SHIN_BRAVER,
+  armdozerId: ArmdozerIds.SHIN_BRAVER,
   pilotId: PilotIds.SHINYA,
 };
 
