@@ -1,18 +1,22 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
-import { PrivateMatchEntry } from "../core/private-match-entry";
+import { PrivateMatchEntry, PrivateMatchEntrySchema } from "../core/private-match-entry";
 import { PrivateMatchRoomID } from "../core/private-match-room";
 import { UserID } from "../core/user";
 
 /**
- * private-match-entries スキーマ
+ * DynamoDB スキーマ private-match-entries
  * パーティションキー roomID
  * ソートキー userID
  */
-export type PrivateMatchEntriesSchema = PrivateMatchEntry;
+type DynamoPrivateMatchEntry = PrivateMatchEntry;
 
-/** private-match-entries DAO */
-export class PrivateMatchEntries {
+/** DynamoPrivateMatchEntry zodスキーマ */
+const DynamoPrivateMatchEntrySchema = PrivateMatchEntrySchema;
+
+/** DynamoDB DAO private-match-entries */
+export class DynamoPrivateMatchEntries {
   /** DynamoDBDocument */
   #dynamoDB: DynamoDBDocument;
   /** テーブル名 */
@@ -20,7 +24,6 @@ export class PrivateMatchEntries {
 
   /**
    * コンストラクタ
-   *
    * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
@@ -36,7 +39,7 @@ export class PrivateMatchEntries {
    */
   async getEntries(
     roomID: PrivateMatchRoomID,
-  ): Promise<PrivateMatchEntriesSchema[]> {
+  ): Promise<DynamoPrivateMatchEntry[]> {
     const result = await this.#dynamoDB.query({
       TableName: this.#tableName,
       KeyConditionExpression: "#hash = :roomID",
@@ -47,7 +50,7 @@ export class PrivateMatchEntries {
         ":roomID": roomID,
       },
     });
-    return result.Items ? (result.Items as PrivateMatchEntriesSchema[]) : [];
+    return result.Items ? (z.array(DynamoPrivateMatchEntrySchema).parse(result.Items)) : [];
   }
 
   /**
@@ -55,7 +58,7 @@ export class PrivateMatchEntries {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(entry: PrivateMatchEntriesSchema): Promise<void> {
+  async put(entry: DynamoPrivateMatchEntry): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: entry,

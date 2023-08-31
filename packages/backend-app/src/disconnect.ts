@@ -10,7 +10,7 @@ import {
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
-import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
+import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
@@ -34,7 +34,7 @@ const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -90,7 +90,7 @@ async function cleanUp(connection: Connection): Promise<void> {
 
   const holdPrivateMatch = async (state: HoldPrivateMatch) => {
     const [entries] = await Promise.all([
-      privateMatchEntries.getEntries(state.roomID),
+      dynamoPrivateMatchEntries.getEntries(state.roomID),
       privateMatchRooms.delete(connection.userID),
     ]);
     await Promise.all([
@@ -103,7 +103,7 @@ async function cleanUp(connection: Connection): Promise<void> {
   };
 
   const privateMatchMaking = async (state: PrivateMatchMaking) => {
-    await privateMatchEntries.delete(state.roomID, connection.userID);
+    await dynamoPrivateMatchEntries.delete(state.roomID, connection.userID);
   };
 
   if (connection.state.type === "CasualMatchMaking") {
