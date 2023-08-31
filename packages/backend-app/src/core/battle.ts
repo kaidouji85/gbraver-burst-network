@@ -2,7 +2,10 @@ import { GameState, Player, PlayerSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
 import { UserID, UserIDSchema } from "./user";
-import { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
+import {
+  WSAPIGatewayConnectionId,
+  WSAPIGatewayConnectionIdSchema,
+} from "./ws-api-gateway-connection";
 
 /** バトルID */
 export type BattleID = string;
@@ -27,7 +30,7 @@ export type BattlePlayer = Player & {
 /** BattlePlayer zodスキーマ */
 export const BattlePlayerSchema = PlayerSchema.extend({
   userID: UserIDSchema,
-  connectionId: z.string(),
+  connectionId: WSAPIGatewayConnectionIdSchema,
 });
 
 /**
