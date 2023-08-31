@@ -1,6 +1,6 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-import { DynamoBattleCommands } from "./battle-commands";
+import { DynamoBattleCommands } from "./dynamo-battle-commands";
 
 /**
  * battle-commands テーブル DAO を生成する
@@ -10,7 +10,7 @@ import { DynamoBattleCommands } from "./battle-commands";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createBattleCommands(
+export function createDynamoBattleCommands(
   dynamoDB: DynamoDBDocument,
   service: string,
   stage: string,

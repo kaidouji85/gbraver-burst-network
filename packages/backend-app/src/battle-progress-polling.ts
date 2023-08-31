@@ -10,7 +10,7 @@ import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
 import { createPlayerCommands } from "./core/create-player-commands";
 import { createPlayers } from "./core/create-players";
-import { createBattleCommands } from "./dynamo-db/create-battle-commands";
+import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createBattles } from "./dynamo-db/create-battles";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
@@ -53,7 +53,7 @@ const connections = createConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
 const battles = createBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO */
-const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
+const dynamoBattleCommands = createDynamoBattleCommands(dynamoDB, SERVICE, STAGE);
 
 /** WebSocketAPI レスポンス 不正なリクエストボディ */
 const webSocketAPIResponseOfInvalidRequestBody = {
@@ -191,8 +191,8 @@ export async function battleProgressPolling(
   }
 
   const fetchedCommands = await Promise.all([
-    battleCommands.get(battle.players[0].userID),
-    battleCommands.get(battle.players[1].userID),
+    dynamoBattleCommands.get(battle.players[0].userID),
+    dynamoBattleCommands.get(battle.players[1].userID),
   ]);
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
     await notifier.notifyToClient(

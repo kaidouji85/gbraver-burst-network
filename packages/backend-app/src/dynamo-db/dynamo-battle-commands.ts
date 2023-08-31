@@ -6,10 +6,10 @@ import { BattleCommand, BattleCommandSchema } from "../core/battle-command";
  * DynamoDB スキーマ battle-commands
  * パーティションキー userID
  */
-export type DynamoBattleCommand = BattleCommand;
+type DynamoBattleCommand = BattleCommand;
 
 /** DynamoBattleCommand zodスキーマ */
-export const DynamoBattleCommandSchema = BattleCommandSchema;
+const DynamoBattleCommandSchema = BattleCommandSchema;
 
 /** DynamoDB DAO battle-commands */
 export class DynamoBattleCommands {
