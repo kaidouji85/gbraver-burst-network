@@ -1,5 +1,5 @@
 import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase, UseCaseContext } from "./use-case";
 
@@ -25,7 +25,7 @@ export class PrivateMatchRoomPlayer implements UseCase {
   async execute(context: UseCaseContext): Promise<void> {
     const battle = await this.#sdk.enterPrivateMatchRoom(
       context.privateMatchRoomID,
-      ArmDozerIds.NEO_LANDOZER,
+      ArmdozerIds.NEO_LANDOZER,
       PilotIds.GAI,
     );
     if (!battle) {

@@ -1,4 +1,4 @@
-import { GameState, restoreGbraverBurst } from "gbraver-burst-core";
+import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
@@ -224,7 +224,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const core = restoreGbraverBurst({
+  const core = restoreGBraverBurst({
     players: corePlayers,
     stateHistory: battle.stateHistory,
   });

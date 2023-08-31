@@ -1,4 +1,4 @@
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { parseJSON } from "../json/parse";
 import type { Resolve } from "../promise/promise";
@@ -17,7 +17,7 @@ import { waitUntil } from "./wait-until";
  */
 export function enterCasualMatch(
   websocket: WebSocket,
-  armdozerId: ArmDozerId,
+  armdozerId: ArmdozerId,
   pilotId: PilotId,
 ): Promise<BattleStart> {
   sendToAPIServer(websocket, {

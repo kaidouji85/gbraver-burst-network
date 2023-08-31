@@ -1,5 +1,5 @@
 import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase } from "./use-case";
 
@@ -24,7 +24,7 @@ export class PrivateMatchRoomOwner implements UseCase {
   /** @override */
   async execute(): Promise<void> {
     const room = await this.#sdk.createPrivateMatchRoom(
-      ArmDozerIds.SHIN_BRAVER,
+      ArmdozerIds.SHIN_BRAVER,
       PilotIds.SHINYA,
     );
     console.log(room.roomID);

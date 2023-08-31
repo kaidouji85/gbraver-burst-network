@@ -1,4 +1,4 @@
-import { startGbraverBurst } from "gbraver-burst-core";
+import { startGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Battle, BattlePlayer } from "./battle";
@@ -13,7 +13,7 @@ import { toPlayer } from "./to-player";
 export function createBattle<X extends BattlePlayer>(
   players: [X, X],
 ): Battle<X> {
-  const core = startGbraverBurst([toPlayer(players[0]), toPlayer(players[1])]);
+  const core = startGBraverBurst([toPlayer(players[0]), toPlayer(players[1])]);
   const poller = players[0].userID;
   return {
     battleID: uuidv4(),

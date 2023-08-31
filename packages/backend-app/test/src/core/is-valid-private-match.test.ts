@@ -1,4 +1,4 @@
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { isValidPrivateMatch } from "../../../src/core/is-valid-private-match";
 import { PrivateMatchEntry } from "../../../src/core/private-match-entry";
@@ -9,13 +9,13 @@ const EmptyRoom: PrivateMatchRoom = {
   roomID: "",
   owner: "",
   ownerConnectionId: "",
-  armdozerId: ArmDozerIds.SHIN_BRAVER,
+  armdozerId: ArmdozerIds.SHIN_BRAVER,
   pilotId: PilotIds.SHINYA,
 };
 const EmptyEntry: PrivateMatchEntry = {
   roomID: "",
   userID: "",
-  armdozerId: ArmDozerIds.NEO_LANDOZER,
+  armdozerId: ArmdozerIds.NEO_LANDOZER,
   pilotId: PilotIds.GAI,
   connectionId: "",
 };

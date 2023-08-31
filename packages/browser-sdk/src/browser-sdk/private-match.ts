@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import { Battle } from "./battle";
 
@@ -11,7 +11,7 @@ export interface PrivateMatchCreate {
    * @return 生成したプライベートマッチルームのID
    */
   createPrivateMatchRoom(
-    armdozerId: ArmDozerId,
+    armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<PrivateMatchRoom>;
 }
@@ -43,7 +43,7 @@ export interface PrivateMatchRoomEnter {
    */
   enterPrivateMatchRoom(
     roomID: PrivateMatchRoomID,
-    armdozerId: ArmDozerId,
+    armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<Battle | null>;
 }

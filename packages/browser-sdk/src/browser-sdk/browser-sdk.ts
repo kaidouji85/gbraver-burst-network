@@ -1,5 +1,5 @@
 import { Auth0Client } from "@auth0/auth0-spa-js";
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
 import { createAuth0ClientHelper } from "../auth0/client";
@@ -157,7 +157,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async startCasualMatch(
-    armdozerId: ArmDozerId,
+    armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<Battle> {
     const websocket = await this.#getOrCreateWebSocket();
@@ -167,7 +167,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async createPrivateMatchRoom(
-    armdozerId: ArmDozerId,
+    armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<PrivateMatchRoom> {
     const websocket = await this.#getOrCreateWebSocket();

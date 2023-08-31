@@ -1,4 +1,4 @@
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 
 import type { UserID } from "./user";
 import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
@@ -13,7 +13,7 @@ export type BattleEntry = {
   userID: UserID;
 
   /** 選択したアームドーザID */
-  armdozerId: ArmDozerId;
+  armdozerId: ArmdozerId;
 
   /** 選択したパイロットID */
   pilotId: PilotId;
