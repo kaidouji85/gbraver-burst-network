@@ -11,7 +11,7 @@ import { None } from "./core/connection";
 import { createPlayerCommands } from "./core/create-player-commands";
 import { createPlayers } from "./core/create-players";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
-import { createBattles } from "./dynamo-db/create-battles";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
@@ -51,7 +51,7 @@ const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** connections テーブル DAO */
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO */
 const dynamoBattleCommands = createDynamoBattleCommands(dynamoDB, SERVICE, STAGE);
 
@@ -114,7 +114,7 @@ async function onGameEnd(params: OnGameEndParams): Promise<void> {
         state: updatedConnectionState,
       }),
     ),
-    battles.delete(battle.battleID),
+    dynamoBattles.delete(battle.battleID),
   ]);
 }
 
@@ -145,7 +145,7 @@ async function onGameContinue(params: OnGameContinueParams): Promise<void> {
     ...battle.players.map((v) =>
       notifier.notifyToClient(v.connectionId, noticedData),
     ),
-    battles.put({ ...battle, flowID, stateHistory }),
+    dynamoBattles.put({ ...battle, flowID, stateHistory }),
   ]);
 }
 
@@ -169,7 +169,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfInvalidRequestBody;
   }
 
-  const battle = await battles.get(data.battleID);
+  const battle = await dynamoBattles.get(data.battleID);
   if (!battle) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,

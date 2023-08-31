@@ -4,7 +4,6 @@ import { DynamoBattleCommands } from "./dynamo-battle-commands";
 
 /**
  * battle-commands テーブル DAO を生成する
- *
  * @param dynamoDB DynamoDBDocument
  * @param service serverlessサービス名
  * @param stage serverlessステージ名

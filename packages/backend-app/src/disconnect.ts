@@ -7,7 +7,7 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createBattles } from "./dynamo-db/create-battles";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
@@ -32,7 +32,7 @@ const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
 
@@ -84,7 +84,7 @@ async function cleanUp(connection: Connection): Promise<void> {
           type: "None",
         },
       }),
-      battles.delete(state.battleID),
+      dynamoBattles.delete(state.battleID),
     ]);
   };
 

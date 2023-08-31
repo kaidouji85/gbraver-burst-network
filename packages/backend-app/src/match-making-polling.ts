@@ -9,7 +9,7 @@ import { casualMatchMake } from "./core/casual-match-make";
 import { InBattle } from "./core/connection";
 import { createBattle } from "./core/create-battle";
 import { createBattlePlayer } from "./core/create-battle-player";
-import { createBattles } from "./dynamo-db/create-battles";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
@@ -32,7 +32,7 @@ const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
 const casualMatchEntryScanLimit = 100;
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const intervalInMillisecond = 3000;
 // コンテナ起動から1日経過したら停止したい
 //   1日 = 86400秒
@@ -85,7 +85,7 @@ async function matchMakingPolling(): Promise<void> {
     });
     const deleteEntryIDs = matching.map((v) => v.userID);
     await Promise.all([
-      battles.put(battle),
+      dynamoBattles.put(battle),
       ...updatedConnections.map((v) => connections.put(v)),
       ...deleteEntryIDs.map((v) => casualMatchEntries.delete(v)),
       ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),

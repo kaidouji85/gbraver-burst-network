@@ -8,7 +8,7 @@ import { createBattlePlayer } from "./core/create-battle-player";
 import { isValidPrivateMatch } from "./core/is-valid-private-match";
 import { notChosenPrivateMatchEntries } from "./core/not-chosen-private-match-entries";
 import { privateMatchMake } from "./core/private-match-make";
-import { createBattles } from "./dynamo-db/create-battles";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createConnections } from "./dynamo-db/create-connections";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
@@ -33,7 +33,7 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
 const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 const connections = createConnections(dynamoDB, SERVICE, STAGE);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
@@ -139,7 +139,7 @@ export async function privateMatchMakePolling(
     state: noneState,
   }));
   await Promise.all([
-    battles.put(battle),
+    dynamoBattles.put(battle),
     ...battleConnections.map((v) => connections.put(v)),
     ...matching.map((v) =>
       notifier.notifyToClient(
