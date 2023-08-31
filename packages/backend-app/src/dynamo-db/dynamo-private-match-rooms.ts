@@ -3,17 +3,21 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import {
   PrivateMatchRoom,
   PrivateMatchRoomID,
+  PrivateMatchRoomSchema,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
 
 /**
- * private-match-rooms スキーマ
+ * DynamoDB スキーマ private-match-rooms
  * パーティションキー owner
  */
-export type PrivateMatchRoomsSchema = PrivateMatchRoom;
+type DynamoPrivateMatchRoom = PrivateMatchRoom;
 
-/** private-match-roomsのDAO */
-export class PrivateMatchRooms {
+/** DynamoPrivateMatchRoom zodスキーマ */
+const DynamoPrivateMatchRoomSchema = PrivateMatchRoomSchema;
+
+/** DynamoDB DAO private-match-rooms */
+export class DynamoPrivateMatchRooms {
   /** DynamoDBDocument */
   #dynamoDB: DynamoDBDocument;
   /** テーブル物理名 */
@@ -35,14 +39,14 @@ export class PrivateMatchRooms {
    * @param owner ルーム作成者のユーザID
    * @return 検索結果
    */
-  async get(owner: UserID): Promise<PrivateMatchRoomsSchema | null> {
+  async get(owner: UserID): Promise<DynamoPrivateMatchRoom | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: {
         owner,
       },
     });
-    return result.Item ? (result.Item as PrivateMatchRoomsSchema) : null;
+    return result.Item ? (DynamoPrivateMatchRoomSchema.parse(result.Item)) : null;
   }
 
   /**
@@ -50,7 +54,7 @@ export class PrivateMatchRooms {
    * @param room 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(room: PrivateMatchRoomsSchema): Promise<void> {
+  async put(room: DynamoPrivateMatchRoom): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: room,
