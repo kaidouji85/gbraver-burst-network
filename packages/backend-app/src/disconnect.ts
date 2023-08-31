@@ -7,9 +7,9 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
 import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
 import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
