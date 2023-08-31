@@ -1,21 +1,23 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-import { BattleCommand } from "../core/battle-command";
+import { BattleCommand, BattleCommandSchema } from "../core/battle-command";
 
 /**
- * battle-commands のスキーマ
+ * DynamoDB スキーマ battle-commands
  * パーティションキー userID
  */
-export type BattleCommandsSchema = BattleCommand;
+export type DynamoBattleCommand = BattleCommand;
 
-/** battle-commandsのDAO */
-export class BattleCommands {
+/** DynamoBattleCommand zodスキーマ */
+export const DynamoBattleCommandSchema = BattleCommandSchema;
+
+/** DynamoDB DAO battle-commands */
+export class DynamoBattleCommands {
   #dynamoDB: DynamoDBDocument;
   #tableName: string;
 
   /**
    * コンストラクタ
-   *
    * @param dynamoDB DynamoDBDocument
    * @param tableName テーブル名
    */
@@ -26,11 +28,10 @@ export class BattleCommands {
 
   /**
    * 項目追加する
-   *
    * @param command 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(command: BattleCommandsSchema): Promise<void> {
+  async put(command: DynamoBattleCommand): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: command,
@@ -40,17 +41,16 @@ export class BattleCommands {
   /**
    * ユーザID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
-   *
    * @param userID ユーザID
    * @return 検索結果
    */
-  async get(userID: string): Promise<BattleCommandsSchema | null> {
+  async get(userID: string): Promise<DynamoBattleCommand | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: {
         userID,
       },
     });
-    return result.Item ? (result.Item as BattleCommandsSchema) : null;
+    return result.Item ? (DynamoBattleCommandSchema.parse(result.Item)) : null;
   }
 }

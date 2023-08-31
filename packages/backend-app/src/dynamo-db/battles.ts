@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Battle, BattleIDSchema, BattlePlayer, BattlePlayerSchema,FlowIDSchema } from "../core/battle";
 
 /**
- * battlesのDynamoDBスキーマ
+ * DynamoDB スキーマ battles
  * パーティションキー battleID
  */
 export type DynamoBattle = Battle<BattlePlayer>;
@@ -18,7 +18,7 @@ export const DynamoBattlesSchema = z.object({
   stateHistory: z.array(z.any()),
 });
 
-/** battlesのDAO*/
+/** DynamoDB DAO battles */
 export class DynamoBattles {
   /** DynamoDBドキュメント */
   #dynamoDB: DynamoDBDocument;
