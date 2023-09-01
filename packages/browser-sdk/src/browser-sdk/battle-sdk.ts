@@ -32,7 +32,7 @@ export class BattleSDK implements Battle {
   readonly enemy: Player;
   /** @override */
   readonly initialState: GameState[];
-  /** WebSocket接続 */
+  /** websocketクライアント */
   readonly #websocket: WebSocket;
   /** バトルID */
   readonly #battleID: string;
