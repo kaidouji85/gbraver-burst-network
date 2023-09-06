@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
   "description": "gbraver burst browser sdk",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "codehawk-cli": "^10.1.0",
     "eslint": "^8.48.0",
     "eslint-plugin-jest": "^27.2.3",

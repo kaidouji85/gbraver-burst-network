@@ -1,13 +1,13 @@
 {
   "name": "@gbraver-burst-network/backend-ecs",
   "description": "create backend ecs.",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "bin": {
     "backend-ecs": "bin/backend-ecs.js"
   },
   "dependencies": {
     "@types/ramda": "^0.29.3",
-    "aws-cdk-lib": "^2.93.0",
+    "aws-cdk-lib": "^2.94.0",
     "constructs": "^10.2.70",
     "dotenv": "^16.3.1",
     "ramda": "^0.29.0",
@@ -15,11 +15,11 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
-    "@types/node": "20.5.7",
+    "@types/node": "20.5.9",
     "@types/uuid": "^9.0.3",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
-    "aws-cdk": "2.93.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "aws-cdk": "2.94.0",
     "eslint": "^8.48.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "jest": "^29.6.4",
