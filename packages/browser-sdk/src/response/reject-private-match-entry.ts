@@ -1,7 +1,14 @@
+import { z } from "zod";
+
 /** 何らかの理由でプライベートマッチに参加できなかった */
 export type RejectPrivateMatchEntry = {
   action: "reject-private-match-entry";
 };
+
+/** RejectPrivateMatchEntry zodスキーマ */
+export const RejectPrivateMatchEntrySchema = z.object({
+  action: z.literal("reject-private-match-entry"),
+});
 
 /**
  * 任意オブジェクトをRejectPrivateMatchEntryにパースする
@@ -9,13 +16,9 @@ export type RejectPrivateMatchEntry = {
  * @param data パース元となるオブジェクト
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseRejectPrivateMatchEntry(
-  origin: any,
+  origin: unknown,
 ): RejectPrivateMatchEntry | null {
-  /* eslint-enable */
-  if (origin?.action === "reject-private-match-entry") {
-    return { action: "reject-private-match-entry" };
-  }
-  return null;
+  const result = RejectPrivateMatchEntrySchema.safeParse(origin);
+  return result.success ? result.data : null;
 }
