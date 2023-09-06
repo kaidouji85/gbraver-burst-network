@@ -1,34 +1,29 @@
-import type { GameState } from "gbraver-burst-core";
+import { GameState, GameStateSchema } from "gbraver-burst-core";
+import { z } from "zod";
 
 /** バトル進行通知 */
 export type BattleProgressed = {
   action: "battle-progressed";
-
   /** 発行されたフローID */
   flowID: string;
-
   /** 更新されたゲームステート */
   update: GameState[];
 };
 
+/** BattleProgressed zodスキーマ */
+export const BattleProgressedSchema = z.object({
+  action: z.literal("battle-progressed"),
+  flowID: z.string(),
+  update: z.array(GameStateSchema),
+});
+
 /**
  * 任意オブジェクトをBattleProgressedをパースする
  * パースできない場合はnullを返す
- *
  * @param data パース元オブジェクト
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function parseBattleProgressed(data: any): BattleProgressed | null {
-  /* eslint-enable */
-  // TODO updateを正確に型チェックする
-  return data?.action === "battle-progressed" &&
-    typeof data?.flowID === "string" &&
-    Array.isArray(data?.update)
-    ? {
-        action: data.action,
-        flowID: data.flowID,
-        update: data.update,
-      }
-    : null;
+export function parseBattleProgressed(data: unknown): BattleProgressed | null {
+  const result = BattleProgressedSchema.safeParse(data);
+  return result.success ? result.data : null;
 }

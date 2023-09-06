@@ -1,7 +1,14 @@
+import { z } from "zod";
+
 /** オーナーがプライベートマッチングできなかった */
 export type CouldNotPrivateMatchMaking = {
   action: "cloud-not-private-match-making";
 };
+
+/** CouldNotPrivateMatchMaking zodスキーマ */
+export const CouldNotPrivateMatchMakingSchema = z.object({
+  action: z.literal("cloud-not-private-match-making"),
+});
 
 /**
  * 任意オブジェクトをCouldNotPrivateMatchMakingにパースする
@@ -9,15 +16,9 @@ export type CouldNotPrivateMatchMaking = {
  * @param origin パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseCouldNotPrivateMatchMaking(
-  origin: any,
+  origin: unknown,
 ): CouldNotPrivateMatchMaking | null {
-  /* eslint-enable */
-  if (origin?.action === "cloud-not-private-match-making") {
-    return {
-      action: "cloud-not-private-match-making",
-    };
-  }
-  return null;
+  const result = CouldNotPrivateMatchMakingSchema.safeParse(origin);
+  return result.success ? result.data : null;
 }

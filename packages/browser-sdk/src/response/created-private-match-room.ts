@@ -1,10 +1,17 @@
+import { z } from "zod";
+
 /** オーナーがプライベートマッチルーム作成に成功した */
 export type CreatedPrivateMatchRoom = {
   action: "created-private-match-room";
-
   /** 作成したルームID */
   roomID: string;
 };
+
+/** CreatedPrivateMatchRoom zodスキーマ */
+export const CreatedPrivateMatchRoomSchema = z.object({
+  action: z.literal("created-private-match-room"),
+  roomID: z.string(),
+});
 
 /**
  * 任意オブジェクトをCreatedPrivateMatchRoomにパースする
@@ -12,19 +19,9 @@ export type CreatedPrivateMatchRoom = {
  * @param data パース元
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseCreatedPrivateMatchRoom(
-  data: any,
+  data: unknown,
 ): CreatedPrivateMatchRoom | null {
-  /* eslint-enable */
-  if (
-    data?.action === "created-private-match-room" &&
-    typeof data?.roomID === "string"
-  ) {
-    return {
-      action: "created-private-match-room",
-      roomID: data.roomID,
-    };
-  }
-  return null;
+  const result = CreatedPrivateMatchRoomSchema.safeParse(data);
+  return result.success ? result.data : null;
 }

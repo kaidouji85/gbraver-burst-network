@@ -1,23 +1,22 @@
-export type { Battle } from "./browser-sdk/battle";
-export type { BrowserSDK } from "./browser-sdk/browser-sdk";
-export { createBrowserSDK } from "./browser-sdk/browser-sdk";
-export type { CasualMatch } from "./browser-sdk/casual-match";
-export type { LoginCheck, Logout, UniversalLogin } from "./browser-sdk/login";
-export type { Ping } from "./browser-sdk/ping";
-export type {
+export { BrowserSDK, createBrowserSDK } from "./browser-sdk";
+export { Battle } from "./browser-sdk/battle";
+export { CasualMatch } from "./browser-sdk/casual-match";
+export { LoginCheck, Logout, UniversalLogin } from "./browser-sdk/login";
+export { Ping } from "./browser-sdk/ping";
+export {
   PrivateMatchCreate,
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
 } from "./browser-sdk/private-match";
-export type {
+export {
   LoggedInUserDelete,
   MailVerify,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
 } from "./browser-sdk/user";
-export type {
+export {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
 } from "./browser-sdk/websocket";

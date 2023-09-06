@@ -1,6 +1,7 @@
 /** エラー */
 export type Error = {
   action: "error";
+  /** エラー情報 */
   error: unknown;
 };
 

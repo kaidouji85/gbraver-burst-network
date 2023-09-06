@@ -1,4 +1,4 @@
-import type { Command, GameState, Player } from "gbraver-burst-core";
+import { Command, GameState, Player } from "gbraver-burst-core";
 import { filter, fromEvent, map, Observable } from "rxjs";
 
 import { parseJSON } from "../json/parse";
@@ -10,22 +10,16 @@ import { Battle } from "./battle";
 type Param = {
   /** プレイヤー情報 */
   player: Player;
-
   /** 敵情報 */
   enemy: Player;
-
   /** 初期ステート */
   initialState: GameState[];
-
   /** バトルID */
   battleID: string;
-
   /** 初期フローID */
   initialFlowID: string;
-
   /** ポーリング担当か否か、trueでポーリング担当 */
   isPoller: boolean;
-
   /** websocketクライアント */
   websocket: WebSocket;
 };
@@ -33,18 +27,21 @@ type Param = {
 /** バトルSDK */
 export class BattleSDK implements Battle {
   /** @override */
-  player: Player;
-
+  readonly player: Player;
   /** @override */
-  enemy: Player;
-
+  readonly enemy: Player;
   /** @override */
-  initialState: GameState[];
-  _websocket: WebSocket;
-  _battleID: string;
-  _flowID: string;
-  _isPoller: boolean;
-  _suddenlyBattleEnd: Observable<unknown>;
+  readonly initialState: GameState[];
+  /** websocketクライアント */
+  readonly #websocket: WebSocket;
+  /** バトルID */
+  readonly #battleID: string;
+  /** フローID */
+  #flowID: string;
+  /** ポーリング実行プレイヤーであるか否か、trueでポーリングする */
+  readonly #isPoller: boolean;
+  /** バトル突然終了通知ストリーム */
+  readonly #suddenlyBattleEnd: Observable<unknown>;
 
   /**
    * コンストラクタ
@@ -55,11 +52,11 @@ export class BattleSDK implements Battle {
     this.player = param.player;
     this.enemy = param.enemy;
     this.initialState = param.initialState;
-    this._websocket = param.websocket;
-    this._battleID = param.battleID;
-    this._flowID = param.initialFlowID;
-    this._isPoller = param.isPoller;
-    this._suddenlyBattleEnd = fromEvent(this._websocket, "message").pipe(
+    this.#websocket = param.websocket;
+    this.#battleID = param.battleID;
+    this.#flowID = param.initialFlowID;
+    this.#isPoller = param.isPoller;
+    this.#suddenlyBattleEnd = fromEvent(this.#websocket, "message").pipe(
       map((e) => e as MessageEvent),
       map((e) => parseJSON(e.data)),
       filter((data) => data),
@@ -70,22 +67,22 @@ export class BattleSDK implements Battle {
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
-    const result = this._isPoller
+    const result = this.#isPoller
       ? await sendCommandWithPolling(
-          this._websocket,
-          this._battleID,
-          this._flowID,
+          this.#websocket,
+          this.#battleID,
+          this.#flowID,
           command,
         )
       : await sendCommand(
-          this._websocket,
-          this._battleID,
-          this._flowID,
+          this.#websocket,
+          this.#battleID,
+          this.#flowID,
           command,
         );
 
     if (result.action === "battle-progressed") {
-      this._flowID = result.flowID;
+      this.#flowID = result.flowID;
     }
 
     return result.update;
@@ -93,6 +90,6 @@ export class BattleSDK implements Battle {
 
   /** @override */
   suddenlyBattleNotifier(): Observable<unknown> {
-    return this._suddenlyBattleEnd;
+    return this.#suddenlyBattleEnd;
   }
 }
