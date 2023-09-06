@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/browser-sdk",
   "description": "gbraver burst browser sdk",
-  "version": "1.9.6",
+  "version": "1.9.8",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.1.2",
-    "gbraver-burst-core": "^1.21.0",
+    "gbraver-burst-core": "^1.22.0",
     "rxjs": "^7.8.1",
     "zod": "^3.22.2"
   },
