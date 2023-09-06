@@ -16,7 +16,9 @@ export const EnteredCasualMatchSchema = z.object({
  * @param data パース元となるオブジェクト
  * @return パース結果
  */
-export function parseEnteredCasualMatch(data: unknown): EnteredCasualMatch | null {
+export function parseEnteredCasualMatch(
+  data: unknown,
+): EnteredCasualMatch | null {
   const result = EnteredCasualMatchSchema.safeParse(data);
   return result.success ? result.data : null;
 }

@@ -16,7 +16,9 @@ export const SuddenlyBattleEndSchema = z.object({
  * @param data パース元オブジェクト
  * @return パース結果
  */
-export function parseSuddenlyBattleEnd(data: unknown): SuddenlyBattleEnd | null {
+export function parseSuddenlyBattleEnd(
+  data: unknown,
+): SuddenlyBattleEnd | null {
   const result = SuddenlyBattleEndSchema.safeParse(data);
   return result.success ? result.data : null;
 }

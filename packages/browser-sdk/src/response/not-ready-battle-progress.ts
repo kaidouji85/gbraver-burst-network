@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /** バトル進行の準備ができていない */
 export type NotReadyBattleProgress = {

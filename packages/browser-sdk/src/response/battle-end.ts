@@ -1,4 +1,4 @@
-import { GameState,GameStateSchema } from "gbraver-burst-core";
+import { GameState, GameStateSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
 /** バトル終了 */
