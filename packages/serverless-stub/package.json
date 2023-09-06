@@ -4,9 +4,9 @@
   "version": "1.9.6",
   "author": "Y.Takeuchi",
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^1.9.6",
+    "@gbraver-burst-network/browser-sdk": "^1.9.7",
     "dotenv": "^16.3.1",
-    "gbraver-burst-core": "^1.21.0"
+    "gbraver-burst-core": "^1.22.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.6.0",
