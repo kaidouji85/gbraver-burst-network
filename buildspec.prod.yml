@@ -12,7 +12,6 @@ env:
     AUTH0_AUDIENCE: /GbraverBurst/prod/auth0Audience
     AUTH0_USER_MANAGEMENT_DOMAIN: /GbraverBurst/prod/auth0UserManagementDomain
     AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/prod/auth0UserManagementAppClientId
-    AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET: /GbraverBurst/prod/auth0UserManagementAppClientSecret
     DOCKER_USER: /GbraverBurst/prod/dockerUser
     DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName
