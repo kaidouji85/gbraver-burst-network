@@ -1,28 +1,26 @@
-import type { GameState } from "gbraver-burst-core";
+import { GameState, GameStateSchema } from "gbraver-burst-core";
+import { z } from "zod";
 
 /** バトル終了 */
 export type BattleEnd = {
   action: "battle-end";
-
   /** 更新されたゲームステート */
   update: GameState[];
 };
 
+/** BattleEnd zodスキーマ */
+export const BattleEndSchema = z.object({
+  action: z.literal("battle-end"),
+  update: z.array(GameStateSchema),
+});
+
 /**
  * 任意オブジェクトをBattleEndにパースする
  * パースできない場合はnullを返す
- *
  * @param data パース元オブジェクト
  * @return パース結果
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function parseBattleEnd(data: any): BattleEnd | null {
-  /* eslint-enable */
-  // TODO updateを正確に型チェックする
-  return data?.action === "battle-end" && Array.isArray(data?.update)
-    ? {
-        action: data.action,
-        update: data.update,
-      }
-    : null;
+export function parseBattleEnd(data: unknown): BattleEnd | null {
+  const result = BattleEndSchema.safeParse(data);
+  return result.success ? result.data : null;
 }

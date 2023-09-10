@@ -1,4 +1,4 @@
-import { GameState, restoreGbraverBurst } from "gbraver-burst-core";
+import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
@@ -10,9 +10,9 @@ import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
 import { createPlayerCommands } from "./core/create-player-commands";
 import { createPlayers } from "./core/create-players";
-import { createBattleCommands } from "./dynamo-db/create-battle-commands";
-import { createBattles } from "./dynamo-db/create-battles";
-import { createConnections } from "./dynamo-db/create-connections";
+import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -49,11 +49,15 @@ const notifier = new Notifier(apiGateway);
 /** Dynamo DB ドキュメント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** connections テーブル DAO */
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 /** battles テーブル DAO */
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
 /** battle-commands テーブル DAO */
-const battleCommands = createBattleCommands(dynamoDB, SERVICE, STAGE);
+const dynamoBattleCommands = createDynamoBattleCommands(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 /** WebSocketAPI レスポンス 不正なリクエストボディ */
 const webSocketAPIResponseOfInvalidRequestBody = {
@@ -108,13 +112,13 @@ async function onGameEnd(params: OnGameEndParams): Promise<void> {
       notifier.notifyToClient(v.connectionId, noticedData),
     ),
     ...battle.players.map((v) =>
-      connections.put({
+      dynamoConnections.put({
         connectionId: v.connectionId,
         userID: v.userID,
         state: updatedConnectionState,
       }),
     ),
-    battles.delete(battle.battleID),
+    dynamoBattles.delete(battle.battleID),
   ]);
 }
 
@@ -145,7 +149,7 @@ async function onGameContinue(params: OnGameContinueParams): Promise<void> {
     ...battle.players.map((v) =>
       notifier.notifyToClient(v.connectionId, noticedData),
     ),
-    battles.put({ ...battle, flowID, stateHistory }),
+    dynamoBattles.put({ ...battle, flowID, stateHistory }),
   ]);
 }
 
@@ -169,7 +173,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfInvalidRequestBody;
   }
 
-  const battle = await battles.get(data.battleID);
+  const battle = await dynamoBattles.get(data.battleID);
   if (!battle) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -191,8 +195,8 @@ export async function battleProgressPolling(
   }
 
   const fetchedCommands = await Promise.all([
-    battleCommands.get(battle.players[0].userID),
-    battleCommands.get(battle.players[1].userID),
+    dynamoBattleCommands.get(battle.players[0].userID),
+    dynamoBattleCommands.get(battle.players[1].userID),
   ]);
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
     await notifier.notifyToClient(
@@ -224,7 +228,7 @@ export async function battleProgressPolling(
     return webSocketAPIResponseOfNotReadyBattleProgress;
   }
 
-  const core = restoreGbraverBurst({
+  const core = restoreGBraverBurst({
     players: corePlayers,
     stateHistory: battle.stateHistory,
   });

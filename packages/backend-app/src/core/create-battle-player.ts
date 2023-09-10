@@ -1,4 +1,4 @@
-import { ArmDozers, Pilots } from "gbraver-burst-core";
+import { Armdozers, Pilots } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import type { BattlePlayer } from "./battle";
@@ -11,7 +11,7 @@ import { BattleEntry } from "./battle-entry";
  */
 export function createBattlePlayer(entry: BattleEntry): BattlePlayer {
   const armdozer =
-    ArmDozers.find((v) => v.id === entry.armdozerId) ?? ArmDozers[0];
+    Armdozers.find((v) => v.id === entry.armdozerId) ?? Armdozers[0];
   const pilot = Pilots.find((v) => v.id === entry.pilotId) ?? Pilots[0];
   return {
     playerId: uuidv4(),

@@ -1,4 +1,4 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { z } from "zod";
 
 import { PrivateMatchRoomID } from "../core/private-match-room";
@@ -9,7 +9,7 @@ export type EnterPrivateMatchRoom = {
   /** ルームID */
   roomID: PrivateMatchRoomID;
   /** 選択したアームドーザID */
-  armdozerId: ArmDozerId;
+  armdozerId: ArmdozerId;
   /** 選択したパイロットID */
   pilotId: PilotId;
 };

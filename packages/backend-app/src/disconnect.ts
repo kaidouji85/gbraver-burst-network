@@ -7,11 +7,11 @@ import {
   InBattle,
   PrivateMatchMaking,
 } from "./core/connection";
-import { createBattles } from "./dynamo-db/create-battles";
-import { createCasualMatchEntries } from "./dynamo-db/create-casual-match-entries";
-import { createConnections } from "./dynamo-db/create-connections";
-import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
-import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
+import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
+import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
+import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
@@ -30,11 +30,23 @@ const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const casualMatchEntries = createCasualMatchEntries(dynamoDB, SERVICE, STAGE);
-const battles = createBattles(dynamoDB, SERVICE, STAGE);
-const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -46,9 +58,9 @@ export async function disconnect(
   event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
   const connectionId = event.requestContext.connectionId;
-  const connection = await connections.get(connectionId);
+  const connection = await dynamoConnections.get(connectionId);
   await Promise.all([
-    connections.delete(connectionId),
+    dynamoConnections.delete(connectionId),
     connection ? cleanUp(connection) : Promise.resolve(),
   ]);
   return {
@@ -65,7 +77,7 @@ export async function disconnect(
  */
 async function cleanUp(connection: Connection): Promise<void> {
   const inCasualMatchMaking = async () => {
-    await casualMatchEntries.delete(connection.userID);
+    await dynamoCasualMatchEntries.delete(connection.userID);
   };
 
   const inBattle = async (state: InBattle) => {
@@ -77,21 +89,21 @@ async function cleanUp(connection: Connection): Promise<void> {
       notifier.notifyToClient(other.connectionId, {
         action: "suddenly-battle-end",
       }),
-      connections.put({
+      dynamoConnections.put({
         connectionId: other.connectionId,
         userID: other.userID,
         state: {
           type: "None",
         },
       }),
-      battles.delete(state.battleID),
+      dynamoBattles.delete(state.battleID),
     ]);
   };
 
   const holdPrivateMatch = async (state: HoldPrivateMatch) => {
     const [entries] = await Promise.all([
-      privateMatchEntries.getEntries(state.roomID),
-      privateMatchRooms.delete(connection.userID),
+      dynamoPrivateMatchEntries.getEntries(state.roomID),
+      dynamoPrivateMatchRooms.delete(connection.userID),
     ]);
     await Promise.all([
       ...entries.map((v) =>
@@ -103,7 +115,7 @@ async function cleanUp(connection: Connection): Promise<void> {
   };
 
   const privateMatchMaking = async (state: PrivateMatchMaking) => {
-    await privateMatchEntries.delete(state.roomID, connection.userID);
+    await dynamoPrivateMatchEntries.delete(state.roomID, connection.userID);
   };
 
   if (connection.state.type === "CasualMatchMaking") {

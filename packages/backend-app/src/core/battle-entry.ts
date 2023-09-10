@@ -1,7 +1,16 @@
-import type { ArmDozerId, PilotId } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  ArmdozerIdSchema,
+  PilotId,
+  PilotIdSchema,
+} from "gbraver-burst-core";
+import { z } from "zod";
 
-import type { UserID } from "./user";
-import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
+import { UserID, UserIDSchema } from "./user";
+import {
+  WSAPIGatewayConnectionId,
+  WSAPIGatewayConnectionIdSchema,
+} from "./ws-api-gateway-connection";
 
 /**
  * ネット対戦エントリ
@@ -11,13 +20,18 @@ import type { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
 export type BattleEntry = {
   /** エントリーするユーザのID */
   userID: UserID;
-
   /** 選択したアームドーザID */
-  armdozerId: ArmDozerId;
-
+  armdozerId: ArmdozerId;
   /** 選択したパイロットID */
   pilotId: PilotId;
-
   /** コネクションID */
   connectionId: WSAPIGatewayConnectionId;
 };
+
+/** BattleEntry zodスキーマ */
+export const BattleEntrySchema = z.object({
+  userID: UserIDSchema,
+  armdozerId: ArmdozerIdSchema,
+  pilotId: PilotIdSchema,
+  connectionId: WSAPIGatewayConnectionIdSchema,
+});

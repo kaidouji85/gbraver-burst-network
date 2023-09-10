@@ -1,6 +1,6 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-import { PrivateMatchEntries } from "./private-match-entries";
+import { DynamoPrivateMatchEntries } from "./dynamo-private-match-entries";
 
 /**
  * private-match-entries テーブル DAO を生成する
@@ -9,11 +9,11 @@ import { PrivateMatchEntries } from "./private-match-entries";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createPrivateMatchEntries(
+export function createDynamoPrivateMatchEntries(
   dynamoDB: DynamoDBDocument,
   service: string,
   stage: string,
-): PrivateMatchEntries {
+): DynamoPrivateMatchEntries {
   const tableName = `${service}__${stage}__private-match-entries`;
-  return new PrivateMatchEntries(dynamoDB, tableName);
+  return new DynamoPrivateMatchEntries(dynamoDB, tableName);
 }

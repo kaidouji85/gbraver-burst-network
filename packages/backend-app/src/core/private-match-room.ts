@@ -1,10 +1,22 @@
-import { ArmDozerId, PilotId } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  ArmdozerIdSchema,
+  PilotId,
+  PilotIdSchema,
+} from "gbraver-burst-core";
+import { z } from "zod";
 
-import { UserID } from "./user";
-import { WSAPIGatewayConnectionId } from "./ws-api-gateway-connection";
+import { UserID, UserIDSchema } from "./user";
+import {
+  WSAPIGatewayConnectionId,
+  WSAPIGatewayConnectionIdSchema,
+} from "./ws-api-gateway-connection";
 
 /** ルームID */
 export type PrivateMatchRoomID = string;
+
+/** PrivateMatchRoomID zodスキーマ */
+export const PrivateMatchRoomIDSchema = z.string();
 
 /** プライベートマッチルーム */
 export type PrivateMatchRoom = {
@@ -15,7 +27,16 @@ export type PrivateMatchRoom = {
   /** ルーム作成者のWebsocketAPIコネクションID */
   ownerConnectionId: WSAPIGatewayConnectionId;
   /** ルーム作成者が選択したアームドーザID */
-  armdozerId: ArmDozerId;
+  armdozerId: ArmdozerId;
   /** ルーム作成者が選択したパイロットID */
   pilotId: PilotId;
 };
+
+/** PrivateMatchRoom zodスキーマ */
+export const PrivateMatchRoomSchema = z.object({
+  roomID: PrivateMatchRoomIDSchema,
+  owner: UserIDSchema,
+  ownerConnectionId: WSAPIGatewayConnectionIdSchema,
+  armdozerId: ArmdozerIdSchema,
+  pilotId: PilotIdSchema,
+});

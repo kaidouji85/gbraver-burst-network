@@ -1,15 +1,22 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
-import type { CasualMatchEntry } from "../core/casual-match-entry";
+import {
+  CasualMatchEntry,
+  CasualMatchEntrySchema,
+} from "../core/casual-match-entry";
 
 /**
- * casual_match_entriesのスキーマ
+ * DynamoDB スキーマ casual_match_entries
  * パーティションキー userID
  */
-export type CasualMatchEntriesSchema = CasualMatchEntry;
+type DynamoCasualMatchEntry = CasualMatchEntry;
 
-/** casual_match_entriesのDAO */
-export class CasualMatchEntries {
+/** DynamoCasualMatchEntry zodスキーマ */
+const DynamoCasualMatchEntrySchema = CasualMatchEntrySchema;
+
+/** DynamoDB DAO casual_match_entries */
+export class DynamoCasualMatchEntries {
   #dynamoDB: DynamoDBDocument;
   #tableName: string;
 
@@ -30,7 +37,7 @@ export class CasualMatchEntries {
    * @param entry 追加する項目
    * @return 処理が完了したら発火するPromise
    */
-  async put(entry: CasualMatchEntriesSchema): Promise<void> {
+  async put(entry: DynamoCasualMatchEntry): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: entry,
@@ -43,14 +50,16 @@ export class CasualMatchEntries {
    * @param limit 検索件数の上限
    * @return 取得結果
    */
-  async scan(limit: number): Promise<CasualMatchEntriesSchema[]> {
+  async scan(limit: number): Promise<DynamoCasualMatchEntry[]> {
     const resp = await this.#dynamoDB.scan({
       TableName: this.#tableName,
       Select: "ALL_ATTRIBUTES",
       ConsistentRead: true,
       Limit: limit,
     });
-    return resp.Items ? (resp.Items as CasualMatchEntriesSchema[]) : [];
+    return resp.Items
+      ? z.array(DynamoCasualMatchEntrySchema).parse(resp.Items)
+      : [];
   }
 
   /**

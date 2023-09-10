@@ -159,7 +159,6 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/auth0Audience                      | SecureString | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                          |
 | /GbraverBurst/dev/auth0UserManagementDomain          | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照    |
 | /GbraverBurst/dev/auth0UserManagementAppClientId     | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_ID を参照     |
-| /GbraverBurst/dev/auth0UserManagementAppClientSecret | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET を参照 |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName         | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照          |
 | /GbraverBurst/dev/dockerUser                         | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                             |
 | /GbraverBurst/dev/dockerToken                        | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                            |
@@ -196,7 +195,6 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/prod/auth0Audience                      | SecureString  | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                          |
 | /GbraverBurst/prod/auth0UserManagementDomain          | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照     |
 | /GbraverBurst/prod/auth0UserManagementAppClientId     | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_ID を参照     |
-| /GbraverBurst/prod/auth0UserManagementAppClientSecret | SecureString  | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_APP_CLIENT_SECRET を参照 |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName         | String        | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照          |
 | /GbraverBurst/prod/dockerUser                         | SecureString  | [環境変数定義の定義](#env-config) DOCKER_USER を参照                             |
 | /GbraverBurst/prod/dockerToken                        | SecureString  | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                            |

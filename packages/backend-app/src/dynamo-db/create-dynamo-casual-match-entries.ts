@@ -1,6 +1,6 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-import { CasualMatchEntries } from "./casual-match-entries";
+import { DynamoCasualMatchEntries } from "./dynamo-casual-match-entries";
 
 /**
  * casual-match-entries テーブル DAO を生成する
@@ -10,11 +10,11 @@ import { CasualMatchEntries } from "./casual-match-entries";
  * @param stage serverlessステージ名
  * @return 生成結果
  */
-export function createCasualMatchEntries(
+export function createDynamoCasualMatchEntries(
   dynamoDB: DynamoDBDocument,
   service: string,
   stage: string,
-): CasualMatchEntries {
+): DynamoCasualMatchEntries {
   const tableName = `${service}__${stage}__casual-match-entries`;
-  return new CasualMatchEntries(dynamoDB, tableName);
+  return new DynamoCasualMatchEntries(dynamoDB, tableName);
 }

@@ -2,9 +2,9 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { PrivateMatchEntry } from "./core/private-match-entry";
-import { createConnections } from "./dynamo-db/create-connections";
-import { createPrivateMatchEntries } from "./dynamo-db/create-private-match-entries";
-import { createPrivateMatchRooms } from "./dynamo-db/create-private-match-rooms";
+import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
+import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -22,9 +22,17 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-const connections = createConnections(dynamoDB, SERVICE, STAGE);
-const privateMatchRooms = createPrivateMatchRooms(dynamoDB, SERVICE, STAGE);
-const privateMatchEntries = createPrivateMatchEntries(dynamoDB, SERVICE, STAGE);
+const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
 
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
@@ -73,7 +81,7 @@ export async function enterPrivateMatchRoom(
     return invalidRequestBody;
   }
 
-  const isExistRoom = await privateMatchRooms.isExistRoom(data.roomID);
+  const isExistRoom = await dynamoPrivateMatchRooms.isExistRoom(data.roomID);
   if (!isExistRoom) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
@@ -93,8 +101,8 @@ export async function enterPrivateMatchRoom(
     connectionId: event.requestContext.connectionId,
   };
   await Promise.all([
-    privateMatchEntries.put(entry),
-    connections.put({
+    dynamoPrivateMatchEntries.put(entry),
+    dynamoConnections.put({
       connectionId: event.requestContext.connectionId,
       userID: user.userID,
       state: {

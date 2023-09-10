@@ -1,5 +1,5 @@
 import type { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import { ArmDozerIds, PilotIds } from "gbraver-burst-core";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import type { UseCase } from "./use-case";
 
@@ -24,7 +24,7 @@ export class BattlePlayer02 implements UseCase {
   /** @override */
   async execute(): Promise<void> {
     const battle = await this._sdk.startCasualMatch(
-      ArmDozerIds.NEO_LANDOZER,
+      ArmdozerIds.NEO_LANDOZER,
       PilotIds.GAI,
     );
     battle.suddenlyBattleNotifier().subscribe(() => {
