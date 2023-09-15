@@ -61,14 +61,13 @@ export async function deleteUser(
     domain: AUTH0_USER_MANAGEMENT_DOMAIN,
     clientId: AUTH0_USER_MANAGEMENT_APP_CLIENT_ID,
     clientSecret: auth0Secret.auth0UserManagementAppClientSecret,
-    scope: "delete:users",
   });
   const user = extractUserFromRestAPIJWT(
     event.requestContext.authorizer.jwt.claims,
   );
   // auth0ユーザ削除関数にGブレイバーバーストのユーザIDを指定しているが、
   // 現状ではauth0、GブレイバーバーストのユーザIDは完全一致するので問題ない
-  await auth0ManagementClient.deleteUser({
+  await auth0ManagementClient.users.delete({
     id: user.userID,
   });
   return {
