@@ -20,7 +20,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@types/auth0": "^3.3.4",
     "@types/jest": "^29.5.4",
     "@types/ramda": "^0.29.4",
     "@types/uuid": "^9.0.4",
