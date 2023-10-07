@@ -11,12 +11,12 @@
     "@auth0/auth0-spa-js": "^2.1.2",
     "gbraver-burst-core": "^1.22.0",
     "rxjs": "^7.8.1",
-    "zod": "^3.22.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
     "codehawk-cli": "^10.1.0",
     "eslint": "^8.50.0",
     "eslint-plugin-jest": "^27.4.2",
@@ -27,7 +27,6 @@
     "prettier": "3.0.3",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   },
