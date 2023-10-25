@@ -9,10 +9,10 @@
     "gbraver-burst-core": "^1.22.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
     "codehawk-cli": "^10.1.0",
-    "eslint": "^8.51.0",
+    "eslint": "^8.52.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "html-webpack-plugin": "^5.5.3",
     "http-server": "^14.1.1",
