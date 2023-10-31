@@ -45,6 +45,7 @@ export class DynamoPrivateMatchRooms {
       Key: {
         owner,
       },
+      ConsistentRead: true,
     });
     return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
   }
@@ -88,6 +89,7 @@ export class DynamoPrivateMatchRooms {
       ExpressionAttributeValues: {
         ":roomID": roomID,
       },
+      ConsistentRead: true,
     });
     return result?.Items ? 0 < result.Items.length : false;
   }

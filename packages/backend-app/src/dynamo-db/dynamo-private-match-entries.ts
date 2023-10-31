@@ -52,6 +52,7 @@ export class DynamoPrivateMatchEntries {
       ExpressionAttributeValues: {
         ":roomID": roomID,
       },
+      ConsistentRead: true,
     });
     return result.Items
       ? z.array(DynamoPrivateMatchEntrySchema).parse(result.Items)
