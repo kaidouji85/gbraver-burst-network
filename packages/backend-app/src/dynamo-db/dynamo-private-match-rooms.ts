@@ -44,7 +44,6 @@ export class DynamoPrivateMatchRooms {
       Key: {
         owner,
       },
-      ConsistentRead: true,
     });
     return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
   }
