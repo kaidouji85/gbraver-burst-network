@@ -2,7 +2,6 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import {
   PrivateMatchRoom,
-  PrivateMatchRoomID,
   PrivateMatchRoomSchema,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
@@ -74,23 +73,5 @@ export class DynamoPrivateMatchRooms {
         owner,
       },
     });
-  }
-
-  /**
-   * 指定したプライベートマッチルームが存在するか否かを判定する
-   * @param roomID プライベートルームID
-   * @return 判定結果、trueで存在する
-   */
-  async isExistRoom(roomID: PrivateMatchRoomID): Promise<boolean> {
-    const result = await this.#dynamoDB.query({
-      TableName: this.#tableName,
-      IndexName: "roomID",
-      KeyConditionExpression: "roomID = :roomID",
-      ExpressionAttributeValues: {
-        ":roomID": roomID,
-      },
-      ConsistentRead: true,
-    });
-    return result?.Items ? 0 < result.Items.length : false;
   }
 }
