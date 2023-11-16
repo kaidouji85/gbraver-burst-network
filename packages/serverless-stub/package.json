@@ -33,6 +33,7 @@
     "clean": "rimraf build",
     "code-analysis": "codehawk src",
     "code-format": "prettier --write src",
+    "code-format-check": "prettier --check src",
     "detect-circular": "madge --extensions ts -c src",
     "dev-server": "webpack serve",
     "lint": "eslint --max-warnings 0 src",
