@@ -2,7 +2,7 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "lerna": "^7.4.1",
+    "lerna": "^7.4.2",
     "typescript": "^5.2.2"
   },
   "private": true,
@@ -10,6 +10,7 @@
     "build": "lerna run build",
     "clean": "lerna run clean",
     "code-format": "lerna run code-format",
+    "code-format-check": "lerna run code-format-check",
     "detect-circular": "lerna run detect-circular",
     "lint": "lerna run lint",
     "lint-fix": "lerna run lint-fix",

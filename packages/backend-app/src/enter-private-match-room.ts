@@ -4,7 +4,6 @@ import { Notifier } from "./api-gateway/notifier";
 import { PrivateMatchEntry } from "./core/private-match-entry";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
-import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -23,11 +22,6 @@ const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
-const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
-  dynamoDB,
-  SERVICE,
-  STAGE,
-);
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
   dynamoDB,
   SERVICE,
@@ -74,15 +68,6 @@ export async function enterPrivateMatchRoom(
   }
 
   if (data.roomID === "") {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      rejectPrivateMatchEntry,
-    );
-    return invalidRequestBody;
-  }
-
-  const isExistRoom = await dynamoPrivateMatchRooms.isExistRoom(data.roomID);
-  if (!isExistRoom) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       rejectPrivateMatchEntry,

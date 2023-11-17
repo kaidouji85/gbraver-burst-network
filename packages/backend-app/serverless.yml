@@ -209,24 +209,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: owner
             AttributeType: S
-          - AttributeName: roomID
-            AttributeType: S
         KeySchema:
           - AttributeName: owner
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        GlobalSecondaryIndexes:
-          - IndexName: "roomID"
-            KeySchema:
-              - AttributeName: "roomID"
-                KeyType: "HASH"
-            Projection:
-              ProjectionType: "KEYS_ONLY"
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1            
     PrivateMatchEntriesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
