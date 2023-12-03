@@ -133,7 +133,7 @@ export async function privateMatchMakePolling(
   const noneState: None = {
     type: "None",
   };
-  const notChonsenConnections = notChosenEntries.map((v) => ({
+  const notChosenConnections = notChosenEntries.map((v) => ({
     connectionId: v.connectionId,
     userID: v.userID,
     state: noneState,
@@ -152,7 +152,7 @@ export async function privateMatchMakePolling(
     ...notChosenEntries.map((v) =>
       notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry),
     ),
-    ...notChonsenConnections.map((v) => dynamoConnections.put(v)),
+    ...notChosenConnections.map((v) => dynamoConnections.put(v)),
   ]);
 
   return endPrivateMatchMakePolling;
