@@ -19,7 +19,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
 import { createBattleStart } from "./response/create-battle-start";
-import type {
+import {
   CouldNotPrivateMatchMaking,
   Error,
   RejectPrivateMatchEntry,
@@ -97,15 +97,7 @@ export async function privateMatchMakePolling(
     dynamoPrivateMatchRooms.get(user.userID),
     dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
-  if (!room) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
-    );
-    return endPrivateMatchMakePolling;
-  }
-
-  if (!isValidPrivateMatch({ owner: user, room, entries })) {
+  if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       cloudNotPrivateMatchMake,
@@ -141,7 +133,7 @@ export async function privateMatchMakePolling(
   const noneState: None = {
     type: "None",
   };
-  const notChonsenConnections = notChosenEntries.map((v) => ({
+  const notChosenConnections = notChosenEntries.map((v) => ({
     connectionId: v.connectionId,
     userID: v.userID,
     state: noneState,
@@ -160,7 +152,7 @@ export async function privateMatchMakePolling(
     ...notChosenEntries.map((v) =>
       notifier.notifyToClient(v.connectionId, rejectPrivateMatchEntry),
     ),
-    ...notChonsenConnections.map((v) => dynamoConnections.put(v)),
+    ...notChosenConnections.map((v) => dynamoConnections.put(v)),
   ]);
 
   return endPrivateMatchMakePolling;
