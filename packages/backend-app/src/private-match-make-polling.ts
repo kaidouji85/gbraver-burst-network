@@ -19,7 +19,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
 import { createBattleStart } from "./response/create-battle-start";
-import type {
+import {
   CouldNotPrivateMatchMaking,
   Error,
   RejectPrivateMatchEntry,
