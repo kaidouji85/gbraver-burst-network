@@ -28,18 +28,21 @@ export function casualMatchMake<X extends CasualMatchEntry>(
     return [];
   }
 
-  return entries.reduce((result: Result<X>, entry: X) => {
-    if (result.working.length === 1) {
-      const matching: CasualMatching<X> = [result.working[0], entry];
-      return {
-        working: [],
-        matchingList: [...result.matchingList, matching],
-      };
-    } else {
-      return {
-        working: [entry],
-        matchingList: result.matchingList,
-      };
-    }
-  }, { working: [], matchingList: [] }).matchingList;
+  return entries.reduce(
+    (result: Result<X>, entry: X) => {
+      if (result.working.length === 0) {
+        return {
+          working: [entry],
+          matchingList: result.matchingList,
+        };
+      } else {
+        const matching: CasualMatching<X> = [result.working[0], entry];
+        return {
+          working: [],
+          matchingList: [...result.matchingList, matching],
+        };
+      }
+    },
+    { working: [], matchingList: [] },
+  ).matchingList;
 }
