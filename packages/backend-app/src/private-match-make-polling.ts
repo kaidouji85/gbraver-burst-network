@@ -97,15 +97,7 @@ export async function privateMatchMakePolling(
     dynamoPrivateMatchRooms.get(user.userID),
     dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
-  if (!room) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
-    );
-    return endPrivateMatchMakePolling;
-  }
-
-  if (!isValidPrivateMatch({ owner: user, room, entries })) {
+  if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
       cloudNotPrivateMatchMake,
