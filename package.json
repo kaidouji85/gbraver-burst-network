@@ -3,7 +3,7 @@
   "description": "gbraver burst network module.",
   "devDependencies": {
     "lerna": "^8.0.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "private": true,
   "scripts": {
