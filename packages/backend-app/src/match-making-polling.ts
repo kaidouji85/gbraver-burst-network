@@ -4,11 +4,8 @@ import * as fs from "fs";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { BattlePlayer } from "./core/battle";
 import { casualMatchMake } from "./core/casual-match-make";
-import { InBattle } from "./core/connection";
-import { createBattle } from "./core/create-battle";
-import { createBattlePlayer } from "./core/create-battle-player";
+import { startCasualMatch } from "./core/start-casual-match";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
@@ -67,21 +64,7 @@ async function matchMakingPolling(): Promise<void> {
   );
   const matchingList = casualMatchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
-    const players: [BattlePlayer, BattlePlayer] = [
-      createBattlePlayer(matching[0]),
-      createBattlePlayer(matching[1]),
-    ];
-    const battle = createBattle(players);
-    const updatedConnectionState: InBattle = {
-      type: "InBattle",
-      battleID: battle.battleID,
-      players,
-    };
-    const updatedConnections = matching.map((v) => ({
-      connectionId: v.connectionId,
-      userID: v.userID,
-      state: updatedConnectionState,
-    }));
+    const { battle, connections } = startCasualMatch(matching);
     const notices = matching.map((entry) => {
       const data = createBattleStart(entry.userID, battle);
       return {
@@ -92,7 +75,7 @@ async function matchMakingPolling(): Promise<void> {
     const deleteEntryIDs = matching.map((v) => v.userID);
     await Promise.all([
       dynamoBattles.put(battle),
-      ...updatedConnections.map((v) => dynamoConnections.put(v)),
+      ...connections.map((v) => dynamoConnections.put(v)),
       ...deleteEntryIDs.map((v) => dynamoCasualMatchEntries.delete(v)),
       ...notices.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
     ]);
