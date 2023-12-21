@@ -23,7 +23,14 @@ const entry02: CasualMatchEntry = {
   connectionId: "user-02-connection-id",
 };
 
-test("カジュアルマッチを正しく開始できる", () => {
+beforeEach(() => {
   (uuidv4 as jest.Mock).mockImplementation(mockUniqUUID());
+});
+
+afterEach(() => {
+  (uuidv4 as jest.Mock).mockReset();
+});
+
+test("カジュアルマッチを正しく開始できる", () => {
   expect(startCasualMatch([entry01, entry02])).toMatchSnapshot();
 });

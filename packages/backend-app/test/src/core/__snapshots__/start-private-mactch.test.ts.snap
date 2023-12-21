@@ -1,0 +1,410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`正しくプライベートマッチを開始できる 1`] = `
+{
+  "battle": {
+    "battleID": "mock-id-3",
+    "flowID": "mock-id-4",
+    "players": [
+      {
+        "armdozer": {
+          "burst": {
+            "recoverBattery": 5,
+            "type": "RecoverBattery",
+          },
+          "id": "SHIN_BRAVER",
+          "maxBattery": 5,
+          "maxHp": 3100,
+          "name": "シンブレイバー",
+          "power": 2000,
+          "speed": 2000,
+        },
+        "connectionId": "owner-connection-id",
+        "pilot": {
+          "id": "SHINYA",
+          "name": "シンヤ",
+          "skill": {
+            "recoverBattery": 2,
+            "type": "RecoverBatterySkill",
+          },
+        },
+        "playerId": "mock-id-1",
+        "userID": "owner",
+      },
+      {
+        "armdozer": {
+          "burst": {
+            "recoverBattery": 3,
+            "type": "ContinuousAttack",
+          },
+          "id": "WING_DOZER",
+          "maxBattery": 5,
+          "maxHp": 2700,
+          "name": "ウィングドーザ",
+          "power": 2200,
+          "speed": 2200,
+        },
+        "connectionId": "user2-connection-id",
+        "pilot": {
+          "id": "TSUBASA",
+          "name": "ツバサ",
+          "skill": {
+            "batteryEnchantment": 1,
+            "duration": 2,
+            "type": "BatteryEnchantmentSkill",
+          },
+        },
+        "playerId": "mock-id-2",
+        "userID": "user2",
+      },
+    ],
+    "poller": "owner",
+    "stateHistory": [
+      {
+        "activePlayerId": "mock-id-2",
+        "effect": {
+          "name": "StartGame",
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 3,
+                "type": "ContinuousAttack",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 2700,
+              "id": "WING_DOZER",
+              "maxBattery": 5,
+              "maxHp": 2700,
+              "name": "ウィングドーザ",
+              "power": 2200,
+              "speed": 2200,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "TSUBASA",
+              "name": "ツバサ",
+              "skill": {
+                "batteryEnchantment": 1,
+                "duration": 2,
+                "type": "BatteryEnchantmentSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "mock-id-2",
+        "effect": {
+          "name": "InputCommand",
+          "players": [
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "mock-id-1",
+              "selectable": true,
+            },
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "mock-id-2",
+              "selectable": true,
+            },
+          ],
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 3,
+                "type": "ContinuousAttack",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 2700,
+              "id": "WING_DOZER",
+              "maxBattery": 5,
+              "maxHp": 2700,
+              "name": "ウィングドーザ",
+              "power": 2200,
+              "speed": 2200,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "TSUBASA",
+              "name": "ツバサ",
+              "skill": {
+                "batteryEnchantment": 1,
+                "duration": 2,
+                "type": "BatteryEnchantmentSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+          },
+        ],
+      },
+    ],
+  },
+  "battleConnections": [
+    {
+      "connectionId": "owner-connection-id",
+      "state": {
+        "battleID": "mock-id-3",
+        "players": [
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "connectionId": "owner-connection-id",
+            "pilot": {
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+            "userID": "owner",
+          },
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 3,
+                "type": "ContinuousAttack",
+              },
+              "id": "WING_DOZER",
+              "maxBattery": 5,
+              "maxHp": 2700,
+              "name": "ウィングドーザ",
+              "power": 2200,
+              "speed": 2200,
+            },
+            "connectionId": "user2-connection-id",
+            "pilot": {
+              "id": "TSUBASA",
+              "name": "ツバサ",
+              "skill": {
+                "batteryEnchantment": 1,
+                "duration": 2,
+                "type": "BatteryEnchantmentSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+            "userID": "user2",
+          },
+        ],
+        "type": "InBattle",
+      },
+      "userID": "owner",
+    },
+    {
+      "connectionId": "user2-connection-id",
+      "state": {
+        "battleID": "mock-id-3",
+        "players": [
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "connectionId": "owner-connection-id",
+            "pilot": {
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+            "userID": "owner",
+          },
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 3,
+                "type": "ContinuousAttack",
+              },
+              "id": "WING_DOZER",
+              "maxBattery": 5,
+              "maxHp": 2700,
+              "name": "ウィングドーザ",
+              "power": 2200,
+              "speed": 2200,
+            },
+            "connectionId": "user2-connection-id",
+            "pilot": {
+              "id": "TSUBASA",
+              "name": "ツバサ",
+              "skill": {
+                "batteryEnchantment": 1,
+                "duration": 2,
+                "type": "BatteryEnchantmentSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+            "userID": "user2",
+          },
+        ],
+        "type": "InBattle",
+      },
+      "userID": "user2",
+    },
+  ],
+  "notChosenConnections": [
+    {
+      "connectionId": "user1-connection-id",
+      "state": {
+        "type": "None",
+      },
+      "userID": "user1",
+    },
+    {
+      "connectionId": "user3-connection-id",
+      "state": {
+        "type": "None",
+      },
+      "userID": "user3",
+    },
+  ],
+}
+`;
