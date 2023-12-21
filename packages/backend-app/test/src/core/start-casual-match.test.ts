@@ -5,7 +5,7 @@ import { CasualMatchEntry } from "../../../src/core/casual-match-entry";
 import { startCasualMatch } from "../../../src/core/start-casual-match";
 import { mockUniqUUID } from "../../mock-unique-uuid";
 
-jest.mock('uuid');
+jest.mock("uuid");
 
 /** カジュアルマッチ参加プレイヤー1 */
 const entry01: CasualMatchEntry = {

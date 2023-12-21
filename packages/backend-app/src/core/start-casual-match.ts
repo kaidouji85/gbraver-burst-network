@@ -11,14 +11,14 @@ type MatchStartResponse = {
   battle: Battle<BattlePlayer>;
   /** バトル参加者のコネクション */
   connections: Connection[];
-}
+};
 
 /**
  * カジュアルマッチを開始する
  * @param matching マッチング
  * @return バトルとコネクションのリスト
  */
-export function startCasualMatch<X extends CasualMatchEntry> (
+export function startCasualMatch<X extends CasualMatchEntry>(
   matching: CasualMatching<X>,
 ): MatchStartResponse {
   const battle = createBattle([
