@@ -97,17 +97,17 @@ export async function privateMatchMakePolling(
   await Promise.all([
     dynamoBattles.put(battle),
     ...battleConnections.map((v) => dynamoConnections.put(v)),
+    ...battleConnections.map(({ connectionId, userID }) =>
+      notifier.notifyToClient(connectionId, createBattleStart(userID, battle)),
+    ),
     ...notChosenConnections.map((v) => dynamoConnections.put(v)),
+    ...notChosenConnections.map(({ connectionId }) =>
+      notifier.notifyToClient(connectionId, rejectPrivateMatchEntry),
+    ),
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),
     ),
     dynamoPrivateMatchRooms.delete(user.userID),
-    ...matching.map(({ connectionId, userID }) =>
-      notifier.notifyToClient(connectionId, createBattleStart(userID, battle)),
-    ),
-    ...notChosenConnections.map(({ connectionId }) =>
-      notifier.notifyToClient(connectionId, rejectPrivateMatchEntry),
-    ),
   ]);
   return endPrivateMatchMakePolling;
 }
