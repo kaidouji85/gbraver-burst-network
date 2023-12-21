@@ -65,13 +65,10 @@ async function matchMakingPolling(): Promise<void> {
   const matchingList = casualMatchMake(entries);
   const startBattles = matchingList.map(async (matching): Promise<void> => {
     const { battle, connections } = startCasualMatch(matching);
-    const notices = matching.map((entry) => {
-      const data = createBattleStart(entry.userID, battle);
-      return {
-        connectionId: entry.connectionId,
-        data,
-      };
-    });
+    const notices = matching.map((entry) => ({
+      connectionId: entry.connectionId,
+      data: createBattleStart(entry.userID, battle),
+    }));
     const deleteEntryIDs = matching.map((v) => v.userID);
     await Promise.all([
       dynamoBattles.put(battle),
