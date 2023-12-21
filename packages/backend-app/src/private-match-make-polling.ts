@@ -14,16 +14,16 @@ import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-priva
 import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
+import { endPrivateMatchMakePolling } from "./lambda/end-private-match-make-polling";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
+import { invalidRequestBody } from "./lambda/invalid-request-body";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
+import { cloudNotPrivateMatchMake } from "./response/cloud-not-private-match-make";
 import { createBattleStart } from "./response/create-battle-start";
-import {
-  CouldNotPrivateMatchMaking,
-  Error,
-  RejectPrivateMatchEntry,
-} from "./response/websocket-response";
+import { invalidRequestBodyError } from "./response/invalid-request-body-error";
+import { rejectPrivateMatchEntry } from "./response/reject-private-match-entry";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -51,26 +51,6 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
 );
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
-
-const invalidRequestBodyError: Error = {
-  action: "error",
-  error: "invalid request body",
-};
-const cloudNotPrivateMatchMake: CouldNotPrivateMatchMaking = {
-  action: "cloud-not-private-match-making",
-};
-const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
-  action: "reject-private-match-entry",
-};
-
-const invalidRequestBody: WebsocketAPIResponse = {
-  statusCode: 400,
-  body: "invalid request body",
-};
-const endPrivateMatchMakePolling: WebsocketAPIResponse = {
-  statusCode: 200,
-  body: "end private match make polling",
-};
 
 /**
  * プライベートマッチメイクポーリング
