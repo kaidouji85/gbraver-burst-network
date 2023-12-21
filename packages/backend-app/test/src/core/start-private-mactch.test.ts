@@ -53,7 +53,14 @@ const entries: PrivateMatchEntry[] = [user1Entry, user2Entry, user3Entry];
 /** マッチング結果 */
 const matching: PrivateMatching = [ownerEntry, user2Entry];
 
-test("正しくプライベートマッチを開始できる", () => {
+beforeEach(() => {
   (uuidv4 as jest.Mock).mockImplementation(mockUniqUUID());
+});
+
+afterEach(() => {
+  (uuidv4 as jest.Mock).mockReset();
+});
+
+test("正しくプライベートマッチを開始できる", () => {
   expect(startPrivateMatch(entries, matching)).toMatchSnapshot();
 });
