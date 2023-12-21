@@ -18,7 +18,7 @@ type MatchStartResponse = {
 
 /**
  * プライベートマッチを開始する
- * @param entries プライベートマッチのエントリ
+ * @param entries 指定したルームのすべてのエントリ
  * @param matching マッチング結果
  * @return プライベートマッチ開始情報
  */
