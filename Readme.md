@@ -100,7 +100,7 @@ npm run build
 #### serverlessデプロイ
 
 ```shell
-./serverless-deploy.sh
+./deploy-serverless.sh
 ```
 
 #### serverless環境削除
