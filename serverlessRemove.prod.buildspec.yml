@@ -12,4 +12,4 @@ phases:
       - npm ci
   build:
     commands:
-      - ./serverless-remove.sh
+      - ./remove-serverless.sh

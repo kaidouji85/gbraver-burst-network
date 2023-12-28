@@ -106,7 +106,7 @@ npm run build
 #### serverless環境削除
 
 ```shell
-./serverless-remove.sh
+./remove-serverless.sh
 ```
 
 #### ECRリポジトリPush
