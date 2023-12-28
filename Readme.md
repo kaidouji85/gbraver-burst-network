@@ -169,9 +169,11 @@ AWS Parameter Storeに以下の値をセットします。
 
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|--| --------- | -------- |
-| DEVCB-01 | デプロイ | buildspec.yml | BLD-01 |
+| DEVCB-01 | フルデプロイ（環境新規作成時に利用する想定） | buildspec.yml | BLD-01 |
 | DEVCB-02 | serverless削除 | serverlessRemove.buildspec.yml | BLD-01 |
 | DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
+| DEVCB-04 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）| buildspec.sls.yml | BLD-01 |
+| DEVCB-05 | バックエンドecsデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.ecs.yml | BLD-01 |
 
 #### 本番環境でのCI/CD
 ##### AWS Secret Managerを設定
