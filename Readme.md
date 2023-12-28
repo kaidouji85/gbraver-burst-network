@@ -118,7 +118,7 @@ npm run build
 #### バックエンド処理用ECSデプロイ
 
 ```shell
-./backend-ecs-deploy.sh
+./deploy-backend-ecs.sh
 ```
 
 #### バックエンド処理用ECS環境削除
