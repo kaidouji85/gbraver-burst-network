@@ -127,7 +127,7 @@ npm run build
 ./backend-ecs-remove.sh
 ```
 
-### CodepipelineでCI/CDする
+### AWS CodeBuild/CodePipelineでCI/CDする
 
 #### ビルド環境について
 以下がGブレイバーバーストで利用するビルド環境です。
@@ -164,14 +164,20 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/dockerToken                        | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                            |
 | /GbraverBurst/dev/vpcSubnetCount                     | String       | [環境変数定義の定義](#env-config) VPC_SUBNET_COUNT を参照                        |
 
-##### Code Build
-以下のCode Buildプロジェクトを生成します
+##### CodeBuild
+以下のCodeBuildプロジェクトを生成します
 
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|--| --------- | -------- |
-| DEVCB-01 | デプロイ | buildspec.yml | BLD-01 |
+| DEVCB-01 | フルデプロイ（環境新規作成時に利用する想定） | buildspec.yml | BLD-01 |
 | DEVCB-02 | serverless削除 | serverlessRemove.buildspec.yml | BLD-01 |
 | DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
+| DEVCB-04 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）| buildspec.sls.yml | BLD-01 |
+| DEVCB-05 | バックエンドecsデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml | BLD-01 |
+
+##### CodePipeline
+DEVCB-04、DEVCB-05を並列実行するプロジェクトを作成する。
+ただし、事前にDEVCB-01で環境を作成すること。
 
 #### 本番環境でのCI/CD
 ##### AWS Secret Managerを設定
