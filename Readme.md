@@ -124,7 +124,7 @@ npm run build
 #### バックエンド処理用ECS環境削除
 
 ```shell
-./backend-ecs-remove.sh
+./remove-backend-ecs.sh
 ```
 
 ### AWS CodeBuild/CodePipelineでCI/CDする
