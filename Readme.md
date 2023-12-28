@@ -118,7 +118,11 @@ npm run build
 #### バックエンド処理用ECSデプロイ
 
 ```shell
+# 通常デプロイ
 ./deploy-backend-ecs.sh
+
+# ホットスワップデプロイ
+./deploy-backend-ecs-with-hotswap.sh
 ```
 
 #### バックエンド処理用ECS環境削除
@@ -173,7 +177,7 @@ AWS Parameter Storeに以下の値をセットします。
 | DEVCB-02 | serverless削除 | buildspec.sls.remove.yml | BLD-01 |
 | DEVCB-03 | バックエンドECS削除 | buildspec.backendEcs.remove.yml | BLD-01 |
 | DEVCB-04 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）| buildspec.sls.yml | BLD-01 |
-| DEVCB-05 | バックエンドecsデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml | BLD-01 |
+| DEVCB-05 | バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml | BLD-01 |
 
 ##### CodePipeline
 DEVCB-04、DEVCB-05を並列実行するプロジェクトを作成する。
