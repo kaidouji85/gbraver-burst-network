@@ -100,31 +100,31 @@ npm run build
 #### serverlessデプロイ
 
 ```shell
-./serverless-deploy.sh
+./deploy-serverless.sh
 ```
 
 #### serverless環境削除
 
 ```shell
-./serverless-remove.sh
+./remove-serverless.sh
 ```
 
 #### ECRリポジトリPush
 
 ```shell
-./match-make-container-push.sh
+./push-match-make-container.sh
 ```
 
 #### バックエンド処理用ECSデプロイ
 
 ```shell
-./backend-ecs-deploy.sh
+./deploy-backend-ecs.sh
 ```
 
 #### バックエンド処理用ECS環境削除
 
 ```shell
-./backend-ecs-remove.sh
+./remove-backend-ecs.sh
 ```
 
 ### AWS CodeBuild/CodePipelineでCI/CDする
@@ -170,8 +170,8 @@ AWS Parameter Storeに以下の値をセットします。
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|--| --------- | -------- |
 | DEVCB-01 | フルデプロイ（環境新規作成時に利用する想定） | buildspec.yml | BLD-01 |
-| DEVCB-02 | serverless削除 | serverlessRemove.buildspec.yml | BLD-01 |
-| DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
+| DEVCB-02 | serverless削除 | buildspec.sls.remove.yml | BLD-01 |
+| DEVCB-03 | バックエンドECS削除 | buildspec.backendEcs.remove.yml | BLD-01 |
 | DEVCB-04 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）| buildspec.sls.yml | BLD-01 |
 | DEVCB-05 | バックエンドecsデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml | BLD-01 |
 
@@ -212,8 +212,8 @@ AWS Parameter Storeに以下の値をセットします。
 | #        | 概要           | BuildSpec                           | ビルド環境 |
 |----------|--------------|-------------------------------------| ------- |
 | PROCB-01 | デプロイ         | buildspec.prod.yml                  | BLD-01 |
-| PROCB-02 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
-| PROCB-03 | バックエンドECS削除  | backendECSRemove.prod.buildspec.yml | BLD-01 |
+| PROCB-02 | serverless削除 | buildspec.sls.remove.prod.yml | BLD-01 |
+| PROCB-03 | バックエンドECS削除  | buildspec.backendEcs.remove.prod.yml | BLD-01 |
 
 ## パッケージ公開
 ```shell
