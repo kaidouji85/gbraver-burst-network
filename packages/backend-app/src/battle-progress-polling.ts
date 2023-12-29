@@ -59,6 +59,36 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   STAGE,
 );
 
+/**
+ * 「リクエストボディが不正」でAPIを終了する
+ * @param event イベント
+ * @return websocket apiに返すデータ
+ */
+async function endWithInvalidRequestBody(
+  event: WebsocketAPIEvent,
+): Promise<WebsocketAPIResponse> {
+  await notifier.notifyToClient(
+    event.requestContext.connectionId,
+    invalidRequestBodyError,
+  );
+  return invalidRequestBody;
+}
+
+/**
+ * 「コマンド入力が完了していない」でAPIを終了する
+ * @param event イベント
+ * @return websocket apiに返すデータ
+ */
+async function endWithNotReadyBattleProgress(
+  event: WebsocketAPIEvent,
+): Promise<WebsocketAPIResponse> {
+  await notifier.notifyToClient(
+    event.requestContext.connectionId,
+    notReadyBattleProgress,
+  );
+  return webSocketAPIResponseOfNotReadyBattleProgress;
+}
+
 /** ゲーム終了時処理のパラメータ */
 type OnGameEndParams = {
   /** バトル情報 */
@@ -132,7 +162,7 @@ async function onGameContinue(params: OnGameContinueParams): Promise<void> {
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
  * @param event イベント
- * @return 本関数が終了したら発火するPromise
+ * @return websocket apiに返すデータ
  */
 export async function battleProgressPolling(
   event: WebsocketAPIEvent,
@@ -140,32 +170,20 @@ export async function battleProgressPolling(
   const body = parseJSON(event.body);
   const data = parseBattleProgressPolling(body);
   if (!data) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      invalidRequestBodyError,
-    );
-    return invalidRequestBody;
+    return await endWithInvalidRequestBody(event);
   }
 
   const battle = await dynamoBattles.get(data.battleID);
   if (!battle) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      notReadyBattleProgress,
-    );
-    return webSocketAPIResponseOfNotReadyBattleProgress;
+    return await endWithNotReadyBattleProgress(event);
   }
 
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
-  const isPoller = user.userID === battle.poller;
-  if (!isPoller) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      notReadyBattleProgress,
-    );
-    return webSocketAPIResponseOfNotReadyBattleProgress;
+  const isNotPoller = user.userID !== battle.poller;
+  if (isNotPoller) {
+    return await endWithNotReadyBattleProgress(event);
   }
 
   const fetchedCommands = await Promise.all([
@@ -173,11 +191,7 @@ export async function battleProgressPolling(
     dynamoBattleCommands.get(battle.players[1].userID),
   ]);
   if (!fetchedCommands[0] || !fetchedCommands[1]) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      notReadyBattleProgress,
-    );
-    return webSocketAPIResponseOfNotReadyBattleProgress;
+    return await endWithNotReadyBattleProgress(event);
   }
 
   const commands: [BattleCommand, BattleCommand] = [
@@ -185,21 +199,13 @@ export async function battleProgressPolling(
     fetchedCommands[1],
   ];
   if (!canProgressBattle(data, battle, commands)) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      notReadyBattleProgress,
-    );
-    return webSocketAPIResponseOfNotReadyBattleProgress;
+    return await endWithNotReadyBattleProgress(event);
   }
 
   const corePlayers = createPlayers(battle);
   const coreCommands = createPlayerCommands(battle, commands);
   if (!coreCommands) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      notReadyBattleProgress,
-    );
-    return webSocketAPIResponseOfNotReadyBattleProgress;
+    return await endWithNotReadyBattleProgress(event);
   }
 
   const core = restoreGBraverBurst({
