@@ -17,6 +17,7 @@ import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { invalidRequestBody } from "./lambda/invalid-request-body";
+import { notReadyBattleProgress as webSocketAPIResponseOfNotReadyBattleProgress } from "./lambda/not-ready-battle-progress";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
@@ -59,12 +60,6 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   SERVICE,
   STAGE,
 );
-
-/** WebSocketAPI レスポンス コマンド入力が完了していない */
-const webSocketAPIResponseOfNotReadyBattleProgress = {
-  statusCode: 200,
-  body: "not-ready-battle-progress",
-};
 
 /** WebSocketAPI レスポンス コマンド送信成功 */
 const webSocketAPIResponseOfSendCommandSuccess = {
