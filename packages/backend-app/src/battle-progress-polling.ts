@@ -60,6 +60,21 @@ const dynamoBattleCommands = createDynamoBattleCommands(
 );
 
 /**
+ * 「リクエストボディが不正」でAPIを終了する
+ * @param event イベント
+ * @return 本関数が終了したら発火するPromise
+ */
+async function endWithInvalidRequestBody(
+  event: WebsocketAPIEvent,
+): Promise<WebsocketAPIResponse> {
+  await notifier.notifyToClient(
+    event.requestContext.connectionId,
+    invalidRequestBodyError,
+  );
+  return invalidRequestBody;
+}
+
+/**
  * 「コマンド入力が完了していない」でAPIを終了する
  * @param event イベント
  * @return 本関数が終了したら発火するPromise
@@ -155,11 +170,7 @@ export async function battleProgressPolling(
   const body = parseJSON(event.body);
   const data = parseBattleProgressPolling(body);
   if (!data) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      invalidRequestBodyError,
-    );
-    return invalidRequestBody;
+    return await endWithInvalidRequestBody(event);
   }
 
   const battle = await dynamoBattles.get(data.battleID);
@@ -170,8 +181,8 @@ export async function battleProgressPolling(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
-  const isPoller = user.userID === battle.poller;
-  if (!isPoller) {
+  const isNotPoller = user.userID !== battle.poller;
+  if (isNotPoller) {
     return await endWithNotReadyBattleProgress(event);
   }
 
