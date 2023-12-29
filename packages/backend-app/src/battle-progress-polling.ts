@@ -62,7 +62,7 @@ const dynamoBattleCommands = createDynamoBattleCommands(
 /**
  * 「リクエストボディが不正」でAPIを終了する
  * @param event イベント
- * @return 本関数が終了したら発火するPromise
+ * @return websocket apiに返すデータ
  */
 async function endWithInvalidRequestBody(
   event: WebsocketAPIEvent,
@@ -77,7 +77,7 @@ async function endWithInvalidRequestBody(
 /**
  * 「コマンド入力が完了していない」でAPIを終了する
  * @param event イベント
- * @return 本関数が終了したら発火するPromise
+ * @return websocket apiに返すデータ
  */
 async function endWithNotReadyBattleProgress(
   event: WebsocketAPIEvent,
@@ -162,7 +162,7 @@ async function onGameContinue(params: OnGameContinueParams): Promise<void> {
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
  * @param event イベント
- * @return 本関数が終了したら発火するPromise
+ * @return websocket apiに返すデータ
  */
 export async function battleProgressPolling(
   event: WebsocketAPIEvent,
