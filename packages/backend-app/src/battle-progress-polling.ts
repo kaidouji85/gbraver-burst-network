@@ -24,10 +24,7 @@ import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
 import { notReadyBattleProgress } from "./response/not-ready-battle-progress";
-import {
-  BattleEnd,
-  BattleProgressed,
-} from "./response/websocket-response";
+import { BattleEnd, BattleProgressed } from "./response/websocket-response";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
