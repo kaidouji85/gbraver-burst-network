@@ -23,10 +23,10 @@ import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
+import { notReadyBattleProgress } from "./response/not-ready-battle-progress";
 import type {
   BattleEnd,
   BattleProgressed,
-  NotReadyBattleProgress,
 } from "./response/websocket-response";
 
 /** AWSリージョン */
@@ -61,11 +61,6 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   SERVICE,
   STAGE,
 );
-
-/** クライアント通知 コマンド入力が完了していない */
-const notReadyBattleProgress: NotReadyBattleProgress = {
-  action: "not-ready-battle-progress",
-};
 
 /** ゲーム終了時処理のパラメータ */
 type OnGameEndParams = {
