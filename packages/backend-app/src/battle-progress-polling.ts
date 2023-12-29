@@ -16,13 +16,14 @@ import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
+import { invalidRequestBody } from "./lambda/invalid-request-body";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
+import { invalidRequestBodyError } from "./response/invalid-request-body-error";
 import type {
   BattleEnd,
   BattleProgressed,
-  Error,
   NotReadyBattleProgress,
 } from "./response/websocket-response";
 
@@ -59,27 +60,18 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   STAGE,
 );
 
-/** WebSocketAPI レスポンス 不正なリクエストボディ */
-const webSocketAPIResponseOfInvalidRequestBody = {
-  statusCode: 400,
-  body: "invalid request body",
-};
 /** WebSocketAPI レスポンス コマンド入力が完了していない */
 const webSocketAPIResponseOfNotReadyBattleProgress = {
   statusCode: 200,
   body: "not-ready-battle-progress",
 };
+
 /** WebSocketAPI レスポンス コマンド送信成功 */
 const webSocketAPIResponseOfSendCommandSuccess = {
   statusCode: 200,
   body: "send command success",
 };
 
-/** クライアント通知 不正なリクエストボディ */
-const invalidRequestError: Error = {
-  action: "error",
-  error: "invalid request body",
-};
 /** クライアント通知 コマンド入力が完了していない */
 const notReadyBattleProgress: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
@@ -168,9 +160,9 @@ export async function battleProgressPolling(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestError,
+      invalidRequestBodyError,
     );
-    return webSocketAPIResponseOfInvalidRequestBody;
+    return invalidRequestBody;
   }
 
   const battle = await dynamoBattles.get(data.battleID);
