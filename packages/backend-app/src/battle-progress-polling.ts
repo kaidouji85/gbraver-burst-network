@@ -19,12 +19,12 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { invalidRequestBody } from "./lambda/invalid-request-body";
 import { notReadyBattleProgress as webSocketAPIResponseOfNotReadyBattleProgress } from "./lambda/not-ready-battle-progress";
 import { sendCommandSuccess as webSocketAPIResponseOfSendCommandSuccess } from "./lambda/send-command-success";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
 import { notReadyBattleProgress } from "./response/not-ready-battle-progress";
-import type {
+import {
   BattleEnd,
   BattleProgressed,
 } from "./response/websocket-response";
