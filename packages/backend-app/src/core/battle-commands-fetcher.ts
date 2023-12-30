@@ -9,6 +9,6 @@ export interface BattleCommandsFetcher {
    * @return 取得結果、取得できなかった場合はnull
    */
   fetch(
-    players: BattlePlayer[],
+    players: [BattlePlayer, BattlePlayer],
   ): Promise<[BattleCommand, BattleCommand] | null>;
 }

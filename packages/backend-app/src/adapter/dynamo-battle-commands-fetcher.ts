@@ -18,7 +18,7 @@ export class DynamoBattleCommandsFetcher implements BattleCommandsFetcher {
 
   /** @override */
   async fetch(
-    players: BattlePlayer[],
+    players: [BattlePlayer, BattlePlayer],
   ): Promise<[BattleCommand, BattleCommand] | null> {
     const fetchedCommands = await Promise.all([
       this.#dynamoBattleCommands.get(players[0].userID),
