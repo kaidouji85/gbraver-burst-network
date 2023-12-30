@@ -1,11 +1,12 @@
 import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
+import { DynamoBattleCommandsFetcher } from "./adapter/dynamo-battle-commands-fetcher";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { Battle, BattlePlayer } from "./core/battle";
-import { BattleCommand } from "./core/battle-command";
+import { BattleCommandsFetcher } from "./core/battle-commands-fetcher";
 import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
 import { createPlayerCommands } from "./core/create-player-commands";
@@ -58,6 +59,10 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   SERVICE,
   STAGE,
 );
+
+/** DynamoDBからゲーム参加プレイヤーのバトルコマンドを取得するポート */
+const battleCommandsFetcher: BattleCommandsFetcher =
+  new DynamoBattleCommandsFetcher(dynamoBattleCommands);
 
 /**
  * 「リクエストボディが不正」でAPIを終了する
@@ -186,18 +191,11 @@ export async function battleProgressPolling(
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const fetchedCommands = await Promise.all([
-    dynamoBattleCommands.get(battle.players[0].userID),
-    dynamoBattleCommands.get(battle.players[1].userID),
-  ]);
-  if (!fetchedCommands[0] || !fetchedCommands[1]) {
+  const commands = await battleCommandsFetcher.fetch(battle.players);
+  if (!commands) {
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const commands: [BattleCommand, BattleCommand] = [
-    fetchedCommands[0],
-    fetchedCommands[1],
-  ];
   if (!canProgressBattle(data, battle, commands)) {
     return await endWithNotReadyBattleProgress(event);
   }
