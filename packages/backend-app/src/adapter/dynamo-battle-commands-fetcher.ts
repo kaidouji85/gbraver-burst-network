@@ -24,9 +24,8 @@ export class DynamoBattleCommandsFetcher implements BattleCommandsFetcher {
       this.#dynamoBattleCommands.get(players[0].userID),
       this.#dynamoBattleCommands.get(players[1].userID),
     ]);
-    if (!fetchedCommands[0] || !fetchedCommands[1]) {
-      return null;
-    }
-    return [fetchedCommands[0], fetchedCommands[1]];
+    return fetchedCommands[0] && fetchedCommands[1]
+      ? [fetchedCommands[0], fetchedCommands[1]]
+      : null;
   }
 }
