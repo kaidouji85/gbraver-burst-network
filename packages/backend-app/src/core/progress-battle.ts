@@ -85,8 +85,8 @@ export function progressBattle(
   if (isGameEnd) {
     const connections = battle.players.map(createPostBattleConnection);
     return {
-      isGameEnd: true,
-      update: stateHistory,
+      isGameEnd,
+      update,
       connections,
       endBattleID: battle.battleID,
     };
