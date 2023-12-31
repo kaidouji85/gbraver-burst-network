@@ -1,11 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`バトルを正しく進めることができる 1`] = `
+exports[`バトル進行の結果、バトル終了となる 1`] = `
 {
-  "isGameEnd": false,
-  "stateHistory": [
+  "connections": [
     {
-      "activePlayerId": "player02",
+      "connectionId": "defender-connection",
+      "state": {
+        "type": "None",
+      },
+      "userID": "defender-userid",
+    },
+    {
+      "connectionId": "attacker--connection",
+      "state": {
+        "type": "None",
+      },
+      "userID": "attacker-userid",
+    },
+  ],
+  "endBattleID": "test-battle",
+  "isGameEnd": true,
+  "update": [
+    {
+      "activePlayerId": "attacker-player-id",
       "effect": {
         "name": "StartGame",
       },
@@ -38,7 +55,7 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
@@ -66,12 +83,12 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
         "name": "InputCommand",
         "players": [
@@ -108,7 +125,7 @@ exports[`バトルを正しく進めることができる 1`] = `
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "player01",
+            "playerId": "defender-player",
             "selectable": true,
           },
           {
@@ -144,7 +161,7 @@ exports[`バトルを正しく進めることができる 1`] = `
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "player02",
+            "playerId": "attacker-player-id",
             "selectable": true,
           },
         ],
@@ -178,7 +195,7 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
@@ -206,24 +223,24 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
-        "attacker": "player02",
-        "attackerBattery": 3,
-        "defenderBattery": 3,
+        "attacker": "attacker-player-id",
+        "attackerBattery": 4,
+        "defenderBattery": 0,
         "name": "BatteryDeclaration",
-        "originalBatteryOfAttacker": 3,
-        "originalBatteryOfDefender": 3,
+        "originalBatteryOfAttacker": 4,
+        "originalBatteryOfDefender": 0,
       },
       "players": [
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 5,
             "burst": {
               "buffPower": 1000,
               "duration": 2,
@@ -249,11 +266,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 1,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -277,225 +294,20 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
-        "attacker": "player02",
-        "isDeath": false,
+        "attacker": "attacker-player-id",
+        "isDeath": true,
         "name": "Battle",
         "result": {
-          "damage": 1000,
-          "name": "Guard",
+          "damage": 9999,
+          "name": "CriticalHit",
         },
-      },
-      "players": [
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "buffPower": 1000,
-              "duration": 2,
-              "recoverBattery": 3,
-              "type": "BuffPower",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 2300,
-            "id": "NEO_LANDOZER",
-            "maxBattery": 5,
-            "maxHp": 3300,
-            "name": "ネオランドーザ",
-            "power": 2300,
-            "speed": 1500,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player01",
-        },
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "recoverBattery": 5,
-              "type": "RecoverBattery",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 3100,
-            "id": "SHIN_BRAVER",
-            "maxBattery": 5,
-            "maxHp": 3100,
-            "name": "シンブレイバー",
-            "power": 2000,
-            "speed": 2000,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player02",
-        },
-      ],
-    },
-    {
-      "activePlayerId": "player02",
-      "effect": {
-        "battleResult": {
-          "damage": 1000,
-          "name": "Guard",
-        },
-        "defender": "player01",
-        "name": "RightItself",
-      },
-      "players": [
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "buffPower": 1000,
-              "duration": 2,
-              "recoverBattery": 3,
-              "type": "BuffPower",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 2300,
-            "id": "NEO_LANDOZER",
-            "maxBattery": 5,
-            "maxHp": 3300,
-            "name": "ネオランドーザ",
-            "power": 2300,
-            "speed": 1500,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player01",
-        },
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "recoverBattery": 5,
-              "type": "RecoverBattery",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 3100,
-            "id": "SHIN_BRAVER",
-            "maxBattery": 5,
-            "maxHp": 3100,
-            "name": "シンブレイバー",
-            "power": 2000,
-            "speed": 2000,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player02",
-        },
-      ],
-    },
-    {
-      "activePlayerId": "player02",
-      "effect": {
-        "endArmdozerEffects": [],
-        "name": "UpdateRemainingTurn",
-      },
-      "players": [
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "buffPower": 1000,
-              "duration": 2,
-              "recoverBattery": 3,
-              "type": "BuffPower",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 2300,
-            "id": "NEO_LANDOZER",
-            "maxBattery": 5,
-            "maxHp": 3300,
-            "name": "ネオランドーザ",
-            "power": 2300,
-            "speed": 1500,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player01",
-        },
-        {
-          "armdozer": {
-            "battery": 2,
-            "burst": {
-              "recoverBattery": 5,
-              "type": "RecoverBattery",
-            },
-            "effects": [],
-            "enableBurst": true,
-            "hp": 3100,
-            "id": "SHIN_BRAVER",
-            "maxBattery": 5,
-            "maxHp": 3100,
-            "name": "シンブレイバー",
-            "power": 2000,
-            "speed": 2000,
-          },
-          "pilot": {
-            "enableSkill": true,
-            "id": "EMPTY_PLAYER",
-            "name": "名無し",
-            "skill": {
-              "recoverBattery": 2,
-              "type": "RecoverBatterySkill",
-            },
-          },
-          "playerId": "player02",
-        },
-      ],
-    },
-    {
-      "activePlayerId": "player01",
-      "effect": {
-        "name": "TurnChange",
-        "recoverBattery": 3,
       },
       "players": [
         {
@@ -509,7 +321,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": -6699,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -526,11 +338,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 1,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -554,76 +366,18 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player01",
+      "activePlayerId": "attacker-player-id",
       "effect": {
-        "name": "InputCommand",
-        "players": [
-          {
-            "command": [
-              {
-                "battery": 0,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 1,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 2,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "type": "BURST_COMMAND",
-              },
-              {
-                "type": "PILOT_SKILL_COMMAND",
-              },
-            ],
-            "playerId": "player02",
-            "selectable": true,
-          },
-          {
-            "command": [
-              {
-                "battery": 0,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 1,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 2,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 3,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 4,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 5,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "type": "BURST_COMMAND",
-              },
-              {
-                "type": "PILOT_SKILL_COMMAND",
-              },
-            ],
-            "playerId": "player01",
-            "selectable": true,
-          },
-        ],
+        "name": "GameEnd",
+        "result": {
+          "type": "GameOver",
+          "winner": "attacker-player-id",
+        },
       },
       "players": [
         {
@@ -637,7 +391,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": -6699,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -654,11 +408,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 1,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -682,26 +436,779 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
   ],
+}
+`;
+
+exports[`バトル進行の結果、バトル継続となる 1`] = `
+{
+  "battle": {
+    "battleID": "test-battle",
+    "flowID": "mock-id-1",
+    "players": [
+      {
+        "armdozer": {
+          "burst": {
+            "buffPower": 1000,
+            "duration": 2,
+            "recoverBattery": 3,
+            "type": "BuffPower",
+          },
+          "id": "NEO_LANDOZER",
+          "maxBattery": 5,
+          "maxHp": 3300,
+          "name": "ネオランドーザ",
+          "power": 2300,
+          "speed": 1500,
+        },
+        "connectionId": "defender-connection",
+        "pilot": {
+          "id": "EMPTY_PLAYER",
+          "name": "名無し",
+          "skill": {
+            "recoverBattery": 2,
+            "type": "RecoverBatterySkill",
+          },
+        },
+        "playerId": "defender-player",
+        "userID": "defender-userid",
+      },
+      {
+        "armdozer": {
+          "burst": {
+            "recoverBattery": 5,
+            "type": "RecoverBattery",
+          },
+          "id": "SHIN_BRAVER",
+          "maxBattery": 5,
+          "maxHp": 3100,
+          "name": "シンブレイバー",
+          "power": 2000,
+          "speed": 2000,
+        },
+        "connectionId": "attacker--connection",
+        "pilot": {
+          "id": "EMPTY_PLAYER",
+          "name": "名無し",
+          "skill": {
+            "recoverBattery": 2,
+            "type": "RecoverBatterySkill",
+          },
+        },
+        "playerId": "attacker-player-id",
+        "userID": "attacker-userid",
+      },
+    ],
+    "poller": "defender-userid",
+    "stateHistory": [
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "name": "StartGame",
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "name": "InputCommand",
+          "players": [
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "defender-player",
+              "selectable": true,
+            },
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "attacker-player-id",
+              "selectable": true,
+            },
+          ],
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "attacker": "attacker-player-id",
+          "attackerBattery": 2,
+          "defenderBattery": 1,
+          "name": "BatteryDeclaration",
+          "originalBatteryOfAttacker": 2,
+          "originalBatteryOfDefender": 1,
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 4,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "attacker": "attacker-player-id",
+          "isDeath": false,
+          "name": "Battle",
+          "result": {
+            "damage": 2000,
+            "name": "NormalHit",
+          },
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 4,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 1300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "battleResult": {
+            "damage": 2000,
+            "name": "NormalHit",
+          },
+          "defender": "defender-player",
+          "name": "RightItself",
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 4,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 1300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "attacker-player-id",
+        "effect": {
+          "endArmdozerEffects": [],
+          "name": "UpdateRemainingTurn",
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 4,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 1300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "defender-player",
+        "effect": {
+          "name": "TurnChange",
+          "recoverBattery": 3,
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 1300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "defender-player",
+        "effect": {
+          "name": "InputCommand",
+          "players": [
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "attacker-player-id",
+              "selectable": true,
+            },
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "defender-player",
+              "selectable": true,
+            },
+          ],
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 1300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "defender-player",
+          },
+          {
+            "armdozer": {
+              "battery": 3,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "EMPTY_PLAYER",
+              "name": "名無し",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "attacker-player-id",
+          },
+        ],
+      },
+    ],
+  },
+  "isGameEnd": false,
   "update": [
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
-        "attacker": "player02",
-        "attackerBattery": 3,
-        "defenderBattery": 3,
+        "attacker": "attacker-player-id",
+        "attackerBattery": 2,
+        "defenderBattery": 1,
         "name": "BatteryDeclaration",
-        "originalBatteryOfAttacker": 3,
-        "originalBatteryOfDefender": 3,
+        "originalBatteryOfAttacker": 2,
+        "originalBatteryOfDefender": 1,
       },
       "players": [
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 4,
             "burst": {
               "buffPower": 1000,
               "duration": 2,
@@ -727,11 +1234,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -755,25 +1262,25 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
-        "attacker": "player02",
+        "attacker": "attacker-player-id",
         "isDeath": false,
         "name": "Battle",
         "result": {
-          "damage": 1000,
-          "name": "Guard",
+          "damage": 2000,
+          "name": "NormalHit",
         },
       },
       "players": [
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 4,
             "burst": {
               "buffPower": 1000,
               "duration": 2,
@@ -782,7 +1289,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": 1300,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -799,11 +1306,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -827,24 +1334,24 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
         "battleResult": {
-          "damage": 1000,
-          "name": "Guard",
+          "damage": 2000,
+          "name": "NormalHit",
         },
-        "defender": "player01",
+        "defender": "defender-player",
         "name": "RightItself",
       },
       "players": [
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 4,
             "burst": {
               "buffPower": 1000,
               "duration": 2,
@@ -853,7 +1360,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": 1300,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -870,11 +1377,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -898,12 +1405,12 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player02",
+      "activePlayerId": "attacker-player-id",
       "effect": {
         "endArmdozerEffects": [],
         "name": "UpdateRemainingTurn",
@@ -911,7 +1418,7 @@ exports[`バトルを正しく進めることができる 1`] = `
       "players": [
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 4,
             "burst": {
               "buffPower": 1000,
               "duration": 2,
@@ -920,7 +1427,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": 1300,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -937,11 +1444,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -965,12 +1472,12 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player01",
+      "activePlayerId": "defender-player",
       "effect": {
         "name": "TurnChange",
         "recoverBattery": 3,
@@ -987,7 +1494,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": 1300,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -1004,11 +1511,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -1032,12 +1539,12 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
     {
-      "activePlayerId": "player01",
+      "activePlayerId": "defender-player",
       "effect": {
         "name": "InputCommand",
         "players": [
@@ -1056,13 +1563,17 @@ exports[`バトルを正しく進めることができる 1`] = `
                 "type": "BATTERY_COMMAND",
               },
               {
+                "battery": 3,
+                "type": "BATTERY_COMMAND",
+              },
+              {
                 "type": "BURST_COMMAND",
               },
               {
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "player02",
+            "playerId": "attacker-player-id",
             "selectable": true,
           },
           {
@@ -1098,7 +1609,7 @@ exports[`バトルを正しく進めることができる 1`] = `
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "player01",
+            "playerId": "defender-player",
             "selectable": true,
           },
         ],
@@ -1115,7 +1626,7 @@ exports[`バトルを正しく進めることができる 1`] = `
             },
             "effects": [],
             "enableBurst": true,
-            "hp": 2300,
+            "hp": 1300,
             "id": "NEO_LANDOZER",
             "maxBattery": 5,
             "maxHp": 3300,
@@ -1132,11 +1643,11 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player01",
+          "playerId": "defender-player",
         },
         {
           "armdozer": {
-            "battery": 2,
+            "battery": 3,
             "burst": {
               "recoverBattery": 5,
               "type": "RecoverBattery",
@@ -1160,7 +1671,7 @@ exports[`バトルを正しく進めることができる 1`] = `
               "type": "RecoverBatterySkill",
             },
           },
-          "playerId": "player02",
+          "playerId": "attacker-player-id",
         },
       ],
     },
