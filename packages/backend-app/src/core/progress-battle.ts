@@ -1,7 +1,7 @@
 import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { Battle, BattlePlayer } from "./battle";
+import {Battle, BattleID, BattlePlayer} from "./battle";
 import { BattleCommand } from "./battle-command";
 import { Connection } from "./connection";
 import { createPlayerCommands } from "./create-player-commands";
@@ -26,7 +26,37 @@ export type BattleEnd = {
   update: GameState[];
   /** 戦闘後のコネクションステート */
   connections: Connection[];
+  /** 終了したバトルのID */
+  endBattleID: BattleID;
 };
+
+/**
+ * プレイヤーからバトル終了後のコネクションステートを生成する
+ * @param player プレイヤー
+ * @return 生成結果
+ */
+const createPostBattleConnection = (player: BattlePlayer): Connection => ({
+  connectionId: player.connectionId,
+  userID: player.userID,
+  state: {
+    type: "None",
+  },
+});
+
+/**
+ * バトル情報を更新する
+ * @param origin 更新前のバトル情報
+ * @param stateHistory 更新後のステートヒストリ
+ * @return 更新されたバトル情報
+ */
+const updateBattle = (
+  origin: Battle<BattlePlayer>,
+  stateHistory: GameState[],
+): Battle<BattlePlayer> => ({
+  ...origin,
+  flowID: uuidv4(),
+  stateHistory,
+});
 
 /**
  * 戦闘を進行する
@@ -53,25 +83,15 @@ export function progressBattle(
   const lastState = update.at(-1);
   const isGameEnd = lastState?.effect.name === "GameEnd";
   if (isGameEnd) {
-    const connections: Connection[] = battle.players.map((v) => ({
-      connectionId: v.connectionId,
-      userID: v.userID,
-      state: {
-        type: "None",
-      },
-    }));
+    const connections = battle.players.map(createPostBattleConnection);
     return {
       isGameEnd: true,
       update: stateHistory,
       connections,
+      endBattleID: battle.battleID,
     };
   }
 
-  const flowID = uuidv4();
-  const updatedBattle: Battle<BattlePlayer> = {
-    ...battle,
-    flowID,
-    stateHistory,
-  };
+  const updatedBattle = updateBattle(battle, stateHistory);
   return { isGameEnd, update, battle: updatedBattle };
 }
