@@ -1,14 +1,7 @@
-import {
-  ArmdozerIds,
-  Armdozers,
-  EMPTY_PLAYER,
-} from "gbraver-burst-core";
-import {startGBraverBurst} from "gbraver-burst-core/lib/src/game";
+import { ArmdozerIds, Armdozers, EMPTY_PLAYER } from "gbraver-burst-core";
+import { startGBraverBurst } from "gbraver-burst-core/lib/src/game";
 
-import {
-  Battle,
-  BattlePlayer,
-} from "../../../src/core/battle";
+import { Battle, BattlePlayer } from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
 import { progressBattle } from "../../../src/core/progress-battle";
 
@@ -54,6 +47,7 @@ const player01Command: BattleCommand = {
   },
 };
 
+/** プレイヤー02 コマンド */
 const player02Command: BattleCommand = {
   userID: player02.userID,
   battleID: battle.battleID,
