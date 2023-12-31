@@ -1,29 +1,38 @@
-import { ArmdozerIds, Armdozers, EMPTY_PLAYER } from "gbraver-burst-core";
-import { startGBraverBurst } from "gbraver-burst-core/lib/src/game";
+import {
+  ArmdozerIds,
+  Armdozers,
+  Command,
+  EMPTY_PLAYER,
+  startGBraverBurst,
+} from "gbraver-burst-core";
+import { v4 as uuidv4 } from "uuid";
 
 import { Battle, BattlePlayer } from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
-import { deprecatedProgressBattle } from "../../../src/core/deprecated-progress-battle";
+import { progressBattle } from "../../../src/core/progress-battle";
+import { mockUniqUUID } from "../../mock-unique-uuid";
 
-/** プレイヤー01 */
-const player01: BattlePlayer = {
+jest.mock("uuid");
+
+/** 攻撃側プレイヤー */
+const attacker: BattlePlayer = {
   ...EMPTY_PLAYER,
-  playerId: "player01",
-  userID: "userid-01",
-  connectionId: "player01-connection",
+  playerId: "attacker-player-id",
+  userID: "attacker-userid",
+  connectionId: "attacker--connection",
   armdozer:
-    Armdozers.find((armdozer) => armdozer.id === ArmdozerIds.NEO_LANDOZER) ??
+    Armdozers.find((armdozer) => armdozer.id === ArmdozerIds.SHIN_BRAVER) ??
     Armdozers[0],
 };
 
-/** プレイヤー02 */
-const player02: BattlePlayer = {
+/** 防御側プレイヤー */
+const defender: BattlePlayer = {
   ...EMPTY_PLAYER,
-  playerId: "player02",
-  userID: "userid-02",
-  connectionId: "player02-connection",
+  playerId: "defender-player",
+  userID: "defender-userid",
+  connectionId: "defender-connection",
   armdozer:
-    Armdozers.find((armdozer) => armdozer.id === ArmdozerIds.SHIN_BRAVER) ??
+    Armdozers.find((armdozer) => armdozer.id === ArmdozerIds.NEO_LANDOZER) ??
     Armdozers[0],
 };
 
@@ -31,35 +40,55 @@ const player02: BattlePlayer = {
 const battle: Battle<BattlePlayer> = {
   battleID: "test-battle",
   flowID: "test-flow",
-  players: [player01, player02],
-  poller: player01.userID,
-  stateHistory: startGBraverBurst([player01, player02]).stateHistory(),
+  players: [defender, attacker],
+  poller: defender.userID,
+  stateHistory: startGBraverBurst([defender, attacker]).stateHistory(),
 };
 
-/** プレイヤー01 コマンド */
-const player01Command: BattleCommand = {
-  userID: player01.userID,
+/**
+ * 攻撃側プレイヤーのバトルコマンドを作成する
+ * @param command コマンド
+ * @return 生成結果
+ */
+const createAttackerCommand = (command: Command): BattleCommand => ({
+  userID: attacker.userID,
   battleID: battle.battleID,
   flowID: battle.flowID,
-  command: {
-    type: "BATTERY_COMMAND",
-    battery: 3,
-  },
-};
+  command,
+});
 
-/** プレイヤー02 コマンド */
-const player02Command: BattleCommand = {
-  userID: player02.userID,
+/**
+ * 防御側プレイヤーのバトルコマンドを作成する
+ * @param command コマンド
+ * @return 生成結果
+ */
+const createDefenderCommand = (command: Command): BattleCommand => ({
+  userID: defender.userID,
   battleID: battle.battleID,
   flowID: battle.flowID,
-  command: {
-    type: "BATTERY_COMMAND",
-    battery: 3,
-  },
-};
+  command,
+});
 
-test("バトルを正しく進めることができる", () => {
-  expect(
-    deprecatedProgressBattle(battle, [player01Command, player02Command]),
-  ).toMatchSnapshot();
+beforeEach(() => {
+  (uuidv4 as jest.Mock).mockImplementation(mockUniqUUID());
+});
+
+afterEach(() => {
+  (uuidv4 as jest.Mock).mockReset();
+});
+
+test("バトル進行の結果、バトル継続となる", () => {
+  const result = progressBattle(battle, [
+    createAttackerCommand({ type: "BATTERY_COMMAND", battery: 2 }),
+    createDefenderCommand({ type: "BATTERY_COMMAND", battery: 1 }),
+  ]);
+  expect(result).toMatchSnapshot();
+});
+
+test("バトル進行の結果、バトル終了となる", () => {
+  const result = progressBattle(battle, [
+    createAttackerCommand({ type: "BATTERY_COMMAND", battery: 4 }),
+    createDefenderCommand({ type: "BATTERY_COMMAND", battery: 0 }),
+  ]);
+  expect(result).toMatchSnapshot();
 });
