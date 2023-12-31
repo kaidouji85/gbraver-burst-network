@@ -9,7 +9,7 @@ import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommandsFetcher } from "./core/battle-commands-fetcher";
 import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
-import { progressBattle } from "./core/progress-battle";
+import { deprecatedProgressBattle } from "./core/deprecated-progress-battle";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
@@ -199,7 +199,7 @@ export async function battleProgressPolling(
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const result = progressBattle(battle, commands);
+  const result = deprecatedProgressBattle(battle, commands);
   if (!result) {
     return await endWithNotReadyBattleProgress(event);
   }

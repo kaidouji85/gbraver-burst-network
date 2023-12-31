@@ -3,7 +3,7 @@ import { startGBraverBurst } from "gbraver-burst-core/lib/src/game";
 
 import { Battle, BattlePlayer } from "../../../src/core/battle";
 import { BattleCommand } from "../../../src/core/battle-command";
-import { progressBattle } from "../../../src/core/progress-battle";
+import { deprecatedProgressBattle } from "../../../src/core/deprecated-progress-battle";
 
 /** プレイヤー01 */
 const player01: BattlePlayer = {
@@ -60,6 +60,6 @@ const player02Command: BattleCommand = {
 
 test("バトルを正しく進めることができる", () => {
   expect(
-    progressBattle(battle, [player01Command, player02Command]),
+    deprecatedProgressBattle(battle, [player01Command, player02Command]),
   ).toMatchSnapshot();
 });

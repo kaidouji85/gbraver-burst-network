@@ -16,12 +16,13 @@ type BattleProgressResult = {
 };
 
 /**
+ * @deprecated
  * 戦闘を進行する
  * @param battle 戦闘情報
  * @param commands ゲームに参加しているプレイヤーのコマンド
  * @return 戦闘進行結果、進行できない場合はnullを返す
  */
-export function progressBattle(
+export function deprecatedProgressBattle(
   battle: Battle<BattlePlayer>,
   commands: [BattleCommand, BattleCommand],
 ): BattleProgressResult | null {
