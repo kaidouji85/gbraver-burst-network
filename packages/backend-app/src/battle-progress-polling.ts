@@ -1,4 +1,4 @@
-import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
+import { GameState } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
 import { DynamoBattleCommandsFetcher } from "./adapter/dynamo-battle-commands-fetcher";
@@ -9,8 +9,7 @@ import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommandsFetcher } from "./core/battle-commands-fetcher";
 import { canProgressBattle } from "./core/can-battle-progress";
 import { None } from "./core/connection";
-import { createPlayerCommands } from "./core/create-player-commands";
-import { createPlayers } from "./core/create-players";
+import { progressBattle } from "./core/progress-battle";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
@@ -200,20 +199,12 @@ export async function battleProgressPolling(
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const corePlayers = createPlayers(battle);
-  const coreCommands = createPlayerCommands(battle, commands);
-  if (!coreCommands) {
+  const result = progressBattle(battle, commands);
+  if (!result) {
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const core = restoreGBraverBurst({
-    players: corePlayers,
-    stateHistory: battle.stateHistory,
-  });
-  const update = core.progress(coreCommands);
-  const stateHistory = core.stateHistory();
-  const lastState = update[update.length - 1];
-  const isGameEnd = lastState.effect.name === "GameEnd";
+  const { update, stateHistory, isGameEnd } = result;
   await (isGameEnd
     ? onGameEnd({ battle, update })
     : onGameContinue({ battle, update, stateHistory }));
