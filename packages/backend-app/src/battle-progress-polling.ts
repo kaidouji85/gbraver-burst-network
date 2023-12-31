@@ -1,15 +1,14 @@
-import { GameState } from "gbraver-burst-core";
-import { v4 as uuidv4 } from "uuid";
-
 import { DynamoBattleCommandsFetcher } from "./adapter/dynamo-battle-commands-fetcher";
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { Battle, BattlePlayer } from "./core/battle";
 import { BattleCommandsFetcher } from "./core/battle-commands-fetcher";
 import { canProgressBattle } from "./core/can-battle-progress";
-import { None } from "./core/connection";
-import { deprecatedProgressBattle } from "./core/deprecated-progress-battle";
+import {
+  BattleContinue,
+  BattleEnd,
+  progressBattle,
+} from "./core/progress-battle";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
@@ -24,7 +23,6 @@ import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
 import { notReadyBattleProgress } from "./response/not-ready-battle-progress";
-import { BattleEnd, BattleProgressed } from "./response/websocket-response";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -93,72 +91,58 @@ async function endWithNotReadyBattleProgress(
   return webSocketAPIResponseOfNotReadyBattleProgress;
 }
 
-/** ゲーム終了時処理のパラメータ */
-type OnGameEndParams = {
-  /** バトル情報 */
-  battle: Battle<BattlePlayer>;
-  /** 更新されたゲームステート */
-  update: GameState[];
-};
-
 /**
- * ゲーム終了時の処理
- * @param params パラメータ
- * @return 処理が完了したら発火するPromise
+ * 「ゲーム終了」でAPIを終了する
+ * @param battleEnd バトル終了情報
+ * @return websocket apiに返すデータ
  */
-async function onGameEnd(params: OnGameEndParams): Promise<void> {
-  const { battle, update } = params;
-  const noticedData: BattleEnd = {
-    action: "battle-end",
-    update,
-  };
-  const updatedConnectionState: None = {
-    type: "None",
-  };
-  await Promise.all([
-    ...battle.players.map((v) =>
-      notifier.notifyToClient(v.connectionId, noticedData),
-    ),
-    ...battle.players.map((v) =>
-      dynamoConnections.put({
+async function endWithGameEnd(
+  battleEnd: BattleEnd,
+): Promise<WebsocketAPIResponse> {
+  const { update, connections, endBattleID } = battleEnd;
+  const notifiers = connections.map(
+    (v) =>
+      ({
         connectionId: v.connectionId,
-        userID: v.userID,
-        state: updatedConnectionState,
-      }),
-    ),
-    dynamoBattles.delete(battle.battleID),
+        data: {
+          action: "battle-end",
+          update,
+        },
+      }) as const,
+  );
+  await Promise.all([
+    ...notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+    ...connections.map((v) => dynamoConnections.put(v)),
+    dynamoBattles.delete(endBattleID),
   ]);
+  return webSocketAPIResponseOfSendCommandSuccess;
 }
 
-/** ゲーム継続時処理のパラメータ */
-type OnGameContinueParams = {
-  /** バトル情報 */
-  battle: Battle<BattlePlayer>;
-  /** 更新されたゲームステート */
-  update: GameState[];
-  /** 今まで蓄積されたすべてのゲームステート */
-  stateHistory: GameState[];
-};
-
 /**
- * ゲーム継続時の処理
- * @param params パラメータ
- * @return 処理が完了したら発火するPromise
+ * 「ゲーム継続」でAPIを終了する
+ * @param battleContinue バトル継続情報
+ * @return websocket apiに返すデータ
  */
-async function onGameContinue(params: OnGameContinueParams): Promise<void> {
-  const { battle, update, stateHistory } = params;
-  const flowID = uuidv4();
-  const noticedData: BattleProgressed = {
-    action: "battle-progressed",
-    flowID,
-    update,
-  };
+async function endWithGameContinue(
+  battleContinue: BattleContinue,
+): Promise<WebsocketAPIResponse> {
+  const { battle, update } = battleContinue;
+  const notifiers = battle.players.map(
+    (v) =>
+      ({
+        connectionId: v.connectionId,
+        data: {
+          action: "battle-progressed",
+          flowID: battle.flowID,
+          update,
+        },
+      }) as const,
+  );
   await Promise.all([
-    ...battle.players.map((v) =>
-      notifier.notifyToClient(v.connectionId, noticedData),
-    ),
-    dynamoBattles.put({ ...battle, flowID, stateHistory }),
+    ...notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+    dynamoBattles.put(battle),
   ]);
+  return webSocketAPIResponseOfSendCommandSuccess;
 }
 
 /**
@@ -199,14 +183,14 @@ export async function battleProgressPolling(
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const result = deprecatedProgressBattle(battle, commands);
+  const result = progressBattle(battle, commands);
   if (!result) {
     return await endWithNotReadyBattleProgress(event);
   }
 
-  const { update, stateHistory, isGameEnd } = result;
-  await (isGameEnd
-    ? onGameEnd({ battle, update })
-    : onGameContinue({ battle, update, stateHistory }));
-  return webSocketAPIResponseOfSendCommandSuccess;
+  if (result.isGameEnd) {
+    return await endWithGameEnd(result);
+  }
+
+  return await endWithGameContinue(result);
 }
