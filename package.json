@@ -2,8 +2,8 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "lerna": "^7.4.2",
-    "typescript": "^5.2.2"
+    "lerna": "^8.0.2",
+    "typescript": "^5.3.3"
   },
   "private": true,
   "scripts": {

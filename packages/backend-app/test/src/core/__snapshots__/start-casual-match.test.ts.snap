@@ -1,0 +1,404 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`カジュアルマッチを正しく開始できる 1`] = `
+{
+  "battle": {
+    "battleID": "mock-id-3",
+    "flowID": "mock-id-4",
+    "players": [
+      {
+        "armdozer": {
+          "burst": {
+            "recoverBattery": 5,
+            "type": "RecoverBattery",
+          },
+          "id": "SHIN_BRAVER",
+          "maxBattery": 5,
+          "maxHp": 3100,
+          "name": "シンブレイバー",
+          "power": 2000,
+          "speed": 2000,
+        },
+        "connectionId": "user-01-connection-id",
+        "pilot": {
+          "id": "SHINYA",
+          "name": "シンヤ",
+          "skill": {
+            "recoverBattery": 2,
+            "type": "RecoverBatterySkill",
+          },
+        },
+        "playerId": "mock-id-1",
+        "userID": "user-01",
+      },
+      {
+        "armdozer": {
+          "burst": {
+            "buffPower": 1000,
+            "duration": 2,
+            "recoverBattery": 3,
+            "type": "BuffPower",
+          },
+          "id": "NEO_LANDOZER",
+          "maxBattery": 5,
+          "maxHp": 3300,
+          "name": "ネオランドーザ",
+          "power": 2300,
+          "speed": 1500,
+        },
+        "connectionId": "user-02-connection-id",
+        "pilot": {
+          "id": "GAI",
+          "name": "ガイ",
+          "skill": {
+            "buffPower": 600,
+            "duration": 2,
+            "type": "BuffPowerSkill",
+          },
+        },
+        "playerId": "mock-id-2",
+        "userID": "user-02",
+      },
+    ],
+    "poller": "user-01",
+    "stateHistory": [
+      {
+        "activePlayerId": "mock-id-1",
+        "effect": {
+          "name": "StartGame",
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "GAI",
+              "name": "ガイ",
+              "skill": {
+                "buffPower": 600,
+                "duration": 2,
+                "type": "BuffPowerSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+          },
+        ],
+      },
+      {
+        "activePlayerId": "mock-id-1",
+        "effect": {
+          "name": "InputCommand",
+          "players": [
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "mock-id-1",
+              "selectable": true,
+            },
+            {
+              "command": [
+                {
+                  "battery": 0,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 1,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 2,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 3,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "type": "BURST_COMMAND",
+                },
+                {
+                  "type": "PILOT_SKILL_COMMAND",
+                },
+              ],
+              "playerId": "mock-id-2",
+              "selectable": true,
+            },
+          ],
+        },
+        "players": [
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3100,
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+          },
+          {
+            "armdozer": {
+              "battery": 5,
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "effects": [],
+              "enableBurst": true,
+              "hp": 3300,
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "pilot": {
+              "enableSkill": true,
+              "id": "GAI",
+              "name": "ガイ",
+              "skill": {
+                "buffPower": 600,
+                "duration": 2,
+                "type": "BuffPowerSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+          },
+        ],
+      },
+    ],
+  },
+  "connections": [
+    {
+      "connectionId": "user-01-connection-id",
+      "state": {
+        "battleID": "mock-id-3",
+        "players": [
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "connectionId": "user-01-connection-id",
+            "pilot": {
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+            "userID": "user-01",
+          },
+          {
+            "armdozer": {
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "connectionId": "user-02-connection-id",
+            "pilot": {
+              "id": "GAI",
+              "name": "ガイ",
+              "skill": {
+                "buffPower": 600,
+                "duration": 2,
+                "type": "BuffPowerSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+            "userID": "user-02",
+          },
+        ],
+        "type": "InBattle",
+      },
+      "userID": "user-01",
+    },
+    {
+      "connectionId": "user-02-connection-id",
+      "state": {
+        "battleID": "mock-id-3",
+        "players": [
+          {
+            "armdozer": {
+              "burst": {
+                "recoverBattery": 5,
+                "type": "RecoverBattery",
+              },
+              "id": "SHIN_BRAVER",
+              "maxBattery": 5,
+              "maxHp": 3100,
+              "name": "シンブレイバー",
+              "power": 2000,
+              "speed": 2000,
+            },
+            "connectionId": "user-01-connection-id",
+            "pilot": {
+              "id": "SHINYA",
+              "name": "シンヤ",
+              "skill": {
+                "recoverBattery": 2,
+                "type": "RecoverBatterySkill",
+              },
+            },
+            "playerId": "mock-id-1",
+            "userID": "user-01",
+          },
+          {
+            "armdozer": {
+              "burst": {
+                "buffPower": 1000,
+                "duration": 2,
+                "recoverBattery": 3,
+                "type": "BuffPower",
+              },
+              "id": "NEO_LANDOZER",
+              "maxBattery": 5,
+              "maxHp": 3300,
+              "name": "ネオランドーザ",
+              "power": 2300,
+              "speed": 1500,
+            },
+            "connectionId": "user-02-connection-id",
+            "pilot": {
+              "id": "GAI",
+              "name": "ガイ",
+              "skill": {
+                "buffPower": 600,
+                "duration": 2,
+                "type": "BuffPowerSkill",
+              },
+            },
+            "playerId": "mock-id-2",
+            "userID": "user-02",
+          },
+        ],
+        "type": "InBattle",
+      },
+      "userID": "user-02",
+    },
+  ],
+}
+`;

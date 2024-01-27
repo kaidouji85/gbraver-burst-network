@@ -25,7 +25,4 @@ phases:
       - npm ci
   build:
     commands:
-      - DOCKER_IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
       - ./deploy-serverless.sh
-      - ./push-match-make-container.sh
-      - ./deploy-backend-ecs.sh

@@ -1,4 +1,3 @@
-import { uniq } from "ramda";
 import { z } from "zod";
 
 import {
@@ -10,15 +9,6 @@ import {
   FlowIDSchema,
 } from "./battle";
 import { BattleCommand } from "./battle-command";
-
-/**
- * 指定した文字列が全て同じ値か否かを判定するヘルパー関数
- * @param values 判定対象の文字列を配列で渡す
- * @return 判定結果、trueで全て同じ値である
- */
-function isSameValues(values: string[]): boolean {
-  return uniq(values).length === 1;
-}
 
 /** ポーリング実行者が送信したバトル進行チェックの問い合わせ */
 export type CanBattleProgressQueryFromPoller = {
@@ -47,7 +37,7 @@ export function canProgressBattle(
   commands: [BattleCommand, BattleCommand],
 ): boolean {
   const objects = [query, battle, ...commands];
-  const isSameBattleIDs = isSameValues(objects.map((v) => v.battleID));
-  const isSameFlowIDs = isSameValues(objects.map((v) => v.flowID));
+  const isSameBattleIDs = new Set(objects.map((v) => v.battleID)).size === 1;
+  const isSameFlowIDs = new Set(objects.map((v) => v.flowID)).size === 1;
   return isSameBattleIDs && isSameFlowIDs;
 }

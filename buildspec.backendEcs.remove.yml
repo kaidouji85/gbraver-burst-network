@@ -2,15 +2,15 @@ version: 0.2
 env:
   # プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
   parameter-store:
-    SERVICE: /GbraverBurst/prod/service
-    VPC_SUBNET_COUNT: /GbraverBurst/prod/vpcSubnetCount
+    SERVICE: /GbraverBurst/dev/service
+    VPC_SUBNET_COUNT: /GbraverBurst/dev/vpcSubnetCount
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 20
   pre_build:
     commands:
       - npm ci
   build:
     commands:
-      - ./backend-ecs-remove.sh
+      - ./remove-backend-ecs.sh

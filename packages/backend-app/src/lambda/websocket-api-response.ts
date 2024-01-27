@@ -1,4 +1,4 @@
-/** websocket apiが返すデータ */
+/** websocket apiに返すデータ */
 export type WebsocketAPIResponse = {
   /** ステータスコード */
   statusCode: number;

@@ -100,34 +100,38 @@ npm run build
 #### serverlessデプロイ
 
 ```shell
-./serverless-deploy.sh
+./deploy-serverless.sh
 ```
 
 #### serverless環境削除
 
 ```shell
-./serverless-remove.sh
+./remove-serverless.sh
 ```
 
 #### ECRリポジトリPush
 
 ```shell
-./match-make-container-push.sh
+./push-match-make-container.sh
 ```
 
 #### バックエンド処理用ECSデプロイ
 
 ```shell
-./backend-ecs-deploy.sh
+# 通常デプロイ
+./deploy-backend-ecs.sh
+
+# ホットスワップデプロイ
+./deploy-backend-ecs-with-hotswap.sh
 ```
 
 #### バックエンド処理用ECS環境削除
 
 ```shell
-./backend-ecs-remove.sh
+./remove-backend-ecs.sh
 ```
 
-### CodepipelineでCI/CDする
+### AWS CodeBuild/CodePipelineでCI/CDする
 
 #### ビルド環境について
 以下がGブレイバーバーストで利用するビルド環境です。
@@ -164,14 +168,20 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/dockerToken                        | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                            |
 | /GbraverBurst/dev/vpcSubnetCount                     | String       | [環境変数定義の定義](#env-config) VPC_SUBNET_COUNT を参照                        |
 
-##### Code Build
-以下のCode Buildプロジェクトを生成します
+##### CodeBuild
+以下のCodeBuildプロジェクトを生成します
 
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|--| --------- | -------- |
-| DEVCB-01 | デプロイ | buildspec.yml | BLD-01 |
-| DEVCB-02 | serverless削除 | serverlessRemove.buildspec.yml | BLD-01 |
-| DEVCB-03 | バックエンドECS削除 | backendECSRemove.buildspec.yml | BLD-01 |
+| DEVCB-01 | フルデプロイ（環境新規作成時に利用する想定） | buildspec.yml | BLD-01 |
+| DEVCB-02 | serverless削除 | buildspec.sls.remove.yml | BLD-01 |
+| DEVCB-03 | バックエンドECS削除 | buildspec.backendEcs.remove.yml | BLD-01 |
+| DEVCB-04 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）| buildspec.sls.yml | BLD-01 |
+| DEVCB-05 | バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml | BLD-01 |
+
+##### CodePipeline
+DEVCB-04、DEVCB-05を並列実行するプロジェクトを作成する。
+ただし、事前にDEVCB-01で環境を作成すること。
 
 #### 本番環境でのCI/CD
 ##### AWS Secret Managerを設定
@@ -206,8 +216,8 @@ AWS Parameter Storeに以下の値をセットします。
 | #        | 概要           | BuildSpec                           | ビルド環境 |
 |----------|--------------|-------------------------------------| ------- |
 | PROCB-01 | デプロイ         | buildspec.prod.yml                  | BLD-01 |
-| PROCB-02 | serverless削除 | serverlessRemove.prod.buildspec.yml | BLD-01 |
-| PROCB-03 | バックエンドECS削除  | backendECSRemove.prod.buildspec.yml | BLD-01 |
+| PROCB-02 | serverless削除 | buildspec.sls.remove.prod.yml | BLD-01 |
+| PROCB-03 | バックエンドECS削除  | buildspec.backendEcs.remove.prod.yml | BLD-01 |
 
 ## パッケージ公開
 ```shell
