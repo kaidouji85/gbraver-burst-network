@@ -5,25 +5,25 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "^1.10.1",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.3",
     "gbraver-burst-core": "^1.23.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
     "codehawk-cli": "^10.1.0",
     "eslint": "^8.56.0",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
     "html-webpack-plugin": "^5.6.0",
     "http-server": "^14.1.1",
     "madge": "^6.1.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "3.2.4",
+    "prettier": "3.2.5",
     "rimraf": "^5.0.5",
     "ts-loader": "^9.5.1",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^5.0.0"
   },
   "license": "ISC",
   "main": "lib/index.js",
