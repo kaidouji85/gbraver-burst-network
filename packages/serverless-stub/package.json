@@ -5,7 +5,7 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "^1.10.1",
-    "dotenv": "^16.4.3",
+    "dotenv": "^16.4.4",
     "gbraver-burst-core": "^1.23.0"
   },
   "devDependencies": {
@@ -23,7 +23,7 @@
     "ts-loader": "^9.5.1",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.0"
+    "webpack-dev-server": "^5.0.1"
   },
   "license": "ISC",
   "main": "lib/index.js",
