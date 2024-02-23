@@ -8,7 +8,7 @@ import * as R from "ramda";
 import { BackendEcsStack } from "../lib/backend-ecs-stack";
 
 /** VPC世代数 */
-const VPC_GENERATION = 2;
+const VPC_GENERATION = 3;
 
 dotenv.config();
 
