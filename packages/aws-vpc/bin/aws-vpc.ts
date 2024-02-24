@@ -14,7 +14,7 @@ import { AwsVpcStack } from "../lib/aws-vpc-stack";
  * ただ、backend-app、backend-ecsと同じ頻度でブルーグリーンデプロイするのは無駄が多いので、
  * これらとは別に世代管理をするために、本変数が必要である。
  */
-const VPC_GENERATION = 2;
+const VPC_GENERATION = 3;
 
 dotenv.config();
 const service = process.env.SERVICE ?? "";
