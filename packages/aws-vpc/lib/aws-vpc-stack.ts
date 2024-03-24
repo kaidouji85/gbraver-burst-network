@@ -34,6 +34,7 @@ export class AwsVpcStack extends Stack {
           subnetType: SubnetType.PUBLIC,
         },
       ],
+      ipProtocol: ec2.IpProtocol.DUAL_STACK,
     });
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
