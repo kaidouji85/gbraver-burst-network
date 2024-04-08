@@ -3,7 +3,6 @@ import type { AuthorizerEvent } from "./lambda/authorizer-event";
 import type { AuthorizerResponse } from "./lambda/authorizer-response";
 import { successAuthorize } from "./lambda/authorizer-response";
 
-
 /** auth0 JWKSのURL */
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? "";
 
