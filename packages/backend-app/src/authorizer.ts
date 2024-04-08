@@ -2,7 +2,11 @@ import { verifyAccessToken } from "./auth0/access-token";
 import type { AuthorizerEvent } from "./lambda/authorizer-event";
 import type { AuthorizerResponse } from "./lambda/authorizer-response";
 import { successAuthorize } from "./lambda/authorizer-response";
+
+/** auth0 JWKSのURL */
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? "";
+
+/** auth0 Audience */
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
 
 /**
