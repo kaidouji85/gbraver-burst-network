@@ -16,7 +16,7 @@ type MatchStartResponse = {
 /**
  * カジュアルマッチを開始する
  * @param matching マッチング
- * @return バトルとコネクションのリスト
+ * @returns バトルとコネクションのリスト
  */
 export function startCasualMatch<X extends CasualMatchEntry>(
   matching: CasualMatching<X>,

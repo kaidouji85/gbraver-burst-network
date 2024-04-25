@@ -7,7 +7,7 @@ import { DynamoBattleCommands } from "./dynamo-battle-commands";
  * @param dynamoDB DynamoDBDocument
  * @param service serverlessサービス名
  * @param stage serverlessステージ名
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createDynamoBattleCommands(
   dynamoDB: DynamoDBDocument,

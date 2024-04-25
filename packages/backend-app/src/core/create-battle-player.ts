@@ -7,7 +7,7 @@ import { BattleEntry } from "./battle-entry";
 /**
  * BattleEntryからBattlePlayerを生成するヘルパー関数
  * @param entry エントリ
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createBattlePlayer(entry: BattleEntry): BattlePlayer {
   const armdozer =

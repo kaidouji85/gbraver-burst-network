@@ -11,7 +11,7 @@ import { waitUntil } from "./wait-until";
  * プライベートマッチングポーリング
  * @param websocket websocketクライアント
  * @param roomID ルームID
- * @return APIサーバからのレスポンス
+ * @returns APIサーバからのレスポンス
  */
 export async function privateMatchMakePolling(
   websocket: WebSocket,

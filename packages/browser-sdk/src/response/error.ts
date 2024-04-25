@@ -10,7 +10,7 @@ export type Error = {
  * パースできない場合はnullを返す
  *
  * @param data パース元オブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseError(data: any): Error | null {

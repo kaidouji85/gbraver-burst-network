@@ -14,7 +14,7 @@ export const RejectPrivateMatchEntrySchema = z.object({
  * 任意オブジェクトをRejectPrivateMatchEntryにパースする
  * パースできない場合はnullを返す
  * @param data パース元となるオブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parseRejectPrivateMatchEntry(
   origin: unknown,

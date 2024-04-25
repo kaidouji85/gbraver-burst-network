@@ -21,7 +21,7 @@ import { waitUntil } from "./wait-until";
  * @param battleID バトルID
  * @param flowID フローID
  * @param command コマンド
- * @return サーバからのレスポンス
+ * @returns サーバからのレスポンス
  */
 export function sendCommand(
   websocket: WebSocket,
@@ -62,7 +62,7 @@ export function sendCommand(
  * @param battleID バトルID
  * @param flowID フローID
  * @param command コマンド
- * @return APIサーバからのレスポンス
+ * @returns APIサーバからのレスポンス
  */
 export async function sendCommandWithPolling(
   websocket: WebSocket,

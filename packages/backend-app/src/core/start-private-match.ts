@@ -20,7 +20,7 @@ type MatchStartResponse = {
  * プライベートマッチを開始する
  * @param entries 指定したルームのすべてのエントリ
  * @param matching マッチング結果
- * @return プライベートマッチ開始情報
+ * @returns プライベートマッチ開始情報
  */
 export function startPrivateMatch(
   entries: PrivateMatchEntry[],

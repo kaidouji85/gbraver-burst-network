@@ -10,7 +10,7 @@
  * ネット対戦ではプレイヤーIDにUUIDをセットすることが多い
  * ただし、Gブレイバーバーストのコアロジックでは同じユーザIDの重複は許されないため、
  * テストコードではユニークなUUIDを生成する必要がある
- * @return モック用UUIDを生成する関数
+ * @returns モック用UUIDを生成する関数
  */
 export const mockUniqUUID = () => {
   let count = 1;

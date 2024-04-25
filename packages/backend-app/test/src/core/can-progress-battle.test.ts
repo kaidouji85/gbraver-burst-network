@@ -40,7 +40,7 @@ type CreateBattleParams = {
 /**
  * バトル情報を生成する
  * @param params パラメータ
- * @return 生成結果
+ * @returns 生成結果
  */
 const createBattle = (params: CreateBattleParams): Battle<BattlePlayer> => ({
   ...params,
@@ -62,7 +62,7 @@ type CreateCommandParams = {
 /**
  * バトルコマンドを生成する
  * @param params 生成パラメータ
- * @return 生成結果
+ * @returns 生成結果
  */
 const createBattleCommand = (params: CreateCommandParams): BattleCommand => ({
   ...params,

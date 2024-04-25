@@ -20,7 +20,7 @@ const notifier = new Notifier(apiGateway);
  * Websocket API ping エントリポイント
  *
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function ping(
   event: WebsocketAPIEvent,

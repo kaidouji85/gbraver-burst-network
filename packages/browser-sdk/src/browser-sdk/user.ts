@@ -3,7 +3,7 @@ export interface UserNameGet {
   /**
    * ユーザ名を取得する
    *
-   * @return ユーザ名
+   * @returns ユーザ名
    */
   getUserName(): Promise<string>;
 }
@@ -13,7 +13,7 @@ export interface UserPictureGet {
   /**
    * ユーザ画像URLを取得する
    *
-   * @return ユーザ画像URL
+   * @returns ユーザ画像URL
    */
   getUserPictureURL(): Promise<string>;
 }
@@ -23,7 +23,7 @@ export interface UserMailGet {
   /**
    * メールアドレスを取得する
    *
-   * @return メールアドレス
+   * @returns メールアドレス
    */
   getMail(): Promise<string>;
 }
@@ -33,7 +33,7 @@ export interface MailVerify {
   /**
    * メール認証が完了しているか否か
    *
-   * @return 判定結果、trueでメール認証が完了している
+   * @returns 判定結果、trueでメール認証が完了している
    */
   isMailVerified(): Promise<boolean>;
 }
@@ -43,7 +43,7 @@ export interface LoggedInUserDelete {
   /**
    * 現在ログインしているユーザを削除する
    *
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   deleteLoggedInUser(): Promise<void>;
 }

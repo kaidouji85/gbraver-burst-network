@@ -7,7 +7,7 @@ import { DynamoConnections } from "./dynamo-connections";
  * @param dynamoDB DynamoDBDocument
  * @param service serverlessサービス名
  * @param stage serverlessステージ名
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createDynamoConnections(
   dynamoDB: DynamoDBDocument,
