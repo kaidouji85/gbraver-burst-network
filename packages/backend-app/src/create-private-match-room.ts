@@ -42,7 +42,7 @@ const invalidRequestBodyError: Error = {
 /**
  * Websocket API createPrivateMatchRoom エントリポイント
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function createPrivateMatchRoom(
   event: WebsocketAPIEvent,

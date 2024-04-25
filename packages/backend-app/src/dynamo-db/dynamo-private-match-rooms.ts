@@ -36,7 +36,7 @@ export class DynamoPrivateMatchRooms {
    * パーティションキー指定で検索
    * データが存在しない場合はnullを返す
    * @param owner ルーム作成者のユーザID
-   * @return 検索結果
+   * @returns 検索結果
    */
   async get(owner: UserID): Promise<DynamoPrivateMatchRoom | null> {
     const result = await this.#dynamoDB.get({
@@ -51,7 +51,7 @@ export class DynamoPrivateMatchRooms {
   /**
    * 項目追加する
    * @param room 追加する項目
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async put(room: DynamoPrivateMatchRoom): Promise<void> {
     await this.#dynamoDB.put({
@@ -63,7 +63,7 @@ export class DynamoPrivateMatchRooms {
   /**
    * パーティションキー指定で項目を削除する
    * @param owner プライベートマッチルーム作成者
-   * @return 削除受付したら発火するPromise
+   * @returns 削除受付したら発火するPromise
    */
   async delete(owner: UserID): Promise<void> {
     await this.#dynamoDB.delete({

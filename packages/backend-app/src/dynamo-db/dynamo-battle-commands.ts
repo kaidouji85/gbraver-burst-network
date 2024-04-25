@@ -29,7 +29,7 @@ export class DynamoBattleCommands {
   /**
    * 項目追加する
    * @param command 追加する項目
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async put(command: DynamoBattleCommand): Promise<void> {
     await this.#dynamoDB.put({
@@ -42,7 +42,7 @@ export class DynamoBattleCommands {
    * ユーザID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
    * @param userID ユーザID
-   * @return 検索結果
+   * @returns 検索結果
    */
   async get(userID: string): Promise<DynamoBattleCommand | null> {
     const result = await this.#dynamoDB.get({

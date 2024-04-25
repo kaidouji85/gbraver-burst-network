@@ -17,7 +17,7 @@ export const CreatedPrivateMatchRoomSchema = z.object({
  * 任意オブジェクトをCreatedPrivateMatchRoomにパースする
  * パースできない場合はnullを返す
  * @param data パース元
- * @return パース結果
+ * @returns パース結果
  */
 export function parseCreatedPrivateMatchRoom(
   data: unknown,

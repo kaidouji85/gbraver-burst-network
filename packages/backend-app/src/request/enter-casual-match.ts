@@ -21,7 +21,7 @@ export const EnterCasualMatchSchema = z.object({
  * 変換できない場合はnullを返す
  *
  * @param origin 変換元のリクエストボディ
- * @return 変換結果
+ * @returns 変換結果
  */
 export function parseEnterCasualMatch(
   origin: unknown,

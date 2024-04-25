@@ -3,7 +3,7 @@
  * JSONパースできなかった場合はnullを返す
  *
  * @param origin パース元
- * @return パース結果
+ * @returns パース結果
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function parseJSON(origin: any): any {

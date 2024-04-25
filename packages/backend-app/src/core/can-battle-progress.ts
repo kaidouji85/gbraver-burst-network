@@ -29,7 +29,7 @@ export const CanBattleProgressQueryFromPollerSchema = z.object({
  * @param query バトル進行クエリ
  * @param battle バトル情報
  * @param commands すべてのプレイヤーのバトルコマンド
- * @return 判定結果、trueでバトル進行ができる
+ * @returns 判定結果、trueでバトル進行ができる
  */
 export function canProgressBattle(
   query: CanBattleProgressQueryFromPoller,

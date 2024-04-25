@@ -19,14 +19,14 @@ export interface Battle {
    * バトルを進行させる
    *
    * @param command プレイヤーが入力するコマンド
-   * @return ゲーム結果
+   * @returns ゲーム結果
    */
   progress(command: Command): Promise<GameState[]>;
 
   /**
    * バトル強制終了の通知ストリーム
    *
-   * @return 通知ストリーム
+   * @returns 通知ストリーム
    */
   suddenlyBattleNotifier(): Observable<unknown>;
 }

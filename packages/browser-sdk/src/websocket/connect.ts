@@ -4,7 +4,7 @@ import { Reject } from "../promise/promise";
  * 接続完了したWebSocketを返す
  *
  * @param url 接続先のWebSocket
- * @return WebSocket
+ * @returns WebSocket
  */
 export function connect(url: string): Promise<WebSocket> {
   let handler: (() => void) | null = null;

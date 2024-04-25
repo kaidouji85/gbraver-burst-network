@@ -35,7 +35,7 @@ const responseHTTP500 = {
 /**
  * ユーザ削除API
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function deleteUser(
   event: RestAPIEvent,

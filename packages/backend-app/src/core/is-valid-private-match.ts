@@ -15,7 +15,7 @@ type Param = {
 /**
  * プライベートマッチ関連データが有効であるかを判定する
  * @param param 判定対象
- * @return 判定結果、trueで有効である
+ * @returns 判定結果、trueで有効である
  */
 export function isValidPrivateMatch(param: Param): boolean {
   const { owner, room, entries } = param;

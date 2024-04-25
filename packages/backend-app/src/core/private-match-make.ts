@@ -10,7 +10,7 @@ export type PrivateMatching = [BattleEntry, BattleEntry];
  * マッチメイクできなかった場合はnullを返す
  * @param room ルーム
  * @param entries エントリ
- * @return マッチメイク結果
+ * @returns マッチメイク結果
  */
 export function privateMatchMake(
   room: PrivateMatchRoom,

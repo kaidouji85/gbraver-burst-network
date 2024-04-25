@@ -35,7 +35,7 @@ export type AuthorizerResponse = {
  * @param principalId プリンシパルID
  * @param resource リソース
  * @param effect エフェクト
- * @return レスポンス
+ * @returns レスポンス
  */
 function createAuthorizeResponse(
   principalId: string,
@@ -62,7 +62,7 @@ function createAuthorizeResponse(
  *
  * @param principalId プリンシパルID
  * @param resource リソース
- * @return レスポンス
+ * @returns レスポンス
  */
 export function successAuthorize(
   principalId: string,
@@ -76,7 +76,7 @@ export function successAuthorize(
  *
  * @param principalId プリンシパルID
  * @param resource リソース
- * @return レスポンス
+ * @returns レスポンス
  */
 export function failedAuthorize(
   principalId: string,

@@ -216,7 +216,7 @@ class BrowserSDKImpl implements BrowserSDK {
    * WebSocketクライアントの取得を行う
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
    *
-   * @return 取得、生成結果
+   * @returns 取得、生成結果
    */
   async #getOrCreateWebSocket(): Promise<WebSocket> {
     if (this.#websocket) {
@@ -245,7 +245,7 @@ class BrowserSDKImpl implements BrowserSDK {
  * @param auth0Domain auth0ドメイン
  * @param auth0ClientID auth0クライアントID
  * @param auth0Audience auth0 audience
- * @return GブレイバーバーストブラウザSDK
+ * @returns GブレイバーバーストブラウザSDK
  */
 export async function createBrowserSDK(
   ownURL: string,

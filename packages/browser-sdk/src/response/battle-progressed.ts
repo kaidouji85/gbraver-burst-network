@@ -21,7 +21,7 @@ export const BattleProgressedSchema = z.object({
  * 任意オブジェクトをBattleProgressedをパースする
  * パースできない場合はnullを返す
  * @param data パース元オブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parseBattleProgressed(data: unknown): BattleProgressed | null {
   const result = BattleProgressedSchema.safeParse(data);

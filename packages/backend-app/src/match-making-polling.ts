@@ -48,7 +48,7 @@ const healthCheckFilePath = "match-make-health-check";
 
 /**
  * ヘルスチェック用のファイルを作成する
- * @return 処理完了後に発火するPromise
+ * @returns 処理完了後に発火するPromise
  */
 async function createHeathCheckFile(): Promise<void> {
   await fs.promises.writeFile(healthCheckFilePath, "ok");
@@ -56,7 +56,7 @@ async function createHeathCheckFile(): Promise<void> {
 
 /**
  * カジュアルマッチでマッチングがないかを探す
- * @return 処理完了後に発火するPromise
+ * @returns 処理完了後に発火するPromise
  */
 async function matchMakingPolling(): Promise<void> {
   const entries = await dynamoCasualMatchEntries.scan(

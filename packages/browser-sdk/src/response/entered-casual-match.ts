@@ -14,7 +14,7 @@ export const EnteredCasualMatchSchema = z.object({
  * 任意のオブジェクトをカジュアルマッチ入室成功にパースする
  * パースできない場合はnullを返す
  * @param data パース元となるオブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parseEnteredCasualMatch(
   data: unknown,

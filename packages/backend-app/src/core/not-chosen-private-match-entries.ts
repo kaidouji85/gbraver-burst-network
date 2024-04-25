@@ -5,7 +5,7 @@ import { PrivateMatching } from "./private-match-make";
  * マッチングされなかったエントリを求める
  * @param matching プライベートマッチ結果
  * @param entries プライベートマッチエントリ
- * @return マッチングされなかったエントリ
+ * @returns マッチングされなかったエントリ
  */
 export function notChosenPrivateMatchEntries(
   matching: PrivateMatching,

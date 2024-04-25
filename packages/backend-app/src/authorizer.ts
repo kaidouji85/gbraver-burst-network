@@ -13,7 +13,7 @@ const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
  * オーサライザ
  *
  * @param event イベント
- * @return 認可結果
+ * @returns 認可結果
  */
 export async function authorizer(
   event: AuthorizerEvent,

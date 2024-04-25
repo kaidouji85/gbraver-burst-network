@@ -37,7 +37,7 @@ export type MessageHandler<X> = (
  * @template X 本関数が返すデータ型
  * @param websocket messageイベントを処理するwebsocket
  * @param messageHandler messageイベントが発火した時のハンドラ
- * @return messageHandler内でresolveされたデータ
+ * @returns messageHandler内でresolveされたデータ
  */
 export function waitUntil<X>(
   websocket: WebSocket,

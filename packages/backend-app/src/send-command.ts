@@ -42,7 +42,7 @@ const acceptCommand: AcceptCommand = {
  * Websocket API send-command エントリポイント
  *
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function sendCommand(
   event: WebsocketAPIEvent,

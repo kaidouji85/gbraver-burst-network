@@ -9,7 +9,7 @@ import { waitUntil } from "./wait-until";
  * API サーバへの疎通確認
  *
  * @param websocket websocketクライアント
- * @return APIサーバからの返答内容
+ * @returns APIサーバからの返答内容
  */
 export function ping(websocket: WebSocket): Promise<Pong> {
   sendToAPIServer(websocket, {

@@ -7,7 +7,7 @@ import { Auth0Client, createAuth0Client } from "@auth0/auth0-spa-js";
  * @param clientID auth0クライアントID
  * @param audience auth0 audience
  * @param redirectURI リダイレクト元となるGブレイバーバーストのURL
- * @return Auth0Client
+ * @returns Auth0Client
  */
 export function createAuth0ClientHelper(
   domain: string,

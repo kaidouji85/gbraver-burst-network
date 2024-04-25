@@ -4,8 +4,8 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 /**
  * DynamoDBクライアントを生成する
  *
- * @return region AWSのリージョン
- * @return DynamoDBクライアント
+ * @returns region AWSのリージョン
+ * @returns DynamoDBクライアント
  */
 export function createDynamoDBDocument(region: string): DynamoDBDocument {
   return DynamoDBDocument.from(

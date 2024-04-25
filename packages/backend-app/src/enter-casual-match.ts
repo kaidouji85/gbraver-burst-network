@@ -44,7 +44,7 @@ const enteredCasualMatch: EnteredCasualMatch = {
  * Websocket API enter-casual-match エントリポイント
  *
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function enterCasualMatch(
   event: WebsocketAPIEvent,

@@ -48,7 +48,7 @@ const battle: Battle<BattlePlayer> = {
 /**
  * 攻撃側プレイヤーのバトルコマンドを作成する
  * @param command コマンド
- * @return 生成結果
+ * @returns 生成結果
  */
 const createAttackerCommand = (command: Command): BattleCommand => ({
   userID: attacker.userID,
@@ -60,7 +60,7 @@ const createAttackerCommand = (command: Command): BattleCommand => ({
 /**
  * 防御側プレイヤーのバトルコマンドを作成する
  * @param command コマンド
- * @return 生成結果
+ * @returns 生成結果
  */
 const createDefenderCommand = (command: Command): BattleCommand => ({
   userID: defender.userID,

@@ -8,7 +8,7 @@ import { toPlayer } from "./to-player";
  * バトル情報を生成する
  * @template X プレイヤー情報のデータ型
  * @param players プレイヤー情報
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createBattle<X extends BattlePlayer>(
   players: [X, X],

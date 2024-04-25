@@ -19,7 +19,7 @@ export const privateMatchMakePollingSchema = z.object({
  * PrivateMatchMakePollingにパースする
  * パースできない場合、nullを返す
  * @param origin パース元
- * @return パース結果
+ * @returns パース結果
  */
 export function parsePrivateMatchMakePolling(
   origin: unknown,
