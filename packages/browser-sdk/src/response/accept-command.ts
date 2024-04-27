@@ -14,7 +14,7 @@ export const AcceptCommandSchema: z.ZodSchema<AcceptCommand> = z.object({
  * 任意オブジェクトをAcceptCommandにパースする
  * パースできない場合はnullを返す
  * @param data パース元オブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parseAcceptCommand(data: unknown): AcceptCommand | null {
   const result = AcceptCommandSchema.safeParse(data);

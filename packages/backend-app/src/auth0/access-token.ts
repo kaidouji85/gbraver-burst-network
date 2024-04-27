@@ -5,7 +5,7 @@ import { JwksClient } from "jwks-rsa";
  * 公開鍵取得関数を生成する
  *
  * @param client jwksRsaクライアント
- * @return 公開鍵取得関数
+ * @returns 公開鍵取得関数
  */
 const createKeyGetter =
   (client: JwksClient): GetPublicKeyOrSecret =>
@@ -31,7 +31,7 @@ export type Auth0AccessToken = JwtPayload;
  * @param accessToken 検証するアクセストークン
  * @param jwksURL jwks url
  * @param audience オーディエンス
- * @return 検証結果
+ * @returns 検証結果
  */
 export function verifyAccessToken(
   accessToken: string,

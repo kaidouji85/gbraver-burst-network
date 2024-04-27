@@ -44,7 +44,7 @@ export class DynamoBattles {
   /**
    * 項目追加する
    * @param battle 追加する項目
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async put(battle: DynamoBattle): Promise<void> {
     await this.#dynamoDB.put({
@@ -57,7 +57,7 @@ export class DynamoBattles {
    * バトルID指定でアイテムを検索する
    * 検索条件に合致するアイテムがない場合は、nullを返す
    * @param battleID バトルID
-   * @return 検索結果
+   * @returns 検索結果
    */
   async get(battleID: string): Promise<DynamoBattle | null> {
     const result = await this.#dynamoDB.get({
@@ -72,7 +72,7 @@ export class DynamoBattles {
   /**
    * パーティションキー指定で項目を削除する
    * @param battleID バトルID
-   * @return 削除受付したら発火するPromise
+   * @returns 削除受付したら発火するPromise
    */
   async delete(battleID: string): Promise<void> {
     await this.#dynamoDB.delete({

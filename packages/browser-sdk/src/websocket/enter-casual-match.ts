@@ -13,7 +13,7 @@ import { waitUntil } from "./wait-until";
  * @param websocket websocketクライアント
  * @param armdozerId アームドーザID
  * @param pilotId パイロットID
- * @return バトル情報
+ * @returns バトル情報
  */
 export function enterCasualMatch(
   websocket: WebSocket,

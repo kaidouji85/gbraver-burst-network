@@ -12,7 +12,7 @@ export interface CasualMatch {
    *
    * @param armdozerId 選択したアームドーザID
    * @param pilotId 選択したパイロットID
-   * @return バトル
+   * @returns バトル
    */
   startCasualMatch(armdozerId: ArmdozerId, pilotId: PilotId): Promise<Battle>;
 }

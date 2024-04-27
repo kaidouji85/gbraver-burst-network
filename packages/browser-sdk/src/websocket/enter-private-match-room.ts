@@ -17,7 +17,7 @@ import { waitUntil } from "./wait-until";
  * @param roomID ルームID
  * @param armdozerId アームドーザID
  * @param pilotId パイロットID
- * @return 入室結果
+ * @returns 入室結果
  */
 export function enterPrivateMatchRoom(
   websocket: WebSocket,

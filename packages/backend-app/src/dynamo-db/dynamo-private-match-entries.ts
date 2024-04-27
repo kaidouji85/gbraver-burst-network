@@ -38,7 +38,7 @@ export class DynamoPrivateMatchEntries {
   /**
    * ルーム配下のエントリを取得する
    * @param roomID ルームID
-   * @return 取得結果
+   * @returns 取得結果
    */
   async getEntries(
     roomID: PrivateMatchRoomID,
@@ -61,7 +61,7 @@ export class DynamoPrivateMatchEntries {
   /**
    * 項目追加する
    * @param entry 追加する項目
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async put(entry: DynamoPrivateMatchEntry): Promise<void> {
     await this.#dynamoDB.put({
@@ -74,7 +74,7 @@ export class DynamoPrivateMatchEntries {
    * エントリを削除する
    * @param roomID ルームID
    * @param userID ユーザID
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async delete(roomID: PrivateMatchRoomID, userID: UserID): Promise<void> {
     await this.#dynamoDB.delete({

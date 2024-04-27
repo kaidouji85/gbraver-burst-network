@@ -8,7 +8,7 @@ import type { BattleStart } from "./websocket-response";
  * @template X プレイヤー情報のデータ型
  * @param userID 戦闘開始オブジェクトを受け取るユーザのID
  * @param battle バトル情報
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createBattleStart<X extends BattlePlayer>(
   userID: UserID,

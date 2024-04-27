@@ -14,7 +14,7 @@ import { waitUntil } from "./wait-until";
  * @param websocket websocketクライアント
  * @param armdozerId 選択したアームドーザのID
  * @param pilotId 選択したパイロットのID
- * @return レスポンス
+ * @returns レスポンス
  */
 export function createPrivateMatchRoom(
   websocket: WebSocket,

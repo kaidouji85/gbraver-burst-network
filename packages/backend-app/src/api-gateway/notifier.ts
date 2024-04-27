@@ -21,7 +21,7 @@ export class Notifier {
    *
    * @param connectionID コネクションID
    * @param data 送信するデータ
-   * @return メッセージ送信が完了したら発火するPromise
+   * @returns メッセージ送信が完了したら発火するPromise
    */
   async notifyToClient(
     connectionID: string,

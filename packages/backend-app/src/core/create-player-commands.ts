@@ -7,7 +7,7 @@ import { BattleCommand } from "./battle-command";
  * Gブレイバーバーストコアのコマンドを生成する
  * @param battle バトル情報
  * @param command バトルコマンド
- * @return 生成結果、生成できない場合はnullを返す
+ * @returns 生成結果、生成できない場合はnullを返す
  */
 function createPlayerCommand(
   battle: Battle<BattlePlayer>,
@@ -26,7 +26,7 @@ function createPlayerCommand(
  * Gブレイバーバースコアに渡すための、全プレイヤーのコマンドを生成する
  * @param battle バトル情報
  * @param commands すべてのプレイヤーのバトルコマンド
- * @return 生成結果、生成できない場合はnullを返す
+ * @returns 生成結果、生成できない場合はnullを返す
  */
 export function createPlayerCommands(
   battle: Battle<BattlePlayer>,

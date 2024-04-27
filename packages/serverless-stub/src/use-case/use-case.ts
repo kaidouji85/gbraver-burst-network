@@ -12,7 +12,7 @@ export interface UseCase {
   /**
    * ユースケースを実行する
    * @param context コンテクスト
-   * @return ユースケースが完了したら発火するPromise
+   * @returns ユースケースが完了したら発火するPromise
    */
   execute(context: UseCaseContext): Promise<void>;
 }

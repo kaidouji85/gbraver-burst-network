@@ -64,7 +64,7 @@ const battleCommandsFetcher: BattleCommandsFetcher =
 /**
  * 「リクエストボディが不正」でAPIを終了する
  * @param event イベント
- * @return websocket apiに返すデータ
+ * @returns websocket apiに返すデータ
  */
 async function endWithInvalidRequestBody(
   event: WebsocketAPIEvent,
@@ -79,7 +79,7 @@ async function endWithInvalidRequestBody(
 /**
  * 「コマンド入力が完了していない」でAPIを終了する
  * @param event イベント
- * @return websocket apiに返すデータ
+ * @returns websocket apiに返すデータ
  */
 async function endWithNotReadyBattleProgress(
   event: WebsocketAPIEvent,
@@ -94,7 +94,7 @@ async function endWithNotReadyBattleProgress(
 /**
  * 「ゲーム終了」でAPIを終了する
  * @param battleEnd バトル終了情報
- * @return websocket apiに返すデータ
+ * @returns websocket apiに返すデータ
  */
 async function endWithGameEnd(
   battleEnd: BattleEnd,
@@ -121,7 +121,7 @@ async function endWithGameEnd(
 /**
  * 「ゲーム継続」でAPIを終了する
  * @param battleContinue バトル継続情報
- * @return websocket apiに返すデータ
+ * @returns websocket apiに返すデータ
  */
 async function endWithGameContinue(
   battleContinue: BattleContinue,
@@ -150,7 +150,7 @@ async function endWithGameContinue(
  * プレイヤーのコマンドが揃っている場合はバトルを進め、
  * そうでない場合は何もしない
  * @param event イベント
- * @return websocket apiに返すデータ
+ * @returns websocket apiに返すデータ
  */
 export async function battleProgressPolling(
   event: WebsocketAPIEvent,

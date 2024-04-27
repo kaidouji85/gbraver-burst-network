@@ -8,7 +8,7 @@ export interface PrivateMatchCreate {
    * プライベートマッチルームを生成する
    * @param armdozerId 選択したアームドーザのID
    * @param pilotId 選択したパイロットのID
-   * @return 生成したプライベートマッチルームのID
+   * @returns 生成したプライベートマッチルームのID
    */
   createPrivateMatchRoom(
     armdozerId: ArmdozerId,
@@ -26,7 +26,7 @@ export interface PrivateMatchRoom {
 
   /**
    * マッチングが成立するまで待機する
-   * @return バトル
+   * @returns バトル
    */
   waitUntilMatching(): Promise<Battle>;
 }
@@ -39,7 +39,7 @@ export interface PrivateMatchRoomEnter {
    * @param private 入室するルームのID
    * @param armdozerId 選択したアームドーザ
    * @param pilotId 選択したパイロット
-   * @return マッチング結果
+   * @returns マッチング結果
    */
   enterPrivateMatchRoom(
     roomID: PrivateMatchRoomID,

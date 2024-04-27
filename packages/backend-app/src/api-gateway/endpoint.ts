@@ -4,7 +4,7 @@
  * @param apiID API ID
  * @param region AWSのリージョン
  * @param stage API Gatewayのステージ
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createAPIGatewayEndpoint(
   apiID: string,

@@ -51,7 +51,7 @@ const notifier = new Notifier(apiGateway);
 /**
  * プライベートマッチメイクポーリング
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function privateMatchMakePolling(
   event: WebsocketAPIEvent,

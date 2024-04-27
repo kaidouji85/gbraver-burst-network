@@ -17,7 +17,7 @@ export const PongSchema = z.object({
  * 任意のオブジェクトをPingResponseにパースする
  * パースできない場合はnullを返す
  * @param data パース元となるオブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parsePong(data: unknown): Pong | null {
   const result = PongSchema.safeParse(data);

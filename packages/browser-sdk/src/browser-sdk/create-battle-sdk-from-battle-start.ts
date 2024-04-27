@@ -5,7 +5,7 @@ import { BattleSDK } from "./battle-sdk";
  * BattleStartからBattleSDKを生成する
  * @param battleStart BattleStartのデータ
  * @param websocket websocketクライアント
- * @return 生成結果
+ * @returns 生成結果
  */
 export function createBattleSDKFromBattleStart(
   battleStart: BattleStart,

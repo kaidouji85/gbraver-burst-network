@@ -15,7 +15,7 @@ const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
  * Websocket API $connect エントリポイント
  *
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function connect(
   event: WebsocketAPIEvent,

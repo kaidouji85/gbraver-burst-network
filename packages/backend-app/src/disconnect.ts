@@ -52,7 +52,7 @@ const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
  * Websocket API $disconnect エントリポイント
  *
  * @param event イベント
- * @return レスポンス
+ * @returns レスポンス
  */
 export async function disconnect(
   event: WebsocketAPIEvent,
@@ -73,7 +73,7 @@ export async function disconnect(
  * Websocket切断時のクリーンアップを行う
  *
  * @param connection 接続情報
- * @return クリーンアップ完了時に発火するPromise
+ * @returns クリーンアップ完了時に発火するPromise
  */
 async function cleanUp(connection: Connection): Promise<void> {
   const inCasualMatchMaking = async () => {

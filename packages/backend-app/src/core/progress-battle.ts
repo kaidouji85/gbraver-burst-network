@@ -33,7 +33,7 @@ export type BattleEnd = {
 /**
  * プレイヤーからバトル終了後のコネクションステートを生成する
  * @param player プレイヤー
- * @return 生成結果
+ * @returns 生成結果
  */
 const createPostBattleConnection = (player: BattlePlayer): Connection => ({
   connectionId: player.connectionId,
@@ -47,7 +47,7 @@ const createPostBattleConnection = (player: BattlePlayer): Connection => ({
  * バトル情報を更新する
  * @param origin 更新前のバトル情報
  * @param stateHistory 更新後のステートヒストリ
- * @return 更新されたバトル情報
+ * @returns 更新されたバトル情報
  */
 const updateBattle = (
   origin: Battle<BattlePlayer>,
@@ -62,7 +62,7 @@ const updateBattle = (
  * 戦闘を進行する
  * @param battle 戦闘情報
  * @param commands ゲームに参加しているプレイヤーのコマンド
- * @return 戦闘進行結果、進行できない場合はnullを返す
+ * @returns 戦闘進行結果、進行できない場合はnullを返す
  */
 export function progressBattle(
   battle: Battle<BattlePlayer>,

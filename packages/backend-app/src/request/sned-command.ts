@@ -29,7 +29,7 @@ export const SendCommandSchema = z.object({
  * パースできない場合はnullを返す
  *
  * @param data パース元
- * @return パース結果
+ * @returns パース結果
  */
 export function parseSendCommand(data: unknown): SendCommand | null {
   const result = SendCommandSchema.safeParse(data);

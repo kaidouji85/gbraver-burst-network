@@ -38,7 +38,7 @@ export const BattleStartSchema = z.object({
  * 任意のオブジェクトをStartBattleにパースする
  * パースできない場合はnullを返す
  * @param data パース元となる文字列
- * @return パース結果
+ * @returns パース結果
  */
 export function parseBattleStart(data: unknown): BattleStart | null {
   const result = BattleStartSchema.safeParse(data);

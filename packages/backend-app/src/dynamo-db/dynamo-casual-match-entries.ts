@@ -35,7 +35,7 @@ export class DynamoCasualMatchEntries {
    * 項目追加する
    *
    * @param entry 追加する項目
-   * @return 処理が完了したら発火するPromise
+   * @returns 処理が完了したら発火するPromise
    */
   async put(entry: DynamoCasualMatchEntry): Promise<void> {
     await this.#dynamoDB.put({
@@ -48,7 +48,7 @@ export class DynamoCasualMatchEntries {
    * 全項目を取得する
    *
    * @param limit 検索件数の上限
-   * @return 取得結果
+   * @returns 取得結果
    */
   async scan(limit: number): Promise<DynamoCasualMatchEntry[]> {
     const resp = await this.#dynamoDB.scan({
@@ -66,7 +66,7 @@ export class DynamoCasualMatchEntries {
    * パーティションキー指定で項目を削除する
    *
    * @param userID ユーザID
-   * @return 削除受付したら発火するPromise
+   * @returns 削除受付したら発火するPromise
    */
   async delete(userID: string): Promise<void> {
     await this.#dynamoDB.delete({

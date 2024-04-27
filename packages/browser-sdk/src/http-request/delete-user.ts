@@ -3,7 +3,7 @@
  *
  * @param restAPIURL Rest API のURL
  * @param accessToken Auth0 アクセストークン
- * @return 処理が完了したら発火するPromise
+ * @returns 処理が完了したら発火するPromise
  */
 export async function deleteLoggedInUser(
   restAPIURL: string,

@@ -19,7 +19,7 @@ type Result<X extends CasualMatchEntry> = {
  * カジュアルマッチメイクを行う
  * @template X エントリのデータ型
  * @param entries 全エントリ
- * @return マッチメイク結果
+ * @returns マッチメイク結果
  */
 export function casualMatchMake<X extends CasualMatchEntry>(
   entries: X[],

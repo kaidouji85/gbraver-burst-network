@@ -18,7 +18,7 @@ export const BattleEndSchema = z.object({
  * 任意オブジェクトをBattleEndにパースする
  * パースできない場合はnullを返す
  * @param data パース元オブジェクト
- * @return パース結果
+ * @returns パース結果
  */
 export function parseBattleEnd(data: unknown): BattleEnd | null {
   const result = BattleEndSchema.safeParse(data);
