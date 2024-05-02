@@ -100,13 +100,13 @@ npm run build
 #### serverlessデプロイ
 
 ```shell
-./deploy-serverless.sh
+./deploy-serverless.bash
 ```
 
 #### serverless環境削除
 
 ```shell
-./remove-serverless.sh
+./remove-serverless.bash
 ```
 
 #### ECRリポジトリPush
@@ -119,16 +119,16 @@ npm run build
 
 ```shell
 # 通常デプロイ
-./deploy-backend-ecs.sh
+./deploy-backend-ecs.bash
 
 # ホットスワップデプロイ
-./deploy-backend-ecs-with-hotswap.sh
+./deploy-backend-ecs-with-hotswap.bash
 ```
 
 #### バックエンド処理用ECS環境削除
 
 ```shell
-./remove-backend-ecs.sh
+./remove-backend-ecs.bash
 ```
 
 ### AWS CodeBuild/CodePipelineでCI/CDする

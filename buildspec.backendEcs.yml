@@ -27,4 +27,4 @@ phases:
     commands:
       - DOCKER_IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
       - ./push-match-make-container.sh
-      - ./deploy-backend-ecs-with-hotswap.sh
+      - ./deploy-backend-ecs-with-hotswap.bash
