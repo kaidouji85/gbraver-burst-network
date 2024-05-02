@@ -112,7 +112,7 @@ npm run build
 #### ECRリポジトリPush
 
 ```shell
-./push-match-make-container.sh
+./push-match-make-container.bash
 ```
 
 #### バックエンド処理用ECSデプロイ

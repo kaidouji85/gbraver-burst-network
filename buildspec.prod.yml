@@ -27,5 +27,5 @@ phases:
     commands:
       - DOCKER_IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
       - ./deploy-serverless.bash
-      - ./push-match-make-container.sh
+      - ./push-match-make-container.bash
       - ./deploy-backend-ecs.bash
