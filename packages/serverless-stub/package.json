@@ -6,7 +6,7 @@
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "^1.10.5",
     "dotenv": "^16.4.5",
-    "gbraver-burst-core": "^1.27.0"
+    "gbraver-burst-core": "^1.27.1"
   },
   "devDependencies": {
     "codehawk-cli": "^10.1.0",
@@ -19,7 +19,7 @@
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
     "ts-loader": "^9.5.1",
-    "typescript-eslint": "^7.7.1",
+    "typescript-eslint": "^7.8.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
