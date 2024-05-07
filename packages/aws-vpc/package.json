@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/aws-vpc",
   "description": "gbraver burst backend vpc.",
-  "version": "1.10.5",
+  "version": "1.11.0",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
   },
@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/node": "20.12.8",
+    "@types/node": "20.12.10",
     "aws-cdk": "2.140.0",
     "eslint": "^8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
