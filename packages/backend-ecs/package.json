@@ -6,7 +6,7 @@
     "backend-ecs": "bin/backend-ecs.js"
   },
   "dependencies": {
-    "@types/ramda": "^0.29.12",
+    "@types/ramda": "^0.30.0",
     "aws-cdk-lib": "^2.140.0",
     "constructs": "^10.3.0",
     "dotenv": "^16.4.5",
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/node": "20.12.8",
+    "@types/node": "20.12.10",
     "@types/uuid": "^9.0.8",
     "aws-cdk": "2.140.0",
     "eslint": "^8.57.0",

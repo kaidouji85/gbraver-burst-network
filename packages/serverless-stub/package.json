@@ -4,9 +4,9 @@
   "version": "1.10.5",
   "author": "Y.Takeuchi",
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^1.10.5",
+    "@gbraver-burst-network/browser-sdk": "^1.10.6",
     "dotenv": "^16.4.5",
-    "gbraver-burst-core": "^1.27.1"
+    "gbraver-burst-core": "^1.28.0"
   },
   "devDependencies": {
     "codehawk-cli": "^10.1.0",
