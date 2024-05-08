@@ -221,9 +221,9 @@ AWS Parameter Storeに以下の値をセットします。
 
 ## パッケージ公開
 ```shell
-npx turbo version x.x.x --no-push
 npm run build
-npx turbo publish from-package -y
+npx changeset x.x.x
+npx changeset publish
 ```
 
 ## その他コマンド
