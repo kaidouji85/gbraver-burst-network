@@ -1,13 +1,29 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build": {},
-    "clean": {},
-    "code-format": {},
-    "code-format-check": {},
-    "detect-circular": {},
-    "lint": {},
-    "lint-fix": {},
-    "test": {}
+    "build": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    },
+    "code-format": {
+      "cache": false
+    },
+    "code-format-check": {
+      "cache": false
+    },
+    "detect-circular": {
+      "cache": false
+    },
+    "lint": {
+      "cache": false
+    },
+    "lint-fix": {
+      "cache": false
+    },
+    "test": {
+      "cache": false
+    }
   }
 }
