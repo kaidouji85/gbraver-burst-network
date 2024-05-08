@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {},
+    "clean": {},
+    "code-format": {},
+    "code-format-check": {},
+    "detect-circular": {},
+    "lint": {},
+    "lint-fix": {},
+    "test": {}
+  }
+}
