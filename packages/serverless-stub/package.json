@@ -4,7 +4,7 @@
   "version": "1.11.0",
   "author": "Y.Takeuchi",
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^1.10.6",
+    "@gbraver-burst-network/browser-sdk": "*",
     "dotenv": "^16.4.5",
     "gbraver-burst-core": "^1.28.0"
   },
