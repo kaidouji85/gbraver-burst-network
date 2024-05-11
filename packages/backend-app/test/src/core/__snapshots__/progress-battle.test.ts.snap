@@ -67,6 +67,7 @@ exports[`バトル進行の結果、バトル終了となる 1`] = `
             "battery": 1,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -139,6 +140,7 @@ exports[`バトル進行の結果、バトル終了となる 1`] = `
             "battery": 1,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -209,6 +211,7 @@ exports[`バトル進行の結果、バトル終了となる 1`] = `
             "battery": 1,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -275,6 +278,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
         "armdozer": {
           "burst": {
             "recoverBattery": 5,
+            "turnStartBatteryCorrect": 1,
             "type": "RecoverBattery",
           },
           "id": "SHIN_BRAVER",
@@ -340,6 +344,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -480,6 +485,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -551,6 +557,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -623,6 +630,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -694,6 +702,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -761,6 +770,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -828,6 +838,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -960,6 +971,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
               "battery": 3,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -1035,6 +1047,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -1107,6 +1120,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -1178,6 +1192,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -1245,6 +1260,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -1312,6 +1328,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
@@ -1444,6 +1461,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
             "battery": 3,
             "burst": {
               "recoverBattery": 5,
+              "turnStartBatteryCorrect": 1,
               "type": "RecoverBattery",
             },
             "effects": [],
