@@ -10,6 +10,7 @@ exports[`正しくプライベートマッチを開始できる 1`] = `
         "armdozer": {
           "burst": {
             "recoverBattery": 5,
+            "turnStartBatteryCorrect": 1,
             "type": "RecoverBattery",
           },
           "id": "SHIN_BRAVER",
@@ -71,6 +72,7 @@ exports[`正しくプライベートマッチを開始できる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -210,6 +212,7 @@ exports[`正しくプライベートマッチを開始できる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -276,6 +279,7 @@ exports[`正しくプライベートマッチを開始できる 1`] = `
             "armdozer": {
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "id": "SHIN_BRAVER",
@@ -337,6 +341,7 @@ exports[`正しくプライベートマッチを開始できる 1`] = `
             "armdozer": {
               "burst": {
                 "recoverBattery": 5,
+                "turnStartBatteryCorrect": 1,
                 "type": "RecoverBattery",
               },
               "id": "SHIN_BRAVER",
