@@ -1,12 +1,12 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
   "description": "gbraver burst network stub.",
-  "version": "1.10.5",
+  "version": "1.11.0",
   "author": "Y.Takeuchi",
   "dependencies": {
-    "@gbraver-burst-network/browser-sdk": "^1.10.5",
+    "@gbraver-burst-network/browser-sdk": "*",
     "dotenv": "^16.4.5",
-    "gbraver-burst-core": "^1.27.0"
+    "gbraver-burst-core": "^1.29.0"
   },
   "devDependencies": {
     "codehawk-cli": "^10.1.0",
@@ -17,9 +17,9 @@
     "madge": "^7.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "3.2.5",
-    "rimraf": "^5.0.5",
+    "rimraf": "^5.0.6",
     "ts-loader": "^9.5.1",
-    "typescript-eslint": "^7.7.1",
+    "typescript-eslint": "^7.8.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"

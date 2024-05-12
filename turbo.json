@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    },
+    "code-format": {
+      "cache": false
+    },
+    "code-format-check": {
+      "cache": false
+    },
+    "detect-circular": {
+      "cache": false
+    },
+    "lint": {
+      "cache": false
+    },
+    "lint-fix": {
+      "cache": false
+    },
+    "test": {
+      "cache": false
+    }
+  }
+}

@@ -25,4 +25,4 @@ phases:
       - npm ci
   build:
     commands:
-      - ./deploy-serverless.sh
+      - ./deploy-serverless.bash

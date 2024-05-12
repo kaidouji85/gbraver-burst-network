@@ -13,4 +13,4 @@ phases:
       - npm ci
   build:
     commands:
-      - ./remove-backend-ecs.sh
+      - ./remove-backend-ecs.bash

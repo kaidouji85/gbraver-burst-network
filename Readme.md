@@ -1,7 +1,7 @@
 # Gブレイバーバースト ネットワーク
 
 本リポジトリは、Gブレイバーバーストのネットワーク関連モジュールです。
-リポジトリ構造は標準的な[lerna monorepo](https://lerna.js.org) となっています。
+リポジトリは[npm workspace](https://docs.npmjs.com/cli/v7/using-npm/workspaces)、[turborepo](https://turbo.build/repo/docs/handbook)を用いたモノレポ構造となっています。
 
 ## コマンド例のカレントディレクトリについて
 特に断りがない限り、本書のコマンド例のカレントディレクトリは```本リポジトリをcloneした場所の直下```であるとします。
@@ -100,35 +100,35 @@ npm run build
 #### serverlessデプロイ
 
 ```shell
-./deploy-serverless.sh
+./deploy-serverless.bash
 ```
 
 #### serverless環境削除
 
 ```shell
-./remove-serverless.sh
+./remove-serverless.bash
 ```
 
 #### ECRリポジトリPush
 
 ```shell
-./push-match-make-container.sh
+./push-match-make-container.bash
 ```
 
 #### バックエンド処理用ECSデプロイ
 
 ```shell
 # 通常デプロイ
-./deploy-backend-ecs.sh
+./deploy-backend-ecs.bash
 
 # ホットスワップデプロイ
-./deploy-backend-ecs-with-hotswap.sh
+./deploy-backend-ecs-with-hotswap.bash
 ```
 
 #### バックエンド処理用ECS環境削除
 
 ```shell
-./remove-backend-ecs.sh
+./remove-backend-ecs.bash
 ```
 
 ### AWS CodeBuild/CodePipelineでCI/CDする
@@ -221,18 +221,13 @@ AWS Parameter Storeに以下の値をセットします。
 
 ## パッケージ公開
 ```shell
-npx lerna version x.x.x --no-push
 npm run build
-npx lerna publish from-package -y
+npx changeset x.x.x
+npx changeset publish
 ```
 
 ## その他コマンド
 ```shell
-# packages配下のnpm auditを一括で修正
-# 本コマンドの実行にはlerna-auditが必要
-# https://www.npmjs.com/package/lerna-audit
-lerna-audit
-
 # package.jsonフォーマット
 # 本コマンドの実行にはfixpackが必要
 # https://www.npmjs.com/package/fixpack

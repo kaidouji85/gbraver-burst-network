@@ -1,14 +1,5 @@
-#!/bin/sh
-
-if [ -z "$STAGE" ] ||
-  [ -z "$DOCKER_USER" ] ||
-  [ -z "$DOCKER_TOKEN" ] ||
-  [ -z "$AWS_DEFAULT_REGION" ] ||
-  [ -z "$MATCH_MAKE_ECR_REPOSITORY_NAME" ] ||
-  [ -z "$DOCKER_IMAGE_TAG" ]; then
-  echo 'required environment variables are not defined'
-  exit 1
-fi
+#!/bin/bash
+set -Ceu
 
 OWN_PATH=$(cd "$(dirname "${0}")" && pwd)
 cd "${OWN_PATH}/packages/backend-app" || exit
