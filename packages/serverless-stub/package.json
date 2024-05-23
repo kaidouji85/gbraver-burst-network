@@ -17,9 +17,9 @@
     "madge": "^7.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "3.2.5",
-    "rimraf": "^5.0.6",
+    "rimraf": "^5.0.7",
     "ts-loader": "^9.5.1",
-    "typescript-eslint": "^7.8.0",
+    "typescript-eslint": "^7.10.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
