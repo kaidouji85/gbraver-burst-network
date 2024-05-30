@@ -143,7 +143,9 @@ npm run build
 
 #### 事前作業
 * serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する
-* AWSで作業用IAMユーザのアクセスキーを生成する
+* AWSで作業用IAMユーザーのアクセスキーを生成する
+  * 上記IAMユーザーには権限設定は不要
+  * CIでAWSにアクセスする作業は行っておらず、serverless cliのAWS認証にのみアクセスキーを利用しているため
 
 #### Secrets設定
 [ここ](https://docs.github.com/ja/actions/security-guides/using-secrets-in-github-actions)を参考にGitHub ActionsのSecretsを設定する。
