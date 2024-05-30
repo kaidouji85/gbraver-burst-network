@@ -142,7 +142,8 @@ npm run build
 ### GitHub ActionsでCIする
 
 #### 事前作業
-* serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する。
+* serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する
+* AWSで作業用IAMユーザのアクセスキーを生成する
 
 #### Secrets設定
 [ここ](https://docs.github.com/ja/actions/security-guides/using-secrets-in-github-actions)を参考にGitHub ActionsのSecretsを設定する。
@@ -151,6 +152,8 @@ npm run build
 | シークレット名 | 値 |
 | ------------- | - |
 | SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey |
+| AWS_ACCESS_KEY_ID | AWS IMAユーザー アクセスキーID |
+| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー |
 
 ### AWS CodeBuild/CodePipelineでCDする
 
@@ -174,7 +177,7 @@ AwS Secret Managerに以下をセットする。
 | /GbraverBurst/dev/auth0 | [AWS Secret Manager 作成](#7-aws-secret-manager-作成)を参照 |
 
 ##### AWS Parameter Storeを設定
-AWS Parameter Storeに以下の値をセットします。
+AWS Parameter Storeに以下の値をセットする。
 
 | 名前                                                   | 種類           | 値                                                                    |
 |------------------------------------------------------|--------------|----------------------------------------------------------------------|
@@ -194,7 +197,7 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/dev/serverlessAccessKey | SecureString | serverless dashboardから発行したaccesskey |
 
 ##### CodeBuild
-以下のCodeBuildプロジェクトを生成します
+以下のCodeBuildプロジェクトを生成する。
 
 | # | 概要 | BuildSpec | ビルド環境 |
 |---|--| --------- | -------- |
@@ -214,10 +217,10 @@ AwS Secret Managerに以下をセットします。
 
 | シークレット名 | 設定内容 |
 | ------------- | -------- |
-| /GbraverBurst/prod/auth0 | [事前作業](#pre-required-task)9.を参照 
+| /GbraverBurst/prod/auth0 | [AWS Secret Manager 作成](#7-aws-secret-manager-作成)を参照 | 
 
 ##### AWS Parameter Storeを設定
-AWS Parameter Storeに以下の値をセットします。
+AWS Parameter Storeに以下の値をセットする。
 
 | 名前                                                    | 種類            | 値                                                                    |
 |-------------------------------------------------------|---------------|----------------------------------------------------------------------|
@@ -237,7 +240,7 @@ AWS Parameter Storeに以下の値をセットします。
 | /GbraverBurst/prod/serverlessAccessKey | SecureString | serverless dashboardから発行したaccesskey |
 
 ##### Code Build
-以下のCode Buildプロジェクトを生成します
+以下のCode Buildプロジェクトを生成する。
 
 | #        | 概要           | BuildSpec                           | ビルド環境 |
 |----------|--------------|-------------------------------------| ------- |
