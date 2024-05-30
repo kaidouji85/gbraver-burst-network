@@ -7,6 +7,7 @@ on:
     branches: [ master, develop ]
 env:
   NODE_JS_VERSION: 20.x
+  SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 jobs:
   test:
     runs-on: ubuntu-latest
