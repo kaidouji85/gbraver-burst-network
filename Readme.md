@@ -139,7 +139,20 @@ npm run build
 ./remove-backend-ecs.bash
 ```
 
-### AWS CodeBuild/CodePipelineでCI/CDする
+### GitHub ActionsでCIする
+
+#### 事前作業
+* serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する。
+
+#### Secrets設定
+[ここ](https://docs.github.com/ja/actions/security-guides/using-secrets-in-github-actions)を参考にGitHub ActionsのSecretsを設定する。
+以下が設定内容である。
+
+| シークレット名 | 値 |
+| ------------- | - |
+| SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey |
+
+### AWS CodeBuild/CodePipelineでCDする
 
 #### ビルド環境について
 以下がGブレイバーバーストで利用するビルド環境である。
