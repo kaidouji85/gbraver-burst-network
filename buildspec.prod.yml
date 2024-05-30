@@ -16,6 +16,7 @@ env:
     DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName
     VPC_SUBNET_COUNT: /GbraverBurst/prod/vpcSubnetCount
+    SERVERLESS_ACCESS_KEY: /GbraverBurst/prod/serverlessAccessKey
 phases:
   install:
     runtime-versions:
