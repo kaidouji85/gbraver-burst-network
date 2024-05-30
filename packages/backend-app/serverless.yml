@@ -1,6 +1,5 @@
 service: ${env:SERVICE, "gbraver-burst-sls-dev"}
-frameworkVersion: '3'
-useDotenv: true
+frameworkVersion: '4'
 
 custom:
   connections: ${self:service}__${sls:stage}__connections
@@ -9,9 +8,6 @@ custom:
   battles: ${self:service}__${sls:stage}__battles
   privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
   privateMatchEntries: ${self:service}__${sls:stage}__private-match-entries
-
-plugins:
-  - serverless-webpack
 
 provider:
   name: aws
