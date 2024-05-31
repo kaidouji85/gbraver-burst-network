@@ -1,6 +1,7 @@
 *.js
 !jest.config.js
 !eslint.config.js
+!.dependency-cruiser.js
 *.d.ts
 node_modules
 .env

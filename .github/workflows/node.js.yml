@@ -23,7 +23,6 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run code-format-check
-    - run: npm run detect-circular
     - run: npm test
   build:
     runs-on: ubuntu-latest
@@ -34,3 +33,4 @@ jobs:
           node-version: ${{ env.NODE_JS_VERSION }}
       - run: npm ci
       - run: npm run build
+      - run: npm run dependency-check
