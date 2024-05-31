@@ -23,7 +23,7 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run code-format-check
-    - run: npm run detect-circular
+    - run: npm run dependency-check
     - run: npm test
   build:
     runs-on: ubuntu-latest
