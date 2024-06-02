@@ -9,7 +9,6 @@
     "gbraver-burst-core": "^1.29.0"
   },
   "devDependencies": {
-    "codehawk-cli": "^10.1.0",
     "dependency-cruiser": "^16.3.2",
     "eslint": "^8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
@@ -30,7 +29,6 @@
   "scripts": {
     "build": "run-s clean transpile",
     "clean": "rimraf build",
-    "code-analysis": "codehawk src",
     "code-format": "prettier --write src",
     "code-format-check": "prettier --check src",
     "dependency-check": "depcruise src",
