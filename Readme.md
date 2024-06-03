@@ -264,3 +264,6 @@ npx changeset publish
 # https://www.npmjs.com/package/fixpack
 fixpack
 ```
+
+#License
+MIT

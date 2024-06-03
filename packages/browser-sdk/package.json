@@ -38,7 +38,7 @@
     "gbraver-burst",
     "sdk"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/src/index.js",
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk",
   "scripts": {

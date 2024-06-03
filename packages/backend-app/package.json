@@ -38,7 +38,7 @@
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   },
-  "license": "ISC",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "build": "run-s clean transpile",
