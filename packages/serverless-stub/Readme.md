@@ -44,3 +44,6 @@ npm audit --omit=dev
 # https://www.npmjs.com/package/fixpack
 fixpack
 ```
+
+## License
+MIT
