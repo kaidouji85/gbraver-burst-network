@@ -14,7 +14,7 @@
     "code-format-check": {
       "cache": false
     },
-    "detect-circular": {
+    "dependency-check": {
       "cache": false
     },
     "lint": {

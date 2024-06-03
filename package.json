@@ -2,7 +2,7 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
+    "@changesets/cli": "^2.27.5",
     "turbo": "^1.13.3",
     "typescript": "^5.4.5"
   },
@@ -12,7 +12,7 @@
     "clean": "turbo run clean",
     "code-format": "turbo run code-format",
     "code-format-check": "turbo run code-format-check",
-    "detect-circular": "turbo run detect-circular",
+    "dependency-check": "turbo run dependency-check",
     "lint": "turbo run lint",
     "lint-fix": "turbo run lint-fix",
     "test": "turbo run test"

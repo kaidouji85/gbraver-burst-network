@@ -1,6 +1,5 @@
 service: ${env:SERVICE, "gbraver-burst-sls-dev"}
-frameworkVersion: '3'
-useDotenv: true
+frameworkVersion: '4'
 
 custom:
   connections: ${self:service}__${sls:stage}__connections
@@ -9,9 +8,6 @@ custom:
   battles: ${self:service}__${sls:stage}__battles
   privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
   privateMatchEntries: ${self:service}__${sls:stage}__private-match-entries
-
-plugins:
-  - serverless-webpack
 
 provider:
   name: aws
@@ -62,13 +58,13 @@ provider:
             - 'dynamodb:Scan'
             - 'dynamodb:BatchWrite*'
           Resource:
-            - Fn::GetAtt: [ConnectionsTable, Arn]
-            - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
-            - Fn::GetAtt: [BattleCommandsTable, Arn]
-            - Fn::GetAtt: [BattlesTable, Arn]
-            - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
-            - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
-            - Fn::Join: ['/', ["Fn::GetAtt": [ PrivateMatchRoomsTable, Arn ], 'index', 'roomID']]
+            - Fn::GetAtt: [ ConnectionsTable, Arn ]
+            - Fn::GetAtt: [ CasualMatchEntriesTable, Arn ]
+            - Fn::GetAtt: [ BattleCommandsTable, Arn ]
+            - Fn::GetAtt: [ BattlesTable, Arn ]
+            - Fn::GetAtt: [ PrivateMatchRoomsTable, Arn ]
+            - Fn::GetAtt: [ PrivateMatchEntriesTable, Arn ]
+            - Fn::Join: [ '/', [ "Fn::GetAtt": [ PrivateMatchRoomsTable, Arn ], 'index', 'roomID' ] ]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -82,10 +78,6 @@ provider:
             - 'secretsmanager:ListSecretVersionIds'
           Resource:
             - "arn:aws:secretsmanager:*:*:secret:*"
-
-  logs:
-    httpApi: true
-    websocket: true
 
 functions:
   webSocketAPIAuthorizer:
@@ -231,7 +223,7 @@ resources:
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
-          WriteCapacityUnits: 1  
+          WriteCapacityUnits: 1
   Outputs:
     WebsocketApiId:
       Description: "id of websocket api gateway"
@@ -242,24 +234,24 @@ resources:
     ConnectionsTableArn:
       Description: "arn of connections table"
       Value:
-        Fn::GetAtt: [ConnectionsTable, Arn]
+        Fn::GetAtt: [ ConnectionsTable, Arn ]
       Export:
         Name: ${self:service}:${sls:stage}:ConnectionsTableArn
     CasualMatchEntriesTableArn:
       Description: "arn of casual match entries table"
       Value:
-        Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+        Fn::GetAtt: [ CasualMatchEntriesTable, Arn ]
       Export:
         Name: ${self:service}:${sls:stage}:CasualMatchEntriesTableArn
     BattlesTableArn:
       Description: "arn of battles table"
       Value:
-        Fn::GetAtt: [BattlesTable, Arn]
+        Fn::GetAtt: [ BattlesTable, Arn ]
       Export:
         Name: ${self:service}:${sls:stage}:BattlesTableArn
     BattleCommandsTableArn:
       Description: "arn of battle commands table"
       Value:
-        Fn::GetAtt: [BattleCommandsTable, Arn]
+        Fn::GetAtt: [ BattleCommandsTable, Arn ]
       Export:
         Name: ${self:service}:${sls:stage}:BattleCommandsTableArn
