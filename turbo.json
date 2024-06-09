@@ -5,28 +5,36 @@
       "dependsOn": [
         "^build"
       ],
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "code-format": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "code-format-check": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "dependency-check": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "lint": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "lint-fix": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     },
     "test": {
-      "cache": false
+      "cache": false,
+      "env": [ "*" ]
     }
   }
 }
