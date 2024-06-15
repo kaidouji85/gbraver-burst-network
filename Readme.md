@@ -252,8 +252,11 @@ AWS Parameter Storeに以下の値をセットする。
 
 ## パッケージ公開
 ```shell
+# 画面の指示に従い、変更内容を記入する
+npx changeset
+npx changeset version
+
 npm run build
-npx changeset x.x.x
 npx changeset publish
 ```
 
@@ -264,3 +267,6 @@ npx changeset publish
 # https://www.npmjs.com/package/fixpack
 fixpack
 ```
+
+#License
+MIT

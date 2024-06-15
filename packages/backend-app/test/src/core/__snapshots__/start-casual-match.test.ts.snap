@@ -10,7 +10,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
         "armdozer": {
           "burst": {
             "recoverBattery": 5,
-            "turnStartBatteryCorrect": 1,
+            "turnStartBatteryCorrect": 2,
             "type": "RecoverBattery",
           },
           "id": "SHIN_BRAVER",
@@ -74,7 +74,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
-                "turnStartBatteryCorrect": 1,
+                "turnStartBatteryCorrect": 2,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -216,7 +216,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
               "battery": 5,
               "burst": {
                 "recoverBattery": 5,
-                "turnStartBatteryCorrect": 1,
+                "turnStartBatteryCorrect": 2,
                 "type": "RecoverBattery",
               },
               "effects": [],
@@ -285,7 +285,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
             "armdozer": {
               "burst": {
                 "recoverBattery": 5,
-                "turnStartBatteryCorrect": 1,
+                "turnStartBatteryCorrect": 2,
                 "type": "RecoverBattery",
               },
               "id": "SHIN_BRAVER",
@@ -349,7 +349,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
             "armdozer": {
               "burst": {
                 "recoverBattery": 5,
-                "turnStartBatteryCorrect": 1,
+                "turnStartBatteryCorrect": 2,
                 "type": "RecoverBattery",
               },
               "id": "SHIN_BRAVER",
