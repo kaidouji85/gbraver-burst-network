@@ -13,9 +13,9 @@ import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
 import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
 import type { UseCase } from "./use-case/use-case";
 
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
-const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
+const COGNITO_DOMAIN = process.env.COGNITO_DOMAIN ?? "";
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
+const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
 const REST_API_URL = process.env.REST_API_URL ?? "";
 const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? "";
 
@@ -24,9 +24,9 @@ window.onload = async () => {
     window.location.origin,
     REST_API_URL,
     WEBSOCKET_API_URL,
-    AUTH0_DOMAIN,
-    AUTH0_CLIENT_ID,
-    AUTH0_AUDIENCE,
+    COGNITO_DOMAIN,
+    COGNITO_CLIENT_ID,
+    COGNITO_AUDIENCE,
   );
   browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);
