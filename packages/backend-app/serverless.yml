@@ -11,6 +11,8 @@ custom:
 
 provider:
   name: aws
+  logs:
+    websocket: true
   runtime: nodejs20.x
   region: ap-northeast-1
   httpApi:
@@ -61,14 +63,6 @@ provider:
             - 'execute-api:ManageConnections'
           Resource:
             - 'arn:aws:execute-api:*:*:**/@connections/*'
-        - Effect: Allow
-          Action:
-            - 'secretsmanager:GetResourcePolicy'
-            - 'secretsmanager:GetSecretValue'
-            - 'secretsmanager:DescribeSecret'
-            - 'secretsmanager:ListSecretVersionIds'
-          Resource:
-            - "arn:aws:secretsmanager:*:*:secret:*"
 
 functions:
   webSocketAPIAuthorizer:

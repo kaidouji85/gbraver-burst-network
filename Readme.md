@@ -36,9 +36,15 @@ AWSでマッチメイク用ECRリポジトリを作成する。
 
 [ここ](https://docs.docker.com/docker-hub/access-tokens/)を参考に、Docker Hubのアクセストークンを発行する。
 
-### 4. auth0 API作成
+### 4. API GatewayがCloud Watch Logsに書き込むためのIAM Roleを作成
+以下を参考に、API GatewayがCloud Watch Logsに書き込むためのIAM Roleを作成する。
+Role名は「serverlessApiGatewayCloudWatchRole」とすること。
 
-// TODO 4 - 5をCognito系手順に書き換える
+https://dev.classmethod.jp/articles/tsnote-apigw-what-to-do-when-cloudwatch-logs-role-arn-must-be-set-in-account-settings-to-enable-logging-occurs-with-api-gateway/
+
+### 5. auth0 API作成
+
+// TODO 5 - 6をCognito系手順に書き換える
 [ここ](https://auth0.com/docs/get-started/auth0-overview/set-up-apis)を参考に、auth0 APIを作成する。
 作成条件は、以下の通り。
 
@@ -46,7 +52,7 @@ AWSでマッチメイク用ECRリポジトリを作成する。
 * Identifier -> 任意
 * Signing Algorithm -> RS256
 
-### 5. 通常機能用auth0 Application作成
+### 6. 通常機能用auth0 Application作成
 
 [ここ](https://auth0.com/docs/get-started/create-apps)を参考に、通常機能用auth0のauth0 Applicationを作成する。
 作成条件は、以下の通り。
@@ -56,37 +62,6 @@ AWSでマッチメイク用ECRリポジトリを作成する。
 * Allowed Callback URLs -> フロントエンド公開URL
 * Allowed Logout URLs -> フロントエンド公開URL
 * Allowed Web Origins -> フロントエンド公開URL
-
-### 6. 管理機能用auth0 Application作成
-
-// TODO Cognito移行後は削除
-[ここ](https://auth0.com/docs/get-started/create-apps)を参考に、管理機能用のauth0 Applicationを作成する。
-作成条件は、以下の通り。
-
-* Name -> 任意
-* Choose an application type -> Machine to Machine Applications
-* Select an API... -> Auth0 Management API
-* Permissions
-    * read:users
-    * update:users
-    * delete:users
-    * update:users_app_metadata
-    * delete:users_app_metadata
-    * create:users_app_metadata
-    * read:logs_users
-
-### 7. AWS Secret Manager 作成
-
-// TODO Cognito移行後は削除
-
-以下条件でAWS Secret Managerを作成する
-
-* シークレットのタイプ -> その他のシークレットタイプ
-* シークレットの値
-  | シークレットキー | シークレットの値 |
-  | --------------- | -------------- |
-  | auth0UserManagementAppClientSecret | [6. 管理機能用auth0 Application作成](#6-管理機能用auth0-application作成)
-  で作成したAuth0 Applicationのclient secretを記載する |
 
 ## 環境構築方法
 
