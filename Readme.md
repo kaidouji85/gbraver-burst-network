@@ -111,20 +111,20 @@ npm run build
 
 ローカル環境に以下の環境変数を定義する。
 
-| 環境変数名                          | 記載内容                                                                                                                    |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                                                      |
-| STAGE                          | デプロイする環境のステージ名を記入する                                                                                                     |
-| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                                                            |
-| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                                                      |
-| COGNITO_JWKS_URL               | cognitoのjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
-| COGNITO_AUDIENCE               | [4. auth0 API作成](#4-auth0-api作成) で作成したAuth0 APIのIdentifierを記載する                                                         |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                                                      |
-| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                  |
-| DOCKER_USER                    | Docker Hubのユーザ名                                                                                                         |
-| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                       |
-| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                          |
-| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                                           |                                                                                                                      |
+| 環境変数名                          | 記載内容                                                                              |
+|--------------------------------|-----------------------------------------------------------------------------------|
+| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                |
+| STAGE                          | デプロイする環境のステージ名を記入する                                                               |
+| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                      |
+| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                |
+| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                 |
+| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                  |
+| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                |
+| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                            |
+| DOCKER_USER                    | Docker Hubのユーザ名                                                                   |
+| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照 |
+| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                    |
+| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                     |                                                                                                                      |
 
 #### serverlessデプロイ
 
@@ -215,8 +215,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#env-config) STAGE を参照                          |
 | /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                   |
 | /GbraverBurst/dev/testAllowOrigin            | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照              |
-| /GbraverBurst/dev/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_JWKS_URL を参照               |
-| /GbraverBurst/dev/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_AUDIENCE を参照               |
+| /GbraverBurst/dev/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
+| /GbraverBurst/dev/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
 | /GbraverBurst/dev/dockerUser                 | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                    |
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                   |
@@ -260,8 +260,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#env-config) STAGE を参照                          |
 | /GbraverBurst/prod/allowOrigin                | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                   |
 | /GbraverBurst/prod/testAllowOrigin            | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照              |
-| /GbraverBurst/prod/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_JWKS_URL を参照               |
-| /GbraverBurst/prod/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_AUDIENCE を参照               |
+| /GbraverBurst/prod/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
+| /GbraverBurst/prod/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
 | /GbraverBurst/prod/dockerUser                 | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                    |
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                   |

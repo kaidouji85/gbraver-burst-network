@@ -5,8 +5,8 @@ env:
     STAGE: /GbraverBurst/prod/stage
     ALLOW_ORIGIN: /GbraverBurst/prod/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/prod/testAllowOrigin
-    COGNITO_JWKS_URL: /GbraverBurst/prod/auth0JwksUrl
-    COGNITO_AUDIENCE: /GbraverBurst/prod/auth0Audience
+    COGNITO_USER_POOL_ID: /GbraverBurst/prod/auth0JwksUrl
+    COGNITO_CLIENT_ID: /GbraverBurst/prod/auth0Audience
     DOCKER_USER: /GbraverBurst/prod/dockerUser
     DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName

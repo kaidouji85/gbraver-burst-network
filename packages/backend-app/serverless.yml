@@ -35,8 +35,8 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
-    COGNITO_JWKS_URL: ${env:COGNITO_JWKS_URL, ''}
-    COGNITO_AUDIENCE: ${env:COGNITO_AUDIENCE, ''}
+    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID, ''}
+    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID, ''}
   iam:
     role:
       statements:

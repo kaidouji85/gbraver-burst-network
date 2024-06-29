@@ -15,7 +15,6 @@ import type { UseCase } from "./use-case/use-case";
 
 const COGNITO_DOMAIN = process.env.COGNITO_DOMAIN ?? "";
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
-const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
 const REST_API_URL = process.env.REST_API_URL ?? "";
 const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? "";
 
@@ -26,7 +25,7 @@ window.onload = async () => {
     WEBSOCKET_API_URL,
     COGNITO_DOMAIN,
     COGNITO_CLIENT_ID,
-    COGNITO_AUDIENCE,
+    "", // TODO パラメータを正しく作る
   );
   browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);

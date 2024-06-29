@@ -5,11 +5,11 @@ import {
   successAuthorize,
 } from "./lambda/authorizer-response";
 
-/** cognito JWKSのURL */
-const COGNITO_JWKS_URL = process.env.COGNITO_JWKS_URL ?? "";
+/** cognito ユーザープールID */
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID ?? "";
 
-/** cognito Audience */
-const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
+/** cognito クライアントID */
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
 
 /**
  * オーサライザ
@@ -20,8 +20,8 @@ export async function authorizer(
   event: AuthorizerEvent,
 ): Promise<AuthorizerResponse> {
   const token = await verifyAccessTokenFromCognito(
-    COGNITO_JWKS_URL,
-    COGNITO_AUDIENCE,
+    COGNITO_USER_POOL_ID,
+    COGNITO_CLIENT_ID,
     event.queryStringParameters.token,
   );
   const principalId = token.sub ?? "";

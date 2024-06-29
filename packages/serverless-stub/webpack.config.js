@@ -43,7 +43,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.COGNITO_DOMAIN': JSON.stringify(process.env.COGNITO_DOMAIN),
       'process.env.COGNITO_CLIENT_ID': JSON.stringify(process.env.COGNITO_CLIENT_ID),
-      'process.env.COGNITO_AUDIENCE': JSON.stringify(process.env.COGNITO_AUDIENCE),
       'process.env.REST_API_URL': JSON.stringify(process.env.REST_API_URL),
       'process.env.WEBSOCKET_API_URL': JSON.stringify(process.env.WEBSOCKET_API_URL),
     })
