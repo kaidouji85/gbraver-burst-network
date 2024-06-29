@@ -1,4 +1,4 @@
-import { verifyAccessToken } from "./access-token/verify-access-token";
+import { verifyAccessTokenFromCognito } from "./cognito/verify-access-token";
 import { AuthorizerEvent } from "./lambda/authorizer-event";
 import {
   AuthorizerResponse,
@@ -19,10 +19,10 @@ const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
 export async function authorizer(
   event: AuthorizerEvent,
 ): Promise<AuthorizerResponse> {
-  const token = await verifyAccessToken(
-    event.queryStringParameters.token,
+  const token = await verifyAccessTokenFromCognito(
     COGNITO_JWKS_URL,
     COGNITO_AUDIENCE,
+    event.queryStringParameters.token,
   );
   const principalId = token.sub ?? "";
   const resource: string = event.methodArn;

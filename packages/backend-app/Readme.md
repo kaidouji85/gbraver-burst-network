@@ -49,19 +49,13 @@ npm install -g wscat
 # https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html 
 API_URL=<AWS APIGatewayのURL>
 
-# 以下URLを参考にauth0のアクセストークンを取得する
-# https://auth0.com/docs/tokens/access-tokens/get-access-tokens
-ACCESS_TOKEN=<auth0 access token>
+# cognitoのアクセストークンを取得する
+# 以下リポジトリのサンドボックスから、サインインユーザーのアクセストークンを取得することができる
+# https://github.com/kaidouji85/cognito-spa
+ACCESS_TOKEN=<access token>
 wscat -c "$API_URL?token=$ACCESS_TOKEN"
 {"action":"ping"}
 -> サーバからメッセージが返される
-```
-
-#### RestAPI 動作確認
-```shell
-API_URL=<AWS APIGatewayのURL>
-ACCESS_TOKEN=<auth0 access token>
-curl -X DELETE -H "Authorization: Bearer ${ACCESS_TOKEN}" "${API_URL}"
 ```
 
 ### マッチメイクECS
