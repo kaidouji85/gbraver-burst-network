@@ -1,7 +1,9 @@
-import { verifyAccessToken } from "./auth0/access-token";
-import type { AuthorizerEvent } from "./lambda/authorizer-event";
-import type { AuthorizerResponse } from "./lambda/authorizer-response";
-import { successAuthorize } from "./lambda/authorizer-response";
+import { verifyAccessToken } from "./access-token/verify-access-token";
+import { AuthorizerEvent } from "./lambda/authorizer-event";
+import {
+  AuthorizerResponse,
+  successAuthorize,
+} from "./lambda/authorizer-response";
 
 /** cognito JWKSのURL */
 const COGNITO_JWKS_URL = process.env.COGNITO_JWKS_URL ?? "";
@@ -11,7 +13,6 @@ const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
 
 /**
  * オーサライザ
- *
  * @param event イベント
  * @returns 認可結果
  */

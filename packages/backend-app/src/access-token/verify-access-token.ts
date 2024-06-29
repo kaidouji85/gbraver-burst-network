@@ -3,7 +3,6 @@ import { JwksClient } from "jwks-rsa";
 
 /**
  * 公開鍵取得関数を生成する
- *
  * @param client jwksRsaクライアント
  * @returns 公開鍵取得関数
  */
@@ -21,13 +20,9 @@ const createKeyGetter =
       });
   };
 
-/** auth0 アクセストークン */
-export type Auth0AccessToken = JwtPayload;
-
 /**
  * auth0アクセストークンの検証
  * 検証成功の場合、オブジェクトパースしたアクセストークンを返す
- *
  * @param accessToken 検証するアクセストークン
  * @param jwksURL jwks url
  * @param audience オーディエンス
@@ -37,7 +32,7 @@ export function verifyAccessToken(
   accessToken: string,
   jwksURL: string,
   audience: string,
-): Promise<Auth0AccessToken> {
+): Promise<JwtPayload> {
   const client = new JwksClient({
     jwksUri: jwksURL,
   });
