@@ -114,7 +114,6 @@ npm run build
 | STAGE                                    | デプロイする環境のステージ名を記入する                                                                                                   |
 | ALLOW_ORIGIN                             | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                                                          |
 | TEST_ALLOW_ORIGIN                        | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                                                    |
-| <削除> AUTH0_DOMAIN                        | auth0のドメインを記載                                                                                                         |
 | <リネーム>AUTH0_JWKS_URL -> COGNITO_JWKS_URL | auth0のjwks.jsonが配置されたURL、詳細は[ここ](https://auth0.com/docs/security/tokens/json-web-tokens/locate-json-web-key-sets) を参照 |
 | <リネーム>AUTH0_AUDIENCE -> COGNITO_AUDIENCE | [4. auth0 API作成](#4-auth0-api作成) で作成したAuth0 APIのIdentifierを記載する                                                       |
 | <削除> AUTH0_USER_MANAGEMENT_DOMAIN        | auth0のドメインを記載（カスタムドメインは利用不可、本来のドメイン名を指定）※cognitoでは使わないので削除予定                                                          |
@@ -216,7 +215,6 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/stage                          | String       | [環境変数定義の定義](#env-config) STAGE を参照                               |
 | /GbraverBurst/dev/allowOrigin                    | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                        |
 | /GbraverBurst/dev/testAllowOrigin                | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/dev/auth0Domain                    | SecureString | [環境変数定義の定義](#env-config) AUTH0_DOMAIN を参照                        |
 | /GbraverBurst/dev/auth0JwksUrl                   | SecureString | [環境変数定義の定義](#env-config) AUTH0_JWKS_URL を参照                      |
 | /GbraverBurst/dev/auth0Audience                  | SecureString | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                      |
 | /GbraverBurst/dev/auth0UserManagementDomain      | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照        |
@@ -264,7 +262,6 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/stage                          | String       | [環境変数定義の定義](#env-config) STAGE を参照                               |
 | /GbraverBurst/prod/allowOrigin                    | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                        |
 | /GbraverBurst/prod/testAllowOrigin                | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/prod/auth0Domain                    | SecureString | [環境変数定義の定義](#env-config) AUTH0_DOMAIN を参照                        |
 | /GbraverBurst/prod/auth0JwksUrl                   | SecureString | [環境変数定義の定義](#env-config) AUTH0_JWKS_URL を参照                      |
 | /GbraverBurst/prod/auth0Audience                  | SecureString | [環境変数定義の定義](#env-config) AUTH0_AUDIENCE を参照                      |
 | /GbraverBurst/prod/auth0UserManagementDomain      | SecureString | [環境変数定義の定義](#env-config) AUTH0_USER_MANAGEMENT_DOMAIN を参照        |
