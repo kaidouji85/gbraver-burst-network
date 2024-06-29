@@ -5,8 +5,8 @@ env:
     STAGE: /GbraverBurst/dev/stage
     ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
-    AUTH0_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
-    AUTH0_AUDIENCE: /GbraverBurst/dev/auth0Audience
+    COGNITO_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
+    COGNITO_AUDIENCE: /GbraverBurst/dev/auth0Audience
     DOCKER_USER: /GbraverBurst/dev/dockerUser
     DOCKER_TOKEN: /GbraverBurst/dev/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName

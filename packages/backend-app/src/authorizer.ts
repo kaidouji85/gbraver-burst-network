@@ -3,11 +3,11 @@ import type { AuthorizerEvent } from "./lambda/authorizer-event";
 import type { AuthorizerResponse } from "./lambda/authorizer-response";
 import { successAuthorize } from "./lambda/authorizer-response";
 
-/** auth0 JWKSのURL */
-const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? "";
+/** cognito JWKSのURL */
+const COGNITO_JWKS_URL = process.env.COGNITO_JWKS_URL ?? "";
 
-/** auth0 Audience */
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
+/** cognito Audience */
+const COGNITO_AUDIENCE = process.env.COGNITO_AUDIENCE ?? "";
 
 /**
  * オーサライザ
@@ -20,8 +20,8 @@ export async function authorizer(
 ): Promise<AuthorizerResponse> {
   const token = await verifyAccessToken(
     event.queryStringParameters.token,
-    AUTH0_JWKS_URL,
-    AUTH0_AUDIENCE,
+    COGNITO_JWKS_URL,
+    COGNITO_AUDIENCE,
   );
   const principalId = token.sub ?? "";
   const resource: string = event.methodArn;

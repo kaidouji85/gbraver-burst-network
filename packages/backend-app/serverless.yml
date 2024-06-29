@@ -35,8 +35,8 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
-    AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
-    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
+    COGNITO_JWKS_URL: ${env:COGNITO_JWKS_URL, ''}
+    COGNITO_AUDIENCE: ${env:COGNITO_AUDIENCE, ''}
   iam:
     role:
       statements:
