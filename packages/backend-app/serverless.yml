@@ -37,9 +37,6 @@ provider:
       Ref: WebsocketsApi
     AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL, ''}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE, ''}
-    AUTH0_USER_MANAGEMENT_DOMAIN: ${env:AUTH0_USER_MANAGEMENT_DOMAIN, ''}
-    AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: ${env:AUTH0_USER_MANAGEMENT_APP_CLIENT_ID, ''}
-    AUTH0_SECRET_NAME: ${env:AUTH0_SECRET_NAME, ''}
   iam:
     role:
       statements:
