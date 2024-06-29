@@ -215,8 +215,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#env-config) STAGE を参照                          |
 | /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                   |
 | /GbraverBurst/dev/testAllowOrigin            | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照              |
-| /GbraverBurst/dev/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
-| /GbraverBurst/dev/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
+| /GbraverBurst/dev/cognitoUserPoolId          | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
+| /GbraverBurst/dev/cognitoClientId            | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
 | /GbraverBurst/dev/dockerUser                 | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                    |
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                   |
@@ -260,8 +260,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#env-config) STAGE を参照                          |
 | /GbraverBurst/prod/allowOrigin                | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                   |
 | /GbraverBurst/prod/testAllowOrigin            | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照              |
-| /GbraverBurst/prod/auth0JwksUrl               | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
-| /GbraverBurst/prod/auth0Audience              | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
+| /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
+| /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
 | /GbraverBurst/prod/dockerUser                 | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                    |
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                   |
