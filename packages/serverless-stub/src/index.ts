@@ -1,4 +1,7 @@
-import { createBrowserSDK } from "@gbraver-burst-network/browser-sdk";
+import {
+  createBrowserSDK,
+  initializeBrowserSDK,
+} from "@gbraver-burst-network/browser-sdk";
 
 import { BattlePlayer01 } from "./use-case/battle-player-01";
 import { BattlePlayer02 } from "./use-case/battle-player-02";
@@ -7,34 +10,27 @@ import { DisconnectWebsocketCase } from "./use-case/disconnect-websocket";
 import { GetUserNameCase } from "./use-case/get-user-name";
 import { GetUserPictureURLCase } from "./use-case/get-user-picture-url";
 import { MailAddressGet } from "./use-case/mail-address-get";
-import { MailVerifiedCase } from "./use-case/mail-verified";
 import { PingUseCase } from "./use-case/ping";
 import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
 import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
-import type { UseCase } from "./use-case/use-case";
+import { UseCase } from "./use-case/use-case";
 
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
-const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID ?? "";
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
-const REST_API_URL = process.env.REST_API_URL ?? "";
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID ?? "";
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
+const COGNITO_HOSTED_UI_DOMAIN = process.env.COGNITO_HOSTED_UI_DOMAIN ?? "";
 const WEBSOCKET_API_URL = process.env.WEBSOCKET_API_URL ?? "";
 
 window.onload = async () => {
-  const browserSDK = await createBrowserSDK(
-    window.location.origin,
-    REST_API_URL,
-    WEBSOCKET_API_URL,
-    AUTH0_DOMAIN,
-    AUTH0_CLIENT_ID,
-    AUTH0_AUDIENCE,
-  );
+  initializeBrowserSDK({
+    ownURL: window.location.origin,
+    userPoolId: COGNITO_USER_POOL_ID,
+    userPoolClientId: COGNITO_CLIENT_ID,
+    hostedUIDomain: COGNITO_HOSTED_UI_DOMAIN,
+  });
+  const browserSDK = await createBrowserSDK(WEBSOCKET_API_URL);
   browserSDK.websocketErrorNotifier().subscribe((e) => {
     console.log("websocketErrorNotifier", e);
   });
-
-  if (browserSDK.isLoginSuccessRedirect()) {
-    await browserSDK.afterLoginSuccess();
-  }
 
   const useCases: UseCase[] = [
     new PingUseCase(browserSDK),
@@ -44,7 +40,6 @@ window.onload = async () => {
     new PrivateMatchRoomPlayer(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
-    new MailVerifiedCase(browserSDK),
     new MailAddressGet(browserSDK),
     new DisconnectWebsocketCase(browserSDK),
     new DeleteUserCase(browserSDK),

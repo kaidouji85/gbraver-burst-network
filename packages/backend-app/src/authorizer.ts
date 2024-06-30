@@ -1,27 +1,28 @@
-import { verifyAccessToken } from "./auth0/access-token";
-import type { AuthorizerEvent } from "./lambda/authorizer-event";
-import type { AuthorizerResponse } from "./lambda/authorizer-response";
-import { successAuthorize } from "./lambda/authorizer-response";
+import { verifyAccessTokenFromCognito } from "./cognito/verify-access-token";
+import { AuthorizerEvent } from "./lambda/authorizer-event";
+import {
+  AuthorizerResponse,
+  successAuthorize,
+} from "./lambda/authorizer-response";
 
-/** auth0 JWKSのURL */
-const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL ?? "";
+/** cognito ユーザープールID */
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID ?? "";
 
-/** auth0 Audience */
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE ?? "";
+/** cognito クライアントID */
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
 
 /**
  * オーサライザ
- *
  * @param event イベント
  * @returns 認可結果
  */
 export async function authorizer(
   event: AuthorizerEvent,
 ): Promise<AuthorizerResponse> {
-  const token = await verifyAccessToken(
+  const token = await verifyAccessTokenFromCognito(
+    COGNITO_USER_POOL_ID,
+    COGNITO_CLIENT_ID,
     event.queryStringParameters.token,
-    AUTH0_JWKS_URL,
-    AUTH0_AUDIENCE,
   );
   const principalId = token.sub ?? "";
   const resource: string = event.methodArn;

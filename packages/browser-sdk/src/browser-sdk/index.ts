@@ -1,13 +1,14 @@
-import { Auth0Client } from "@auth0/auth0-spa-js";
-import type { ArmdozerId, PilotId } from "gbraver-burst-core";
+import {
+  deleteUser,
+  fetchAuthSession,
+  fetchUserAttributes,
+  getCurrentUser,
+  signInWithRedirect,
+  signOut,
+} from "aws-amplify/auth";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
-import { createAuth0ClientHelper } from "../auth0/client";
-import {
-  clearLoginHistory,
-  isLoginSuccessRedirect,
-} from "../auth0/login-redirect";
-import { deleteLoggedInUser } from "../http-request/delete-user";
 import { connect } from "../websocket/connect";
 import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
@@ -27,7 +28,6 @@ import {
 import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
 import {
   LoggedInUserDelete,
-  MailVerify,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
@@ -44,7 +44,6 @@ export interface BrowserSDK
     UserNameGet,
     UserPictureGet,
     UserMailGet,
-    MailVerify,
     LoggedInUserDelete,
     WebsocketDisconnect,
     WebsocketErrorNotifier,
@@ -53,99 +52,67 @@ export interface BrowserSDK
 
 /** ブラウザSDK実装 */
 class BrowserSDKImpl implements BrowserSDK {
-  #ownURL: string;
-  #restAPIURL: string;
+  /** Web Socket APIのURL */
   #websocketAPIURL: string;
-  #auth0Client: Auth0Client;
+  /** Web Socket クライアント */
   #websocket: WebSocket | null;
+  /** Web Socket エラー通知 */
   #websocketError: Subject<unknown>;
+  /** Web Socket イベントストリーム */
   #websocketSubscriptions: Subscription[];
 
   /**
    * コンストラクタ
-   *
-   * @param ownURL リダイレクト元となるGブレイバーバーストのURL
-   * @param restAPIURL Rest API のURL
    * @param websocketAPIURL Websocket API のURL
-   * @param auth0Client auth0クライアント
    */
-  constructor(
-    ownURL: string,
-    restAPIURL: string,
-    websocketAPIURL: string,
-    auth0Client: Auth0Client,
-  ) {
-    this.#ownURL = ownURL;
-    this.#restAPIURL = restAPIURL;
+  constructor(websocketAPIURL: string) {
     this.#websocketAPIURL = websocketAPIURL;
-    this.#auth0Client = auth0Client;
     this.#websocket = null;
     this.#websocketError = new Subject();
     this.#websocketSubscriptions = [];
   }
 
   /** @override */
-  isLoginSuccessRedirect(): boolean {
-    return isLoginSuccessRedirect();
-  }
-
-  /** @override */
-  async afterLoginSuccess(): Promise<void> {
-    await this.#auth0Client.handleRedirectCallback();
-    clearLoginHistory();
-  }
-
-  /** @override */
   async gotoLoginPage(): Promise<void> {
-    await this.#auth0Client.loginWithRedirect({
-      authorizationParams: {
-        redirect_uri: this.#ownURL,
-      },
-    });
+    await signInWithRedirect();
   }
 
   /** @override */
-  isLogin(): Promise<boolean> {
-    return this.#auth0Client.isAuthenticated();
+  async isLogin(): Promise<boolean> {
+    try {
+      await getCurrentUser();
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /** @override */
   async logout(): Promise<void> {
-    await this.#auth0Client.logout({
-      logoutParams: {
-        returnTo: this.#ownURL,
-      },
-    });
+    await signOut();
   }
 
   /** @override */
   async getUserName(): Promise<string> {
-    const user = await this.#auth0Client.getUser();
-    return user?.nickname ?? "";
+    const userAttributes = await fetchUserAttributes();
+    return userAttributes?.preferred_username ?? "";
   }
 
   /** @override */
   async getUserPictureURL(): Promise<string> {
-    const user = await this.#auth0Client.getUser();
-    return user?.picture ?? "";
+    const userAttributes = await fetchUserAttributes();
+    return userAttributes?.picture ?? "";
   }
 
   /** @override */
   async getMail(): Promise<string> {
-    const user = await this.#auth0Client.getUser();
-    return user?.email ?? "";
-  }
-
-  /** @override */
-  async isMailVerified(): Promise<boolean> {
-    const user = await this.#auth0Client.getUser();
-    return user?.email_verified ?? false;
+    const userAttributes = await fetchUserAttributes();
+    return userAttributes?.email ?? "";
   }
 
   /** @override */
   async deleteLoggedInUser(): Promise<void> {
-    const accessToken = await this.#auth0Client.getTokenSilently();
-    await deleteLoggedInUser(this.#restAPIURL, accessToken);
+    await deleteUser();
   }
 
   /** @override */
@@ -215,7 +182,6 @@ class BrowserSDKImpl implements BrowserSDK {
   /**
    * WebSocketクライアントの取得を行う
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
-   *
    * @returns 取得、生成結果
    */
   async #getOrCreateWebSocket(): Promise<WebSocket> {
@@ -223,7 +189,8 @@ class BrowserSDKImpl implements BrowserSDK {
       return this.#websocket;
     }
 
-    const accessToken = await this.#auth0Client.getTokenSilently();
+    const authSession = await fetchAuthSession();
+    const accessToken = authSession.tokens?.accessToken.toString() ?? "";
     const websocket = await connect(
       `${this.#websocketAPIURL}?token=${accessToken}`,
     );
@@ -238,28 +205,11 @@ class BrowserSDKImpl implements BrowserSDK {
 
 /**
  * GブレイバーバーストブラウザSDKを生成する
- *
- * @param ownURL リダイレクト元となるGブレイバーバーストのURL
- * @param restAPIURL Rest API のURL
  * @param websocketAPIURL Websocket APIのURL
- * @param auth0Domain auth0ドメイン
- * @param auth0ClientID auth0クライアントID
- * @param auth0Audience auth0 audience
  * @returns GブレイバーバーストブラウザSDK
  */
 export async function createBrowserSDK(
-  ownURL: string,
-  restAPIURL: string,
   websocketAPIURL: string,
-  auth0Domain: string,
-  auth0ClientID: string,
-  auth0Audience: string,
 ): Promise<BrowserSDK> {
-  const auth0Client = await createAuth0ClientHelper(
-    auth0Domain,
-    auth0ClientID,
-    auth0Audience,
-    ownURL,
-  );
-  return new BrowserSDKImpl(ownURL, restAPIURL, websocketAPIURL, auth0Client);
+  return new BrowserSDKImpl(websocketAPIURL);
 }
