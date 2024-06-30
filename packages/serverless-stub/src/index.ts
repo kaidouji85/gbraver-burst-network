@@ -1,4 +1,7 @@
-import {createBrowserSDK, initializeBrowserSDK } from "@gbraver-burst-network/browser-sdk";
+import {
+  createBrowserSDK,
+  initializeBrowserSDK,
+} from "@gbraver-burst-network/browser-sdk";
 
 import { BattlePlayer01 } from "./use-case/battle-player-01";
 import { BattlePlayer02 } from "./use-case/battle-player-02";
