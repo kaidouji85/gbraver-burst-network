@@ -41,9 +41,9 @@ module.exports = {
       inject: true
     }),
     new webpack.DefinePlugin({
-      'process.env.COGNITO_DOMAIN': JSON.stringify(process.env.COGNITO_DOMAIN),
+      'process.env.COGNITO_USER_POOL_ID': JSON.stringify(process.env.COGNITO_USER_POOL_ID),
       'process.env.COGNITO_CLIENT_ID': JSON.stringify(process.env.COGNITO_CLIENT_ID),
-      'process.env.REST_API_URL': JSON.stringify(process.env.REST_API_URL),
+      'process.env.COGNITO_HOSTED_UI_DOMAIN': JSON.stringify(process.env.COGNITO_HOSTED_UI_DOMAIN),
       'process.env.WEBSOCKET_API_URL': JSON.stringify(process.env.WEBSOCKET_API_URL),
     })
   ]
