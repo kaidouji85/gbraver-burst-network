@@ -20,3 +20,4 @@ export {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
 } from "./browser-sdk/websocket";
+export { initialize } from "./initialize";
