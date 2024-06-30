@@ -54,9 +54,9 @@ export interface BrowserSDK
 class BrowserSDKImpl implements BrowserSDK {
   /** Web Socket APIのURL */
   #websocketAPIURL: string;
-  /** Auth0クライアント */
+  /** Web Socket クライアント */
   #websocket: WebSocket | null;
-  /** Web Scocketエラー通知 */
+  /** Web Socket エラー通知 */
   #websocketError: Subject<unknown>;
   /** Web Socket イベントストリーム */
   #websocketSubscriptions: Subscription[];
