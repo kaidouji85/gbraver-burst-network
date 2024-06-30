@@ -42,26 +42,32 @@ Role名は「serverlessApiGatewayCloudWatchRole」とすること。
 
 https://dev.classmethod.jp/articles/tsnote-apigw-what-to-do-when-cloudwatch-logs-role-arn-must-be-set-in-account-settings-to-enable-logging-occurs-with-api-gateway/
 
-### 5. auth0 API作成
+### 4. Cognitoユーザープールの作成
+Cognitoのユーザープールを以下条件で作成する。
 
-// TODO 5 - 6をCognito系手順に書き換える
-[ここ](https://auth0.com/docs/get-started/auth0-overview/set-up-apis)を参考に、auth0 APIを作成する。
-作成条件は、以下の通り。
+* Hosted UIを有効にする
+  * スコープにopenid, email, profile、phone、aws.cognito.signin.user.adminを追加する
+* 許可されているコールバック URL、許可されているサインアウト URLに```http://localhost:8080```、GブレイバーバーストをホストしているURLを設定する
 
-* Name -> 任意
-* Identifier -> 任意
-* Signing Algorithm -> RS256
+### 5. CognitoにGooogleのソーシャルログインを追加
 
-### 6. 通常機能用auth0 Application作成
+Google Play ConsoleでOAuth2.0クライアントIDを以下条件で追加する。
+この時に生成されるクライアントIDとクライアントシークレットを控えておく。
 
-[ここ](https://auth0.com/docs/get-started/create-apps)を参考に、通常機能用auth0のauth0 Applicationを作成する。
-作成条件は、以下の通り。
+* 承認済みのリダイレクト URIに```https://<Cognitoのドメイン>/oauth2/idpresponse```を追加する
 
-* Name -> 任意
-* Choose an application type -> Single Page Web Applications
-* Allowed Callback URLs -> フロントエンド公開URL
-* Allowed Logout URLs -> フロントエンド公開URL
-* Allowed Web Origins -> フロントエンド公開URL
+CognitoのアイデンティティプロバイダーにGoogleを以下条件で追加する。
+
+* 許可されたスコープは```profile email openid```を指定
+* 属性マッピングは以下のように設定
+
+| Cognito属性          | Google属性 |
+|--------------------|----------|
+| email              | email    |
+| picture            | picture  |
+| preferred_username | name     |
+
+CgonitoのホストされたUIのID プロバイダーにGoogleを追加する。
 
 ## 環境構築方法
 
