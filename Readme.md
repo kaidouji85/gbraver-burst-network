@@ -43,7 +43,7 @@ Role名は「serverlessApiGatewayCloudWatchRole」とすること。
 
 https://dev.classmethod.jp/articles/tsnote-apigw-what-to-do-when-cloudwatch-logs-role-arn-must-be-set-in-account-settings-to-enable-logging-occurs-with-api-gateway/
 
-### 4. Cognitoユーザープールの作成
+### 5. Cognitoユーザープールの作成
 
 Cognitoのユーザープールを以下条件で作成する。
 
@@ -51,7 +51,7 @@ Cognitoのユーザープールを以下条件で作成する。
     * スコープにopenid, email, profile、phone、aws.cognito.signin.user.adminを追加する
 * 許可されているコールバック URL、許可されているサインアウト URLに```http://localhost:8080```、GブレイバーバーストをホストしているURLを設定する
 
-### 5. CognitoにGooogleのソーシャルログインを追加
+### 6. CognitoにGooogleのソーシャルログインを追加
 
 Google Play ConsoleでOAuth2.0クライアントIDを以下条件で追加する。
 この時に生成されるクライアントIDとクライアントシークレットを控えておく。
@@ -180,14 +180,6 @@ ActionsのSecretsを設定する。
 
 #### 開発環境でのCI/CD
 
-##### AWS Secret Managerを設定
-
-AwS Secret Managerに以下をセットする。
-
-| シークレット名                 | 設定内容                                                 |
-|-------------------------|------------------------------------------------------|
-| /GbraverBurst/dev/auth0 | [AWS Secret Manager 作成](#7-aws-secret-manager-作成)を参照 |
-
 ##### AWS Parameter Storeを設定
 
 AWS Parameter Storeに以下の値をセットする。
@@ -224,14 +216,6 @@ DEVCB-04、DEVCB-05を並列実行するプロジェクトを作成する。
 ただし、事前にDEVCB-01で環境を作成すること。
 
 #### 本番環境でのCI/CD
-
-##### AWS Secret Managerを設定
-
-AwS Secret Managerに以下をセットします。
-
-| シークレット名                  | 設定内容                                                 |
-|--------------------------|------------------------------------------------------|
-| /GbraverBurst/prod/auth0 | [AWS Secret Manager 作成](#7-aws-secret-manager-作成)を参照 | 
 
 ##### AWS Parameter Storeを設定
 
