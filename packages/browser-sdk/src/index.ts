@@ -11,7 +11,6 @@ export {
 } from "./browser-sdk/private-match";
 export {
   LoggedInUserDelete,
-  MailVerify,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
