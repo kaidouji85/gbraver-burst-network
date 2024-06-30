@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.14.0
+
+### Minor Changes
+
+- migrate cognito
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.14.0
+
 ## 1.13.0
 
 ### Minor Changes
