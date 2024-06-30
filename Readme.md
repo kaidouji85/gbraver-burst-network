@@ -37,16 +37,18 @@ AWSでマッチメイク用ECRリポジトリを作成する。
 [ここ](https://docs.docker.com/docker-hub/access-tokens/)を参考に、Docker Hubのアクセストークンを発行する。
 
 ### 4. API GatewayがCloud Watch Logsに書き込むためのIAM Roleを作成
+
 以下を参考に、API GatewayがCloud Watch Logsに書き込むためのIAM Roleを作成する。
 Role名は「serverlessApiGatewayCloudWatchRole」とすること。
 
 https://dev.classmethod.jp/articles/tsnote-apigw-what-to-do-when-cloudwatch-logs-role-arn-must-be-set-in-account-settings-to-enable-logging-occurs-with-api-gateway/
 
 ### 4. Cognitoユーザープールの作成
+
 Cognitoのユーザープールを以下条件で作成する。
 
 * Hosted UIを有効にする
-  * スコープにopenid, email, profile、phone、aws.cognito.signin.user.adminを追加する
+    * スコープにopenid, email, profile、phone、aws.cognito.signin.user.adminを追加する
 * 許可されているコールバック URL、許可されているサインアウト URLに```http://localhost:8080```、GブレイバーバーストをホストしているURLを設定する
 
 ### 5. CognitoにGooogleのソーシャルログインを追加
@@ -196,8 +198,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#env-config) STAGE を参照                          |
 | /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#env-config) ALLOW_ORIGIN を参照                   |
 | /GbraverBurst/dev/testAllowOrigin            | String       | [環境変数定義の定義](#env-config) TEST_ALLOW_ORIGIN を参照              |
-| /GbraverBurst/dev/cognitoUserPoolId          | SecureString | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
-| /GbraverBurst/dev/cognitoClientId            | SecureString | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
+| /GbraverBurst/dev/cognitoUserPoolId          | String       | [環境変数定義の定義](#env-config) COGNITO_USER_POOL_ID を参照           |
+| /GbraverBurst/dev/cognitoClientId            | String       | [環境変数定義の定義](#env-config) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#env-config) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
 | /GbraverBurst/dev/dockerUser                 | SecureString | [環境変数定義の定義](#env-config) DOCKER_USER を参照                    |
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#env-config) DOCKER_TOKEN を参照                   |
