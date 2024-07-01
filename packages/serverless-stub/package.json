@@ -9,7 +9,7 @@
     "gbraver-burst-core": "^1.31.1"
   },
   "devDependencies": {
-    "dependency-cruiser": "^16.3.3",
+    "dependency-cruiser": "^16.3.5",
     "eslint": "^8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "html-webpack-plugin": "^5.6.0",
@@ -18,7 +18,7 @@
     "prettier": "3.3.2",
     "rimraf": "^5.0.7",
     "ts-loader": "^9.5.1",
-    "typescript-eslint": "^7.14.1",
+    "typescript-eslint": "^7.15.0",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
