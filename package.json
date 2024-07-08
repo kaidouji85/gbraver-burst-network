@@ -2,9 +2,9 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "@changesets/cli": "^2.27.5",
-    "turbo": "^2.0.4",
-    "typescript": "^5.4.5"
+    "@changesets/cli": "^2.27.7",
+    "turbo": "^2.0.6",
+    "typescript": "^5.5.3"
   },
   "license;": "MIT",
   "packageManager": "npm@10.7.0",

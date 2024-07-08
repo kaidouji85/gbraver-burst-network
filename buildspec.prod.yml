@@ -1,17 +1,12 @@
 version: 0.2
 env:
-  variables:
-    AUTH0_SECRET_NAME: /GbraverBurst/prod/auth0
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
     STAGE: /GbraverBurst/prod/stage
     ALLOW_ORIGIN: /GbraverBurst/prod/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/prod/testAllowOrigin
-    AUTH0_DOMAIN: /GbraverBurst/prod/auth0Domain
-    AUTH0_JWKS_URL: /GbraverBurst/prod/auth0JwksUrl
-    AUTH0_AUDIENCE: /GbraverBurst/prod/auth0Audience
-    AUTH0_USER_MANAGEMENT_DOMAIN: /GbraverBurst/prod/auth0UserManagementDomain
-    AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/prod/auth0UserManagementAppClientId
+    COGNITO_USER_POOL_ID: /GbraverBurst/prod/cognitoUserPoolId
+    COGNITO_CLIENT_ID: /GbraverBurst/prod/cognitoClientId
     DOCKER_USER: /GbraverBurst/prod/dockerUser
     DOCKER_TOKEN: /GbraverBurst/prod/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/prod/matchMakeEcrRepositoryName

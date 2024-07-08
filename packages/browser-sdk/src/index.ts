@@ -11,7 +11,6 @@ export {
 } from "./browser-sdk/private-match";
 export {
   LoggedInUserDelete,
-  MailVerify,
   UserMailGet,
   UserNameGet,
   UserPictureGet,
@@ -20,3 +19,4 @@ export {
   WebsocketDisconnect,
   WebsocketErrorNotifier,
 } from "./browser-sdk/websocket";
+export { initializeBrowserSDK } from "./initialize-browser-sdk";

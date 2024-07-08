@@ -1,17 +1,10 @@
 version: 0.2
 env:
-  variables:
-    AUTH0_SECRET_NAME: /GbraverBurst/dev/auth0
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
     ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
-    AUTH0_DOMAIN: /GbraverBurst/dev/auth0Domain
-    AUTH0_JWKS_URL: /GbraverBurst/dev/auth0JwksUrl
-    AUTH0_AUDIENCE: /GbraverBurst/dev/auth0Audience
-    AUTH0_USER_MANAGEMENT_DOMAIN: /GbraverBurst/dev/auth0UserManagementDomain
-    AUTH0_USER_MANAGEMENT_APP_CLIENT_ID: /GbraverBurst/dev/auth0UserManagementAppClientId
     DOCKER_USER: /GbraverBurst/dev/dockerUser
     DOCKER_TOKEN: /GbraverBurst/dev/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
