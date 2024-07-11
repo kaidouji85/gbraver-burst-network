@@ -47,11 +47,11 @@ https://dev.classmethod.jp/articles/tsnote-apigw-what-to-do-when-cloudwatch-logs
 
 Cognitoのユーザープールを以下条件で作成する。
 
-* CognitoユーザープールのサインインオプションはEメールに設定する
-  * 後から変更できない
+* CognitoユーザープールのサインインオプションはEメールに設定する **(後から変更できない)**
 * Hosted UIを有効にする
     * スコープにopenid, email, profile、phone、aws.cognito.signin.user.adminを追加する
 * 許可されているコールバック URL、許可されているサインアウト URLに```http://localhost:8080```、GブレイバーバーストをホストしているURLを設定する
+* 検証メッセージの検証タイプを```Link```に設定する
 
 ### 6. CognitoにGooogleのソーシャルログインを追加
 
