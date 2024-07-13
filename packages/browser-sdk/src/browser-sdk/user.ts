@@ -11,9 +11,9 @@ export interface UserNameGet {
 export interface UserPictureGet {
   /**
    * ユーザ画像URLを取得する
-   * @returns ユーザ画像URL
+   * @returns ユーザ画像URL、未設定の場合はnull
    */
-  getUserPictureURL(): Promise<string>;
+  getUserPictureURL(): Promise<string | null>;
 }
 
 /** ユーザメールアドレス取得 */
