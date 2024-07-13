@@ -95,19 +95,19 @@ class BrowserSDKImpl implements BrowserSDK {
   /** @override */
   async getUserName(): Promise<string> {
     const userAttributes = await fetchUserAttributes();
-    return userAttributes?.preferred_username ?? "";
+    return userAttributes.preferred_username ?? userAttributes.email ?? "";
   }
 
   /** @override */
-  async getUserPictureURL(): Promise<string> {
+  async getUserPictureURL(): Promise<string | null> {
     const userAttributes = await fetchUserAttributes();
-    return userAttributes?.picture ?? "";
+    return userAttributes.picture ?? null;
   }
 
   /** @override */
   async getMail(): Promise<string> {
     const userAttributes = await fetchUserAttributes();
-    return userAttributes?.email ?? "";
+    return userAttributes.email ?? "";
   }
 
   /** @override */
