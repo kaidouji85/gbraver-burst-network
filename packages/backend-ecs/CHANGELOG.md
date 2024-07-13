@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.15.0
+
+### Minor Changes
+
+- ユーザー情報取得APIのシグニチャ変更
+
 ## 1.14.0
 
 ### Minor Changes
