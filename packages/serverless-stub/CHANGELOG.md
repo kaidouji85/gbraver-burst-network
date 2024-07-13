@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.15.0
+
+### Minor Changes
+
+- ユーザー情報取得APIのシグニチャ変更
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.15.0
+
 ## 1.14.0
 
 ### Minor Changes
