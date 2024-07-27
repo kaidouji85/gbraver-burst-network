@@ -1,5 +1,13 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.15.1
+
+### Patch Changes
+
+- 依存ライブラリを最新化
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.15.1
+
 ## 1.15.0
 
 ### Minor Changes

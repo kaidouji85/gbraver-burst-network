@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/backend-app",
   "description": "gbraver burst backend app",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.620.0",

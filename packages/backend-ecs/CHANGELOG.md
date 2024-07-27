@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.15.1
+
+### Patch Changes
+
+- 依存ライブラリを最新化
+
 ## 1.15.0
 
 ### Minor Changes
