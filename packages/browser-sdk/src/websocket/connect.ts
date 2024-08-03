@@ -19,7 +19,7 @@ export function connect(url: string): Promise<WebSocket> {
     websocket.addEventListener("open", handler);
     websocket.addEventListener("error", errorHandler);
   }).finally(() => {
-    handler && websocket.removeEventListener("open", handler);
-    errorHandler && websocket.removeEventListener("error", errorHandler);
+    if (handler) websocket.removeEventListener("open", handler);
+    if (errorHandler) websocket.removeEventListener("error", errorHandler);
   });
 }

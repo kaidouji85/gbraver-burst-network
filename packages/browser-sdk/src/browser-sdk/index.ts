@@ -164,7 +164,7 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async disconnectWebsocket(): Promise<void> {
-    this.#websocket && this.#websocket.close();
+    if (this.#websocket) this.#websocket.close();
     this.#websocket = null;
 
     this.#websocketSubscriptions.forEach((v) => {
