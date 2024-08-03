@@ -85,7 +85,7 @@ async function matchMakingPolling(): Promise<void> {
   console.log(`${new Date().toString()} start`);
   await createHeathCheckFile();
   for (let i = 0; i < maxPollingCount; i++) {
-    i % 30 === 0 && console.log(`${new Date().toString()} polling`);
+    if (i % 30 === 0) console.log(`${new Date().toString()} polling`);
     const start = Date.now();
     await matchMakingPolling();
     const end = Date.now();

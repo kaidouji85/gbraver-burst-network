@@ -51,6 +51,6 @@ export function waitUntil<X>(
 
     websocket.addEventListener("message", handler);
   }).finally(() => {
-    handler && websocket.removeEventListener("message", handler);
+    if (handler) websocket.removeEventListener("message", handler);
   });
 }
