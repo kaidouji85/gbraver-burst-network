@@ -81,7 +81,9 @@ export async function sendCommandWithPolling(
     (e: MessageEvent, resolve: Resolve<AcceptCommand>) => {
       const data = parseJSON(e.data);
       const acceptCommand = parseAcceptCommand(data);
-      if (acceptCommand) resolve(acceptCommand);
+      if (acceptCommand) {
+        resolve(acceptCommand);
+      }
     },
   );
 
