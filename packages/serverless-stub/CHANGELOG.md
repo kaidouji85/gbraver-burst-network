@@ -1,5 +1,13 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.15.3
+
+### Patch Changes
+
+- ワンライナーifをブロック体に書き直した
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.15.3
+
 ## 1.15.2
 
 ### Patch Changes

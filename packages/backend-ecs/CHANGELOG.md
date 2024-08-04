@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.15.3
+
+### Patch Changes
+
+- ワンライナーifをブロック体に書き直した
+
 ## 1.15.2
 
 ### Patch Changes
