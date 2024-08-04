@@ -1,5 +1,17 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.15.3
+
+### Patch Changes
+
+- ワンライナーifをブロック体に書き直した
+
+## 1.15.2
+
+### Patch Changes
+
+- typescript-eslintバージョンアップに伴い、null・undefinedチェックのワンライナーを修正
+
 ## 1.15.1
 
 ### Patch Changes
