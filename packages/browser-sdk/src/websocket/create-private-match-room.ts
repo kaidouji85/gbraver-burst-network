@@ -31,7 +31,9 @@ export function createPrivateMatchRoom(
     (e: MessageEvent, resolve: Resolve<CreatedPrivateMatchRoom>) => {
       const data = parseJSON(e.data);
       const response = parseCreatedPrivateMatchRoom(data);
-      response && resolve(response);
+      if (response) {
+        resolve(response);
+      }
     },
   );
 }

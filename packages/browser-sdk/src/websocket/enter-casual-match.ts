@@ -30,7 +30,9 @@ export function enterCasualMatch(
     (e: MessageEvent, resolve: Resolve<BattleStart>): void => {
       const data = parseJSON(e.data);
       const response = parseBattleStart(data);
-      response && resolve(response);
+      if (response) {
+        resolve(response);
+      }
     },
   );
 }
