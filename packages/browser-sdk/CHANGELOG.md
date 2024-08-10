@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.16.0
+
+### Minor Changes
+
+- コア、amplifyをアップデート
+
 ## 1.15.3
 
 ### Patch Changes

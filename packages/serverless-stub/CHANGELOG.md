@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.16.0
+
+### Minor Changes
+
+- コア、amplifyをアップデート
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.16.0
+
 ## 1.15.3
 
 ### Patch Changes
