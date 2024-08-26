@@ -1,5 +1,13 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.16.1
+
+### Patch Changes
+
+- amplify.jsをバージョンアップ
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.16.1
+
 ## 1.16.0
 
 ### Minor Changes

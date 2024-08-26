@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.16.1
+
+### Patch Changes
+
+- amplify.jsをバージョンアップ
+
 ## 1.16.0
 
 ### Minor Changes
