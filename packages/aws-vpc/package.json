@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/aws-vpc",
   "description": "gbraver burst backend vpc.",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
   },
