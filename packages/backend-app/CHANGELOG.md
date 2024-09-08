@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.16.3
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+
 ## 1.16.2
 
 ### Patch Changes
