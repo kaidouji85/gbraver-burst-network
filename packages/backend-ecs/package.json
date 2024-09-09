@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/backend-ecs",
   "description": "create backend ecs.",
-  "version": "1.16.2",
+  "version": "1.16.3",
   "bin": {
     "backend-ecs": "bin/backend-ecs.js"
   },

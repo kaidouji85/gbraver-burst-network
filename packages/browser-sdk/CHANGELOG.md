@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.16.3
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+
 ## 1.16.2
 
 ### Patch Changes

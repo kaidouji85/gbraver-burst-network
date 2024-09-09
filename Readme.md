@@ -267,5 +267,5 @@ npx changeset publish
 fixpack
 ```
 
-#License
+## License
 MIT
