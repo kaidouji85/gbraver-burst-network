@@ -150,9 +150,27 @@ npm run build
 #### 事前作業
 
 * serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する
-* AWSで作業用IAMユーザーのアクセスキーを生成する
-    * 上記IAMユーザーには権限設定は不要
-    * CIでAWSにアクセスする作業は行っておらず、serverless cliのAWS認証にのみアクセスキーを利用しているため
+* AWSで「SlsCli用IAMポリシー」をアタッチしたIAMユーザーを作成し、アクセスキーIDとシークレットキーを控えておく
+
+**SlsCli用IAMポリシー**
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*",
+        "cloudformation:DescribeStackResource",
+        "ssm:GetParameter"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 
 #### Secrets設定
 
@@ -268,4 +286,5 @@ fixpack
 ```
 
 ## License
+
 MIT
