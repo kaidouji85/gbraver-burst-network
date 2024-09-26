@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.16.4
+
+### Patch Changes
+
+- npmパッケージをアップデート
+
 ## 1.16.3
 
 ### Patch Changes
