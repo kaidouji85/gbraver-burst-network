@@ -1,5 +1,5 @@
 # docker buildの前にbuild:match-makeを実行すること
-FROM node:20.17.0-bookworm-slim
+FROM node:20.18.0-bookworm-slim
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app
 # SIGTERMを適切に処理できるように、
