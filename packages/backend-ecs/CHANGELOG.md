@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.16.8
+
+### Patch Changes
+
+- coreをアップデート
+
 ## 1.16.7
 
 ### Patch Changes
