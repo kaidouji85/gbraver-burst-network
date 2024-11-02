@@ -62,7 +62,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
   Trivy-Scan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
