@@ -6,16 +6,16 @@
     "aws-vpc": "bin/aws-vpc.js"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.165.0",
+    "aws-cdk-lib": "^2.166.0",
     "constructs": "^10.4.2",
     "dotenv": "^16.4.5",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "22.8.6",
-    "aws-cdk": "2.165.0",
-    "dependency-cruiser": "^16.5.0",
+    "@types/node": "22.9.0",
+    "aws-cdk": "2.166.0",
+    "dependency-cruiser": "^16.6.0",
     "eslint": "^9.14.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jest": "^29.7.0",
@@ -23,7 +23,7 @@
     "prettier": "3.3.3",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.12.2"
+    "typescript-eslint": "^8.14.0"
   },
   "licens": "MIT",
   "private": true,
