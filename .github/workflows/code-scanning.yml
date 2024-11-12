@@ -69,7 +69,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
           cache: npm
 
       - name: Build an image from Dockerfile
@@ -80,7 +80,7 @@ jobs:
           docker build -t gbraver-burst/backend-app:${{ github.sha }} -f matchMake.Dockerfile .
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.2.8
         with:
           image-ref: "gbraver-burst/backend-app:${{ github.sha }}"
           format: "sarif"
