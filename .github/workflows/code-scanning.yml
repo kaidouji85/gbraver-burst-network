@@ -80,7 +80,7 @@ jobs:
           docker build -t gbraver-burst/backend-app:${{ github.sha }} -f matchMake.Dockerfile .
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.2.8
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: "gbraver-burst/backend-app:${{ github.sha }}"
           format: "sarif"
