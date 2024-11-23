@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.16.9
+
+### Patch Changes
+
+- npmパッケージ更新
+
 ## 1.16.8
 
 ### Patch Changes
