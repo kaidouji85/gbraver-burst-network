@@ -13,7 +13,7 @@ provider:
   name: aws
   logs:
     websocket: true
-  runtime: nodejs20.x
+  runtime: nodejs22.x
   region: ap-northeast-1
   httpApi:
     name: ${self:service}__${sls:stage}__rest-api
