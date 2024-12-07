@@ -13,7 +13,7 @@ provider:
   name: aws
   logs:
     websocket: true
-  runtime: nodejs20.x
+  runtime: nodejs22.x
   region: ap-northeast-1
   httpApi:
     name: ${self:service}__${sls:stage}__rest-api
@@ -129,9 +129,7 @@ resources:
         KeySchema:
           - AttributeName: connectionId
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
     CasualMatchEntriesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -142,9 +140,7 @@ resources:
         KeySchema:
           - AttributeName: userID
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
     BattleCommandsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -155,9 +151,7 @@ resources:
         KeySchema:
           - AttributeName: userID
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
     BattlesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -168,9 +162,7 @@ resources:
         KeySchema:
           - AttributeName: battleID
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
     PrivateMatchRoomsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -181,9 +173,7 @@ resources:
         KeySchema:
           - AttributeName: owner
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -198,9 +188,7 @@ resources:
             KeyType: HASH
           - AttributeName: userID
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
   Outputs:
     WebsocketApiId:
       Description: "id of websocket api gateway"
