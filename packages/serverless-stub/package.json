@@ -9,8 +9,8 @@
     "gbraver-burst-core": "^1.32.1"
   },
   "devDependencies": {
-    "dependency-cruiser": "^16.7.0",
-    "eslint": "^9.16.0",
+    "dependency-cruiser": "^16.8.0",
+    "eslint": "^9.17.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "html-webpack-plugin": "^5.6.3",
     "http-server": "^14.1.1",
@@ -18,10 +18,10 @@
     "prettier": "3.4.2",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.1",
-    "typescript-eslint": "^8.17.0",
-    "webpack": "^5.97.0",
+    "typescript-eslint": "^8.18.0",
+    "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0"
+    "webpack-dev-server": "^5.2.0"
   },
   "license": "MIT",
   "main": "lib/index.js",
