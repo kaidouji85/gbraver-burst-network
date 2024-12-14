@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.16.11
+
+### Patch Changes
+
+- gbraver-burst-coreをアップデートした
+
 ## 1.16.10
 
 ### Patch Changes
