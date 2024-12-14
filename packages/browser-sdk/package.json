@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "aws-amplify": "^6.10.3",
-    "gbraver-burst-core": "^1.32.1",
+    "gbraver-burst-core": "^1.33.0",
     "rxjs": "^7.8.1",
     "zod": "^3.24.1"
   },
