@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/backend-app",
   "description": "gbraver burst backend app",
-  "version": "1.16.10",
+  "version": "1.16.11",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.712.0",
@@ -11,7 +11,7 @@
     "@aws-sdk/signature-v4-crt": "^3.712.0",
     "aws-jwt-verify": "^4.0.1",
     "dotenv": "^16.4.7",
-    "gbraver-burst-core": "^1.32.1",
+    "gbraver-burst-core": "^1.33.0",
     "nanoid": "^5.0.9",
     "ramda": "^0.30.1",
     "rimraf": "^6.0.1",

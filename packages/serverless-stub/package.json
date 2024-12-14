@@ -1,12 +1,12 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
   "description": "gbraver burst network stub.",
-  "version": "1.16.10",
+  "version": "1.16.11",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "*",
     "dotenv": "^16.4.7",
-    "gbraver-burst-core": "^1.32.1"
+    "gbraver-burst-core": "^1.33.0"
   },
   "devDependencies": {
     "dependency-cruiser": "^16.8.0",
