@@ -7,7 +7,7 @@
     "typescript": "^5.7.2"
   },
   "license;": "MIT",
-  "packageManager": "npm@10.9.1",
+  "packageManager": "npm@10.9.2",
   "private": true,
   "scripts": {
     "build": "turbo run build",
