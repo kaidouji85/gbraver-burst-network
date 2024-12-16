@@ -6,7 +6,7 @@
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "*",
     "dotenv": "^16.4.7",
-    "gbraver-burst-core": "^1.33.0"
+    "gbraver-burst-core": "^1.33.1"
   },
   "devDependencies": {
     "dependency-cruiser": "^16.8.0",
