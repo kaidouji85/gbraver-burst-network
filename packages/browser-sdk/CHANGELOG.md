@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.16.12
+
+### Patch Changes
+
+- gbraver-burst-coreをアップデート
+
 ## 1.16.11
 
 ### Patch Changes
