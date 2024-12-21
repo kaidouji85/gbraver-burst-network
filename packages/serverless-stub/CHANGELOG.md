@@ -1,5 +1,13 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.16.13
+
+### Patch Changes
+
+- npmパッケージ更新
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.16.13
+
 ## 1.16.12
 
 ### Patch Changes
