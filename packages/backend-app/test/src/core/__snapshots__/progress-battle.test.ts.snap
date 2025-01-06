@@ -888,13 +888,21 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
                   "type": "BATTERY_COMMAND",
                 },
                 {
+                  "battery": 4,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
+                  "battery": 5,
+                  "type": "BATTERY_COMMAND",
+                },
+                {
                   "type": "BURST_COMMAND",
                 },
                 {
                   "type": "PILOT_SKILL_COMMAND",
                 },
               ],
-              "playerId": "attacker-player-id",
+              "playerId": "defender-player",
               "selectable": true,
             },
             {
@@ -916,21 +924,13 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
                   "type": "BATTERY_COMMAND",
                 },
                 {
-                  "battery": 4,
-                  "type": "BATTERY_COMMAND",
-                },
-                {
-                  "battery": 5,
-                  "type": "BATTERY_COMMAND",
-                },
-                {
                   "type": "BURST_COMMAND",
                 },
                 {
                   "type": "PILOT_SKILL_COMMAND",
                 },
               ],
-              "playerId": "defender-player",
+              "playerId": "attacker-player-id",
               "selectable": true,
             },
           ],
@@ -1378,13 +1378,21 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
                 "type": "BATTERY_COMMAND",
               },
               {
+                "battery": 4,
+                "type": "BATTERY_COMMAND",
+              },
+              {
+                "battery": 5,
+                "type": "BATTERY_COMMAND",
+              },
+              {
                 "type": "BURST_COMMAND",
               },
               {
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "attacker-player-id",
+            "playerId": "defender-player",
             "selectable": true,
           },
           {
@@ -1406,21 +1414,13 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
                 "type": "BATTERY_COMMAND",
               },
               {
-                "battery": 4,
-                "type": "BATTERY_COMMAND",
-              },
-              {
-                "battery": 5,
-                "type": "BATTERY_COMMAND",
-              },
-              {
                 "type": "BURST_COMMAND",
               },
               {
                 "type": "PILOT_SKILL_COMMAND",
               },
             ],
-            "playerId": "defender-player",
+            "playerId": "attacker-player-id",
             "selectable": true,
           },
         ],
