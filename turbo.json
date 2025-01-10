@@ -20,6 +20,10 @@
       "cache": false,
       "env": [ "*" ]
     },
+    "coverage": {
+      "cache": false,
+      "env": [ "*" ]
+    },
     "dependency-check": {
       "cache": false,
       "env": [ "*" ]
