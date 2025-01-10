@@ -1,9 +1,0 @@
-{
-  "extensions": [".ts"],
-  "skipDirectories": [
-    "/node_modules", 
-    "coverage",
-    ".serverless",
-    ".webpack"
-  ]
-}

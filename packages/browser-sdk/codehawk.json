@@ -1,3 +1,0 @@
-{
-  "skipDirectories": ["/node_modules", "coverage", "lib"]
-}
