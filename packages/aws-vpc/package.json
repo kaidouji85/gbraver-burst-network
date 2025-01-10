@@ -39,6 +39,7 @@
     "code-format:bin": "prettier --write bin",
     "code-format:lib": "prettier --write lib",
     "code-format:test": "prettier --write test",
+    "coverage": "jest --coverage",
     "dependency-check": "run-s dependency-check:*",
     "dependency-check:bin": "depcruise bin",
     "dependency-check:lib": "depcruise lib",
