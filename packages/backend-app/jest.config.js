@@ -4,5 +4,5 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   coverageDirectory: "coverage",
-  coverageReporters: [['lcov', { projectRoot: '..' }]],
+  coverageReporters: [['lcov', { projectRoot: '../../' }]],
 };
