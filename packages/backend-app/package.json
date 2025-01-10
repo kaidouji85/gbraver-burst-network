@@ -51,6 +51,7 @@
     "code-format-check:test": "prettier --check test",
     "code-format:src": "prettier --write src",
     "code-format:test": "prettier --write test",
+    "coverage": "jest --coverage",
     "dependency-check": "run-s dependency-check:*",
     "dependency-check:src": "depcruise src",
     "dependency-check:test": "depcruise test",
