@@ -7,7 +7,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
+  coverage:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -29,7 +29,4 @@ jobs:
         coverageCommand: npm run coverage
         debug: true
         coverageLocations: |
-          ${{github.workspace}}/packages/aws-vpc/coverage/lcov.info:lcov
-          ${{github.workspace}}/packages/backend-app/coverage/lcov.info:lcov
-          ${{github.workspace}}/packages/backend-ecs/coverage/lcov.info:lcov
-          ${{github.workspace}}/packages/browser-sdk/coverage/lcov.info:lcov
+          ${{github.workspace}}/packages/*/coverage/lcov.info:lcov
