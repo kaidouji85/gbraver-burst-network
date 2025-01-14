@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.16.15
+
+### Patch Changes
+
+- 98e90b1: npmパッケージをアップデート
+
 ## 1.16.14
 
 ### Patch Changes
