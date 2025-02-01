@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "22.10.10",
+    "@types/node": "22.13.0",
     "aws-cdk": "2.177.0",
     "dependency-cruiser": "^16.9.0",
     "eslint": "^9.19.0",
@@ -23,7 +23,7 @@
     "prettier": "3.4.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.21.0"
+    "typescript-eslint": "^8.22.0"
   },
   "licens": "MIT",
   "private": true,
