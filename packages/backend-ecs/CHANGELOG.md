@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.16.17
+
+### Patch Changes
+
+- npmパッケージを更新
+
 ## 1.16.16
 
 ### Patch Changes
