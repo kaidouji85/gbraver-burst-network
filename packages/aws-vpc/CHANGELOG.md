@@ -1,5 +1,29 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.16.17
+
+### Patch Changes
+
+- npmパッケージを更新
+
+## 1.16.16
+
+### Patch Changes
+
+- npmパッケージをアップデートした
+
+## 1.16.15
+
+### Patch Changes
+
+- npmパッケージをアップデートした
+
+## 1.16.14
+
+### Patch Changes
+
+- npmパッケージをアップデート
+
 ## 1.16.13
 
 ### Patch Changes
