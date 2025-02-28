@@ -3,7 +3,7 @@
   "description": "gbraver burst network module.",
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
-    "turbo": "^2.4.2",
+    "turbo": "^2.4.4",
     "typescript": "^5.7.3"
   },
   "license;": "MIT",
