@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.16.18
+
+### Patch Changes
+
+- gbraver-burst-coreをアップデートした
+
 ## 1.16.17
 
 ### Patch Changes
