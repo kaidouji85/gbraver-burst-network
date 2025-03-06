@@ -1,6 +1,5 @@
-node_modules
-.serverless
-.webpack
+node_modules/*
+.serverless/*
+.webpack/*
 .env
-coverage
-generated
+coverage/*

@@ -1,5 +1,5 @@
 service: ${env:SERVICE, "gbraver-burst-sls-dev"}
-frameworkVersion: '4'
+frameworkVersion: "4"
 
 custom:
   connections: ${self:service}__${sls:stage}__connections
@@ -44,25 +44,33 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - 'dynamodb:PutItem'
-            - 'dynamodb:GetItem'
-            - 'dynamodb:DeleteItem'
-            - 'dynamodb:Query'
-            - 'dynamodb:Scan'
-            - 'dynamodb:BatchWrite*'
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
+            - "dynamodb:BatchWrite*"
           Resource:
-            - Fn::GetAtt: [ ConnectionsTable, Arn ]
-            - Fn::GetAtt: [ CasualMatchEntriesTable, Arn ]
-            - Fn::GetAtt: [ BattleCommandsTable, Arn ]
-            - Fn::GetAtt: [ BattlesTable, Arn ]
-            - Fn::GetAtt: [ PrivateMatchRoomsTable, Arn ]
-            - Fn::GetAtt: [ PrivateMatchEntriesTable, Arn ]
-            - Fn::Join: [ '/', [ "Fn::GetAtt": [ PrivateMatchRoomsTable, Arn ], 'index', 'roomID' ] ]
+            - Fn::GetAtt: [ConnectionsTable, Arn]
+            - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
+            - Fn::GetAtt: [BattleCommandsTable, Arn]
+            - Fn::GetAtt: [BattlesTable, Arn]
+            - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
+            - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
+            - Fn::Join:
+                [
+                  "/",
+                  [
+                    "Fn::GetAtt": [PrivateMatchRoomsTable, Arn],
+                    "index",
+                    "roomID",
+                  ],
+                ]
         - Effect: Allow
           Action:
-            - 'execute-api:ManageConnections'
+            - "execute-api:ManageConnections"
           Resource:
-            - 'arn:aws:execute-api:*:*:**/@connections/*'
+            - "arn:aws:execute-api:*:*:**/@connections/*"
 
 functions:
   webSocketAPIAuthorizer:
@@ -75,7 +83,7 @@ functions:
           authorizer:
             name: webSocketAPIAuthorizer
             identitySource:
-              - 'route.request.querystring.token'
+              - "route.request.querystring.token"
   disconnect:
     handler: src/disconnect.disconnect
     events:
@@ -120,7 +128,7 @@ functions:
 resources:
   Resources:
     ConnectionsTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.connections}
         AttributeDefinitions:
@@ -131,7 +139,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     CasualMatchEntriesTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.casualMatchEntries}
         AttributeDefinitions:
@@ -142,7 +150,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     BattleCommandsTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.battleCommands}
         AttributeDefinitions:
@@ -153,7 +161,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     BattlesTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.battles}
         AttributeDefinitions:
@@ -164,7 +172,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     PrivateMatchRoomsTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.privateMatchRooms}
         AttributeDefinitions:
@@ -175,7 +183,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: ${self:custom.privateMatchEntries}
         AttributeDefinitions:
@@ -199,24 +207,24 @@ resources:
     ConnectionsTableArn:
       Description: "arn of connections table"
       Value:
-        Fn::GetAtt: [ ConnectionsTable, Arn ]
+        Fn::GetAtt: [ConnectionsTable, Arn]
       Export:
         Name: ${self:service}:${sls:stage}:ConnectionsTableArn
     CasualMatchEntriesTableArn:
       Description: "arn of casual match entries table"
       Value:
-        Fn::GetAtt: [ CasualMatchEntriesTable, Arn ]
+        Fn::GetAtt: [CasualMatchEntriesTable, Arn]
       Export:
         Name: ${self:service}:${sls:stage}:CasualMatchEntriesTableArn
     BattlesTableArn:
       Description: "arn of battles table"
       Value:
-        Fn::GetAtt: [ BattlesTable, Arn ]
+        Fn::GetAtt: [BattlesTable, Arn]
       Export:
         Name: ${self:service}:${sls:stage}:BattlesTableArn
     BattleCommandsTableArn:
       Description: "arn of battle commands table"
       Value:
-        Fn::GetAtt: [ BattleCommandsTable, Arn ]
+        Fn::GetAtt: [BattleCommandsTable, Arn]
       Export:
         Name: ${self:service}:${sls:stage}:BattleCommandsTableArn
