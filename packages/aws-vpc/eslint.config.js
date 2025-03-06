@@ -5,10 +5,7 @@ const simpleImportSort = require("eslint-plugin-simple-import-sort");
 
 module.exports = [
   {
-    ignores: [
-      "**/*.js", 
-      "**/*.d.ts"
-    ]
+    ignores: ["**/*.js", "**/*.d.ts"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -22,10 +19,10 @@ module.exports = [
     },
   },
   {
-    files: ['test/**'],
-    ...jest.configs['flat/recommended'],
+    files: ["test/**"],
+    ...jest.configs["flat/recommended"],
     rules: {
-      ...jest.configs['flat/recommended'].rules,
+      ...jest.configs["flat/recommended"].rules,
     },
   },
 ];

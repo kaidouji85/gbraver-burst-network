@@ -1,12 +1,11 @@
-
 name: "Trivy Scanning - Action"
 
 on:
   workflow_dispatch:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
   pull_request:
-    branches: [ master, develop ]
+    branches: [master, develop]
   schedule:
     - cron: "30 1 * * 0"
 
