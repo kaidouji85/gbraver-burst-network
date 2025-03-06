@@ -57,7 +57,7 @@
     "start:match-make": "run-s build:match-make serve:match-make",
     "test": "jest",
     "transpile": "run-s transpile:*",
-    "transpile:match-make": "webpack --config matchMake.webpack.config.js",
+    "transpile:match-make": "webpack --config matchMake.webpack.config.mjs",
     "transpile:sls": "sls package",
     "type-check": "tsc --noEmit"
   }
