@@ -10,14 +10,6 @@
       "cache": false,
       "env": ["*"]
     },
-    "code-format": {
-      "cache": false,
-      "env": ["*"]
-    },
-    "code-format-check": {
-      "cache": false,
-      "env": ["*"]
-    },
     "coverage": {
       "cache": false,
       "env": ["*"]
