@@ -5,7 +5,18 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/*", "coverage/*"],
+    ignores: [
+      "node_modules/*",
+      "coverage/*",
+
+      // tscがトランスパイルしたファイルはeslintの対象外とする
+      "lib/**/*.js",
+      "lib/**/*.d.ts",
+      "bin/**/*.js",
+      "bin/**/*.d.ts",
+      "test/**/*.js",
+      "test/**/*.d.ts",
+    ],
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,
