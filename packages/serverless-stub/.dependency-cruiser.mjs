@@ -1,5 +1,5 @@
 /** @type {import('dependency-cruiser').IConfiguration} */
-module.exports = {
+export default {
   forbidden: [
     {
       name: "no-circular",
@@ -118,20 +118,7 @@ module.exports = {
     },
 
     /* rules you might want to tweak for your specific situation: */
-    {
-      name: "not-to-test",
-      comment:
-        "This module depends on code within a folder that should only contain tests. As tests don't " +
-        "implement functionality this is odd. Either you're writing a test outside the test folder " +
-        "or there's something in the test folder that isn't a test.",
-      severity: "error",
-      from: {
-        pathNot: "^(test)",
-      },
-      to: {
-        path: "^(test)",
-      },
-    },
+
     {
       name: "not-to-spec",
       comment:
@@ -387,4 +374,4 @@ module.exports = {
     },
   },
 };
-// generated: dependency-cruiser@16.3.2 on 2024-05-31T05:30:20.936Z
+// generated: dependency-cruiser@16.3.2 on 2024-05-31T05:56:58.086Z

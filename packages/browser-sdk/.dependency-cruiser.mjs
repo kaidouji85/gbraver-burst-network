@@ -1,5 +1,5 @@
 /** @type {import('dependency-cruiser').IConfiguration} */
-module.exports = {
+export default {
   forbidden: [
     {
       name: "no-circular",
@@ -154,7 +154,7 @@ module.exports = {
         "section of your package.json. If this module is development only - add it to the " +
         "from.pathNot re of the not-to-dev-dep rule in the dependency-cruiser configuration",
       from: {
-        path: "^(bin|lib)",
+        path: "^(src)",
         pathNot:
           "[.](?:spec|test)[.](?:js|mjs|cjs|jsx|ts|mts|cts|tsx|ls|coffee|litcoffee|coffee[.]md)$",
       },
@@ -387,4 +387,4 @@ module.exports = {
     },
   },
 };
-// generated: dependency-cruiser@16.3.2 on 2024-05-31T05:23:45.687Z
+// generated: dependency-cruiser@16.3.2 on 2024-05-31T05:50:50.945Z
