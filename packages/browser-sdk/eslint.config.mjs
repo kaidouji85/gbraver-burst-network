@@ -1,11 +1,14 @@
-const eslint = require("@eslint/js");
-const tseslint = require("typescript-eslint");
-const jest = require("eslint-plugin-jest");
-const simpleImportSort = require("eslint-plugin-simple-import-sort");
+import eslint from "@eslint/js";
+import jest from "eslint-plugin-jest";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import tseslint from "typescript-eslint";
 
-module.exports = [
+export default tseslint.config(
+  {
+    ignores: ["node_modules/*", "coverage/*", "lib/*"],
+  },
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  tseslint.configs.recommended,
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
@@ -22,4 +25,4 @@ module.exports = [
       ...jest.configs["flat/recommended"].rules,
     },
   },
-];
+);
