@@ -3,9 +3,9 @@ name: "CodeQL - Action"
 on:
   workflow_dispatch:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
   pull_request:
-     branches: [ master, develop ]
+    branches: [master, develop]
   schedule:
     #        ┌───────────── minute (0 - 59)
     #        │  ┌───────────── hour (0 - 23)

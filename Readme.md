@@ -65,11 +65,11 @@ CognitoのアイデンティティプロバイダーにGoogleを以下条件で�
 - 許可されたスコープは`profile email openid`を指定
 - 属性マッピングは以下のように設定
 
-| Cognito属性          | Google属性 |
-|--------------------|----------|
-| email              | email    |
-| picture            | picture  |
-| preferred_username | name     |
+| Cognito属性        | Google属性 |
+| ------------------ | ---------- |
+| email              | email      |
+| picture            | picture    |
+| preferred_username | name       |
 
 CgonitoのホストされたUIのID プロバイダーにGoogleを追加する。
 
@@ -92,20 +92,20 @@ npm run build
 
 ローカル環境に以下の環境変数を定義する。
 
-| 環境変数名                          | 記載内容                                                                              |
-|--------------------------------|-----------------------------------------------------------------------------------|
-| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                |
-| STAGE                          | デプロイする環境のステージ名を記入する                                                               |
-| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                      |
-| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                |
-| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                 |
-| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                  |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                |
-| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                            |
-| DOCKER_USER                    | Docker Hubのユーザ名                                                                   |
-| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照 |
-| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                    |
-| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                     |
+| 環境変数名                     | 記載内容                                                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                         |
+| STAGE                          | デプロイする環境のステージ名を記入する                                                                            |
+| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                                  |
+| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                      |
+| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                         |
+| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                           |
+| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名 |
+| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                               |
+| DOCKER_USER                    | Docker Hubのユーザ名                                                                                              |
+| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照               |
+| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                         |
+| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                        |
 
 ### serverlessデプロイ
 
@@ -175,12 +175,12 @@ npm run build
 ActionsのSecretsを設定する。
 以下が設定内容である。
 
-| シークレット名               | 値                                                                                      |
-|-----------------------|----------------------------------------------------------------------------------------|
-| SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey                                                    |
-| AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID                                                                   |
-| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー                                                                   |
-| CC_TEST_REPORTER_ID   | code climate reporter id                                                               |
+| シークレット名        | 値                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------- |
+| SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey                                               |
+| AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID                                                          |
+| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー                                                        |
+| CC_TEST_REPORTER_ID   | code climate reporter id                                                                |
 | NPM_TOKEN             | [npmのPersonal Access Token](https://docs.npmjs.com/creating-and-viewing-access-tokens) |
 
 ## AWS CodeBuild CD環境構築方法
@@ -195,8 +195,8 @@ ActionsのSecretsを設定する。
 
 AWS Parameter Storeに以下の値をセットする。
 
-| 名前                                           | 種類           | 値                                                        |
-|----------------------------------------------|--------------|----------------------------------------------------------|
+| 名前                                         | 種類         | 値                                                                          |
+| -------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/dev/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
@@ -207,18 +207,18 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/dockerUser                 | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_USER を参照                    |
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/dev/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
-| /GbraverBurst/dev/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                      |
+| /GbraverBurst/dev/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
 
 #### CodeBuild
 
 以下のCodeBuildプロジェクトを生成する。
 
-| 役割                                                 | buildspec                       | 環境                                                                                                               | webhook                           |
-|----------------------------------------------------|---------------------------------|------------------------------------------------------------------------------------------------------------------|-----------------------------------|
-| フルデプロイ（環境新規作成時に利用する想定）                             | buildspec.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                |
-| serverless削除                                       | buildspec.sls.remove.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                |
-| バックエンドECS削除                                        | buildspec.backendEcs.remove.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                |
-| serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）        | buildspec.sls.yml               | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
+| 役割                                                                                         | buildspec                       | 環境                                                                                                             | webhook                                     |
+| -------------------------------------------------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| フルデプロイ（環境新規作成時に利用する想定）                                                 | buildspec.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
+| serverless削除                                                                               | buildspec.sls.remove.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
+| バックエンドECS削除                                                                          | buildspec.backendEcs.remove.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
+| serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）                      | buildspec.sls.yml               | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
 | バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
 
 ##### webhook
@@ -248,8 +248,8 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 
 AWS Parameter Storeに以下の値をセットする。
 
-| 名前                                            | 種類           | 値                                                        |
-|-----------------------------------------------|--------------|----------------------------------------------------------|
+| 名前                                          | 種類         | 値                                                                          |
+| --------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/prod/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/prod/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
@@ -260,17 +260,17 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/dockerUser                 | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_USER を参照                    |
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
-| /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                      |
+| /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
 
 #### Code Build
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割           | buildspec                            | 環境                                                                                                               | 　webhook                          |
-|--------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------|-----------------------------------|
-| デプロイ         | buildspec.prod.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| serverless削除 | buildspec.sls.remove.prod.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                |
-| バックエンドECS削除  | buildspec.backendEcs.remove.prod.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                |
+| 役割                | buildspec                            | 環境                                                                                                             | 　webhook                                   |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| デプロイ            | buildspec.prod.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
+| serverless削除      | buildspec.sls.remove.prod.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
+| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
 
 ##### webhook
 
