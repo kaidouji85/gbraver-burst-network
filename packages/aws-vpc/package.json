@@ -38,14 +38,8 @@
     "dependency-check:bin": "depcruise bin",
     "dependency-check:lib": "depcruise lib",
     "dependency-check:test": "depcruise test",
-    "lint": "run-s lint:*",
-    "lint-fix": "run-s lint-fix:*",
-    "lint-fix:bin": "eslint --fix --max-warnings 0 bin",
-    "lint-fix:lib": "eslint --fix --max-warnings 0 lib",
-    "lint-fix:test": "eslint --fix --max-warnings 0 test",
-    "lint:bin": "eslint --max-warnings 0 bin",
-    "lint:lib": "eslint --max-warnings 0 lib",
-    "lint:test": "eslint --max-warnings 0 test",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "test": "jest",
     "watch": "tsc -w"
   }

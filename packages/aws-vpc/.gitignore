@@ -3,7 +3,7 @@
 !eslint.config.js
 !.dependency-cruiser.js
 *.d.ts
-node_modules
+node_modules/*
 .env
 cdk.context.json
 coverage/*
