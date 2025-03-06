@@ -5,7 +5,13 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/*", "coverage/*", ".webpack/*", ".serverless/*"],
+    ignores: [
+      "node_modules/*",
+      "coverage/*",
+      ".webpack/*",
+      ".serverless/*",
+      "*webpack.config.js",
+    ],
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,

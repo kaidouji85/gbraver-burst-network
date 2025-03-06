@@ -1,11 +1,6 @@
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+const path = require("path");
 
-import path from "path";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-export default {
+module.exports = {
   entry: {
     "match-making-polling.js": path.resolve(
       __dirname,
