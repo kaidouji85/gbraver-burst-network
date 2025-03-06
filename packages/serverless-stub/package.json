@@ -29,8 +29,8 @@
   "scripts": {
     "build": "run-s clean transpile",
     "clean": "rimraf build",
-    "code-format": "prettier --write src",
-    "code-format-check": "prettier --check src",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check",
     "dependency-check": "depcruise src",
     "dev-server": "webpack serve",
     "lint": "eslint --max-warnings 0 src",
