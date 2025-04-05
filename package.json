@@ -3,17 +3,18 @@
   "description": "gbraver burst network module.",
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
-    "turbo": "^2.4.2",
-    "typescript": "^5.7.3"
+    "prettier": "3.5.3",
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.3"
   },
   "license;": "MIT",
-  "packageManager": "npm@11.1.0",
+  "packageManager": "npm@11.2.0",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "code-format": "turbo run code-format",
-    "code-format-check": "turbo run code-format-check",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check",
     "coverage": "turbo run coverage",
     "dependency-check": "turbo run dependency-check",
     "lint": "turbo run lint",

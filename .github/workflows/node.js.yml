@@ -2,9 +2,9 @@ name: Node.js CI
 on:
   workflow_dispatch:
   push:
-    branches: [ master, develop ]
+    branches: [master, develop]
   pull_request:
-    branches: [ master, develop ]
+    branches: [master, develop]
 env:
   NODE_JS_VERSION: 22.x
   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
@@ -14,16 +14,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - run: shellcheck -x *.bash
-    - uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_JS_VERSION }}
-        cache: npm
-    - run: npm ci
-    - run: npm run lint
-    - run: npm run code-format-check
-    - run: npm test
+      - uses: actions/checkout@v4
+      - run: shellcheck -x *.bash
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_JS_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run code-format-check
+      - run: npm test
   build:
     runs-on: ubuntu-latest
     steps:
