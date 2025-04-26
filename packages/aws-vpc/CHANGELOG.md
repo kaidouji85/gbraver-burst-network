@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.16.22
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+
 ## 1.16.21
 
 ### Patch Changes
