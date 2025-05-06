@@ -2,7 +2,7 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "@changesets/cli": "^2.29.2",
+    "@changesets/cli": "^2.29.3",
     "prettier": "3.5.3",
     "turbo": "^2.5.2",
     "typescript": "^5.8.3"
