@@ -299,6 +299,7 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 # 画面の指示に従い、変更内容を記入する
 npx changeset
 npx changeset version
+npm install
 
 npm run build
 npx changeset publish
