@@ -800,6 +800,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
         "activePlayerId": "defender-player",
         "effect": {
           "name": "TurnChange",
+          "reason": "Normal",
           "recoverBattery": 3,
         },
         "players": [
@@ -1290,6 +1291,7 @@ exports[`バトル進行の結果、バトル継続となる 1`] = `
       "activePlayerId": "defender-player",
       "effect": {
         "name": "TurnChange",
+        "reason": "Normal",
         "recoverBattery": 3,
       },
       "players": [
