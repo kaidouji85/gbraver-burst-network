@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`VPCスタックがスナップショットと一致している 1`] = `
 {
@@ -85,6 +85,12 @@ exports[`VPCスタックがスナップショットと一致している 1`] = `
     },
     "vpcEIGW693EAFBD1": {
       "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "gbraver-buesr-sls-dev-gXXXXX/vpc",
+          },
+        ],
         "VpcId": {
           "Ref": "vpcA2121C38",
         },
