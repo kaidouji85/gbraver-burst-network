@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`カジュアルマッチを正しく開始できる 1`] = `
 {
@@ -8,6 +8,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
     "players": [
       {
         "armdozer": {
+          "batteryAutoRecovery": 3,
           "burst": {
             "recoverBattery": 5,
             "turnStartBatteryCorrect": 2,
@@ -34,6 +35,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
       },
       {
         "armdozer": {
+          "batteryAutoRecovery": 3,
           "burst": {
             "buffPower": 1000,
             "duration": 2,
@@ -72,6 +74,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           {
             "armdozer": {
               "battery": 5,
+              "batteryAutoRecovery": 3,
               "burst": {
                 "recoverBattery": 5,
                 "turnStartBatteryCorrect": 2,
@@ -101,6 +104,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           {
             "armdozer": {
               "battery": 5,
+              "batteryAutoRecovery": 3,
               "burst": {
                 "buffPower": 1000,
                 "duration": 2,
@@ -214,6 +218,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           {
             "armdozer": {
               "battery": 5,
+              "batteryAutoRecovery": 3,
               "burst": {
                 "recoverBattery": 5,
                 "turnStartBatteryCorrect": 2,
@@ -243,6 +248,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           {
             "armdozer": {
               "battery": 5,
+              "batteryAutoRecovery": 3,
               "burst": {
                 "buffPower": 1000,
                 "duration": 2,
@@ -283,6 +289,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
         "players": [
           {
             "armdozer": {
+              "batteryAutoRecovery": 3,
               "burst": {
                 "recoverBattery": 5,
                 "turnStartBatteryCorrect": 2,
@@ -309,6 +316,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           },
           {
             "armdozer": {
+              "batteryAutoRecovery": 3,
               "burst": {
                 "buffPower": 1000,
                 "duration": 2,
@@ -347,6 +355,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
         "players": [
           {
             "armdozer": {
+              "batteryAutoRecovery": 3,
               "burst": {
                 "recoverBattery": 5,
                 "turnStartBatteryCorrect": 2,
@@ -373,6 +382,7 @@ exports[`カジュアルマッチを正しく開始できる 1`] = `
           },
           {
             "armdozer": {
+              "batteryAutoRecovery": 3,
               "burst": {
                 "buffPower": 1000,
                 "duration": 2,
