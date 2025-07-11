@@ -180,6 +180,7 @@ ActionsのSecretsを設定する。
 | AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID                                                          |
 | AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー                                                        |
 | NPM_TOKEN             | [npmのPersonal Access Token](https://docs.npmjs.com/creating-and-viewing-access-tokens) |
+| SONAR_TOKEN           | SonarQube Cloudのトークン                                                               |
 
 ## AWS CodeBuild CD環境構築方法
 
