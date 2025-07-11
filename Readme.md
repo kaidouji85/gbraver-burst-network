@@ -147,7 +147,6 @@ npm run build
 
 - serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する
 - AWSで「SlsCli用IAMポリシー」をアタッチしたIAMユーザーを作成し、アクセスキーIDとシークレットキーを控えておく
-- codeclimateのcode climate reporter idを控える
 
 **SlsCli用IAMポリシー**
 
@@ -180,7 +179,6 @@ ActionsのSecretsを設定する。
 | SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey                                               |
 | AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID                                                          |
 | AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー                                                        |
-| CC_TEST_REPORTER_ID   | code climate reporter id                                                                |
 | NPM_TOKEN             | [npmのPersonal Access Token](https://docs.npmjs.com/creating-and-viewing-access-tokens) |
 
 ## AWS CodeBuild CD環境構築方法
