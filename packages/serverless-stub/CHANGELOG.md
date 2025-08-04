@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.17.0
+
+### Minor Changes
+
+- 一部依存モジュールをpeerDependenciesにした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.17.0
+
 ## 1.16.30
 
 ### Patch Changes

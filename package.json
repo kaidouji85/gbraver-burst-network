@@ -4,11 +4,11 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "prettier": "3.6.2",
-    "turbo": "^2.5.4",
+    "turbo": "^2.5.5",
     "typescript": "^5.8.3"
   },
   "license": "MIT",
-  "packageManager": "npm@11.4.2",
+  "packageManager": "npm@11.5.2",
   "private": true,
   "scripts": {
     "build": "turbo run build",
