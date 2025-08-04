@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.17.0
+
+### Minor Changes
+
+- 一部依存モジュールをpeerDependenciesにした
+
 ## 1.16.30
 
 ### Patch Changes
