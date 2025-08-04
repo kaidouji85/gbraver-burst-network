@@ -114,6 +114,7 @@ export default {
         // _and_ (e.g.) a devDependency - don't consider type-only dependency
         // types for this rule
         dependencyTypesNot: ["type-only"],
+        pathNot: ["../browser-sdk/"],
       },
     },
 
@@ -177,6 +178,7 @@ export default {
       from: {},
       to: {
         dependencyTypes: ["npm-peer"],
+        pathNot: ["../browser-sdk/"],
       },
     },
   ],
