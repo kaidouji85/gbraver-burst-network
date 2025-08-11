@@ -26,7 +26,7 @@
     "typescript-eslint": "^8.39.0",
     "webpack": "^5.101.0",
     "webpack-cli": "^6.0.1",
-    "zod": "*"
+    "zod": "^4.0.17"
   },
   "files": [
     "lib"
@@ -42,7 +42,7 @@
   "main": "lib/src/index.js",
   "peerDependencies": {
     "gbraver-burst-core": "^1.40.0",
-    "zod": "^4.0.14"
+    "zod": "^4.0.17"
   },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk",
   "scripts": {
