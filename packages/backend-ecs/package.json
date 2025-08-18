@@ -1,32 +1,32 @@
 {
   "name": "@gbraver-burst-network/backend-ecs",
   "description": "create backend ecs.",
-  "version": "1.16.29",
+  "version": "1.17.1",
   "bin": {
     "backend-ecs": "bin/backend-ecs.js"
   },
   "dependencies": {
-    "@types/ramda": "^0.30.2",
-    "aws-cdk-lib": "^2.202.0",
+    "@types/ramda": "^0.31.0",
+    "aws-cdk-lib": "^2.210.0",
     "constructs": "^10.4.2",
-    "dotenv": "^16.5.0",
-    "ramda": "^0.30.1",
+    "dotenv": "^17.2.1",
+    "ramda": "^0.31.3",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "24.0.3",
+    "@types/node": "24.2.1",
     "@types/uuid": "^10.0.0",
-    "aws-cdk": "2.1019.1",
-    "dependency-cruiser": "^16.10.3",
-    "eslint": "^9.29.0",
+    "aws-cdk": "2.1024.0",
+    "dependency-cruiser": "^17.0.1",
+    "eslint": "^9.33.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "jest": "^30.0.2",
+    "jest": "^30.0.5",
     "npm-run-all": "^4.1.5",
-    "prettier": "3.5.3",
-    "ts-jest": "^29.4.0",
+    "prettier": "3.6.2",
+    "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.34.1"
+    "typescript-eslint": "^8.39.0"
   },
   "license": "MIT",
   "private": true,

@@ -1,5 +1,23 @@
 # @gbraver-burst-network/backend-app
 
+## 1.17.1
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+
+## 1.17.0
+
+### Minor Changes
+
+- 一部依存モジュールをpeerDependenciesにした
+
+## 1.16.30
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+
 ## 1.16.29
 
 ### Patch Changes

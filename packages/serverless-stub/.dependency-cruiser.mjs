@@ -107,7 +107,9 @@ export default {
         "in your package.json i.e. bot as a devDependencies and in dependencies. This will cause " +
         "maintenance problems later on.",
       severity: "error",
-      from: {},
+      from: {
+        pathNot: ["^\\.\\./browser-sdk/"],
+      },
       to: {
         moreThanOneDependencyType: true,
         // as it's pretty common to have a type import be a type only import
@@ -174,7 +176,9 @@ export default {
         "other cases - maybe not so much. If the use of a peer dependency is intentional " +
         "add an exception to your dependency-cruiser configuration.",
       severity: "error",
-      from: {},
+      from: {
+        pathNot: ["^\\.\\./browser-sdk/"],
+      },
       to: {
         dependencyTypes: ["npm-peer"],
       },

@@ -114,6 +114,7 @@ export default {
         // _and_ (e.g.) a devDependency - don't consider type-only dependency
         // types for this rule
         dependencyTypesNot: ["type-only"],
+        pathNot: ["node_modules/zod/", "node_modules/gbraver-burst-core/"],
       },
     },
 
@@ -163,7 +164,11 @@ export default {
         // type only dependencies are not a problem as they don't end up in the
         // production code or are ignored by the runtime.
         dependencyTypesNot: ["type-only"],
-        pathNot: ["node_modules/@types/"],
+        pathNot: [
+          "node_modules/@types/",
+          "node_modules/zod/",
+          "node_modules/gbraver-burst-core/",
+        ],
       },
     },
     {
@@ -190,6 +195,7 @@ export default {
       from: {},
       to: {
         dependencyTypes: ["npm-peer"],
+        pathNot: ["node_modules/zod/", "node_modules/gbraver-burst-core/"],
       },
     },
   ],
