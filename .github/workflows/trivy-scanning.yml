@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: "30 1 * * 0"
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   Trivy-Scan:
     runs-on: ubuntu-latest
