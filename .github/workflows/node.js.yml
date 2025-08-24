@@ -5,6 +5,8 @@ on:
     branches: [master, develop]
   pull_request:
     branches: [master, develop]
+permissions:
+  contents: read
 env:
   NODE_JS_VERSION: 22.x
   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
