@@ -6,8 +6,8 @@ export default {
   coverageDirectory: "coverage",
   coverageReporters: [["lcov", { projectRoot: "../../" }]],
   // 変換を無視するパターン（マッチしたファイルは変換されない）
-  // "node_modules配下でuuid以外" = uuidのみ変換対象にする
-  transformIgnorePatterns: [
-    "node_modules/(?!(uuid)/)"
-  ]
+  // 正規表現の否定先読みで、uuidパッケージを変換対象に含める
+  // 参考文献
+  // https://qiita.com/konyaru/items/b22916308ee6f03272db
+  transformIgnorePatterns: ["node_modules/(?!(uuid)/)"],
 };
