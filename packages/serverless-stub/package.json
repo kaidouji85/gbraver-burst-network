@@ -5,12 +5,12 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "*",
-    "dotenv": "^17.2.1",
+    "dotenv": "^17.2.2",
     "gbraver-burst-core": "^1.41.0"
   },
   "devDependencies": {
     "dependency-cruiser": "^17.0.1",
-    "eslint": "^9.34.0",
+    "eslint": "^9.35.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "html-webpack-plugin": "^5.6.4",
     "http-server": "^14.1.1",
@@ -18,7 +18,7 @@
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.4",
-    "typescript-eslint": "^8.41.0",
+    "typescript-eslint": "^8.44.0",
     "webpack": "^5.101.3",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
