@@ -10,4 +10,9 @@ export default {
   // 参考文献
   // https://qiita.com/konyaru/items/b22916308ee6f03272db
   transformIgnorePatterns: ["node_modules/(?!(uuid)/)"],
+  // uuidパッケージのES Modules対応
+  transform: {
+    //"^.+\\.tsx?$": "ts-jest",
+    "^.+\\.jsx?$": "babel-jest",
+  },
 };
