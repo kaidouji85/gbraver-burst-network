@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.17.2
+
+### Patch Changes
+
+- aws-amplifyをアップデート
+
 ## 1.17.1
 
 ### Patch Changes
