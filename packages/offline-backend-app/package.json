@@ -4,16 +4,20 @@
   "version": "1.17.2",
   "author": "Y.Takeuchi",
   "dependencies": {
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "dependency-cruiser": "^17.0.1",
     "eslint": "^9.35.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "3.6.2",
-    "socket.io": "^4.8.1"
+    "prettier": "3.6.2"
   },
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
+    "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "type-check": "tsc --noEmit"
