@@ -3,13 +3,15 @@
   "description": "gbraver burst offline backend app",
   "version": "1.17.2",
   "author": "Y.Takeuchi",
+  "dependencies": {
+    "prettier": "3.6.2",
+    "socket.io": "^4.8.1"
+  },
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check",
     "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "socket.io": "^4.8.1"
   }
 }
