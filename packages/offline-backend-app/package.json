@@ -1,0 +1,15 @@
+{
+  "name": "offline-backend-app",
+  "description": "gbraver burst offline backend app",
+  "version": "1.17.2",
+  "author": "Y.Takeuchi",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1"
+  }
+}
