@@ -1,0 +1,11 @@
+{
+  "name": "offline-browser-sdk",
+  "version": "1.0.0",
+  "description": "gbraver burst offline browser sdk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Y.Takeuchi",
+  "license": "MIT"
+}
