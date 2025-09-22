@@ -7,10 +7,12 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@types/node": "^24.5.2",
     "dependency-cruiser": "^17.0.1",
     "eslint": "^9.35.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "3.6.2"
+    "prettier": "3.6.2",
+    "ts-node": "^10.9.2"
   },
   "license": "MIT",
   "main": "index.js",
@@ -20,6 +22,7 @@
     "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
+    "start": "ts-node src/index.ts",
     "type-check": "tsc --noEmit"
   }
 }
