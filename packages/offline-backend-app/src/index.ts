@@ -34,13 +34,12 @@ let cachedMatchEntry: MatchEntry | null = null;
 /**
  * マッチメイキング処理を行う
  * 待機中のプレイヤーがいれば即座にマッチングし、いなければ待機状態にする
- *
  * @param options - マッチメイキングに必要な情報
  * @param options.socket - プレイヤーのSocket.IOソケット
  * @param options.armdozerId - プレイヤーのアームドーザID
  * @param options.pilotId - プレイヤーのパイロットID
  */
-const processMatchmaking = (options: {
+const processMatchmaking = async (options: {
   socket: Socket;
   armdozerId: ArmdozerId;
   pilotId: PilotId;
@@ -62,7 +61,7 @@ const processMatchmaking = (options: {
   const roomId = "room-id";
   socket.join(roomId);
   otherSocket.join(roomId);
-  io.to(roomId).emit("matched", {});
+  await io.to(roomId).emitWithAck("matched", {});
 
   cachedMatchEntry = null;
 };
