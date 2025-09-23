@@ -3,6 +3,9 @@
   "description": "gbraver burst offline browser sdk",
   "version": "1.17.2",
   "author": "Y.Takeuchi",
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
+  },
   "devDependencies": {
     "dependency-cruiser": "^17.0.1",
     "eslint": "^9.35.0",
@@ -23,9 +26,7 @@
     "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "start": "webpack serve"
-  },
-  "dependencies": {
-    "socket.io-client": "^4.8.1"
+    "start": "webpack serve",
+    "type-check": "tsc --noEmit"
   }
 }
