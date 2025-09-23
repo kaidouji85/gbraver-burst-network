@@ -4,6 +4,7 @@
   "version": "1.17.2",
   "author": "Y.Takeuchi",
   "devDependencies": {
+    "dependency-cruiser": "^17.0.1",
     "eslint": "^9.35.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -19,6 +20,7 @@
   "scripts": {
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
+    "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start": "webpack serve"
