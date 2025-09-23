@@ -4,6 +4,8 @@
   "version": "1.17.2",
   "author": "Y.Takeuchi",
   "dependencies": {
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "socket.io": "^4.8.1"
   },
