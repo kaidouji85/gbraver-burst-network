@@ -6,8 +6,7 @@ import express from "express";
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Server, Socket } from "socket.io";
 
-import { ConnectionState } from "./connection-state";
-import { MatchEntry } from "./match-entry";
+import { ConnectionState } from "./core/connection-state";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 
 dotenv.config();
@@ -23,13 +22,7 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
  * key: socket.id
  * value: ConnectionState
  */
-const connectionStates = new Map<string, ConnectionState>();
-
-/**
- * キャッシュされたマッチングのエントリー
- * nullの場合はキャッシュされていない
- */
-let cachedMatchEntry: MatchEntry | null = null;
+export const connectionStates = new Map<string, ConnectionState>();
 
 /**
  * マッチメイキング処理を行う
@@ -45,25 +38,7 @@ const processMatchmaking = (options: {
   pilotId: PilotId;
 }) => {
   const { socket } = options;
-  const myEntry = { ...options, connectionId: socket.id };
-  if (!cachedMatchEntry) {
-    cachedMatchEntry = myEntry;
-    return;
-  }
-
-  const otherSocket = io.sockets.sockets.get(cachedMatchEntry.connectionId);
-  if (!otherSocket) {
-    cachedMatchEntry = myEntry;
-    return;
-  }
-
-  // ユニークなルームIDになるようにする
-  const roomId = "room-id";
-  socket.join(roomId);
-  otherSocket.join(roomId);
-  io.to(roomId).emit("matched");
-
-  cachedMatchEntry = null;
+  connectionStates.set(socket.id, { ...options, type: "MatchMaking" });
 };
 
 const app = express();
