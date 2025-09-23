@@ -5,6 +5,8 @@ import * as dotenv from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
 
+import { ConnectionState } from "./connection-state";
+
 dotenv.config();
 
 /** CORS許可オリジン */
@@ -12,6 +14,13 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
 
 /** サーバーポート番号 */
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+
+/**
+ * コネクションのステートを管理するマップ
+ * key: socket.id
+ * value: ConnectionState
+ */
+const connectionStates = new Map<string, ConnectionState>();
 
 const app = express();
 app.use(
@@ -30,9 +39,11 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log(`a user connected: ${socket.id}`);
+  connectionStates.set(socket.id, { type: "NoState" });
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    connectionStates.delete(socket.id);
+    console.log(`user disconnected: ${socket.id}`);
   });
 });
 
