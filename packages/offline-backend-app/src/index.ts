@@ -3,9 +3,11 @@ import { createServer } from "node:http";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
-import { Server } from "socket.io";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { Server, Socket } from "socket.io";
 
 import { ConnectionState } from "./connection-state";
+import { MatchEntry } from "./match-entry";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 
 dotenv.config();
@@ -22,6 +24,48 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
  * value: ConnectionState
  */
 const connectionStates = new Map<string, ConnectionState>();
+
+/**
+ * キャッシュされたマッチングのエントリー
+ * nullの場合はキャッシュされていない
+ */
+let cachedMatchEntry: MatchEntry | null = null;
+
+/**
+ * マッチメイキング処理を行う
+ * 待機中のプレイヤーがいれば即座にマッチングし、いなければ待機状態にする
+ *
+ * @param options - マッチメイキングに必要な情報
+ * @param options.socket - プレイヤーのSocket.IOソケット
+ * @param options.armdozerId - プレイヤーのアームドーザID
+ * @param options.pilotId - プレイヤーのパイロットID
+ */
+const processMatchmaking = (options: {
+  socket: Socket;
+  armdozerId: ArmdozerId;
+  pilotId: PilotId;
+}) => {
+  const { socket } = options;
+  const myEntry = { ...options, connectionId: socket.id };
+  if (!cachedMatchEntry) {
+    cachedMatchEntry = myEntry;
+    return;
+  }
+
+  const otherSocket = io.sockets.sockets.get(cachedMatchEntry.connectionId);
+  if (!otherSocket) {
+    cachedMatchEntry = myEntry;
+    return;
+  }
+
+  // ユニークなルームIDになるようにする
+  const roomId = "room-id";
+  socket.join(roomId);
+  otherSocket.join(roomId);
+  io.to(roomId).emit("matched", {});
+
+  cachedMatchEntry = null;
+};
 
 const app = express();
 app.use(
@@ -53,6 +97,7 @@ io.on("connection", (socket) => {
     const enterRoom = result.data;
     connectionStates.set(socket.id, { ...enterRoom, type: "MatchMaking" });
     console.log(`a user(${socket.id}) entered room`);
+    processMatchmaking({ ...enterRoom, socket });
   });
 
   socket.on("disconnect", () => {
