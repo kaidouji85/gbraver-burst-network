@@ -11,7 +11,7 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   #socket: Socket | null = null;
 
   /**
-   * オプション
+   * コンストラクタ
    * @param options オプション
    * @param options.backendURL バックエンドURL
    */
