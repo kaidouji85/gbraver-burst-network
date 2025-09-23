@@ -6,6 +6,7 @@ import express from "express";
 import { Server } from "socket.io";
 
 import { ConnectionState } from "./connection-state";
+import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 
 dotenv.config();
 
@@ -41,6 +42,18 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`a user connected: ${socket.id}`);
   connectionStates.set(socket.id, { type: "NoState" });
+
+  socket.on("enterRoom", (data) => {
+    const result = EnterRoomEventSchema.safeParse(data);
+    if (!result.success) {
+      socket.emit("error", { message: "Invalid data format" });
+      return;
+    }
+
+    const enterRoom = result.data;
+    connectionStates.set(socket.id, { ...enterRoom, type: "MatchMaking" });
+  });
+
   socket.on("disconnect", () => {
     connectionStates.delete(socket.id);
     console.log(`user disconnected: ${socket.id}`);
