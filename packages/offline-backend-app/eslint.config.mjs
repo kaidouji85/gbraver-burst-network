@@ -1,5 +1,4 @@
 import eslint from "@eslint/js";
-import jest from "eslint-plugin-jest";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from "typescript-eslint";
 
@@ -10,11 +9,21 @@ export default tseslint.config(
       "coverage/*",
       ".webpack/*",
       ".serverless/*",
-      "*webpack.config.js",
+      "**/*.js",
+      "**/*.mjs",
     ],
   },
+  {
+    files: ["**/*.ts"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   eslint.configs.recommended,
-  tseslint.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
@@ -22,13 +31,6 @@ export default tseslint.config(
     rules: {
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
-    },
-  },
-  {
-    files: ["test/**"],
-    ...jest.configs["flat/recommended"],
-    rules: {
-      ...jest.configs["flat/recommended"].rules,
     },
   },
 );
