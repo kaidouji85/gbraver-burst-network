@@ -6,7 +6,11 @@ import express from "express";
 import { Server } from "socket.io";
 
 dotenv.config();
+
+/** CORS許可オリジン */
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
+
+/** サーバーポート番号 */
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 const app = express();
