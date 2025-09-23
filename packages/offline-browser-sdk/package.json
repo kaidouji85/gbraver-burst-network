@@ -11,13 +11,16 @@
     "ts-loader": "^9.5.4",
     "typescript-eslint": "^8.44.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2"
+    "webpack-dev-server": "^5.2.2",
+    "prettier": "3.6.2"
   },
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check"
   }
 }
