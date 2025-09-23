@@ -4,14 +4,20 @@
   "version": "1.17.2",
   "author": "Y.Takeuchi",
   "devDependencies": {
+    "eslint": "^9.35.0",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "html-webpack-plugin": "^5.6.4",
     "ts-loader": "^9.5.4",
+    "typescript-eslint": "^8.44.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
   "license": "MIT",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "start": "webpack serve"
   }
 }
