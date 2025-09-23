@@ -1,6 +1,5 @@
-import { io } from "socket.io-client";
+import { createOfflineBrowserSDK } from ".";
 
 window.onload = () => {
-  const socket = io("http://localhost:3000");
-  console.log("hello");
+  createOfflineBrowserSDK({ backendURL: "http://localhost:3000" });
 };
