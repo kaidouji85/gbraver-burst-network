@@ -4,6 +4,7 @@
   "version": "1.17.2",
   "author": "Y.Takeuchi",
   "dependencies": {
+    "dotenv": "^17.2.2",
     "gbraver-burst-core": "^1.41.0",
     "socket.io-client": "^4.8.1"
   },
