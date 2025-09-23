@@ -14,14 +14,5 @@ export type MatchMaking = {
   pilotId: PilotId;
 };
 
-/**
- * コネクションのステート
- * 主にMapなどで管理する際に使用する
- */
+/** コネクションのステート */
 export type ConnectionState = NoState | MatchMaking;
-
-/**
- * ソケットID付きコネクションのステート
- * 主に配列で管理する際に使用する
- */
-export type ConnectionStateWithId = ConnectionState & { socketId: string };
