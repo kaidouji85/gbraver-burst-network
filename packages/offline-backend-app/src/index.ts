@@ -40,7 +40,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`a user connected: ${socket.id}`);
+  console.log(`a user(${socket.id}) connected`);
   connectionStates.set(socket.id, { type: "NoState" });
 
   socket.on("enterRoom", (data) => {
@@ -52,11 +52,12 @@ io.on("connection", (socket) => {
 
     const enterRoom = result.data;
     connectionStates.set(socket.id, { ...enterRoom, type: "MatchMaking" });
+    console.log(`a user(${socket.id}) entered room`);
   });
 
   socket.on("disconnect", () => {
     connectionStates.delete(socket.id);
-    console.log(`user disconnected: ${socket.id}`);
+    console.log(`a user(${socket.id}) disconnected`);
   });
 });
 
