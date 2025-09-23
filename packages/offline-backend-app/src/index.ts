@@ -39,7 +39,7 @@ let cachedMatchEntry: MatchEntry | null = null;
  * @param options.armdozerId - プレイヤーのアームドーザID
  * @param options.pilotId - プレイヤーのパイロットID
  */
-const processMatchmaking = async (options: {
+const processMatchmaking = (options: {
   socket: Socket;
   armdozerId: ArmdozerId;
   pilotId: PilotId;
@@ -61,7 +61,7 @@ const processMatchmaking = async (options: {
   const roomId = "room-id";
   socket.join(roomId);
   otherSocket.join(roomId);
-  await io.to(roomId).emitWithAck("matched", {});
+  io.to(roomId).emit("matched");
 
   cachedMatchEntry = null;
 };

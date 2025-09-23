@@ -63,9 +63,13 @@ window.onload = () => {
     const armdozerSelect = getArmdozerSelector();
     const pilotSelect = getPilotSelector();
     hiddenSelector();
-    sdk.enterRoom({
-      armdozerId: armdozerSelect.value,
-      pilotId: pilotSelect.value,
-    });
+    sdk
+      .enterRoom({
+        armdozerId: armdozerSelect.value,
+        pilotId: pilotSelect.value,
+      })
+      .then(() => {
+        console.log("matched");
+      });
   });
 };

@@ -20,8 +20,14 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   }
 
   /** @override */
-  enterRoom(options: { armdozerId: ArmdozerId; pilotId: PilotId }): void {
-    this.#ensureSocket().emit("enterRoom", options);
+  async enterRoom(options: { armdozerId: ArmdozerId; pilotId: PilotId }) {
+    const socket = this.#ensureSocket();
+    socket.emit("enterRoom", options);
+    return new Promise<void>((resolve) => {
+      socket.once("matched", () => {
+        resolve();
+      });
+    });
   }
 
   /**

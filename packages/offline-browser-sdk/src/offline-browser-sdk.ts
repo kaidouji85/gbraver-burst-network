@@ -8,6 +8,10 @@ export interface OfflineBrowserSDK {
    * @param options オプション
    * @param options.armdozerId アームドーザID
    * @param options.pilotId パイロットID
+   * @returns マッチングしたら発火するPromise
    */
-  enterRoom(options: { armdozerId: ArmdozerId; pilotId: PilotId }): void;
+  enterRoom(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<void>;
 }
