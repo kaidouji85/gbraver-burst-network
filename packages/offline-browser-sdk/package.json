@@ -24,5 +24,8 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start": "webpack serve"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
   }
 }
