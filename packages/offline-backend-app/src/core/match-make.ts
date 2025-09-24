@@ -1,17 +1,14 @@
 import { MatchMaking } from "./connection-state";
 
-/** MatchMaking型にsocketIdを追加した型 */
-type MatchMakingWithSocketId = MatchMaking & { socketId: string };
-
 /** マッチングされた2つのプレイヤーのペア */
-type MatchPair = [MatchMakingWithSocketId, MatchMakingWithSocketId];
+type MatchPair = [MatchMaking, MatchMaking];
 
 /** マッチメイキング処理の作業用オブジェクト */
 type Work = {
   /** マッチングが成立したペアの配列 */
   matched: MatchPair[];
   /** 待機中のプレイヤー、nullの場合は待機中のプレイヤーがいない */
-  waiting: MatchMakingWithSocketId | null;
+  waiting: MatchMaking | null;
 };
 
 /**
@@ -20,11 +17,9 @@ type Work = {
  * @param entries - マッチメイキング対象のプレイヤーエントリー配列
  * @returns マッチングが成立したペアの配列
  */
-export const matchMake = (
-  entries: (MatchMaking & { socketId: string })[],
-): MatchPair[] =>
+export const matchMake = (entries: MatchMaking[]): MatchPair[] =>
   entries.reduce(
-    (work: Work, current: MatchMakingWithSocketId) => {
+    (work: Work, current: MatchMaking) => {
       if (!work.waiting) {
         return { ...work, waiting: current };
       }

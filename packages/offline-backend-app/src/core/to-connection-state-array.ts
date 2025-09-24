@@ -1,6 +1,7 @@
 import { ConnectionState } from "./connection-state";
 
 /**
+ * @deprecated
  * コネクションステートを配列で取得する
  * @param origin コネクションステートのマップ
  * @returns 配列で取得したコネクションステート
@@ -8,7 +9,4 @@ import { ConnectionState } from "./connection-state";
 export const toConnectionStateArray = (
   origin: Map<string, ConnectionState>,
 ): (ConnectionState & { socketId: string })[] =>
-  Array.from(origin.entries()).map(([socketId, state]) => ({
-    socketId,
-    ...state,
-  }));
+  Array.from(origin.entries()).map(([, state]) => ({ ...state }));

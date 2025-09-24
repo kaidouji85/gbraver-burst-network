@@ -6,7 +6,7 @@ import express from "express";
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Server, Socket } from "socket.io";
 
-import { ConnectionState } from "./core/connection-state";
+import { InMemoryConnectionStates } from "./connection-states-container";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 
 dotenv.config();
@@ -17,12 +17,8 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
 /** サーバーポート番号 */
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-/**
- * コネクションのステートを管理するマップ
- * key: socket.id
- * value: ConnectionState
- */
-export const connectionStates = new Map<string, ConnectionState>();
+/** コネクションのステートを管理 */
+export const connectionStates = new InMemoryConnectionStates();
 
 /**
  * マッチメイキング処理を行う
@@ -38,7 +34,11 @@ const processMatchmaking = (options: {
   pilotId: PilotId;
 }) => {
   const { socket } = options;
-  connectionStates.set(socket.id, { ...options, type: "MatchMaking" });
+  connectionStates.set({
+    ...options,
+    socketId: socket.id,
+    type: "MatchMaking",
+  });
 };
 
 const app = express();
@@ -59,7 +59,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log(`a user(${socket.id}) connected`);
-  connectionStates.set(socket.id, { type: "NoState" });
+  connectionStates.set({ type: "NoState", socketId: socket.id });
 
   socket.on("enterRoom", (data) => {
     const result = EnterRoomEventSchema.safeParse(data);
@@ -69,7 +69,6 @@ io.on("connection", (socket) => {
     }
 
     const enterRoom = result.data;
-    connectionStates.set(socket.id, { ...enterRoom, type: "MatchMaking" });
     console.log(`a user(${socket.id}) entered room`);
     processMatchmaking({ ...enterRoom, socket });
   });
