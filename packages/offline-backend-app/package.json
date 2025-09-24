@@ -30,10 +30,12 @@
   "scripts": {
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
+    "coverage": "jest --coverage",
     "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start": "ts-node src/index.ts",
+    "test": "jest",
     "type-check": "tsc --noEmit"
   }
 }
