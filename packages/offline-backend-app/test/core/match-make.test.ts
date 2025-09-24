@@ -42,11 +42,8 @@ test("エントリが2つの場合は、1つのペアを返す", () => {
     PilotIds.GAI,
   );
   const entries = [entry1, entry2];
-
   const result = matchMake(entries);
-
-  expect(result).toHaveLength(1);
-  expect(result[0]).toEqual([entry1, entry2]);
+  expect(result).toEqual([[entry1, entry2]]);
 });
 
 test("エントリが3つの場合は、1つのペアを返す（1つが余る）", () => {
@@ -66,11 +63,8 @@ test("エントリが3つの場合は、1つのペアを返す（1つが余る�
     PilotIds.RAITO,
   );
   const entries = [entry1, entry2, entry3];
-
   const result = matchMake(entries);
-
-  expect(result).toHaveLength(1);
-  expect(result[0]).toEqual([entry1, entry2]);
+  expect(result).toEqual([[entry1, entry2]]);
 });
 
 test("エントリが4つの場合は、2つのペアを返す", () => {
@@ -95,12 +89,11 @@ test("エントリが4つの場合は、2つのペアを返す", () => {
     PilotIds.TSUBASA,
   );
   const entries = [entry1, entry2, entry3, entry4];
-
   const result = matchMake(entries);
-
-  expect(result).toHaveLength(2);
-  expect(result[0]).toEqual([entry1, entry2]);
-  expect(result[1]).toEqual([entry3, entry4]);
+  expect(result).toEqual([
+    [entry1, entry2],
+    [entry3, entry4],
+  ]);
 });
 
 test("エントリが5つの場合は、2つのペアを返す（1つが余る）", () => {
@@ -130,10 +123,9 @@ test("エントリが5つの場合は、2つのペアを返す（1つが余る�
     PilotIds.YUUYA,
   );
   const entries = [entry1, entry2, entry3, entry4, entry5];
-
   const result = matchMake(entries);
-
-  expect(result).toHaveLength(2);
-  expect(result[0]).toEqual([entry1, entry2]);
-  expect(result[1]).toEqual([entry3, entry4]);
+  expect(result).toEqual([
+    [entry1, entry2],
+    [entry3, entry4],
+  ]);
 });
