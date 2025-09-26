@@ -4,6 +4,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   ConnectionStatesContainer,
@@ -37,7 +38,7 @@ const processMatchmaking = () => {
     .filter((state) => state.type === "MatchMaking");
   const matched = matchMake(entries);
   matched.forEach((pair) => {
-    const roomId = `room-${pair[0].socketId}-${pair[1].socketId}`;
+    const roomId = uuidv4();
     pair.forEach((player) => {
       io.sockets.sockets.get(player.socketId)?.join(roomId);
     });
