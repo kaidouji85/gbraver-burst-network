@@ -3,10 +3,13 @@ import { createServer } from "node:http";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
-import { ArmdozerId, PilotId } from "gbraver-burst-core";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 
-import { InMemoryConnectionStates } from "./connection-states-container";
+import {
+  ConnectionStatesContainer,
+  InMemoryConnectionStates,
+} from "./connection-states-container";
+import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 
 dotenv.config();
@@ -18,26 +21,30 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 /** コネクションのステートを管理 */
-export const connectionStates = new InMemoryConnectionStates();
+export const connectionStates: ConnectionStatesContainer =
+  new InMemoryConnectionStates();
 
 /**
  * マッチメイキング処理を行う
- * 待機中のプレイヤーがいれば即座にマッチングし、いなければ待機状態にする
  * @param options - マッチメイキングに必要な情報
  * @param options.socket - プレイヤーのSocket.IOソケット
  * @param options.armdozerId - プレイヤーのアームドーザID
  * @param options.pilotId - プレイヤーのパイロットID
  */
-const processMatchmaking = (options: {
-  socket: Socket;
-  armdozerId: ArmdozerId;
-  pilotId: PilotId;
-}) => {
-  const { socket } = options;
-  connectionStates.set({
-    ...options,
-    socketId: socket.id,
-    type: "MatchMaking",
+const processMatchmaking = () => {
+  const entries = connectionStates
+    .toArray()
+    .filter((state) => state.type === "MatchMaking");
+  const matched = matchMake(entries);
+  matched.forEach((pair) => {
+    const roomId = `room-${pair[0].socketId}-${pair[1].socketId}`;
+    pair.forEach((player) => {
+      io.sockets.sockets.get(player.socketId)?.join(roomId);
+    });
+    io.to(roomId).emit("matched", { roomId });
+    pair.forEach((player) => {
+      io.sockets.sockets.get(player.socketId)?.leave(roomId);
+    });
   });
 };
 
@@ -70,7 +77,12 @@ io.on("connection", (socket) => {
 
     const enterRoom = result.data;
     console.log(`a user(${socket.id}) entered room`);
-    processMatchmaking({ ...enterRoom, socket });
+    connectionStates.set({
+      ...enterRoom,
+      socketId: socket.id,
+      type: "MatchMaking",
+    });
+    processMatchmaking();
   });
 
   socket.on("disconnect", () => {
