@@ -12,6 +12,7 @@ import {
 } from "./connection-states-container";
 import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
+import { createPlayer } from "./core/create-player";
 
 dotenv.config();
 
@@ -39,12 +40,19 @@ const processMatchmaking = () => {
   const matched = matchMake(entries);
   matched.forEach((pair) => {
     const battleId = uuidv4();
-    pair.forEach((player) => {
-      io.sockets.sockets.get(player.socketId)?.join(battleId);
+    const players = pair.map((entry) => ({
+      socketId: entry.socketId,
+      player: createPlayer(entry),
+    }));
+
+    players.forEach(p => {
+      io.sockets.sockets.get(p.socketId)?.join(battleId);
+      connectionStates.set({ ...p, type: "InBattle"});
     });
     io.to(battleId).emit("matched", { roomId: battleId });
-    pair.forEach((player) => {
-      io.sockets.sockets.get(player.socketId)?.leave(battleId);
+    players.forEach(p => {
+      io.sockets.sockets.get(p.socketId)?.leave(battleId);
+      connectionStates.set({ ...p, type: "NoState"});
     });
   });
 };
