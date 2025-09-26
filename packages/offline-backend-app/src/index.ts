@@ -10,9 +10,9 @@ import {
   ConnectionStatesContainer,
   InMemoryConnectionStates,
 } from "./connection-states-container";
+import { createPlayer } from "./core/create-player";
 import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
-import { createPlayer } from "./core/create-player";
 
 dotenv.config();
 

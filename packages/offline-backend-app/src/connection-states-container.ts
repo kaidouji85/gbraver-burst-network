@@ -1,6 +1,6 @@
 import { ConnectionState } from "./core/connection-state";
 
-/** コネクションステートの配置場所 */
+/** コネクションステートの管理インタフェース */
 export interface ConnectionStatesContainer {
   /**
    * コネクションステートを取得する
