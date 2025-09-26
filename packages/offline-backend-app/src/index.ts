@@ -38,13 +38,13 @@ const processMatchmaking = () => {
     .filter((state) => state.type === "MatchMaking");
   const matched = matchMake(entries);
   matched.forEach((pair) => {
-    const roomId = uuidv4();
+    const battleId = uuidv4();
     pair.forEach((player) => {
-      io.sockets.sockets.get(player.socketId)?.join(roomId);
+      io.sockets.sockets.get(player.socketId)?.join(battleId);
     });
-    io.to(roomId).emit("matched", { roomId });
+    io.to(battleId).emit("matched", { roomId: battleId });
     pair.forEach((player) => {
-      io.sockets.sockets.get(player.socketId)?.leave(roomId);
+      io.sockets.sockets.get(player.socketId)?.leave(battleId);
     });
   });
 };

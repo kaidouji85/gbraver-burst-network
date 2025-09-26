@@ -1,4 +1,4 @@
-import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId, Player } from "gbraver-burst-core";
 
 /** すべてのステートが持つソケット情報 */
 type SocketInfo = {
@@ -20,5 +20,12 @@ export type MatchMaking = SocketInfo & {
   pilotId: PilotId;
 };
 
+/** バトル中 */
+export type InBattle = SocketInfo & {
+  type: "InBattle";
+  /** ゲームでのステータス */
+  player: Player;
+};
+
 /** コネクションのステート */
-export type ConnectionState = NoState | MatchMaking;
+export type ConnectionState = NoState | MatchMaking | InBattle;
