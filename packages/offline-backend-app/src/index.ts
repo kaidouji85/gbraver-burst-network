@@ -45,14 +45,14 @@ const processMatchmaking = () => {
       player: createPlayer(entry),
     }));
 
-    players.forEach(p => {
+    players.forEach((p) => {
       io.sockets.sockets.get(p.socketId)?.join(battleId);
-      connectionStates.set({ ...p, type: "InBattle"});
+      connectionStates.set({ ...p, type: "InBattle" });
     });
     io.to(battleId).emit("matched", { roomId: battleId });
-    players.forEach(p => {
+    players.forEach((p) => {
       io.sockets.sockets.get(p.socketId)?.leave(battleId);
-      connectionStates.set({ ...p, type: "NoState"});
+      connectionStates.set({ ...p, type: "NoState" });
     });
   });
 };
@@ -77,6 +77,10 @@ io.on("connection", (socket) => {
   console.log(`a user(${socket.id}) connected`);
   connectionStates.set({ type: "NoState", socketId: socket.id });
 
+  /**
+   * ルームに入室する
+   * @param data ユーザーから渡された入室データ
+   */
   socket.on("enterRoom", (data) => {
     const result = EnterRoomEventSchema.safeParse(data);
     if (!result.success) {
@@ -94,6 +98,9 @@ io.on("connection", (socket) => {
     processMatchmaking();
   });
 
+  /**
+   * ソケットの切断処理
+   */
   socket.on("disconnect", () => {
     connectionStates.delete(socket.id);
     console.log(`a user(${socket.id}) disconnected`);
