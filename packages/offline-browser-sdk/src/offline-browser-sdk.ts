@@ -1,4 +1,25 @@
-import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, GameState, GameStateSchema, PilotId, Player, PlayerSchema } from "gbraver-burst-core";
+import { z } from "zod";
+
+/** バトル情報 */
+export type BattleInfo = {
+  /** バトルID */
+  battleId: string;
+  /** フローID */
+  flowId: string;
+  /** 自分自身のプレイヤー情報 */
+  player: Player;
+  /** ゲームステートの履歴 */
+  stateHistory: GameState[];
+};
+
+/** バトル情報のZodスキーマ */
+export const BattleInfoSchema = z.object({
+  battleId: z.string(),
+  flowId: z.string(),
+  player: PlayerSchema,
+  stateHistory: z.array(GameStateSchema),
+});
 
 /** オフライン用ブラウザSDK */
 
@@ -13,5 +34,5 @@ export interface OfflineBrowserSDK {
   enterRoom(options: {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
-  }): Promise<void>;
+  }): Promise<BattleInfo>;
 }

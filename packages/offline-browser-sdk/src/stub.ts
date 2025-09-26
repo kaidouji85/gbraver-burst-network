@@ -68,8 +68,8 @@ window.onload = () => {
         armdozerId: armdozerSelect.value,
         pilotId: pilotSelect.value,
       })
-      .then(() => {
-        console.log("matched");
+      .then((battleInfo) => {
+        console.log("matched", battleInfo);
       });
   });
 };

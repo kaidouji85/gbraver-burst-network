@@ -1,7 +1,11 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { io, Socket } from "socket.io-client";
 
-import { OfflineBrowserSDK } from "./offline-browser-sdk";
+import {
+  BattleInfo,
+  BattleInfoSchema,
+  OfflineBrowserSDK,
+} from "./offline-browser-sdk";
 
 /** オフライン用ブラウザSDK実装 */
 export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
@@ -20,12 +24,18 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   }
 
   /** @override */
-  async enterRoom(options: { armdozerId: ArmdozerId; pilotId: PilotId }) {
+  async enterRoom(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<BattleInfo> {
     const socket = this.#ensureSocket();
     socket.emit("enterRoom", options);
-    return new Promise<void>((resolve) => {
-      socket.once("matched", () => {
-        resolve();
+    return new Promise<BattleInfo>((resolve) => {
+      socket.once("matched", (data) => {
+        const parsedBattleInfo = BattleInfoSchema.safeParse(data);
+        if (parsedBattleInfo.success) {
+          resolve(parsedBattleInfo.data);
+        }
       });
     });
   }
