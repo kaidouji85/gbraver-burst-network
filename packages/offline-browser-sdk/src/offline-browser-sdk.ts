@@ -1,4 +1,11 @@
-import { ArmdozerId, GameState, GameStateSchema, PilotId, Player, PlayerSchema } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  GameState,
+  GameStateSchema,
+  PilotId,
+  Player,
+  PlayerSchema,
+} from "gbraver-burst-core";
 import { z } from "zod";
 
 /** バトル情報 */

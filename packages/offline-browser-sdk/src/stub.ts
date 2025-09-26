@@ -46,11 +46,12 @@ const updatePilotOptions = () => {
 };
 
 /**
- * セレクターを非表示にする
+ * セレクターを操作不可能にする
  */
-const hiddenSelector = () => {
-  const selector = document.getElementById("selector") as HTMLDivElement;
-  selector.style.display = "none";
+const disabledSelector = () => {
+  document.getElementById("armdozer")?.setAttribute("disabled", "true");
+  document.getElementById("pilot")?.setAttribute("disabled", "true");
+  document.getElementById("enter-room")?.setAttribute("disabled", "true");
 };
 
 /** スタブのエントリポイント */
@@ -62,7 +63,7 @@ window.onload = () => {
   document.getElementById("enter-room")?.addEventListener("click", () => {
     const armdozerSelect = getArmdozerSelector();
     const pilotSelect = getPilotSelector();
-    hiddenSelector();
+    disabledSelector();
     sdk
       .enterRoom({
         armdozerId: armdozerSelect.value,
