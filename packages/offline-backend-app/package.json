@@ -8,6 +8,7 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "gbraver-burst-core": "^1.41.0",
+    "p-queue": "^8.1.1",
     "socket.io": "^4.8.1",
     "uuid": "^13.0.0",
     "zod": "^4.1.11"

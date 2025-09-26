@@ -4,6 +4,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
 import { startGBraverBurst } from "gbraver-burst-core";
+import PQueue from "p-queue";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,6 +34,9 @@ const connectionStates: ConnectionStatesContainer =
 
 /** バトル情報管理 */
 const battles: BattlesContainer = new InMemoryBattles();
+
+/** キュー制御 */
+const queue = new PQueue({ concurrency: 1 });
 
 /**
  * マッチメイキング処理を行う
@@ -101,14 +105,16 @@ io.on("connection", (socket) => {
       return;
     }
 
-    const enterRoom = result.data;
-    console.log(`a user(${socket.id}) entered room`);
-    connectionStates.set({
-      ...enterRoom,
-      socketId: socket.id,
-      type: "MatchMaking",
+    queue.add(() => {
+      const enterRoom = result.data;
+      console.log(`a user(${socket.id}) entered room`);
+      connectionStates.set({
+        ...enterRoom,
+        socketId: socket.id,
+        type: "MatchMaking",
+      });
+      processMatchmaking();
     });
-    processMatchmaking();
   });
 
   /**
