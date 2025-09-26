@@ -1,4 +1,4 @@
-import { ConnectionState } from "./core/connection-state";
+import { ConnectionState } from "../core/connection-state";
 
 /** コネクションステートの管理インタフェース */
 export interface ConnectionStatesContainer {

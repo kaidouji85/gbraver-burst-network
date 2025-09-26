@@ -1,4 +1,4 @@
-import { Battle } from "./core/battle";
+import { Battle } from "../core/battle";
 
 /** バトル情報を管理するインターフェース */
 export interface BattlesContainer {

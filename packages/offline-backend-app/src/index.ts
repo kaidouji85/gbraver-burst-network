@@ -3,13 +3,18 @@ import { createServer } from "node:http";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
+import { startGBraverBurst } from "gbraver-burst-core";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 
 import {
+  BattlesContainer,
+  InMemoryBattles,
+} from "./containers/battles-conctainer";
+import {
   ConnectionStatesContainer,
   InMemoryConnectionStates,
-} from "./connection-states-container";
+} from "./containers/connection-states-container";
 import { createPlayer } from "./core/create-player";
 import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
@@ -22,9 +27,12 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
 /** サーバーポート番号 */
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-/** コネクションのステートを管理 */
-export const connectionStates: ConnectionStatesContainer =
+/** コネクションステート管理 */
+const connectionStates: ConnectionStatesContainer =
   new InMemoryConnectionStates();
+
+/** バトル情報管理 */
+const battles: BattlesContainer = new InMemoryBattles();
 
 /**
  * マッチメイキング処理を行う
@@ -40,19 +48,24 @@ const processMatchmaking = () => {
   const matched = matchMake(entries);
   matched.forEach((pair) => {
     const battleId = uuidv4();
+    const flowId = uuidv4();
     const players = pair.map((entry) => ({
       socketId: entry.socketId,
       player: createPlayer(entry),
     }));
 
+    const core = startGBraverBurst([players[0].player, players[1].player]);
+    const stateHistory = core.stateHistory();
+    battles.set({ battleId, flowId, stateHistory });
     players.forEach((p) => {
-      io.sockets.sockets.get(p.socketId)?.join(battleId);
+      const socket = io.sockets.sockets.get(p.socketId);
       connectionStates.set({ ...p, type: "InBattle" });
-    });
-    io.to(battleId).emit("matched", { roomId: battleId });
-    players.forEach((p) => {
-      io.sockets.sockets.get(p.socketId)?.leave(battleId);
-      connectionStates.set({ ...p, type: "NoState" });
+      socket?.emit("matched", {
+        battleId,
+        flowId,
+        player: p.player,
+        stateHistory,
+      });
     });
   });
 };
