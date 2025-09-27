@@ -16,6 +16,7 @@ import {
   ConnectionStatesContainer,
   InMemoryConnectionStates,
 } from "./containers/connection-states-container";
+import { InBattle } from "./core/connection-state";
 import { createPlayer } from "./core/create-player";
 import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
@@ -63,7 +64,7 @@ const processMatchmaking = () => {
     battles.set({ battleId, flowId, stateHistory });
     players.forEach((p) => {
       const socket = io.sockets.sockets.get(p.socketId);
-      connectionStates.set({ ...p, type: "InBattle" });
+      connectionStates.set({ ...p, type: "InBattle", battleId });
       socket?.emit("matched", {
         battleId,
         flowId,
@@ -72,6 +73,32 @@ const processMatchmaking = () => {
       });
     });
   });
+};
+
+/**
+ * 必要であればバトルを破棄する
+ * 本関数はコネクションが切断された時に、それ以外の終了処理を行うものである
+ * @param state 切断されたコネクションのInBattleステート
+ */
+const destroyBattleIfNeeded = (state: InBattle) => {
+  battles.delete(state.battleId);
+
+  const otherState = connectionStates
+    .toArray()
+    .find(
+      (s) =>
+        s.type === "InBattle" &&
+        s.battleId === state.battleId &&
+        s.socketId !== state.socketId,
+    );
+  if (!otherState) {
+    return;
+  }
+
+  io.sockets.sockets
+    .get(otherState.socketId)
+    ?.emit("error", { message: "battle ended" });
+  connectionStates.set({ type: "NoState", socketId: otherState.socketId });
 };
 
 const app = express();
@@ -121,8 +148,14 @@ io.on("connection", (socket) => {
    * ソケットの切断処理
    */
   socket.on("disconnect", () => {
-    connectionStates.delete(socket.id);
     console.log(`a user(${socket.id}) disconnected`);
+    queue.add(() => {
+      const state = connectionStates.get(socket.id);
+      connectionStates.delete(socket.id);
+      if (state?.type === "InBattle") {
+        destroyBattleIfNeeded(state);
+      }
+    });
   });
 });
 

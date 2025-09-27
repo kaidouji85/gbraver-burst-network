@@ -25,6 +25,8 @@ export type InBattle = SocketInfo & {
   type: "InBattle";
   /** ゲームでのステータス */
   player: Player;
+  /** バトルID */
+  battleId: string;
 };
 
 /** コネクションのステート */
