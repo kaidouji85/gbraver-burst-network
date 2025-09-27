@@ -1,10 +1,12 @@
-import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, Command, PilotId } from "gbraver-burst-core";
 import { Observable, Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
 
 import {
   BattleInfo,
   BattleInfoSchema,
+  GameProgressResult,
+  GameProgressResultSchema,
   OfflineBrowserSDK,
 } from "./offline-browser-sdk";
 
@@ -14,6 +16,8 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   #backendURL: string;
   /** ソケット接続、未作成の場合はnull */
   #socket: Socket | null = null;
+  /** 現在のフローID、バトル以外ではnullがセットされる */
+  #flowId: string | null = null;
   /** エラー通知のSubject */
   #error: Subject<unknown>;
 
@@ -38,7 +42,26 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
       socket.once("matched", (data) => {
         const parsedBattleInfo = BattleInfoSchema.safeParse(data);
         if (parsedBattleInfo.success) {
+          this.#flowId = parsedBattleInfo.data.flowId;
           resolve(parsedBattleInfo.data);
+        }
+      });
+    });
+  }
+
+  /** @override */
+  async sendCommand(command: Command): Promise<GameProgressResult> {
+    if (!this.#flowId) {
+      throw new Error("Not in battle");
+    }
+
+    const socket = this.#ensureSocket();
+    socket.emit("sendCommand", { command, flowId: this.#flowId });
+    return new Promise<GameProgressResult>((resolve) => {
+      socket.once("progressed", (data) => {
+        const parsedResult = GameProgressResultSchema.safeParse(data);
+        if (parsedResult.success) {
+          resolve(parsedResult.data);
         }
       });
     });
