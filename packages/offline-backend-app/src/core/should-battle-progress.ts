@@ -7,10 +7,13 @@ import { Battle } from "./battle";
  * @returns バトルを進めてよい場合はtrue、そうでない場合はfalse
  */
 export function shouldBattleProgress(battle: Battle): boolean {
+  if (battle.flowId === "") {
+    return false;
+  }
+
   const receivedCommandFlowIds = Array.from(battle.commands.values()).map(
     (c) => c.flowId,
   );
-
   // すべてのプレイヤー(2人)からコマンドが届き、全て同じflowIdであることを確認
   return (
     receivedCommandFlowIds.length === 2 &&
