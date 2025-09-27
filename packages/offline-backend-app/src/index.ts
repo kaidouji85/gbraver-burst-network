@@ -195,6 +195,10 @@ io.on("connection", (socket) => {
     });
   });
 
+  /**
+   * クライアントがコマンドを送信する
+   * @param data ユーザーから渡されたコマンドデータ
+   */
   socket.on("sendCommand", (data) => {
     console.log(`a user(${socket.id}) sent command`);
     const parsedData = SendCommandSchema.safeParse(data);
