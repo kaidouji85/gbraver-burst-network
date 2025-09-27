@@ -1,4 +1,11 @@
-import { Armdozers, Pilots, Player, Selectable } from "gbraver-burst-core";
+import {
+  Armdozers,
+  Command,
+  CommandSchema,
+  Pilots,
+  Player,
+  Selectable,
+} from "gbraver-burst-core";
 
 import { createOfflineBrowserSDK } from "./";
 
@@ -69,6 +76,23 @@ const showCommands = () => {
 };
 
 /**
+ * 選択されているコマンドを取得する
+ * @returns 選択されているコマンド
+ */
+const getSelectedCommand = (): Command => {
+  const commandSelector = document.getElementById(
+    "command-selector",
+  ) as HTMLSelectElement;
+  if (!commandSelector) {
+    throw new Error("Command selector not found");
+  }
+
+  const command = JSON.parse(commandSelector.value);
+  const parsedCommand = CommandSchema.parse(command);
+  return parsedCommand;
+};
+
+/**
  * コマンドセレクターを更新する
  * @param selectable 選択可能なコマンド
  */
@@ -128,6 +152,43 @@ window.onload = () => {
       showCommands();
     }
   });
+
+  /**
+   * コマンド送信ボタンのクリックイベント
+   */
+  document
+    .getElementById("send-command")
+    ?.addEventListener("click", async () => {
+      hiddenCommands();
+      if (!player) {
+        return;
+      }
+
+      let lastCommand = getSelectedCommand();
+      const maxPollingAttempts = 100;
+      for (let i = 0; i < maxPollingAttempts; i++) {
+        const gameProgressed = await sdk.sendCommand(lastCommand);
+        const lastState = gameProgressed.updatedStateHistory.at(-1);
+        if (lastState?.effect.name !== "InputCommand") {
+          return;
+        }
+
+        const commands = lastState.effect.players.find(
+          (p) => p.playerId === player?.playerId,
+        );
+        if (!commands) {
+          return;
+        }
+
+        if (commands.selectable) {
+          updateCommands(commands);
+          showCommands();
+          return;
+        }
+
+        lastCommand = commands.nextTurnCommand;
+      }
+    });
 
   /**
    * エラーが発生した時の処理
