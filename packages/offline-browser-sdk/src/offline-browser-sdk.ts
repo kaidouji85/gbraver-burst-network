@@ -6,6 +6,7 @@ import {
   Player,
   PlayerSchema,
 } from "gbraver-burst-core";
+import { Observable } from "rxjs";
 import { z } from "zod";
 
 /** バトル情報 */
@@ -42,4 +43,10 @@ export interface OfflineBrowserSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<BattleInfo>;
+
+  /**
+   * エラーを通知するObservableを取得する
+   * @returns エラー通知のObservable
+   */
+  notifyError(): Observable<unknown>;
 }

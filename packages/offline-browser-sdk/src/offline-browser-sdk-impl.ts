@@ -1,4 +1,5 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { Observable, Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
 
 import {
@@ -13,6 +14,8 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   #backendURL: string;
   /** ソケット接続、未作成の場合はnull */
   #socket: Socket | null = null;
+  /** エラー通知のSubject */
+  #error: Subject<unknown>;
 
   /**
    * コンストラクタ
@@ -21,6 +24,7 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
    */
   constructor(options: { backendURL: string }) {
     this.#backendURL = options.backendURL;
+    this.#error = new Subject<unknown>();
   }
 
   /** @override */
@@ -40,12 +44,24 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
     });
   }
 
+  /** @override */
+  notifyError(): Observable<unknown> {
+    return this.#error;
+  }
+
   /**
    * ソケットの存在を保証する（未作成なら作成する）
    * @returns ソケット
    */
   #ensureSocket(): Socket {
-    this.#socket = this.#socket ?? io(this.#backendURL);
+    if (this.#socket) {
+      return this.#socket;
+    }
+
+    this.#socket = io(this.#backendURL);
+    this.#socket.on("error", (err) => {
+      this.#error.next(err);
+    });
     return this.#socket;
   }
 }
