@@ -78,11 +78,11 @@ const processMatchmaking = () => {
 };
 
 /**
- * 必要であればバトルを破棄する
- * 本関数はコネクションが切断された時に、それ以外の終了処理を行うものである
+ * プレイヤー切断時のバトルクリーンアップ処理を行う
+ * バトルを削除し、対戦相手がいる場合は終了通知を送信する
  * @param state 切断されたコネクションのInBattleステート
  */
-const destroyBattleIfNeeded = (state: InBattle) => {
+const cleanupBattleOnDisconnect = (state: InBattle) => {
   battles.delete(state.battleId);
 
   const otherState = connectionStates
@@ -184,7 +184,7 @@ io.on("connection", (socket) => {
       const state = connectionStates.get(socket.id);
       connectionStates.delete(socket.id);
       if (state?.type === "InBattle") {
-        destroyBattleIfNeeded(state);
+        cleanupBattleOnDisconnect(state);
       }
     });
   });
