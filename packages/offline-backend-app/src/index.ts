@@ -3,7 +3,11 @@ import { createServer } from "node:http";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
-import { startGBraverBurst } from "gbraver-burst-core";
+import {
+  Player,
+  restoreGBraverBurst,
+  startGBraverBurst,
+} from "gbraver-burst-core";
 import PQueue from "p-queue";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
@@ -23,6 +27,7 @@ import { matchMake } from "./core/match-make";
 import { updateCommand } from "./core/update-command";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 import { SendCommandSchema } from "./socket-io-event/send-command";
+import { shouldBattleProgress } from "./core/should-battle-progress";
 
 dotenv.config();
 
@@ -44,10 +49,6 @@ const queue = new PQueue({ concurrency: 1 });
 
 /**
  * マッチメイキング処理を行う
- * @param options - マッチメイキングに必要な情報
- * @param options.socket - プレイヤーのSocket.IOソケット
- * @param options.armdozerId - プレイヤーのアームドーザID
- * @param options.pilotId - プレイヤーのパイロットID
  */
 const processMatchmaking = () => {
   const entries = connectionStates
@@ -78,9 +79,50 @@ const processMatchmaking = () => {
   });
 };
 
-// const progressBattle = (battle: Battle) => {
+/**
+ * バトルの進行処理を行う
+ * @param battle バトル情報
+ */
+const progressBattle = (battle: Battle) => {
+  if (!shouldBattleProgress(battle)) {
+    return;
+  }
 
-// };
+  const battleStates = connectionStates
+    .toArray()
+    .filter((state) => state.type === "InBattle")
+    .filter((state) => state.battleId === battle.battleId);
+  if (battleStates.length !== 2) {
+    return;
+  }
+
+  const { stateHistory } = battle;
+  const players: [Player, Player] = [
+    battleStates[0].player,
+    battleStates[1].player,
+  ];
+  const core = restoreGBraverBurst({ players, stateHistory });
+  const commands = Array.from(battle.commands.values());
+  if (commands.length !== 2) {
+    return;
+  }
+
+  const updatedStateHistory = core.progress([commands[0], commands[1]]);
+  const newFlowId = uuidv4();
+  const updatedBattle = {
+    ...battle,
+    flowId: newFlowId,
+    stateHistory: [...battle.stateHistory, ...updatedStateHistory],
+  };
+  battles.set(updatedBattle);
+  battleStates.forEach((state) => {
+    const socket = io.sockets.sockets.get(state.socketId);
+    socket?.emit("progressed", {
+      flowId: newFlowId,
+      updatedStateHistory,
+    });
+  });
+};
 
 /**
  * プレイヤー切断時のバトルクリーンアップ処理を行う
@@ -177,6 +219,7 @@ io.on("connection", (socket) => {
         command: { ...sendCommand, playerId: state.player.playerId },
       });
       battles.set(updatedBattle);
+      progressBattle(updatedBattle);
     });
   });
 
