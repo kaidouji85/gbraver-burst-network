@@ -19,6 +19,7 @@ import {
 import { InBattle } from "./core/connection-state";
 import { createPlayer } from "./core/create-player";
 import { matchMake } from "./core/match-make";
+import { updateCommand } from "./core/update-command";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 import { SendCommandSchema } from "./socket-io-event/send-command";
 
@@ -166,11 +167,11 @@ io.on("connection", (socket) => {
         return;
       }
 
-      battle.commands.set(state.player.playerId, {
-        ...sendCommand,
-        battleId: battle.battleId,
-        playerId: state.player.playerId,
+      const updatedBattle = updateCommand({
+        battle,
+        command: { ...sendCommand, playerId: state.player.playerId },
       });
+      battles.set(updatedBattle);
     });
   });
 

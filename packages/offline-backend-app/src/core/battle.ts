@@ -2,8 +2,6 @@ import { Command, GameState, PlayerId } from "gbraver-burst-core";
 
 /** バトルに利用するコマンド */
 export type BattleCommand = {
-  /** バトルID */
-  readonly battleId: string;
   /** フローID */
   readonly flowId: string;
   /** プレイヤーID */
