@@ -22,6 +22,7 @@ import { matchMake } from "./core/match-make";
 import { updateCommand } from "./core/update-command";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 import { SendCommandSchema } from "./socket-io-event/send-command";
+import { Battle } from "./core/battle";
 
 dotenv.config();
 
@@ -76,6 +77,10 @@ const processMatchmaking = () => {
     });
   });
 };
+
+// const progressBattle = (battle: Battle) => {
+  
+// };
 
 /**
  * プレイヤー切断時のバトルクリーンアップ処理を行う
