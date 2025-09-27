@@ -1,6 +1,13 @@
-import { Armdozers, Pilots } from "gbraver-burst-core";
+import {
+  Armdozers,
+  InputCommand,
+  Pilots,
+  Player,
+  Selectable,
+} from "gbraver-burst-core";
 
 import { createOfflineBrowserSDK } from "./";
+import { BattleInfo } from "./offline-browser-sdk";
 
 /** バックエンドURL */
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
@@ -54,23 +61,45 @@ const disabledSelector = () => {
   document.getElementById("enter-room")?.setAttribute("disabled", "true");
 };
 
+const updateCommands = (selectable: Selectable) => {
+  const commandSelector = document.getElementById("command-selector") as HTMLSelectElement;
+  selectable.command.forEach((command, index) => {
+    const option = document.createElement("option");
+    option.value = index.toString();
+    option.text = JSON.stringify(command);
+    commandSelector.appendChild(option);
+  });
+};
+
 /** スタブのエントリポイント */
 window.onload = () => {
   updateArmdozerOptions();
   updatePilotOptions();
   const sdk = createOfflineBrowserSDK({ backendURL: BACKEND_URL });
 
-  document.getElementById("enter-room")?.addEventListener("click", () => {
+  document.getElementById("enter-room")?.addEventListener("click", async () => {
     const armdozerSelect = getArmdozerSelector();
     const pilotSelect = getPilotSelector();
     disabledSelector();
-    sdk
-      .enterRoom({
-        armdozerId: armdozerSelect.value,
-        pilotId: pilotSelect.value,
-      })
-      .then((battleInfo) => {
-        console.log("matched", battleInfo);
-      });
+    
+    const battleInfo = await sdk.enterRoom({
+      armdozerId: armdozerSelect.value,
+      pilotId: pilotSelect.value,
+    });
+    
+    console.log("matched", battleInfo);
+    const inputCommand = battleInfo.stateHistory.findLast(
+      (s) => s.effect.name === "InputCommand",
+    );
+    if (inputCommand?.effect.name !== "InputCommand") {
+      return;
+    }
+
+    const commands = inputCommand.effect.players.find(
+      (p) => p.playerId === battleInfo.player.playerId,
+    );
+    if (commands?.selectable) {
+      updateCommands(commands);
+    }
   });
 };
