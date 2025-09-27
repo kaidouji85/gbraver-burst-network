@@ -61,6 +61,7 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
       socket.once("progressed", (data) => {
         const parsedResult = GameProgressResultSchema.safeParse(data);
         if (parsedResult.success) {
+          this.#flowId = parsedResult.data.flowId;
           resolve(parsedResult.data);
         }
       });
