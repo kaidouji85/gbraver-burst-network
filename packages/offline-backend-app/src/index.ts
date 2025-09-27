@@ -61,7 +61,7 @@ const processMatchmaking = () => {
 
     const core = startGBraverBurst([players[0].player, players[1].player]);
     const stateHistory = core.stateHistory();
-    battles.set({ battleId, flowId, stateHistory });
+    battles.set({ battleId, flowId, stateHistory, commands: new Map() });
     players.forEach((p) => {
       const socket = io.sockets.sockets.get(p.socketId);
       connectionStates.set({ ...p, type: "InBattle", battleId });
