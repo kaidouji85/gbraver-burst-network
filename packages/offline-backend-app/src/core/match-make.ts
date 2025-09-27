@@ -6,9 +6,9 @@ type MatchPair = [MatchMaking, MatchMaking];
 /** マッチメイキング処理の作業用オブジェクト */
 type Work = {
   /** マッチングが成立したペアの配列 */
-  matched: MatchPair[];
+  readonly matched: MatchPair[];
   /** 待機中のプレイヤー、nullの場合は待機中のプレイヤーがいない */
-  waiting: MatchMaking | null;
+  readonly waiting: MatchMaking | null;
 };
 
 /**

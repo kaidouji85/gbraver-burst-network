@@ -3,7 +3,7 @@ import { ArmdozerId, PilotId, Player } from "gbraver-burst-core";
 /** すべてのステートが持つソケット情報 */
 type SocketInfo = {
   /** ソケットID */
-  socketId: string;
+  readonly socketId: string;
 };
 
 /** 状態なし */
@@ -15,18 +15,18 @@ export type NoState = SocketInfo & {
 export type MatchMaking = SocketInfo & {
   type: "MatchMaking";
   /** アームドーザID */
-  armdozerId: ArmdozerId;
+  readonly armdozerId: ArmdozerId;
   /** パイロットID */
-  pilotId: PilotId;
+  readonly pilotId: PilotId;
 };
 
 /** バトル中 */
 export type InBattle = SocketInfo & {
   type: "InBattle";
   /** ゲームでのステータス */
-  player: Player;
+  readonly player: Player;
   /** バトルID */
-  battleId: string;
+  readonly battleId: string;
 };
 
 /** コネクションのステート */

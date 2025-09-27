@@ -3,27 +3,27 @@ import { Command, GameState, PlayerId } from "gbraver-burst-core";
 /** バトルに利用するコマンド */
 export type BattleCommand = {
   /** バトルID */
-  battleId: string;
+  readonly battleId: string;
   /** フローID */
-  flowId: string;
+  readonly flowId: string;
   /** プレイヤーID */
-  playerId: PlayerId;
+  readonly playerId: PlayerId;
   /** コマンド */
-  command: Command;
+  readonly command: Command;
 };
 
 /** バトル管理情報 */
 export type Battle = {
   /** バトルID */
-  battleId: string;
+  readonly battleId: string;
   /** フローID */
-  flowId: string;
+  readonly flowId: string;
   /** ゲームステートの履歴 */
-  stateHistory: GameState[];
+  readonly stateHistory: GameState[];
   /**
    * プレイヤーごとのコマンド
    * キーはプレイヤーID
    * 値はコマンド
    */
-  commands: Map<PlayerId, BattleCommand>;
+  readonly commands: Map<PlayerId, BattleCommand>;
 };
