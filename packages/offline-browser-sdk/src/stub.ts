@@ -128,4 +128,11 @@ window.onload = () => {
       showCommands();
     }
   });
+
+  /**
+   * エラーが発生した時の処理
+   */
+  sdk.notifyError().subscribe((error) => {
+    console.error("error occurred", error);
+  });
 };
