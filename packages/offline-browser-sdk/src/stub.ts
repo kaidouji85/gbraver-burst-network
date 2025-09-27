@@ -100,6 +100,7 @@ const updateCommands = (selectable: Selectable) => {
   const commandSelector = document.getElementById(
     "command-selector",
   ) as HTMLSelectElement;
+  commandSelector.innerHTML = "";
   selectable.command.forEach((command) => {
     const option = document.createElement("option");
     const jsonStr = JSON.stringify(command);
@@ -168,6 +169,7 @@ window.onload = () => {
       const maxPollingAttempts = 100;
       for (let i = 0; i < maxPollingAttempts; i++) {
         const gameProgressed = await sdk.sendCommand(lastCommand);
+        console.log("game progressed", gameProgressed);
         const lastState = gameProgressed.updatedStateHistory.at(-1);
         if (lastState?.effect.name !== "InputCommand") {
           return;

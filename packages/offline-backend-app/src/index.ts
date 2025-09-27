@@ -65,6 +65,7 @@ const processMatchmaking = () => {
 
     const core = startGBraverBurst([players[0].player, players[1].player]);
     const stateHistory = core.stateHistory();
+    console.log(`a battle(${battleId}) started`);
     battles.set({ battleId, flowId, stateHistory, commands: new Map() });
     players.forEach((p) => {
       const socket = io.sockets.sockets.get(p.socketId);
@@ -114,6 +115,7 @@ const progressBattle = (battle: Battle) => {
     flowId: newFlowId,
     stateHistory: [...battle.stateHistory, ...updatedStateHistory],
   };
+  console.log(`a battle(${battle.battleId}) progressed`);
   battles.set(updatedBattle);
   battleStates.forEach((state) => {
     const socket = io.sockets.sockets.get(state.socketId);
@@ -194,6 +196,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendCommand", (data) => {
+    console.log(`a user(${socket.id}) sent command`);
     const parsedData = SendCommandSchema.safeParse(data);
     if (!parsedData.success) {
       socket.emit("error", { message: "Invalid data format" });
