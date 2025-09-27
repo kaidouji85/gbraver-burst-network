@@ -61,8 +61,22 @@ const disabledSelector = () => {
   document.getElementById("enter-room")?.setAttribute("disabled", "true");
 };
 
+const hiddenCommands = () => {
+  document.getElementById("commands")?.setAttribute("style", "display:none");
+};
+
+const showCommands = () => {
+  document.getElementById("commands")?.setAttribute("style", "display:block");
+};
+
+/**
+ * コマンドセレクターを更新する
+ * @param selectable 選択可能なコマンド
+ */
 const updateCommands = (selectable: Selectable) => {
-  const commandSelector = document.getElementById("command-selector") as HTMLSelectElement;
+  const commandSelector = document.getElementById(
+    "command-selector",
+  ) as HTMLSelectElement;
   selectable.command.forEach((command, index) => {
     const option = document.createElement("option");
     option.value = index.toString();
@@ -73,6 +87,7 @@ const updateCommands = (selectable: Selectable) => {
 
 /** スタブのエントリポイント */
 window.onload = () => {
+  hiddenCommands();
   updateArmdozerOptions();
   updatePilotOptions();
   const sdk = createOfflineBrowserSDK({ backendURL: BACKEND_URL });
@@ -81,12 +96,12 @@ window.onload = () => {
     const armdozerSelect = getArmdozerSelector();
     const pilotSelect = getPilotSelector();
     disabledSelector();
-    
+
     const battleInfo = await sdk.enterRoom({
       armdozerId: armdozerSelect.value,
       pilotId: pilotSelect.value,
     });
-    
+
     console.log("matched", battleInfo);
     const inputCommand = battleInfo.stateHistory.findLast(
       (s) => s.effect.name === "InputCommand",
@@ -100,6 +115,7 @@ window.onload = () => {
     );
     if (commands?.selectable) {
       updateCommands(commands);
+      showCommands();
     }
   });
 };
