@@ -20,6 +20,7 @@ import { InBattle } from "./core/connection-state";
 import { createPlayer } from "./core/create-player";
 import { matchMake } from "./core/match-make";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
+import { SendCommandSchema } from "./socket-io-event/send-command";
 
 dotenv.config();
 
@@ -141,6 +142,35 @@ io.on("connection", (socket) => {
         type: "MatchMaking",
       });
       processMatchmaking();
+    });
+  });
+
+  socket.on("sendCommand", (data) => {
+    const parsedData = SendCommandSchema.safeParse(data);
+    if (!parsedData.success) {
+      socket.emit("error", { message: "Invalid data format" });
+      return;
+    }
+
+    queue.add(() => {
+      const sendCommand = parsedData.data;
+      const state = connectionStates.get(socket.id);
+      if (!sendCommand || state?.type !== "InBattle") {
+        socket.emit("error", { message: "No in battle" });
+        return;
+      }
+
+      const battle = battles.get(state.battleId);
+      if (!battle) {
+        socket.emit("error", { message: "Not found battle" });
+        return;
+      }
+
+      battle.commands.set(state.player.playerId, {
+        ...sendCommand,
+        battleId: battle.battleId,
+        playerId: state.player.playerId,
+      });
     });
   });
 
