@@ -69,6 +69,17 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   }
 
   /** @override */
+  closeConnection(): void {
+    if (!this.#socket) {
+      return;
+    }
+
+    this.#socket.disconnect();
+    this.#socket = null;
+    this.#flowId = null;
+  }
+
+  /** @override */
   notifyError(): Observable<unknown> {
     return this.#error;
   }

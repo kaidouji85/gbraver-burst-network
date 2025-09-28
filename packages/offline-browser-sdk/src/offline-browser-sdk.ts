@@ -66,6 +66,11 @@ export interface OfflineBrowserSDK {
   sendCommand(command: Command): Promise<GameProgressResult>;
 
   /**
+   * サーバーとの接続を閉じる
+   */
+  closeConnection(): void;
+
+  /**
    * エラーを通知するObservableを取得する
    * @returns エラー通知のObservable
    */
