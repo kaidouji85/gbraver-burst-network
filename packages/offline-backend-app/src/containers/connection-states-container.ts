@@ -48,8 +48,8 @@ export class InMemoryConnectionStates implements ConnectionStatesContainer {
   }
 
   /** @override */
-  delete(socketId: string): boolean {
-    return this.#states.delete(socketId);
+  delete(socketId: string): void {
+    this.#states.delete(socketId);
   }
 
   /** @override */
