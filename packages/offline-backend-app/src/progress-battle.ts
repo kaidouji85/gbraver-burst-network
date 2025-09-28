@@ -1,11 +1,48 @@
-import { Player, restoreGBraverBurst } from "gbraver-burst-core";
+import { GameState, Player, restoreGBraverBurst } from "gbraver-burst-core";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 
 import { BattlesContainer } from "./containers/battles-conctainer";
 import { ConnectionStatesContainer } from "./containers/connection-states-container";
 import { Battle } from "./core/battle";
+import { InBattle } from "./core/connection-state";
 import { shouldBattleProgress } from "./core/should-battle-progress";
+
+/**
+ * ゲーム続行処理を行う
+ * バトル情報を更新し、プレイヤーに進行状況を通知する
+ * @param options ゲーム続行に必要な情報
+ * @param options.battle バトル情報
+ * @param options.updatedStateHistory 更新されたゲームステート履歴
+ * @param options.battleStates バトルに参加しているプレイヤーの接続状態
+ * @param options.battles バトル情報管理
+ * @param options.io Socket.IOサーバーインスタンス
+ */
+const continueGame = (options: {
+  battle: Battle;
+  updatedStateHistory: GameState[];
+  battleStates: InBattle[];
+  battles: BattlesContainer;
+  io: Server;
+}) => {
+  const { battle, updatedStateHistory, battleStates, battles, io } = options;
+
+  const newFlowId = uuidv4();
+  const updatedBattle = {
+    ...battle,
+    flowId: newFlowId,
+    stateHistory: [...battle.stateHistory, ...updatedStateHistory],
+  };
+  console.log(`a battle(${battle.battleId}) progressed`);
+  battles.set(updatedBattle);
+  battleStates.forEach((state) => {
+    const socket = io.sockets.sockets.get(state.socketId);
+    socket?.emit("progressed", {
+      flowId: newFlowId,
+      updatedStateHistory,
+    });
+  });
+};
 
 /**
  * バトルの進行処理を行う
@@ -47,19 +84,11 @@ export const progressBattle = (options: {
   }
 
   const updatedStateHistory = core.progress([commands[0], commands[1]]);
-  const newFlowId = uuidv4();
-  const updatedBattle = {
-    ...battle,
-    flowId: newFlowId,
-    stateHistory: [...battle.stateHistory, ...updatedStateHistory],
-  };
-  console.log(`a battle(${battle.battleId}) progressed`);
-  battles.set(updatedBattle);
-  battleStates.forEach((state) => {
-    const socket = io.sockets.sockets.get(state.socketId);
-    socket?.emit("progressed", {
-      flowId: newFlowId,
-      updatedStateHistory,
-    });
+  continueGame({
+    battle,
+    updatedStateHistory,
+    battleStates,
+    battles,
+    io,
   });
 };
