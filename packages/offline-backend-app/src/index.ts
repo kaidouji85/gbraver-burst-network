@@ -6,6 +6,7 @@ import express from "express";
 import PQueue from "p-queue";
 import { Server } from "socket.io";
 
+import { cleanupBattleOnDisconnect } from "./cleanup-battle-on-disconnect";
 import {
   BattlesContainer,
   InMemoryBattles,
@@ -14,7 +15,6 @@ import {
   ConnectionStatesContainer,
   InMemoryConnectionStates,
 } from "./containers/connection-states-container";
-import { InBattle } from "./core/connection-state";
 import { updateCommand } from "./core/update-command";
 import { processMatchmaking } from "./process-matchmaking";
 import { progressBattle } from "./progress-battle";
@@ -38,32 +38,6 @@ const battles: BattlesContainer = new InMemoryBattles();
 
 /** キュー制御 */
 const queue = new PQueue({ concurrency: 1 });
-
-/**
- * プレイヤー切断時のバトルクリーンアップ処理を行う
- * バトルを削除し、対戦相手がいる場合は終了通知を送信する
- * @param state 切断されたコネクションのInBattleステート
- */
-const cleanupBattleOnDisconnect = (state: InBattle) => {
-  battles.delete(state.battleId);
-
-  const otherState = connectionStates
-    .toArray()
-    .find(
-      (s) =>
-        s.type === "InBattle" &&
-        s.battleId === state.battleId &&
-        s.socketId !== state.socketId,
-    );
-  if (!otherState) {
-    return;
-  }
-
-  io.sockets.sockets
-    .get(otherState.socketId)
-    ?.emit("error", { message: "battle ended" });
-  connectionStates.set({ type: "NoState", socketId: otherState.socketId });
-};
 
 const app = express();
 app.use(
@@ -139,11 +113,11 @@ io.on("connection", (socket) => {
         command: { ...sendCommand, playerId: state.player.playerId },
       });
       battles.set(updatedBattle);
-      progressBattle({ 
+      progressBattle({
         battle: updatedBattle,
-        connectionStates, 
-        battles, 
-        io 
+        connectionStates,
+        battles,
+        io,
       });
     });
   });
@@ -157,7 +131,12 @@ io.on("connection", (socket) => {
       const state = connectionStates.get(socket.id);
       connectionStates.delete(socket.id);
       if (state?.type === "InBattle") {
-        cleanupBattleOnDisconnect(state);
+        cleanupBattleOnDisconnect({
+          state,
+          connectionStates,
+          battles,
+          io,
+        });
       }
     });
   });
