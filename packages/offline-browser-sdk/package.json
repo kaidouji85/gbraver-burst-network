@@ -1,0 +1,54 @@
+{
+  "name": "@gbraver-burst-network/offline-browser-sdk",
+  "description": "gbraver burst offline browser sdk",
+  "version": "1.17.2",
+  "author": "Y.Takeuchi",
+  "bugs": {
+    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
+    "email": "kaidouji85@gmail.com"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.2",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "dependency-cruiser": "^17.0.1",
+    "eslint": "^9.35.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "gbraver-burst-core": "^1.41.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
+    "ts-loader": "^9.5.4",
+    "typescript-eslint": "^8.44.0",
+    "zod": "^4.1.11"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk#readme",
+  "keywords": [
+    "browser",
+    "gbraver-burst",
+    "offline",
+    "sdk"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "peerDependencies": {
+    "gbraver-burst-core": "^1.41.0",
+    "zod": "^4.1.11"
+  },
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",
+  "scripts": {
+    "build": "run-s clean transpile",
+    "clean": "rimraf lib",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check",
+    "dependency-check": "depcruise src",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "transpile": "tsc -d --outDir lib",
+    "type-check": "tsc --noEmit"
+  }
+}

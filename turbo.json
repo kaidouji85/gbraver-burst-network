@@ -6,6 +6,11 @@
       "cache": false,
       "env": ["*"]
     },
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "cache": false,
+      "env": ["*"]
+    },
     "clean": {
       "cache": false,
       "env": ["*"]
