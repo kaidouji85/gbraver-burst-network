@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.18.0
+
+### Minor Changes
+
+- オフライン用SDKを追加した
+
 ## 1.17.2
 
 ### Patch Changes
