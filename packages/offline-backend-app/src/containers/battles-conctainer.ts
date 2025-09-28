@@ -42,7 +42,7 @@ export class InMemoryBattles implements BattlesContainer {
   }
 
   /** @override */
-  delete(battleId: string): boolean {
-    return this.#battles.delete(battleId);
+  delete(battleId: string): void {
+    this.#battles.delete(battleId);
   }
 }
