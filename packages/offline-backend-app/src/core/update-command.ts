@@ -5,7 +5,7 @@ import { Battle, BattleCommand } from "./battle";
  * @param options オプション
  * @param options.battle バトル情報
  * @param options.command 更新するコマンド
- * @returns
+ * @returns 更新後のバトル情報
  */
 export function updateCommand(options: {
   battle: Battle;
