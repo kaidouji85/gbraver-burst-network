@@ -49,6 +49,7 @@ export const progressBattle = (options: {
   const updatedStateHistory = core.progress([commands[0], commands[1]]);
   const isGameEnd = updatedStateHistory.at(-1)?.effect.name === "GameEnd";
   if (isGameEnd) {
+    console.log(`a battle(${battle.battleId}) ended`);
     battles.delete(battle.battleId);
     battleStates.forEach((state) => {
       const socket = io.sockets.sockets.get(state.socketId);
