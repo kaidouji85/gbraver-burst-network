@@ -8,15 +8,15 @@
     "email": "kaidouji85@gmail.com"
   },
   "dependencies": {
-    "dotenv": "^17.2.2",
-    "gbraver-burst-core": "^1.41.0",
     "rxjs": "^7.8.2",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "dependency-cruiser": "^17.0.1",
     "eslint": "^9.35.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "gbraver-burst-core": "^1.41.0",
     "npm-run-all": "^4.1.5",
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
@@ -35,6 +35,10 @@
   ],
   "license": "MIT",
   "main": "lib/index.js",
+  "peerDependencies": {
+    "gbraver-burst-core": "^1.41.0",
+    "zod": "^4.1.11"
+  },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",
   "scripts": {
     "build": "run-s clean transpile",
