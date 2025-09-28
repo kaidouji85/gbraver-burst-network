@@ -30,20 +30,6 @@ export const BattleInfoSchema = z.object({
   stateHistory: z.array(GameStateSchema),
 });
 
-/** ゲーム進行結果 */
-export type GameProgressResult = {
-  /** 新しいフローID */
-  flowId: string;
-  /** 更新されたゲームステートの履歴 */
-  updatedStateHistory: GameState[];
-};
-
-/** ゲーム進行結果のZodスキーマ */
-export const GameProgressResultSchema = z.object({
-  flowId: z.string(),
-  updatedStateHistory: z.array(GameStateSchema),
-});
-
 /** オフライン用ブラウザSDK */
 
 export interface OfflineBrowserSDK {
@@ -63,7 +49,7 @@ export interface OfflineBrowserSDK {
    * コマンドを送信する
    * @param command 送信するコマンド
    */
-  sendCommand(command: Command): Promise<GameProgressResult>;
+  sendCommand(command: Command): Promise<GameState[]>;
 
   /**
    * サーバーとの接続を閉じる

@@ -1,12 +1,11 @@
-import { ArmdozerId, Command, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, Command, GameState, PilotId } from "gbraver-burst-core";
 import { Observable, Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
 
+import { GameProgressResultSchema } from "../lib/offline-browser-sdk";
 import {
   BattleInfo,
   BattleInfoSchema,
-  GameProgressResult,
-  GameProgressResultSchema,
   OfflineBrowserSDK,
 } from "./offline-browser-sdk";
 
@@ -50,19 +49,19 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   }
 
   /** @override */
-  async sendCommand(command: Command): Promise<GameProgressResult> {
+  async sendCommand(command: Command): Promise<GameState[]> {
     if (!this.#flowId) {
       throw new Error("Not in battle");
     }
 
     const socket = this.#ensureSocket();
     socket.emit("sendCommand", { command, flowId: this.#flowId });
-    return new Promise<GameProgressResult>((resolve) => {
+    return new Promise<GameState[]>((resolve) => {
       socket.once("progressed", (data) => {
         const parsedResult = GameProgressResultSchema.safeParse(data);
         if (parsedResult.success) {
           this.#flowId = parsedResult.data.flowId;
-          resolve(parsedResult.data);
+          resolve(parsedResult.data.updatedStateHistory);
         }
       });
     });
