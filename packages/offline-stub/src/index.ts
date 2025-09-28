@@ -52,6 +52,15 @@ const updatePilotOptions = () => {
 };
 
 /**
+ * キャラクターセレクターを操作可能にする
+ */
+const enableSelector = () => {
+  document.getElementById("armdozer")?.removeAttribute("disabled");
+  document.getElementById("pilot")?.removeAttribute("disabled");
+  document.getElementById("enter-room")?.removeAttribute("disabled");
+};
+
+/**
  * キャラクターセレクターを操作不可能にする
  */
 const disabledSelector = () => {
@@ -167,9 +176,17 @@ window.onload = () => {
       let lastCommand = getSelectedCommand();
       const maxPollingAttempts = 100;
       for (let i = 0; i < maxPollingAttempts; i++) {
-        const gameProgressed = await sdk.sendCommand(lastCommand);
-        console.log("game progressed", gameProgressed);
-        const lastState = gameProgressed.updatedStateHistory.at(-1);
+        const updatedStateHistory = await sdk.sendCommand(lastCommand);
+        console.log("game progressed", updatedStateHistory);
+        const lastState = updatedStateHistory.at(-1);
+
+        if (lastState?.effect.name === "GameEnd") {
+          hiddenCommands();
+          enableSelector();
+          sdk.closeConnection();
+          return;
+        }
+
         if (lastState?.effect.name !== "InputCommand") {
           return;
         }
