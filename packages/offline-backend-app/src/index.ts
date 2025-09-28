@@ -6,7 +6,6 @@ import express from "express";
 import {
   Player,
   restoreGBraverBurst,
-  startGBraverBurst,
 } from "gbraver-burst-core";
 import PQueue from "p-queue";
 import { Server } from "socket.io";
@@ -22,10 +21,9 @@ import {
 } from "./containers/connection-states-container";
 import { Battle } from "./core/battle";
 import { InBattle } from "./core/connection-state";
-import { createPlayer } from "./core/create-player";
-import { matchMake } from "./core/match-make";
 import { shouldBattleProgress } from "./core/should-battle-progress";
 import { updateCommand } from "./core/update-command";
+import { processMatchmaking } from "./process-matchmaking";
 import { EnterRoomEventSchema } from "./socket-io-event/enter-room-event";
 import { SendCommandSchema } from "./socket-io-event/send-command";
 
@@ -46,39 +44,6 @@ const battles: BattlesContainer = new InMemoryBattles();
 
 /** キュー制御 */
 const queue = new PQueue({ concurrency: 1 });
-
-/**
- * マッチメイキング処理を行う
- */
-const processMatchmaking = () => {
-  const entries = connectionStates
-    .toArray()
-    .filter((state) => state.type === "MatchMaking");
-  const matched = matchMake(entries);
-  matched.forEach((pair) => {
-    const battleId = uuidv4();
-    const flowId = uuidv4();
-    const players = pair.map((entry) => ({
-      socketId: entry.socketId,
-      player: createPlayer(entry),
-    }));
-
-    const core = startGBraverBurst([players[0].player, players[1].player]);
-    const stateHistory = core.stateHistory();
-    console.log(`a battle(${battleId}) started`);
-    battles.set({ battleId, flowId, stateHistory, commands: new Map() });
-    players.forEach((p) => {
-      const socket = io.sockets.sockets.get(p.socketId);
-      connectionStates.set({ ...p, type: "InBattle", battleId });
-      socket?.emit("matched", {
-        battleId,
-        flowId,
-        player: p.player,
-        stateHistory,
-      });
-    });
-  });
-};
 
 /**
  * バトルの進行処理を行う
@@ -191,7 +156,7 @@ io.on("connection", (socket) => {
         socketId: socket.id,
         type: "MatchMaking",
       });
-      processMatchmaking();
+      processMatchmaking({ connectionStates, battles, io });
     });
   });
 
