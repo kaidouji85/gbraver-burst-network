@@ -1,17 +1,12 @@
 {
-  "name": "@gbraver-burst-network/offline-browser-sdk",
+  "name": "@gbraver-burst-network/offline-stub",
   "description": "gbraver burst offline browser sdk",
   "version": "1.17.2",
   "author": "Y.Takeuchi",
-  "bugs": {
-    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
-    "email": "kaidouji85@gmail.com"
-  },
   "dependencies": {
+    "@gbraver-burst-network/offline-browser-sdk": "*",
     "dotenv": "^17.2.2",
-    "gbraver-burst-core": "^1.41.0",
-    "rxjs": "^7.8.2",
-    "socket.io-client": "^4.8.1"
+    "gbraver-burst-core": "^1.41.0"
   },
   "devDependencies": {
     "dependency-cruiser": "^17.0.1",
@@ -26,22 +21,10 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
-  "files": [
-    "lib"
-  ],
-  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk#readme",
-  "keywords": [
-    "browser",
-    "gbraver-burst",
-    "offline",
-    "sdk"
-  ],
   "license": "MIT",
-  "main": "lib/index.js",
-  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",
+  "main": "lib/src/index.js",
+  "private": true,
   "scripts": {
-    "build": "run-s clean transpile",
-    "clean": "rimraf lib",
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
     "dependency-check": "depcruise src",
