@@ -1,16 +1,13 @@
 import { GameState, GameStateSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
-/** ゲーム進行結果 */
-export type GameProgressResult = {
-  /** 新しいフローID */
-  flowId: string;
+/** socket.ioイベントgameEnded */
+export type GameEnded = {
   /** 更新されたゲームステートの履歴 */
   updatedStateHistory: GameState[];
 };
 
-/** ゲーム進行結果のZodスキーマ */
-export const GameProgressResultSchema = z.object({
-  flowId: z.string(),
+/** socket.ioイベントgameEndedのZodスキーマ */
+export const GameEndedSchema = z.object({
   updatedStateHistory: z.array(GameStateSchema),
 });
