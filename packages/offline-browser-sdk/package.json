@@ -3,6 +3,10 @@
   "description": "gbraver burst offline browser sdk",
   "version": "1.17.2",
   "author": "Y.Takeuchi",
+  "bugs": {
+    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
+    "email": "kaidouji85@gmail.com"
+  },
   "dependencies": {
     "dotenv": "^17.2.2",
     "gbraver-burst-core": "^1.41.0",
@@ -14,21 +18,37 @@
     "eslint": "^9.35.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "html-webpack-plugin": "^5.6.4",
+    "npm-run-all": "^4.1.5",
     "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
     "ts-loader": "^9.5.4",
     "typescript-eslint": "^8.44.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk#readme",
+  "keywords": [
+    "browser",
+    "gbraver-burst",
+    "offline",
+    "sdk"
+  ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/src/index.js",
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",
   "scripts": {
+    "build": "run-s clean transpile",
+    "clean": "rimraf lib",
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
     "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start": "webpack serve",
+    "transpile": "tsc -d --outDir lib",
     "type-check": "tsc --noEmit"
   }
 }
