@@ -1,11 +1,24 @@
-# オフライン用ブラウザSDK
+# オフライン用スタブ
 
-オフライン環境で動作するブラウザ向けのSDKです。
-[offline-backend-app](../offline-backend-app/Readme.md)がサーバーーとして動作し、データの保存や取得を行います。
+オフライン環境のスタブです。
+サーバーは[offline-backend-app](../offline-backend-app/Readme.md)、ブラウザSDKは[offline-browser-sdk](../offline-browser-sdk/Readme.md)を使っています。
 
-## ビルド方法
+## セットアップ
 
 ```bash
 npm ci
-npm run build
+
+# .envに各種設定を記載
+cp .env.template .env
+```
+
+## 起動方法
+
+サーバーを起動する。
+詳細は[offline-backend-app](../offline-backend-app/Readme.md)を参照。
+その上で、以下コマンドを実行する。
+
+```bash
+# デフォルトだとhttp://localhost:8080で起動
+npm start
 ```
