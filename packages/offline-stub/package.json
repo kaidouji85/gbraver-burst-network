@@ -22,7 +22,6 @@
     "webpack-dev-server": "^5.2.2"
   },
   "license": "MIT",
-  "main": "lib/src/index.js",
   "private": true,
   "scripts": {
     "code-format": "prettier . --write",
