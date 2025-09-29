@@ -1,4 +1,5 @@
 import { BattleStart } from "../response/battle-start";
+import { BattleSDK } from "./battle-sdk";
 import { BattleSDKImpl } from "./battle-sdk-impl";
 
 /**
@@ -10,7 +11,7 @@ import { BattleSDKImpl } from "./battle-sdk-impl";
 export function createBattleSDKFromBattleStart(
   battleStart: BattleStart,
   websocket: WebSocket,
-): BattleSDKImpl {
+): BattleSDK {
   return new BattleSDKImpl({
     player: battleStart.player,
     enemy: battleStart.enemy,
