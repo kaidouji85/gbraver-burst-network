@@ -4,7 +4,7 @@ import { filter, fromEvent, map, Observable } from "rxjs";
 import { parseJSON } from "../json/parse";
 import { parseSuddenlyBattleEnd } from "../response/suddenly-battle-end";
 import { sendCommand, sendCommandWithPolling } from "../websocket/send-command";
-import { Battle } from "./battle-sdk";
+import { BattleSDK } from "./battle-sdk";
 
 /** コンストラクタのパラメータ */
 type Param = {
@@ -25,7 +25,7 @@ type Param = {
 };
 
 /** バトルSDKの実装 */
-export class BattleSDKImpl implements Battle {
+export class BattleSDKImpl implements BattleSDK {
   /** @override */
   readonly player: Player;
   /** @override */

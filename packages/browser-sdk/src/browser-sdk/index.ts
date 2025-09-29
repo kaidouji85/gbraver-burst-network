@@ -14,7 +14,7 @@ import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import { Battle } from "./battle-sdk";
+import { BattleSDK } from "./battle-sdk";
 import { CasualMatch } from "./casual-match";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { LoginCheck, Logout, UniversalLogin } from "./login";
@@ -126,7 +126,7 @@ class BrowserSDKImpl implements BrowserSDK {
   async startCasualMatch(
     armdozerId: ArmdozerId,
     pilotId: PilotId,
-  ): Promise<Battle> {
+  ): Promise<BattleSDK> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
     return createBattleSDKFromBattleStart(resp, websocket);
@@ -147,7 +147,7 @@ class BrowserSDKImpl implements BrowserSDK {
     roomID: PrivateMatchRoomID,
     armdozerId: string,
     pilotId: string,
-  ): Promise<Battle | null> {
+  ): Promise<BattleSDK | null> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await enterPrivateMatchRoom(
       websocket,

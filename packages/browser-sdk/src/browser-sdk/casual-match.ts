@@ -1,6 +1,6 @@
 import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import type { Battle } from "./battle-sdk";
+import type { BattleSDK } from "./battle-sdk";
 
 /**
  * カジュアルマッチ
@@ -14,5 +14,8 @@ export interface CasualMatch {
    * @param pilotId 選択したパイロットID
    * @returns バトル
    */
-  startCasualMatch(armdozerId: ArmdozerId, pilotId: PilotId): Promise<Battle>;
+  startCasualMatch(
+    armdozerId: ArmdozerId,
+    pilotId: PilotId,
+  ): Promise<BattleSDK>;
 }

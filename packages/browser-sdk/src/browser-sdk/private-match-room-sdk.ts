@@ -1,5 +1,5 @@
 import { privateMatchMakePolling } from "../websocket/private-match-make-polling";
-import { Battle } from "./battle-sdk";
+import { BattleSDK } from "./battle-sdk";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { PrivateMatchRoom, PrivateMatchRoomID } from "./private-match";
 
@@ -21,7 +21,7 @@ export class PrivateMatchRoomSDK implements PrivateMatchRoom {
   }
 
   /** @override */
-  async waitUntilMatching(): Promise<Battle> {
+  async waitUntilMatching(): Promise<BattleSDK> {
     const resp = await privateMatchMakePolling(this.#websocket, this.roomID);
     return createBattleSDKFromBattleStart(resp, this.#websocket);
   }

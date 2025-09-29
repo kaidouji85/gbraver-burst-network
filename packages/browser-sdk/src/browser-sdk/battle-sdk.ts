@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
  * バトルSDK
  * 本操作はログイン後に実行することを想定している
  */
-export interface Battle {
+export interface BattleSDK {
   /** プレイヤーの情報 */
   player: Player;
 
@@ -17,7 +17,6 @@ export interface Battle {
 
   /**
    * バトルを進行させる
-   *
    * @param command プレイヤーが入力するコマンド
    * @returns ゲーム結果
    */
@@ -25,7 +24,6 @@ export interface Battle {
 
   /**
    * バトル強制終了の通知ストリーム
-   *
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown>;
