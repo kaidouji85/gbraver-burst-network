@@ -89,7 +89,7 @@ export class BattleSDK implements Battle {
   }
 
   /** @override */
-  suddenlyBattleNotifier(): Observable<unknown> {
+  suddenlyBattleEndNotifier(): Observable<unknown> {
     return this.#suddenlyBattleEnd;
   }
 }
