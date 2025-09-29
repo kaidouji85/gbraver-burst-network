@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { Battle } from "./battle";
+import { Battle } from "./battle-sdk";
 
 /** プライベートマッチルーム生成 */
 export interface PrivateMatchCreate {

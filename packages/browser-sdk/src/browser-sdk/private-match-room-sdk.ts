@@ -1,5 +1,5 @@
 import { privateMatchMakePolling } from "../websocket/private-match-make-polling";
-import { Battle } from "./battle";
+import { Battle } from "./battle-sdk";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { PrivateMatchRoom, PrivateMatchRoomID } from "./private-match";
 
