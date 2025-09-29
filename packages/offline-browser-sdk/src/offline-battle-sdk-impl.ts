@@ -63,6 +63,7 @@ export class OfflineBattleSDKImpl implements OfflineBattleSDK {
         if (!parsedResult.success) {
           return;
         }
+        // ゲームが終了したのでflowIdは送信されないので、同プロパティの更新処理は行わない
         resolve(parsedResult.data.updatedStateHistory);
       });
     });
