@@ -1,6 +1,5 @@
 import {
   ArmdozerId,
-  Command,
   GameState,
   GameStateSchema,
   PilotId,
@@ -9,6 +8,8 @@ import {
 } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 import { z } from "zod";
+
+import { OfflineBattleSDK } from "./offline-battle-sdk";
 
 /** バトル情報 */
 export type BattleInfo = {
@@ -43,13 +44,7 @@ export interface OfflineBrowserSDK {
   enterRoom(options: {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
-  }): Promise<BattleInfo>;
-
-  /**
-   * コマンドを送信する
-   * @param command 送信するコマンド
-   */
-  sendCommand(command: Command): Promise<GameState[]>;
+  }): Promise<OfflineBattleSDK>;
 
   /**
    * サーバーとの接続を閉じる

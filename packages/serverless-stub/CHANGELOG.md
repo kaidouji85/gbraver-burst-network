@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.19.0
+
+### Minor Changes
+
+- バトルSDKのインタフェースを統一
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.19.0
+
 ## 1.18.0
 
 ### Minor Changes

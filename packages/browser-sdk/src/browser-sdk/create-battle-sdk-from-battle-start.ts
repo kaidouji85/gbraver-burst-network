@@ -1,5 +1,6 @@
 import { BattleStart } from "../response/battle-start";
 import { BattleSDK } from "./battle-sdk";
+import { BattleSDKImpl } from "./battle-sdk-impl";
 
 /**
  * BattleStartからBattleSDKを生成する
@@ -11,7 +12,7 @@ export function createBattleSDKFromBattleStart(
   battleStart: BattleStart,
   websocket: WebSocket,
 ): BattleSDK {
-  return new BattleSDK({
+  return new BattleSDKImpl({
     player: battleStart.player,
     enemy: battleStart.enemy,
     initialState: battleStart.stateHistory,

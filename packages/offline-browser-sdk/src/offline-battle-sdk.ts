@@ -1,11 +1,12 @@
-import type { Command, GameState, Player } from "gbraver-burst-core";
+import { Command, GameState, Player } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 /**
- * バトル
+ * オフライン用バトルSDK
+ * インターフェースはpackages/browser-sdk/src/browser-sdk/battle-sdk.tsのBattleSDKと同一
  * 本操作はログイン後に実行することを想定している
  */
-export interface Battle {
+export interface OfflineBattleSDK {
   /** プレイヤーの情報 */
   player: Player;
 
@@ -17,7 +18,6 @@ export interface Battle {
 
   /**
    * バトルを進行させる
-   *
    * @param command プレイヤーが入力するコマンド
    * @returns ゲーム結果
    */
@@ -25,8 +25,7 @@ export interface Battle {
 
   /**
    * バトル強制終了の通知ストリーム
-   *
    * @returns 通知ストリーム
    */
-  suddenlyBattleNotifier(): Observable<unknown>;
+  suddenlyBattleEndNotifier(): Observable<unknown>;
 }
