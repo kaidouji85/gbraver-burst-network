@@ -1,14 +1,10 @@
-import { ArmdozerId, Command, GameState, PilotId } from "gbraver-burst-core";
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Observable, Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
 
-import {
-  BattleInfo,
-  BattleInfoSchema,
-  OfflineBrowserSDK,
-} from "./offline-browser-sdk";
-import { GameEndedSchema } from "./socket-io-events/game-ended";
-import { ProgressedSchema } from "./socket-io-events/progressed";
+import { OfflineBattleSDK } from "./offline-battle-sdk";
+import { OfflineBattleSDKImpl } from "./offline-battle-sdk-impl";
+import { BattleInfoSchema, OfflineBrowserSDK } from "./offline-browser-sdk";
 
 /** オフライン用ブラウザSDK実装 */
 export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
@@ -16,8 +12,6 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   #backendURL: string;
   /** ソケット接続、未作成の場合はnull */
   #socket: Socket | null = null;
-  /** 現在のフローID、バトル以外ではnullがセットされる */
-  #flowId: string | null = null;
   /** エラー通知のSubject */
   #error: Subject<unknown>;
 
@@ -35,47 +29,19 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
   async enterRoom(options: {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
-  }): Promise<BattleInfo> {
+  }): Promise<OfflineBattleSDK> {
     const socket = this.#ensureSocket();
     socket.emit("enterRoom", options);
-    return new Promise<BattleInfo>((resolve) => {
+    return new Promise<OfflineBattleSDK>((resolve) => {
       socket.once("matched", (data) => {
         const parsedBattleInfo = BattleInfoSchema.safeParse(data);
         if (parsedBattleInfo.success) {
-          this.#flowId = parsedBattleInfo.data.flowId;
-          resolve(parsedBattleInfo.data);
+          const battleSDK = new OfflineBattleSDKImpl({
+            ...parsedBattleInfo.data,
+            socket,
+          });
+          resolve(battleSDK);
         }
-      });
-    });
-  }
-
-  /** @override */
-  async sendCommand(command: Command): Promise<GameState[]> {
-    if (!this.#flowId) {
-      throw new Error("Not in battle");
-    }
-
-    const socket = this.#ensureSocket();
-    socket.emit("sendCommand", { command, flowId: this.#flowId });
-    return new Promise<GameState[]>((resolve) => {
-      socket.once("progressed", (data) => {
-        const parsedResult = ProgressedSchema.safeParse(data);
-        if (!parsedResult.success) {
-          return;
-        }
-
-        this.#flowId = parsedResult.data.flowId;
-        resolve(parsedResult.data.updatedStateHistory);
-      });
-
-      socket.once("gameEnded", (data) => {
-        const parsedResult = GameEndedSchema.safeParse(data);
-        if (!parsedResult.success) {
-          return;
-        }
-
-        this.#flowId = null;
-        resolve(parsedResult.data.updatedStateHistory);
       });
     });
   }
@@ -88,7 +54,6 @@ export class OfflineBrowserSDKImpl implements OfflineBrowserSDK {
 
     this.#socket.disconnect();
     this.#socket = null;
-    this.#flowId = null;
   }
 
   /** @override */
