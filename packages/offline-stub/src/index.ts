@@ -1,10 +1,10 @@
 import { createOfflineBrowserSDK } from "@gbraver-burst-network/offline-browser-sdk";
+import { OfflineBattleSDK } from "@gbraver-burst-network/offline-browser-sdk/lib/offline-battle-sdk";
 import {
   Armdozers,
   Command,
   CommandSchema,
   Pilots,
-  Player,
   Selectable,
 } from "gbraver-burst-core";
 
@@ -119,10 +119,10 @@ const updateCommands = (selectable: Selectable) => {
 };
 
 /**
- * 現在のプレイヤー情報
+ * 現在のバトルSDK
  * 対戦以外ではnullが入る
  */
-let player: Player | null = null;
+let battleSDK: OfflineBattleSDK | null = null;
 
 /** スタブのエントリポイント */
 window.onload = () => {
@@ -139,24 +139,24 @@ window.onload = () => {
     const pilotSelect = getPilotSelector();
     disabledSelector();
 
-    const battleInfo = await sdk.enterRoom({
+    battleSDK = await sdk.enterRoom({
       armdozerId: armdozerSelect.value,
       pilotId: pilotSelect.value,
     });
 
-    console.log("matched", battleInfo);
-    const inputCommand = battleInfo.stateHistory.findLast(
+    console.log("matched", battleSDK);
+    const inputCommand = battleSDK.initialState.findLast(
       (s) => s.effect.name === "InputCommand",
     );
     if (inputCommand?.effect.name !== "InputCommand") {
       return;
     }
 
+    const playerId = battleSDK.player.playerId;
     const commands = inputCommand.effect.players.find(
-      (p) => p.playerId === battleInfo.player.playerId,
+      (p) => p.playerId === playerId,
     );
     if (commands?.selectable) {
-      player = battleInfo.player;
       updateCommands(commands);
       showCommands();
     }
@@ -169,14 +169,14 @@ window.onload = () => {
     .getElementById("send-command")
     ?.addEventListener("click", async () => {
       hiddenCommands();
-      if (!player) {
+      if (!battleSDK) {
         return;
       }
 
       let lastCommand = getSelectedCommand();
       const maxPollingAttempts = 100;
       for (let i = 0; i < maxPollingAttempts; i++) {
-        const updatedStateHistory = await sdk.sendCommand(lastCommand);
+        const updatedStateHistory = await battleSDK.progress(lastCommand);
         console.log("game progressed", updatedStateHistory);
         const lastState = updatedStateHistory.at(-1);
 
@@ -192,7 +192,7 @@ window.onload = () => {
         }
 
         const commands = lastState.effect.players.find(
-          (p) => p.playerId === player?.playerId,
+          (p) => p.playerId === battleSDK?.player.playerId,
         );
         if (!commands) {
           return;
