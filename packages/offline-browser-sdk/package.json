@@ -15,12 +15,12 @@
     "dependency-cruiser": "^17.0.1",
     "eslint": "^9.36.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "gbraver-burst-core": "^1.41.0",
+    "gbraver-burst-core": "^1.42.0",
     "npm-run-all": "^4.1.5",
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.4",
-    "typescript-eslint": "^8.44.1",
+    "typescript-eslint": "^8.45.0",
     "zod": "^4.1.11"
   },
   "files": [
@@ -36,7 +36,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "peerDependencies": {
-    "gbraver-burst-core": "^1.41.0",
+    "gbraver-burst-core": "^1.42.0",
     "zod": "^4.1.11"
   },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",

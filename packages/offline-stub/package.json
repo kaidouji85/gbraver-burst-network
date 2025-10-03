@@ -5,8 +5,8 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/offline-browser-sdk": "*",
-    "dotenv": "^17.2.2",
-    "gbraver-burst-core": "^1.41.0"
+    "dotenv": "^17.2.3",
+    "gbraver-burst-core": "^1.42.0"
   },
   "devDependencies": {
     "dependency-cruiser": "^17.0.1",
@@ -17,7 +17,7 @@
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.4",
-    "typescript-eslint": "^8.44.1",
+    "typescript-eslint": "^8.45.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
