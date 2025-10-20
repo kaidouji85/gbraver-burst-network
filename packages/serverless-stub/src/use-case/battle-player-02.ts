@@ -27,7 +27,7 @@ export class BattlePlayer02 implements UseCase {
       ArmdozerIds.NEO_LANDOZER,
       PilotIds.GAI,
     );
-    battle.suddenlyBattleNotifier().subscribe(() => {
+    battle.suddenlyBattleEndNotifier().subscribe(() => {
       console.log("suddenly battle end");
     });
     console.log(battle.player, battle.enemy, battle.initialState);

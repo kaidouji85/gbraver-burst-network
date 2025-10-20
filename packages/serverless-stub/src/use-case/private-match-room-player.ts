@@ -33,7 +33,7 @@ export class PrivateMatchRoomPlayer implements UseCase {
       return;
     }
 
-    battle.suddenlyBattleNotifier().subscribe(() => {
+    battle.suddenlyBattleEndNotifier().subscribe(() => {
       console.log("suddenly battle end");
     });
     console.log(battle.player, battle.enemy, battle.initialState);

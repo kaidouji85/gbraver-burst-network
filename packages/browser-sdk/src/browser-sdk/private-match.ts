@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { Battle } from "./battle";
+import { BattleSDK } from "./battle-sdk";
 
 /** プライベートマッチルーム生成 */
 export interface PrivateMatchCreate {
@@ -28,7 +28,7 @@ export interface PrivateMatchRoom {
    * マッチングが成立するまで待機する
    * @returns バトル
    */
-  waitUntilMatching(): Promise<Battle>;
+  waitUntilMatching(): Promise<BattleSDK>;
 }
 
 /** プライベートマッチルーム入室 */
@@ -45,5 +45,5 @@ export interface PrivateMatchRoomEnter {
     roomID: PrivateMatchRoomID,
     armdozerId: ArmdozerId,
     pilotId: PilotId,
-  ): Promise<Battle | null>;
+  ): Promise<BattleSDK | null>;
 }
