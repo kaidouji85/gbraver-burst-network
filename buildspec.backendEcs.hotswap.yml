@@ -2,6 +2,7 @@ version: 0.2
 env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
+    STAGE: /GbraverBurst/dev/stage
     ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
     DOCKER_USER: /GbraverBurst/dev/dockerUser
@@ -19,4 +20,4 @@ phases:
     commands:
       - DOCKER_IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
       - ./push-match-make-container.bash
-      - ./deploy-backend-ecs.bash
+      - ./deploy-backend-ecs-with-hotswap.bash
