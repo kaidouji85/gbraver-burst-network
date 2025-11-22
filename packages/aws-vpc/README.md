@@ -31,17 +31,13 @@ npx jest -u
 
 <a id="deploy-command"></a>
 
-## CDKコマンドの認証
-
-```bash
-aws login
-export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-export CDK_DEFAULT_REGION=$(aws configure get region)
-```
-
 ## VPCをデプロイする
 
 ```shell
+# ドライラン（差分を表示）
+npx cdk diff
+
+# デプロイ
 npx cdk deploy
 ```
 
