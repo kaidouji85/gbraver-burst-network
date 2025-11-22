@@ -11,6 +11,8 @@ interface VPCProps extends StackProps {
   maxAzs: number;
   /** サブネットのCIDRマスク */
   subnetCidrMask: number;
+  /** サブネットをIPv6のみにするか */
+  ipv6OnlySubnets?: boolean;
 }
 
 /** VPC スタック */
@@ -36,6 +38,16 @@ export class AwsVpcStack extends Stack {
       ],
       ipProtocol: ec2.IpProtocol.DUAL_STACK,
     });
+
+    // IPv6のみのサブネットに変更
+    vpc.publicSubnets.forEach((subnet) => {
+      const cfnSubnet = subnet.node.defaultChild as ec2.CfnSubnet;
+      cfnSubnet.ipv6Native = true;
+      cfnSubnet.cidrBlock = undefined;
+      // IPv6 CIDRブロックは自動割り当て
+      cfnSubnet.enableDns64 = true;
+    });
+
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
       exportName: `${stackID}:VpcId`,
