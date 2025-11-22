@@ -2,7 +2,6 @@ version: 0.2
 env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
-    STAGE: /GbraverBurst/dev/stage
     ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
     TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
     DOCKER_USER: /GbraverBurst/dev/dockerUser
