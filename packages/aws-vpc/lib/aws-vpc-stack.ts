@@ -3,6 +3,8 @@ import { aws_ec2 as ec2 } from "aws-cdk-lib";
 import { SubnetType } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 
+import { toIpV6OnlySubnet } from "./to-ipv6-only-subnet";
+
 /** VPCスタックプロパティ */
 interface VPCProps extends StackProps {
   /** VPC CIDR */
@@ -39,15 +41,6 @@ export class AwsVpcStack extends Stack {
       ipProtocol: ec2.IpProtocol.DUAL_STACK,
     });
 
-    // IPv6のみのサブネットに変更
-    vpc.publicSubnets.forEach((subnet) => {
-      const cfnSubnet = subnet.node.defaultChild as ec2.CfnSubnet;
-      cfnSubnet.ipv6Native = true;
-      cfnSubnet.cidrBlock = undefined;
-      // IPv6 CIDRブロックは自動割り当て
-      cfnSubnet.enableDns64 = true;
-    });
-
     new CfnOutput(this, "VpcId", {
       value: vpc.vpcId,
       exportName: `${stackID}:VpcId`,
@@ -57,13 +50,14 @@ export class AwsVpcStack extends Stack {
       exportName: `${stackID}:SubnetCount`,
     });
 
-    vpc.publicSubnets.forEach((subnets, index) => {
+    vpc.publicSubnets.forEach((subnet, index) => {
+      toIpV6OnlySubnet(subnet);
       new CfnOutput(this, `PublicNetAvailabilityZone${index}`, {
-        value: subnets.availabilityZone,
+        value: subnet.availabilityZone,
         exportName: `${stackID}:PublicNetAvailabilityZone${index}`,
       });
       new CfnOutput(this, `PublicSubnetId${index}`, {
-        value: subnets.subnetId,
+        value: subnet.subnetId,
         exportName: `${stackID}:PublicSubnetId${index}`,
       });
     });
