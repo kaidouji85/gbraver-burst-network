@@ -109,11 +109,23 @@ export class BackendEcsStack extends Stack {
       },
     });
     const cluster = new ecs.Cluster(this, "backend-ecs-cluster", { vpc });
+    const securityGroup = new ec2.SecurityGroup(this, "ecs-security-group", {
+      vpc,
+      description: "Security group for ECS tasks",
+      allowAllOutbound: false,
+    });
+    // IPv6のアウトバウンドを全て許可
+    securityGroup.addEgressRule(
+      ec2.Peer.anyIpv6(),
+      ec2.Port.allTraffic(),
+      "Allow all outbound IPv6 traffic",
+    );
     new ecs.FargateService(this, "service", {
       cluster,
       taskDefinition: matchMakeTaskDefinition,
       assignPublicIp: true,
       minHealthyPercent: 0,
+      securityGroups: [securityGroup],
     });
   }
 }
