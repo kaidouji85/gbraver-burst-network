@@ -1,7 +1,6 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import {
   aws_ec2 as ec2,
-  aws_ecr as ecr,
   aws_ecs as ecs,
   aws_iam as iam,
   Duration,
@@ -28,10 +27,8 @@ interface BackendEcsProps extends StackProps {
   casualMatchEntriesTableARN: string;
   /** DynamoDB battles テーブルのARN */
   battlesTableARN: string;
-  /** マッチメイクECRリポジトリ名 */
-  matchMakeEcrRepositoryName: string;
-  /** Dockerイメージのタグ */
-  dockerImageTag: string;
+  /** マッチメイクコンテナのイメージURI */
+  matchMakeImageUri: string;
 }
 
 /** バックエンドECS スタック */
@@ -94,16 +91,8 @@ export class BackendEcsStack extends Stack {
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: `${props.service}__${props.stage}__match-make`,
     });
-    const matchMakeRepository = ecr.Repository.fromRepositoryName(
-      this,
-      "match-make-ecr",
-      props.matchMakeEcrRepositoryName,
-    );
     matchMakeTaskDefinition.addContainer(`match-make-container`, {
-      image: ecs.ContainerImage.fromEcrRepository(
-        matchMakeRepository,
-        props.dockerImageTag,
-      ),
+      image: ecs.ContainerImage.fromRegistry(props.matchMakeImageUri),
       environment: {
         SERVICE: props.service,
         STAGE: props.stage,
