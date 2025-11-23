@@ -15,6 +15,7 @@ dotenv.config();
 const service = process.env.SERVICE ?? "";
 const stage = process.env.STAGE ?? "dev";
 const matchMakeImageUri = process.env.MATCH_MAKE_IMAGE_URI ?? "";
+const matchMakeImageTag = process.env.MATCH_MAKE_IMAGE_TAG ?? "";
 const vpcSubnetCount = Number.parseInt(process.env.VPC_SUBNET_COUNT ?? "");
 
 const vpcStackId = `${service}-vpc-g${VPC_GENERATION}`;
@@ -46,4 +47,5 @@ new BackendEcsStack(app, `${service}-${stage}-backend-ecs`, {
   casualMatchEntriesTableARN,
   battlesTableARN,
   matchMakeImageUri,
+  matchMakeImageTag,
 });

@@ -29,6 +29,8 @@ interface BackendEcsProps extends StackProps {
   battlesTableARN: string;
   /** マッチメイクコンテナのイメージURI */
   matchMakeImageUri: string;
+  /** マッチメイクコンテナのイメージタグ */
+  matchMakeImageTag: string;
 }
 
 /** バックエンドECS スタック */
@@ -91,8 +93,9 @@ export class BackendEcsStack extends Stack {
     const matchMakeLogging = new ecs.AwsLogDriver({
       streamPrefix: `${props.service}__${props.stage}__match-make`,
     });
+    const imageURI = `${props.matchMakeImageUri}:${props.matchMakeImageTag}`;
     matchMakeTaskDefinition.addContainer(`match-make-container`, {
-      image: ecs.ContainerImage.fromRegistry(props.matchMakeImageUri),
+      image: ecs.ContainerImage.fromRegistry(imageURI),
       environment: {
         SERVICE: props.service,
         STAGE: props.stage,
