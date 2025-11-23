@@ -80,6 +80,14 @@ export class BackendEcsStack extends Stack {
         inlinePolicies: { matchMakePolicy },
       },
     );
+    const executionRole = new iam.Role(this, "match-make-execution-role", {
+      assumedBy: new iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "service-role/AmazonECSTaskExecutionRolePolicy",
+        ),
+      ],
+    });
     const matchMakeTaskDefinition = new ecs.TaskDefinition(
       this,
       ",match-make-taskdef",
@@ -88,6 +96,7 @@ export class BackendEcsStack extends Stack {
         cpu: "256",
         memoryMiB: "512",
         taskRole: matchMakeServiceTaskRole,
+        executionRole: executionRole,
       },
     );
     const matchMakeLogging = new ecs.AwsLogDriver({
