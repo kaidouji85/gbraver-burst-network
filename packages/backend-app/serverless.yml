@@ -16,6 +16,7 @@ provider:
   runtime: nodejs22.x
   region: ap-northeast-1
   tracing:
+    apiGateway: true
     lambda: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
