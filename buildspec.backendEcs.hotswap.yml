@@ -3,8 +3,6 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
-    ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
-    TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
     DOCKER_USER: /GbraverBurst/dev/dockerUser
     DOCKER_TOKEN: /GbraverBurst/dev/dockerToken
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
