@@ -12,7 +12,8 @@ custom:
 provider:
   name: aws
   domain:
-    name: api.gbraver-burst.com
+    name: api.gbraver-burst-dev.com
+    basePath: ${sls:stage}
     apiType: websocket
   logs:
     websocket: true
