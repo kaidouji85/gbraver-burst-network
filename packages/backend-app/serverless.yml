@@ -11,6 +11,9 @@ custom:
 
 provider:
   name: aws
+  domain:
+    name: api.gbraver-burst.com
+    apiType: websocket
   logs:
     websocket: true
   runtime: nodejs22.x
