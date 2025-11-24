@@ -23,9 +23,9 @@ const apiGatewayEndpoint = createAPIGatewayEndpoint(
   AWS_REGION,
   STAGE,
 );
-const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint, true);
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 const notifier = new Notifier(apiGateway);
-const dynamoDB = createDynamoDBDocument(AWS_REGION, true);
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
   dynamoDB,
