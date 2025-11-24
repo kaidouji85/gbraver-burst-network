@@ -12,5 +12,6 @@ export function createApiGatewayManagementApi(
   return new ApiGatewayManagementApi({
     apiVersion: "2018-11-29",
     endpoint,
+    useDualstackEndpoint: true,
   });
 }

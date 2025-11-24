@@ -12,6 +12,7 @@ export function createDynamoDBDocument(region: string): DynamoDBDocument {
     new DynamoDB({
       apiVersion: "2012-08-10",
       region,
+      useDualstackEndpoint: true,
     }),
   );
 }
