@@ -96,8 +96,6 @@ npm run build
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                         |
 | STAGE                          | デプロイする環境のステージ名を記入する                                                                            |
-| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                                  |
-| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                      |
 | COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                         |
 | COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                           |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名 |
@@ -197,8 +195,6 @@ AWS Parameter Storeに以下の値をセットする。
 | -------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/dev/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/dev/testAllowOrigin            | String       | [環境変数定義の定義](#環境変数の定義) TEST_ALLOW_ORIGIN を参照              |
 | /GbraverBurst/dev/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/dev/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -251,8 +247,6 @@ AWS Parameter Storeに以下の値をセットする。
 | --------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/prod/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/prod/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/prod/testAllowOrigin            | String       | [環境変数定義の定義](#環境変数の定義) TEST_ALLOW_ORIGIN を参照              |
 | /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
