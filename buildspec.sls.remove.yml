@@ -3,6 +3,7 @@ env:
   # プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
+    WS_API_DOMAIN_NAME: /GbraverBurst/prod/wsApiDomainName
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
 phases:
   install:
