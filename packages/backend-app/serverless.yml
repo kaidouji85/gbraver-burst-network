@@ -12,7 +12,7 @@ custom:
 provider:
   name: aws
   domain:
-    name: ${env:WS_API_DOMAIN_NAME, ''}
+    name: ${env:WS_API_DOMAIN_NAME}
     basePath: ${sls:stage}
     apiType: websocket
   logs:
