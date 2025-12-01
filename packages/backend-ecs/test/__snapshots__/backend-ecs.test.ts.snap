@@ -135,6 +135,10 @@ exports[`バックエンドECSスタックがスナップショットと一致�
         "RequiresCompatibilities": [
           "FARGATE",
         ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
         "TaskRoleArn": {
           "Fn::GetAtt": [
             "matchmakeservicetaskrole7B5E20D2",
