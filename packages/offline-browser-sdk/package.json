@@ -12,16 +12,16 @@
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
-    "dependency-cruiser": "^17.3.1",
+    "dependency-cruiser": "^17.3.2",
     "eslint": "^9.39.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "gbraver-burst-core": "^1.42.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "3.6.2",
+    "prettier": "3.7.3",
     "rimraf": "^6.1.2",
     "ts-loader": "^9.5.4",
-    "typescript-eslint": "^8.47.0",
-    "zod": "^4.1.12"
+    "typescript-eslint": "^8.48.0",
+    "zod": "^4.1.13"
   },
   "files": [
     "lib"
@@ -37,7 +37,7 @@
   "main": "lib/index.js",
   "peerDependencies": {
     "gbraver-burst-core": "^1.42.1",
-    "zod": "^4.1.12"
+    "zod": "^4.1.13"
   },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/offline-browser-sdk",
   "scripts": {
