@@ -16,6 +16,7 @@ provider:
     basePath: ${sls:stage}
     apiType: websocket
   runtime: nodejs24.x
+  architecture: arm64
   region: ap-northeast-1
   tracing:
     apiGateway: true
