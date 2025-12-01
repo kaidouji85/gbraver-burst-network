@@ -89,6 +89,10 @@ export class BackendEcsStack extends Stack {
         cpu: "256",
         memoryMiB: "512",
         taskRole: matchMakeServiceTaskRole,
+        runtimePlatform: {
+          cpuArchitecture: ecs.CpuArchitecture.ARM64,
+          operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
+        },
       },
     );
     const matchMakeLogging = new ecs.AwsLogDriver({
