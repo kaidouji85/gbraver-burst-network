@@ -36,7 +36,8 @@ import { WebsocketDisconnect, WebsocketErrorNotifier } from "./websocket";
 
 /** ブラウザSDK */
 export interface BrowserSDK
-  extends UniversalLogin,
+  extends
+    UniversalLogin,
     LoginCheck,
     Logout,
     Ping,
