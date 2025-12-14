@@ -3,8 +3,7 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
-    ALLOW_ORIGIN: /GbraverBurst/dev/allowOrigin
-    TEST_ALLOW_ORIGIN: /GbraverBurst/dev/testAllowOrigin
+    WS_API_DOMAIN_NAME: /GbraverBurst/dev/wsApiDomainName
     COGNITO_USER_POOL_ID: /GbraverBurst/dev/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/dev/cognitoClientId
     DOCKER_USER: /GbraverBurst/dev/dockerUser

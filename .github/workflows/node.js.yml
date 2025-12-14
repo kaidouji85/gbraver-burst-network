@@ -8,10 +8,11 @@ on:
 permissions:
   contents: read
 env:
-  NODE_JS_VERSION: 22.x
+  NODE_JS_VERSION: 24.x
   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  WS_API_DOMAIN_NAME: test-domain-name # ビルド用のダミー値
 jobs:
   test:
     runs-on: ubuntu-latest

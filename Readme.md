@@ -96,8 +96,7 @@ npm run build
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                         |
 | STAGE                          | デプロイする環境のステージ名を記入する                                                                            |
-| ALLOW_ORIGIN                   | RestAPIサーバのAccess-Control-Allow-Origin、本APIを利用するサイトのURLを記載する                                  |
-| TEST_ALLOW_ORIGIN              | RestAPIサーバのAccess-Control-Allow-Origin、本APIにテスト目的で接続するサイトのURLを記載する                      |
+| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                            |
 | COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                         |
 | COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                           |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名 |
@@ -197,8 +196,7 @@ AWS Parameter Storeに以下の値をセットする。
 | -------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/dev/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/dev/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/dev/testAllowOrigin            | String       | [環境変数定義の定義](#環境変数の定義) TEST_ALLOW_ORIGIN を参照              |
+| /GbraverBurst/dev/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/dev/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/dev/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -211,13 +209,14 @@ AWS Parameter Storeに以下の値をセットする。
 
 以下のCodeBuildプロジェクトを生成する。
 
-| 役割                                                                                         | buildspec                       | 環境                                                                                                             | webhook                                     |
-| -------------------------------------------------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| フルデプロイ（環境新規作成時に利用する想定）                                                 | buildspec.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
-| serverless削除                                                                               | buildspec.sls.remove.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
-| バックエンドECS削除                                                                          | buildspec.backendEcs.remove.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
-| serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）                      | buildspec.sls.yml               | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
-| バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
+| 役割                                                                                         | buildspec                        | 環境                                                                                                                       | webhook                                     |
+| -------------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| フルデプロイ（環境新規作成時に利用する想定）                                                 | buildspec.yml                    | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| serverless削除                                                                               | buildspec.sls.remove.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| バックエンドECS削除                                                                          | buildspec.backendEcs.remove.yml  | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）                      | buildspec.sls.yml                | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
+| バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.hotswap.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) |
+| バックエンドECS通常デプロイ                                                                  | buildspec.backendEcs.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) |                                             |
 
 ##### webhook
 
@@ -250,8 +249,7 @@ AWS Parameter Storeに以下の値をセットする。
 | --------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/prod/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/prod/allowOrigin                | String       | [環境変数定義の定義](#環境変数の定義) ALLOW_ORIGIN を参照                   |
-| /GbraverBurst/prod/testAllowOrigin            | String       | [環境変数定義の定義](#環境変数の定義) TEST_ALLOW_ORIGIN を参照              |
+| /GbraverBurst/prod/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -264,11 +262,11 @@ AWS Parameter Storeに以下の値をセットする。
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割                | buildspec                            | 環境                                                                                                             | 　webhook                                   |
-| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| デプロイ            | buildspec.prod.yml                   | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| serverless削除      | buildspec.sls.remove.prod.yml        | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
-| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [aws/codebuild/standard:7.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/ubuntu/standard/7.0) | なし                                        |
+| 役割                | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| デプロイ            | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
+| serverless削除      | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
 ##### webhook
 

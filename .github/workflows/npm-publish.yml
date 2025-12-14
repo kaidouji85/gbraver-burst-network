@@ -9,6 +9,9 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  # serverless frameworkのビルドを通すためのダミー値
+  # 同フレームワークを用いているパッケージはnpm publishの対象ではないため、ダミーでも問題ない
+  WS_API_DOMAIN_NAME: "dummy-value.not-used.com"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +20,7 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
-          node-version: "22.x"
+          node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
       - run: npm ci
       - run: npm run build
