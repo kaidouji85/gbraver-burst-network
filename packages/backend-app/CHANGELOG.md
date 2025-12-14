@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.19.1
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+
 ## 1.19.0
 
 ### Minor Changes
