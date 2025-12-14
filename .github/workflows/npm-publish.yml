@@ -9,6 +9,9 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  # serverless frameworkのビルドを通すためのダミー値
+  # 同フレームワークを用いているパッケージはnpm publishの対象ではないため、ダミーでも問題ない
+  WS_API_DOMAIN_NAME: "dummy-value.not-used.com"
 jobs:
   build:
     runs-on: ubuntu-latest
