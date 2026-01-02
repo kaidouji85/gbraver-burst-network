@@ -41,8 +41,8 @@
   "license": "MIT",
   "main": "lib/src/index.js",
   "peerDependencies": {
-    "gbraver-burst-core": "^1.42.1",
-    "zod": "^4.2.1"
+    "gbraver-burst-core": "^1.43.1",
+    "zod": "^4.3.4"
   },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk",
   "scripts": {
