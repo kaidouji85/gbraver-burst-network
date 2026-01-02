@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/offline-backend-app",
   "description": "gbraver burst offline backend app",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "author": "Y.Takeuchi",
   "dependencies": {
     "cors": "^2.8.5",
