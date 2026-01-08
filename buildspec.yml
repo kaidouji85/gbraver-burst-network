@@ -4,6 +4,7 @@ env:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
     WS_API_DOMAIN_NAME: /GbraverBurst/dev/wsApiDomainName
+    WS_API_CERT_ARN: /GbraverBurst/dev/wsApiCertArn
     COGNITO_USER_POOL_ID: /GbraverBurst/dev/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/dev/cognitoClientId
     DOCKER_USER: /GbraverBurst/dev/dockerUser

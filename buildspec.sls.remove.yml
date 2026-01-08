@@ -4,6 +4,7 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     WS_API_DOMAIN_NAME: /GbraverBurst/dev/wsApiDomainName
+    WS_API_CERT_ARN: /GbraverBurst/dev/wsApiCertArn
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
 phases:
   install:
