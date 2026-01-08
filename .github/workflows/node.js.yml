@@ -13,6 +13,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   WS_API_DOMAIN_NAME: test-domain-name # ビルド用のダミー値
+  WS_API_CERT_ARN: test-certificate-arn # ビルド用のダミー値
 jobs:
   test:
     runs-on: ubuntu-latest

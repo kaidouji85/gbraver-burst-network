@@ -12,6 +12,7 @@ env:
   # serverless frameworkのビルドを通すためのダミー値
   # 同フレームワークを用いているパッケージはnpm publishの対象ではないため、ダミーでも問題ない
   WS_API_DOMAIN_NAME: "dummy-value.not-used.com"
+  WS_API_CERT_ARN: "arn:aws:acm:region:account:certificate/dummy-value-not-used"
 jobs:
   build:
     runs-on: ubuntu-latest
