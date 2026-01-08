@@ -12,9 +12,9 @@ custom:
 provider:
   name: aws
   domain:
-    name: ${env:WS_API_DOMAIN_NAME}
-    basePath: ${sls:stage}
+    name: ${sls:stage}.${env:WS_API_DOMAIN_NAME}
     apiType: websocket
+    certificateArnn: ${env:WS_API_CERT_ARN}
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
