@@ -13,9 +13,9 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "dependency-cruiser": "^17.3.5",
+    "dependency-cruiser": "^17.3.6",
     "eslint": "^9.39.2",
-    "eslint-plugin-jest": "^29.12.0",
+    "eslint-plugin-jest": "^29.12.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "gbraver-burst-core": "*",
     "jest": "^30.2.0",
@@ -23,10 +23,10 @@
     "prettier": "3.7.4",
     "rimraf": "^6.1.2",
     "ts-jest": "^29.4.6",
-    "typescript-eslint": "^8.51.0",
+    "typescript-eslint": "^8.53.0",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1",
-    "zod": "^4.3.4"
+    "zod": "^4.3.5"
   },
   "files": [
     "lib"
@@ -42,7 +42,7 @@
   "main": "lib/src/index.js",
   "peerDependencies": {
     "gbraver-burst-core": "^1.43.1",
-    "zod": "^4.3.4"
+    "zod": "^4.3.5"
   },
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/browser-sdk",
   "scripts": {
