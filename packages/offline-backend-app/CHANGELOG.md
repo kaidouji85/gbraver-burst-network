@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 1.19.3
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+
 ## 1.19.2
 
 ### Patch Changes
