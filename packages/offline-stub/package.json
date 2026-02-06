@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/offline-stub",
   "description": "gbraver burst offline browser sdk",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/offline-browser-sdk": "*",
