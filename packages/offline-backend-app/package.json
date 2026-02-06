@@ -1,26 +1,26 @@
 {
   "name": "@gbraver-burst-network/offline-backend-app",
   "description": "gbraver burst offline backend app",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "author": "Y.Takeuchi",
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "gbraver-burst-core": "^1.43.1",
     "p-queue": "^9.1.0",
     "socket.io": "^4.8.3",
     "uuid": "^13.0.0",
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.0.10",
+    "@types/node": "^25.2.1",
     "babel-jest": "^30.2.0",
-    "dependency-cruiser": "^17.3.6",
+    "dependency-cruiser": "^17.3.7",
     "eslint": "^9.39.2",
-    "eslint-plugin-jest": "^29.12.1",
+    "eslint-plugin-jest": "^29.12.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jest": "^30.2.0",
     "prettier": "3.8.1",

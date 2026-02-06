@@ -1,15 +1,15 @@
 {
   "name": "@gbraver-burst-network/serverless-stub",
   "description": "gbraver burst network stub.",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@gbraver-burst-network/browser-sdk": "*",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "gbraver-burst-core": "^1.43.1"
   },
   "devDependencies": {
-    "dependency-cruiser": "^17.3.6",
+    "dependency-cruiser": "^17.3.7",
     "eslint": "^9.39.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "html-webpack-plugin": "^5.6.6",
@@ -18,8 +18,8 @@
     "prettier": "3.8.1",
     "rimraf": "^6.1.2",
     "ts-loader": "^9.5.4",
-    "typescript-eslint": "^8.53.1",
-    "webpack": "^5.104.1",
+    "typescript-eslint": "^8.54.0",
+    "webpack": "^5.105.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.3"
   },

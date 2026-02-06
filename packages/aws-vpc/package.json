@@ -1,21 +1,21 @@
 {
   "name": "@gbraver-burst-network/aws-vpc",
   "description": "gbraver burst backend vpc.",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "bin": {
     "aws-vpc": "bin/aws-vpc.js"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.235.1",
+    "aws-cdk-lib": "^2.237.1",
     "constructs": "^10.4.5",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "25.0.10",
-    "aws-cdk": "2.1102.0",
-    "dependency-cruiser": "^17.3.6",
+    "@types/node": "25.2.1",
+    "aws-cdk": "2.1105.0",
+    "dependency-cruiser": "^17.3.7",
     "eslint": "^9.39.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jest": "^30.2.0",
@@ -23,7 +23,7 @@
     "prettier": "3.8.1",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.53.1"
+    "typescript-eslint": "^8.54.0"
   },
   "license": "MIT",
   "private": true,
