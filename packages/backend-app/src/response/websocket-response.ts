@@ -16,7 +16,6 @@ export type WebsocketResponse =
   | CreatedPrivateMatchRoom
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
-  | KickedByNewConnection
   | Error;
 
 /** pingの応答 */
@@ -102,11 +101,6 @@ export type CouldNotPrivateMatchMaking = {
 /** 何らかの理由でプライベートマッチに参加できなかった */
 export type RejectPrivateMatchEntry = {
   action: "reject-private-match-entry";
-};
-
-/** 新規接続によりキックされた通知 */
-export type KickedByNewConnection = {
-  action: "kicked-by-new-connection";
 };
 
 /** エラー */
