@@ -36,19 +36,22 @@ export async function connect(
 
   const currentConnectionId = event.requestContext.connectionId;
   const connections = await dynamoConnections.queryByUserID(user.userID);
+  // GSIの結果整合性およびConnectionID再利用などで、
+  // 既存コネクションテーブルに同一ユーザIDの別コネクションが存在した場合に備えて、
+  // filterで現在のコネクションIDを除外している
   const oldConnectionIds = connections
     .map((c) => c.connectionId)
     .filter((id) => id !== currentConnectionId);
-
-  await Promise.all(
-    oldConnectionIds.map(async (oldConnectionId) => {
-      try {
-        await apiGateway.deleteConnection({ ConnectionId: oldConnectionId });
-      } catch {
-        // best-effort: stale connections will be cleaned up on $disconnect
-      }
-    }),
+  const deletedOldConnectionResults = await Promise.allSettled(
+    oldConnectionIds.map((oldConnectionId) =>
+      apiGateway.deleteConnection({ ConnectionId: oldConnectionId }),
+    ),
   );
+  deletedOldConnectionResults
+    .filter((result) => result.status === "rejected")
+    .forEach((result) =>
+      console.error("Failed to delete old connection:", result.reason),
+    );
 
   await dynamoConnections.put({
     connectionId: currentConnectionId,
