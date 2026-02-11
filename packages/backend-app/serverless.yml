@@ -51,11 +51,7 @@ provider:
             - Fn::Join:
                 [
                   "/",
-                  [
-                    "Fn::GetAtt": [ConnectionsTable, Arn],
-                    "index",
-                    "userID",
-                  ],
+                  ["Fn::GetAtt": [ConnectionsTable, Arn], "index", "userID"],
                 ]
             - Fn::GetAtt: [CasualMatchEntriesTable, Arn]
             - Fn::GetAtt: [BattleCommandsTable, Arn]
