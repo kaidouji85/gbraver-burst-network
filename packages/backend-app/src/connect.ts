@@ -3,27 +3,34 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
-import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
-import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
+import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ名 */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway Management API */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 
+/** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB DAO connections */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 
 /**
  * Websocket API $connect エントリポイント
- *
  * @param event イベント
  * @returns レスポンス
  */
