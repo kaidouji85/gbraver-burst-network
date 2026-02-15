@@ -50,6 +50,7 @@ export async function connect(
   const oldConnectionIds = connectionIds.filter(
     (id) => id !== currentConnectionId,
   );
+  // ここでは旧接続の切断のみ行い、終了処理と通知は$disconnectで行う
   const deletedOldConnectionResults = await Promise.allSettled(
     oldConnectionIds.map((oldConnectionId) =>
       apiGateway.deleteConnection({ ConnectionId: oldConnectionId }),
