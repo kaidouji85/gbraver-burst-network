@@ -42,13 +42,15 @@ export async function connect(
   );
 
   const currentConnectionId = event.requestContext.connectionId;
-  const connections = await dynamoConnections.queryByUserID(user.userID);
+  const connectionIds = await dynamoConnections.queryConnectionIdsByUserID(
+    user.userID,
+  );
   // GSIの結果整合性およびConnectionID再利用などで、
   // 既存コネクションテーブルに同一ユーザIDの別コネクションが存在した場合に備えて、
   // filterで現在のコネクションIDを除外している
-  const oldConnectionIds = connections
-    .map((c) => c.connectionId)
-    .filter((id) => id !== currentConnectionId);
+  const oldConnectionIds = connectionIds.filter(
+    (id) => id !== currentConnectionId,
+  );
   const deletedOldConnectionResults = await Promise.allSettled(
     oldConnectionIds.map((oldConnectionId) =>
       apiGateway.deleteConnection({ ConnectionId: oldConnectionId }),

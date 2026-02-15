@@ -1,4 +1,5 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
 import { Connection, ConnectionSchema } from "../core/connection";
 
@@ -58,11 +59,11 @@ export class DynamoConnections {
   }
 
   /**
-   * userID で GSI をクエリして該当接続を取得する
+   * userID で GSI をクエリして該当connectionId 配列を取得する
    * @param userID ユーザID
-   * @returns 該当する Connection 配列（未存在は空配列）
+   * @returns 該当するconnectionId配列（未存在は空配列）
    */
-  async queryByUserID(userID: string): Promise<DynamoConnection[]> {
+  async queryConnectionIdsByUserID(userID: string): Promise<string[]> {
     const result = await this.#dynamoDB.query({
       TableName: this.#tableName,
       IndexName: USER_ID_INDEX,
@@ -70,7 +71,7 @@ export class DynamoConnections {
       ExpressionAttributeValues: { ":uid": userID },
     });
     const items = result.Items ?? [];
-    return items.map((it) => DynamoConnectionSchema.parse(it));
+    return items.map((it) => z.string().parse(it.connectionId));
   }
 
   /**
