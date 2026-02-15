@@ -40,7 +40,6 @@ export async function connect(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
-
   const currentConnectionId = event.requestContext.connectionId;
   const connectionIds = await dynamoConnections.queryConnectionIdsByUserID(
     user.userID,
@@ -65,9 +64,7 @@ export async function connect(
   await dynamoConnections.put({
     connectionId: currentConnectionId,
     userID: user.userID,
-    state: {
-      type: "None",
-    },
+    state: { type: "None" },
   });
   return {
     statusCode: 200,
