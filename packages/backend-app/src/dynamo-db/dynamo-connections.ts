@@ -1,6 +1,10 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
 import { Connection, ConnectionSchema } from "../core/connection";
+
+/** userID の GSI 名 */
+const USER_ID_INDEX = "userID";
 
 /**
  * DynamoDB スキーマ connections
@@ -52,6 +56,22 @@ export class DynamoConnections {
       TableName: this.#tableName,
       Item: connection,
     });
+  }
+
+  /**
+   * userID で GSI をクエリして該当connectionId 配列を取得する
+   * @param userID ユーザID
+   * @returns 該当するconnectionId配列（未存在は空配列）
+   */
+  async queryConnectionIdsByUserID(userID: string): Promise<string[]> {
+    const result = await this.#dynamoDB.query({
+      TableName: this.#tableName,
+      IndexName: USER_ID_INDEX,
+      KeyConditionExpression: "userID = :uid",
+      ExpressionAttributeValues: { ":uid": userID },
+    });
+    const items = result.Items ?? [];
+    return items.map((it) => z.string().parse(it.connectionId));
   }
 
   /**
