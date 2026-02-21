@@ -9,6 +9,7 @@
     "gbraver-burst-core": "^1.43.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "dependency-cruiser": "^17.3.8",
     "eslint": "^10.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",

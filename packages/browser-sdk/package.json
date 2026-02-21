@@ -12,6 +12,7 @@
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "dependency-cruiser": "^17.3.8",
     "eslint": "^10.0.1",
