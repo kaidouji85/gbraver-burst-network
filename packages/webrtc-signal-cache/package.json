@@ -1,0 +1,9 @@
+{
+  "name": "@gbraver-burst-network/webrtc-signal-cache",
+  "version": "1.19.4",
+  "description": "gbraver burst webrtc signal cache",
+  "license": "MIT",
+  "author": "Y.Takeuchi",
+  "private": true,
+  "main": "handler.js"
+}
