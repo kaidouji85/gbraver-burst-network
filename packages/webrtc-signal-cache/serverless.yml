@@ -1,8 +1,3 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: kaidouji85
-# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
-app: webrtc-signal-cache
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: webrtc-signal-cache
 
 provider:
