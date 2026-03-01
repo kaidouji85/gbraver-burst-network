@@ -1,0 +1,13 @@
+service: webrtc-signal-cache
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
