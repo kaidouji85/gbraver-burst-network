@@ -10,7 +10,6 @@
     "serverless": "^4.33.0"
   },
   "license": "MIT",
-  "main": "handler.ts",
   "private": true,
   "scripts": {
     "build": "run-s clean transpile",
