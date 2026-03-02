@@ -14,6 +14,12 @@ SDP、ICE CandidateはQRコードには収まりきらないため、シグナ�
 
 ## 各種コマンド
 
+### 型チェック
+
+```shell
+npm run type-check
+```
+
 ### デプロイ
 
 ```shell

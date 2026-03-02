@@ -7,6 +7,9 @@
     "serverless": "^4.33.0"
   },
   "license": "MIT",
-  "main": "handler.js",
-  "private": true
+  "main": "handler.ts",
+  "private": true,
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  }
 }
