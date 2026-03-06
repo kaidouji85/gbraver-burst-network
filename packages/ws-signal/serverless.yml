@@ -1,4 +1,4 @@
-service: ws-signal
+service: gbraver-burst-ws-signal
 frameworkVersion: "4"
 
 provider:
