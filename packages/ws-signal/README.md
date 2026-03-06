@@ -29,3 +29,17 @@ npx sls deploy --stage <ステージ名>
 ```shell
 npx sls remove --stage <ステージ名>
 ```
+
+### WebSocketAPI 動作確認
+
+```shell
+npm install -g wscat
+
+# 以下URLを参考にAPI GatewayのURLを取得する
+# https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html
+API_URL=<AWS APIGatewayのURL>
+
+wscat -c "$API_URL"
+{"action":"ping"}
+-> サーバからメッセージが返される
+```
