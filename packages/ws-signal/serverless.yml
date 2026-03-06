@@ -6,6 +6,9 @@ provider:
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
+  tracing:
+    apiGateway: true
+    lambda: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -13,6 +16,14 @@ provider:
     STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "xray:PutTraceSegments"
+            - "xray:PutTelemetryRecords"
+          Resource: "*"
 
 functions:
   ping:
