@@ -2,7 +2,6 @@ import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi
 
 /**
  * APIゲートウェイ管理オブジェクトを生成するヘルパー関数
- *
  * @param endpoint APIゲートウェイのエンドポイント
  * @returns APIゲートウェイ管理オブジェクト
  */

@@ -1,6 +1,5 @@
 /**
  * Websocket API Gatewayのエンドポイントを生成する
- *
  * @param apiID API ID
  * @param region AWSのリージョン
  * @param stage API Gatewayのステージ

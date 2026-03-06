@@ -5,20 +5,19 @@ import type { WebsocketResponse } from "../response/websocket-response";
 
 /** メッセージ通知 */
 export class Notifier {
-  _api: ApiGatewayManagementApi;
+  /** APIゲートウェイ管理オブジェクト */
+  #api: ApiGatewayManagementApi;
 
   /**
    * コンストラクタ
-   *
    * @param api APIゲートウェイ管理オブジェクト
    */
   constructor(api: ApiGatewayManagementApi) {
-    this._api = api;
+    this.#api = api;
   }
 
   /**
    * クライアントにメッセージ送信する
-   *
    * @param connectionID コネクションID
    * @param data 送信するデータ
    * @returns メッセージ送信が完了したら発火するPromise
@@ -28,7 +27,7 @@ export class Notifier {
     data: WebsocketResponse,
   ): Promise<void> {
     const sendData = new TextEncoder().encode(JSON.stringify(data));
-    await this._api.postToConnection({
+    await this.#api.postToConnection({
       ConnectionId: connectionID,
       Data: sendData,
     });
