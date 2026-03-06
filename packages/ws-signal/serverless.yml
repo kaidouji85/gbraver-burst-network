@@ -6,7 +6,7 @@ provider:
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
-  websocketsApiName: ${self:service}__${sls:stage}__ws-api
+  websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
   websocketsApiRouteSelectionExpression: $request.body.action
 
 functions:
