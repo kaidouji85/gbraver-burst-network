@@ -1,0 +1,38 @@
+service: gbraver-burst-ws-signal
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  architecture: arm64
+  region: ap-northeast-1
+  tracing:
+    apiGateway: true
+    lambda: true
+  websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    SERVICE: ${self:service}
+    STAGE: ${sls:stage}
+    WEBSOCKET_API_ID:
+      Ref: WebsocketsApi
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "xray:PutTraceSegments"
+            - "xray:PutTelemetryRecords"
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - "execute-api:ManageConnections"
+          Resource:
+            - "arn:aws:execute-api:*:*:**/@connections/*"
+
+functions:
+  ping:
+    handler: src/ping.ping
+    events:
+      - websocket:
+          route: ping

@@ -1,8 +1,12 @@
 {
-  "name": "@gbraver-burst-network/webrtc-signal-cache",
+  "name": "@gbraver-burst-network/ws-signal",
   "description": "gbraver burst webrtc signal cache",
   "version": "1.19.4",
   "author": "Y.Takeuchi",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1000.0",
+    "@types/aws-lambda": "^8.10.161"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.2",
