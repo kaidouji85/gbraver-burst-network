@@ -1,13 +1,17 @@
-service: webrtc-signal-cache
+service: ws-signal
+version: 4
 
 provider:
   name: aws
   runtime: nodejs24.x
+  architecture: arm64
+  region: ap-northeast-1
+  websocketsApiName: ${self:service}__${sls:stage}__ws-api
+  websocketsApiRouteSelectionExpression: $request.body.action
 
 functions:
-  hello:
-    handler: handler.hello
+  ping:
+    handler: src/ping.ping
     events:
-      - httpApi:
-          path: /
-          method: get
+      - websocket:
+          route: ping
