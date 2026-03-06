@@ -21,7 +21,6 @@ const notifier = new Notifier(apiGateway);
 
 /**
  * Websocket API ping エントリポイント
- *
  * @param event イベント
  * @returns レスポンス
  */
@@ -30,11 +29,8 @@ export async function ping(
 ): Promise<APIGatewayProxyResultV2> {
   const data: Pong = {
     action: "pong",
-    message: "welcome to gbraver burst serverless",
+    message: "welcome to gbraver burst signal server",
   };
   await notifier.notifyToClient(event.requestContext.connectionId, data);
-  return {
-    statusCode: 200,
-    body: "ping success",
-  };
+  return { statusCode: 200, body: "ping success" };
 }
