@@ -49,4 +49,17 @@ export class DynamoRoomsDAO {
     this.#dynamoDB = dynamoDB;
     this.#tableName = tableName;
   }
+
+  /**
+   * ルーム情報をDynamoDBに保存する
+   * ルームIDが既に存在する場合は、条件式によりエラーになる
+   * @param room 保存するルーム情報
+   */
+  async put(room: DynamoRooms): Promise<void> {
+    await this.#dynamoDB.put({
+      TableName: this.#tableName,
+      Item: room,
+      ConditionExpression: "attribute_not_exists(roomID)",
+    });
+  }
 }
