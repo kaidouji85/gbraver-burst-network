@@ -76,13 +76,20 @@ export class DynamoRoomsDAO {
    * 条件付きで削除するため、ルームIDが存在しない場合は例外を投げる
    * @param roomID ルームID
    */
-  async deleteAndReturnOld(roomID: string): Promise<DynamoRooms> {
-    const result = await this.#dynamoDB.delete({
-      TableName: this.#tableName,
-      Key: { roomID },
-      ConditionExpression: "attribute_exists(roomID)",
-      ReturnValues: "ALL_OLD",
-    });
-    return DynamoRoomsSchema.parse(result.Attributes);
+  async deleteAndReturnOld(roomID: string): Promise<DynamoRooms | null> {
+    try {
+      const result = await this.#dynamoDB.delete({
+        TableName: this.#tableName,
+        Key: { roomID },
+        ConditionExpression: "attribute_exists(roomID)",
+        ReturnValues: "ALL_OLD",
+      });
+      return DynamoRoomsSchema.parse(result.Attributes);
+    } catch (error) {
+      if (!isConditionalCheckFailedException(error)) {
+        throw error;
+      }
+      return null;
+    }
   }
 }
