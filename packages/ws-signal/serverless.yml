@@ -44,6 +44,16 @@ provider:
             - Fn::GetAtt: [ConnectionsTable, Arn]
 
 functions:
+  connect:
+    handler: src/connect.connect
+    events:
+      - websocket:
+          route: $connect
+  disconnect:
+    handler: src/disconnect.disconnect
+    events:
+      - websocket:
+          route: $disconnect
   ping:
     handler: src/ping.ping
     events:
