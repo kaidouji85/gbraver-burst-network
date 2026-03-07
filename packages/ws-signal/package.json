@@ -5,7 +5,8 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1000.0",
-    "@types/aws-lambda": "^8.10.161"
+    "@types/aws-lambda": "^8.10.161",
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.1000.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -25,6 +26,7 @@
     "clean": "rimraf .serverless",
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
+    "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "transpile": "sls package",
