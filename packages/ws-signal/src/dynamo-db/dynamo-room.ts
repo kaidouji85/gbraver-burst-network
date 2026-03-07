@@ -8,7 +8,6 @@ import {
   RTCSessionDescriptionInitSchema,
 } from "../core/web-rtc";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
-import { th } from "zod/v4/locales";
 
 /** DynamoDBスキーマ room */
 export type DynamoRooms = {
