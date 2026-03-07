@@ -3,6 +3,7 @@ frameworkVersion: "4"
 
 custom:
   connections: ${self:service}__${sls:stage}__connections
+  room: ${self:service}__${sls:stage}__room
 
 provider:
   name: aws
@@ -18,6 +19,7 @@ provider:
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
+    DYNAMODB_ROOM_TABLE: ${self:custom.room}
   iam:
     role:
       statements:
@@ -70,5 +72,16 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    RoomTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.room}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
