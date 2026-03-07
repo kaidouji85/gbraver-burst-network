@@ -1,6 +1,9 @@
 service: gbraver-burst-ws-signal
 frameworkVersion: "4"
 
+custom:
+  connections: ${self:service}__${sls:stage}__connections
+
 provider:
   name: aws
   runtime: nodejs24.x
@@ -29,6 +32,16 @@ provider:
             - "execute-api:ManageConnections"
           Resource:
             - "arn:aws:execute-api:*:*:**/@connections/*"
+        - Effect: Allow
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
+            - "dynamodb:BatchWrite*"
+          Resource:
+            - Fn::GetAtt: [ConnectionsTable, Arn]
 
 functions:
   ping:
@@ -36,3 +49,17 @@ functions:
     events:
       - websocket:
           route: ping
+
+resources:
+  Resources:
+    ConnectionsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.connections}
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
