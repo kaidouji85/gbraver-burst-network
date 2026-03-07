@@ -12,8 +12,6 @@ import {
 export type DynamoRooms = {
   /** ルームID（パーティションキー） */
   roomID: string;
-  /** ルームに入室可能であるか否か、trueで入室可能 */
-  canEntry: boolean;
   /** ルームのホストのシグナル情報 */
   hostSignal: {
     /** WebRTCのセッション記述 */
@@ -26,7 +24,6 @@ export type DynamoRooms = {
 /** DynamoRooms zodスキーマ */
 export const DynamoRoomsSchema = z.object({
   roomID: z.string(),
-  canEntry: z.boolean(),
   hostSignal: z.object({
     sdp: RTCSessionDescriptionInitSchema,
     iceCandidates: z.array(RTCIceCandidateInitSchema),
@@ -52,7 +49,7 @@ export class DynamoRoomsDAO {
 
   /**
    * ルーム情報をDynamoDBに保存する
-   * ルームIDが既に存在する場合は、条件式によりエラーになる
+   * 条件付きPutを行うため、同じルームIDが存在する場合は例外を投げる
    * @param room 保存するルーム情報
    */
   async put(room: DynamoRooms): Promise<void> {
@@ -61,5 +58,20 @@ export class DynamoRoomsDAO {
       Item: room,
       ConditionExpression: "attribute_not_exists(roomID)",
     });
+  }
+
+  /**
+   * ルーム情報を削除して、削除前のルーム情報を返す
+   * 条件付きで削除するため、ルームIDが存在しない場合は例外を投げる
+   * @param roomID ルームID
+   */
+  async deleteAndReturnOld(roomID: string): Promise<DynamoRooms> {
+    const result = await this.#dynamoDB.delete({
+      TableName: this.#tableName,
+      Key: { roomID },
+      ConditionExpression: "attribute_exists(roomID)",
+      ReturnValues: "ALL_OLD",
+    });
+    return DynamoRoomsSchema.parse(result.Attributes);
   }
 }
