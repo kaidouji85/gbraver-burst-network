@@ -1,6 +1,9 @@
 service: gbraver-burst-ws-signal
 frameworkVersion: "4"
 
+custom:
+  connections: ${self:service}__${sls:stage}__connections
+
 provider:
   name: aws
   runtime: nodejs24.x
@@ -12,10 +15,9 @@ provider:
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
-    SERVICE: ${self:service}
-    STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
+    DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
   iam:
     role:
       statements:
@@ -29,10 +31,44 @@ provider:
             - "execute-api:ManageConnections"
           Resource:
             - "arn:aws:execute-api:*:*:**/@connections/*"
+        - Effect: Allow
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
+            - "dynamodb:BatchWrite*"
+          Resource:
+            - Fn::GetAtt: [ConnectionsTable, Arn]
 
 functions:
+  connect:
+    handler: src/connect.connect
+    events:
+      - websocket:
+          route: $connect
+  disconnect:
+    handler: src/disconnect.disconnect
+    events:
+      - websocket:
+          route: $disconnect
   ping:
     handler: src/ping.ping
     events:
       - websocket:
           route: ping
+
+resources:
+  Resources:
+    ConnectionsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.connections}
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
