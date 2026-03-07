@@ -3,24 +3,21 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
-/** サービス名 */
-const SERVICE = process.env.SERVICE ?? "";
-/** ステージ名 */
-const STAGE = process.env.STAGE ?? "";
+/** DynamoDB connections テーブル名 */
+const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** DynamoDB DAO connections */
-const dynamoConnections = createDynamoConnections({
+const dynamoConnections = new DynamoConnections(
   dynamoDB,
-  service: SERVICE,
-  stage: STAGE,
-});
+  DYNAMODB_CONNECTIONS_TABLE,
+);
 
 /**
  * Websocket API $disconnect エントリポイント

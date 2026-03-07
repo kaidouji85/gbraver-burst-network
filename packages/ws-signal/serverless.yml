@@ -15,10 +15,9 @@ provider:
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
-    SERVICE: ${self:service}
-    STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
+    DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
   iam:
     role:
       statements:
