@@ -72,8 +72,9 @@ export class DynamoRoomsDAO {
 
   /**
    * ルーム情報を削除して、削除前のルーム情報を返す
-   * 条件付きで削除するため、ルームIDが存在しない場合は例外を投げる
+   * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
    * @param roomID ルームID
+   * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
   async deleteAndReturnOld(roomID: string): Promise<DynamoRooms | null> {
     try {
