@@ -5,10 +5,10 @@
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.1000.0",
-    "@aws-sdk/client-dynamodb": "^3.1000.0",
-    "@types/aws-lambda": "^8.10.161"
+    "@aws-sdk/client-dynamodb": "^3.1000.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.161",
     "@eslint/js": "^10.0.1",
     "dependency-cruiser": "^17.3.8",
     "eslint": "^10.0.2",
