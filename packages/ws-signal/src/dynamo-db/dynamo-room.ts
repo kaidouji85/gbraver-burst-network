@@ -7,6 +7,8 @@ import {
   RTCSessionDescriptionInit,
   RTCSessionDescriptionInitSchema,
 } from "../core/web-rtc";
+import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
+import { th } from "zod/v4/locales";
 
 /** DynamoDBスキーマ room */
 export type DynamoRooms = {
@@ -49,15 +51,24 @@ export class DynamoRoomsDAO {
 
   /**
    * ルーム情報をDynamoDBに保存する
-   * 条件付きPutを行うため、同じルームIDが存在する場合は例外を投げる
+   * 条件付きPutを行うため、同じルームIDが存在する場合は何もしない
    * @param room 保存するルーム情報
+   * @return ルーム情報の保存に成功した場合はtrue、同じルームIDが存在する場合はfalse
    */
-  async put(room: DynamoRooms): Promise<void> {
-    await this.#dynamoDB.put({
-      TableName: this.#tableName,
-      Item: room,
-      ConditionExpression: "attribute_not_exists(roomID)",
-    });
+  async put(room: DynamoRooms): Promise<boolean> {
+    try {
+      await this.#dynamoDB.put({
+        TableName: this.#tableName,
+        Item: room,
+        ConditionExpression: "attribute_not_exists(roomID)",
+      });
+      return true;
+    } catch (error) {
+      if (!isConditionalCheckFailedException(error)) {
+        throw error;
+      }
+      return false;
+    }
   }
 
   /**
