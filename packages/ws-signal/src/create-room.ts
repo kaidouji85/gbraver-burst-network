@@ -3,14 +3,33 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { CreateRoomSchema } from "./request/create-room";
+import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./api-gateway/management";
+import { Notifier } from "./api-gateway/notifier";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRoomsDAO } from "./dynamo-db/dynamo-room";
+import { CreateRoomSchema } from "./request/create-room";
+import { RoomCreationResult } from "./response/room-creation-result";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** ステージ */
+const STAGE = process.env.STAGE ?? "";
 /** DynamoDB room テーブル名 */
 const DYNAMODB_ROOM_TABLE = process.env.DYNAMODB_ROOM_TABLE ?? "";
+/** Websocket API ID */
+const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
+/** API エンドポイント */
+const apiGatewayEndpoint = createAPIGatewayEndpoint(
+  WEBSOCKET_API_ID,
+  AWS_REGION,
+  STAGE,
+);
+/** API Gateway Management API */
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** WebSocket用メッセージ通知オブジェクト */
+const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
@@ -33,6 +52,15 @@ export async function createRoom(
 
   const roomID = "あおえいさ"; // ルームIDの生成ロジックは後で実装する
   const { sdp, iceCandidates } = createRoom.data;
-  dynamoRooms.put({ roomID, hostSignal: { sdp, iceCandidates } });
+  const isRoomCreationSuccessful = await dynamoRooms.put({
+    roomID,
+    hostSignal: { sdp, iceCandidates },
+  });
+  const roomCreationResult: RoomCreationResult = isRoomCreationSuccessful
+    ? { type: "room-creation-result", isSuccess: true, roomID }
+    : { type: "room-creation-result", isSuccess: false };
+  const { connectionId } = event.requestContext;
+  await notifier.notifyToClient(connectionId, roomCreationResult);
+
   return { statusCode: 200, body: "create-room success" };
 }

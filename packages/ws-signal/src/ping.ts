@@ -8,15 +8,22 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { Pong } from "./response/pong";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+
+/** API エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway Management API */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** WebSocket用メッセージ通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
 /**
