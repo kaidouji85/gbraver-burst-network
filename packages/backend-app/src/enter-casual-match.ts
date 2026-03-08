@@ -10,7 +10,7 @@ import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseEnterCasualMatch } from "./request/enter-casual-match";
 import type { EnteredCasualMatch } from "./response/entered-casual-match";
-import type { Error } from "./response/websocket-response";
+import type { Error } from "./response/error";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

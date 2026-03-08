@@ -10,9 +10,7 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
-import type {
-  Error,
-} from "./response/websocket-response";
+import type { Error } from "./response/error";
 import type { RejectPrivateMatchEntry } from "./response/reject-private-match-entry";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";

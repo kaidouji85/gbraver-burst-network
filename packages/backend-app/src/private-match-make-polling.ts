@@ -18,7 +18,7 @@ import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
 import { createBattleStart } from "./response/battle-start";
 import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match-make";
-import { invalidRequestBodyError } from "./response/invalid-request-body-error";
+import { INVALID_REQUEST_BODY_ERROR } from "./response/error";
 import { REJECT_PRIVATE_MATCH_ENTRY } from "./response/reject-private-match-entry";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -61,7 +61,7 @@ export async function privateMatchMakePolling(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError,
+      INVALID_REQUEST_BODY_ERROR,
     );
     return invalidRequestBody;
   }

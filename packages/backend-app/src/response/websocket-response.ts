@@ -10,6 +10,7 @@ import { BattleEnd } from "./battle-end";
 import { CreatedPrivateMatchRoom } from "./created-private-match-room";
 import { CouldNotPrivateMatchMaking } from "./cloud-not-private-match-make";
 import { RejectPrivateMatchEntry } from "./reject-private-match-entry";
+import { Error } from "./error";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -26,10 +27,4 @@ export type WebsocketResponse =
   | RejectPrivateMatchEntry
   | Error;
 
-/** エラー */
-export type Error = {
-  action: "error";
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  error: any;
-  /* eslint-enable */
-};
+
