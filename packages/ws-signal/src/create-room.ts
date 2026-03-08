@@ -10,7 +10,6 @@ import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { CreateRoomSchema } from "./request/create-room";
-import { RoomCreationResult } from "./response/room-creation-result";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -37,7 +36,10 @@ const notifier = new Notifier(apiGateway);
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** DynamoDB connections DAO */
-const dynmoConnections = new DynamoConnections(dynamoDB, DYNAMODB_CONNECTIONS_TABLE);
+const dynamoConnections = new DynamoConnections(
+  dynamoDB,
+  DYNAMODB_CONNECTIONS_TABLE,
+);
 /** DynamoDB rooms DAO */
 const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
@@ -66,9 +68,24 @@ export async function createRoom(
     roomID,
     hostSignal: { sdp, iceCandidates },
   });
-  const roomCreationResult: RoomCreationResult = isRoomCreationSuccessful
-    ? { type: "room-creation-result", isSuccess: true, roomID }
-    : { type: "room-creation-result", isSuccess: false };
-  await notifier.notifyToClient(connectionId, roomCreationResult);
+  if (!isRoomCreationSuccessful) {
+    await notifier.notifyToClient(connectionId, {
+      type: "room-creation-result",
+      isSuccess: false,
+    });
+    return { statusCode: 200, body: "create-room failed" };
+  }
+
+  await Promise.all([
+    dynamoConnections.put({
+      connectionId,
+      state: { type: "room-host", roomID },
+    }),
+    notifier.notifyToClient(connectionId, {
+      type: "room-creation-result",
+      isSuccess: true,
+      roomID,
+    }),
+  ]);
   return { statusCode: 200, body: "create-room success" };
 }
