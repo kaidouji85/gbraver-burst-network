@@ -8,6 +8,7 @@ import { BattleProgressed } from "./battle-progressed";
 import { SuddenlyBattleEnd } from "./suddenly-battle-end";
 import { BattleEnd } from "./battle-end";
 import { CreatedPrivateMatchRoom } from "./created-private-match-room";
+import { CouldNotPrivateMatchMaking } from "./cloud-not-private-match-make";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -23,11 +24,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** オーナーがプライベートマッチングできなかった */
-export type CouldNotPrivateMatchMaking = {
-  action: "cloud-not-private-match-making";
-};
 
 /** 何らかの理由でプライベートマッチに参加できなかった */
 export type RejectPrivateMatchEntry = {

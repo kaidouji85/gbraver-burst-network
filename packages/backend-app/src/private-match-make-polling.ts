@@ -17,7 +17,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
 import { createBattleStart } from "./response/battle-start";
-import { cloudNotPrivateMatchMake } from "./response/cloud-not-private-match-make";
+import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match-make";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
 import { rejectPrivateMatchEntry } from "./response/reject-private-match-entry";
 
@@ -76,7 +76,7 @@ export async function privateMatchMakePolling(
   if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
@@ -85,7 +85,7 @@ export async function privateMatchMakePolling(
   if (!matching) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
