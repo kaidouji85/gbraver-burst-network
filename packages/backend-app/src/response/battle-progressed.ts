@@ -1,4 +1,5 @@
 import { GameState } from "gbraver-burst-core";
+
 import { FlowID } from "../core/battle";
 
 /** バトル進行通知 */
