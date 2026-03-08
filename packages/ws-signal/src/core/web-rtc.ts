@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+/** RTCSessionDescriptionInit（ブラウザの同名データ型をコピー） */
+export type RTCSessionDescriptionInit = {
+  type: "offer" | "pranswer" | "answer" | "rollback";
+  sdp?: string;
+};
+
+/** Session Descriptionのzodスキーマ */
+export const RTCSessionDescriptionInitSchema = z.object({
+  type: z.enum(["offer", "pranswer", "answer", "rollback"]),
+  sdp: z.string().optional(),
+});
+
 /** RTCIceCandidateInit（ブラウザの同名データ型をコピー） */
 export type RTCIceCandidateInit = {
   candidate?: string;
@@ -14,16 +26,4 @@ export const RTCIceCandidateInitSchema = z.object({
   sdpMLineIndex: z.number().nullable().optional(),
   sdpMid: z.string().nullable().optional(),
   usernameFragment: z.string().nullable().optional(),
-});
-
-/** RTCSessionDescriptionInit（ブラウザの同名データ型をコピー） */
-export type RTCSessionDescriptionInit = {
-  type: "offer" | "pranswer" | "answer" | "rollback";
-  sdp?: string;
-};
-
-/** Session Descriptionのzodスキーマ */
-export const RTCSessionDescriptionInitSchema = z.object({
-  type: z.enum(["offer", "pranswer", "answer", "rollback"]),
-  sdp: z.string().optional(),
 });
