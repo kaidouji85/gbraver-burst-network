@@ -1,6 +1,3 @@
-/** websocketがクライアントに返すデータ */
-export type WebsocketResponse = Pong | Error;
-
 /** pingの応答 */
 export type Pong = {
   action: "pong";
@@ -12,3 +9,6 @@ export type Error = {
   action: "error";
   error: unknown;
 };
+
+/** websocketがクライアントに返すデータ */
+export type WebsocketResponse = Pong | Error;
