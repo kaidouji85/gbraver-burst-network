@@ -1,5 +1,4 @@
 
-import { PrivateMatchRoomID } from "../core/private-match-room";
 import { AcceptCommand } from "./accept-command";
 import { BattleStart } from "./battle-start";
 import { EnteredCasualMatch } from "./entered-casual-match";
@@ -8,6 +7,7 @@ import { Pong } from "./pong";
 import { BattleProgressed } from "./battle-progressed";
 import { SuddenlyBattleEnd } from "./suddenly-battle-end";
 import { BattleEnd } from "./battle-end";
+import { CreatedPrivateMatchRoom } from "./created-private-match-room";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -23,13 +23,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** オーナーがプライベートマッチルーム作成に成功した */
-export type CreatedPrivateMatchRoom = {
-  action: "created-private-match-room";
-  /** 作成したルームID */
-  roomID: PrivateMatchRoomID;
-};
 
 /** オーナーがプライベートマッチングできなかった */
 export type CouldNotPrivateMatchMaking = {
