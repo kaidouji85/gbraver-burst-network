@@ -7,6 +7,7 @@ import { EnteredCasualMatch } from "./entered-casual-match";
 import { NotReadyBattleProgress } from "./not-ready-battle-progress";
 import { Pong } from "./pong";
 import { BattleProgressed } from "./battle-progressed";
+import { SuddenlyBattleEnd } from "./suddenly-battle-end";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -22,11 +23,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** バトル強制終了 */
-export type SuddenlyBattleEnd = {
-  action: "suddenly-battle-end";
-};
 
 /** バトル終了 */
 export type BattleEnd = {
