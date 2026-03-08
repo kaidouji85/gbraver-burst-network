@@ -1,7 +1,7 @@
 import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 import { TextEncoder } from "util";
 
-import type { WebsocketResponse } from "../response/websocket-response";
+import type { WebsocketResponse } from "../response";
 
 /** メッセージ通知 */
 export class Notifier {
