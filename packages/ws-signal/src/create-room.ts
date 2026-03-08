@@ -65,6 +65,5 @@ export async function createRoom(
     ? { type: "room-creation-result", isSuccess: true, roomID }
     : { type: "room-creation-result", isSuccess: false };
   await notifier.notifyToClient(connectionId, roomCreationResult);
-
   return { statusCode: 200, body: "create-room success" };
 }
