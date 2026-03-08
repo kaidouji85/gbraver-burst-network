@@ -2,6 +2,7 @@ import type { GameState, Player } from "gbraver-burst-core";
 
 import type { BattleID, FlowID } from "../core/battle";
 import { PrivateMatchRoomID } from "../core/private-match-room";
+import { Pong } from "./pong";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -17,12 +18,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** pingの応答 */
-export type Pong = {
-  action: "pong";
-  message: string;
-};
 
 /** カジュアルマッチ入室成功 */
 export type EnteredCasualMatch = {
