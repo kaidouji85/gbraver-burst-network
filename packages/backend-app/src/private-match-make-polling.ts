@@ -16,10 +16,10 @@ import { invalidRequestBody } from "./lambda/invalid-request-body";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
-import { cloudNotPrivateMatchMake } from "./response/cloud-not-private-match-make";
-import { createBattleStart } from "./response/create-battle-start";
-import { invalidRequestBodyError } from "./response/invalid-request-body-error";
-import { rejectPrivateMatchEntry } from "./response/reject-private-match-entry";
+import { createBattleStart } from "./response/battle-start";
+import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match-make";
+import { INVALID_REQUEST_BODY_ERROR } from "./response/error";
+import { REJECT_PRIVATE_MATCH_ENTRY } from "./response/reject-private-match-entry";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -61,7 +61,7 @@ export async function privateMatchMakePolling(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError,
+      INVALID_REQUEST_BODY_ERROR,
     );
     return invalidRequestBody;
   }
@@ -76,7 +76,7 @@ export async function privateMatchMakePolling(
   if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
@@ -85,7 +85,7 @@ export async function privateMatchMakePolling(
   if (!matching) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
@@ -102,7 +102,7 @@ export async function privateMatchMakePolling(
     ),
     ...notChosenConnections.map((v) => dynamoConnections.put(v)),
     ...notChosenConnections.map(({ connectionId }) =>
-      notifier.notifyToClient(connectionId, rejectPrivateMatchEntry),
+      notifier.notifyToClient(connectionId, REJECT_PRIVATE_MATCH_ENTRY),
     ),
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),

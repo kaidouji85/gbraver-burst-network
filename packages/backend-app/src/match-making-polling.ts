@@ -10,7 +10,7 @@ import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { createBattleStart } from "./response/create-battle-start";
+import { createBattleStart } from "./response/battle-start";
 import { wait } from "./wait/wait";
 
 dotenv.config();
