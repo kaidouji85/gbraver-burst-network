@@ -45,7 +45,7 @@ provider:
             - "dynamodb:BatchWrite*"
           Resource:
             - Fn::GetAtt: [ConnectionsTable, Arn]
-            - Fn::GetAtt: [RoomTable, Arn]
+            - Fn::GetAtt: [RoomsTable, Arn]
 
 functions:
   connect:
