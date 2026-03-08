@@ -6,7 +6,7 @@ import {
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { Pong } from "./response/websocket-response";
+import { Pong } from "./response/pong";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
