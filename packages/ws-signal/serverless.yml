@@ -60,6 +60,11 @@ functions:
     events:
       - websocket:
           route: ping
+  createRoom:
+    handler: src/create-room.createRoom
+    events:
+      - websocket:
+          route: create-room
 
 resources:
   Resources:
