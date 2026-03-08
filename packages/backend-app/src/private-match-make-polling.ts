@@ -19,7 +19,7 @@ import { parsePrivateMatchMakePolling } from "./request/private-match-make-polli
 import { createBattleStart } from "./response/battle-start";
 import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match-make";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
-import { rejectPrivateMatchEntry } from "./response/reject-private-match-entry";
+import { REJECT_PRIVATE_MATCH_ENTRY } from "./response/reject-private-match-entry";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
@@ -102,7 +102,7 @@ export async function privateMatchMakePolling(
     ),
     ...notChosenConnections.map((v) => dynamoConnections.put(v)),
     ...notChosenConnections.map(({ connectionId }) =>
-      notifier.notifyToClient(connectionId, rejectPrivateMatchEntry),
+      notifier.notifyToClient(connectionId, REJECT_PRIVATE_MATCH_ENTRY),
     ),
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),
