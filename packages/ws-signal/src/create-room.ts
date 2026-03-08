@@ -46,7 +46,12 @@ export async function createRoom(
 ): Promise<APIGatewayProxyResultV2> {
   const parsedBody = JSON.parse(event.body || "");
   const createRoom = CreateRoomSchema.safeParse(parsedBody);
+  const { connectionId } = event.requestContext;
   if (!createRoom.success) {
+    await notifier.notifyToClient(connectionId, {
+      type: "room-creation-result",
+      isSuccess: false,
+    });
     return { statusCode: 400, body: "invalid request" };
   }
 
@@ -59,7 +64,6 @@ export async function createRoom(
   const roomCreationResult: RoomCreationResult = isRoomCreationSuccessful
     ? { type: "room-creation-result", isSuccess: true, roomID }
     : { type: "room-creation-result", isSuccess: false };
-  const { connectionId } = event.requestContext;
   await notifier.notifyToClient(connectionId, roomCreationResult);
 
   return { statusCode: 200, body: "create-room success" };
