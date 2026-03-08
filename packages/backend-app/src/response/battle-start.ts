@@ -1,4 +1,4 @@
-import { Player, GameState } from "gbraver-burst-core";
+import { GameState, Player } from "gbraver-burst-core";
 
 import { Battle, BattleID, BattlePlayer, FlowID } from "../core/battle";
 import { toPlayer } from "../core/to-player";

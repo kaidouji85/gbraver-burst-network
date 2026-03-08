@@ -22,7 +22,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseBattleProgressPolling } from "./request/battle-progress-polling";
 import { invalidRequestBodyError } from "./response/invalid-request-body-error";
-import { notReadyBattleProgress } from "./response/not-ready-battle-progress";
+import { NOT_READY_BATTLE_PROGRESS } from "./response/not-ready-battle-progress";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -86,7 +86,7 @@ async function endWithNotReadyBattleProgress(
 ): Promise<WebsocketAPIResponse> {
   await notifier.notifyToClient(
     event.requestContext.connectionId,
-    notReadyBattleProgress,
+    NOT_READY_BATTLE_PROGRESS,
   );
   return webSocketAPIResponseOfNotReadyBattleProgress;
 }
