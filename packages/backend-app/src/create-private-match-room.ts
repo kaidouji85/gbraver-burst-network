@@ -11,7 +11,7 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseCreatePrivateMatchRoom } from "./request/create-private-match-room";
-import { Error } from "./response/websocket-response";
+import { Error } from "./response/error";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";
