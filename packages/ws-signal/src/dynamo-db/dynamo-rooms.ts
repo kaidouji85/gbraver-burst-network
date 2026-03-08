@@ -10,7 +10,7 @@ import {
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /** DynamoDBスキーマ room */
-export type DynamoRooms = {
+export type DynamoRoom = {
   /** ルームID（パーティションキー） */
   roomID: string;
   /** ルームのホストのシグナル情報 */
@@ -22,8 +22,8 @@ export type DynamoRooms = {
   };
 };
 
-/** DynamoRooms zodスキーマ */
-export const DynamoRoomsSchema = z.object({
+/** DynamoRoom zodスキーマ */
+export const DynamoRoomSchema = z.object({
   roomID: z.string(),
   hostSignal: z.object({
     sdp: RTCSessionDescriptionInitSchema,
@@ -32,7 +32,7 @@ export const DynamoRoomsSchema = z.object({
 });
 
 /** DynamoDB rooms の DAO */
-export class DynamoRoomsDAO {
+export class DynamoRooms {
   /** DynamoDBDocument */
   #dynamoDB: DynamoDBDocument;
   /** DynamoDB テーブル名 */
@@ -54,7 +54,7 @@ export class DynamoRoomsDAO {
    * @param room 保存するルーム情報
    * @return ルーム情報の保存に成功した場合はtrue、同じルームIDが存在する場合はfalse
    */
-  async put(room: DynamoRooms): Promise<boolean> {
+  async put(room: DynamoRoom): Promise<boolean> {
     try {
       await this.#dynamoDB.put({
         TableName: this.#tableName,
@@ -76,7 +76,7 @@ export class DynamoRoomsDAO {
    * @param roomID ルームID
    * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
-  async deleteAndReturnOld(roomID: string): Promise<DynamoRooms | null> {
+  async deleteAndReturnOld(roomID: string): Promise<DynamoRoom | null> {
     try {
       const result = await this.#dynamoDB.delete({
         TableName: this.#tableName,
@@ -84,7 +84,7 @@ export class DynamoRoomsDAO {
         ConditionExpression: "attribute_exists(roomID)",
         ReturnValues: "ALL_OLD",
       });
-      return DynamoRoomsSchema.parse(result.Attributes);
+      return DynamoRoomSchema.parse(result.Attributes);
     } catch (error) {
       if (!isConditionalCheckFailedException(error)) {
         throw error;

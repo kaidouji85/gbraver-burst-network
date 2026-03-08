@@ -6,8 +6,9 @@ import {
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { DynamoRoomsDAO } from "./dynamo-db/dynamo-room";
+import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { CreateRoomSchema } from "./request/create-room";
 import { RoomCreationResult } from "./response/room-creation-result";
 
@@ -15,8 +16,10 @@ import { RoomCreationResult } from "./response/room-creation-result";
 const AWS_REGION = process.env.AWS_REGION ?? "";
 /** ステージ */
 const STAGE = process.env.STAGE ?? "";
-/** DynamoDB room テーブル名 */
-const DYNAMODB_ROOM_TABLE = process.env.DYNAMODB_ROOM_TABLE ?? "";
+/** DynamoDB connection テーブル名 */
+const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
+/** DynamoDB rooms テーブル名 */
+const DYNAMODB_ROOMS_TABLE = process.env.DYNAMODB_ROOMS_TABLE ?? "";
 /** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
@@ -33,8 +36,10 @@ const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-/** DynamoDB room DAO */
-const dynamoRooms = new DynamoRoomsDAO(dynamoDB, DYNAMODB_ROOM_TABLE);
+/** DynamoDB connections DAO */
+const dynmoConnections = new DynamoConnections(dynamoDB, DYNAMODB_CONNECTIONS_TABLE);
+/** DynamoDB rooms DAO */
+const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * Websocket API create-room エントリポイント
