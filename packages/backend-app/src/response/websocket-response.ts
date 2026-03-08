@@ -1,4 +1,3 @@
-import { GameState } from "gbraver-burst-core";
 
 import { PrivateMatchRoomID } from "../core/private-match-room";
 import { AcceptCommand } from "./accept-command";
@@ -8,6 +7,7 @@ import { NotReadyBattleProgress } from "./not-ready-battle-progress";
 import { Pong } from "./pong";
 import { BattleProgressed } from "./battle-progressed";
 import { SuddenlyBattleEnd } from "./suddenly-battle-end";
+import { BattleEnd } from "./battle-end";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -23,14 +23,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** バトル終了 */
-export type BattleEnd = {
-  action: "battle-end";
-
-  /** 更新されたゲームステート */
-  update: GameState[];
-};
 
 /** オーナーがプライベートマッチルーム作成に成功した */
 export type CreatedPrivateMatchRoom = {
