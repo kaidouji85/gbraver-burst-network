@@ -1,10 +1,11 @@
-import type { GameState, Player } from "gbraver-burst-core";
+import type { GameState } from "gbraver-burst-core";
 
-import type { BattleID, FlowID } from "../core/battle";
+import type { FlowID } from "../core/battle";
 import { PrivateMatchRoomID } from "../core/private-match-room";
 import { Pong } from "./pong";
 import { EnteredCasualMatch } from "./entered-casual-match";
 import { AcceptCommand } from "./accept-command";
+import { BattleStart } from "./battle-start";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -20,23 +21,6 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | Error;
-
-/** 戦闘開始 */
-export type BattleStart = {
-  action: "battle-start";
-  /** プレイヤー情報 */
-  player: Player;
-  /** 敵情報 */
-  enemy: Player;
-  /** 戦闘ID */
-  battleID: BattleID;
-  /** ステートヒストリー */
-  stateHistory: GameState[];
-  /** フローID */
-  flowID: FlowID;
-  /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
-  isPoller: boolean;
-};
 
 /** バトル進行の準備ができていない */
 export type NotReadyBattleProgress = {
