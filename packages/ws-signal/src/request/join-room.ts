@@ -8,8 +8,8 @@ import {
 } from "../core/web-rtc";
 
 /** ゲストが入室する */
-export type EnterRoom = {
-  action: "enter-room";
+export type JoinRoom = {
+  action: "join-room";
   /** ルームID */
   roomId: string;
   /** クライアントのSDP */
@@ -18,9 +18,9 @@ export type EnterRoom = {
   iceCandidates: RTCIceCandidateInit[];
 };
 
-/** EnterRoom zod スキーマ */
-export const EnterRoomSchema = z.object({
-  action: z.literal("enter-room"),
+/** JoinRoom zod スキーマ */
+export const JoinRoomSchema = z.object({
+  action: z.literal("join-room"),
   roomId: z.string(),
   sdp: RTCSessionDescriptionInitSchema,
   iceCandidates: z.array(RTCIceCandidateInitSchema),

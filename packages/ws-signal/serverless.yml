@@ -68,6 +68,11 @@ functions:
     events:
       - websocket:
           route: create-room
+  joinRoom:
+    handler: src/join-room.joinRoom
+    events:
+      - websocket:
+          route: join-room
 
 resources:
   Resources:
