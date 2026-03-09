@@ -1,6 +1,13 @@
 import { Error } from "./error";
+import { JoinRoomRejected } from "./join-room-rejected";
+import { Matching } from "./matching";
 import { Pong } from "./pong";
 import { RoomCreationResult } from "./room-creation-result";
 
 /** websocketがクライアントに返すデータ */
-export type WebsocketResponse = Pong | RoomCreationResult | Error;
+export type WebsocketResponse =
+  | Pong
+  | RoomCreationResult
+  | JoinRoomRejected
+  | Matching
+  | Error;
