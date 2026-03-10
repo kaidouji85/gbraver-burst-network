@@ -53,20 +53,20 @@ export async function joinRoom(
 ): Promise<APIGatewayProxyResultV2> {
   const parsedBody = JSON.parse(event.body || "");
   const joinRoom = JoinRoomSchema.safeParse(parsedBody);
-  const { connectionId } = event.requestContext;
+  const { connectionId: guestConnectionId } = event.requestContext;
   if (!joinRoom.success) {
-    await notifier.notifyToClient(connectionId, { type: "join-room-rejected" });
+    await notifier.notifyToClient(guestConnectionId, { type: "join-room-rejected" });
     return { statusCode: 200, body: "join room rejected" };
   }
 
   const { roomId } = joinRoom.data;
   const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomId);
   if (!deletedRoom) {
-    await notifier.notifyToClient(connectionId, { type: "join-room-rejected" });
+    await notifier.notifyToClient(guestConnectionId, { type: "join-room-rejected" });
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { sdp, iceCandidates } = joinRoom.data;
+  const { sdp: guestSdp, iceCandidates: guestIceCandidates } = joinRoom.data;
   const { hostConnectionId, hostSignal } = deletedRoom;
   await Promise.all([
     dynamoConnections.put({
@@ -75,10 +75,10 @@ export async function joinRoom(
     }),
     notifier.notifyToClient(hostConnectionId, {
       type: "matching",
-      sdp,
-      iceCandidates,
+      sdp: guestSdp,
+      iceCandidates: guestIceCandidates,
     }),
-    notifier.notifyToClient(connectionId, {
+    notifier.notifyToClient(guestConnectionId, {
       type: "matching",
       sdp: hostSignal.sdp,
       iceCandidates: hostSignal.iceCandidates,
