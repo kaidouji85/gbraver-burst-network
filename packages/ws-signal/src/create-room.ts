@@ -66,6 +66,7 @@ export async function createRoom(
   const { sdp, iceCandidates } = createRoom.data;
   const isRoomCreationSuccessful = await dynamoRooms.put({
     roomID,
+    hostConnectionId: connectionId,
     hostSignal: { sdp, iceCandidates },
   });
   if (!isRoomCreationSuccessful) {

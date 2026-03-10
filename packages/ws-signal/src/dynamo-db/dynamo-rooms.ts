@@ -13,6 +13,8 @@ import { isConditionalCheckFailedException } from "./is-conditional-check-failed
 export type DynamoRoom = {
   /** ルームID（パーティションキー） */
   roomID: string;
+  /** ホストのコネクションID */
+  hostConnectionId: string;
   /** ルームのホストのシグナル情報 */
   hostSignal: {
     /** WebRTCのセッション記述 */
@@ -25,6 +27,7 @@ export type DynamoRoom = {
 /** DynamoRoom zodスキーマ */
 export const DynamoRoomSchema = z.object({
   roomID: z.string(),
+  hostConnectionId: z.string(),
   hostSignal: z.object({
     sdp: RTCSessionDescriptionInitSchema,
     iceCandidates: z.array(RTCIceCandidateInitSchema),

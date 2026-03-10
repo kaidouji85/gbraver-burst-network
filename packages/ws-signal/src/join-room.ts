@@ -56,8 +56,29 @@ export async function joinRoom(
   const { connectionId } = event.requestContext;
   if (!joinRoom.success) {
     await notifier.notifyToClient(connectionId, { type: "join-room-rejected" });
-    return { statusCode: 400, body: "invalid request body" };
+    return { statusCode: 200, body: "join room rejected" };
   }
+
+  const { roomId } = joinRoom.data;
+  const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomId);
+  if (!deletedRoom) {
+    await notifier.notifyToClient(connectionId, { type: "join-room-rejected" });
+    return { statusCode: 200, body: "join room rejected" };
+  }
+
+  
+  // const {
+  //   connectionId: hostConnectionId,
+  //   sdp: hostSdp,
+  //   iceCandidates: hostIceCandidates,
+  // } = deletedRoom;
+  // await Promise.all([
+  //   notifier.notifyToClient(hostConnectionId, {
+  //     type: "matching",
+  //     sdp: hostSdp,
+  //     iceCandidates: hostIceCandidates,
+  //   }),
+  // ]);
 
   return { statusCode: 200, body: "join room success" };
 }
