@@ -66,19 +66,23 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  
-  // const {
-  //   connectionId: hostConnectionId,
-  //   sdp: hostSdp,
-  //   iceCandidates: hostIceCandidates,
-  // } = deletedRoom;
-  // await Promise.all([
-  //   notifier.notifyToClient(hostConnectionId, {
-  //     type: "matching",
-  //     sdp: hostSdp,
-  //     iceCandidates: hostIceCandidates,
-  //   }),
-  // ]);
-
+  const { sdp, iceCandidates } = joinRoom.data;
+  const { hostConnectionId, hostSignal } = deletedRoom;
+  await Promise.all([
+    dynamoConnections.put({
+      connectionId: hostConnectionId,
+      state: { type: "none" },
+    }),
+    notifier.notifyToClient(hostConnectionId, {
+      type: "matching",
+      sdp,
+      iceCandidates,
+    }),
+    notifier.notifyToClient(connectionId, {
+      type: "matching",
+      sdp: hostSignal.sdp,
+      iceCandidates: hostSignal.iceCandidates,
+    }),
+  ]);
   return { statusCode: 200, body: "join room success" };
 }

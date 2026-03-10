@@ -28,6 +28,6 @@ export async function connect(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
   const { connectionId } = event.requestContext;
-  await dynamoConnections.put({ connectionId, state: { type: "None" } });
+  await dynamoConnections.put({ connectionId, state: { type: "none" } });
   return { statusCode: 200, body: "connected." };
 }
