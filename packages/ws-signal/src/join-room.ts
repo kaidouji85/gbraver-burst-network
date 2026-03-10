@@ -55,14 +55,18 @@ export async function joinRoom(
   const joinRoom = JoinRoomSchema.safeParse(parsedBody);
   const { connectionId: guestConnectionId } = event.requestContext;
   if (!joinRoom.success) {
-    await notifier.notifyToClient(guestConnectionId, { type: "join-room-rejected" });
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-rejected",
+    });
     return { statusCode: 200, body: "join room rejected" };
   }
 
   const { roomId } = joinRoom.data;
   const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomId);
   if (!deletedRoom) {
-    await notifier.notifyToClient(guestConnectionId, { type: "join-room-rejected" });
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-rejected",
+    });
     return { statusCode: 200, body: "join room rejected" };
   }
 
