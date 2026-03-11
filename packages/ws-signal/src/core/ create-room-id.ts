@@ -14,8 +14,8 @@ const kana = [
   ...["わ", "を", "ん"],
 ];
 
-/** パスワードの文字数 */
-const PASSWORD_LENGTH = 5;
+/** ルームIDの文字数 */
+const ROOM_ID_LENGTH = 5;
 
 /**
  * ランダムなルームIDを生成する
@@ -23,6 +23,6 @@ const PASSWORD_LENGTH = 5;
  */
 export const createRoomId = (): string =>
   Array.from(
-    { length: PASSWORD_LENGTH },
+    { length: ROOM_ID_LENGTH },
     () => kana[crypto.randomInt(kana.length)],
   ).join("");
