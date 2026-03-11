@@ -1,20 +1,6 @@
 import { z } from "zod";
 
-/** 状態なし */
-export type None = {
-  type: "None";
-};
-
-/** None zodスキーマ */
-export const NoneSchema = z.object({
-  type: z.literal("None"),
-});
-
-/** コネクションステート */
-export type ConnectionState = None;
-
-/** ConnectionState zodスキーマ */
-export const ConnectionStateSchema = z.union([NoneSchema]);
+import { ConnectionState, ConnectionStateSchema } from "./connection-state";
 
 /** コネクション */
 export type Connection = {

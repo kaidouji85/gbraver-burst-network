@@ -3,6 +3,7 @@ frameworkVersion: "4"
 
 custom:
   connections: ${self:service}__${sls:stage}__connections
+  rooms: ${self:service}__${sls:stage}__rooms
 
 provider:
   name: aws
@@ -15,9 +16,12 @@ provider:
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
+    SERVICE: ${self:service}
+    STAGE: ${sls:stage}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
+    DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
   iam:
     role:
       statements:
@@ -41,6 +45,7 @@ provider:
             - "dynamodb:BatchWrite*"
           Resource:
             - Fn::GetAtt: [ConnectionsTable, Arn]
+            - Fn::GetAtt: [RoomsTable, Arn]
 
 functions:
   connect:
@@ -58,6 +63,16 @@ functions:
     events:
       - websocket:
           route: ping
+  createRoom:
+    handler: src/create-room.createRoom
+    events:
+      - websocket:
+          route: create-room
+  joinRoom:
+    handler: src/join-room.joinRoom
+    events:
+      - websocket:
+          route: join-room
 
 resources:
   Resources:
@@ -70,5 +85,16 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    RoomsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.rooms}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST

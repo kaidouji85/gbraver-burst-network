@@ -56,13 +56,17 @@ export class DynamoConnections {
 
   /**
    * Delete操作を行う
+   * 削除対象が存在しない場合は何もせずにnullを返す
    * @param connectionId コネクションID
-   * @returns 項目削除が完了したら発火するPromise
+   * @returns 削除対象が存在した場合は削除されたアイテム、存在しない場合はnull
    */
-  async delete(connectionId: string): Promise<void> {
-    await this.#dynamoDB.delete({
+  async delete(connectionId: string): Promise<DynamoConnection | null> {
+    const result = await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: { connectionId },
+      ReturnValues: "ALL_OLD",
     });
+    const parsed = DynamoConnectionSchema.safeParse(result.Attributes);
+    return parsed.success ? parsed.data : null;
   }
 }
