@@ -1,4 +1,5 @@
-//import * as crypto from "crypto";
+import * as R from "ramda";
+import * as crypto from "crypto";
 
 /** ひらがな表 */
 const kana = [
@@ -22,6 +23,8 @@ const PASSWORD_LENGTH = 5;
  * @return 生成されたルームID
  */
 export function createRoomId(): string {
-  //crypto.randomInt(0, 45);
-  return "";
+  return R.times(() => {
+    const index = crypto.randomInt(0, kana.length - 1);
+    return kana[index];
+  }, PASSWORD_LENGTH).join("");
 }
