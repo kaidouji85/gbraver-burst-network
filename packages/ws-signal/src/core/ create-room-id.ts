@@ -24,7 +24,7 @@ const PASSWORD_LENGTH = 5;
  */
 export function createRoomId(): string {
   return R.times(() => {
-    const index = crypto.randomInt(0, kana.length - 2);
+    const index = crypto.randomInt(0, kana.length);
     return kana[index];
   }, PASSWORD_LENGTH).join("");
 }
