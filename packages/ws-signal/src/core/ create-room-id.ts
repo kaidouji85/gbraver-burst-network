@@ -1,5 +1,5 @@
-import * as R from "ramda";
 import * as crypto from "crypto";
+import * as R from "ramda";
 
 /** ひらがな表 */
 const kana = [
@@ -24,7 +24,7 @@ const PASSWORD_LENGTH = 5;
  */
 export function createRoomId(): string {
   return R.times(() => {
-    const index = crypto.randomInt(0, kana.length - 1);
+    const index = crypto.randomInt(0, kana.length - 2);
     return kana[index];
   }, PASSWORD_LENGTH).join("");
 }
