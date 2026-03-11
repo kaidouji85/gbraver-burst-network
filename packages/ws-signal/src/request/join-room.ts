@@ -11,7 +11,7 @@ import {
 export type JoinRoom = {
   action: "join-room";
   /** ルームID */
-  roomId: string;
+  roomID: string;
   /** クライアントのSDP */
   sdp: RTCSessionDescriptionInit;
   /** クライアントのICE候補 */
@@ -21,7 +21,7 @@ export type JoinRoom = {
 /** JoinRoom zod スキーマ */
 export const JoinRoomSchema = z.object({
   action: z.literal("join-room"),
-  roomId: z.string(),
+  roomID: z.string(),
   sdp: RTCSessionDescriptionInitSchema,
   iceCandidates: z.array(RTCIceCandidateInitSchema),
 });

@@ -61,8 +61,8 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { roomId } = joinRoom.data;
-  const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomId);
+  const { roomID } = joinRoom.data;
+  const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomID);
   if (!deletedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
