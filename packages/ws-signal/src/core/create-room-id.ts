@@ -23,7 +23,7 @@ const ROOM_ID_LENGTH = 5;
  * ランダムなルームIDを生成する
  * @return 生成されたルームID
  */
-export const createRoomId = (): string =>
+export const createRoomID = (): string =>
   Array.from(
     { length: ROOM_ID_LENGTH },
     () => kana[crypto.randomInt(kana.length)],
