@@ -10,6 +10,7 @@ import { createRoomID } from "./core/create-room-id";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { parseJSON } from "./json/parse";
 import { CreateRoom, CreateRoomSchema } from "./request/create-room";
 
 /** AWSリージョン */
@@ -76,7 +77,7 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
 export async function createRoom(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
-  const parsedBody = JSON.parse(event.body || "");
+  const parsedBody = parseJSON(event.body);
   const createRoom = CreateRoomSchema.safeParse(parsedBody);
   const { connectionId } = event.requestContext;
   if (!createRoom.success) {
