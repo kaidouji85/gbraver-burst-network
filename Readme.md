@@ -164,6 +164,18 @@ npm run build
 ./remove-backend-ecs.bash
 ```
 
+### シグナルサーバーデプロイ
+
+```shell
+./deploy-ws-signal.bash
+```
+
+### シグナルサーバー環境削除
+
+```shell
+./remove-ws-signal.bash
+```
+
 ## GitHub Actions CI環境構築方法
 
 ### 事前作業
