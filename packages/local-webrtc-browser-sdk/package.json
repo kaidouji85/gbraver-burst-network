@@ -7,19 +7,13 @@
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
     "email": "kaidouji85@gmail.com"
   },
-  "devDependencies": {
-    "zod": "^4.3.6"
-  },
   "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-webrtc-browser-sdk#readme",
   "keywords": [
     "gbraver-burst",
     "web-rtc"
   ],
   "license": "MIT",
-  "main": "index.js",
-  "peerDependencies": {
-    "zod": "^4.3.6"
-  },
+  "main": "index.j
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-webrtc-browser-sdk",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
