@@ -1,0 +1,21 @@
+{
+  "name": "@gbraver-burst-network/local-web-rtc-browser-sdk",
+  "description": "gbraver burst local web rtc browser sdk",
+  "version": "1.19.4",
+  "author": "Y.Takeuchi",
+  "bugs": {
+    "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
+    "email": "kaidouji85@gmail.com"
+  },
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-web-rtc-browser-sdk#readme",
+  "keywords": [
+    "gbraver-burst",
+    "web-rtc"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-web-rtc-browser-sdk",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
