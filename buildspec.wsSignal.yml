@@ -1,0 +1,18 @@
+version: 0.2
+env:
+  parameter-store:
+    WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
+    STAGE: /GbraverBurst/dev/stage
+    WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
+    WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
+    SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  pre_build:
+    commands:
+      - npm ci
+  build:
+    commands:
+      - ./deploy-ws-signal.bash
