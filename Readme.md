@@ -114,7 +114,8 @@ npm run build
 
 | 環境変数名                     | 記載内容                                                                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                                |
+| SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                       |
+| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gbraver-burst-ws-signal-dev、gbraver-burst-ws-signal-prodなどを記入する        |
 | STAGE                          | デプロイする環境のステージ名を記入する                                                                                   |
 | WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                   |
 | WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある       |
@@ -218,6 +219,7 @@ AWS Parameter Storeに以下の値をセットする。
 | 名前                                         | 種類         | 値                                                                          |
 | -------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/dev/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
+| /GbraverBurst/dev/wsSignalService            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_SERVICE を参照              |
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/dev/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/dev/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
@@ -274,6 +276,7 @@ AWS Parameter Storeに以下の値をセットする。
 | 名前                                          | 種類         | 値                                                                          |
 | --------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/prod/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
+| /GbraverBurst/prod/wsSignalService            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_SERVICE を参照              |
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/prod/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/prod/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
