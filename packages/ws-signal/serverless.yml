@@ -17,7 +17,7 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
-  websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
+  websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SERVICE: ${self:service}
