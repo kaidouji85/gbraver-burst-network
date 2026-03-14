@@ -112,20 +112,22 @@ npm run build
 
 ローカル環境に以下の環境変数を定義する。
 
-| 環境変数名                     | 記載内容                                                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                          |
-| STAGE                          | デプロイする環境のステージ名を記入する                                                                             |
-| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                             |
-| WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある |
-| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                          |
-| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                            |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名  |
-| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                |
-| DOCKER_USER                    | Docker Hubのユーザ名                                                                                               |
-| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                |
-| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                          |
-| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                         |
+| 環境変数名                     | 記載内容                                                                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| SERVICE                        | デプロイする環境のサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                                |
+| STAGE                          | デプロイする環境のステージ名を記入する                                                                                   |
+| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                   |
+| WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある       |
+| WS_SIGNAL_DOMAIN_NAME          | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                |
+| WS_SIGNAL_CERT_ARN             | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある |
+| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                |
+| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                  |
+| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名        |
+| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                      |
+| DOCKER_USER                    | Docker Hubのユーザ名                                                                                                     |
+| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                      |
+| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                |
+| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                               |
 
 ### serverlessデプロイ
 
@@ -218,6 +220,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
 | /GbraverBurst/dev/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/dev/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
+| /GbraverBurst/dev/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
+| /GbraverBurst/dev/wsSignalCertArn            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
 | /GbraverBurst/dev/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
 | /GbraverBurst/dev/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/dev/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
@@ -273,6 +277,8 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/prod/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/prod/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
+| /GbraverBurst/prod/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
+| /GbraverBurst/prod/wsSignalCertArn            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
 | /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
