@@ -1,0 +1,18 @@
+version: 0.2
+env:
+  # プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
+  parameter-store:
+    WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
+    WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName
+    WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn
+    SERVERLESS_ACCESS_KEY: /GbraverBurst/prod/serverlessAccessKey
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  pre_build:
+    commands:
+      - npm ci
+  build:
+    commands:
+      - ./remove-ws-signal.bash

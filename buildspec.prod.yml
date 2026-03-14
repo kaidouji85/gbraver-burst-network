@@ -2,9 +2,12 @@ version: 0.2
 env:
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
+    WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
     STAGE: /GbraverBurst/prod/stage
     WS_API_DOMAIN_NAME: /GbraverBurst/prod/wsApiDomainName
     WS_API_CERT_ARN: /GbraverBurst/prod/wsApiCertArn
+    WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName
+    WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn
     COGNITO_USER_POOL_ID: /GbraverBurst/prod/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/prod/cognitoClientId
     DOCKER_USER: /GbraverBurst/prod/dockerUser
@@ -25,3 +28,4 @@ phases:
       - ./deploy-serverless.bash
       - ./push-match-make-container.bash
       - ./deploy-backend-ecs.bash
+      - ./deploy-ws-signal.bash

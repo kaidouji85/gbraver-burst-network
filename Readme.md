@@ -115,7 +115,7 @@ npm run build
 | 環境変数名                     | 記載内容                                                                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                       |
-| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gbraver-burst-ws-signal-dev、gbraver-burst-ws-signal-prodなどを記入する        |
+| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                              |
 | STAGE                          | デプロイする環境のステージ名を記入する                                                                                   |
 | WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                   |
 | WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある       |
@@ -162,6 +162,18 @@ npm run build
 
 ```shell
 ./remove-backend-ecs.bash
+```
+
+### シグナルサーバーデプロイ
+
+```shell
+./deploy-ws-signal.bash
+```
+
+### シグナルサーバー環境削除
+
+```shell
+./remove-ws-signal.bash
 ```
 
 ## GitHub Actions CI環境構築方法
@@ -243,8 +255,10 @@ AWS Parameter Storeに以下の値をセットする。
 | serverless削除                                                                               | buildspec.sls.remove.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 | バックエンドECS削除                                                                          | buildspec.backendEcs.remove.yml  | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 | serverlessデプロイ（CI/CDで既存環境をアップデートする際に利用する想定）                      | buildspec.sls.yml                | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
-| バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.hotswap.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) |
-| バックエンドECS通常デプロイ                                                                  | buildspec.backendEcs.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) |                                             |
+| バックエンドecsをホットスワップデプロイ（CI/CDで既存環境をアップデートする際に利用する想定） | buildspec.backendEcs.hotswap.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
+| バックエンドECS通常デプロイ                                                                  | buildspec.backendEcs.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| シグナルサーバーデプロイ                                                                     | buildspec.wsSignal.yml           | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
+| シグナルサーバー削除                                                                         | buildspec.wsSignal.remove.yml    | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
 ##### webhook
 
@@ -256,16 +270,16 @@ developブランチにpushされた時にCodeBuildが実行されるように、
   - チェックを入れる
 - **ビルドタイプ**
   - 単一ビルド
+- **コメント承認**
+  - DISABLED
 - **ウェブフックイベントフィルタグループ**
   - **フィルタグループ 1**
     - **イベントタイプ**
       - プッシュ
-    - **これらの条件でビルドを開始する**
-      | タイプ | パターン |
-      |--------|---------|
-      | HEAD_REF | ^refs/heads/develop$ |
-    - **これらの条件でビルドを開始しない**
-      - なし
+    - **フィルター**
+      | 条件 | タイプ | パターン |
+      |-----|--------|---------|
+      |START_BUILD |HEAD_REF | ^refs/heads/develop$ |
 
 ### AWS CodeBuild本番環境
 
@@ -294,11 +308,12 @@ AWS Parameter Storeに以下の値をセットする。
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割                | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| デプロイ            | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| serverless削除      | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
-| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| 役割                 | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
+| -------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| デプロイ             | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
+| serverless削除       | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| バックエンドECS削除  | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| シグナルサーバー削除 | buildspec.wsSignal.remove.prod.yml   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
 ##### webhook
 
@@ -310,16 +325,16 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
   - チェックを入れる
 - **ビルドタイプ**
   - 単一ビルド
+- **コメント承認**
+  - DISABLED
 - **ウェブフックイベントフィルタグループ**
   - **フィルタグループ 1**
     - **イベントタイプ**
       - プッシュ
-    - **これらの条件でビルドを開始する**
-      | タイプ | パターン |
-      |--------|---------|
-      | HEAD_REF | ^refs/heads/master$ |
-    - **これらの条件でビルドを開始しない**
-      - なし
+    - **フィルター**
+      | 条件 | タイプ | パターン |
+      |-----|--------|---------|
+      |START_BUILD |HEAD_REF | ^refs/heads/master$ |
 
 ## パッケージ公開
 

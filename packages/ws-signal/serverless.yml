@@ -1,4 +1,4 @@
-service: ${env:WS_SIGNAL_SERVICE, "gbraver-burst-ws-signal-dev"}
+service: ${env:WS_SIGNAL_SERVICE, "gb-ws-signal-dev"}
 frameworkVersion: "4"
 
 custom:
@@ -17,7 +17,7 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
-  websocketsApiName: ${self:service}__${sls:stage}__ws-signal-server
+  websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SERVICE: ${self:service}
