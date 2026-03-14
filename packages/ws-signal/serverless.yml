@@ -1,4 +1,4 @@
-service: gbraver-burst-ws-signal
+service: ${env:WS_SIGNAL_SERVICE, "gbraver-burst-ws-signal-dev"}
 frameworkVersion: "4"
 
 custom:
@@ -7,6 +7,10 @@ custom:
 
 provider:
   name: aws
+  domain:
+    name: ${sls:stage}.${env:WS_SIGNAL_DOMAIN_NAME}
+    apiType: websocket
+    certificateArn: ${env:WS_SIGNAL_CERT_ARN}
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
