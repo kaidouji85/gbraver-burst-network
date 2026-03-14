@@ -1,8 +1,9 @@
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       "node_modules/*",
@@ -10,7 +11,6 @@ export default tseslint.config(
       "lib/*",
       "build/*",
       "**/*.js",
-      "**/*.mjs",
     ],
   },
   {
