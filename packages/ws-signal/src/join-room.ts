@@ -9,6 +9,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { parseJSON } from "./json/parse";
 import { JoinRoomSchema } from "./request/join-room";
 
 /** AWSリージョン */
@@ -51,7 +52,7 @@ const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 export async function joinRoom(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
-  const parsedBody = JSON.parse(event.body || "");
+  const parsedBody = parseJSON(event.body);
   const joinRoom = JoinRoomSchema.safeParse(parsedBody);
   const { connectionId: guestConnectionId } = event.requestContext;
   if (!joinRoom.success) {
