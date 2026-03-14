@@ -36,6 +36,7 @@ class LocalWebRTCHostImpl implements LocalWebRTCHost {
   /** @override */
   async createRoom() {
     this.#websocket = await connectWebSocket(this.#wsSignalUrl);
+    // TODO ロジックを作る
     return "";
   }
 
@@ -44,5 +45,17 @@ class LocalWebRTCHostImpl implements LocalWebRTCHost {
     if (!this.#websocket) {
       return;
     }
+
+    // TODO ロジックを作る
+    this.#websocket.close();
   }
+}
+
+/**
+ * ローカルWebRTCホストを生成する
+ * @param wsSignalUrl WebSocketシグナルサーバーのURL
+ * @returns ローカルWebRTCホストのインスタンス
+ */
+export function createLocalWebRTCHost(wsSignalUrl: string): LocalWebRTCHost {
+  return new LocalWebRTCHostImpl(wsSignalUrl);
 }
