@@ -115,7 +115,7 @@ npm run build
 | 環境変数名                     | 記載内容                                                                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                       |
-| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gbraver-burst-ws-signal-dev、gbraver-burst-ws-signal-prodなどを記入する        |
+| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                              |
 | STAGE                          | デプロイする環境のステージ名を記入する                                                                                   |
 | WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                   |
 | WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある       |
@@ -270,16 +270,16 @@ developブランチにpushされた時にCodeBuildが実行されるように、
   - チェックを入れる
 - **ビルドタイプ**
   - 単一ビルド
+- **コメント承認**
+  - DISABLED
 - **ウェブフックイベントフィルタグループ**
   - **フィルタグループ 1**
     - **イベントタイプ**
       - プッシュ
-    - **これらの条件でビルドを開始する**
-      | タイプ | パターン |
-      |--------|---------|
-      | HEAD_REF | ^refs/heads/develop$ |
-    - **これらの条件でビルドを開始しない**
-      - なし
+    - **フィルター**
+      | 条件 | タイプ | パターン |
+      |-----|--------|---------|
+      |START_BUILD |HEAD_REF | ^refs/heads/develop$ |
 
 ### AWS CodeBuild本番環境
 
