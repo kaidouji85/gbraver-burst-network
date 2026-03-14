@@ -36,8 +36,21 @@
   ],
   "license": "MIT",
   "main": "index.js",
+  "private": true,
   "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-webrtc-stub",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "run-s clean transpile",
+    "clean": "rimraf build",
+    "code-format": "prettier . --write",
+    "code-format-check": "prettier . --check",
+    "dependency-check": "depcruise src",
+    "dev-server": "webpack serve",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "serve": "http-server build -p 8080 -c-1",
+    "start": "run-s clean dev-server",
+    "start:production": "run-s build serve",
+    "transpile": "webpack --mode=production",
+    "type-check": "tsc --noEmit"
   }
 }
