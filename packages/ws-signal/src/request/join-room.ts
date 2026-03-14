@@ -5,7 +5,7 @@ import {
   RTCIceCandidateInitSchema,
   RTCSessionDescriptionInit,
   RTCSessionDescriptionInitSchema,
-} from "../core/web-rtc";
+} from "../core/webrtc";
 
 /** ゲストが入室する */
 export type JoinRoom = {

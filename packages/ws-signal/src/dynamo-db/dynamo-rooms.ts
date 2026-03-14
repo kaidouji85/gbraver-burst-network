@@ -6,7 +6,7 @@ import {
   RTCIceCandidateInitSchema,
   RTCSessionDescriptionInit,
   RTCSessionDescriptionInitSchema,
-} from "../core/web-rtc";
+} from "../core/webrtc";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /** DynamoDBスキーマ room */

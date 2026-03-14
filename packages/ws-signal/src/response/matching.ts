@@ -1,7 +1,4 @@
-import {
-  RTCIceCandidateInit,
-  RTCSessionDescriptionInit,
-} from "../core/web-rtc";
+import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
 
 /** マッチング成功 */
 export type Matching = {
