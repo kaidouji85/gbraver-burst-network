@@ -12,3 +12,19 @@ export type LocalWebRTCHost = {
    */
   waitUntilMatching: () => Promise<void>;
 };
+
+/** ローカルWebRTCホストの実装 */
+class LocalWebRTCHostImpl implements LocalWebRTCHost {
+  /** WebSocketシグナルサーバーのURL */
+  #wsSignalUrl: string;
+  /** 接続中のWebSocket、接続されていない場合はnull */
+  #websocket: WebSocket | null = null;
+
+  /**
+   * コンストラクタ
+   * @param wsSignalUrl WebSocketシグナルサーバーのURL
+   */
+  constructor(wsSignalUrl: string) {
+    this.#wsSignalUrl = wsSignalUrl;
+  }
+}
