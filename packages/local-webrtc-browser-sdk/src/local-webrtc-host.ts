@@ -1,3 +1,5 @@
+import { connectWebSocket } from "./websocket/connect-web-socket";
+
 /** ローカルWebRTCホスト */
 export type LocalWebRTCHost = {
   /**
@@ -17,7 +19,10 @@ export type LocalWebRTCHost = {
 class LocalWebRTCHostImpl implements LocalWebRTCHost {
   /** WebSocketシグナルサーバーのURL */
   #wsSignalUrl: string;
-  /** 接続中のWebSocket、接続されていない場合はnull */
+  /**
+   * 接続中のWebSocket、接続されていない場合はnull
+   * シグナリングの時だけ接続されている想定
+   */
   #websocket: WebSocket | null = null;
 
   /**
@@ -26,5 +31,18 @@ class LocalWebRTCHostImpl implements LocalWebRTCHost {
    */
   constructor(wsSignalUrl: string) {
     this.#wsSignalUrl = wsSignalUrl;
+  }
+
+  /** @override */
+  async createRoom() {
+    this.#websocket = await connectWebSocket(this.#wsSignalUrl);
+    return "";
+  }
+
+  /** @override */
+  async waitUntilMatching() {
+    if (!this.#websocket) {
+      return;
+    }
   }
 }
