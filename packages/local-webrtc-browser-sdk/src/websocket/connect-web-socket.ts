@@ -1,6 +1,6 @@
 /**
  * 接続完了したWebSocketを返す
- * @param url 接続先のWebSocket
+ * @param url 接続先のWebSocketサーバーのURL
  * @returns WebSocket
  */
 export function connectWebSocket(url: string): Promise<WebSocket> {
