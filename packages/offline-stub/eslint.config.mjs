@@ -5,13 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
-    ignores: [
-      "node_modules/*",
-      "coverage/*",
-      "lib/*",
-      "build/*",
-      "**/*.js",
-    ],
+    ignores: ["node_modules/*", "coverage/*", "lib/*", "build/*", "**/*.js"],
   },
   {
     files: ["**/*.ts"],
