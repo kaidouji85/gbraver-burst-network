@@ -1,17 +1,11 @@
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default defineConfig(
   {
-    ignores: [
-      "node_modules/*",
-      "coverage/*",
-      "lib/*",
-      "build/*",
-      "**/*.js",
-      "**/*.mjs",
-    ],
+    ignores: ["node_modules/*", "coverage/*", "lib/*", "build/*", "**/*.js"],
   },
   {
     files: ["**/*.ts"],
