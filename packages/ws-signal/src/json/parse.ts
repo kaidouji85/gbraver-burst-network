@@ -4,7 +4,7 @@
  * @param origin パース元
  * @returns パース結果
  */
-export function parseJSON(origin: unknown): unknown {
+export function parseJSON(origin: unknown): unknown | null {
   if (typeof origin !== "string") {
     return null;
   }
