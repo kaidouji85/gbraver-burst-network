@@ -7,6 +7,7 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
+import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
@@ -41,8 +42,13 @@ const dynamoConnections = new DynamoConnections(
   dynamoDB,
   DYNAMODB_CONNECTIONS_TABLE,
 );
+/** @deprecated DynamoDB rooms DAO */
+const deprecatedDynamoRooms = new DeprecatedDynamoRooms(
+  dynamoDB,
+  DYNAMODB_ROOMS_TABLE,
+);
 /** DynamoDB rooms DAO */
-const dynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * ゲストが入室する
@@ -63,7 +69,7 @@ export async function joinRoom(
   }
 
   const { roomID } = joinRoom.data;
-  const deletedRoom = await dynamoRooms.deleteAndReturnOld(roomID);
+  const deletedRoom = await deprecatedDynamoRooms.deleteAndReturnOld(roomID);
   if (!deletedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
