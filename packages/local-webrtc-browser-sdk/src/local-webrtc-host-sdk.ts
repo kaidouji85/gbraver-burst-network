@@ -2,13 +2,10 @@ import { waitUntilIceCandidate } from "./webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "./ws-signal/connect-ws-signal";
 import { createRoom } from "./ws-signal/create-room";
 
-/** ローカルWebRTCホスト用SDK */
-export type LocalWebRTCHostSDK = {
-  /**
-   * ルームを生成する
-   * @returns 生成されたルームのID、生成に失敗した場合はnull
-   */
-  createRoom: () => Promise<string | null>;
+/** ローカルWebRTC ルームマッチング */
+export type LocalWebRTCRoomMatching = {
+  /** ルームID */
+  readonly roomID: string;
 
   /**
    * マッチングするまで待機する
@@ -16,6 +13,46 @@ export type LocalWebRTCHostSDK = {
    */
   waitUntilMatching: () => Promise<void>;
 };
+
+/** ローカルWebRTCホスト用SDK */
+export type LocalWebRTCHostSDK = {
+  /**
+   * ルームを生成する
+   * @returns 生成されたルーム、生成に失敗した場合はnull
+   */
+  createRoom: () => Promise<LocalWebRTCRoomMatching | null>;
+};
+
+/** ローカルWebRTCホスト用SDKの実装 */
+class LocalWebRTCRoomMatchingImpl implements LocalWebRTCRoomMatching {
+  roomID: string;
+  #connection: RTCPeerConnection;
+  #websocket: WebSocket;
+
+  /**
+   * コンストラクタ
+   * @param roomID ルームID
+   * @param connection RTCPeerConnectionのインスタンス
+   * @param websocket WebSocketのインスタンス
+   */
+  constructor(
+    roomID: string,
+    connection: RTCPeerConnection,
+    websocket: WebSocket,
+  ) {
+    this.roomID = roomID;
+    this.#connection = connection;
+    this.#websocket = websocket;
+  }
+
+  /**
+   * マッチングするまで待機する
+   * @returns マッチングしたら発火するPromise
+   */
+  async waitUntilMatching(): Promise<void> {
+    // TODO マッチングの実装
+  }
+}
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
@@ -42,12 +79,12 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
     ]);
 
     const websocket = await connectWSSignal(this.#wsSignalUrl);
-    return await createRoom({ websocket, sdp, iceCandidates });
-  }
+    const roomID = await createRoom({ websocket, sdp, iceCandidates });
+    if (roomID === null) {
+      return null;
+    }
 
-  /** @override */
-  async waitUntilMatching() {
-    // TODO ロジックを作る
+    return new LocalWebRTCRoomMatchingImpl(roomID, connection, websocket);
   }
 }
 
