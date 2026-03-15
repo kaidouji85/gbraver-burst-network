@@ -1,9 +1,9 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { nanoid } from "nanoid";
 
+import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
 import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
-import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
 
 /**
  * DynamoDBスキーマ room
@@ -109,15 +109,28 @@ export class DynamoRooms {
   /**
    * ルーム情報を削除する
    * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
-   * @param roomID ルームID
+   * @param options ルーム情報の削除に必要な情報
    * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
-  async delete(roomID: string): Promise<DynamoRoom | null> {
+  async delete(options: {
+    /** ルームID */
+    roomID: string;
+    /** 予約ID */
+    reservationID: string;
+  }): Promise<DynamoRoom | null> {
     try {
+      const { roomID, reservationID } = options;
       const result = await this.#dynamoDB.delete({
         TableName: this.#tableName,
         Key: { roomID },
-        ConditionExpression: "attribute_exists(roomID)",
+        ConditionExpression:
+          "attribute_exists(roomID) AND #reservationID = :reservationID",
+        ExpressionAttributeNames: {
+          "#reservationID": "reservationID",
+        },
+        ExpressionAttributeValues: {
+          ":reservationID": reservationID,
+        },
         ReturnValues: "ALL_OLD",
       });
       return DynamoRoomSchema.parse(result.Attributes);
