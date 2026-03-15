@@ -25,7 +25,7 @@ export type WSSignalRoom = {
    * マッチングしたゲストに本プロパティの値を伝え、
    * シグナルサーバー側はこれが一致しているかで検証する
    */
-  reservationId: string;
+  reservationID: string;
   /** ホストのコネクションID */
   hostConnectionId: string;
   /** ルームのホストのシグナル情報 */
@@ -42,7 +42,7 @@ export type WSSignalRoom = {
 /** WSSignalRoom zod スキーマ */
 export const WSSignalRoomSchema = z.object({
   roomID: z.string(),
-  reservationId: z.string(),
+  reservationID: z.string(),
   hostConnectionId: z.string(),
   hostSignal: z.object({
     sdp: RTCSessionDescriptionInitSchema,

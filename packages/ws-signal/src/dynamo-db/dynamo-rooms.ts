@@ -1,7 +1,9 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { nanoid } from "nanoid";
 
 import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
+import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
 
 /**
  * DynamoDBスキーマ room
@@ -30,16 +32,33 @@ export class DynamoRooms {
   }
 
   /**
-   * ルーム情報をDynamoDBに保存する
+   * ルームを新規作成する
    * 条件付きPutを行うため、同じルームIDが存在する場合は何もしない
-   * @param room 保存するルーム情報
+   * @param options ルーム情報の保存に必要な情報
    * @return ルーム情報の保存に成功した場合はtrue、同じルームIDが存在する場合はfalse
    */
-  async put(room: DynamoRoom): Promise<boolean> {
+  async put(options: {
+    /** ルームID */
+    roomID: string;
+    /** ホストのコネクションID */
+    hostConnectionId: string;
+    /** ホストのシグナル情報 */
+    hostSignal: {
+      /** ホストのSDP */
+      sdp: RTCSessionDescriptionInit;
+      /** ホストのICE候補 */
+      iceCandidates: RTCIceCandidateInit[];
+    };
+  }): Promise<boolean> {
     try {
+      const room: DynamoRoom = {
+        ...options,
+        reservationID: nanoid(),
+        state: "awaiting-guest-join",
+      };
       await this.#dynamoDB.put({
         TableName: this.#tableName,
-        Item: room,
+        Item: DynamoRoomSchema.parse(room),
         ConditionExpression: "attribute_not_exists(roomID)",
       });
       return true;
@@ -88,12 +107,12 @@ export class DynamoRooms {
   }
 
   /**
-   * ルーム情報を削除して、削除前のルーム情報を返す
+   * ルーム情報を削除する
    * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
    * @param roomID ルームID
    * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
-  async deleteAndReturnOld(roomID: string): Promise<DynamoRoom | null> {
+  async delete(roomID: string): Promise<DynamoRoom | null> {
     try {
       const result = await this.#dynamoDB.delete({
         TableName: this.#tableName,

@@ -7,6 +7,7 @@
     "@aws-sdk/client-apigatewaymanagementapi": "^3.1004.0",
     "@aws-sdk/client-dynamodb": "^3.1004.0",
     "@aws-sdk/lib-dynamodb": "^3.1004.0",
+    "nanoid": "^5.1.6",
     "zod": "^4.3.6"
   },
   "devDependencies": {
