@@ -1,3 +1,4 @@
+import { Signal } from "../webrtc/signal";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
 
 /** ローカルWebRTC ルーム */
@@ -9,7 +10,7 @@ export type LocalWebRTCRoom = {
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  waitUntilMatching: () => Promise<void>;
+  waitUntilMatching: () => Promise<Signal>;
 };
 
 /** ローカルWebRTCルームの実装 */
@@ -33,7 +34,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  async waitUntilMatching(): Promise<void> {
-    waitUntilMatching(this.#websocket);
+  async waitUntilMatching(): Promise<Signal> {
+    return await waitUntilMatching(this.#websocket);
   }
 }
