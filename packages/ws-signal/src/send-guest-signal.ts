@@ -74,12 +74,10 @@ export async function sendGuestSignal(
 
   const { sdp: guestSdp, iceCandidates: guestIceCandidates } =
     sendGuestSignalRequest;
-  const { hostConnectionId, hostSignal } = deletedRoom;
+  const { hostConnectionId } = deletedRoom;
   await Promise.all([
     notifier.notifyToClient(guestConnectionId, {
-      type: "matching",
-      sdp: hostSignal.sdp,
-      iceCandidates: hostSignal.iceCandidates,
+      type: "send-guest-signal-accepted",
     }),
     notifier.notifyToClient(hostConnectionId, {
       type: "matching",
