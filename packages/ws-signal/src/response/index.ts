@@ -4,7 +4,7 @@ import { JoinRoomRejected } from "./join-room-rejected";
 import { Matching } from "./matching";
 import { Pong } from "./pong";
 import { RoomCreationResult } from "./room-creation-result";
-import { SendGuestSignalAccepted } from "./send-guest-signal-accpected";
+import { SendGuestSignalAccepted } from "./send-guest-signal-accepted";
 import { SendGuestSignalRejected } from "./send-guest-signal-rejected";
 
 /** websocketがクライアントに返すデータ */
