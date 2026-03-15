@@ -1,18 +1,7 @@
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { createRoom } from "../ws-signal/create-room";
-
-/** ローカルWebRTC ルーム */
-export type LocalWebRTCRoom = {
-  /** ルームID */
-  readonly roomID: string;
-
-  /**
-   * マッチングするまで待機する
-   * @returns マッチングしたら発火するPromise
-   */
-  waitUntilMatching: () => Promise<void>;
-};
+import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-web-rtc-room";
 
 /** ローカルWebRTCホスト用SDK */
 export type LocalWebRTCHostSDK = {
@@ -22,37 +11,6 @@ export type LocalWebRTCHostSDK = {
    */
   createRoom: () => Promise<LocalWebRTCRoom | null>;
 };
-
-/** ローカルWebRTCルームの実装 */
-class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
-  roomID: string;
-  #connection: RTCPeerConnection;
-  #websocket: WebSocket;
-
-  /**
-   * コンストラクタ
-   * @param roomID ルームID
-   * @param connection RTCPeerConnectionのインスタンス
-   * @param websocket WebSocketのインスタンス
-   */
-  constructor(
-    roomID: string,
-    connection: RTCPeerConnection,
-    websocket: WebSocket,
-  ) {
-    this.roomID = roomID;
-    this.#connection = connection;
-    this.#websocket = websocket;
-  }
-
-  /**
-   * マッチングするまで待機する
-   * @returns マッチングしたら発火するPromise
-   */
-  async waitUntilMatching(): Promise<void> {
-    // TODO マッチングの実装
-  }
-}
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
@@ -84,7 +42,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
       return null;
     }
 
-    return new LocalWebRTCRoomImpl(roomID, connection, websocket);
+    return new LocalWebRTCRoomImpl(roomID);
   }
 }
 
