@@ -1,4 +1,4 @@
-import { connectWebSocket } from "./websocket/connect-web-socket";
+import { connectWSSignal } from "./ws-signal/connect-ws-signal";
 
 /** ローカルWebRTCホスト用SDK */
 export type LocalWebRTCHostSDK = {
@@ -35,7 +35,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /** @override */
   async createRoom() {
-    this.#websocket = await connectWebSocket(this.#wsSignalUrl);
+    this.#websocket = await connectWSSignal(this.#wsSignalUrl);
     // TODO ロジックを作る
     return "";
   }

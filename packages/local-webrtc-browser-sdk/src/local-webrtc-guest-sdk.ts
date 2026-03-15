@@ -1,4 +1,4 @@
-import { connectWebSocket } from "./websocket/connect-web-socket";
+import { connectWSSignal } from "./ws-signal/connect-ws-signal";
 
 /** ローカルWebRTCゲスト用SDK */
 export type LocalWebRTCGuestSDK = {
@@ -30,7 +30,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
   /** @override */
   async joinRoom() {
-    this.#websocket = await connectWebSocket(this.#wsSignalUrl);
+    this.#websocket = await connectWSSignal(this.#wsSignalUrl);
     this.#websocket.close();
 
     // TODO ロジックを作る
