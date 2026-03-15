@@ -8,16 +8,16 @@ import {
 } from "./webrtc";
 
 /** ルームの状態 */
-export type RoomState = "awaiting-guest-join" | "awaiting-guest-signal";
+export type WSSignalRoomState = "awaiting-guest-join" | "awaiting-guest-signal";
 
-/** RoomState zod スキーマ */
-export const RoomStateSchema = z.union([
+/** WSSignalRoomState zod スキーマ */
+export const WSSignalRoomStateSchema = z.union([
   z.literal("awaiting-guest-join"),
   z.literal("awaiting-guest-signal"),
 ]);
 
 /** ルーム情報 */
-export type DynamoRoom = {
+export type WSSignalRoom = {
   /** ルームID（パーティションキー） */
   roomID: string;
   /**
@@ -36,11 +36,11 @@ export type DynamoRoom = {
     iceCandidates: RTCIceCandidateInit[];
   };
   /** ルームの状態 */
-  state: RoomState;
+  state: WSSignalRoomState;
 };
 
-/** DynamoRoom zod スキーマ */
-export const DynamoRoomSchema = z.object({
+/** WSSignalRoom zod スキーマ */
+export const WSSignalRoomSchema = z.object({
   roomID: z.string(),
   reservationId: z.string(),
   hostConnectionId: z.string(),
@@ -48,5 +48,5 @@ export const DynamoRoomSchema = z.object({
     sdp: RTCSessionDescriptionInitSchema,
     iceCandidates: z.array(RTCIceCandidateInitSchema),
   }),
-  state: RoomStateSchema,
+  state: WSSignalRoomStateSchema,
 });

@@ -6,9 +6,9 @@ import {
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { parseJSON } from "./json/parse";
 import { JoinRoomSchema } from "./request/join-room";
 

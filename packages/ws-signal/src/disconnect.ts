@@ -3,9 +3,9 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
