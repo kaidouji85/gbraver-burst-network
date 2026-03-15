@@ -18,8 +18,9 @@ export const createRoom = (options: {
   iceCandidates: RTCIceCandidateInit[];
 }): Promise<string | null> => {
   const { websocket, sdp, iceCandidates } = options;
-  return new Promise((resolve) => {
-    websocket.addEventListener("message", (event) => {
+  let handler: ((event: MessageEvent) => void) | null = null;
+  return new Promise<string | null>((resolve) => {
+    handler = (event) => {
       const parsedData = parseJSON(event.data);
 
       const parsedRoomCreationSuccessSchema =
@@ -36,7 +37,12 @@ export const createRoom = (options: {
         resolve(null);
         return;
       }
-    });
+    };
+    websocket.addEventListener("message", handler);
     sendToWSSignal(websocket, { action: "create-room", sdp, iceCandidates });
+  }).finally(() => {
+    if (handler) {
+      websocket.removeEventListener("message", handler);
+    }
   });
 };
