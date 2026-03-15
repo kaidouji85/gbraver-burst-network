@@ -16,9 +16,9 @@ export const createRoom = (options: {
   websocket: WebSocket;
   sdp: RTCSessionDescriptionInit;
   iceCandidates: RTCIceCandidateInit[];
-}) => {
+}): Promise<string | null> => {
   const { websocket, sdp, iceCandidates } = options;
-  new Promise<string | null>((resolve) => {
+  return new Promise((resolve) => {
     websocket.addEventListener("message", (event) => {
       const parsedData = parseJSON(event.data);
 
