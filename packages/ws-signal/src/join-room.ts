@@ -6,10 +6,8 @@ import {
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
-import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
-import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
+import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { parseJSON } from "./json/parse";
 import { JoinRoomSchema } from "./request/join-room";
 
@@ -19,8 +17,6 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 /** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
-/** DynamoDB connection テーブル名 */
-const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
 /** DynamoDB rooms テーブル名 */
 const DYNAMODB_ROOMS_TABLE = process.env.DYNAMODB_ROOMS_TABLE ?? "";
 
@@ -37,16 +33,6 @@ const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
-/** DynamoDB connections DAO */
-const dynamoConnections = new DynamoConnections(
-  dynamoDB,
-  DYNAMODB_CONNECTIONS_TABLE,
-);
-/** @deprecated DynamoDB rooms DAO */
-const deprecatedDynamoRooms = new DeprecatedDynamoRooms(
-  dynamoDB,
-  DYNAMODB_ROOMS_TABLE,
-);
 /** DynamoDB rooms DAO */
 const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
@@ -69,31 +55,21 @@ export async function joinRoom(
   }
 
   const { roomID } = joinRoom.data;
-  const deletedRoom = await deprecatedDynamoRooms.deleteAndReturnOld(roomID);
-  if (!deletedRoom) {
+  const updatedRoom = await dynamoRooms.updateToAwaitingGuestSignal(roomID);
+  if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
     });
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { sdp: guestSdp, iceCandidates: guestIceCandidates } = joinRoom.data;
-  const { hostConnectionId, hostSignal } = deletedRoom;
-  await Promise.all([
-    dynamoConnections.put({
-      connectionId: hostConnectionId,
-      state: { type: "none" },
-    }),
-    notifier.notifyToClient(hostConnectionId, {
-      type: "matching",
-      sdp: guestSdp,
-      iceCandidates: guestIceCandidates,
-    }),
-    notifier.notifyToClient(guestConnectionId, {
-      type: "matching",
-      sdp: hostSignal.sdp,
-      iceCandidates: hostSignal.iceCandidates,
-    }),
-  ]);
+  const { reservationID } = updatedRoom;
+  const { sdp, iceCandidates } = updatedRoom.hostSignal;
+  await notifier.notifyToClient(guestConnectionId, {
+    type: "join-room-accepted",
+    reservationID,
+    sdp,
+    iceCandidates,
+  });
   return { statusCode: 200, body: "join room success" };
 }
