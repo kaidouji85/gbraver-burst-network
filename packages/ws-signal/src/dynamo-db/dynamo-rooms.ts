@@ -141,4 +141,15 @@ export class DynamoRooms {
       return null;
     }
   }
+
+  /**
+   * ルームを強制削除する
+   * @param roomID 削除するルームID
+   */
+  async forceDelete(roomID: string): Promise<void> {
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
+      Key: { roomID },
+    });
+  }
 }
