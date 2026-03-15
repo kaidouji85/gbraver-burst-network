@@ -6,6 +6,7 @@ import {
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { parseJSON } from "./json/parse";
@@ -17,6 +18,8 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 /** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+/** DynamoDB connections テーブル名 */
+const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
 /** DynamoDB rooms テーブル名 */
 const DYNAMODB_ROOMS_TABLE = process.env.DYNAMODB_ROOMS_TABLE ?? "";
 
@@ -33,6 +36,11 @@ const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB connections DAO */
+const dynamoConnections = new DynamoConnections(
+  dynamoDB,
+  DYNAMODB_CONNECTIONS_TABLE,
+);
 /** DynamoDB rooms DAO */
 const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
@@ -71,7 +79,10 @@ export async function sendGuestSignal(
       sdp: guestSdp,
       iceCandidates: guestIceCandidates,
     }),
+    dynamoConnections.put({
+      connectionId: hostConnectionId,
+      state: { type: "none" },
+    }),
   ]);
-
   return { statusCode: 200, body: "send-guest-signal success" };
 }
