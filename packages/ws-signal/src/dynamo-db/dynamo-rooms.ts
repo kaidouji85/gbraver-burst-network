@@ -3,7 +3,10 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
-/** DynamoDBスキーマ room */
+/** 
+ * DynamoDBスキーマ room
+ * パーティションキー: roomID
+ */
 export type DynamoRoom = WSSignalRoom;
 
 /** DynamoRoom zodスキーマ */
