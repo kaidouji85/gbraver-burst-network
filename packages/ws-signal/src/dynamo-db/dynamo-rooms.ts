@@ -109,6 +109,10 @@ export class DynamoRooms {
   /**
    * ルーム情報を削除する
    * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
+   * 削除条件
+   *   - roomIDが存在する
+   *   - reservationIDが一致する
+   *   - stateが"awaiting-guest-signal"である
    * @param options ルーム情報の削除に必要な情報
    * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
@@ -124,12 +128,14 @@ export class DynamoRooms {
         TableName: this.#tableName,
         Key: { roomID },
         ConditionExpression:
-          "attribute_exists(roomID) AND #reservationID = :reservationID",
+          "attribute_exists(roomID) AND #reservationID = :reservationID AND #state = :expectedState",
         ExpressionAttributeNames: {
           "#reservationID": "reservationID",
+          "#state": "state",
         },
         ExpressionAttributeValues: {
           ":reservationID": reservationID,
+          ":expectedState": "awaiting-guest-signal",
         },
         ReturnValues: "ALL_OLD",
       });
