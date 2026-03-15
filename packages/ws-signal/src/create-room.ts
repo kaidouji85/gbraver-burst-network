@@ -7,9 +7,9 @@ import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { createRoomID } from "./core/create-room-id";
-import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
+import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { parseJSON } from "./json/parse";
 import { CreateRoom, CreateRoomSchema } from "./request/create-room";
 
@@ -44,8 +44,8 @@ const dynamoConnections = new DynamoConnections(
   dynamoDB,
   DYNAMODB_CONNECTIONS_TABLE,
 );
-/** @deprecated DynamoDB rooms DAO */
-const deprecatedDynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+/** DynamoDB rooms DAO */
+const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * リトライありでルーム生成をする
@@ -57,7 +57,7 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = createRoomID();
     const { sdp, iceCandidates } = body;
-    const isRoomCreationSuccessful = await deprecatedDynamoRooms.put({
+    const isRoomCreationSuccessful = await dynamoRooms.put({
       roomID,
       hostConnectionId: connectionId,
       hostSignal: { sdp, iceCandidates },
