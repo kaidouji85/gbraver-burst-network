@@ -51,7 +51,14 @@ export class DynamoRooms {
     }
   }
 
-  async update(roomID: string): Promise<void> {
+  /**
+   * ルームの状態を "awaiting-guest-join" から "awaiting-guest-signal" に更新する
+   * 以下の条件で、条件付きUpdateを行う
+   *   - roomIDが存在する
+   *   - ルームの状態が"awaiting-guest-join"である
+   * @param roomID ルームID
+   */
+  async updateToAwaitingGuestSignal(roomID: string): Promise<void> {
     await this.#dynamoDB.update({
       TableName: this.#tableName,
       Key: { roomID },
