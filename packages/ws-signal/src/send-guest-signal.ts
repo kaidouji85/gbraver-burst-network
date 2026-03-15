@@ -52,9 +52,13 @@ const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 export async function sendGuestSignal(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
+  const { connectionId: guestConnectionId } = event.requestContext;
   const parsedBody = parseJSON(event.body);
   const parsedSendGuestSignal = SendGuestSignalSchema.safeParse(parsedBody);
   if (!parsedSendGuestSignal.success) {
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "send-guest-signal-rejected",
+    });
     return { statusCode: 200, body: "send-guest-signal rejected" };
   }
 
@@ -62,10 +66,12 @@ export async function sendGuestSignal(
   const { roomID, reservationID } = sendGuestSignal;
   const deletedRoom = await dynamoRooms.delete({ roomID, reservationID });
   if (!deletedRoom) {
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "send-guest-signal-rejected",
+    });
     return { statusCode: 200, body: "send-guest-signal rejected" };
   }
 
-  const { connectionId: guestConnectionId } = event.requestContext;
   const { sdp: guestSdp, iceCandidates: guestIceCandidates } = sendGuestSignal;
   const { hostConnectionId, hostSignal } = deletedRoom;
   await Promise.all([
