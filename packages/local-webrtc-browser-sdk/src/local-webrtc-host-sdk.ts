@@ -42,9 +42,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
     ]);
 
     const websocket = await connectWSSignal(this.#wsSignalUrl);
-    const roomID = await createRoom({ websocket, sdp, iceCandidates });
-    websocket.close();
-    return roomID;
+    return await createRoom({ websocket, sdp, iceCandidates });
   }
 
   /** @override */
