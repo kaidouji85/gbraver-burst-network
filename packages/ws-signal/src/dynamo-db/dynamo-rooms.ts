@@ -51,6 +51,22 @@ export class DynamoRooms {
     }
   }
 
+  async update(roomID: string): Promise<void> {
+    await this.#dynamoDB.update({
+      TableName: this.#tableName,
+      Key: { roomID },
+      UpdateExpression: "SET #state = :state",
+      ExpressionAttributeNames: {
+        "#state": "state",
+      },
+      ExpressionAttributeValues: {
+        ":state": "awaiting-guest-signal",
+        ":expectedState": "awaiting-guest-join",
+      },
+      ConditionExpression: "attribute_exists(roomID) AND #state = :expectedState",
+    });
+  }
+
   /**
    * ルーム情報を削除して、削除前のルーム情報を返す
    * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
