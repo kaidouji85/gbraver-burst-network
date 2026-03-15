@@ -3,7 +3,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
-/** 
+/**
  * DynamoDBスキーマ room
  * パーティションキー: roomID
  */
@@ -57,23 +57,34 @@ export class DynamoRooms {
    *   - roomIDが存在する
    *   - ルームの状態が"awaiting-guest-join"である
    * @param roomID ルームID
+   * @return 更新に成功した場合は更新後のルーム情報、更新できなかった場合はnull
    */
-  async updateToAwaitingGuestSignal(roomID: string): Promise<DynamoRoom> {
-   const result = await this.#dynamoDB.update({
-      TableName: this.#tableName,
-      Key: { roomID },
-      UpdateExpression: "SET #state = :state",
-      ExpressionAttributeNames: {
-        "#state": "state",
-      },
-      ExpressionAttributeValues: {
-        ":state": "awaiting-guest-signal",
-        ":expectedState": "awaiting-guest-join",
-      },
-      ConditionExpression: "attribute_exists(roomID) AND #state = :expectedState",
-      ReturnValues: "ALL_NEW",
-    });
-    return DynamoRoomSchema.parse(result.Attributes);
+  async updateToAwaitingGuestSignal(
+    roomID: string,
+  ): Promise<DynamoRoom | null> {
+    try {
+      const result = await this.#dynamoDB.update({
+        TableName: this.#tableName,
+        Key: { roomID },
+        UpdateExpression: "SET #state = :state",
+        ExpressionAttributeNames: {
+          "#state": "state",
+        },
+        ExpressionAttributeValues: {
+          ":state": "awaiting-guest-signal",
+          ":expectedState": "awaiting-guest-join",
+        },
+        ConditionExpression:
+          "attribute_exists(roomID) AND #state = :expectedState",
+        ReturnValues: "ALL_NEW",
+      });
+      return DynamoRoomSchema.parse(result.Attributes);
+    } catch (error) {
+      if (!isConditionalCheckFailedException(error)) {
+        throw error;
+      }
+      return null;
+    }
   }
 
   /**
