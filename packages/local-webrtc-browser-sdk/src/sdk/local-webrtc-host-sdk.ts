@@ -2,8 +2,8 @@ import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { createRoom } from "../ws-signal/create-room";
 
-/** ローカルWebRTC ルームマッチング */
-export type LocalWebRTCRoomMatching = {
+/** ローカルWebRTC ルーム */
+export type LocalWebRTCRoom = {
   /** ルームID */
   readonly roomID: string;
 
@@ -20,11 +20,11 @@ export type LocalWebRTCHostSDK = {
    * ルームを生成する
    * @returns 生成されたルーム、生成に失敗した場合はnull
    */
-  createRoom: () => Promise<LocalWebRTCRoomMatching | null>;
+  createRoom: () => Promise<LocalWebRTCRoom | null>;
 };
 
-/** ローカルWebRTCホスト用SDKの実装 */
-class LocalWebRTCRoomMatchingImpl implements LocalWebRTCRoomMatching {
+/** ローカルWebRTCルームの実装 */
+class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   roomID: string;
   #connection: RTCPeerConnection;
   #websocket: WebSocket;
@@ -84,7 +84,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
       return null;
     }
 
-    return new LocalWebRTCRoomMatchingImpl(roomID, connection, websocket);
+    return new LocalWebRTCRoomImpl(roomID, connection, websocket);
   }
 }
 
