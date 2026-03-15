@@ -23,12 +23,14 @@ export class HostPlayer implements UseCase {
   /** @override */
   async execute(): Promise<void> {
     console.log("start create room");
-    const roomID = await this.#hostSDK.createRoom();
-    if (roomID === null) {
+    const room = await this.#hostSDK.createRoom();
+    if (room === null) {
       console.error("create room failed");
       return;
     }
 
-    console.log("create room success, roomID:", roomID);
+    console.log("create room success, roomID:", room.roomID);
+    const guestSignal = await room.waitUntilMatching();
+    console.log("matching success, guestSignal:", guestSignal);
   }
 }
