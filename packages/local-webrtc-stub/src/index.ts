@@ -1,6 +1,11 @@
+import { createLocalWebRTCHostSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+
 import { GuestPlayer } from "./use-case/guest-player";
 import { HostPlayer } from "./use-case/host-player";
 import { UseCase } from "./use-case/use-case";
+
+/** WebSocketシグナルサーバーのURL */
+const WS_SIGNAL_SERVER_URL = process.env.WS_SIGNAL_SERVER_URL || "";
 
 /**
  * ユースケースセレクターを取得する
@@ -41,7 +46,8 @@ const getRoomIDInput = (): HTMLInputElement => {
  * エントリポイント
  */
 window.onload = () => {
-  const useCases: UseCase[] = [new HostPlayer(), new GuestPlayer()];
+  const hostSDK = createLocalWebRTCHostSDK(WS_SIGNAL_SERVER_URL);
+  const useCases: UseCase[] = [new HostPlayer(hostSDK), new GuestPlayer()];
 
   const useCaseSelector = getUseCaseSelector();
   const useCaseExecuteButton = getUseCaseExecuteButton();

@@ -1,10 +1,19 @@
-import { LocalWebRTCBrowserSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import { LocalWebRTCHostSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
 
-import { UseCase, UseCaseContext } from "./use-case";
+import { UseCase } from "./use-case";
 
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
-  //#hostSDK: LocalWebRTCBrowserSDK;
+  /** ローカルWebRTCホスト用SDK */
+  #hostSDK: LocalWebRTCHostSDK;
+
+  /**
+   * コンストラクタ
+   * @param hostSDK ローカルWebRTCホスト用SDK
+   */
+  constructor(hostSDK: LocalWebRTCHostSDK) {
+    this.#hostSDK = hostSDK;
+  }
 
   /** @override */
   name(): string {
@@ -12,7 +21,9 @@ export class HostPlayer implements UseCase {
   }
 
   /** @override */
-  async execute(context: UseCaseContext): Promise<void> {
-    console.log("ホスト側プレイヤーを実行", context);
+  async execute(): Promise<void> {
+    console.log("start create room");
+    const roomID = await this.#hostSDK.createRoom();
+    console.log("create room success, roomID:", roomID);
   }
 }
