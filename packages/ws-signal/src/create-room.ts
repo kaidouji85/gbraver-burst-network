@@ -44,8 +44,8 @@ const dynamoConnections = new DynamoConnections(
   dynamoDB,
   DYNAMODB_CONNECTIONS_TABLE,
 );
-/** DynamoDB rooms DAO */
-const dynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+/** @deprecated DynamoDB rooms DAO */
+const deprecatedDynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * リトライありでルーム生成をする
@@ -57,7 +57,7 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = createRoomID();
     const { sdp, iceCandidates } = body;
-    const isRoomCreationSuccessful = await dynamoRooms.put({
+    const isRoomCreationSuccessful = await deprecatedDynamoRooms.put({
       roomID,
       hostConnectionId: connectionId,
       hostSignal: { sdp, iceCandidates },
