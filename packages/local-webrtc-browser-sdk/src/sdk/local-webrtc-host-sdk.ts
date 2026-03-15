@@ -1,6 +1,6 @@
-import { waitUntilIceCandidate } from "./webrtc/wait-untilIce-candidate";
-import { connectWSSignal } from "./ws-signal/connect-ws-signal";
-import { createRoom } from "./ws-signal/create-room";
+import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
+import { connectWSSignal } from "../ws-signal/connect-ws-signal";
+import { createRoom } from "../ws-signal/create-room";
 
 /** ローカルWebRTC ルームマッチング */
 export type LocalWebRTCRoomMatching = {

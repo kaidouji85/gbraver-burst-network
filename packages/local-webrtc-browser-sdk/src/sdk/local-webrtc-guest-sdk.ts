@@ -1,4 +1,4 @@
-import { connectWSSignal } from "./ws-signal/connect-ws-signal";
+import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 
 /** ローカルWebRTCゲスト用SDK */
 export type LocalWebRTCGuestSDK = {
