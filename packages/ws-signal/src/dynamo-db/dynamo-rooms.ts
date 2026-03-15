@@ -58,8 +58,8 @@ export class DynamoRooms {
    *   - ルームの状態が"awaiting-guest-join"である
    * @param roomID ルームID
    */
-  async updateToAwaitingGuestSignal(roomID: string): Promise<void> {
-    await this.#dynamoDB.update({
+  async updateToAwaitingGuestSignal(roomID: string): Promise<DynamoRoom> {
+   const result = await this.#dynamoDB.update({
       TableName: this.#tableName,
       Key: { roomID },
       UpdateExpression: "SET #state = :state",
@@ -71,7 +71,9 @@ export class DynamoRooms {
         ":expectedState": "awaiting-guest-join",
       },
       ConditionExpression: "attribute_exists(roomID) AND #state = :expectedState",
+      ReturnValues: "ALL_NEW",
     });
+    return DynamoRoomSchema.parse(result.Attributes);
   }
 
   /**
