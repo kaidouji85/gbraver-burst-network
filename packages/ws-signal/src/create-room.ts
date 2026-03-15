@@ -9,7 +9,7 @@ import { Notifier } from "./api-gateway/notifier";
 import { createRoomID } from "./core/create-room-id";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { parseJSON } from "./json/parse";
 import { CreateRoom, CreateRoomSchema } from "./request/create-room";
 
@@ -45,7 +45,7 @@ const dynamoConnections = new DynamoConnections(
   DYNAMODB_CONNECTIONS_TABLE,
 );
 /** DynamoDB rooms DAO */
-const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+const dynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * リトライありでルーム生成をする

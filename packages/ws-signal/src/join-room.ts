@@ -8,7 +8,7 @@ import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { parseJSON } from "./json/parse";
 import { JoinRoomSchema } from "./request/join-room";
 
@@ -42,7 +42,7 @@ const dynamoConnections = new DynamoConnections(
   DYNAMODB_CONNECTIONS_TABLE,
 );
 /** DynamoDB rooms DAO */
-const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+const dynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * ゲストが入室する

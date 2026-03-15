@@ -34,8 +34,8 @@ export const DynamoRoomSchema = z.object({
   }),
 });
 
-/** DynamoDB rooms の DAO */
-export class DynamoRooms {
+/** @deprecated DynamoDB rooms の DAO */
+export class DeprecatedDynamoRooms {
   /** DynamoDBDocument */
   #dynamoDB: DynamoDBDocument;
   /** DynamoDB テーブル名 */
