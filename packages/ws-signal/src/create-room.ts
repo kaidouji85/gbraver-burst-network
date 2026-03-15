@@ -78,9 +78,9 @@ export async function createRoom(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
   const parsedBody = parseJSON(event.body);
-  const createRoom = CreateRoomSchema.safeParse(parsedBody);
+  const parsedCreateRoom = CreateRoomSchema.safeParse(parsedBody);
   const { connectionId } = event.requestContext;
-  if (!createRoom.success) {
+  if (!parsedCreateRoom.success) {
     await notifier.notifyToClient(connectionId, {
       type: "room-creation-result",
       isSuccess: false,
@@ -88,7 +88,8 @@ export async function createRoom(
     return { statusCode: 400, body: "invalid request" };
   }
 
-  const roomID = await createRoomWithRetry(connectionId, createRoom.data);
+  const createRoomRequest = parsedCreateRoom.data;
+  const roomID = await createRoomWithRetry(connectionId, createRoomRequest);
   if (!roomID) {
     await notifier.notifyToClient(connectionId, {
       type: "room-creation-result",
