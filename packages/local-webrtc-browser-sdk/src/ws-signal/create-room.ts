@@ -3,13 +3,21 @@ import {
   RoomCreationFailureSchema,
   RoomCreationSuccessSchema,
 } from "./response/room-creation-result";
+import { sendToWSSignal } from "./send-to-ws-signal";
 
 /**
  * ルームを生成する
- * @param websocket WebSocketコネクション
+ * @param options.websocket WebSocketコネクション
+ * @param options.sdp ホストのSDP
+ * @param options.iceCandidates ホストのICE候補
  * @returns 成功したらルームID、失敗したらnull
  */
-export const createRoom = (websocket: WebSocket) =>
+export const createRoom = (options: {
+  websocket: WebSocket;
+  sdp: RTCSessionDescriptionInit;
+  iceCandidates: RTCIceCandidateInit[];
+}) => {
+  const { websocket, sdp, iceCandidates } = options;
   new Promise<string | null>((resolve) => {
     websocket.addEventListener("message", (event) => {
       const parsedData = parseJSON(event.data);
@@ -29,4 +37,6 @@ export const createRoom = (websocket: WebSocket) =>
         return;
       }
     });
+    sendToWSSignal(websocket, { action: "create-room", sdp, iceCandidates });
   });
+};
