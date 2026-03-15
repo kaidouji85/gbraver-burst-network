@@ -3,9 +3,9 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { DeprecatedDynamoRooms } from "./dynamo-db/deprecated_dynamo-rooms";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
+import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -22,7 +22,7 @@ const dynamoConnections = new DynamoConnections(
   DYNAMODB_CONNECTIONS_TABLE,
 );
 /** DynamoDB DAO rooms */
-const dynamoRooms = new DeprecatedDynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 
 /**
  * Websocket API $disconnect エントリポイント
@@ -40,7 +40,7 @@ export async function disconnect(
 
   if (deletedConnection.state.type === "room-host") {
     const { roomID } = deletedConnection.state;
-    await dynamoRooms.deleteAndReturnOld(roomID);
+    await dynamoRooms.forceDelete(roomID);
   }
   return { statusCode: 200, body: "disconnected." };
 }
