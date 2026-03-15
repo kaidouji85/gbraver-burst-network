@@ -1,5 +1,8 @@
 export {
-  createLocalWebRTCBrowserSDK,
-  LocalWebRTCBrowserSDK,
-} from "./local-webrtc-guest";
-export { createLocalWebRTCHost, LocalWebRTCHost } from "./local-webrtc-host";
+  createLocalWebRTCGuestSDK,
+  LocalWebRTCGuestSDK,
+} from "./local-webrtc-guest-sdk";
+export {
+  createLocalWebRTCHostSDK,
+  LocalWebRTCHostSDK,
+} from "./local-webrtc-host-sdk";

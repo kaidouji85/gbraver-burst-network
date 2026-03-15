@@ -1,7 +1,7 @@
 import { connectWebSocket } from "./websocket/connect-web-socket";
 
-/** ローカルWebRTCホスト */
-export type LocalWebRTCHost = {
+/** ローカルWebRTCホスト用SDK */
+export type LocalWebRTCHostSDK = {
   /**
    * ルームを生成する
    * @returns 生成されたルームのID、生成に失敗した場合はnull
@@ -15,8 +15,8 @@ export type LocalWebRTCHost = {
   waitUntilMatching: () => Promise<void>;
 };
 
-/** ローカルWebRTCホストの実装 */
-class LocalWebRTCHostImpl implements LocalWebRTCHost {
+/** ローカルWebRTCホスト用SDKの実装 */
+class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebSocketシグナルサーバーのURL */
   #wsSignalUrl: string;
   /**
@@ -52,10 +52,12 @@ class LocalWebRTCHostImpl implements LocalWebRTCHost {
 }
 
 /**
- * ローカルWebRTCホストを生成する
+ * ローカルWebRTCホスト用SDKを生成する
  * @param wsSignalUrl WebSocketシグナルサーバーのURL
- * @returns ローカルWebRTCホストのインスタンス
+ * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
-export function createLocalWebRTCHost(wsSignalUrl: string): LocalWebRTCHost {
-  return new LocalWebRTCHostImpl(wsSignalUrl);
+export function createLocalWebRTCHostSDK(
+  wsSignalUrl: string,
+): LocalWebRTCHostSDK {
+  return new LocalWebRTCHostSDKImpl(wsSignalUrl);
 }
