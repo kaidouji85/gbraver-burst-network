@@ -62,8 +62,8 @@ export async function sendGuestSignal(
     return { statusCode: 200, body: "send-guest-signal rejected" };
   }
 
-  const sendGuestSignal = parsedSendGuestSignal.data;
-  const { roomID, reservationID } = sendGuestSignal;
+  const sendGuestSignalRequest = parsedSendGuestSignal.data;
+  const { roomID, reservationID } = sendGuestSignalRequest;
   const deletedRoom = await dynamoRooms.delete({ roomID, reservationID });
   if (!deletedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
@@ -72,7 +72,8 @@ export async function sendGuestSignal(
     return { statusCode: 200, body: "send-guest-signal rejected" };
   }
 
-  const { sdp: guestSdp, iceCandidates: guestIceCandidates } = sendGuestSignal;
+  const { sdp: guestSdp, iceCandidates: guestIceCandidates } =
+    sendGuestSignalRequest;
   const { hostConnectionId, hostSignal } = deletedRoom;
   await Promise.all([
     notifier.notifyToClient(guestConnectionId, {

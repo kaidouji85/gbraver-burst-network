@@ -88,8 +88,8 @@ export async function createRoom(
     return { statusCode: 400, body: "invalid request" };
   }
 
-  const createRoom = parsedCreateRoom.data;
-  const roomID = await createRoomWithRetry(connectionId, createRoom);
+  const createRoomRequest = parsedCreateRoom.data;
+  const roomID = await createRoomWithRetry(connectionId, createRoomRequest);
   if (!roomID) {
     await notifier.notifyToClient(connectionId, {
       type: "room-creation-result",
