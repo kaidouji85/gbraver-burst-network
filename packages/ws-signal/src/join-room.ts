@@ -45,16 +45,17 @@ export async function joinRoom(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
   const parsedBody = parseJSON(event.body);
-  const joinRoom = JoinRoomSchema.safeParse(parsedBody);
+  const parsedJoinRoom = JoinRoomSchema.safeParse(parsedBody);
   const { connectionId: guestConnectionId } = event.requestContext;
-  if (!joinRoom.success) {
+  if (!parsedJoinRoom.success) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
     });
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { roomID } = joinRoom.data;
+  const joinRoom = parsedJoinRoom.data;
+  const { roomID } = joinRoom;
   const updatedRoom = await dynamoRooms.updateToAwaitingGuestSignal(roomID);
   if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
