@@ -1,3 +1,4 @@
+import { waitUntilIceCandidate } from "./webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "./ws-signal/connect-ws-signal";
 
 /** ローカルWebRTCホスト用SDK */
@@ -19,11 +20,6 @@ export type LocalWebRTCHostSDK = {
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebSocketシグナルサーバーのURL */
   #wsSignalUrl: string;
-  /**
-   * 接続中のWebSocket、接続されていない場合はnull
-   * シグナリングの時だけ接続されている想定
-   */
-  #websocket: WebSocket | null = null;
 
   /**
    * コンストラクタ
@@ -35,19 +31,23 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /** @override */
   async createRoom() {
-    this.#websocket = await connectWSSignal(this.#wsSignalUrl);
+    const connection = new RTCPeerConnection();
+    connection.createDataChannel("sendDataChannel");
+    const description = await connection.createOffer();
+    const [iceCandidates] = await Promise.all([
+      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+      waitUntilIceCandidate(connection),
+      connection.setLocalDescription(description),
+    ]);
+    
+    const websocket = await connectWSSignal(this.#wsSignalUrl);
     // TODO ロジックを作る
     return "";
   }
 
   /** @override */
   async waitUntilMatching() {
-    if (!this.#websocket) {
-      return;
-    }
-
     // TODO ロジックを作る
-    this.#websocket.close();
   }
 }
 
