@@ -1,7 +1,11 @@
+import { LocalWebRTCBrowserSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+
 import { UseCase, UseCaseContext } from "./use-case";
 
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
+  //#hostSDK: LocalWebRTCBrowserSDK;
+
   /** @override */
   name(): string {
     return "ホスト側プレイヤー";
