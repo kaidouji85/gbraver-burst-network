@@ -38,6 +38,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_JS_VERSION }}
       - run: npm ci
-      # serverless v4 standaloneの初回展開競合を避けるため、CIビルドは直列実行にする
-      - run: npm run build -- --concurrency=1
+      # serverless v4 では`sls`コマンド実行時に同ツールがダウンロードされる
+      # そのためturboなどで並列ビルドを行うと、ダウンロードの競合が発生してビルドに失敗することがある
+      # この問題を回避するため、ビルドは並列実行せずに順次実行する
+      - run: npx turbo run build --concurrency=1
       - run: npm run dependency-check
