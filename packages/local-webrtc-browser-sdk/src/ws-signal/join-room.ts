@@ -1,6 +1,8 @@
 import { parseJSON } from "../json/parse";
-import { Signal } from "../webrtc/signal";
-import { JoinRoomAcceptedSchema } from "./response/join-room-accepted";
+import {
+  JoinRoomAccepted,
+  JoinRoomAcceptedSchema,
+} from "./response/join-room-accepted";
 import { JoinRoomRejectedSchema } from "./response/join-room-rejected";
 import { sendToWSSignal } from "./send-to-ws-signal";
 
@@ -8,24 +10,22 @@ import { sendToWSSignal } from "./send-to-ws-signal";
  * ルームに参加する
  * @param websocket WebSocketコネクション
  * @param roomID 参加するルームのID
- * @return ルームへの参加に成功したらSignal、失敗したらnull
+ * @return ルームへの参加に成功したらJoinRoomAccepted、失敗したらnull
  */
 export const joinRoom = (options: {
   websocket: WebSocket;
   roomID: string;
-}): Promise<Signal | null> => {
+}): Promise<JoinRoomAccepted | null> => {
   const { websocket, roomID } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<Signal | null>((resolve) => {
+  return new Promise<JoinRoomAccepted | null>((resolve) => {
     handler = (event) => {
       const parsedData = parseJSON(event.data);
 
       const parsedJoinRoomAccepted =
         JoinRoomAcceptedSchema.safeParse(parsedData);
       if (parsedJoinRoomAccepted.success) {
-        const joinRoomAccepted = parsedJoinRoomAccepted.data;
-        const { sdp, iceCandidates } = joinRoomAccepted;
-        resolve({ sdp, iceCandidates });
+        resolve(parsedJoinRoomAccepted.data);
         return;
       }
 
