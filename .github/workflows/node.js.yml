@@ -38,5 +38,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_JS_VERSION }}
       - run: npm ci
-      - run: npm run build
+      # serverless v4 standaloneの初回展開競合を避けるため、CIビルドは直列実行にする
+      - run: npm run build -- --concurrency=1
       - run: npm run dependency-check
