@@ -108,7 +108,7 @@ export default {
         "maintenance problems later on.",
       severity: "error",
       from: {
-        pathNot: ["^\\.\\./browser-sdk/"],
+        pathNot: ["^\\.\\./local-webrtc-browser-sdk/"],
       },
       to: {
         moreThanOneDependencyType: true,
@@ -177,7 +177,7 @@ export default {
         "add an exception to your dependency-cruiser configuration.",
       severity: "error",
       from: {
-        pathNot: ["^\\.\\./browser-sdk/"],
+        pathNot: ["^\\.\\./local-webrtc-browser-sdk/"],
       },
       to: {
         dependencyTypes: ["npm-peer"],
