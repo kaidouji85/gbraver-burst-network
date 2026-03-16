@@ -43,6 +43,7 @@ provider:
           Action:
             - "dynamodb:PutItem"
             - "dynamodb:GetItem"
+            - "dynamodb:UpdateItem"
             - "dynamodb:DeleteItem"
             - "dynamodb:Query"
             - "dynamodb:Scan"
@@ -77,6 +78,11 @@ functions:
     events:
       - websocket:
           route: join-room
+  sendGuestSignal:
+    handler: src/send-guest-signal.sendGuestSignal
+    events:
+      - websocket:
+          route: send-guest-signal
 
 resources:
   Resources:

@@ -1,38 +1,18 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
-import { z } from "zod";
+import { nanoid } from "nanoid";
 
-import {
-  RTCIceCandidateInit,
-  RTCIceCandidateInitSchema,
-  RTCSessionDescriptionInit,
-  RTCSessionDescriptionInitSchema,
-} from "../core/webrtc";
+import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
+import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
-/** DynamoDBスキーマ room */
-export type DynamoRoom = {
-  /** ルームID（パーティションキー） */
-  roomID: string;
-  /** ホストのコネクションID */
-  hostConnectionId: string;
-  /** ルームのホストのシグナル情報 */
-  hostSignal: {
-    /** WebRTCのセッション記述 */
-    sdp: RTCSessionDescriptionInit;
-    /** WebRTCのICE候補 */
-    iceCandidates: RTCIceCandidateInit[];
-  };
-};
+/**
+ * DynamoDBスキーマ room
+ * パーティションキー: roomID
+ */
+export type DynamoRoom = WSSignalRoom;
 
 /** DynamoRoom zodスキーマ */
-export const DynamoRoomSchema = z.object({
-  roomID: z.string(),
-  hostConnectionId: z.string(),
-  hostSignal: z.object({
-    sdp: RTCSessionDescriptionInitSchema,
-    iceCandidates: z.array(RTCIceCandidateInitSchema),
-  }),
-});
+export const DynamoRoomSchema = WSSignalRoomSchema;
 
 /** DynamoDB rooms の DAO */
 export class DynamoRooms {
@@ -52,16 +32,33 @@ export class DynamoRooms {
   }
 
   /**
-   * ルーム情報をDynamoDBに保存する
+   * ルームを新規作成する
    * 条件付きPutを行うため、同じルームIDが存在する場合は何もしない
-   * @param room 保存するルーム情報
+   * @param options ルーム情報の保存に必要な情報
    * @return ルーム情報の保存に成功した場合はtrue、同じルームIDが存在する場合はfalse
    */
-  async put(room: DynamoRoom): Promise<boolean> {
+  async put(options: {
+    /** ルームID */
+    roomID: string;
+    /** ホストのコネクションID */
+    hostConnectionId: string;
+    /** ホストのシグナル情報 */
+    hostSignal: {
+      /** ホストのSDP */
+      sdp: RTCSessionDescriptionInit;
+      /** ホストのICE候補 */
+      iceCandidates: RTCIceCandidateInit[];
+    };
+  }): Promise<boolean> {
     try {
+      const room: DynamoRoom = {
+        ...options,
+        reservationID: nanoid(),
+        state: "awaiting-guest-join",
+      };
       await this.#dynamoDB.put({
         TableName: this.#tableName,
-        Item: room,
+        Item: DynamoRoomSchema.parse(room),
         ConditionExpression: "attribute_not_exists(roomID)",
       });
       return true;
@@ -74,17 +71,72 @@ export class DynamoRooms {
   }
 
   /**
-   * ルーム情報を削除して、削除前のルーム情報を返す
-   * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
+   * ルームの状態を "awaiting-guest-join" から "awaiting-guest-signal" に更新する
+   * 以下の条件で、条件付きUpdateを行う
+   *   - roomIDが存在する
+   *   - ルームの状態が"awaiting-guest-join"である
    * @param roomID ルームID
+   * @return 更新に成功した場合は更新後のルーム情報、更新できなかった場合はnull
+   */
+  async updateToAwaitingGuestSignal(
+    roomID: string,
+  ): Promise<DynamoRoom | null> {
+    try {
+      const result = await this.#dynamoDB.update({
+        TableName: this.#tableName,
+        Key: { roomID },
+        UpdateExpression: "SET #state = :state",
+        ExpressionAttributeNames: {
+          "#state": "state",
+        },
+        ExpressionAttributeValues: {
+          ":state": "awaiting-guest-signal",
+          ":expectedState": "awaiting-guest-join",
+        },
+        ConditionExpression:
+          "attribute_exists(roomID) AND #state = :expectedState",
+        ReturnValues: "ALL_NEW",
+      });
+      return DynamoRoomSchema.parse(result.Attributes);
+    } catch (error) {
+      if (!isConditionalCheckFailedException(error)) {
+        throw error;
+      }
+      return null;
+    }
+  }
+
+  /**
+   * ルーム情報を削除する
+   * 条件付きで削除するため、ルームIDが存在しない場合は何もせずにnullを返す
+   * 削除条件
+   *   - roomIDが存在する
+   *   - reservationIDが一致する
+   *   - stateが"awaiting-guest-signal"である
+   * @param options ルーム情報の削除に必要な情報
    * @return 削除に成功した場合はルーム情報、失敗時はnull
    */
-  async deleteAndReturnOld(roomID: string): Promise<DynamoRoom | null> {
+  async delete(options: {
+    /** ルームID */
+    roomID: string;
+    /** 予約ID */
+    reservationID: string;
+  }): Promise<DynamoRoom | null> {
     try {
+      const { roomID, reservationID } = options;
       const result = await this.#dynamoDB.delete({
         TableName: this.#tableName,
         Key: { roomID },
-        ConditionExpression: "attribute_exists(roomID)",
+        ConditionExpression:
+          "attribute_exists(roomID) AND #reservationID = :reservationID AND #state = :expectedState",
+        ExpressionAttributeNames: {
+          "#reservationID": "reservationID",
+          "#state": "state",
+        },
+        ExpressionAttributeValues: {
+          ":reservationID": reservationID,
+          ":expectedState": "awaiting-guest-signal",
+        },
         ReturnValues: "ALL_OLD",
       });
       return DynamoRoomSchema.parse(result.Attributes);
@@ -94,5 +146,16 @@ export class DynamoRooms {
       }
       return null;
     }
+  }
+
+  /**
+   * ルームを強制削除する
+   * @param roomID 削除するルームID
+   */
+  async forceDelete(roomID: string): Promise<void> {
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
+      Key: { roomID },
+    });
   }
 }
