@@ -8,8 +8,9 @@ import { sendToWSSignal } from "./send-to-ws-signal";
 
 /**
  * ルームに参加する
- * @param websocket WebSocketコネクション
- * @param roomID 参加するルームのID
+ * @param options オプション
+ * @param options.websocket WebSocketコネクション
+ * @param options.roomID 参加するルームのID
  * @return ルームへの参加に成功したらJoinRoomAccepted、失敗したらnull
  */
 export const joinRoom = (options: {
@@ -21,7 +22,6 @@ export const joinRoom = (options: {
   return new Promise<JoinRoomAccepted | null>((resolve) => {
     handler = (event) => {
       const parsedData = parseJSON(event.data);
-
       const parsedJoinRoomAccepted =
         JoinRoomAcceptedSchema.safeParse(parsedData);
       if (parsedJoinRoomAccepted.success) {
