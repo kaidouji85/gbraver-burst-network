@@ -1,7 +1,7 @@
-import { connectWebSocket } from "./websocket/connect-web-socket";
+import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 
-/** ローカルWebRTCゲスト */
-export type LocalWebRTCBrowserSDK = {
+/** ローカルWebRTCゲスト用SDK */
+export type LocalWebRTCGuestSDK = {
   /**
    * ルームに参加する
    * @param roomID ルームID
@@ -10,8 +10,8 @@ export type LocalWebRTCBrowserSDK = {
   joinRoom: (roomID: string) => Promise<boolean>;
 };
 
-/** ローカルWebRTCゲストの実装 */
-class LocalWebRTCBrowserSDKImpl implements LocalWebRTCBrowserSDK {
+/** ローカルWebRTCゲスト用SDKの実装 */
+class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebSocketシグナルサーバーのURL */
   #wsSignalUrl: string;
   /**
@@ -30,7 +30,7 @@ class LocalWebRTCBrowserSDKImpl implements LocalWebRTCBrowserSDK {
 
   /** @override */
   async joinRoom() {
-    this.#websocket = await connectWebSocket(this.#wsSignalUrl);
+    this.#websocket = await connectWSSignal(this.#wsSignalUrl);
     this.#websocket.close();
 
     // TODO ロジックを作る
@@ -39,12 +39,12 @@ class LocalWebRTCBrowserSDKImpl implements LocalWebRTCBrowserSDK {
 }
 
 /**
- * ローカルWebRTCゲストを生成する
+ * ローカルWebRTCゲスト用SDKを生成する
  * @param wsSignalUrl WebSocketシグナルサーバーのURL
- * @returns ローカルWebRTCゲストのインスタンス
+ * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
-export function createLocalWebRTCBrowserSDK(
+export function createLocalWebRTCGuestSDK(
   wsSignalUrl: string,
-): LocalWebRTCBrowserSDK {
-  return new LocalWebRTCBrowserSDKImpl(wsSignalUrl);
+): LocalWebRTCGuestSDK {
+  return new LocalWebRTCGuestSDKImpl(wsSignalUrl);
 }

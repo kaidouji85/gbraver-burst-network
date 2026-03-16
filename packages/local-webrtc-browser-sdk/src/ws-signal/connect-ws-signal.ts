@@ -1,9 +1,9 @@
 /**
- * 接続完了したWebSocketを返す
- * @param url 接続先のWebSocketサーバーのURL
- * @returns WebSocket
+ * WebSocketシグナルサーバーに接続する
+ * @param url 接続先のWebSocketシグナルサーバーのURL
+ * @returns 接続に成功したWebSocket、接続に失敗した場合はPromiseがrejectされる
  */
-export function connectWebSocket(url: string): Promise<WebSocket> {
+export function connectWSSignal(url: string): Promise<WebSocket> {
   let handler: (() => void) | null = null;
   let errorHandler: ((event: Event) => void) | null = null;
   const websocket = new WebSocket(url);

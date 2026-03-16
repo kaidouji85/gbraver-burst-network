@@ -1,5 +1,9 @@
+export { LocalWebRTCRoom } from "./sdk/local-web-rtc-room";
 export {
-  createLocalWebRTCBrowserSDK,
-  LocalWebRTCBrowserSDK,
-} from "./local-webrtc-guest";
-export { createLocalWebRTCHost, LocalWebRTCHost } from "./local-webrtc-host";
+  createLocalWebRTCGuestSDK,
+  LocalWebRTCGuestSDK,
+} from "./sdk/local-webrtc-guest-sdk";
+export {
+  createLocalWebRTCHostSDK,
+  LocalWebRTCHostSDK,
+} from "./sdk/local-webrtc-host-sdk";
