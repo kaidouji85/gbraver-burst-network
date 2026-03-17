@@ -1,5 +1,7 @@
+import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { joinRoom } from "../ws-signal/join-room";
+import { sendGuestSignal } from "../ws-signal/send-guest-signal";
 
 /** ローカルWebRTCゲスト用SDK */
 export type LocalWebRTCGuestSDK = {
@@ -33,7 +35,26 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
       return false;
     }
 
-    return true;
+    const { sdp: hostSDP, iceCandidates: hostIceCandidates } = joinRoomAccepted;
+    const connection = new RTCPeerConnection();
+    await connection.setRemoteDescription(hostSDP);
+    await Promise.all(
+      hostIceCandidates.map((c) => connection.addIceCandidate(c)),
+    );
+    const guestSDP = await connection.createAnswer();
+    const [guestIceCandidates] = await Promise.all([
+      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+      waitUntilIceCandidate(connection),
+      connection.setLocalDescription(guestSDP),
+    ]);
+    const { reservationID } = joinRoomAccepted;
+    return await sendGuestSignal({
+      websocket,
+      roomID,
+      reservationID,
+      sdp: guestSDP,
+      iceCandidates: guestIceCandidates,
+    });
   }
 }
 
