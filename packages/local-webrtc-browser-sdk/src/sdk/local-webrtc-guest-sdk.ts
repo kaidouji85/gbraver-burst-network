@@ -1,4 +1,5 @@
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
+import { joinRoom } from "../ws-signal/join-room";
 
 /** ローカルWebRTCゲスト用SDK */
 export type LocalWebRTCGuestSDK = {
@@ -14,11 +15,6 @@ export type LocalWebRTCGuestSDK = {
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebSocketシグナルサーバーのURL */
   #wsSignalUrl: string;
-  /**
-   * 接続中のWebSocket、接続されていない場合はnull
-   * シグナリングの時だけ接続されている想定
-   */
-  #websocket: WebSocket | null = null;
 
   /**
    * コンストラクタ
@@ -29,11 +25,14 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   }
 
   /** @override */
-  async joinRoom() {
-    this.#websocket = await connectWSSignal(this.#wsSignalUrl);
-    this.#websocket.close();
+  async joinRoom(roomID: string) {
+    const websocket = await connectWSSignal(this.#wsSignalUrl);
+    const joinRoomAccepted = await joinRoom({ websocket, roomID });
+    if (!joinRoomAccepted) {
+      websocket.close();
+      return false;
+    }
 
-    // TODO ロジックを作る
     return true;
   }
 }
