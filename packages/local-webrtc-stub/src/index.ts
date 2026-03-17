@@ -1,4 +1,7 @@
-import { createLocalWebRTCHostSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import {
+  createLocalWebRTCGuestSDK,
+  createLocalWebRTCHostSDK,
+} from "@gbraver-burst-network/local-webrtc-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
 import { HostPlayer } from "./use-case/host-player";
@@ -47,7 +50,11 @@ const getRoomIDInput = (): HTMLInputElement => {
  */
 window.onload = () => {
   const hostSDK = createLocalWebRTCHostSDK(WS_SIGNAL_SERVER_URL);
-  const useCases: UseCase[] = [new HostPlayer(hostSDK), new GuestPlayer()];
+  const guestSDK = createLocalWebRTCGuestSDK(WS_SIGNAL_SERVER_URL);
+  const useCases: UseCase[] = [
+    new HostPlayer(hostSDK),
+    new GuestPlayer(guestSDK),
+  ];
 
   const useCaseSelector = getUseCaseSelector();
   const useCaseExecuteButton = getUseCaseExecuteButton();
