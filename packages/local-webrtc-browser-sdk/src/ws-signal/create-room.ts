@@ -7,6 +7,7 @@ import { sendToWSSignal } from "./send-to-ws-signal";
 
 /**
  * ルームを生成する
+ * @param options オプション
  * @param options.websocket WebSocketコネクション
  * @param options.sdp ホストのSDP
  * @param options.iceCandidates ホストのICE候補
