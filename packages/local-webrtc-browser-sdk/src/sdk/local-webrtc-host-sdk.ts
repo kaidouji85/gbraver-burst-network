@@ -27,22 +27,30 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /** @override */
   async createRoom() {
-    const connection = new RTCPeerConnection();
-    connection.createDataChannel("sendDataChannel");
-    const sdp = await connection.createOffer();
-    const [iceCandidates] = await Promise.all([
-      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-      waitUntilIceCandidate(connection),
-      connection.setLocalDescription(sdp),
-    ]);
+    let websocket: WebSocket | null = null;
+    try {
+      const connection = new RTCPeerConnection();
+      connection.createDataChannel("sendDataChannel");
+      const sdp = await connection.createOffer();
+      const [iceCandidates] = await Promise.all([
+        // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+        waitUntilIceCandidate(connection),
+        connection.setLocalDescription(sdp),
+      ]);
 
-    const websocket = await connectWSSignal(this.#wsSignalUrl);
-    const roomID = await createRoom({ websocket, sdp, iceCandidates });
-    if (roomID === null) {
-      return null;
+      websocket = await connectWSSignal(this.#wsSignalUrl);
+      const roomID = await createRoom({ websocket, sdp, iceCandidates });
+      if (roomID === null) {
+        websocket.close();
+        return null;
+      }
+
+      return new LocalWebRTCRoomImpl(roomID, websocket);
+    } finally {
+      if (websocket) {
+        websocket.close();
+      }
     }
-
-    return new LocalWebRTCRoomImpl(roomID, websocket);
   }
 }
 
