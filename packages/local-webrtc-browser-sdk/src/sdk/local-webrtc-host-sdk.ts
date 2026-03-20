@@ -43,7 +43,11 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
       return null;
     }
 
-    return new LocalWebRTCRoomImpl({ roomID, websocket, connection });
+    return new LocalWebRTCRoomImpl({
+      roomID,
+      websocketManager: this.#websocketManager,
+      connection,
+    });
   }
 }
 
