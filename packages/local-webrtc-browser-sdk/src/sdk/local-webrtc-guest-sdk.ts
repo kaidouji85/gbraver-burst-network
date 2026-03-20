@@ -1,8 +1,8 @@
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
-import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { joinRoom } from "../ws-signal/join-room";
 import { sendGuestSignal } from "../ws-signal/send-guest-signal";
+import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
 export type LocalWebRTCGuestSDK = {
@@ -16,50 +16,54 @@ export type LocalWebRTCGuestSDK = {
 
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
-  /** WebSocketシグナルサーバーのURL */
-  #wsSignalUrl: string;
+  /** WebSocketコネクションマネージャー */
+  #websocketManager: WebSocketConnectionManager;
 
   /**
    * コンストラクタ
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
-    this.#wsSignalUrl = wsSignalUrl;
+    this.#websocketManager = new WebSocketConnectionManager(wsSignalUrl);
   }
 
   /** @override */
   async joinRoom(roomID: string) {
-    const websocket = await connectWSSignal(this.#wsSignalUrl);
-    const joinRoomAccepted = await joinRoom({ websocket, roomID });
-    if (!joinRoomAccepted) {
-      websocket.close();
-      return false;
-    }
+    try {
+      const websocket = await this.#websocketManager.getOrCreate();
+      const joinRoomAccepted = await joinRoom({ websocket, roomID });
+      if (!joinRoomAccepted) {
+        return false;
+      }
 
-    const { sdp: hostSDP, iceCandidates: hostIceCandidates } = joinRoomAccepted;
-    const connection = new RTCPeerConnection();
-    await connection.setRemoteDescription(hostSDP);
-    await Promise.all(
-      hostIceCandidates.map((c) => connection.addIceCandidate(c)),
-    );
-    const guestSDP = await connection.createAnswer();
-    const [guestIceCandidates] = await Promise.all([
-      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-      waitUntilIceCandidate(connection),
-      connection.setLocalDescription(guestSDP),
-    ]);
-    const { reservationID } = joinRoomAccepted;
-    await Promise.all([
-      sendGuestSignal({
-        websocket,
-        roomID,
-        reservationID,
-        sdp: guestSDP,
-        iceCandidates: guestIceCandidates,
-      }),
-      waitUntilConnected(connection),
-    ]);
-    return true;
+      const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
+        joinRoomAccepted;
+      const connection = new RTCPeerConnection();
+      await connection.setRemoteDescription(hostSDP);
+      await Promise.all(
+        hostIceCandidates.map((c) => connection.addIceCandidate(c)),
+      );
+      const guestSDP = await connection.createAnswer();
+      const [guestIceCandidates] = await Promise.all([
+        // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+        waitUntilIceCandidate(connection),
+        connection.setLocalDescription(guestSDP),
+      ]);
+      const { reservationID } = joinRoomAccepted;
+      await Promise.all([
+        sendGuestSignal({
+          websocket,
+          roomID,
+          reservationID,
+          sdp: guestSDP,
+          iceCandidates: guestIceCandidates,
+        }),
+        waitUntilConnected(connection),
+      ]);
+      return true;
+    } finally {
+      this.#websocketManager.gracefulDisconnect();
+    }
   }
 }
 

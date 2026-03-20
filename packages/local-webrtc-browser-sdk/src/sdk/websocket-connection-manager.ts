@@ -26,7 +26,7 @@ export class WebSocketConnectionManager {
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
    * @returns 取得、生成結果
    */
-  async getOrCreateWebSocket(): Promise<WebSocket> {
+  async getOrCreate(): Promise<WebSocket> {
     if (this.#websocket) {
       return this.#websocket;
     }
@@ -43,9 +43,8 @@ export class WebSocketConnectionManager {
   /**
    * Websocketコネクションを切断する
    * 本メソッドを呼び出すことで、WebSocketコネクションに関連するイベントストリームの購読も解除する
-   * @returns 処理が完了したら発火するPromise
    */
-  async gracefulDisconnectWebsocket(): Promise<void> {
+  gracefulDisconnect(): void {
     this.#websocket?.close();
     this.#websocket = null;
 
@@ -59,7 +58,7 @@ export class WebSocketConnectionManager {
    * WebSocketのエラーを通知する
    * @returns 通知ストリーム
    */
-  websocketErrorNotifier(): Observable<unknown> {
+  errorNotifier(): Observable<unknown> {
     return this.#websocketError;
   }
 }
