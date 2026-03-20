@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../ws-signal/join-room";
@@ -12,6 +14,12 @@ export type LocalWebRTCGuestSDK = {
    * @returns ルームへの参加に成功したらtrue、失敗したらfalse
    */
   joinRoom: (roomID: string) => Promise<boolean>;
+
+  /**
+   * WebSocketのエラーを通知する
+   * @returns 通知ストリーム
+   */
+  websocketErrorNotifier(): Observable<unknown>;
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */
@@ -64,6 +72,11 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
     } finally {
       this.#websocketManager.gracefulDisconnect();
     }
+  }
+
+  /** @override */
+  websocketErrorNotifier(): Observable<unknown> {
+    return this.#websocketManager.errorNotifier();
   }
 }
 
