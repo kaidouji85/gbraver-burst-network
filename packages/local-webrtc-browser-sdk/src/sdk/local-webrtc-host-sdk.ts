@@ -1,7 +1,7 @@
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
-import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { createRoom } from "../ws-signal/create-room";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-web-rtc-room";
+import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCホスト用SDK */
 export type LocalWebRTCHostSDK = {
@@ -14,15 +14,15 @@ export type LocalWebRTCHostSDK = {
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
-  /** WebSocketシグナルサーバーのURL */
-  #wsSignalUrl: string;
+  /** WebSocketコネクションマネージャー */
+  #websocketManager: WebSocketConnectionManager;
 
   /**
    * コンストラクタ
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
-    this.#wsSignalUrl = wsSignalUrl;
+    this.#websocketManager = new WebSocketConnectionManager(wsSignalUrl);
   }
 
   /** @override */
@@ -36,9 +36,10 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
       connection.setLocalDescription(sdp),
     ]);
 
-    const websocket = await connectWSSignal(this.#wsSignalUrl);
+    const websocket = await this.#websocketManager.getOrCreate();
     const roomID = await createRoom({ websocket, sdp, iceCandidates });
     if (roomID === null) {
+      this.#websocketManager.gracefulDisconnect();
       return null;
     }
 
