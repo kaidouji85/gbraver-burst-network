@@ -35,27 +35,32 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /** @override */
   async createRoom() {
-    const connection = new RTCPeerConnection();
-    connection.createDataChannel("sendDataChannel");
-    const sdp = await connection.createOffer();
-    const [iceCandidates] = await Promise.all([
-      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-      waitUntilIceCandidate(connection),
-      connection.setLocalDescription(sdp),
-    ]);
+    try {
+      const connection = new RTCPeerConnection();
+      connection.createDataChannel("sendDataChannel");
+      const sdp = await connection.createOffer();
+      const [iceCandidates] = await Promise.all([
+        // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+        waitUntilIceCandidate(connection),
+        connection.setLocalDescription(sdp),
+      ]);
 
-    const websocket = await this.#websocketManager.getOrCreate();
-    const roomID = await createRoom({ websocket, sdp, iceCandidates });
-    if (roomID === null) {
+      const websocket = await this.#websocketManager.getOrCreate();
+      const roomID = await createRoom({ websocket, sdp, iceCandidates });
+      if (roomID === null) {
+        this.#websocketManager.gracefulDisconnect();
+        return null;
+      }
+
+      return new LocalWebRTCRoomImpl({
+        roomID,
+        websocketManager: this.#websocketManager,
+        connection,
+      });
+    } catch (e) {
       this.#websocketManager.gracefulDisconnect();
-      return null;
+      throw e;
     }
-
-    return new LocalWebRTCRoomImpl({
-      roomID,
-      websocketManager: this.#websocketManager,
-      connection,
-    });
   }
 
   /** @override */
