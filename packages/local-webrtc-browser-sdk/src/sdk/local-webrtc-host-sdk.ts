@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../ws-signal/create-room";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-web-rtc-room";
@@ -10,6 +12,12 @@ export type LocalWebRTCHostSDK = {
    * @returns 生成されたルーム、生成に失敗した場合はnull
    */
   createRoom: () => Promise<LocalWebRTCRoom | null>;
+
+  /**
+   * WebSocketのエラーを通知する
+   * @returns 通知ストリーム
+   */
+  websocketErrorNotifier(): Observable<unknown>;
 };
 
 /** ローカルWebRTCホスト用SDKの実装 */
@@ -48,6 +56,11 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
       websocketManager: this.#websocketManager,
       connection,
     });
+  }
+
+  /** @override */
+  websocketErrorNotifier(): Observable<unknown> {
+    return this.#websocketManager.errorNotifier();
   }
 }
 
