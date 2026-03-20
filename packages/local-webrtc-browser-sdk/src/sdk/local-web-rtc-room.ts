@@ -1,4 +1,4 @@
-import { Signal } from "../webrtc/signal";
+import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
 
 /** ローカルWebRTC ルーム */
@@ -10,7 +10,7 @@ export type LocalWebRTCRoom = {
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  waitUntilMatching: () => Promise<Signal>;
+  waitUntilMatching: () => Promise<void>;
 };
 
 /** ローカルWebRTCルームの実装 */
@@ -19,22 +19,37 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   roomID: string;
   /** WebSocketコネクション */
   #websocket: WebSocket;
+  /** WebRTCコネクション */
+  #connection: RTCPeerConnection;
 
   /**
    * コンストラクタ
-   * @param roomID ルームID
-   * @param websocket WebSocketコネクション
+   * @param options ルームの生成に必要なオプション
+   * @param options.roomID ルームID
+   * @param options.websocket WebSocketコネクション
+   * @param options.connection WebRTCコネクション
    */
-  constructor(roomID: string, websocket: WebSocket) {
+  constructor(options: {
+    roomID: string;
+    websocket: WebSocket;
+    connection: RTCPeerConnection;
+  }) {
+    const { roomID, websocket } = options;
     this.roomID = roomID;
     this.#websocket = websocket;
+    this.#connection = options.connection;
   }
 
   /**
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  async waitUntilMatching(): Promise<Signal> {
-    return await waitUntilMatching(this.#websocket);
+  async waitUntilMatching(): Promise<void> {
+    const signal = await waitUntilMatching(this.#websocket);
+    await this.#connection.setRemoteDescription(signal.sdp);
+    await Promise.all([
+      ...signal.iceCandidates.map((c) => this.#connection.addIceCandidate(c)),
+    ]);
+    await waitUntilConnected(this.#connection);
   }
 }

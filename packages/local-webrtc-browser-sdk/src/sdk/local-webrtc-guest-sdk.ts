@@ -1,3 +1,4 @@
+import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
 import { joinRoom } from "../ws-signal/join-room";
@@ -48,13 +49,17 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
       connection.setLocalDescription(guestSDP),
     ]);
     const { reservationID } = joinRoomAccepted;
-    return await sendGuestSignal({
-      websocket,
-      roomID,
-      reservationID,
-      sdp: guestSDP,
-      iceCandidates: guestIceCandidates,
-    });
+    await Promise.all([
+      sendGuestSignal({
+        websocket,
+        roomID,
+        reservationID,
+        sdp: guestSDP,
+        iceCandidates: guestIceCandidates,
+      }),
+      waitUntilConnected(connection),
+    ]);
+    return true;
   }
 }
 
