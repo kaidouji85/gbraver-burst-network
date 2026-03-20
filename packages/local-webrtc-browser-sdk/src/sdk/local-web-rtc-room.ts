@@ -1,4 +1,3 @@
-import { Signal } from "../webrtc/signal";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
 
