@@ -1,5 +1,6 @@
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -17,8 +18,8 @@ export type LocalWebRTCRoom = {
 export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /** ルームID */
   roomID: string;
-  /** WebSocketコネクション */
-  #websocket: WebSocket;
+  /** WebSocketコネクションマネージャー */
+  #websocketManager: WebSocketConnectionManager;
   /** WebRTCコネクション */
   #connection: RTCPeerConnection;
 
@@ -31,13 +32,13 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   constructor(options: {
     roomID: string;
-    websocket: WebSocket;
+    websocketManager: WebSocketConnectionManager;
     connection: RTCPeerConnection;
   }) {
-    const { roomID, websocket } = options;
+    const { roomID, websocketManager, connection } = options;
     this.roomID = roomID;
-    this.#websocket = websocket;
-    this.#connection = options.connection;
+    this.#websocketManager = websocketManager;
+    this.#connection = connection;
   }
 
   /**
@@ -45,11 +46,16 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<void> {
-    const signal = await waitUntilMatching(this.#websocket);
-    await this.#connection.setRemoteDescription(signal.sdp);
-    await Promise.all([
-      ...signal.iceCandidates.map((c) => this.#connection.addIceCandidate(c)),
-    ]);
-    await waitUntilConnected(this.#connection);
+    try {
+      const websocket = await this.#websocketManager.getOrCreate();
+      const signal = await waitUntilMatching(websocket);
+      await this.#connection.setRemoteDescription(signal.sdp);
+      await Promise.all([
+        ...signal.iceCandidates.map((c) => this.#connection.addIceCandidate(c)),
+      ]);
+      await waitUntilConnected(this.#connection);
+    } finally {
+      this.#websocketManager.gracefulDisconnect();
+    }
   }
 }
