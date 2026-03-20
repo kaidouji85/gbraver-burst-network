@@ -7,6 +7,9 @@
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
     "email": "kaidouji85@gmail.com"
   },
+  "dependencies": {
+    "rxjs": "^7.8.2"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "dependency-cruiser": "^17.3.9",
@@ -42,8 +45,5 @@
     "lint-fix": "eslint --fix .",
     "transpile": "tsc -d --outDir lib",
     "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "rxjs": "^7.8.2"
   }
 }
