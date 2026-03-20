@@ -6,22 +6,22 @@
 export const waitUntilConnected = (
   connection: RTCPeerConnection,
 ): Promise<void> => {
-  let hander: (() => void) | null = null;
+  let handler: (() => void) | null = null;
   return new Promise<void>((resolve) => {
     if (connection.connectionState === "connected") {
       resolve();
       return;
     }
 
-    hander = () => {
+    handler = () => {
       if (connection.connectionState === "connected") {
         resolve();
       }
     };
-    connection.addEventListener("connectionstatechange", hander);
+    connection.addEventListener("connectionstatechange", handler);
   }).finally(() => {
-    if (hander) {
-      connection.removeEventListener("connectionstatechange", hander);
+    if (handler) {
+      connection.removeEventListener("connectionstatechange", handler);
     }
   });
 };
