@@ -46,7 +46,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async waitUntilMatching(): Promise<void> {
     const signal = await waitUntilMatching(this.#websocket);
-    this.#connection.setRemoteDescription(signal.sdp);
+    await this.#connection.setRemoteDescription(signal.sdp);
     await Promise.all([
       ...signal.iceCandidates.map((c) => this.#connection.addIceCandidate(c)),
     ]);
