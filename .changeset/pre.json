@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
     "@gbraver-burst-network/aws-vpc": "1.19.4",
@@ -14,5 +14,7 @@
     "@gbraver-burst-network/serverless-stub": "1.19.4",
     "@gbraver-burst-network/ws-signal": "1.19.4"
   },
-  "changesets": []
+  "changesets": [
+    "open-pianos-smell"
+  ]
 }

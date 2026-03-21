@@ -354,7 +354,7 @@ npx changeset publish
 
 ```shell
 # β版モード開始
-npx changeset pre enter
+npx changeset pre enter beta
 
 # 画面の指示に従い、変更内容を記入する
 npx changeset

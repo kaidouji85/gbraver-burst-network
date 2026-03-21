@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.20.0-beta.0
+
+### Minor Changes
+
+- ローカルWebRTCを追加
+
 ## 1.19.4
 
 ### Patch Changes
