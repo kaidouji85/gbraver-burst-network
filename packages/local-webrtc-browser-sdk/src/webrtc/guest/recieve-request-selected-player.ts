@@ -1,5 +1,8 @@
 import { parseJSON } from "../../json/parse";
-import { RequestSelectedPlayerSchema } from "../host/host-message";
+import {
+  RequestSelectedPlayer,
+  RequestSelectedPlayerSchema,
+} from "../host/host-message";
 
 /**
  * ホストから「RequestSelectedPlayer」メッセージを待ち受ける
@@ -8,16 +11,16 @@ import { RequestSelectedPlayerSchema } from "../host/host-message";
  */
 export const waitRequestSelectedPlayer = (
   dataChannel: RTCDataChannel,
-): Promise<string> => {
+): Promise<RequestSelectedPlayer> => {
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<string>((resolve) => {
+  return new Promise<RequestSelectedPlayer>((resolve) => {
     handler = (event) => {
       const data = parseJSON(event.data);
       const parsedRequestSelectedPlayer =
         RequestSelectedPlayerSchema.safeParse(data);
       if (parsedRequestSelectedPlayer.success) {
-        const { flowID } = parsedRequestSelectedPlayer.data;
-        resolve(flowID);
+        resolve(parsedRequestSelectedPlayer.data);
+        return;
       }
     };
     dataChannel.addEventListener("message", handler);

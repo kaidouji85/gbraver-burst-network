@@ -2,7 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { waitRequestSelectedPlayer } from "../webrtc/guest/wait-request-selected-player";
+import { waitRequestSelectedPlayer } from "../webrtc/guest/recieve-request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../ws-signal/join-room";
@@ -64,7 +64,9 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
     const requestSelectedPlayer = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannel;
-      return await waitRequestSelectedPlayer(dataChannel);
+      const requestSelectedPlayer =
+        await waitRequestSelectedPlayer(dataChannel);
+      return requestSelectedPlayer.flowID;
     })();
     const isSignalingSuccessful = await this.#signaling(roomID);
     if (!isSignalingSuccessful) {
