@@ -15,7 +15,7 @@ type Disconnected = {
 /** コネクションの状態 */
 type ConnectionState = Connected | Disconnected;
 
-/** ホスト側のコネクション */
+/** ホストのWebRTCコネクション管理 */
 export class HostWebRTCConnectionManager {
   /** コネクションの状態 */
   #connectionState: ConnectionState = { type: "disconnected" };
