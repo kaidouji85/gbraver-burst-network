@@ -2,7 +2,7 @@ import { Command, GameState, Player } from "gbraver-burst-core";
 import { EMPTY, Observable } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { receiveBattleProgressed } from "../webrtc/guest/recieve-battle-progressed";
+import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
 import { BattleSDK } from "./battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
