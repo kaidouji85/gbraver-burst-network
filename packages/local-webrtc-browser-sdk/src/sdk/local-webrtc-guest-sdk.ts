@@ -2,7 +2,8 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { waitRequestSelectedPlayer } from "../webrtc/guest/recieve-request-selected-player";
+import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
+import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../ws-signal/join-room";
@@ -61,27 +62,34 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
     pilotId: PilotId;
   }) {
     const { roomID, armdozerId, pilotId } = options;
-    const requestSelectedPlayer = (async () => {
+
+    const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannel;
-      const requestSelectedPlayer =
-        await waitRequestSelectedPlayer(dataChannel);
-      return requestSelectedPlayer.flowID;
+      return await receiveRequestSelectedPlayer(dataChannel);
     })();
+    const battleStartPromise = (async () => {
+      const dataChannel =
+        await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+      return await receiveBattleStart(dataChannel);
+    })();
+
     const isSignalingSuccessful = await this.#signaling(roomID);
     if (!isSignalingSuccessful) {
       return false;
     }
 
-    const flowID = await requestSelectedPlayer;
+    const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannel;
-    await sendGuestMessage(dataChannel, {
+    sendGuestMessage(dataChannel, {
       type: "send-player",
       flowID,
       armdozerId,
       pilotId,
     });
+    const battleStart = await battleStartPromise;
+    console.log("Battle Start!", battleStart); // TODO 開発が終わったら消す
     return true;
   }
 

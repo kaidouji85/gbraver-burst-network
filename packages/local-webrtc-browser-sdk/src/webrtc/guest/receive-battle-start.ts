@@ -1,15 +1,12 @@
 import { parseJSON } from "../../json/parse";
-import {
-  BattleStart,
-  BattleStartSchema,
-} from "../host/host-message";
+import { BattleStart, BattleStartSchema } from "../host/host-message";
 
 /**
  * ホストから「BattleStart」メッセージを待ち受ける
  * @param dataChannel データチャネル
  * @returns フローID
  */
-export const waitBattleStart = (
+export const receiveBattleStart = (
   dataChannel: RTCDataChannel,
 ): Promise<BattleStart> => {
   let handler: ((event: MessageEvent) => void) | null = null;

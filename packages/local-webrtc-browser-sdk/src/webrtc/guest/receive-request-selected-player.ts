@@ -9,7 +9,7 @@ import {
  * @param dataChannel データチャネル
  * @returns フローID
  */
-export const waitRequestSelectedPlayer = (
+export const receiveRequestSelectedPlayer = (
   dataChannel: RTCDataChannel,
 ): Promise<RequestSelectedPlayer> => {
   let handler: ((event: MessageEvent) => void) | null = null;
