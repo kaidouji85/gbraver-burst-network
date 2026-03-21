@@ -1,3 +1,4 @@
+export { BattleSDK } from "./sdk/battle-sdk";
 export {
   createLocalWebRTCGuestSDK,
   LocalWebRTCGuestSDK,
