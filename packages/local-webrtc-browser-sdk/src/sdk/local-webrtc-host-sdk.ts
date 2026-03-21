@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../ws-signal/create-room";
+import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
@@ -25,12 +26,19 @@ export type LocalWebRTCHostSDK = {
    * @returns 通知ストリーム
    */
   websocketErrorNotifier(): Observable<unknown>;
+
+  /**
+   * WebRTCコネクションを切断する
+   */
+  disconnectWebRTC(): void;
 };
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
+  /** WebRTCコネクションマネージャー */
+  #webRtcConnection: HostWebRTCConnectionManager;
 
   /**
    * コンストラクタ
@@ -38,13 +46,13 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
    */
   constructor(wsSignalUrl: string) {
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
+    this.#webRtcConnection = new HostWebRTCConnectionManager();
   }
 
   /** @override */
   async createRoom() {
     try {
-      const connection = new RTCPeerConnection();
-      connection.createDataChannel("sendDataChannel");
+      const { connection } = this.#webRtcConnection.getOrCreateConnection();
       const sdp = await connection.createOffer();
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
@@ -73,6 +81,11 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
     return this.#websocketConnection.errorNotifier();
+  }
+
+  /** @override */
+  disconnectWebRTC() {
+    this.#webRtcConnection.disconnect();
   }
 }
 
