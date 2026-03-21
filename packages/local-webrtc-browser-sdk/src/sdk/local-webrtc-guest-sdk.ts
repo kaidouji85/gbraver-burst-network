@@ -33,14 +33,14 @@ export type LocalWebRTCGuestSDK = {
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebSocketコネクションマネージャー */
-  #websocketManager: WebSocketConnectionManager;
+  #websocketConnection: WebSocketConnectionManager;
 
   /**
    * コンストラクタ
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
-    this.#websocketManager = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
   /** @override */
@@ -51,7 +51,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   }) {
     const { roomID } = options;
     try {
-      const websocket = await this.#websocketManager.getOrCreate();
+      const websocket = await this.#websocketConnection.getOrCreate();
       const joinRoomAccepted = await joinRoom({ websocket, roomID });
       if (!joinRoomAccepted) {
         return false;
@@ -83,13 +83,13 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
       ]);
       return true;
     } finally {
-      this.#websocketManager.gracefulDisconnect();
+      this.#websocketConnection.gracefulDisconnect();
     }
   }
 
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
-    return this.#websocketManager.errorNotifier();
+    return this.#websocketConnection.errorNotifier();
   }
 }
 

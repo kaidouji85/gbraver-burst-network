@@ -30,14 +30,14 @@ export type LocalWebRTCHostSDK = {
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebSocketコネクションマネージャー */
-  #websocketManager: WebSocketConnectionManager;
+  #websocketConnection: WebSocketConnectionManager;
 
   /**
    * コンストラクタ
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
-    this.#websocketManager = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
   /** @override */
@@ -52,27 +52,27 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
         connection.setLocalDescription(sdp),
       ]);
 
-      const websocket = await this.#websocketManager.getOrCreate();
+      const websocket = await this.#websocketConnection.getOrCreate();
       const roomID = await createRoom({ websocket, sdp, iceCandidates });
       if (roomID === null) {
-        this.#websocketManager.gracefulDisconnect();
+        this.#websocketConnection.gracefulDisconnect();
         return null;
       }
 
       return new LocalWebRTCRoomImpl({
         roomID,
-        websocketManager: this.#websocketManager,
+        websocketManager: this.#websocketConnection,
         connection,
       });
     } catch (e) {
-      this.#websocketManager.gracefulDisconnect();
+      this.#websocketConnection.gracefulDisconnect();
       throw e;
     }
   }
 
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
-    return this.#websocketManager.errorNotifier();
+    return this.#websocketConnection.errorNotifier();
   }
 }
 
