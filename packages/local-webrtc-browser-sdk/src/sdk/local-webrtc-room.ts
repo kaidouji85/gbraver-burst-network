@@ -51,6 +51,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<void> {
+    await this.#signaling();
+  }
+
+  /**
+   * シグナリングを行う
+   * @returns シグナリングが完了したら発火するPromise
+   */
+  async #signaling() {
     try {
       const websocket = await this.#websocketManager.getOrCreate();
       const signal = await waitUntilMatching(websocket);
