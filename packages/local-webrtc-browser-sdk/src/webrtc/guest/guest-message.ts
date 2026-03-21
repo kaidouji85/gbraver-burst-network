@@ -38,7 +38,7 @@ export type SendCommand = {
 export const SendCommandSchema = z.object({
   type: z.literal("send-command"),
   flowID: z.string(),
-  command: z.object(CommandSchema),
+  command: CommandSchema,
 });
 
 /** ゲストから送信されるメッセージ */
