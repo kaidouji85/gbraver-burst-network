@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import {
   ArmdozerId,
   Armdozers,
+  Command,
   GameState,
   PilotId,
   Pilots,
@@ -10,6 +11,7 @@ import {
   startGBraverBurst,
 } from "gbraver-burst-core";
 import { BattleSDK } from "./battle-sdk";
+import { EMPTY, Observable } from "rxjs";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements BattleSDK {
@@ -55,5 +57,20 @@ export class HostBattleSDK implements BattleSDK {
 
     this.#core = startGBraverBurst([this.player, this.enemy]);
     this.initialState = this.#core.stateHistory();
+  }
+
+  /** @override */
+  async progress(command: Command): Promise<GameState[]> {
+    // TODO 中身を実装する
+    return [];
+  }
+
+  /**
+   * バトル強制終了の通知ストリーム
+   * @returns 通知ストリーム
+   */
+  suddenlyBattleEndNotifier(): Observable<unknown> {
+    // TODO 中身を実装する
+    return EMPTY;
   }
 }
