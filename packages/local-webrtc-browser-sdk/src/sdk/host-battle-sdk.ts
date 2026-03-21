@@ -3,6 +3,7 @@ import {
   Armdozers,
   Command,
   GameState,
+  GBraverBurstCore,
   PilotId,
   Pilots,
   Player,
@@ -28,7 +29,7 @@ export class HostBattleSDK implements BattleSDK {
   /** 最新のフローID */
   flowID: string;
   /** Gブレイバーバーストコア */
-  #core;
+  #core: GBraverBurstCore;
   /** ホスト側のWebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** ゲストからのコマンド受信プロミス */
