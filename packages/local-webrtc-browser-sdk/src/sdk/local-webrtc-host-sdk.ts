@@ -35,10 +35,10 @@ export type LocalWebRTCHostSDK = {
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
-  /** WebSocketコネクションマネージャー */
-  #websocketConnection: WebSocketConnectionManager;
   /** WebRTCコネクションマネージャー */
   #webRtcConnection: HostWebRTCConnectionManager;
+  /** WebSocketコネクションマネージャー */
+  #websocketConnection: WebSocketConnectionManager;
 
   /**
    * コンストラクタ

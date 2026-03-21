@@ -5,6 +5,7 @@ import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../ws-signal/join-room";
 import { sendGuestSignal } from "../ws-signal/send-guest-signal";
+import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
@@ -28,10 +29,17 @@ export type LocalWebRTCGuestSDK = {
    * @returns 通知ストリーム
    */
   websocketErrorNotifier(): Observable<unknown>;
+
+  /**
+   * WebRTCコネクションを切断する
+   */
+  disconnectWebRTC(): void;
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
+  /** WebRTCコネクションマネージャー */
+  #webRtcConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
 
@@ -40,6 +48,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
+    this.#webRtcConnection = new GuestWebRTCConnectionManager();
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
@@ -59,7 +68,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
       const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
         joinRoomAccepted;
-      const connection = new RTCPeerConnection();
+      const { connection } = this.#webRtcConnection.getOrCreateConnection();
       await connection.setRemoteDescription(hostSDP);
       await Promise.all(
         hostIceCandidates.map((c) => connection.addIceCandidate(c)),
@@ -90,6 +99,11 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
     return this.#websocketConnection.errorNotifier();
+  }
+
+  /** @override */
+  disconnectWebRTC() {
+    this.#webRtcConnection.disconnect();
   }
 }
 
