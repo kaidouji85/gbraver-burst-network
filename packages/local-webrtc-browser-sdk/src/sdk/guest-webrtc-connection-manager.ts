@@ -1,4 +1,4 @@
-import { waitUntilDataChannel } from "../webrtc/wait-until-data-channel";
+import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
 
 /** 接続中 */
 type Connected = {

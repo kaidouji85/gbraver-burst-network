@@ -52,7 +52,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async waitUntilMatching(): Promise<void> {
     await this.#signaling();
-    const {dataChannel} = this.#webRTCConnection.getOrCreateConnection();
+    //const {dataChannel} = this.#webRTCConnection.getOrCreateConnection();
   }
 
   /**

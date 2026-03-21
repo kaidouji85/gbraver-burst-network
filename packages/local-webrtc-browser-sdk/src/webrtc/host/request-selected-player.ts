@@ -1,6 +1,7 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
-import { parseJSON } from "../json/parse";
-import { SendPlayerSchema } from "./guest-message";
+
+import { parseJSON } from "../../json/parse";
+import { SendPlayerSchema } from "../guest/guest-message";
 import { sendHostMessage } from "./host-message";
 
 /** ホストが選択したプレイヤーの情報 */
