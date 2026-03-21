@@ -1,10 +1,12 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 
+import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { BattleSDK } from "./battle-sdk";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
@@ -16,9 +18,9 @@ export type LocalWebRTCRoom = {
 
   /**
    * マッチングするまで待機する
-   * @returns マッチングしたら発火するPromise
+   * @returns マッチングした相手とのバトルSDK
    */
-  waitUntilMatching: () => Promise<void>;
+  waitUntilMatching: () => Promise<BattleSDK>;
 };
 
 /** ローカルWebRTCルームの実装 */
@@ -66,9 +68,12 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  async waitUntilMatching(): Promise<void> {
-    await this.#signaling();
+  async waitUntilMatching(): Promise<BattleSDK> {
     const { dataChannel } = this.#webRTCConnection.getOrCreateConnection();
+    await Promise.all([
+      this.#signaling(),
+      waitUntilDataChannelOpen(dataChannel),
+    ]);
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       await requestSelectedPlayer(dataChannel, flowID);
@@ -78,6 +83,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestArmdozerId,
       guestPilotId,
     });
+    sendHostMessage(dataChannel, {
+      type: "battle-start",
+      flowID: battleSDK.flowID,
+      hostPlayer: battleSDK.player,
+      guestPlayer: battleSDK.enemy,
+      update: battleSDK.initialState,
+    });
+    return battleSDK;
   }
 
   /**
@@ -88,16 +101,12 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     try {
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
-      const { connection, dataChannel } =
-        this.#webRTCConnection.getOrCreateConnection();
+      const { connection } = this.#webRTCConnection.getOrCreateConnection();
       await connection.setRemoteDescription(signal.sdp);
       await Promise.all([
         ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
       ]);
-      await Promise.all([
-        waitUntilConnected(connection),
-        waitUntilDataChannelOpen(dataChannel),
-      ]);
+      await waitUntilConnected(connection);
     } finally {
       this.#websocketConnection.gracefulDisconnect();
     }

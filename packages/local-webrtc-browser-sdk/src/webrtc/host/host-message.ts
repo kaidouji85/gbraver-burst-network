@@ -1,4 +1,9 @@
-import { GameState, GameStateSchema, PlayerId } from "gbraver-burst-core";
+import {
+  GameState,
+  GameStateSchema,
+  Player,
+  PlayerSchema,
+} from "gbraver-burst-core";
 import { z } from "zod";
 
 /** 選択したキャラクターをホストに送信するように要求する */
@@ -19,10 +24,10 @@ export type BattleStart = {
   type: "battle-start";
   /** ゲームのフローID */
   flowID: string;
-  /** ホストプレイヤーのID */
-  hostPlayerId: PlayerId;
-  /** ゲストプレイヤーのID */
-  guestPlayerId: PlayerId;
+  /** ホストプレイヤー */
+  hostPlayer: Player;
+  /** ゲストプレイヤー */
+  guestPlayer: Player;
   /** 更新されたゲームステート履歴 */
   update: GameState[];
 };
@@ -31,8 +36,8 @@ export type BattleStart = {
 export const BattleStartSchema = z.object({
   type: z.literal("battle-start"),
   flowID: z.string(),
-  hostPlayerId: z.string(),
-  guestPlayerId: z.string(),
+  hostPlayer: PlayerSchema,
+  guestPlayer: PlayerSchema,
   update: z.array(GameStateSchema),
 });
 

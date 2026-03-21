@@ -1,7 +1,6 @@
 import {
   ArmdozerId,
   Armdozers,
-  Command,
   GameState,
   PilotId,
   Pilots,
@@ -21,6 +20,8 @@ export class HostBattleSDK implements BattleSDK {
   enemy: Player;
   /** ゲームの初期状態 */
   initialState: GameState[];
+  /** 最新のフローID */
+  flowID: string;
 
   /** Gブレイバーバーストコア */
   #core;
@@ -57,10 +58,12 @@ export class HostBattleSDK implements BattleSDK {
 
     this.#core = startGBraverBurst([this.player, this.enemy]);
     this.initialState = this.#core.stateHistory();
+
+    this.flowID = nanoid();
   }
 
   /** @override */
-  async progress(command: Command): Promise<GameState[]> {
+  async progress(): Promise<GameState[]> {
     // TODO 中身を実装する
     return [];
   }
