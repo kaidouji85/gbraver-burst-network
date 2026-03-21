@@ -14,7 +14,7 @@ import { EMPTY, Observable } from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
 import { sendHostMessage } from "../webrtc/host/host-message";
-import { receiveSendCommand } from "../webrtc/host/recieve-send-command";
+import { receiveSendCommand } from "../webrtc/host/receive-send-command";
 import { BattleSDK } from "./battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
