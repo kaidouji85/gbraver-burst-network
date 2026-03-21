@@ -1,6 +1,7 @@
 import {
   ArmdozerId,
   Armdozers,
+  Command,
   GameState,
   PilotId,
   Pilots,
@@ -10,7 +11,10 @@ import {
 import { nanoid } from "nanoid";
 import { EMPTY, Observable } from "rxjs";
 
+import { SendCommand } from "../webrtc/guest/guest-message";
+import { receiveSendCommand } from "../webrtc/host/recieve-send-command";
 import { BattleSDK } from "./battle-sdk";
+import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements BattleSDK {
@@ -24,6 +28,10 @@ export class HostBattleSDK implements BattleSDK {
   flowID: string;
   /** Gブレイバーバーストコア */
   #core;
+  /** ホスト側のWebRTCコネクションマネージャー */
+  #webRTCConnection: HostWebRTCConnectionManager;
+  /** ゲストからのコマンド受信プロミス */
+  #sendCommandPromise: Promise<SendCommand>;
 
   /**
    * コンストラクタ
@@ -32,12 +40,14 @@ export class HostBattleSDK implements BattleSDK {
    * @param options.hostPilotId ホスト側のパイロットID
    * @param options.guestArmdozerId ゲスト側のアームドーザID
    * @param options.guestPilotId ゲスト側のパイロットID
+   * @param options.webRTCConnection ホスト側のWebRTC接続マネージャー
    */
   constructor(options: {
     hostArmdozerId: ArmdozerId;
     hostPilotId: PilotId;
     guestArmdozerId: ArmdozerId;
     guestPilotId: PilotId;
+    webRTCConnection: HostWebRTCConnectionManager;
   }) {
     const hostPlayerId = nanoid();
     this.player = {
@@ -59,12 +69,22 @@ export class HostBattleSDK implements BattleSDK {
     this.initialState = this.#core.stateHistory();
 
     this.flowID = nanoid();
+    this.#webRTCConnection = options.webRTCConnection;
+    const { dataChannel } = this.#webRTCConnection.getOrCreateConnection();
+    this.#sendCommandPromise = receiveSendCommand(dataChannel, this.flowID);
   }
 
   /** @override */
-  async progress(): Promise<GameState[]> {
-    // TODO 中身を実装する
-    return [];
+  async progress(command: Command): Promise<GameState[]> {
+    const sendCommand = await this.#sendCommandPromise;
+    const hostCommand = { playerId: this.player.playerId, command };
+    const guestCommand = {
+      playerId: this.enemy.playerId,
+      command: sendCommand.command,
+    };
+    const update = this.#core.progress([hostCommand, guestCommand]);
+    this.flowID = nanoid();
+    return update;
   }
 
   /**

@@ -82,6 +82,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       hostPilotId: this.#hostPilotId,
       guestArmdozerId,
       guestPilotId,
+      webRTCConnection: this.#webRTCConnection,
     });
     sendHostMessage(dataChannel, {
       type: "battle-start",
