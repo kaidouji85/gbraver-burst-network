@@ -12,6 +12,7 @@ import { nanoid } from "nanoid";
 import { EMPTY, Observable } from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
+import { sendHostMessage } from "../webrtc/host/host-message";
 import { receiveSendCommand } from "../webrtc/host/recieve-send-command";
 import { BattleSDK } from "./battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
@@ -90,6 +91,14 @@ export class HostBattleSDK implements BattleSDK {
     this.#sendCommandPromise = receiveSendCommand(
       this.#webRTCConnection.getOrCreateConnection().dataChannel,
       this.flowID,
+    );
+    sendHostMessage(
+      this.#webRTCConnection.getOrCreateConnection().dataChannel,
+      {
+        type: "battle-progressed",
+        flowID: this.flowID,
+        update,
+      },
     );
     return update;
   }
