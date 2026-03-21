@@ -4,7 +4,7 @@ import { BattleStart, BattleStartSchema } from "../host/host-message";
 /**
  * ホストから「BattleStart」メッセージを待ち受ける
  * @param dataChannel データチャネル
- * @returns フローID
+ * @returns BattleStartメッセージの内容
  */
 export const receiveBattleStart = (
   dataChannel: RTCDataChannel,
