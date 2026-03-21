@@ -1,3 +1,4 @@
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
@@ -10,10 +11,17 @@ import { WebSocketConnectionManager } from "./websocket-connection-manager";
 export type LocalWebRTCGuestSDK = {
   /**
    * ルームに参加する
-   * @param roomID ルームID
+   * @param options ルーム参加のオプション
+   * @param options.roomID ルームID
+   * @param options.armdozerId ゲストが選択したアームドーザのID
+   * @param options.pilotId ゲストが選択したパイロットのID
    * @returns ルームへの参加に成功したらtrue、失敗したらfalse
    */
-  joinRoom: (roomID: string) => Promise<boolean>;
+  joinRoom: (options: {
+    roomID: string;
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }) => Promise<boolean>;
 
   /**
    * WebSocketのエラーを通知する
@@ -36,7 +44,12 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   }
 
   /** @override */
-  async joinRoom(roomID: string) {
+  async joinRoom(options: {
+    roomID: string;
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }) {
+    const { roomID } = options;
     try {
       const websocket = await this.#websocketManager.getOrCreate();
       const joinRoomAccepted = await joinRoom({ websocket, roomID });

@@ -1,3 +1,4 @@
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
@@ -9,9 +10,15 @@ import { WebSocketConnectionManager } from "./websocket-connection-manager";
 export type LocalWebRTCHostSDK = {
   /**
    * ルームを生成する
+   * @param options ルーム生成のオプション
+   * @param options.armdozerId ホストが選択したアームドーザのID
+   * @param options.pilotId ホストが選択したパイロットのID
    * @returns 生成されたルーム、生成に失敗した場合はnull
    */
-  createRoom: () => Promise<LocalWebRTCRoom | null>;
+  createRoom: (options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }) => Promise<LocalWebRTCRoom | null>;
 
   /**
    * WebSocketのエラーを通知する
