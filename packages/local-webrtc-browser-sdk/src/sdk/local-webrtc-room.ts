@@ -1,4 +1,8 @@
+import { nanoid } from "nanoid";
+
+import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
+import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
@@ -52,7 +56,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async waitUntilMatching(): Promise<void> {
     await this.#signaling();
-    //const {dataChannel} = this.#webRTCConnection.getOrCreateConnection();
+    const { dataChannel } = this.#webRTCConnection.getOrCreateConnection();
+    const flowID = nanoid();
+    const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
+      await requestSelectedPlayer(dataChannel, flowID);
+    // TODO 開発が完了したら削除する
+    console.log(
+      `ゲストが選択したプレイヤー: アームドーザーID=${guestArmdozerId}, パイロットID=${guestPilotId}`,
+    );
   }
 
   /**
@@ -63,12 +74,16 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     try {
       const websocket = await this.#websocketManager.getOrCreate();
       const signal = await waitUntilMatching(websocket);
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const { connection, dataChannel } =
+        this.#webRTCConnection.getOrCreateConnection();
       await connection.setRemoteDescription(signal.sdp);
       await Promise.all([
         ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
       ]);
-      await waitUntilConnected(connection);
+      await Promise.all([
+        waitUntilConnected(connection),
+        waitUntilDataChannelOpen(dataChannel),
+      ]);
     } finally {
       this.#websocketManager.gracefulDisconnect();
     }
