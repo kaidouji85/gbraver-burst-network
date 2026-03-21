@@ -22,7 +22,6 @@ export class HostBattleSDK implements BattleSDK {
   initialState: GameState[];
   /** 最新のフローID */
   flowID: string;
-
   /** Gブレイバーバーストコア */
   #core;
 

@@ -8,6 +8,8 @@ import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../ws-signal/join-room";
 import { sendGuestSignal } from "../ws-signal/send-guest-signal";
+import { BattleSDK } from "./battle-sdk";
+import { GuestBattleSDK } from "./guest-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
@@ -19,13 +21,13 @@ export type LocalWebRTCGuestSDK = {
    * @param options.roomID ルームID
    * @param options.armdozerId ゲストが選択したアームドーザのID
    * @param options.pilotId ゲストが選択したパイロットのID
-   * @returns ルームへの参加に成功したらtrue、失敗したらfalse
+   * @returns ルームへの参加に成功したらBattleSDK、失敗したらnull
    */
   joinRoom: (options: {
     roomID: string;
     armdozerId: ArmdozerId;
     pilotId: PilotId;
-  }) => Promise<boolean>;
+  }) => Promise<BattleSDK | null>;
 
   /**
    * WebSocketのエラーを通知する
@@ -76,7 +78,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
     const isSignalingSuccessful = await this.#signaling(roomID);
     if (!isSignalingSuccessful) {
-      return false;
+      return null;
     }
 
     const { flowID } = await requestSelectedPlayerPromise;
@@ -89,8 +91,12 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
       pilotId,
     });
     const battleStart = await battleStartPromise;
-    console.log("Battle Start!", battleStart); // TODO 開発が終わったら消す
-    return true;
+    return new GuestBattleSDK({
+      hostPlayer: battleStart.hostPlayer,
+      guestPlayer: battleStart.guestPlayer,
+      initialState: battleStart.update,
+      initialFlowID: battleStart.flowID,
+    });
   }
 
   /** @override */
