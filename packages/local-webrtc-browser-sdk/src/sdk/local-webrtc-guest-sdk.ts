@@ -96,6 +96,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
       guestPlayer: battleStart.guestPlayer,
       initialState: battleStart.update,
       initialFlowID: battleStart.flowID,
+      webRTCConnection: this.#webRTCConnection,
     });
   }
 
