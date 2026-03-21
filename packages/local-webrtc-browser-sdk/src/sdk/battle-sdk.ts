@@ -8,10 +8,8 @@ import { Observable } from "rxjs";
 export interface BattleSDK {
   /** プレイヤーの情報 */
   player: Player;
-
   /** 対戦相手の情報 */
   enemy: Player;
-
   /** ゲームの初期状態 */
   initialState: GameState[];
 
