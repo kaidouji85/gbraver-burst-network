@@ -1,4 +1,5 @@
 import { LocalWebRTCHostSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase } from "./use-case";
 
@@ -23,7 +24,10 @@ export class HostPlayer implements UseCase {
   /** @override */
   async execute(): Promise<void> {
     console.log("start create room");
-    const room = await this.#hostSDK.createRoom();
+    const room = await this.#hostSDK.createRoom({
+      armdozerId: ArmdozerIds.SHIN_BRAVER,
+      pilotId: PilotIds.SHINYA,
+    });
     if (room === null) {
       console.error("create room failed");
       return;

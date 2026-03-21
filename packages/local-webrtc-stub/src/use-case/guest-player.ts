@@ -1,4 +1,5 @@
 import { LocalWebRTCGuestSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase, UseCaseContext } from "./use-case";
 
@@ -24,7 +25,11 @@ export class GuestPlayer implements UseCase {
   async execute(context: UseCaseContext): Promise<void> {
     const { roomID } = context;
     console.log("start join room, roomID:", roomID);
-    const isJoined = await this.#guestSDK.joinRoom(roomID);
+    const isJoined = await this.#guestSDK.joinRoom({
+      roomID,
+      armdozerId: ArmdozerIds.NEO_LANDOZER,
+      pilotId: PilotIds.GAI,
+    });
     console.log("join room result:", isJoined);
   }
 }
