@@ -1,5 +1,6 @@
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTC ルーム */
@@ -18,27 +19,31 @@ export type LocalWebRTCRoom = {
 export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /** ルームID */
   roomID: string;
+  /** WebRTCコネクションマネージャー */
+  #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketManager: WebSocketConnectionManager;
-  /** WebRTCコネクション */
-  #connection: RTCPeerConnection;
 
   /**
    * コンストラクタ
    * @param options ルームの生成に必要なオプション
    * @param options.roomID ルームID
-   * @param options.websocket WebSocketコネクション
-   * @param options.connection WebRTCコネクション
+   * @param options.webRTCConnection WebRTCコネクションマネジャー
+   * @param options.websocketConnection WebSocketコネクションマネジャー
    */
   constructor(options: {
     roomID: string;
-    websocketManager: WebSocketConnectionManager;
-    connection: RTCPeerConnection;
+    webRTCConnection: HostWebRTCConnectionManager;
+    websocketConnection: WebSocketConnectionManager;
   }) {
-    const { roomID, websocketManager, connection } = options;
+    const {
+      roomID,
+      webRTCConnection,
+      websocketConnection: websocketManager,
+    } = options;
     this.roomID = roomID;
+    this.#webRTCConnection = webRTCConnection;
     this.#websocketManager = websocketManager;
-    this.#connection = connection;
   }
 
   /**
@@ -49,11 +54,12 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     try {
       const websocket = await this.#websocketManager.getOrCreate();
       const signal = await waitUntilMatching(websocket);
-      await this.#connection.setRemoteDescription(signal.sdp);
+      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      await connection.setRemoteDescription(signal.sdp);
       await Promise.all([
-        ...signal.iceCandidates.map((c) => this.#connection.addIceCandidate(c)),
+        ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
       ]);
-      await waitUntilConnected(this.#connection);
+      await waitUntilConnected(connection);
     } finally {
       this.#websocketManager.gracefulDisconnect();
     }

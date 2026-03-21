@@ -39,7 +39,7 @@ export type LocalWebRTCGuestSDK = {
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebRTCコネクションマネージャー */
-  #webRtcConnection: GuestWebRTCConnectionManager;
+  #webRTCConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
 
@@ -48,7 +48,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
   constructor(wsSignalUrl: string) {
-    this.#webRtcConnection = new GuestWebRTCConnectionManager();
+    this.#webRTCConnection = new GuestWebRTCConnectionManager();
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
@@ -68,7 +68,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
       const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
         joinRoomAccepted;
-      const { connection } = this.#webRtcConnection.getOrCreateConnection();
+      const { connection } = this.#webRTCConnection.getOrCreateConnection();
       await connection.setRemoteDescription(hostSDP);
       await Promise.all(
         hostIceCandidates.map((c) => connection.addIceCandidate(c)),
@@ -103,7 +103,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
   /** @override */
   disconnectWebRTC() {
-    this.#webRtcConnection.disconnect();
+    this.#webRTCConnection.disconnect();
   }
 }
 

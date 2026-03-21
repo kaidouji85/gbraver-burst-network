@@ -36,7 +36,7 @@ export type LocalWebRTCHostSDK = {
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebRTCコネクションマネージャー */
-  #webRtcConnection: HostWebRTCConnectionManager;
+  #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
 
@@ -46,13 +46,13 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
    */
   constructor(wsSignalUrl: string) {
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
-    this.#webRtcConnection = new HostWebRTCConnectionManager();
+    this.#webRTCConnection = new HostWebRTCConnectionManager();
   }
 
   /** @override */
   async createRoom() {
     try {
-      const { connection } = this.#webRtcConnection.getOrCreateConnection();
+      const { connection } = this.#webRTCConnection.getOrCreateConnection();
       const sdp = await connection.createOffer();
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
@@ -69,8 +69,8 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
       return new LocalWebRTCRoomImpl({
         roomID,
-        websocketManager: this.#websocketConnection,
-        connection,
+        webRTCConnection: this.#webRTCConnection,
+        websocketConnection: this.#websocketConnection,
       });
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();
@@ -85,7 +85,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /** @override */
   disconnectWebRTC() {
-    this.#webRtcConnection.disconnect();
+    this.#webRTCConnection.disconnect();
   }
 }
 
