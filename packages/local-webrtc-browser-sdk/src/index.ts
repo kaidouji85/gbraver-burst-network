@@ -1,4 +1,3 @@
-export { LocalWebRTCRoom } from "./sdk/local-web-rtc-room";
 export {
   createLocalWebRTCGuestSDK,
   LocalWebRTCGuestSDK,
@@ -7,3 +6,4 @@ export {
   createLocalWebRTCHostSDK,
   LocalWebRTCHostSDK,
 } from "./sdk/local-webrtc-host-sdk";
+export { LocalWebRTCRoom } from "./sdk/local-webrtc-room";

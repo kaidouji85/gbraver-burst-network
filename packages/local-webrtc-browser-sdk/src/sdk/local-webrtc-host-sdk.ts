@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../ws-signal/create-room";
-import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-web-rtc-room";
+import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCホスト用SDK */
