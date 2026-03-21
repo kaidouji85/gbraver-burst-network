@@ -57,3 +57,15 @@ export type HostMessage =
   | RequestSelectedPlayer
   | BattleStart
   | BattleProgressed;
+
+/**
+ * ホストメッセージをゲストに送信する
+ * @param dataChannel データチャンネル
+ * @param message メッセージ内容
+ */
+export const sendHostMessage = (
+  dataChannel: RTCDataChannel,
+  message: HostMessage,
+): void => {
+  dataChannel.send(JSON.stringify(message));
+};

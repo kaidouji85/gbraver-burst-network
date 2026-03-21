@@ -43,3 +43,15 @@ export const SendCommandSchema = z.object({
 
 /** ゲストから送信されるメッセージ */
 export type GuestMessage = SendPlayer | SendCommand;
+
+/**
+ * ゲストメッセージをホストに送信する
+ * @param dataChannel データチャンネル
+ * @param message メッセージ内容
+ */
+export const sendGuestMessage = (
+  dataChannel: RTCDataChannel,
+  message: GuestMessage,
+): void => {
+  dataChannel.send(JSON.stringify(message));
+};
