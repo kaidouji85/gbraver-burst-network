@@ -50,7 +50,10 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   }
 
   /** @override */
-  async createRoom() {
+  async createRoom(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<LocalWebRTCRoom | null> {
     try {
       const { connection } = this.#webRTCConnection.getOrCreateConnection();
       const sdp = await connection.createOffer();
@@ -67,10 +70,13 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
         return null;
       }
 
+      const { armdozerId: hostArmdozerId, pilotId: hostPilotId } = options;
       return new LocalWebRTCRoomImpl({
         roomID,
         webRTCConnection: this.#webRTCConnection,
         websocketConnection: this.#websocketConnection,
+        hostArmdozerId,
+        hostPilotId,
       });
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();

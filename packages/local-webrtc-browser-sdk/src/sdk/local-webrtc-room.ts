@@ -1,9 +1,11 @@
+import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
 import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
@@ -26,7 +28,11 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
-  #websocketManager: WebSocketConnectionManager;
+  #websocketConnection: WebSocketConnectionManager;
+  /** ホストが選択したアームドーザID */
+  #hostArmdozerId: ArmdozerId;
+  /** ホストが選択したパイロットID */
+  #hostPilotId: PilotId;
 
   /**
    * コンストラクタ
@@ -39,15 +45,21 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     roomID: string;
     webRTCConnection: HostWebRTCConnectionManager;
     websocketConnection: WebSocketConnectionManager;
+    hostArmdozerId: ArmdozerId;
+    hostPilotId: PilotId;
   }) {
     const {
       roomID,
       webRTCConnection,
-      websocketConnection: websocketManager,
+      websocketConnection,
+      hostArmdozerId,
+      hostPilotId,
     } = options;
     this.roomID = roomID;
     this.#webRTCConnection = webRTCConnection;
-    this.#websocketManager = websocketManager;
+    this.#websocketConnection = websocketConnection;
+    this.#hostArmdozerId = hostArmdozerId;
+    this.#hostPilotId = hostPilotId;
   }
 
   /**
@@ -60,10 +72,12 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       await requestSelectedPlayer(dataChannel, flowID);
-    // TODO 開発が完了したら削除する
-    console.log(
-      `ゲストが選択したプレイヤー: アームドーザーID=${guestArmdozerId}, パイロットID=${guestPilotId}`,
-    );
+    const battleSDK = new HostBattleSDK({
+      hostArmdozerId: this.#hostArmdozerId,
+      hostPilotId: this.#hostPilotId,
+      guestArmdozerId,
+      guestPilotId,
+    });
   }
 
   /**
@@ -72,7 +86,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async #signaling() {
     try {
-      const websocket = await this.#websocketManager.getOrCreate();
+      const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
       const { connection, dataChannel } =
         this.#webRTCConnection.getOrCreateConnection();
@@ -85,7 +99,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         waitUntilDataChannelOpen(dataChannel),
       ]);
     } finally {
-      this.#websocketManager.gracefulDisconnect();
+      this.#websocketConnection.gracefulDisconnect();
     }
   }
 }

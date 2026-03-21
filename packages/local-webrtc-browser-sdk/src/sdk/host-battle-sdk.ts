@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid";
-
 import {
   ArmdozerId,
   Armdozers,
@@ -10,8 +8,10 @@ import {
   Player,
   startGBraverBurst,
 } from "gbraver-burst-core";
-import { BattleSDK } from "./battle-sdk";
+import { nanoid } from "nanoid";
 import { EMPTY, Observable } from "rxjs";
+
+import { BattleSDK } from "./battle-sdk";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements BattleSDK {
