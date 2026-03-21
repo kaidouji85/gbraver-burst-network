@@ -20,6 +20,7 @@ export const waitRequestSelectedPlayer = (
         resolve(flowID);
       }
     };
+    dataChannel.addEventListener("message", handler);
   }).finally(() => {
     if (handler) {
       dataChannel.removeEventListener("message", handler);
