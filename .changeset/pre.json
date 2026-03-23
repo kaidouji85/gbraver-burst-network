@@ -15,6 +15,7 @@
     "@gbraver-burst-network/ws-signal": "1.19.4"
   },
   "changesets": [
-    "open-pianos-smell"
+    "open-pianos-smell",
+    "pretty-baboons-notice"
   ]
 }
