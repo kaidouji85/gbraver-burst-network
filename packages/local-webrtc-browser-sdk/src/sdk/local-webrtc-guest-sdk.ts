@@ -36,7 +36,15 @@ export type LocalWebRTCGuestSDK = {
   websocketErrorNotifier(): Observable<unknown>;
 
   /**
+   * WebSocketコネクションを切断する
+   * シグナリングの際に自動的に接続・切断されるが、
+   * シグナリングをキャンセルする場合に本メソッドを呼び出す
+   */
+  disconnectWebSocket(): void;
+
+  /**
    * WebRTCコネクションを切断する
+   * 用側で明示的に本メソッドを呼ばない限り、WebRTCコネクションは切断されない
    */
   disconnectWebRTC(): void;
 };
@@ -103,6 +111,11 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
     return this.#websocketConnection.errorNotifier();
+  }
+
+  /** @override */
+  disconnectWebSocket(): void {
+    this.#websocketConnection.gracefulDisconnect();
   }
 
   /** @override */

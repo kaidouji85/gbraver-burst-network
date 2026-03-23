@@ -28,7 +28,15 @@ export type LocalWebRTCHostSDK = {
   websocketErrorNotifier(): Observable<unknown>;
 
   /**
+   * WebSocketコネクションを切断する
+   * シグナリングの際に自動的に接続・切断されるが、
+   * シグナリングをキャンセルする場合に本メソッドを呼び出す
+   */
+  disconnectWebSocket(): void;
+
+  /**
    * WebRTCコネクションを切断する
+   * 利用側で明示的に本メソッドを呼ばない限り、WebRTCコネクションは切断されない
    */
   disconnectWebRTC(): void;
 };
@@ -87,6 +95,11 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** @override */
   websocketErrorNotifier(): Observable<unknown> {
     return this.#websocketConnection.errorNotifier();
+  }
+
+  /** @override */
+  disconnectWebSocket() {
+    this.#websocketConnection.gracefulDisconnect();
   }
 
   /** @override */
