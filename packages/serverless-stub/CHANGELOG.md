@@ -1,5 +1,20 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.20.0
+
+### Minor Changes
+
+- 219095a: ローカルWebRTCを追加
+- d884b69: ローカルWebRTC SDKにWebSocket切断処理を追加した
+- ローカルWebRTC対戦を正式リリース
+
+### Patch Changes
+
+- Updated dependencies [219095a]
+- Updated dependencies [d884b69]
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.20.0
+
 ## 1.20.0-beta.1
 
 ### Minor Changes
