@@ -44,7 +44,7 @@ export type LocalWebRTCGuestSDK = {
 
   /**
    * WebRTCコネクションを切断する
-   * 用側で明示的に本メソッドを呼ばない限り、WebRTCコネクションは切断されない
+   * 利用側で明示的に本メソッドを呼ばない限り、WebRTCコネクションは切断されない
    */
   disconnectWebRTC(): void;
 };
