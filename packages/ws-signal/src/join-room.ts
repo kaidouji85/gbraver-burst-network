@@ -56,6 +56,13 @@ export async function joinRoom(
 
   const joinRoomRequest = parsedJoinRoom.data;
   const { roomID } = joinRoomRequest;
+  if (roomID === "") {
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-rejected",
+    });
+    return { statusCode: 200, body: "join room rejected" };
+  }
+
   const updatedRoom = await dynamoRooms.updateToAwaitingGuestSignal(roomID);
   if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
