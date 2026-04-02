@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.21.0
+
+### Minor Changes
+
+- TypeScriptのメジャーバージョンを6にした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.21.0
+
 ## 1.20.0
 
 ### Minor Changes

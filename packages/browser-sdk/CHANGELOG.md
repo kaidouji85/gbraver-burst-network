@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.21.0
+
+### Minor Changes
+
+- TypeScriptのメジャーバージョンを6にした
+
 ## 1.20.0
 
 ### Minor Changes
