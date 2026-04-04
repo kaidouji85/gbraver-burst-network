@@ -179,9 +179,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: roomID
             AttributeType: S
+          - AttributeName: owner
+            AttributeType: S
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: owner
+            KeySchema:
+              - AttributeName: owner
+                KeyType: HASH
+            Projection:
+              ProjectionType: KEYS_ONLY
         BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
       Type: "AWS::DynamoDB::Table"
