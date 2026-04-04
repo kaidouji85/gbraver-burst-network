@@ -177,10 +177,10 @@ resources:
       Properties:
         TableName: ${self:custom.privateMatchRooms}
         AttributeDefinitions:
-          - AttributeName: owner
+          - AttributeName: roomID
             AttributeType: S
         KeySchema:
-          - AttributeName: owner
+          - AttributeName: roomID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
