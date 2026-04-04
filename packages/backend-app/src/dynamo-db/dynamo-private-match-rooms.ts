@@ -52,21 +52,6 @@ export class DynamoPrivateMatchRooms {
   }
 
   /**
-   * @deprecated
-   * パーティションキー指定で検索
-   * データが存在しない場合はnullを返す
-   * @param owner ルーム作成者のユーザID
-   * @returns 検索結果
-   */
-  async deprecatedGet(owner: UserID): Promise<DynamoPrivateMatchRoom | null> {
-    const result = await this.#dynamoDB.get({
-      TableName: this.#tableName,
-      Key: { owner },
-    });
-    return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
-  }
-
-  /**
    * 項目を追加する
    * 同じroomIDが存在する場合は何もしない
    * @param room 追加する項目
