@@ -21,31 +21,43 @@ import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match
 import { INVALID_REQUEST_BODY_ERROR } from "./response/error";
 import { REJECT_PRIVATE_MATCH_ENTRY } from "./response/reject-private-match-entry";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** DynamoDBDocument */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB DAO private-match-rooms */
 const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** DynamoDB DAO private-match-entries */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** DynamoDB DAO battles */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+/** DynamoDB DAO connections */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway管理オブジェクト */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
 /**
@@ -70,7 +82,7 @@ export async function privateMatchMakePolling(
     event.requestContext.authorizer,
   );
   const [room, entries] = await Promise.all([
-    dynamoPrivateMatchRooms.deprecatedGet(user.userID),
+    dynamoPrivateMatchRooms.get(data.roomID),
     dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
   if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
@@ -107,7 +119,7 @@ export async function privateMatchMakePolling(
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),
     ),
-    dynamoPrivateMatchRooms.deprecatedDelete(user.userID),
+    dynamoPrivateMatchRooms.delete(data.roomID),
   ]);
   return endPrivateMatchMakePolling;
 }

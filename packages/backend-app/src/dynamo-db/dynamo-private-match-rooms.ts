@@ -2,6 +2,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import {
   PrivateMatchRoom,
+  PrivateMatchRoomID,
   PrivateMatchRoomSchema,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
@@ -31,6 +32,23 @@ export class DynamoPrivateMatchRooms {
   constructor(dynamoDB: DynamoDBDocument, tableName: string) {
     this.#dynamoDB = dynamoDB;
     this.#tableName = tableName;
+  }
+
+  /**
+   * ルームIDを指定してルームを取得する
+   * データが存在しない場合はnullを返す
+   * @param roomID ルームID
+   * @returns 取得結果、存在しない場合はnull
+   */
+  async get(
+    roomID: PrivateMatchRoomID,
+  ): Promise<DynamoPrivateMatchRoom | null> {
+    const result = await this.#dynamoDB.get({
+      TableName: this.#tableName,
+      Key: { roomID },
+      ConsistentRead: true,
+    });
+    return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
   }
 
   /**
@@ -69,6 +87,18 @@ export class DynamoPrivateMatchRooms {
       }
       throw error;
     }
+  }
+
+  /**
+   * ルームIDを指定してルームを削除する
+   * @param roomID ルームID
+   * @returns 削除受付したら発火するPromise
+   */
+  async delete(roomID: PrivateMatchRoomID): Promise<void> {
+    await this.#dynamoDB.delete({
+      TableName: this.#tableName,
+      Key: { roomID },
+    });
   }
 
   /**
