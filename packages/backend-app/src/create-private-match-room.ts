@@ -98,11 +98,9 @@ export async function createPrivateMatchRoom(
 ): Promise<WebsocketAPIResponse> {
   const body = parseJSON(event.body);
   const data = parseCreatePrivateMatchRoom(body);
+  const { connectionId } = event.requestContext;
   if (!data) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      invalidRequestBodyError,
-    );
+    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
     return {
       statusCode: 400,
       body: "invalid request body",
@@ -112,26 +110,28 @@ export async function createPrivateMatchRoom(
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
-  const room: PrivateMatchRoom = {
-    roomID: generatePrivateMatchRoomID(),
-    owner: user.userID,
-    ownerConnectionId: event.requestContext.connectionId,
-    armdozerId: data.armdozerId,
-    pilotId: data.pilotId,
-  };
+  const room = await createRoomWithRetry({ connectionId, data, user });
+  if (!room) {
+    await notifier.notifyToClient(connectionId, {
+      action: "error",
+      error: "create private match room failed",
+    });
+    return {
+      statusCode: 200,
+      body: "create private match room failed",
+    };
+  }
+
+  const { roomID } = room;
   await Promise.all([
-    dynamoPrivateMatchRooms.put(room),
     dynamoConnections.put({
-      connectionId: event.requestContext.connectionId,
+      connectionId,
       userID: user.userID,
-      state: {
-        type: "HoldPrivateMatch",
-        roomID: room.roomID,
-      },
+      state: { type: "HoldPrivateMatch", roomID },
     }),
-    notifier.notifyToClient(event.requestContext.connectionId, {
+    notifier.notifyToClient(connectionId, {
       action: "created-private-match-room",
-      roomID: room.roomID,
+      roomID,
     }),
   ]);
 

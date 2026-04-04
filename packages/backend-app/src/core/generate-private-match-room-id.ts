@@ -1,6 +1,6 @@
-import { PrivateMatchRoomID } from "./private-match-room";
-
 import * as crypto from "crypto";
+
+import { PrivateMatchRoomID } from "./private-match-room";
 
 /** ひらがな表 */
 const kana = [
