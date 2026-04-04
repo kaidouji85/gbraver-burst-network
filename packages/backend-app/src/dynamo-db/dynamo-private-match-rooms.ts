@@ -5,6 +5,7 @@ import {
   PrivateMatchRoomSchema,
 } from "../core/private-match-room";
 import { UserID } from "../core/user";
+import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /**
  * DynamoDB スキーマ private-match-rooms
@@ -48,15 +49,26 @@ export class DynamoPrivateMatchRooms {
   }
 
   /**
-   * 項目追加する
+   * 項目を追加する
+   * 同じroomIDが存在する場合は何もしない
    * @param room 追加する項目
-   * @returns 処理が完了したら発火するPromise
+   * @returns 追加に成功したらtrue、同じroomIDが存在する場合はfalse
    */
-  async put(room: DynamoPrivateMatchRoom): Promise<void> {
-    await this.#dynamoDB.put({
-      TableName: this.#tableName,
-      Item: room,
-    });
+  async put(room: DynamoPrivateMatchRoom): Promise<boolean> {
+    try {
+      const Item = DynamoPrivateMatchRoomSchema.parse(room);
+      await this.#dynamoDB.put({
+        TableName: this.#tableName,
+        Item,
+        ConditionExpression: "attribute_not_exists(roomID)",
+      });
+      return true;
+    } catch (error) {
+      if (isConditionalCheckFailedException(error)) {
+        return false;
+      }
+      throw error;
+    }
   }
 
   /**
