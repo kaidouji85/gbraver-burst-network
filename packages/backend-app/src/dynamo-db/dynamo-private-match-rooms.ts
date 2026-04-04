@@ -1,5 +1,4 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
-import { z } from "zod";
 
 import {
   PrivateMatchRoom,
@@ -17,17 +16,6 @@ type DynamoPrivateMatchRoom = PrivateMatchRoom;
 
 /** DynamoPrivateMatchRoom zodスキーマ */
 const DynamoPrivateMatchRoomSchema = PrivateMatchRoomSchema;
-
-/** Global Secondary Index: owner */
-type GSIOwner = {
-  /** プライベートマッチルーム作成者 */
-  owner: UserID;
-};
-
-/** Global Secondary Index: owner zodスキーマ */
-const GSIOwnerSchema = z.object({
-  owner: UserIDSchema,
-});
 
 /** DynamoDB DAO private-match-rooms */
 export class DynamoPrivateMatchRooms {
@@ -64,27 +52,6 @@ export class DynamoPrivateMatchRooms {
   }
 
   /**
-   * Global Secondary Index owner を指定してルームを取得する
-   * データが存在しない場合はnullを返す
-   * @param owner プライベートマッチルーム作成者
-   * @returns 取得結果、存在しない場合はnull
-   */
-  async getByOwner(owner: UserID): Promise<GSIOwner | null> {
-    const result = await this.#dynamoDB.query({
-      TableName: this.#tableName,
-      IndexName: "owner",
-      KeyConditionExpression: "owner = :owner",
-      ExpressionAttributeValues: {
-        ":owner": owner,
-      },
-    });
-    if (result.Items && result.Items.length > 0) {
-      return GSIOwnerSchema.parse(result.Items[0]);
-    }
-    return null;
-  }
-
-  /**
    * 項目を追加する
    * 同じroomIDが存在する場合は何もしない
    * @param room 追加する項目
@@ -116,21 +83,6 @@ export class DynamoPrivateMatchRooms {
     await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: { roomID },
-    });
-  }
-
-  /**
-   * @deprecated
-   * パーティションキー指定で項目を削除する
-   * @param owner プライベートマッチルーム作成者
-   * @returns 削除受付したら発火するPromise
-   */
-  async deprecatedDelete(owner: UserID): Promise<void> {
-    await this.#dynamoDB.delete({
-      TableName: this.#tableName,
-      Key: {
-        owner,
-      },
     });
   }
 }

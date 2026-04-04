@@ -103,7 +103,7 @@ async function cleanUp(connection: Connection): Promise<void> {
   const holdPrivateMatch = async (state: HoldPrivateMatch) => {
     const [entries] = await Promise.all([
       dynamoPrivateMatchEntries.getEntries(state.roomID),
-      dynamoPrivateMatchRooms.deprecatedDelete(connection.userID),
+      dynamoPrivateMatchRooms.delete(state.roomID),
     ]);
     await Promise.all([
       ...entries.map((v) =>

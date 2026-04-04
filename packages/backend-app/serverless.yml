@@ -57,8 +57,6 @@ provider:
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
             - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
-            - Fn::Join:
-                ["/", ["Fn::GetAtt": [PrivateMatchRoomsTable, Arn], "index", "owner"]]
             - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
         - Effect: Allow
           Action:
@@ -181,18 +179,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: roomID
             AttributeType: S
-          - AttributeName: owner
-            AttributeType: S
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
-        GlobalSecondaryIndexes:
-          - IndexName: owner
-            KeySchema:
-              - AttributeName: owner
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
         BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
       Type: "AWS::DynamoDB::Table"
