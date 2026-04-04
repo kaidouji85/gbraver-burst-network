@@ -179,8 +179,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: roomID
             AttributeType: S
-          - AttributeName: expiresAt
-            AttributeType: N
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
