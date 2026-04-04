@@ -23,7 +23,7 @@ const ROOM_ID_LENGTH = 5;
 
 /**
  * プライベートマッチのルームIDを生成する
- * @return 生成されたルームID
+ * @returns 生成されたルームID
  */
 export const generatePrivateMatchRoomID = (): PrivateMatchRoomID =>
   Array.from(
