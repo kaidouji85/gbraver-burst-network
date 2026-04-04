@@ -5,7 +5,6 @@ import {
   PrivateMatchRoomID,
   PrivateMatchRoomSchema,
 } from "../core/private-match-room";
-import { UserID, UserIDSchema } from "../core/user";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /**
