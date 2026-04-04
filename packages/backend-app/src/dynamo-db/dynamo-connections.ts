@@ -42,6 +42,7 @@ export class DynamoConnections {
       Key: {
         connectionId,
       },
+      ConsistentRead: true,
     });
     return result.Item ? DynamoConnectionSchema.parse(result.Item) : null;
   }
