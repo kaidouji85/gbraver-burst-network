@@ -13,27 +13,38 @@ import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseCreatePrivateMatchRoom } from "./request/create-private-match-room";
 import { Error } from "./response/error";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB 接続情報 */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+/** DynamoDB プライベートマッチルーム情報 */
 const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
   dynamoDB,
   SERVICE,
   STAGE,
 );
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway 管理オブジェクト */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** WebSocket用メッセージ通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** レスポンス（不正なリクエストボディ） */
 const invalidRequestBodyError: Error = {
   action: "error",
   error: "invalid request body",
