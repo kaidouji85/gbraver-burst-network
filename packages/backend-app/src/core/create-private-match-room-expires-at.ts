@@ -6,7 +6,6 @@ export const PRIVATE_MATCH_ROOM_TTL_SECONDS = 60 * 60 * 12;
  * @param currentTimeMs 現在時刻（UNIX epoch milliseconds）
  * @returns 失効時刻（UNIX epoch seconds）
  */
-
 export function createPrivateMatchRoomExpiresAt(
   currentTimeMs: number = Date.now(),
 ): number {
