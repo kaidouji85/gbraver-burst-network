@@ -57,6 +57,8 @@ provider:
             - Fn::GetAtt: [BattleCommandsTable, Arn]
             - Fn::GetAtt: [BattlesTable, Arn]
             - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
+            - Fn::Join:
+                ["/", ["Fn::GetAtt": [PrivateMatchRoomsTable, Arn], "index", "owner"]]
             - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
         - Effect: Allow
           Action:

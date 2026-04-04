@@ -1,11 +1,12 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
 
 import {
   PrivateMatchRoom,
   PrivateMatchRoomID,
   PrivateMatchRoomSchema,
 } from "../core/private-match-room";
-import { UserID } from "../core/user";
+import { UserID, UserIDSchema } from "../core/user";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /**
@@ -16,6 +17,17 @@ type DynamoPrivateMatchRoom = PrivateMatchRoom;
 
 /** DynamoPrivateMatchRoom zodスキーマ */
 const DynamoPrivateMatchRoomSchema = PrivateMatchRoomSchema;
+
+/** Global Secondary Index: owner */
+type GSIOwner = {
+  /** プライベートマッチルーム作成者 */
+  owner: UserID;
+};
+
+/** Global Secondary Index: owner zodスキーマ */
+const GSIOwnerSchema = z.object({
+  owner: UserIDSchema,
+});
 
 /** DynamoDB DAO private-match-rooms */
 export class DynamoPrivateMatchRooms {
@@ -49,6 +61,27 @@ export class DynamoPrivateMatchRooms {
       ConsistentRead: true,
     });
     return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
+  }
+
+  /**
+   * Global Secondary Index owner を指定してルームを取得する
+   * データが存在しない場合はnullを返す
+   * @param owner プライベートマッチルーム作成者
+   * @returns 取得結果、存在しない場合はnull
+   */
+  async getByOwner(owner: UserID): Promise<GSIOwner | null> {
+    const result = await this.#dynamoDB.query({
+      TableName: this.#tableName,
+      IndexName: "owner",
+      KeyConditionExpression: "owner = :owner",
+      ExpressionAttributeValues: {
+        ":owner": owner,
+      },
+    });
+    if (result.Items && result.Items.length > 0) {
+      return GSIOwnerSchema.parse(result.Items[0]);
+    }
+    return null;
   }
 
   /**
