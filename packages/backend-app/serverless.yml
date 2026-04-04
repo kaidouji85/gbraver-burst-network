@@ -179,9 +179,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: roomID
             AttributeType: S
+          - AttributeName: expiresAt
+            AttributeType: N
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
         BillingMode: PAY_PER_REQUEST
     PrivateMatchEntriesTable:
       Type: "AWS::DynamoDB::Table"

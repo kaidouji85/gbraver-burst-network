@@ -7,6 +7,7 @@ import { PrivateMatchRoom } from "../../../src/core/private-match-room";
 
 const room: PrivateMatchRoom = {
   roomID: "test-room",
+  expiresAt: 0,
   owner: "owner",
   ownerConnectionId: "owner-connection",
   armdozerId: ArmdozerIds.SHIN_BRAVER,

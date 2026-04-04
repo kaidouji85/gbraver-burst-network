@@ -1,6 +1,7 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { createPrivateMatchRoomExpiresAt } from "./core/create-private-match-room-expires-at";
 import { generatePrivateMatchRoomID } from "./core/generate-private-match-room-id";
 import { PrivateMatchRoom } from "./core/private-match-room";
 import { User } from "./core/user";
@@ -75,6 +76,7 @@ async function createRoomWithRetry(options: {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const room: PrivateMatchRoom = {
       roomID: generatePrivateMatchRoomID(),
+      expiresAt: createPrivateMatchRoomExpiresAt(),
       owner,
       ownerConnectionId,
       armdozerId,

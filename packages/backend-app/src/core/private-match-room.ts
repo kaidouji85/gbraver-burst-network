@@ -22,6 +22,8 @@ export const PrivateMatchRoomIDSchema = z.string();
 export type PrivateMatchRoom = {
   /** ルームID */
   roomID: PrivateMatchRoomID;
+  /** ルーム失効時刻（UNIX epoch seconds） */
+  expiresAt: number;
   /** ルーム作成者 */
   owner: UserID;
   /** ルーム作成者のWebsocketAPIコネクションID */
@@ -35,6 +37,7 @@ export type PrivateMatchRoom = {
 /** PrivateMatchRoom zodスキーマ */
 export const PrivateMatchRoomSchema = z.object({
   roomID: PrivateMatchRoomIDSchema,
+  expiresAt: z.number().int().nonnegative(),
   owner: UserIDSchema,
   ownerConnectionId: WSAPIGatewayConnectionIdSchema,
   armdozerId: ArmdozerIdSchema,
