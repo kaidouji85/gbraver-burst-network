@@ -70,7 +70,7 @@ export async function privateMatchMakePolling(
     event.requestContext.authorizer,
   );
   const [room, entries] = await Promise.all([
-    dynamoPrivateMatchRooms.get(user.userID),
+    dynamoPrivateMatchRooms.deprecatedGet(user.userID),
     dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
   if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
@@ -107,7 +107,7 @@ export async function privateMatchMakePolling(
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),
     ),
-    dynamoPrivateMatchRooms.delete(user.userID),
+    dynamoPrivateMatchRooms.deprecatedDelete(user.userID),
   ]);
   return endPrivateMatchMakePolling;
 }

@@ -8,7 +8,7 @@ import { UserID } from "../core/user";
 
 /**
  * DynamoDB スキーマ private-match-rooms
- * パーティションキー owner
+ * パーティションキー roomID
  */
 type DynamoPrivateMatchRoom = PrivateMatchRoom;
 
@@ -33,17 +33,16 @@ export class DynamoPrivateMatchRooms {
   }
 
   /**
+   * @deprecated
    * パーティションキー指定で検索
    * データが存在しない場合はnullを返す
    * @param owner ルーム作成者のユーザID
    * @returns 検索結果
    */
-  async get(owner: UserID): Promise<DynamoPrivateMatchRoom | null> {
+  async deprecatedGet(owner: UserID): Promise<DynamoPrivateMatchRoom | null> {
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
-      Key: {
-        owner,
-      },
+      Key: { owner },
     });
     return result.Item ? DynamoPrivateMatchRoomSchema.parse(result.Item) : null;
   }
@@ -61,11 +60,12 @@ export class DynamoPrivateMatchRooms {
   }
 
   /**
+   * @deprecated
    * パーティションキー指定で項目を削除する
    * @param owner プライベートマッチルーム作成者
    * @returns 削除受付したら発火するPromise
    */
-  async delete(owner: UserID): Promise<void> {
+  async deprecatedDelete(owner: UserID): Promise<void> {
     await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: {
