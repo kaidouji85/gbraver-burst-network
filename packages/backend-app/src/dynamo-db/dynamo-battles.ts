@@ -65,6 +65,7 @@ export class DynamoBattles {
       Key: {
         battleID,
       },
+      ConsistentRead: true,
     });
     return result.Item ? DynamoBattlesSchema.parse(result.Item) : null;
   }
