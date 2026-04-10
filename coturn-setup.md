@@ -17,6 +17,7 @@ sudo apt install -y coturn
 さくらのVPSコントロールパネル側で、以下を許可してください。
 
 - SSH: `22/tcp`
+- HTTP-01チャレンジ: `80/tcp`（証明書発行・更新時に使用）
 - TURN: `3478/tcp`, `3478/udp`
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `20000:20100/udp`
@@ -31,58 +32,22 @@ Route53ホストゾーン上で、coturnサーバー向けのサブドメイン�
 | COTURN用サブドメイン | A      | VPSのグローバルIPv4 |
 | COTURN用サブドメイン | AAAA   | VPSのグローバルIPv6 |
 
-## 4. TLS証明書の取得（certbot + Route53）
+## 4. TLS証明書の取得（certbot + HTTP-01）
 
-### 4-1. certbotとRoute53プラグインのインストール
-
-```shell
-sudo apt install -y python3-certbot-dns-route53 acl
-```
-
-### 4-2. Route53操作用IAMユーザーの準備
-
-certbotがDNSチャレンジを自動処理できるよう、以下のポリシーを持つIAMユーザーを作成し、アクセスキーを発行してください。
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:GetChange",
-        "route53:ChangeResourceRecordSets",
-        "route53:ListHostedZones",
-        "route53:ListHostedZonesByName",
-        "route53:ListResourceRecordSets"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-### 4-3. AWS認証情報をVPSに配置
-
-`<AWS_ACCESS_KEY_ID>`と`<AWS_SECRET_ACCESS_KEY>`を実値に置き換えてください。
+### 4-1. certbotをインストール
 
 ```shell
-mkdir -p ~/.aws
-cat > ~/.aws/credentials <<'EOF'
-[default]
-aws_access_key_id = <AWS_ACCESS_KEY_ID>
-aws_secret_access_key = <AWS_SECRET_ACCESS_KEY>
-EOF
-chmod 600 ~/.aws/credentials
+sudo apt install -y certbot acl
 ```
 
-### 4-4. 証明書を取得
+### 4-2. 証明書を取得（HTTP-01 / standalone）
 
 `<TURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
 
 ```shell
 sudo certbot certonly \
-  --dns-route53 \
+  --standalone \
+  --preferred-challenges http \
   -d <TURN用ドメイン> \
   --agree-tos \
   --email <メールアドレス>
@@ -93,7 +58,7 @@ sudo certbot certonly \
 - 公開鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem`
 - 秘密鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem`
 
-### 4-5. coturnへの証明書読み取り権限を付与
+### 4-3. coturnへの証明書読み取り権限を付与
 
 certbotが生成する証明書はデフォルトでrootのみ読み取り可能です。`turnserver`ユーザーが読めるよう権限を追加します。
 
@@ -102,7 +67,9 @@ sudo setfacl -m u:turnserver:rx /etc/letsencrypt/live /etc/letsencrypt/archive
 sudo setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
 ```
 
-### 4-6. 証明書自動更新時にcoturnを再起動
+### 4-4. 証明書自動更新時にcoturnを再起動
+
+Debianのcertbotは通常、systemd timerで自動更新されます。更新後にcoturnを再起動するフックを作成します。
 
 ```shell
 sudo tee /etc/letsencrypt/renewal-hooks/deploy/coturn.sh > /dev/null <<'EOF'
@@ -111,6 +78,12 @@ setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
 systemctl restart coturn
 EOF
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
+```
+
+自動更新の疎通確認（dry-run）:
+
+```shell
+sudo certbot renew --dry-run
 ```
 
 ## 5. coturnを有効化
