@@ -21,7 +21,103 @@ sudo apt install -y coturn
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `20000:20100/udp`（1-32767の範囲で設定）
 
-## 3. coturnを有効化
+## 3. Route53でDNSレコードを設定
+
+Route53ホストゾーン上で、coturnサーバー向けのサブドメインを作成します。
+
+1. AWSコンソール → Route53 → ホストゾーン → 対象ドメインを開く
+2. レコードを作成
+   - レコード名: `turn.<ドメイン名>`（例: `turn.example.com`）
+   - レコードタイプ: `A`
+   - 値: VPSのグローバルIP
+   - TTL: `300`
+
+> **注意**: ACM（AWS Certificate Manager）の公開証明書はエクスポートできないため、VPSに直接インストールできません。
+> 次手順では Route53 を DNS チャレンジのバックエンドとして certbot（Let's Encrypt）と組み合わせます。
+
+## 4. TLS証明書の取得（certbot + Route53）
+
+### 4-1. certbotとRoute53プラグインのインストール
+
+```shell
+sudo apt install -y python3-certbot-dns-route53 acl
+```
+
+### 4-2. Route53操作用IAMユーザーの準備
+
+certbotがDNSチャレンジを自動処理できるよう、以下のポリシーを持つIAMユーザーを作成し、アクセスキーを発行してください。
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:GetChange",
+        "route53:ChangeResourceRecordSets",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListResourceRecordSets"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### 4-3. AWS認証情報をVPSに配置
+
+`<AWS_ACCESS_KEY_ID>`と`<AWS_SECRET_ACCESS_KEY>`を実値に置き換えてください。
+
+```shell
+mkdir -p ~/.aws
+cat > ~/.aws/credentials <<'EOF'
+[default]
+aws_access_key_id = <AWS_ACCESS_KEY_ID>
+aws_secret_access_key = <AWS_SECRET_ACCESS_KEY>
+EOF
+chmod 600 ~/.aws/credentials
+```
+
+### 4-4. 証明書を取得
+
+`<TURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
+
+```shell
+sudo certbot certonly \
+  --dns-route53 \
+  -d <TURN用ドメイン> \
+  --agree-tos \
+  --email <メールアドレス>
+```
+
+成功すると証明書が以下に配置されます。
+
+- 公開鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem`
+- 秘密鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem`
+
+### 4-5. coturnへの証明書読み取り権限を付与
+
+certbotが生成する証明書はデフォルトでrootのみ読み取り可能です。`turnserver`ユーザーが読めるよう権限を追加します。
+
+```shell
+sudo setfacl -m u:turnserver:rx /etc/letsencrypt/live /etc/letsencrypt/archive
+sudo setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
+```
+
+### 4-6. 証明書自動更新時にcoturnを再起動
+
+```shell
+sudo tee /etc/letsencrypt/renewal-hooks/deploy/coturn.sh > /dev/null <<'EOF'
+#!/bin/sh
+setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
+systemctl restart coturn
+EOF
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
+```
+
+## 5. coturnを有効化
 
 Debianでは`/etc/default/coturn`でサービス有効化します。
 
@@ -29,9 +125,9 @@ Debianでは`/etc/default/coturn`でサービス有効化します。
 sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/coturn
 ```
 
-## 4. turnserver.confを作成
+## 6. turnserver.confを作成
 
-`<VPSのグローバルIP>`と`<強力なパスワード>`を実値に置き換えてください。
+`<VPSのグローバルIP>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
 
 ```shell
 sudo cp /etc/turnserver.conf /etc/turnserver.conf.bak
@@ -42,15 +138,19 @@ tls-listening-port=5349
 listening-ip=<VPSのグローバルIP>
 relay-ip=<VPSのグローバルIP>
 
-# Relay port range (パケットフィルターと合わせる)
+# Relay port range (パケットフィルターでの指定と合わせる)
 min-port=20000
 max-port=20100
 
+# TLS Certificates (Let's Encrypt)
+cert=/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem
+pkey=/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem
+
 # Auth
 fingerprint
-lt-cred-mech
+use-auth-secret
+static-auth-secret=<強力な共通シークレット>
 realm=gbraver.local
-user=webrtc:<強力なパスワード>
 
 # Recommended
 stale-nonce=600
@@ -66,9 +166,9 @@ EOF
 補足:
 
 - VPSがNAT配下の場合は`external-ip=<グローバルIP>/<プライベートIP>`を使用してください。
-- ドメインと証明書を用意できる場合は`cert=`と`pkey=`を設定し、`turns:`を利用してください。
+- `use-auth-secret`では、アプリサーバーとcoturnが同じ共通シークレットを持ち、アプリサーバー側で一時クレデンシャルを生成してクライアントへ渡します。
 
-## 5. 起動と自動起動設定
+## 7. 起動と自動起動設定
 
 ```shell
 sudo mkdir -p /var/log/turnserver
@@ -84,7 +184,20 @@ sudo systemctl status coturn --no-pager
 sudo ss -lntup | grep -E '3478|5349|turn'
 ```
 
-## 6. 動作確認（Trickle ICE）
+## 8. 動作確認（Trickle ICE）
+
+`use-auth-secret`の場合、先に一時クレデンシャルを生成します。
+
+```shell
+COTURN_SHARED_SECRET='<強力な共通シークレット>'
+TURN_USERNAME="$(($(date +%s)+3600)):webrtc-user"
+TURN_CREDENTIAL="$(printf '%s' "$TURN_USERNAME" | openssl dgst -binary -sha1 -hmac "$COTURN_SHARED_SECRET" | openssl base64)"
+
+echo "$TURN_USERNAME"
+echo "$TURN_CREDENTIAL"
+```
+
+`TURN_USERNAME`の先頭は有効期限UNIX時刻（例: 現在時刻 + 3600秒）です。
 
 以下で接続テストできます。
 
@@ -95,8 +208,8 @@ ICE server例:
 ```json
 {
   "urls": ["turn:<VPSのグローバルIP>:3478?transport=udp", "turn:<VPSのグローバルIP>:3478?transport=tcp"],
-  "username": "webrtc",
-  "credential": "<強力なパスワード>"
+  "username": "<TURN_USERNAME>",
+  "credential": "<TURN_CREDENTIAL>"
 }
 ```
 
@@ -105,18 +218,21 @@ TLSを使う場合の例:
 ```json
 {
   "urls": ["turns:<TURN用ドメイン>:5349?transport=tcp"],
-  "username": "webrtc",
-  "credential": "<強力なパスワード>"
+  "username": "<TURN_USERNAME>",
+  "credential": "<TURN_CREDENTIAL>"
 }
 ```
 
 `relay`候補が取得できればTURN経由通信は概ね正常です。
 
-## 7. SDK利用時の設定例
+## 9. SDK利用時の設定例
 
-アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ上記TURN情報を設定してください。
+アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ、サーバーが生成した一時クレデンシャルを設定してください。
 
 ```ts
+const turnUsername = '<TURN_USERNAME>';
+const turnCredential = '<TURN_CREDENTIAL>';
+
 const pc = new RTCPeerConnection({
   iceServers: [
     {
@@ -124,16 +240,17 @@ const pc = new RTCPeerConnection({
         'turn:<VPSのグローバルIP>:3478?transport=udp',
         'turn:<VPSのグローバルIP>:3478?transport=tcp',
       ],
-      username: 'webrtc',
-      credential: '<強力なパスワード>',
+      username: turnUsername,
+      credential: turnCredential,
     },
   ],
 });
 ```
 
-## 8. 運用上の注意
+## 10. 運用上の注意
 
-- パスワードは十分に長いランダム値を使用し、定期的に更新してください。
+- 共通シークレットは十分に長いランダム値を使用し、定期的に更新してください。
 - 必要であればfail2ban導入や接続元IP制限を検討してください。
 - 帯域コストを抑えるため、リレー用ポートレンジは必要最小限にしてください。
 - さくらのVPSパケットフィルター制約により、リレーポートは`1-32767`の範囲で設計してください。
+- 一時クレデンシャルのTTLは短め（例: 10分から1時間）にしてください。
