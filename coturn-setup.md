@@ -14,28 +14,22 @@ sudo apt install -y coturn
 
 ## 2. さくらのVPSパケットフィルターを設定
 
-さくらのVPSコントロールパネル側で、最低限以下を許可してください。
+さくらのVPSコントロールパネル側で、以下を許可してください。
 
 - SSH: `22/tcp`
 - TURN: `3478/tcp`, `3478/udp`
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
-- リレー用UDPポートレンジ: 例 `20000:20100/udp`（1-32767の範囲で設定）
-
-IPv6を使う場合は上記ポートをIPv6でも同様に許可してください。
+- リレー用UDPポートレンジ: 例 `20000:20100/udp`
 
 ## 3. Route53でDNSレコードを設定
 
 Route53ホストゾーン上で、coturnサーバー向けのサブドメインを作成します。
+作成するレコードは以下の通りです。
 
-1. AWSコンソール → Route53 → ホストゾーン → 対象ドメインを開く
-2. レコードを作成
-   - レコード名: `turn.<ドメイン名>`（例: `turn.example.com`）
-   - レコードタイプ: `A`
-   - 値: VPSのグローバルIP
-   - TTL: `300`
-
-> **注意**: ACM（AWS Certificate Manager）の公開証明書はエクスポートできないため、VPSに直接インストールできません。
-> 次手順では Route53 を DNS チャレンジのバックエンドとして certbot（Let's Encrypt）と組み合わせます。
+| レコード名                                                                | レコードタイプ | 値  |
+| ------------------------------------------------------------------------- | -------------- | --- |
+| COTURN用サブドメイン（例: `turn.example.com`）｜A｜VPSのグローバルIPv4    |
+| COTURN用サブドメイン（例: `turn.example.com`）｜AAAA｜VPSのグローバルIPv6 |
 
 ## 4. TLS証明書の取得（certbot + Route53）
 
@@ -212,7 +206,10 @@ ICE server例:
 
 ```json
 {
-  "urls": ["turn:<VPSのグローバルIP>:3478?transport=udp", "turn:<VPSのグローバルIP>:3478?transport=tcp"],
+  "urls": [
+    "turn:<VPSのグローバルIP>:3478?transport=udp",
+    "turn:<VPSのグローバルIP>:3478?transport=tcp"
+  ],
   "username": "<TURN_USERNAME>",
   "credential": "<TURN_CREDENTIAL>"
 }
@@ -235,15 +232,15 @@ TLSを使う場合の例:
 アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ、サーバーが生成した一時クレデンシャルを設定してください。
 
 ```ts
-const turnUsername = '<TURN_USERNAME>';
-const turnCredential = '<TURN_CREDENTIAL>';
+const turnUsername = "<TURN_USERNAME>";
+const turnCredential = "<TURN_CREDENTIAL>";
 
 const pc = new RTCPeerConnection({
   iceServers: [
     {
       urls: [
-        'turn:<VPSのグローバルIP>:3478?transport=udp',
-        'turn:<VPSのグローバルIP>:3478?transport=tcp',
+        "turn:<VPSのグローバルIP>:3478?transport=udp",
+        "turn:<VPSのグローバルIP>:3478?transport=tcp",
       ],
       username: turnUsername,
       credential: turnCredential,

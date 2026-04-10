@@ -95,8 +95,8 @@ ACM証明書はシグナルサーバー用のドメイン名のワイルドカ�
 
 ### 9. coturnサーバーの構築
 
-coturnサーバーを構築する。
-構築手順は[ここ](./coturn-setup.md)を参照。
+以下手順書に従ってcoturnサーバーを構築する。  
+[coturnセットアップ手順（さくらのVPS / Debian）](./coturn-setup.md)
 
 ## ローカル環境構築方法
 
