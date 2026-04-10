@@ -21,6 +21,8 @@ sudo apt install -y coturn
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `20000:20100/udp`（1-32767の範囲で設定）
 
+IPv6を使う場合は上記ポートをIPv6でも同様に許可してください。
+
 ## 3. Route53でDNSレコードを設定
 
 Route53ホストゾーン上で、coturnサーバー向けのサブドメインを作成します。
@@ -127,7 +129,8 @@ sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/cot
 
 ## 6. turnserver.confを作成
 
-`<VPSのグローバルIP>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
+`<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
+IPv6を使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
 
 ```shell
 sudo cp /etc/turnserver.conf /etc/turnserver.conf.bak
@@ -135,8 +138,10 @@ sudo tee /etc/turnserver.conf > /dev/null <<'EOF'
 # Listening
 listening-port=3478
 tls-listening-port=5349
-listening-ip=<VPSのグローバルIP>
-relay-ip=<VPSのグローバルIP>
+listening-ip=<VPSのグローバルIPv4>
+listening-ip=<VPSのグローバルIPv6>
+relay-ip=<VPSのグローバルIPv4>
+relay-ip=<VPSのグローバルIPv6>
 
 # Relay port range (パケットフィルターでの指定と合わせる)
 min-port=20000
