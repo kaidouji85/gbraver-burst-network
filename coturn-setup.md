@@ -19,7 +19,7 @@ sudo apt install -y coturn
 - SSH: `22/tcp`
 - TURN: `3478/tcp`, `3478/udp`
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
-- リレー用UDPポートレンジ: 例 `49160:49200/udp`
+- リレー用UDPポートレンジ: 例 `20000:20100/udp`（1-32767の範囲で設定）
 
 ## 3. coturnを有効化
 
@@ -43,8 +43,8 @@ listening-ip=<VPSのグローバルIP>
 relay-ip=<VPSのグローバルIP>
 
 # Relay port range (パケットフィルターと合わせる)
-min-port=49160
-max-port=49200
+min-port=20000
+max-port=20100
 
 # Auth
 fingerprint
@@ -136,3 +136,4 @@ const pc = new RTCPeerConnection({
 - パスワードは十分に長いランダム値を使用し、定期的に更新してください。
 - 必要であればfail2ban導入や接続元IP制限を検討してください。
 - 帯域コストを抑えるため、リレー用ポートレンジは必要最小限にしてください。
+- さくらのVPSパケットフィルター制約により、リレーポートは`1-32767`の範囲で設計してください。
