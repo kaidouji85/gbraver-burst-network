@@ -2,36 +2,26 @@
 
 ローカルWebRTC接続を安定化するために、TURNサーバーとしてcoturnを構築する手順です。
 
-### 1. サーバー初期化
+## 1. サーバー初期化
 
 VPSへSSH接続後、パッケージを最新化します。
 
 ```shell
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y coturn ufw
+sudo apt install -y coturn
 ```
 
-### 2. ファイアウォールを開放
+## 2. さくらのVPSパケットフィルターを設定
 
-最低限、以下を開放します。
+さくらのVPSコントロールパネル側で、最低限以下を許可してください。
 
 - SSH: `22/tcp`
 - TURN: `3478/tcp`, `3478/udp`
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `49160:49200/udp`
 
-```shell
-sudo ufw allow 22/tcp
-sudo ufw allow 3478/tcp
-sudo ufw allow 3478/udp
-sudo ufw allow 5349/tcp
-sudo ufw allow 49160:49200/udp
-sudo ufw enable
-sudo ufw status verbose
-```
-
-### 3. coturnを有効化
+## 3. coturnを有効化
 
 Debianでは`/etc/default/coturn`でサービス有効化します。
 
@@ -39,7 +29,7 @@ Debianでは`/etc/default/coturn`でサービス有効化します。
 sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/coturn
 ```
 
-### 4. turnserver.confを作成
+## 4. turnserver.confを作成
 
 `<VPSのグローバルIP>`と`<強力なパスワード>`を実値に置き換えてください。
 
@@ -52,7 +42,7 @@ tls-listening-port=5349
 listening-ip=<VPSのグローバルIP>
 relay-ip=<VPSのグローバルIP>
 
-# Relay port range (firewallと合わせる)
+# Relay port range (パケットフィルターと合わせる)
 min-port=49160
 max-port=49200
 
@@ -78,7 +68,7 @@ EOF
 - VPSがNAT配下の場合は`external-ip=<グローバルIP>/<プライベートIP>`を使用してください。
 - ドメインと証明書を用意できる場合は`cert=`と`pkey=`を設定し、`turns:`を利用してください。
 
-### 5. 起動と自動起動設定
+## 5. 起動と自動起動設定
 
 ```shell
 sudo mkdir -p /var/log/turnserver
@@ -94,7 +84,7 @@ sudo systemctl status coturn --no-pager
 sudo ss -lntup | grep -E '3478|5349|turn'
 ```
 
-### 6. 動作確認（Trickle ICE）
+## 6. 動作確認（Trickle ICE）
 
 以下で接続テストできます。
 
@@ -122,7 +112,7 @@ TLSを使う場合の例:
 
 `relay`候補が取得できればTURN経由通信は概ね正常です。
 
-### 7. SDK利用時の設定例
+## 7. SDK利用時の設定例
 
 アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ上記TURN情報を設定してください。
 
@@ -141,7 +131,7 @@ const pc = new RTCPeerConnection({
 });
 ```
 
-### 8. 運用上の注意
+## 8. 運用上の注意
 
 - パスワードは十分に長いランダム値を使用し、定期的に更新してください。
 - 必要であればfail2ban導入や接続元IP制限を検討してください。
