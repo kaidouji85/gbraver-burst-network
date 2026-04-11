@@ -2,7 +2,14 @@
 
 ローカルWebRTC接続を安定化するために、TURNサーバーとしてcoturnを構築する手順です。
 
-## 1. サーバー初期化
+## 1. IPv6有効化
+
+2026/04/11現在、さくらのVPSはIPv6がデフォルトで無効化されています。
+以下の公式ドキュメントの手順に従ってIPv6を有効化してください。
+
+[IPv6有効化手順（Debian 12）](https://manual.sakura.ad.jp/vps/network/ipv6/debian-12.html)
+
+## 2. サーバー初期化
 
 VPSへSSH接続後、パッケージを最新化します。
 
@@ -12,7 +19,7 @@ sudo apt upgrade -y
 sudo apt install -y coturn
 ```
 
-## 2. さくらのVPSパケットフィルターを設定
+## 3. さくらのVPSパケットフィルターを設定
 
 さくらのVPSコントロールパネル側で、以下を許可してください。
 
@@ -22,7 +29,7 @@ sudo apt install -y coturn
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `20000:20100/udp`
 
-## 3. Route53でDNSレコードを設定
+## 4. Route53でDNSレコードを設定
 
 Route53ホストゾーン上で、coturnサーバー向けのサブドメインを作成します。
 作成するレコードは以下の通りです。
@@ -32,15 +39,15 @@ Route53ホストゾーン上で、coturnサーバー向けのサブドメイン�
 | COTURN用サブドメイン | A      | VPSのグローバルIPv4 |
 | COTURN用サブドメイン | AAAA   | VPSのグローバルIPv6 |
 
-## 4. TLS証明書の取得（certbot + HTTP-01）
+## 5. TLS証明書の取得（certbot + HTTP-01）
 
-### 4-1. certbotをインストール
+### 5-1. certbotをインストール
 
 ```shell
 sudo apt install -y certbot acl
 ```
 
-### 4-2. 証明書を取得（HTTP-01 / standalone）
+### 5-2. 証明書を取得（HTTP-01 / standalone）
 
 `<TURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
 
@@ -58,7 +65,7 @@ sudo certbot certonly \
 - 公開鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem`
 - 秘密鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem`
 
-### 4-3. coturnへの証明書読み取り権限を付与
+### 5-3. coturnへの証明書読み取り権限を付与
 
 certbotが生成する証明書はデフォルトでrootのみ読み取り可能です。`turnserver`ユーザーが読めるよう権限を追加します。
 
@@ -67,7 +74,7 @@ sudo setfacl -m u:turnserver:rx /etc/letsencrypt/live /etc/letsencrypt/archive
 sudo setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
 ```
 
-### 4-4. 証明書自動更新時にcoturnを再起動
+### 5-4. 証明書自動更新時にcoturnを再起動
 
 Debianのcertbotは通常、systemd timerで自動更新されます。更新後にcoturnを再起動するフックを作成します。
 
@@ -86,7 +93,7 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
 sudo certbot renew --dry-run
 ```
 
-## 5. coturnを有効化
+## 6. coturnを有効化
 
 Debianでは`/etc/default/coturn`でサービス有効化します。
 
@@ -94,7 +101,7 @@ Debianでは`/etc/default/coturn`でサービス有効化します。
 sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/coturn
 ```
 
-## 6. turnserver.confを作成
+## 7. turnserver.confを作成
 
 `<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
 IPv6を使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
@@ -139,7 +146,7 @@ EOF
 
 - `use-auth-secret`では、アプリサーバーとcoturnが同じ共通シークレットを持ち、アプリサーバー側で一時クレデンシャルを生成してクライアントへ渡します。
 
-## 7. 起動と自動起動設定
+## 8. 起動と自動起動設定
 
 ```shell
 sudo mkdir -p /var/log/turnserver
@@ -155,7 +162,7 @@ sudo systemctl status coturn --no-pager
 sudo ss -lntup | grep -E '3478|5349|turn'
 ```
 
-## 8. 動作確認（Trickle ICE）
+## 9. 動作確認（Trickle ICE）
 
 `use-auth-secret`の場合、先に一時クレデンシャルを生成します。
 
@@ -199,7 +206,7 @@ TLSを使う場合の例:
 
 `relay`候補が取得できればTURN経由通信は概ね正常です。
 
-## 9. SDK利用時の設定例
+## 10. SDK利用時の設定例
 
 アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ、サーバーが生成した一時クレデンシャルを設定してください。
 
@@ -221,7 +228,7 @@ const pc = new RTCPeerConnection({
 });
 ```
 
-## 10. 運用上の注意
+## 11. 運用上の注意
 
 - 共通シークレットは十分に長いランダム値を使用し、定期的に更新してください。
 - 必要であればfail2ban導入や接続元IP制限を検討してください。
