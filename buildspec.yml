@@ -17,6 +17,7 @@ env:
     MATCH_MAKE_ECR_REPOSITORY_NAME: /GbraverBurst/dev/matchMakeEcrRepositoryName
     VPC_SUBNET_COUNT: /GbraverBurst/dev/vpcSubnetCount
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
+    OWN_ROOT_URL: /GbraverBurst/dev/ownRootUrl
 phases:
   install:
     runtime-versions:

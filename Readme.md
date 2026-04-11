@@ -148,6 +148,7 @@ npm run build
 | DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                           |
 | AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                     |
 | VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                                    |
+| OWN_ROOT_URL                   | GブレイバーバーストのフロントエンドがホストされているURL（例: https://gbraver-burst-dev.com）                                 |
 
 ### serverlessデプロイ
 
@@ -265,6 +266,7 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/dev/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/dev/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
+| /GbraverBurst/dev/ownRootUrl                 | String       | [環境変数定義の定義](#環境変数の定義) OWN_ROOT_URL を参照                   |
 
 #### AWS Secrets Manager
 
@@ -334,6 +336,7 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
+| /GbraverBurst/prod/ownRootUrl                 | String       | [環境変数定義の定義](#環境変数の定義) OWN_ROOT_URL を参照                   |
 
 #### AWS Secrets Manager
 

@@ -8,6 +8,7 @@ env:
     WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
     WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
+    OWN_ROOT_URL: /GbraverBurst/dev/ownRootUrl
 phases:
   install:
     runtime-versions:

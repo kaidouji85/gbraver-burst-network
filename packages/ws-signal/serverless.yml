@@ -20,6 +20,15 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://example.com
+      allowedMethods:
+        - POST
+        - OPTIONS
+      allowCredentials: true
+      maxAge: 600
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
