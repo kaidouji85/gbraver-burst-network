@@ -73,7 +73,9 @@ CognitoのアイデンティティプロバイダーにGoogleを以下条件で�
 
 CgonitoのホストされたUIのID プロバイダーにGoogleを追加する。
 
-### 7. APIサーバー用のドメイン名およびACM証明書の準備
+### 7. 各種ドメイン名の準備
+
+#### 7.1. APIサーバー用のドメイン名およびACM証明書の準備
 
 APIサーバー用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
 ACM証明書はAPIサーバー用のドメイン名のワイルドカード証明書である必要がある。
@@ -83,7 +85,7 @@ ACM証明書はAPIサーバー用のドメイン名のワイルドカード証�
 - APIサーバー用のドメイン名: ws-api.example.com
 - ACM証明書: \*.ws-api.example.com
 
-### 8. シグナルサーバー用のドメイン名およびACM証明書の準備
+#### 7.2. シグナルサーバー用のドメイン名およびACM証明書の準備
 
 シグナルサーバー用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
 ACM証明書はシグナルサーバー用のドメイン名のワイルドカード証明書である必要がある。
@@ -93,7 +95,17 @@ ACM証明書はシグナルサーバー用のドメイン名のワイルドカ�
 - シグナルサーバー用のドメイン名: ws-signal.example.com
 - ACM証明書: \*.ws-signal.example.com
 
-### 9. coturnサーバーの構築
+#### 7.3. WebRTC Helper API用のドメイン名およびACM証明書の準備
+
+WebRTC Helper API用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
+ACM証明書はWebRTC Helper API用のドメイン名のワイルドカード証明書である必要がある。
+
+例
+
+- WebRTC Helper API用のドメイン名: webrtc-helper.example.com
+- ACM証明書: \*.webrtc-helper.example.com
+
+### 8. coturnサーバーの構築
 
 以下手順書に従ってcoturnサーバーを構築する。  
 [coturnセットアップ手順（さくらのVPS / Debian）](./coturn-setup.md)
