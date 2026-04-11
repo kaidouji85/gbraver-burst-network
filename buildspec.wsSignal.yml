@@ -7,7 +7,7 @@ env:
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
     WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
     WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
-    WEBRTC_HELPER_CORS_ORIGINS: /GbraverBurst/dev/webrtcHelperCorsOrigins
+    WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/dev/webrtcHelperCorsOrigin
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
 phases:
   install:

@@ -28,7 +28,6 @@ export const issueCoturnCredential =
       statusCode: 201,
       headers: {
         "content-type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({ username, password }),
     };

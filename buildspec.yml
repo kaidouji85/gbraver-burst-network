@@ -10,7 +10,7 @@ env:
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
     WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
     WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
-    WEBRTC_HELPER_CORS_ORIGINS: /GbraverBurst/dev/webrtcHelperCorsOrigins
+    WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/dev/webrtcHelperCorsOrigin
     COGNITO_USER_POOL_ID: /GbraverBurst/dev/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/dev/cognitoClientId
     DOCKER_USER: /GbraverBurst/dev/dockerUser
