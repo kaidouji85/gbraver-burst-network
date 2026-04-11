@@ -22,7 +22,7 @@ provider:
   environment:
     SERVICE: ${self:service}
     STAGE: ${sls:stage}
-    COTURN_SHARED_SECRET_ARN: ${env:COTURN_SHARED_SECRET_ARN}
+    COTURN_SHARED_SECRET: ${env:COTURN_SHARED_SECRET}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
