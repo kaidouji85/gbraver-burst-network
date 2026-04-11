@@ -49,21 +49,21 @@ sudo apt install -y certbot acl
 
 ### 5-2. 証明書を取得（HTTP-01 / standalone）
 
-`<TURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
+`<COTURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
 
 ```shell
 sudo certbot certonly \
   --standalone \
   --preferred-challenges http \
-  -d <TURN用ドメイン> \
+  -d <COTURN用ドメイン> \
   --agree-tos \
   --email <メールアドレス>
 ```
 
 成功すると証明書が以下に配置されます。
 
-- 公開鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem`
-- 秘密鍵: `/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem`
+- 公開鍵: `/etc/letsencrypt/live/<COTURN用ドメイン>/fullchain.pem`
+- 秘密鍵: `/etc/letsencrypt/live/<COTURN用ドメイン>/privkey.pem`
 
 ### 5-3. coturnへの証明書読み取り権限を付与
 
@@ -71,15 +71,15 @@ certbotが生成する証明書はデフォルトでroot管理です。`turnserv
 
 ```shell
 sudo setfacl -m u:turnserver:rx /etc/letsencrypt /etc/letsencrypt/live /etc/letsencrypt/archive
-sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<TURN用ドメイン>
-sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<TURN用ドメイン>
+sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<COTURN用ドメイン>
+sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<COTURN用ドメイン>
 ```
 
 設定後、`turnserver`ユーザーで読み取りテストを実施してください。
 
 ```shell
-sudo -u turnserver test -r /etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem && echo ok_fullchain
-sudo -u turnserver test -r /etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem && echo ok_privkey
+sudo -u turnserver test -r /etc/letsencrypt/live/<COTURN用ドメイン>/fullchain.pem && echo ok_fullchain
+sudo -u turnserver test -r /etc/letsencrypt/live/<COTURN用ドメイン>/privkey.pem && echo ok_privkey
 ```
 
 ### 5-4. 証明書自動更新時にcoturnを再起動
@@ -91,8 +91,8 @@ sudo tee /etc/letsencrypt/renewal-hooks/deploy/coturn.sh > /dev/null <<'EOF'
 #!/bin/sh
 set -eu
 setfacl -m u:turnserver:rx /etc/letsencrypt /etc/letsencrypt/live /etc/letsencrypt/archive
-setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<TURN用ドメイン>
-setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<TURN用ドメイン>
+setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<COTURN用ドメイン>
+setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<COTURN用ドメイン>
 systemctl restart coturn
 EOF
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
@@ -114,7 +114,7 @@ sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/cot
 
 ## 7. turnserver.confを作成
 
-`<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
+`<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<COTURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
 IPv6を使う場合は `ip -6 addr` で確認できる実アドレスを設定し、使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
 
 ```shell
@@ -133,8 +133,8 @@ min-port=20000
 max-port=20100
 
 # TLS Certificates (Let's Encrypt)
-cert=/etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem
-pkey=/etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem
+cert=/etc/letsencrypt/live/<COTURN用ドメイン>/fullchain.pem
+pkey=/etc/letsencrypt/live/<COTURN用ドメイン>/privkey.pem
 
 # Auth
 fingerprint
@@ -198,9 +198,10 @@ echo "$TURN_CREDENTIAL"
 
 | STUN or TURN URI:                         | TURN username:  | TURN password:    |
 | ----------------------------------------- | --------------- | ----------------- |
-| turn:<TURN用ドメイン>:3478?transport=udp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
-| turn:<TURN用ドメイン>:3478?transport=tcp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
-| turns:<TURN用ドメイン>:5349?transport=tcp | <TURN_USERNAME> | <TURN_CREDENTIAL> |
+| stun:<COTURN用ドメイン>:3478                |                 |                   |
+| turn:<COTURN用ドメイン>:3478?transport=udp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
+| turn:<COTURN用ドメイン>:3478?transport=tcp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
+| turns:<COTURN用ドメイン>:5349?transport=tcp | <TURN_USERNAME> | <TURN_CREDENTIAL> |
 
 **ICE options**
 
@@ -208,6 +209,7 @@ echo "$TURN_CREDENTIAL"
 - `Acquire microphone/camera permissions`はチェックを外す
 
 入力が完了したら、`Gather candidates`をクリックしてください。
+`Type`が`srflx`のレコードが含まれていれば、STUNサーバー経由での到達性確認ができています。
 `Type`が`relay`のレコードが含まれていれば、TURNサーバー経由での接続が成功しています。
 
 ## 10. SDK利用時の設定例
@@ -221,9 +223,13 @@ const turnCredential = "<TURN_CREDENTIAL>";
 const pc = new RTCPeerConnection({
   iceServers: [
     {
+      urls: ["stun:<COTURN用ドメイン>:3478"],
+    },
+    {
       urls: [
-        "turn:<VPSのグローバルIP>:3478?transport=udp",
-        "turn:<VPSのグローバルIP>:3478?transport=tcp",
+        "turn:<COTURN用ドメイン>:3478?transport=udp",
+        "turn:<COTURN用ドメイン>:3478?transport=tcp",
+        "turns:<COTURN用ドメイン>:5349?transport=tcp",
       ],
       username: turnUsername,
       credential: turnCredential,
