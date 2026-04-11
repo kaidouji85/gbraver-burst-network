@@ -250,6 +250,14 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/dev/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
 
+#### AWS Secrets Manager
+
+AWS Secrets Managerに以下のシークレットをセットする。
+
+| シークレットの名前                    | シークレットのタイプ           |
+| ------------------------------------- | ------------------------------ |
+| /GbraverBurst/dev/serverlessAccessKey | coturnサーバーで生成した秘密鍵 |
+
 #### CodeBuild
 
 以下のCodeBuildプロジェクトを生成する。
@@ -308,6 +316,14 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
+
+#### AWS Secrets Manager
+
+AWS Secrets Managerに以下のシークレットをセットする。
+
+| シークレットの名前                     | シークレットのタイプ           |
+| -------------------------------------- | ------------------------------ |
+| /GbraverBurst/prod/serverlessAccessKey | coturnサーバーで生成した秘密鍵 |
 
 #### Code Build
 
