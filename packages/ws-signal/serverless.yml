@@ -20,6 +20,14 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
+  httpApi:
+    cors:
+      allowedOrigins:
+        - ${env:WEBRTC_HELPER_CORS_ORIGIN}
+      allowedMethods:
+        - POST
+        - OPTIONS
+      maxAge: 600
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -28,7 +36,7 @@ provider:
     COTURN_SHARED_SECRET: ${env:COTURN_SHARED_SECRET}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
-    WEBRTC_HELPER_CORS_ORIGINS: ${env:WEBRTC_HELPER_CORS_ORIGINS}
+    WEBRTC_HELPER_CORS_ORIGIN: ${env:WEBRTC_HELPER_CORS_ORIGIN}
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
   iam:
@@ -99,7 +107,6 @@ functions:
       - httpApi:
           path: /coturn/credentials
           method: post
-          cors: true
 
 resources:
   Resources:
