@@ -196,8 +196,8 @@ echo "$TURN_CREDENTIAL"
 
 **ICE servers**
 
-| STUN or TURN URI:                         | TURN username:  | TURN password:    |
-| ----------------------------------------- | --------------- | ----------------- |
+| STUN or TURN URI:                           | TURN username:  | TURN password:    |
+| ------------------------------------------- | --------------- | ----------------- |
 | stun:<COTURN用ドメイン>:3478                |                 |                   |
 | turn:<COTURN用ドメイン>:3478?transport=udp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
 | turn:<COTURN用ドメイン>:3478?transport=tcp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
@@ -241,7 +241,5 @@ const pc = new RTCPeerConnection({
 ## 11. 運用上の注意
 
 - 共通シークレットは十分に長いランダム値を使用し、定期的に更新してください。
-- 必要であればfail2ban導入や接続元IP制限を検討してください。
-- 帯域コストを抑えるため、リレー用ポートレンジは必要最小限にしてください。
 - さくらのVPSパケットフィルター制約により、リレーポートは`1-32767`の範囲で設計してください。
 - 一時クレデンシャルのTTLは短め（例: 10分から1時間）にしてください。
