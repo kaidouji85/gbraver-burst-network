@@ -67,11 +67,19 @@ sudo certbot certonly \
 
 ### 5-3. coturnへの証明書読み取り権限を付与
 
-certbotが生成する証明書はデフォルトでrootのみ読み取り可能です。`turnserver`ユーザーが読めるよう権限を追加します。
+certbotが生成する証明書はデフォルトでroot管理です。`turnserver`ユーザーが辿って読めるように、ディレクトリには`rx`、証明書ファイルには`r`が付くようACLを設定します。
 
 ```shell
-sudo setfacl -m u:turnserver:rx /etc/letsencrypt/live /etc/letsencrypt/archive
-sudo setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
+sudo setfacl -m u:turnserver:rx /etc/letsencrypt /etc/letsencrypt/live /etc/letsencrypt/archive
+sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<TURN用ドメイン>
+sudo setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<TURN用ドメイン>
+```
+
+設定後、`turnserver`ユーザーで読み取りテストを実施してください。
+
+```shell
+sudo -u turnserver test -r /etc/letsencrypt/live/<TURN用ドメイン>/fullchain.pem && echo ok_fullchain
+sudo -u turnserver test -r /etc/letsencrypt/live/<TURN用ドメイン>/privkey.pem && echo ok_privkey
 ```
 
 ### 5-4. 証明書自動更新時にcoturnを再起動
@@ -81,7 +89,10 @@ Debianのcertbotは通常、systemd timerで自動更新されます。更新後
 ```shell
 sudo tee /etc/letsencrypt/renewal-hooks/deploy/coturn.sh > /dev/null <<'EOF'
 #!/bin/sh
-setfacl -R -m u:turnserver:r /etc/letsencrypt/archive
+set -eu
+setfacl -m u:turnserver:rx /etc/letsencrypt /etc/letsencrypt/live /etc/letsencrypt/archive
+setfacl -R -m u:turnserver:rx /etc/letsencrypt/live/<TURN用ドメイン>
+setfacl -R -m u:turnserver:rx /etc/letsencrypt/archive/<TURN用ドメイン>
 systemctl restart coturn
 EOF
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
@@ -104,7 +115,7 @@ sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/cot
 ## 7. turnserver.confを作成
 
 `<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<TURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
-IPv6を使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
+IPv6を使う場合は `ip -6 addr` で確認できる実アドレスを設定し、使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
 
 ```shell
 sudo cp /etc/turnserver.conf /etc/turnserver.conf.bak
