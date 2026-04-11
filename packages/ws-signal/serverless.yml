@@ -83,6 +83,12 @@ functions:
     events:
       - websocket:
           route: send-guest-signal
+  issueCoturnCredential:
+    handler: src/issue-credential.handler
+    events:
+      - httpApi:
+          path: /coturn/credentials
+          method: post
 
 resources:
   Resources:
