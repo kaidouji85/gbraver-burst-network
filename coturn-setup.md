@@ -181,30 +181,23 @@ echo "$TURN_CREDENTIAL"
 
 - [Trickle ICE Sample](https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/)
 
-ICE server例:
+各入力項目には、以下をセットしてください。
 
-```json
-{
-  "urls": [
-    "turn:<VPSのグローバルIP>:3478?transport=udp",
-    "turn:<VPSのグローバルIP>:3478?transport=tcp"
-  ],
-  "username": "<TURN_USERNAME>",
-  "credential": "<TURN_CREDENTIAL>"
-}
-```
+**ICE servers**
 
-TLSを使う場合の例:
+| STUN or TURN URI:                         | TURN username:  | TURN password:    |
+| ----------------------------------------- | --------------- | ----------------- |
+| turn:<TURN用ドメイン>:3478?transport=udp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
+| turn:<TURN用ドメイン>:3478?transport=tcp  | <TURN_USERNAME> | <TURN_CREDENTIAL> |
+| turns:<TURN用ドメイン>:5349?transport=tcp | <TURN_USERNAME> | <TURN_CREDENTIAL> |
 
-```json
-{
-  "urls": ["turns:<TURN用ドメイン>:5349?transport=tcp"],
-  "username": "<TURN_USERNAME>",
-  "credential": "<TURN_CREDENTIAL>"
-}
-```
+**ICE options**
 
-`relay`候補が取得できればTURN経由通信は概ね正常です。
+- `all`を選択
+- `Acquire microphone/camera permissions`はチェックを外す
+
+入力が完了したら、`Gather candidates`をクリックしてください。
+`Type`が`relay`のレコードが含まれていれば、TURNサーバー経由での接続が成功しています。
 
 ## 10. SDK利用時の設定例
 
