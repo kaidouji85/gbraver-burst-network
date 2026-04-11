@@ -67,7 +67,7 @@ sudo certbot certonly \
 
 ### 5-3. coturnへの証明書読み取り権限を付与
 
-certbotが生成する証明書はデフォルトでroot管理です。`turnserver`ユーザーが辿って読めるように、ディレクトリには`rx`、証明書ファイルには`r`が付くようACLを設定します。
+certbotが生成する証明書はデフォルトでroot管理です。`turnserver`ユーザーが辿って読めるように、適切にACLを設定します。
 
 ```shell
 sudo setfacl -m u:turnserver:rx /etc/letsencrypt /etc/letsencrypt/live /etc/letsencrypt/archive
