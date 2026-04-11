@@ -5,6 +5,8 @@ env:
     STAGE: /GbraverBurst/dev/stage
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
+    WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
+    WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
 phases:
   install:
