@@ -93,6 +93,11 @@ ACM証明書はシグナルサーバー用のドメイン名のワイルドカ�
 - シグナルサーバー用のドメイン名: ws-signal.example.com
 - ACM証明書: \*.ws-signal.example.com
 
+### 9. coturnサーバーの構築
+
+以下手順書に従ってcoturnサーバーを構築する。  
+[coturnセットアップ手順（さくらのVPS / Debian）](./coturn-setup.md)
+
 ## ローカル環境構築方法
 
 ### 各種ツールの認証設定

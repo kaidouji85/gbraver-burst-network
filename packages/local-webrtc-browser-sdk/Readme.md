@@ -6,7 +6,7 @@
 
 ## コマンド例のカレントディレクトリについて
 
-特に断りがない限り、本書のコマンド例のカレントディレクトリは`<本リポジトリをcloneした場所>/packages/local-webrtc-browser-sdk`であるとします。
+とくに断りがない限り、本書のコマンド例のカレントディレクトリは`<本リポジトリをcloneした場所>/packages/local-webrtc-browser-sdk`であるとします。
 
 ## 前提条件
 
@@ -32,6 +32,6 @@ npm audit --omit=dev
 fixpack
 ```
 
-# License
+## License
 
 MIT
