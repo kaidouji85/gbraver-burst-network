@@ -36,7 +36,7 @@ export class GuestWebRTCConnectionManager {
   #coturnDomainName: string;
 
   /** コンストラクタ
-   * @param options コンストラクタのオプション名
+   * @param options オプション
    */
   constructor(options: GuestWebRTCConnectionManagerOptions) {
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
