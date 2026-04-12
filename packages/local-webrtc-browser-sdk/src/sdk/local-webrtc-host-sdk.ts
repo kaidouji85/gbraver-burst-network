@@ -3,7 +3,10 @@ import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../ws-signal/create-room";
-import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
+import {
+  HostWebRTCConnectionManager,
+  HostWebRTCConnectionManagerOptions,
+} from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
@@ -41,6 +44,12 @@ export type LocalWebRTCHostSDK = {
   disconnectWebRTC(): void;
 };
 
+/** LocalWebRTCHostSDKImplコンストラクタのオプション */
+type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
+  /** WebSocketシグナルサーバーのURL */
+  wsSignalUrl: string;
+};
+
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebRTCコネクションマネージャー */
@@ -51,15 +60,8 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /**
    * コンストラクタ
    * @param options コンストラクタのオプション
-   * @param wsSignalUrl WebSocketシグナルサーバーのURL
-   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
-   * @param options.coturnDomainName coturnサーバーのドメイン名
    */
-  constructor(options: {
-    wsSignalUrl: string;
-    webRTCHelperApiURL: string;
-    coturnDomainName: string;
-  }) {
+  constructor(options: LocalWebRTCHostSDKImplOptions) {
     const { wsSignalUrl } = options;
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
@@ -119,15 +121,10 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 /**
  * ローカルWebRTCホスト用SDKを生成する
  * @param options SDK生成のオプション
- * @param options.wsSignalUrl WebSocketシグナルサーバーのURL
- * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
- * @param options.coturnDomainName coturnサーバーのドメイン名
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
-export function createLocalWebRTCHostSDK(options: {
-  wsSignalUrl: string;
-  webRTCHelperApiURL: string;
-  coturnDomainName: string;
-}): LocalWebRTCHostSDK {
+export function createLocalWebRTCHostSDK(
+  options: LocalWebRTCHostSDKImplOptions,
+): LocalWebRTCHostSDK {
   return new LocalWebRTCHostSDKImpl(options);
 }
