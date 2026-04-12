@@ -1,12 +1,13 @@
 import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
+import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
 /** 接続中 */
 type Connected = {
   type: "connected";
-  /** WebRTCコネクション */
-  connection: RTCPeerConnection;
-  /** データチャンネル、開通までラグあるためPromiseで保持 */
-  dataChannel: Promise<RTCDataChannel>;
+  /** WebRTCコネクションPromise */
+  connectionPromise: Promise<RTCPeerConnection>;
+  /** データチャンネルPromise */
+  dataChannelPromise: Promise<RTCDataChannel>;
 };
 
 /** 切断中 */
@@ -49,17 +50,22 @@ export class GuestWebRTCConnectionManager {
    */
   getOrCreateConnection(): {
     /** コネクション */
-    connection: RTCPeerConnection;
+    connectionPromise: Promise<RTCPeerConnection>;
     /** データチャンネル */
-    dataChannel: Promise<RTCDataChannel>;
+    dataChannelPromise: Promise<RTCDataChannel>;
   } {
     if (this.#connectionState.type === "disconnected") {
-      const connection = new RTCPeerConnection();
-      const dataChannel = waitUntilDataChannel(connection);
+      const connectionPromise = createRTCPeerConnection({
+        webRTCHelperApiURL: this.#webRTCHelperApiURL,
+        coturnDomainName: this.#coturnDomainName,
+      });
+      const dataChannelPromise = connectionPromise.then((connection) =>
+        waitUntilDataChannel(connection),
+      );
       this.#connectionState = {
         type: "connected",
-        connection,
-        dataChannel,
+        connectionPromise,
+        dataChannelPromise,
       };
     }
 
@@ -71,8 +77,12 @@ export class GuestWebRTCConnectionManager {
    */
   disconnect() {
     if (this.#connectionState.type === "connected") {
-      this.#connectionState.connection.close();
-      this.#connectionState.dataChannel.then((channel) => channel.close());
+      this.#connectionState.connectionPromise.then((connection) =>
+        connection.close(),
+      );
+      this.#connectionState.dataChannelPromise.then((channel) =>
+        channel.close(),
+      );
     }
     this.#connectionState = { type: "disconnected" };
   }

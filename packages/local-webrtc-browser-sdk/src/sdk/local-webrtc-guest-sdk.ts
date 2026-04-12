@@ -85,12 +85,12 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       return await receiveRequestSelectedPlayer(dataChannel);
     })();
     const battleStartPromise = (async () => {
       const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       return await receiveBattleStart(dataChannel);
     })();
 
@@ -101,7 +101,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
     const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     sendGuestMessage(dataChannel, {
       type: "send-player",
       flowID,
@@ -148,7 +148,8 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
       const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
         joinRoomAccepted;
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const connection =
+        await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       await connection.setRemoteDescription(hostSDP);
       await Promise.all(
         hostIceCandidates.map((c) => connection.addIceCandidate(c)),

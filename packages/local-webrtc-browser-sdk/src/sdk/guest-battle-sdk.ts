@@ -45,7 +45,7 @@ export class GuestBattleSDK implements BattleSDK {
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
     const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     const battleProgressedPromise = receiveBattleProgressed(dataChannel);
     sendGuestMessage(dataChannel, {
       type: "send-command",
