@@ -3,10 +3,16 @@ import { issueCoturnCredential } from "../webrtc-helper/issue-coturn-credential"
 /** 接続中 */
 type Connected = {
   type: "connected";
-  /** WebRTCコネクション */
-  connection: RTCPeerConnection;
-  /** データチャンネル */
-  dataChannel: RTCDataChannel;
+  /** 
+   * コネクションPromise
+   * コネクションの重複作成を防ぐために、コネクションとデータチャンネルのセットをPromiseで保持する
+   */
+  connectionPromise: Promise<{
+    /** WebRTCコネクション */
+    connection: RTCPeerConnection;
+    /** データチャンネル */
+    dataChannel: RTCDataChannel;
+  }>;
 };
 
 /** 切断中 */
@@ -55,34 +61,14 @@ export class HostWebRTCConnectionManager {
     dataChannel: RTCDataChannel;
   }> {
     if (this.#connectionState.type === "disconnected") {
-      const { username, password: credential } = await issueCoturnCredential(
-        this.#webRTCHelperApiURL,
-      );
-      const connection = new RTCPeerConnection({
-        iceServers: [
-          {
-            urls: [`stun:${this.#coturnDomainName}:3478`],
-          },
-          {
-            urls: [
-              `turn:${this.#coturnDomainName}:3478?transport=udp`,
-              `turn:${this.#coturnDomainName}:3478?transport=tcp`,
-              `turns:${this.#coturnDomainName}:5349?transport=tcp`,
-            ],
-            username,
-            credential,
-          },
-        ],
-      });
-      const dataChannel = connection.createDataChannel("sendDataChannel");
+      const connectionPromise = this.#createConnectionPromise();
       this.#connectionState = {
         type: "connected",
-        connection,
-        dataChannel,
+        connectionPromise,
       };
     }
 
-    return this.#connectionState;
+    return await this.#connectionState.connectionPromise;
   }
 
   /**
@@ -90,9 +76,41 @@ export class HostWebRTCConnectionManager {
    */
   disconnect() {
     if (this.#connectionState.type === "connected") {
-      this.#connectionState.connection.close();
-      this.#connectionState.dataChannel.close();
+      this.#connectionState.connectionPromise.then(
+        ({ connection, dataChannel }) => {
+          connection.close();
+          dataChannel.close();
+        },
+      );
     }
     this.#connectionState = { type: "disconnected" };
+  }
+
+  /**
+   * コネクションPromiseを生成する
+   * @returns コネクションPromise
+   */
+  async #createConnectionPromise() {
+    const { username, password: credential } = await issueCoturnCredential(
+      this.#webRTCHelperApiURL,
+    );
+    const connection = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: [`stun:${this.#coturnDomainName}:3478`],
+        },
+        {
+          urls: [
+            `turn:${this.#coturnDomainName}:3478?transport=udp`,
+            `turn:${this.#coturnDomainName}:3478?transport=tcp`,
+            `turns:${this.#coturnDomainName}:5349?transport=tcp`,
+          ],
+          username,
+          credential,
+        },
+      ],
+    });
+    const dataChannel = connection.createDataChannel("sendDataChannel");
+    return { connection, dataChannel };
   }
 }
