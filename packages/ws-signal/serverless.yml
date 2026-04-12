@@ -68,7 +68,7 @@ provider:
           Action:
             - "secretsmanager:GetSecretValue"
           Resource:
-            - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:/GbraverBurst/${sls:stage}/*"
+            - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:/GbraverBurst/*"
 
 functions:
   connect:
