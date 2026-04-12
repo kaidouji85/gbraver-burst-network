@@ -1,7 +1,7 @@
 import { issueCoturnCredential } from "../webrtc-helper/issue-coturn-credential";
 
 /**
- * RTPeerConnectionを作成する
+ * RTCPeerConnectionを作成する
  * @param options オプション
  * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
  * @param options.coturnDomainName coturnサーバーのドメイン名
