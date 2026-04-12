@@ -1,4 +1,3 @@
-import { parseJSON } from "../json/parse";
 import {
   IssueCoturnCredentialResponse,
   IssueCoturnCredentialResponseSchema,
@@ -15,6 +14,6 @@ export const issueCoturnCredential = async (
   const response = await fetch(`${apiURL}/coturn/credentials`, {
     method: "POST",
   });
-  const body = parseJSON(response.body);
+  const body = await response.json();
   return IssueCoturnCredentialResponseSchema.parse(body);
 };
