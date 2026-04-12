@@ -119,13 +119,16 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   }
 }
 
+/** LocalWebRTCHostSDKを生成するオプション */
+type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
+
 /**
  * ローカルWebRTCホスト用SDKを生成する
  * @param options SDK生成のオプション
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
 export function createLocalWebRTCHostSDK(
-  options: LocalWebRTCHostSDKImplOptions,
+  options: CreateLocalWebRTCHostSDKOptions,
 ): LocalWebRTCHostSDK {
   return new LocalWebRTCHostSDKImpl(options);
 }

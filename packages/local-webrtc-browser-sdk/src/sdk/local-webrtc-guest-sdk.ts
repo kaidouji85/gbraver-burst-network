@@ -178,13 +178,16 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   }
 }
 
+/** LocalWebRTCGuestSDKを生成するオプション */
+type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
+
 /**
  * ローカルWebRTCゲスト用SDKを生成する
  * @param options オプション
  * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
 export function createLocalWebRTCGuestSDK(
-  options: LocalWebRTCGuestSDKImplOptions,
+  options: CreateLocalWebRTCGuestSDKOptions,
 ): LocalWebRTCGuestSDK {
   return new LocalWebRTCGuestSDKImpl(options);
 }
