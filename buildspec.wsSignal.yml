@@ -1,5 +1,7 @@
 version: 0.2
 env:
+  variables:
+    COTURN_SHARED_SECRET: /GbraverBurst/dev/coturnSharedSecret
   parameter-store:
     WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
     STAGE: /GbraverBurst/dev/stage

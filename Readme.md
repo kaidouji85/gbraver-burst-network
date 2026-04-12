@@ -272,9 +272,9 @@ AWS Parameter Storeに以下の値をセットする。
 
 AWS Secrets Managerに以下のシークレットをセットする。
 
-| シークレットの名前                    | シークレットのタイプ           |
-| ------------------------------------- | ------------------------------ |
-| /GbraverBurst/dev/serverlessAccessKey | coturnサーバーで生成した秘密鍵 |
+| シークレットの名前                   | シークレットのタイプ           |
+| ------------------------------------ | ------------------------------ |
+| /GbraverBurst/dev/coturnSharedSecret | coturnサーバーで生成した秘密鍵 |
 
 #### CodeBuild
 
@@ -342,9 +342,9 @@ AWS Parameter Storeに以下の値をセットする。
 
 AWS Secrets Managerに以下のシークレットをセットする。
 
-| シークレットの名前                     | シークレットのタイプ           |
-| -------------------------------------- | ------------------------------ |
-| /GbraverBurst/prod/serverlessAccessKey | coturnサーバーで生成した秘密鍵 |
+| シークレットの名前                   | シークレットのタイプ           |
+| ------------------------------------ | ------------------------------ |
+| /GbraverBurst/dev/coturnSharedSecret | coturnサーバーで生成した秘密鍵 |
 
 #### Code Build
 
