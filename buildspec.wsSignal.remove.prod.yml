@@ -1,6 +1,8 @@
 version: 0.2
+# プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
 env:
-  # プロジェクト実行時に、環境変数STAGEに削除したいステージ名を指定する
+  variables:
+    COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret
   parameter-store:
     WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName

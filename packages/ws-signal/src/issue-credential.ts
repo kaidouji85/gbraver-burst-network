@@ -1,5 +1,5 @@
 import { getSecret } from "@aws-lambda-powertools/parameters/secrets";
-import { APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyResultV2 } from "aws-lambda";
 import { createHmac } from "crypto";
 
 /** coturnサーバーとの共有秘密鍵が格納されているAWS Secrets Managerのシークレット名 */
@@ -15,7 +15,7 @@ const coturnSharedSecretPromise = getSecret(COTURN_SHARED_SECRET);
  * @returns レスポンス
  */
 export const issueCoturnCredential =
-  async (): Promise<APIGatewayProxyResult> => {
+  async (): Promise<APIGatewayProxyResultV2> => {
     const coturnSharedSecret = String(await coturnSharedSecretPromise);
     const expiresAt =
       Math.floor(Date.now() / 1000) + COTURN_CREDENTIAL_TTL_SECONDS;
