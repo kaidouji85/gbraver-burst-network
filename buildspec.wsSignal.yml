@@ -1,10 +1,15 @@
 version: 0.2
 env:
+  variables:
+    COTURN_SHARED_SECRET: /GbraverBurst/dev/coturnSharedSecret
   parameter-store:
     WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
     STAGE: /GbraverBurst/dev/stage
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
+    WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
+    WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
+    WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/dev/webrtcHelperCorsOrigin
     SERVERLESS_ACCESS_KEY: /GbraverBurst/dev/serverlessAccessKey
 phases:
   install:

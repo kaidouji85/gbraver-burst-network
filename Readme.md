@@ -73,7 +73,9 @@ CognitoのアイデンティティプロバイダーにGoogleを以下条件で�
 
 CgonitoのホストされたUIのID プロバイダーにGoogleを追加する。
 
-### 7. APIサーバー用のドメイン名およびACM証明書の準備
+### 7. 各種ドメイン名の準備
+
+#### 7.1. APIサーバー用のドメイン名およびACM証明書の準備
 
 APIサーバー用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
 ACM証明書はAPIサーバー用のドメイン名のワイルドカード証明書である必要がある。
@@ -83,7 +85,7 @@ ACM証明書はAPIサーバー用のドメイン名のワイルドカード証�
 - APIサーバー用のドメイン名: ws-api.example.com
 - ACM証明書: \*.ws-api.example.com
 
-### 8. シグナルサーバー用のドメイン名およびACM証明書の準備
+#### 7.2. シグナルサーバー用のドメイン名およびACM証明書の準備
 
 シグナルサーバー用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
 ACM証明書はシグナルサーバー用のドメイン名のワイルドカード証明書である必要がある。
@@ -93,7 +95,17 @@ ACM証明書はシグナルサーバー用のドメイン名のワイルドカ�
 - シグナルサーバー用のドメイン名: ws-signal.example.com
 - ACM証明書: \*.ws-signal.example.com
 
-### 9. coturnサーバーの構築
+#### 7.3. WebRTC Helper API用のドメイン名およびACM証明書の準備
+
+WebRTC Helper API用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
+ACM証明書はWebRTC Helper API用のドメイン名のワイルドカード証明書である必要がある。
+
+例
+
+- WebRTC Helper API用のドメイン名: webrtc-helper.example.com
+- ACM証明書: \*.webrtc-helper.example.com
+
+### 8. coturnサーバーの構築
 
 以下手順書に従ってcoturnサーバーを構築する。  
 [coturnセットアップ手順（さくらのVPS / Debian）](./coturn-setup.md)
@@ -117,23 +129,27 @@ npm run build
 
 ローカル環境に以下の環境変数を定義する。
 
-| 環境変数名                     | 記載内容                                                                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                       |
-| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                              |
-| STAGE                          | デプロイする環境のステージ名を記入する                                                                                   |
-| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                   |
-| WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある       |
-| WS_SIGNAL_DOMAIN_NAME          | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                |
-| WS_SIGNAL_CERT_ARN             | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある |
-| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                |
-| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                  |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名        |
-| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                      |
-| DOCKER_USER                    | Docker Hubのユーザ名                                                                                                     |
-| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                      |
-| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                |
-| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                               |
+| 環境変数名                     | 記載内容                                                                                                                      |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                            |
+| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                                   |
+| STAGE                          | デプロイする環境のステージ名を記入する                                                                                        |
+| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                        |
+| WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある            |
+| WS_SIGNAL_DOMAIN_NAME          | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                     |
+| WS_SIGNAL_CERT_ARN             | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある      |
+| WEBRTC_HELPER_DOMAIN_NAME      | WebRTC Helper APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                    |
+| WEBRTC_HELPER_CERT_ARN         | WebRTC Helper APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWEBRTC_HELPER_DOMAIN_NAMEのワイルドカード証明書である必要がある |
+| WEBRTC_HELPER_CORS_ORIGIN      | WebRTC Helper APIのCORS設定で許可するオリジン                                                                                 |
+| COTURN_SHARED_SECRET           | coturnサーバーで使用する共有秘密鍵を保存したAWS Secrets Managerのシークレット名                                               |
+| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                     |
+| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                       |
+| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名             |
+| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                           |
+| DOCKER_USER                    | Docker Hubのユーザ名                                                                                                          |
+| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                           |
+| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                     |
+| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                                    |
 
 ### serverlessデプロイ
 
@@ -242,6 +258,9 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
 | /GbraverBurst/dev/wsSignalCertArn            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
 | /GbraverBurst/dev/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
+| /GbraverBurst/dev/webrtcHelperDomainName     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_DOMAIN_NAME を参照      |
+| /GbraverBurst/dev/webrtcHelperCertArn        | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CERT_ARN を参照         |
+| /GbraverBurst/dev/webrtcHelperCorsOrigin     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CORS_ORIGIN を参照      |
 | /GbraverBurst/dev/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/dev/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -249,6 +268,14 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/dev/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/dev/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
+
+#### AWS Secrets Manager
+
+AWS Secrets Managerに以下のシークレットをセットする。
+
+| シークレットの名前                   | シークレットのタイプ                                              |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| /GbraverBurst/dev/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
 
 #### CodeBuild
 
@@ -301,6 +328,9 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
 | /GbraverBurst/prod/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
 | /GbraverBurst/prod/wsSignalCertArn            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
+| /GbraverBurst/prod/webrtcHelperDomainName     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_DOMAIN_NAME を参照      |
+| /GbraverBurst/prod/webrtcHelperCertArn        | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CERT_ARN を参照         |
+| /GbraverBurst/prod/webrtcHelperCorsOrigin     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CORS_ORIGIN を参照      |
 | /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -308,6 +338,14 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/dockerToken                | SecureString | [環境変数定義の定義](#環境変数の定義) DOCKER_TOKEN を参照                   |
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
+
+#### AWS Secrets Manager
+
+AWS Secrets Managerに以下のシークレットをセットする。
+
+| シークレットの名前                    | シークレットのタイプ                                              |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| /GbraverBurst/prod/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
 
 #### Code Build
 

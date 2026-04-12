@@ -7,23 +7,36 @@ custom:
 
 provider:
   name: aws
-  domain:
-    name: ${sls:stage}.${env:WS_SIGNAL_DOMAIN_NAME}
-    apiType: websocket
-    certificateArn: ${env:WS_SIGNAL_CERT_ARN}
+  domains:
+    - name: ${sls:stage}.${env:WS_SIGNAL_DOMAIN_NAME}
+      apiType: websocket
+      certificateArn: ${env:WS_SIGNAL_CERT_ARN}
+    - name: ${sls:stage}.${env:WEBRTC_HELPER_DOMAIN_NAME}
+      apiType: http
+      certificateArn: ${env:WEBRTC_HELPER_CERT_ARN}
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
   tracing:
     apiGateway: true
     lambda: true
+  httpApi:
+    cors:
+      allowedOrigins:
+        - ${env:WEBRTC_HELPER_CORS_ORIGIN}
+      allowedMethods:
+        - POST
+        - OPTIONS
+      maxAge: 600
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SERVICE: ${self:service}
     STAGE: ${sls:stage}
+    COTURN_SHARED_SECRET: ${env:COTURN_SHARED_SECRET}
     WEBSOCKET_API_ID:
       Ref: WebsocketsApi
+    WEBRTC_HELPER_CORS_ORIGIN: ${env:WEBRTC_HELPER_CORS_ORIGIN}
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
   iam:
@@ -51,6 +64,11 @@ provider:
           Resource:
             - Fn::GetAtt: [ConnectionsTable, Arn]
             - Fn::GetAtt: [RoomsTable, Arn]
+        - Effect: Allow
+          Action:
+            - "secretsmanager:GetSecretValue"
+          Resource:
+            - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:/GbraverBurst/${sls:stage}/*"
 
 functions:
   connect:
@@ -83,6 +101,12 @@ functions:
     events:
       - websocket:
           route: send-guest-signal
+  issueCoturnCredential:
+    handler: src/issue-credential.issueCoturnCredential
+    events:
+      - httpApi:
+          path: /coturn/credentials
+          method: post
 
 resources:
   Resources:
