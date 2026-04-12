@@ -15,7 +15,9 @@ env:
   WS_API_DOMAIN_NAME: test-domain-name # ビルド用のダミー値
   WS_API_CERT_ARN: test-certificate-arn # ビルド用のダミー値
   WS_SIGNAL_DOMAIN_NAME: test-signal-domain-name # ビルド用のダミー値
-  WS_SIGNAL_CERT_ARN: test-signal-certificate-arn # ビルド用
+  WS_SIGNAL_CERT_ARN: test-signal-certificate-arn # ビルド用のダミー値
+  WEBRTC_HELPER_DOMAIN_NAME: test-webrtc-helper-domain-name # ビルド用のダミー値
+  WEBRTC_HELPER_CERT_ARN: test-webrtc-helper-certificate-arn # ビルド用のダミー値
 jobs:
   test:
     runs-on: ubuntu-latest
