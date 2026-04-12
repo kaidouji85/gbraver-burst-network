@@ -58,10 +58,18 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
   /**
    * コンストラクタ
+   * @param options コンストラクタのオプション
+   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+   * @param options.coturnDomainName coturnサーバーのドメイン名
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
-  constructor(wsSignalUrl: string) {
-    this.#webRTCConnection = new GuestWebRTCConnectionManager();
+  constructor(options: {
+    wsSignalUrl: string;
+    webRTCHelperApiURL: string;
+    coturnDomainName: string;
+  }) {
+    const { wsSignalUrl } = options;
+    this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
@@ -170,10 +178,14 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 /**
  * ローカルWebRTCゲスト用SDKを生成する
  * @param wsSignalUrl WebSocketシグナルサーバーのURL
+ * @param webRTCHelperApiURL WebRTCヘルパーAPIのURL
+ * @param coturnDomainName coturnサーバーのドメイン名
  * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
-export function createLocalWebRTCGuestSDK(
-  wsSignalUrl: string,
-): LocalWebRTCGuestSDK {
-  return new LocalWebRTCGuestSDKImpl(wsSignalUrl);
+export function createLocalWebRTCGuestSDK(options: {
+  wsSignalUrl: string;
+  webRTCHelperApiURL: string;
+  coturnDomainName: string;
+}): LocalWebRTCGuestSDK {
+  return new LocalWebRTCGuestSDKImpl(options);
 }

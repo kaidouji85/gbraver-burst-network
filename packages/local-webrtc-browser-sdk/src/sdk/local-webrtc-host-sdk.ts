@@ -50,11 +50,19 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /**
    * コンストラクタ
+   * @param options コンストラクタのオプション
    * @param wsSignalUrl WebSocketシグナルサーバーのURL
+   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+   * @param options.coturnDomainName coturnサーバーのドメイン名
    */
-  constructor(wsSignalUrl: string) {
+  constructor(options: {
+    wsSignalUrl: string;
+    webRTCHelperApiURL: string;
+    coturnDomainName: string;
+  }) {
+    const { wsSignalUrl } = options;
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
-    this.#webRTCConnection = new HostWebRTCConnectionManager();
+    this.#webRTCConnection = new HostWebRTCConnectionManager(options);
   }
 
   /** @override */
@@ -110,11 +118,16 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
 /**
  * ローカルWebRTCホスト用SDKを生成する
- * @param wsSignalUrl WebSocketシグナルサーバーのURL
+ * @param options SDK生成のオプション
+ * @param options.wsSignalUrl WebSocketシグナルサーバーのURL
+ * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+ * @param options.coturnDomainName coturnサーバーのドメイン名
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
-export function createLocalWebRTCHostSDK(
-  wsSignalUrl: string,
-): LocalWebRTCHostSDK {
-  return new LocalWebRTCHostSDKImpl(wsSignalUrl);
+export function createLocalWebRTCHostSDK(options: {
+  wsSignalUrl: string;
+  webRTCHelperApiURL: string;
+  coturnDomainName: string;
+}): LocalWebRTCHostSDK {
+  return new LocalWebRTCHostSDKImpl(options);
 }
