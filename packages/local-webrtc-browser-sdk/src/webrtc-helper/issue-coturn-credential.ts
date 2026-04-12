@@ -14,6 +14,10 @@ export const issueCoturnCredential = async (
   const response = await fetch(`${apiURL}/coturn/credentials`, {
     method: "POST",
   });
+  if (response.status !== 201) {
+    throw new Error(`Failed to issue coturn credential: ${response.status}`);
+  }
+
   const body = await response.json();
   return IssueCoturnCredentialResponseSchema.parse(body);
 };
