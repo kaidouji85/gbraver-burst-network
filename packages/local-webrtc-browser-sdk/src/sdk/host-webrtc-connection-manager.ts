@@ -3,16 +3,10 @@ import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 /** 接続中 */
 type Connected = {
   type: "connected";
-  /**
-   * コネクションPromise
-   * コネクションの重複作成を防ぐために、コネクションとデータチャンネルのセットをPromiseで保持する
-   */
-  connectionPromise: Promise<{
-    /** WebRTCコネクション */
-    connection: RTCPeerConnection;
-    /** データチャンネル */
-    dataChannel: RTCDataChannel;
-  }>;
+  /** WebRTCコネクションのPromise */
+  connectionPromise: Promise<RTCPeerConnection>;
+  /** データチャンネルのPromise */
+  dataChannelPromise: Promise<RTCDataChannel>;
 };
 
 /** 切断中 */
@@ -52,23 +46,30 @@ export class HostWebRTCConnectionManager {
   /**
    * コネクションを取得する。
    * コネクションが存在しない場合は新たに作成する。
-   * @returns 取得したコネクションとデータチャンネル
+   * @returns 生成したコネクション
    */
-  async getOrCreateConnection(): Promise<{
-    /** コネクション */
-    connection: RTCPeerConnection;
-    /** データチャンネル */
-    dataChannel: RTCDataChannel;
-  }> {
+  getOrCreateConnection(): {
+    /** コネクションのPromise */
+    connectionPromise: Promise<RTCPeerConnection>;
+    /** データチャンネルのPromise */
+    dataChannelPromise: Promise<RTCDataChannel>;
+  } {
     if (this.#connectionState.type === "disconnected") {
-      const connectionPromise = this.#createConnectionPromise();
+      const connectionPromise = createRTCPeerConnection({
+        webRTCHelperApiURL: this.#webRTCHelperApiURL,
+        coturnDomainName: this.#coturnDomainName,
+      });
+      const dataChannelPromise = connectionPromise.then((connection) =>
+        connection.createDataChannel("sendDataChannel"),
+      );
       this.#connectionState = {
         type: "connected",
         connectionPromise,
+        dataChannelPromise,
       };
     }
 
-    return await this.#connectionState.connectionPromise;
+    return this.#connectionState;
   }
 
   /**
@@ -76,26 +77,13 @@ export class HostWebRTCConnectionManager {
    */
   disconnect() {
     if (this.#connectionState.type === "connected") {
-      this.#connectionState.connectionPromise.then(
-        ({ connection, dataChannel }) => {
-          connection.close();
-          dataChannel.close();
-        },
-      );
+      this.#connectionState.connectionPromise.then((connection) => {
+        connection.close();
+      });
+      this.#connectionState.dataChannelPromise.then((dataChannel) => {
+        dataChannel.close();
+      });
     }
     this.#connectionState = { type: "disconnected" };
-  }
-
-  /**
-   * コネクションPromiseを生成する
-   * @returns コネクションPromise
-   */
-  async #createConnectionPromise() {
-    const connection = await createRTCPeerConnection({
-      webRTCHelperApiURL: this.#webRTCHelperApiURL,
-      coturnDomainName: this.#coturnDomainName,
-    });
-    const dataChannel = connection.createDataChannel("sendDataChannel");
-    return { connection, dataChannel };
   }
 }
