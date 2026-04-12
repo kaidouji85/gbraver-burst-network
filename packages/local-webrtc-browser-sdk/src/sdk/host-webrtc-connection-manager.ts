@@ -1,9 +1,9 @@
-import { issueCoturnCredential } from "../webrtc-helper/issue-coturn-credential";
+import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
 /** 接続中 */
 type Connected = {
   type: "connected";
-  /** 
+  /**
    * コネクションPromise
    * コネクションの重複作成を防ぐために、コネクションとデータチャンネルのセットをPromiseで保持する
    */
@@ -91,24 +91,9 @@ export class HostWebRTCConnectionManager {
    * @returns コネクションPromise
    */
   async #createConnectionPromise() {
-    const { username, password: credential } = await issueCoturnCredential(
-      this.#webRTCHelperApiURL,
-    );
-    const connection = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: [`stun:${this.#coturnDomainName}:3478`],
-        },
-        {
-          urls: [
-            `turn:${this.#coturnDomainName}:3478?transport=udp`,
-            `turn:${this.#coturnDomainName}:3478?transport=tcp`,
-            `turns:${this.#coturnDomainName}:5349?transport=tcp`,
-          ],
-          username,
-          credential,
-        },
-      ],
+    const connection = await createRTCPeerConnection({
+      webRTCHelperApiURL: this.#webRTCHelperApiURL,
+      coturnDomainName: this.#coturnDomainName,
     });
     const dataChannel = connection.createDataChannel("sendDataChannel");
     return { connection, dataChannel };
