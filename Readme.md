@@ -141,6 +141,7 @@ npm run build
 | WEBRTC_HELPER_DOMAIN_NAME      | WebRTC Helper APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                    |
 | WEBRTC_HELPER_CERT_ARN         | WebRTC Helper APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWEBRTC_HELPER_DOMAIN_NAMEのワイルドカード証明書である必要がある |
 | WEBRTC_HELPER_CORS_ORIGIN      | WebRTC Helper APIのCORS設定で許可するオリジン                                                                                 |
+| COTURN_SHARED_SECRET           | coturnサーバーで生成した共有秘密鍵                                                                                            |
 | COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                     |
 | COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                       |
 | MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名             |
@@ -272,9 +273,9 @@ AWS Parameter Storeに以下の値をセットする。
 
 AWS Secrets Managerに以下のシークレットをセットする。
 
-| シークレットの名前                   | シークレットのタイプ           |
-| ------------------------------------ | ------------------------------ |
-| /GbraverBurst/dev/coturnSharedSecret | coturnサーバーで生成した秘密鍵 |
+| シークレットの名前                   | シークレットのタイプ                                              |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| /GbraverBurst/dev/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
 
 #### CodeBuild
 
@@ -342,9 +343,9 @@ AWS Parameter Storeに以下の値をセットする。
 
 AWS Secrets Managerに以下のシークレットをセットする。
 
-| シークレットの名前                   | シークレットのタイプ           |
-| ------------------------------------ | ------------------------------ |
-| /GbraverBurst/dev/coturnSharedSecret | coturnサーバーで生成した秘密鍵 |
+| シークレットの名前                   | シークレットのタイプ                                              |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| /GbraverBurst/dev/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
 
 #### Code Build
 
