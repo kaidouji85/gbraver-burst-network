@@ -3,7 +3,10 @@ import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../ws-signal/create-room";
-import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
+import {
+  HostWebRTCConnectionManager,
+  HostWebRTCConnectionManagerOptions,
+} from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
@@ -41,6 +44,12 @@ export type LocalWebRTCHostSDK = {
   disconnectWebRTC(): void;
 };
 
+/** LocalWebRTCHostSDKImplコンストラクタのオプション */
+type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
+  /** WebSocketシグナルサーバーのURL */
+  wsSignalUrl: string;
+};
+
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   /** WebRTCコネクションマネージャー */
@@ -50,11 +59,12 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
 
   /**
    * コンストラクタ
-   * @param wsSignalUrl WebSocketシグナルサーバーのURL
+   * @param options コンストラクタのオプション
    */
-  constructor(wsSignalUrl: string) {
+  constructor(options: LocalWebRTCHostSDKImplOptions) {
+    const { wsSignalUrl } = options;
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
-    this.#webRTCConnection = new HostWebRTCConnectionManager();
+    this.#webRTCConnection = new HostWebRTCConnectionManager(options);
   }
 
   /** @override */
@@ -63,7 +73,8 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
     try {
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const connection =
+        await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
@@ -108,13 +119,16 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
   }
 }
 
+/** LocalWebRTCHostSDKを生成するオプション */
+type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
+
 /**
  * ローカルWebRTCホスト用SDKを生成する
- * @param wsSignalUrl WebSocketシグナルサーバーのURL
+ * @param options SDK生成のオプション
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
 export function createLocalWebRTCHostSDK(
-  wsSignalUrl: string,
+  options: CreateLocalWebRTCHostSDKOptions,
 ): LocalWebRTCHostSDK {
-  return new LocalWebRTCHostSDKImpl(wsSignalUrl);
+  return new LocalWebRTCHostSDKImpl(options);
 }

@@ -9,6 +9,10 @@ import { UseCase } from "./use-case/use-case";
 
 /** WebSocketシグナルサーバーのURL */
 const WS_SIGNAL_SERVER_URL = process.env.WS_SIGNAL_SERVER_URL || "";
+/** WebRTC Helper APIのURL */
+const WEBRTC_HELPER_API_URL = process.env.WEBRTC_HELPER_API_URL || "";
+/** coturnサーバーのドメイン名 */
+const COTURN_DOMAIN_NAME = process.env.COTURN_DOMAIN_NAME || "";
 
 /**
  * ユースケースセレクターを取得する
@@ -49,8 +53,16 @@ const getRoomIDInput = (): HTMLInputElement => {
  * エントリポイント
  */
 window.onload = () => {
-  const hostSDK = createLocalWebRTCHostSDK(WS_SIGNAL_SERVER_URL);
-  const guestSDK = createLocalWebRTCGuestSDK(WS_SIGNAL_SERVER_URL);
+  const hostSDK = createLocalWebRTCHostSDK({
+    wsSignalUrl: WS_SIGNAL_SERVER_URL,
+    webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
+    coturnDomainName: COTURN_DOMAIN_NAME,
+  });
+  const guestSDK = createLocalWebRTCGuestSDK({
+    wsSignalUrl: WS_SIGNAL_SERVER_URL,
+    webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
+    coturnDomainName: COTURN_DOMAIN_NAME,
+  });
   const useCases: UseCase[] = [
     new HostPlayer(hostSDK),
     new GuestPlayer(guestSDK),

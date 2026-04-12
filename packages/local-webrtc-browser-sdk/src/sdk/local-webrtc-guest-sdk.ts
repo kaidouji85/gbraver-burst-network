@@ -10,7 +10,10 @@ import { joinRoom } from "../ws-signal/join-room";
 import { sendGuestSignal } from "../ws-signal/send-guest-signal";
 import { BattleSDK } from "./battle-sdk";
 import { GuestBattleSDK } from "./guest-battle-sdk";
-import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
+import {
+  GuestWebRTCConnectionManager,
+  GuestWebRTCConnectionManagerOptions,
+} from "./guest-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
@@ -49,6 +52,12 @@ export type LocalWebRTCGuestSDK = {
   disconnectWebRTC(): void;
 };
 
+/** LocalWebRTCGuestSDKImplコンストラクタのオプション */
+type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
+  /** WebSocketシグナルサーバーのURL */
+  wsSignalUrl: string;
+};
+
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebRTCコネクションマネージャー */
@@ -58,10 +67,11 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
   /**
    * コンストラクタ
-   * @param wsSignalUrl WebSocketシグナルサーバーのURL
+   * @param options コンストラクタのオプション
    */
-  constructor(wsSignalUrl: string) {
-    this.#webRTCConnection = new GuestWebRTCConnectionManager();
+  constructor(options: LocalWebRTCGuestSDKImplOptions) {
+    const { wsSignalUrl } = options;
+    this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
   }
 
@@ -75,12 +85,12 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       return await receiveRequestSelectedPlayer(dataChannel);
     })();
     const battleStartPromise = (async () => {
       const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       return await receiveBattleStart(dataChannel);
     })();
 
@@ -91,7 +101,7 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
     const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannel;
+      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     sendGuestMessage(dataChannel, {
       type: "send-player",
       flowID,
@@ -138,7 +148,8 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
       const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
         joinRoomAccepted;
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const connection =
+        await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       await connection.setRemoteDescription(hostSDP);
       await Promise.all(
         hostIceCandidates.map((c) => connection.addIceCandidate(c)),
@@ -167,13 +178,16 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   }
 }
 
+/** LocalWebRTCGuestSDKを生成するオプション */
+type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
+
 /**
  * ローカルWebRTCゲスト用SDKを生成する
- * @param wsSignalUrl WebSocketシグナルサーバーのURL
+ * @param options オプション
  * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
 export function createLocalWebRTCGuestSDK(
-  wsSignalUrl: string,
+  options: CreateLocalWebRTCGuestSDKOptions,
 ): LocalWebRTCGuestSDK {
-  return new LocalWebRTCGuestSDKImpl(wsSignalUrl);
+  return new LocalWebRTCGuestSDKImpl(options);
 }
