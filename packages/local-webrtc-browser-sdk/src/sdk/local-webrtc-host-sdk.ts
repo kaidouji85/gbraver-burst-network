@@ -73,7 +73,8 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
     try {
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const { connection } =
+        await this.#webRTCConnection.getOrCreateConnection();
       const sdp = await connection.createOffer();
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく

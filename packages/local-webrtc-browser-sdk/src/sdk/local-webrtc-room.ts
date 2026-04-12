@@ -69,7 +69,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<BattleSDK> {
-    const { dataChannel } = this.#webRTCConnection.getOrCreateConnection();
+    const { dataChannel } =
+      await this.#webRTCConnection.getOrCreateConnection();
     await Promise.all([
       this.#signaling(),
       waitUntilDataChannelOpen(dataChannel),
@@ -102,7 +103,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     try {
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
-      const { connection } = this.#webRTCConnection.getOrCreateConnection();
+      const { connection } =
+        await this.#webRTCConnection.getOrCreateConnection();
       await connection.setRemoteDescription(signal.sdp);
       await Promise.all([
         ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),

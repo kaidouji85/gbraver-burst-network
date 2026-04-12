@@ -1,3 +1,5 @@
+import { issueCoturnCredential } from "../webrtc-helper/issue-coturn-credential";
+
 /** 接続中 */
 type Connected = {
   type: "connected";
@@ -46,14 +48,32 @@ export class HostWebRTCConnectionManager {
    * コネクションが存在しない場合は新たに作成する。
    * @returns 取得したコネクションとデータチャンネル
    */
-  getOrCreateConnection(): {
+  async getOrCreateConnection(): Promise<{
     /** コネクション */
     connection: RTCPeerConnection;
     /** データチャンネル */
     dataChannel: RTCDataChannel;
-  } {
+  }> {
     if (this.#connectionState.type === "disconnected") {
-      const connection = new RTCPeerConnection();
+      const { username, password: credential } = await issueCoturnCredential(
+        this.#webRTCHelperApiURL,
+      );
+      const connection = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [`stun:${this.#coturnDomainName}:3478`],
+          },
+          {
+            urls: [
+              `turn:${this.#coturnDomainName}:3478?transport=udp`,
+              `turn:${this.#coturnDomainName}:3478?transport=tcp`,
+              `turns:${this.#coturnDomainName}:5349?transport=tcp`,
+            ],
+            username,
+            credential,
+          },
+        ],
+      });
       const dataChannel = connection.createDataChannel("sendDataChannel");
       this.#connectionState = {
         type: "connected",

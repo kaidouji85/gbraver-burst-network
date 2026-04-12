@@ -72,10 +72,9 @@ export class HostBattleSDK implements BattleSDK {
 
     this.flowID = nanoid();
     this.#webRTCConnection = options.webRTCConnection;
-    this.#sendCommandPromise = receiveSendCommand(
-      this.#webRTCConnection.getOrCreateConnection().dataChannel,
-      this.flowID,
-    );
+    this.#sendCommandPromise = this.#webRTCConnection
+      .getOrCreateConnection()
+      .then(({ dataChannel }) => receiveSendCommand(dataChannel, this.flowID));
   }
 
   /** @override */
@@ -89,18 +88,14 @@ export class HostBattleSDK implements BattleSDK {
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     this.flowID = nanoid();
-    this.#sendCommandPromise = receiveSendCommand(
-      this.#webRTCConnection.getOrCreateConnection().dataChannel,
-      this.flowID,
-    );
-    sendHostMessage(
-      this.#webRTCConnection.getOrCreateConnection().dataChannel,
-      {
-        type: "battle-progressed",
-        flowID: this.flowID,
-        update,
-      },
-    );
+    const { dataChannel } =
+      await this.#webRTCConnection.getOrCreateConnection();
+    this.#sendCommandPromise = receiveSendCommand(dataChannel, this.flowID);
+    sendHostMessage(dataChannel, {
+      type: "battle-progressed",
+      flowID: this.flowID,
+      update,
+    });
     return update;
   }
 
