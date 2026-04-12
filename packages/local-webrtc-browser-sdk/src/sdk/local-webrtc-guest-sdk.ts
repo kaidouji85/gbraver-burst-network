@@ -10,7 +10,10 @@ import { joinRoom } from "../ws-signal/join-room";
 import { sendGuestSignal } from "../ws-signal/send-guest-signal";
 import { BattleSDK } from "./battle-sdk";
 import { GuestBattleSDK } from "./guest-battle-sdk";
-import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
+import {
+  GuestWebRTCConnectionManager,
+  GuestWebRTCConnectionManagerOptions,
+} from "./guest-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
@@ -49,6 +52,12 @@ export type LocalWebRTCGuestSDK = {
   disconnectWebRTC(): void;
 };
 
+/** LocalWebRTCGuestSDKImplコンストラクタのオプション */
+type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
+  /** WebSocketシグナルサーバーのURL */
+  wsSignalUrl: string;
+};
+
 /** ローカルWebRTCゲスト用SDKの実装 */
 class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /** WebRTCコネクションマネージャー */
@@ -59,15 +68,8 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
   /**
    * コンストラクタ
    * @param options コンストラクタのオプション
-   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
-   * @param options.coturnDomainName coturnサーバーのドメイン名
-   * @param wsSignalUrl WebSocketシグナルサーバーのURL
    */
-  constructor(options: {
-    wsSignalUrl: string;
-    webRTCHelperApiURL: string;
-    coturnDomainName: string;
-  }) {
+  constructor(options: LocalWebRTCGuestSDKImplOptions) {
     const { wsSignalUrl } = options;
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
@@ -177,15 +179,11 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
 
 /**
  * ローカルWebRTCゲスト用SDKを生成する
- * @param wsSignalUrl WebSocketシグナルサーバーのURL
- * @param webRTCHelperApiURL WebRTCヘルパーAPIのURL
- * @param coturnDomainName coturnサーバーのドメイン名
+ * @param options オプション
  * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
-export function createLocalWebRTCGuestSDK(options: {
-  wsSignalUrl: string;
-  webRTCHelperApiURL: string;
-  coturnDomainName: string;
-}): LocalWebRTCGuestSDK {
+export function createLocalWebRTCGuestSDK(
+  options: LocalWebRTCGuestSDKImplOptions,
+): LocalWebRTCGuestSDK {
   return new LocalWebRTCGuestSDKImpl(options);
 }

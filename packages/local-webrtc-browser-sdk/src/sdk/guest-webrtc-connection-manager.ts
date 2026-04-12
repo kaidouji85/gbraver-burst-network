@@ -17,6 +17,14 @@ type Disconnected = {
 /** コネクションの状態 */
 type ConnectionState = Connected | Disconnected;
 
+/** GuestWebRTCConnectionManagerコンストラクタのオプション */
+export type GuestWebRTCConnectionManagerOptions = {
+  /** WebRTCヘルパーAPIのURL */
+  webRTCHelperApiURL: string;
+  /** coturnサーバーのドメイン名 */
+  coturnDomainName: string;
+};
+
 /** ゲストのWebRTCコネクション管理 */
 export class GuestWebRTCConnectionManager {
   /** コネクションの状態 */
@@ -27,16 +35,9 @@ export class GuestWebRTCConnectionManager {
   #coturnDomainName: string;
 
   /** コンストラクタ
-   * @param options コンストラクタのオプション
-   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
-   * @param options.coturnDomainName coturnサーバーのドメイン名
+   * @param options コンストラクタのオプション名
    */
-  constructor(options: {
-    /** WebRTCヘルパーAPIのURL */
-    webRTCHelperApiURL: string;
-    /** coturnサーバーのドメイン名 */
-    coturnDomainName: string;
-  }) {
+  constructor(options: GuestWebRTCConnectionManagerOptions) {
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
     this.#coturnDomainName = options.coturnDomainName;
   }
