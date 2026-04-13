@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.22.0-beta.0
+
+### Minor Changes
+
+- ローカルWebRTCにcoturn接続設定を追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.22.0-beta.0
+
 ## 1.21.0
 
 ### Minor Changes
