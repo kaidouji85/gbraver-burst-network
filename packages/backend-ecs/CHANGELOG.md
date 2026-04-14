@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.22.0
+
+### Minor Changes
+
+- ローカルWebRTCにcoturnを追加
+- aeb6269: ローカルWebRTCにcoturn接続設定を追加した
+
+## 1.22.0-beta.0
+
+### Minor Changes
+
+- ローカルWebRTCにcoturn接続設定を追加した
+
 ## 1.21.0
 
 ### Minor Changes
