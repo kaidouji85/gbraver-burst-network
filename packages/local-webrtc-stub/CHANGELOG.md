@@ -1,5 +1,18 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.22.0
+
+### Minor Changes
+
+- ローカルWebRTCにcoturnを追加
+- aeb6269: ローカルWebRTCにcoturn接続設定を追加した
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [aeb6269]
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.22.0
+
 ## 1.22.0-beta.0
 
 ### Minor Changes
