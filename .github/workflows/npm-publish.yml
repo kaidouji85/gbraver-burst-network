@@ -15,10 +15,10 @@ env:
   WS_API_CERT_ARN: "arn:aws:acm:region:account:certificate/dummy-value-not-used"
   WS_SIGNAL_DOMAIN_NAME: "dummy-value.not-used.com"
   WS_SIGNAL_CERT_ARN: "arn:aws:acm:region:account:certificate/dummy-value-not-used"
-  WEBRTC_HELPER_DOMAIN_NAME: test-webrtc-helper-domain-name
-  WEBRTC_HELPER_CERT_ARN: test-webrtc-helper-certificate-arn
-  WEBRTC_HELPER_CORS_ORIGIN: test-webrtc-helper-cors-origin
-  COTURN_SHARED_SECRET: test-coturn-shared-secret
+  WEBRTC_HELPER_DOMAIN_NAME: "test-webrtc-helper-domain-name"
+  WEBRTC_HELPER_CERT_ARN: "test-webrtc-helper-certificate-arn"
+  WEBRTC_HELPER_CORS_ORIGIN: "test-webrtc-helper-cors-origin"
+  COTURN_SHARED_SECRET: "test-coturn-shared-secret"
 jobs:
   build:
     runs-on: ubuntu-latest
