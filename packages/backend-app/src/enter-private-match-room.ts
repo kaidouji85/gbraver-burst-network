@@ -67,21 +67,16 @@ const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
 export async function enterPrivateMatchRoom(
   event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> {
+  const { connectionId } = event.requestContext;
   const body = parseJSON(event.body);
   const data = parseEnterPrivateMatchRoom(body);
   if (!data) {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      invalidRequestBodyError,
-    );
+    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
     return invalidRequestBody;
   }
 
   if (data.roomID === "") {
-    await notifier.notifyToClient(
-      event.requestContext.connectionId,
-      rejectPrivateMatchEntry,
-    );
+    await notifier.notifyToClient(connectionId, rejectPrivateMatchEntry);
     return invalidRequestBody;
   }
 
@@ -93,12 +88,12 @@ export async function enterPrivateMatchRoom(
     userID: user.userID,
     armdozerId: data.armdozerId,
     pilotId: data.pilotId,
-    connectionId: event.requestContext.connectionId,
+    connectionId,
   };
   await Promise.all([
     dynamoPrivateMatchEntries.put(entry),
     dynamoConnections.put({
-      connectionId: event.requestContext.connectionId,
+      connectionId,
       userID: user.userID,
       state: {
         type: "PrivateMatchMaking",
