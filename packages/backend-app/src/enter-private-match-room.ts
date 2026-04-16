@@ -10,39 +10,51 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseEnterPrivateMatchRoom } from "./request/enter-private-match-room";
-import type { Error } from "./response/error";
-import type { RejectPrivateMatchEntry } from "./response/reject-private-match-entry";
+import { Error } from "./response/error";
+import { RejectPrivateMatchEntry } from "./response/reject-private-match-entry";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** DynamoDBドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDBコネクションステート */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+/** DynamoDBプライベートマッチエントリー */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
 
+/** API Gatewayエンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway Management API */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** 無効なリクエストボディ */
 const invalidRequestBody: WebsocketAPIResponse = {
   statusCode: 400,
   body: "invalid request body",
 };
-
+/** 無効なリクエストボディのエラー */
 const invalidRequestBodyError: Error = {
   action: "error",
   error: "invalid request body",
 };
+/** プライベートマッチエントリー拒否のレスポンス */
 const rejectPrivateMatchEntry: RejectPrivateMatchEntry = {
   action: "reject-private-match-entry",
 };
