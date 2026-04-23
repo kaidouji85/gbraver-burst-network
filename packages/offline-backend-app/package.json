@@ -10,7 +10,7 @@
     "gbraver-burst-core": "^1.44.0",
     "p-queue": "^9.1.2",
     "socket.io": "^4.8.3",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

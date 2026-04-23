@@ -14,7 +14,7 @@
     "gbraver-burst-core": "^1.44.0",
     "nanoid": "^5.1.7",
     "ramda": "^0.32.0",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
