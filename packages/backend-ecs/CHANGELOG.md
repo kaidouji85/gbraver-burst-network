@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.23.0
+
+### Minor Changes
+
+- 依存性のあるパッケージをアップグレード
+
 ## 1.22.0
 
 ### Minor Changes

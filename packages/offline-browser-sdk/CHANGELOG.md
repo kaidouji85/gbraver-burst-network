@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.23.0
+
+### Minor Changes
+
+- 依存性のあるパッケージをアップグレード
+
 ## 1.22.0
 
 ### Minor Changes
