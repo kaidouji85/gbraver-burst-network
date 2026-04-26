@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.23.0
+
+### Minor Changes
+
+- 依存性のあるパッケージをアップグレード
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.23.0
+
 ## 1.22.0
 
 ### Minor Changes
