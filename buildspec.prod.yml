@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret
+    # COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret # あいことば対戦を本番リリースするまでコメントアウト
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
     WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService

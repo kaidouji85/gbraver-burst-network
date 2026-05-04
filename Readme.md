@@ -339,6 +339,7 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
 
+<!-- あいことば対戦を本番リリースするまでコメントアウト
 #### AWS Secrets Manager
 
 AWS Secrets Managerに以下のシークレットをセットする。
@@ -346,6 +347,7 @@ AWS Secrets Managerに以下のシークレットをセットする。
 | シークレットの名前                    | シークレットのタイプ                                              |
 | ------------------------------------- | ----------------------------------------------------------------- |
 | /GbraverBurst/prod/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
+-->
 
 #### Code Build
 
