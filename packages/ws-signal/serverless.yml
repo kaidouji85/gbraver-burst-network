@@ -1,0 +1,134 @@
+service: ${env:WS_SIGNAL_SERVICE, "gb-ws-signal-dev"}
+frameworkVersion: "4"
+
+custom:
+  connections: ${self:service}__${sls:stage}__connections
+  rooms: ${self:service}__${sls:stage}__rooms
+
+provider:
+  name: aws
+  domains:
+    - name: ${sls:stage}.${env:WS_SIGNAL_DOMAIN_NAME}
+      apiType: websocket
+      certificateArn: ${env:WS_SIGNAL_CERT_ARN}
+    - name: ${sls:stage}.${env:WEBRTC_HELPER_DOMAIN_NAME}
+      apiType: http
+      certificateArn: ${env:WEBRTC_HELPER_CERT_ARN}
+  runtime: nodejs24.x
+  architecture: arm64
+  region: ap-northeast-1
+  tracing:
+    apiGateway: true
+    lambda: true
+  httpApi:
+    cors:
+      allowedOrigins:
+        - ${env:WEBRTC_HELPER_CORS_ORIGIN}
+      allowedMethods:
+        - POST
+        - OPTIONS
+      maxAge: 600
+  websocketsApiName: ${self:service}__${sls:stage}__ws-signal
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    SERVICE: ${self:service}
+    STAGE: ${sls:stage}
+    COTURN_SHARED_SECRET: ${env:COTURN_SHARED_SECRET}
+    WEBSOCKET_API_ID:
+      Ref: WebsocketsApi
+    WEBRTC_HELPER_CORS_ORIGIN: ${env:WEBRTC_HELPER_CORS_ORIGIN}
+    DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
+    DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "xray:PutTraceSegments"
+            - "xray:PutTelemetryRecords"
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - "execute-api:ManageConnections"
+          Resource:
+            - "arn:aws:execute-api:*:*:**/@connections/*"
+        - Effect: Allow
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
+            - "dynamodb:BatchWrite*"
+          Resource:
+            - Fn::GetAtt: [ConnectionsTable, Arn]
+            - Fn::GetAtt: [RoomsTable, Arn]
+        - Effect: Allow
+          Action:
+            - "secretsmanager:GetSecretValue"
+          Resource:
+            - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:${env:COTURN_SHARED_SECRET}*"
+
+functions:
+  connect:
+    handler: src/connect.connect
+    events:
+      - websocket:
+          route: $connect
+  disconnect:
+    handler: src/disconnect.disconnect
+    events:
+      - websocket:
+          route: $disconnect
+  ping:
+    handler: src/ping.ping
+    events:
+      - websocket:
+          route: ping
+  createRoom:
+    handler: src/create-room.createRoom
+    events:
+      - websocket:
+          route: create-room
+  joinRoom:
+    handler: src/join-room.joinRoom
+    events:
+      - websocket:
+          route: join-room
+  sendGuestSignal:
+    handler: src/send-guest-signal.sendGuestSignal
+    events:
+      - websocket:
+          route: send-guest-signal
+  issueCoturnCredential:
+    handler: src/issue-credential.issueCoturnCredential
+    events:
+      - httpApi:
+          path: /coturn/credentials
+          method: post
+
+resources:
+  Resources:
+    ConnectionsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.connections}
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    RoomsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.rooms}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

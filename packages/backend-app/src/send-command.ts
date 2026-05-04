@@ -8,7 +8,8 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parseSendCommand } from "./request/sned-command";
-import type { AcceptCommand, Error } from "./response/websocket-response";
+import type { AcceptCommand } from "./response/accept-command";
+import type { Error } from "./response/error";
 
 const AWS_REGION = process.env.AWS_REGION ?? "";
 const SERVICE = process.env.SERVICE ?? "";

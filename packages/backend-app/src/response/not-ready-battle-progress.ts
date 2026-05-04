@@ -1,6 +1,9 @@
-import type { NotReadyBattleProgress } from "./websocket-response";
+/** バトル進行の準備ができていない */
+export type NotReadyBattleProgress = {
+  action: "not-ready-battle-progress";
+};
 
-/** クライアント通知 コマンド入力が完了していない */
-export const notReadyBattleProgress: NotReadyBattleProgress = {
+/** バトル進行の準備ができていない（定数） */
+export const NOT_READY_BATTLE_PROGRESS: NotReadyBattleProgress = {
   action: "not-ready-battle-progress",
 };

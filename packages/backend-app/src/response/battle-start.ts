@@ -1,7 +1,25 @@
-import type { Battle, BattlePlayer } from "../core/battle";
+import { GameState, Player } from "gbraver-burst-core";
+
+import { Battle, BattleID, BattlePlayer, FlowID } from "../core/battle";
 import { toPlayer } from "../core/to-player";
-import type { UserID } from "../core/user";
-import type { BattleStart } from "./websocket-response";
+import { UserID } from "../core/user";
+
+/** 戦闘開始 */
+export type BattleStart = {
+  action: "battle-start";
+  /** プレイヤー情報 */
+  player: Player;
+  /** 敵情報 */
+  enemy: Player;
+  /** 戦闘ID */
+  battleID: BattleID;
+  /** ステートヒストリー */
+  stateHistory: GameState[];
+  /** フローID */
+  flowID: FlowID;
+  /** 戦闘進捗ポーリングを実行する側か否か、trueでポーリングをする */
+  isPoller: boolean;
+};
 
 /**
  * 戦闘開始オブジェクトを生成するヘルパー関数

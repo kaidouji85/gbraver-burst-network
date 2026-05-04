@@ -14,6 +14,12 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   WS_API_DOMAIN_NAME: test-domain-name # ビルド用のダミー値
   WS_API_CERT_ARN: test-certificate-arn # ビルド用のダミー値
+  WS_SIGNAL_DOMAIN_NAME: test-signal-domain-name # ビルド用のダミー値
+  WS_SIGNAL_CERT_ARN: test-signal-certificate-arn # ビルド用のダミー値
+  WEBRTC_HELPER_DOMAIN_NAME: test-webrtc-helper-domain-name # ビルド用のダミー値
+  WEBRTC_HELPER_CERT_ARN: test-webrtc-helper-certificate-arn # ビルド用のダミー値
+  WEBRTC_HELPER_CORS_ORIGIN: test-webrtc-helper-cors-origin # ビルド用のダミー値
+  COTURN_SHARED_SECRET: test-coturn-shared-secret # ビルド用のダミー値
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -36,5 +42,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_JS_VERSION }}
       - run: npm ci
-      - run: npm run build
+      # serverless v4 では`sls`コマンド実行時に同ツールがダウンロードされる
+      # そのためturboなどで並列ビルドを行うと、ダウンロードの競合が発生してビルドに失敗することがある
+      # この問題を回避するため、ビルドは並列実行せずに順次実行する
+      - run: npx turbo run build --concurrency=1
       - run: npm run dependency-check

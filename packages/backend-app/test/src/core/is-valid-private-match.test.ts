@@ -7,6 +7,7 @@ import { User } from "../../../src/core/user";
 
 const EmptyRoom: PrivateMatchRoom = {
   roomID: "",
+  expiresAt: 0,
   owner: "",
   ownerConnectionId: "",
   armdozerId: ArmdozerIds.SHIN_BRAVER,

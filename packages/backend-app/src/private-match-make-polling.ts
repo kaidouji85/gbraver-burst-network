@@ -16,36 +16,48 @@ import { invalidRequestBody } from "./lambda/invalid-request-body";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { parsePrivateMatchMakePolling } from "./request/private-match-make-polling";
-import { cloudNotPrivateMatchMake } from "./response/cloud-not-private-match-make";
-import { createBattleStart } from "./response/create-battle-start";
-import { invalidRequestBodyError } from "./response/invalid-request-body-error";
-import { rejectPrivateMatchEntry } from "./response/reject-private-match-entry";
+import { createBattleStart } from "./response/battle-start";
+import { CLOUD_NOT_PRIVATE_MATCH_MAKE } from "./response/cloud-not-private-match-make";
+import { INVALID_REQUEST_BODY_ERROR } from "./response/error";
+import { REJECT_PRIVATE_MATCH_ENTRY } from "./response/reject-private-match-entry";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス名 */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** WebSocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** DynamoDBDocument */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB DAO private-match-rooms */
 const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** DynamoDB DAO private-match-entries */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** DynamoDB DAO battles */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+/** DynamoDB DAO connections */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway管理オブジェクト */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
 /**
@@ -61,7 +73,7 @@ export async function privateMatchMakePolling(
   if (!data) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      invalidRequestBodyError,
+      INVALID_REQUEST_BODY_ERROR,
     );
     return invalidRequestBody;
   }
@@ -70,13 +82,13 @@ export async function privateMatchMakePolling(
     event.requestContext.authorizer,
   );
   const [room, entries] = await Promise.all([
-    dynamoPrivateMatchRooms.get(user.userID),
+    dynamoPrivateMatchRooms.get(data.roomID),
     dynamoPrivateMatchEntries.getEntries(data.roomID),
   ]);
   if (!room || !isValidPrivateMatch({ owner: user, room, entries })) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
@@ -85,7 +97,7 @@ export async function privateMatchMakePolling(
   if (!matching) {
     await notifier.notifyToClient(
       event.requestContext.connectionId,
-      cloudNotPrivateMatchMake,
+      CLOUD_NOT_PRIVATE_MATCH_MAKE,
     );
     return endPrivateMatchMakePolling;
   }
@@ -102,12 +114,12 @@ export async function privateMatchMakePolling(
     ),
     ...notChosenConnections.map((v) => dynamoConnections.put(v)),
     ...notChosenConnections.map(({ connectionId }) =>
-      notifier.notifyToClient(connectionId, rejectPrivateMatchEntry),
+      notifier.notifyToClient(connectionId, REJECT_PRIVATE_MATCH_ENTRY),
     ),
     ...entries.map(({ roomID, userID }) =>
       dynamoPrivateMatchEntries.delete(roomID, userID),
     ),
-    dynamoPrivateMatchRooms.delete(user.userID),
+    dynamoPrivateMatchRooms.delete(data.roomID),
   ]);
   return endPrivateMatchMakePolling;
 }

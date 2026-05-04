@@ -1,11 +1,33 @@
-import { nanoid } from "nanoid";
+import * as crypto from "crypto";
 
 import { PrivateMatchRoomID } from "./private-match-room";
 
+/** ひらがな表 */
+const kana = [
+  // prettierで一文字ずつ改行されるのを防ぐため、
+  // 行ごとにスプレッド構文で展開している
+  ...["あ", "い", "う", "え", "お"],
+  ...["か", "き", "く", "け", "こ"],
+  ...["さ", "し", "す", "せ", "そ"],
+  ...["た", "ち", "つ", "て", "と"],
+  ...["な", "に", "ぬ", "ね", "の"],
+  ...["は", "ひ", "ふ", "へ", "ほ"],
+  ...["ま", "み", "む", "め", "も"],
+  ...["や", "ゆ", "よ"],
+  ...["ら", "り", "る", "れ", "ろ"],
+  // 「お」と「を」は発音が同じなので、「お」のみを使用する
+  ...["わ", /*"を",*/ "ん"],
+];
+
+/** ルームIDの文字数 */
+const ROOM_ID_LENGTH = 5;
+
 /**
- * プライベートマッチルームIDを発行する
- * @returns 発行したプライベートマッチルームID
+ * プライベートマッチのルームIDを生成する
+ * @returns 生成されたルームID
  */
-export function generatePrivateMatchRoomID(): PrivateMatchRoomID {
-  return nanoid();
-}
+export const generatePrivateMatchRoomID = (): PrivateMatchRoomID =>
+  Array.from(
+    { length: ROOM_ID_LENGTH },
+    () => kana[crypto.randomInt(kana.length)],
+  ).join("");
