@@ -322,15 +322,9 @@ AWS Parameter Storeに以下の値をセットする。
 | 名前                                          | 種類         | 値                                                                          |
 | --------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
 | /GbraverBurst/prod/service                    | String       | [環境変数定義の定義](#環境変数の定義) SERVICE を参照                        |
-| /GbraverBurst/prod/wsSignalService            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_SERVICE を参照              |
 | /GbraverBurst/prod/stage                      | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
 | /GbraverBurst/prod/wsApiDomainName            | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/prod/wsApiCertArn               | String       | [環境変数定義の定義](#環境変数の定義) WS_API_CERT_ARN を参照                |
-| /GbraverBurst/prod/wsSignalDomainName         | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
-| /GbraverBurst/prod/wsSignalCertArn            | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
-| /GbraverBurst/prod/webrtcHelperDomainName     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_DOMAIN_NAME を参照      |
-| /GbraverBurst/prod/webrtcHelperCertArn        | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CERT_ARN を参照         |
-| /GbraverBurst/prod/webrtcHelperCorsOrigin     | String       | [環境変数定義の定義](#環境変数の定義) WEBRTC_HELPER_CORS_ORIGIN を参照      |
 | /GbraverBurst/prod/cognitoUserPoolId          | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/prod/cognitoClientId            | String       | [環境変数定義の定義](#環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [環境変数定義の定義](#環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
@@ -339,26 +333,15 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/prod/vpcSubnetCount             | String       | [環境変数定義の定義](#環境変数の定義) VPC_SUBNET_COUNT を参照               |
 | /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                   |
 
-<!-- あいことば対戦を本番リリースするまでコメントアウト
-#### AWS Secrets Manager
-
-AWS Secrets Managerに以下のシークレットをセットする。
-
-| シークレットの名前                    | シークレットのタイプ                                              |
-| ------------------------------------- | ----------------------------------------------------------------- |
-| /GbraverBurst/prod/coturnSharedSecret | [環境変数定義の定義](#環境変数の定義) COTURN_SHARED_SECRET を参照 |
--->
-
 #### Code Build
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割                 | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
-| -------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| デプロイ             | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| serverless削除       | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
-| バックエンドECS削除  | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
-| シグナルサーバー削除 | buildspec.wsSignal.remove.prod.yml   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| 役割                | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| デプロイ            | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
+| serverless削除      | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
 ##### webhook
 
