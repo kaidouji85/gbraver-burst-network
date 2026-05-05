@@ -3,7 +3,15 @@ import { createHash } from "crypto";
 import { z } from "zod";
 
 /** トークンの有効期限（秒） */
-export const AUTH_TOKEN_TTL = 60 * 10;
+const AUTH_TOKEN_TTL = 60 * 10;
+
+/**
+ * トークンをハッシュ化する
+ * @param token トークン
+ * @returns ハッシュ化したトークン
+ */
+const hashToken = (token: string): string =>
+  createHash("sha256").update(token).digest("hex");
 
 /**
  * DynamoDBスキーマ AuthToken
@@ -40,16 +48,12 @@ export class DynamoAuthTokens {
   }
 
   /**
-   * トークンをSHA-256でハッシュ化する
-   * @param token 元のトークン
-   * @returns ハッシュ化されたトークン（hex文字列）
+   * トークンを保存する
+   * @param token トークン
+   * @returns 処理が完了したら発火するPromise
    */
-  hashToken(token: string): string {
-    return createHash("sha256").update(token).digest("hex");
-  }
-
   async put(token: string): Promise<void> {
-    const tokenHash = this.hashToken(token);
+    const tokenHash = hashToken(token);
     const expiresAt = Date.now() / 1000 + AUTH_TOKEN_TTL;
     await this.#dynamoDB.put({
       TableName: this.#tableName,
