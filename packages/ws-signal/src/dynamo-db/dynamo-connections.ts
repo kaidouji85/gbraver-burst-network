@@ -29,20 +29,6 @@ export class DynamoConnections {
   }
 
   /**
-   * コネクションID指定でアイテムを検索する
-   * 検索条件に合致するアイテムがない場合は、nullを返す
-   * @param connectionId コネクションID
-   * @returns 検索結果
-   */
-  async get(connectionId: string): Promise<DynamoConnection | null> {
-    const result = await this.#dynamoDB.get({
-      TableName: this.#tableName,
-      Key: { connectionId },
-    });
-    return result.Item ? DynamoConnectionSchema.parse(result.Item) : null;
-  }
-
-  /**
    * Put操作を行う
    * @param connection 追加する項目
    * @returns 処理が完了したら発火するPromise
