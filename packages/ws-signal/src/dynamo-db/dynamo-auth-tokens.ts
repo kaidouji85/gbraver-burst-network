@@ -10,7 +10,7 @@ const AUTH_TOKEN_TTL = 60 * 10;
  * @param token トークン
  * @returns ハッシュ化したトークン
  */
-const hashToken = (token: string): string =>
+const toTokenHash = (token: string): string =>
   createHash("sha256").update(token).digest("hex");
 
 /**
@@ -53,11 +53,26 @@ export class DynamoAuthTokens {
    * @returns 処理が完了したら発火するPromise
    */
   async put(token: string): Promise<void> {
-    const tokenHash = hashToken(token);
+    const tokenHash = toTokenHash(token);
     const expiresAt = Date.now() / 1000 + AUTH_TOKEN_TTL;
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: { tokenHash, expiresAt },
     });
+  }
+
+  /**
+   * 指定したトークンがDynamoDB内に存在するかを検索する
+   * @param token トークン
+   * @returns 検索結果、存在する場合はハッシュ化したトークン、存在しない場合はnullを返す
+   */
+  async get(token: string): Promise<DynamoAuthToken | null> {
+    const tokenHash = toTokenHash(token);
+    const result = await this.#dynamoDB.get({
+      TableName: this.#tableName,
+      Key: { tokenHash },
+      ConsistentRead: true,
+    });
+    return result ? DynamoAuthTokenSchema.parse(result.Item) : null;
   }
 }
