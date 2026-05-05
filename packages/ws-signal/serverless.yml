@@ -4,6 +4,7 @@ frameworkVersion: "4"
 custom:
   connections: ${self:service}__${sls:stage}__connections
   rooms: ${self:service}__${sls:stage}__rooms
+  authTokens: ${self:service}__${sls:stage}__auth-tokens
 
 provider:
   name: aws
@@ -64,6 +65,7 @@ provider:
           Resource:
             - Fn::GetAtt: [ConnectionsTable, Arn]
             - Fn::GetAtt: [RoomsTable, Arn]
+            - Fn::GetAtt: [AuthTokensTable, Arn]
         - Effect: Allow
           Action:
             - "secretsmanager:GetSecretValue"
@@ -131,4 +133,18 @@ resources:
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    AuthTokensTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.authTokens}
+        AttributeDefinitions:
+          - AttributeName: tokenHash
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tokenHash
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
         BillingMode: PAY_PER_REQUEST
