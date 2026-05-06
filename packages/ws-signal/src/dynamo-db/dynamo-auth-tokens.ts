@@ -1,9 +1,7 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { createHash } from "crypto";
 import { z } from "zod";
-
-/** トークンの有効期限（秒） */
-const AUTH_TOKEN_TTL = 60 * 10;
+import { AuthToken } from "../core/auth-token";
 
 /**
  * トークンをハッシュ化する
@@ -49,12 +47,12 @@ export class DynamoAuthTokens {
 
   /**
    * トークンを保存する
-   * @param token トークン
+   * @param authToken 認証用トークン
    * @returns 処理が完了したら発火するPromise
    */
-  async put(token: string): Promise<void> {
+  async put(authToken: AuthToken): Promise<void> {
+    const { token, expiresAt } = authToken;
     const tokenHash = toTokenHash(token);
-    const expiresAt = Date.now() / 1000 + AUTH_TOKEN_TTL;
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: { tokenHash, expiresAt },
@@ -63,16 +61,17 @@ export class DynamoAuthTokens {
 
   /**
    * 指定したトークンがDynamoDB内に存在するかを検索する
-   * @param token トークン
-   * @returns 検索結果、存在する場合はハッシュ化したトークン、存在しない場合はnullを返す
+   * @param authToken 認証用トークン
+   * @returns 存在する場合はtrue、存在しない場合はfalseを返す
    */
-  async get(token: string): Promise<DynamoAuthToken | null> {
+  async hasToken(authToken: AuthToken): Promise<boolean> {
+    const { token } = authToken;
     const tokenHash = toTokenHash(token);
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: { tokenHash },
       ConsistentRead: true,
     });
-    return result ? DynamoAuthTokenSchema.parse(result.Item) : null;
+    return !!result.Item;
   }
 }
