@@ -29,6 +29,10 @@ provider:
         - POST
         - OPTIONS
       maxAge: 600
+    authorizers:
+      httpAuthorizer:
+        type: request
+        functionName: httpAuthorizerFunc
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -74,6 +78,7 @@ provider:
             - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:${env:COTURN_SHARED_SECRET}*"
 
 functions:
+  # WebSocket API
   connect:
     handler: src/connect.connect
     events:
@@ -84,12 +89,6 @@ functions:
     events:
       - websocket:
           route: $disconnect
-  issueAuthToken:
-    handler: src/issue-auth-token.issueAuthToken
-    events:
-      - httpApi:
-          path: /auth-token
-          method: post
   ping:
     handler: src/ping.ping
     events:
@@ -110,12 +109,22 @@ functions:
     events:
       - websocket:
           route: send-guest-signal
+
+  # HTTP API
+  issueAuthToken:
+    handler: src/issue-auth-token.issueAuthToken
+    events:
+      - httpApi:
+          path: /auth-token
+          method: post
   issueCoturnCredential:
     handler: src/issue-coturn-credential.issueCoturnCredential
     events:
       - httpApi:
           path: /coturn/credentials
           method: post
+  httpAuthorizerFunc:
+    handler: src/authorizer.authorizer
 
 resources:
   Resources:
