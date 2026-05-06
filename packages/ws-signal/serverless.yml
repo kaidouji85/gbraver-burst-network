@@ -33,6 +33,8 @@ provider:
       httpAuthorizer:
         type: request
         functionName: httpAuthorizerFunc
+        enableSimpleResponses: true
+        payloadVersion: "2.0"
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -123,6 +125,8 @@ functions:
       - httpApi:
           path: /coturn/credentials
           method: post
+          authorizer:
+            name: httpAuthorizer
   httpAuthorizerFunc:
     handler: src/authorizer.authorizer
 
