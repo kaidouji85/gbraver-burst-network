@@ -40,6 +40,7 @@ provider:
     WEBRTC_HELPER_CORS_ORIGIN: ${env:WEBRTC_HELPER_CORS_ORIGIN}
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
+    DYNAMODB_AUTH_TOKENS_TABLE: ${self:custom.authTokens}
   iam:
     role:
       statements:
