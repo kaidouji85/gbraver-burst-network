@@ -104,7 +104,7 @@ functions:
       - websocket:
           route: send-guest-signal
   issueCoturnCredential:
-    handler: src/issue-credential.issueCoturnCredential
+    handler: src/issue-coturn-credential.issueCoturnCredential
     events:
       - httpApi:
           path: /coturn/credentials
