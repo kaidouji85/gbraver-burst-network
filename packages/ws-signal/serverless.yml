@@ -83,6 +83,12 @@ functions:
     events:
       - websocket:
           route: $disconnect
+  issueAuthToken:
+    handler: src/issue-auth-token.issueAuthToken
+    events:
+      - httpApi:
+          path: /auth-token
+          method: post
   ping:
     handler: src/ping.ping
     events:
