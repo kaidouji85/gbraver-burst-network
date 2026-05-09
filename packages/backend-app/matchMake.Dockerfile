@@ -1,5 +1,5 @@
 # docker buildの前にbuild:match-makeを実行すること
-FROM node:24.14.1-trixie-slim
+FROM node:24.15.0-trixie-slim
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app
 # SIGTERMを適切に処理できるように、
