@@ -25,7 +25,7 @@ const dynamoAuthTokens = new DynamoAuthTokens(
  * HTTP API用のオーソライザー
  * @returns 認証結果
  */
-export const authorizer = async (
+export const httpAPIAuthorizer = async (
   event: APIGatewayProxyEventV2,
 ): Promise<
   | APIGatewaySimpleAuthorizerWithContextResult<AuthToken>

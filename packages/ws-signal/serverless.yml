@@ -128,7 +128,7 @@ functions:
           authorizer:
             name: httpAuthorizer
   httpAuthorizerFunc:
-    handler: src/authorizer.authorizer
+    handler: src/http-api-authorizer.httpAPIAuthorizer
 
 resources:
   Resources:
