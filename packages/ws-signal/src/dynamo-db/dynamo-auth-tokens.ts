@@ -76,6 +76,6 @@ export class DynamoAuthTokens {
       return null;
     }
 
-    return AuthTokenSchema.parse(result.Item);
+    return AuthTokenSchema.parse({ token, expiresAt: result.Item.expiresAt });
   }
 }
