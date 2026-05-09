@@ -1,5 +1,13 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.23.1
+
+### Patch Changes
+
+- 依存パッケージを更新
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.23.1
+
 ## 1.23.0
 
 ### Minor Changes
