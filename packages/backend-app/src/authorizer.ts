@@ -1,4 +1,5 @@
 import { CognitoAccessTokenPayload } from "aws-jwt-verify/jwt-model";
+
 import { verifyAccessTokenFromCognito } from "./cognito/verify-access-token";
 import { AuthorizerEvent } from "./lambda/authorizer-event";
 import {
@@ -22,7 +23,7 @@ export async function authorizer(
   event: AuthorizerEvent,
 ): Promise<AuthorizerResponse> {
   const resource = event.methodArn;
-  let token: CognitoAccessTokenPayload | null = null;
+  let token: CognitoAccessTokenPayload;
   try {
     token = await verifyAccessTokenFromCognito(
       COGNITO_USER_POOL_ID,
