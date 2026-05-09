@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { z } from "zod";
 
 /** 認証用トークン */
 export type AuthToken = {
@@ -7,6 +8,12 @@ export type AuthToken = {
   /** トークンの有効期限（Unix時間） */
   expiresAt: number;
 };
+
+/** AuthToken zodスキーマ */
+export const AuthTokenSchema = z.object({
+  token: z.string(),
+  expiresAt: z.number(),
+});
 
 /** 認証用トークンの有効期限（秒） */
 export const AUTH_TOKEN_TTL_SECONDS = 60 * 15;

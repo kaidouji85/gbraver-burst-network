@@ -1,13 +1,11 @@
 import { APIGatewayProxyResultV2 } from "aws-lambda";
 
 import { createAuthToken } from "./core/auth-token";
-import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
-/** ステージ */
-const STAGE = process.env.STAGE ?? "";
 /** DynamoDB authTokens テーブル名 */
 const DYNAMO_AUTH_TOKENS_TABLE = process.env.DYNAMODB_AUTH_TOKENS_TABLE ?? "";
 

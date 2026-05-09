@@ -1,7 +1,8 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { createHash } from "crypto";
 import { z } from "zod";
-import { AuthToken } from "../core/auth-token";
+
+import { AuthToken, AuthTokenSchema } from "../core/auth-token";
 
 /**
  * トークンをハッシュ化する
@@ -60,18 +61,21 @@ export class DynamoAuthTokens {
   }
 
   /**
-   * 指定したトークンがDynamoDB内に存在するかを検索する
-   * @param authToken 認証用トークン
-   * @returns 存在する場合はtrue、存在しない場合はfalseを返す
+   * 指定したトークンを取得する
+   * @param token トークン文字列
+   * @returns 取得結果、トークンが存在しない場合はnull
    */
-  async hasToken(authToken: AuthToken): Promise<boolean> {
-    const { token } = authToken;
+  async getToken(token: string): Promise<AuthToken | null> {
     const tokenHash = toTokenHash(token);
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
       Key: { tokenHash },
       ConsistentRead: true,
     });
-    return !!result.Item;
+    if (!result.Item) {
+      return null;
+    }
+
+    return AuthTokenSchema.parse(result.Item);
   }
 }
