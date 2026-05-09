@@ -1,0 +1,324 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`バックエンドECSスタックがスナップショットと一致している 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "backendecscluster8F4B4819": {
+      "Type": "AWS::ECS::Cluster",
+    },
+    "matchmakeservicetaskrole7B5E20D2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:PutItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchWrite*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "MyConnectionsTableARN",
+                    "MyCasualMatchEntriesTableARN",
+                    "MyBattlesTableARN",
+                  ],
+                },
+                {
+                  "Action": "execute-api:ManageConnections",
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:execute-api:*:*:**/@connections/*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "matchMakePolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "matchmaketaskdef9DD39F0A": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "SERVICE",
+                "Value": "gbraver-buesr-sls-dev",
+              },
+              {
+                "Name": "STAGE",
+                "Value": "v1-5-1",
+              },
+              {
+                "Name": "WEBSOCKET_API_ID",
+                "Value": "MyWebsocketAPIID",
+              },
+            ],
+            "Essential": true,
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "test -f match-make-health-check || exit 1",
+              ],
+              "Interval": 5,
+              "Retries": 3,
+              "Timeout": 5,
+            },
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/MyMatchMakeRepositoryName:MyDockerImageTag",
+                ],
+              ],
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "matchmaketaskdefmatchmakecontainerLogGroup37FA7290",
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "gbraver-buesr-sls-dev__v1-5-1__match-make",
+              },
+            },
+            "Name": "match-make-container",
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "matchmaketaskdefExecutionRoleABBC5ED2",
+            "Arn",
+          ],
+        },
+        "Family": "MyTestStackmatchmaketaskdef1B2FC70A",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "matchmakeservicetaskrole7B5E20D2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "matchmaketaskdefExecutionRoleABBC5ED2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "matchmaketaskdefExecutionRoleDefaultPolicy4AFB354E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/MyMatchMakeRepositoryName",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "matchmaketaskdefmatchmakecontainerLogGroup37FA7290",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "matchmaketaskdefExecutionRoleDefaultPolicy4AFB354E",
+        "Roles": [
+          {
+            "Ref": "matchmaketaskdefExecutionRoleABBC5ED2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "matchmaketaskdefmatchmakecontainerLogGroup37FA7290": {
+      "DeletionPolicy": "Retain",
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "serviceSecurityGroupF051F0EB": {
+      "DependsOn": [
+        "matchmakeservicetaskrole7B5E20D2",
+      ],
+      "Properties": {
+        "GroupDescription": "MyTestStack/service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "MyVpcId",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "serviceService7DDC3B7C": {
+      "DependsOn": [
+        "matchmakeservicetaskrole7B5E20D2",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "backendecscluster8F4B4819",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 0,
+        },
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "serviceSecurityGroupF051F0EB",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": [
+              "subnet-id-0",
+              "subnet-id-1",
+              "subnet-id-2",
+            ],
+          },
+        },
+        "TaskDefinition": {
+          "Ref": "matchmaketaskdef9DD39F0A",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

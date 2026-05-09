@@ -12,9 +12,12 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/aws-lambda": "^8.10.161",
+    "babel-jest": "^30.4.1",
     "dependency-cruiser": "^17.4.0",
     "eslint": "^10.3.0",
     "eslint-plugin-jest": "^29.15.2",
