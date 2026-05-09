@@ -21,3 +21,18 @@ export const createAuthToken = () => {
   const expiresAt = now + AUTH_TOKEN_TTL_SECONDS;
   return { token, expiresAt };
 };
+
+/**
+ * AuthorizationヘッダーからBearerトークンを抽出する
+ * Rest API用のオーソライザーでは、以下フォーマットでのAuthorizationヘッダーを想定している
+ * Authorization: Bearer <token>
+ * @param authorization Authorizationヘッダーの値
+ * @returns Bearerトークン、不正なフォーマットの場合はnull
+ */
+export const extractBearerToken = (authorization: string) => {
+  const parts = authorization.split(/\s+/);
+  if (parts.length !== 2 || parts[0] !== "Bearer") {
+    return null;
+  }
+  return parts[1];
+};
