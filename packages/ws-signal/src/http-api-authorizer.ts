@@ -36,10 +36,10 @@ export const httpAPIAuthorizer = async (
     return { isAuthorized: false };
   }
 
-  const authToken = await dynamoAuthTokens.getHashToken(token);
-  if (!authToken) {
+  const tokenHash = await dynamoAuthTokens.getTokenHash(token);
+  if (!tokenHash) {
     return { isAuthorized: false };
   }
 
-  return { isAuthorized: true, context: authToken };
+  return { isAuthorized: true, context: tokenHash };
 };

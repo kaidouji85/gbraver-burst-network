@@ -1,5 +1,23 @@
+import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { AuthorizerEvent } from "./lambda-authorizer/authorizer-event";
-import { successAuthorize } from "./lambda-authorizer/authorizer-response";
+import {
+  failedAuthorize,
+  successAuthorize,
+} from "./lambda-authorizer/authorizer-response";
+
+/** AWSリージョン */
+const AWS_REGION = process.env.AWS_REGION ?? "";
+/** DynamoDB authTokens テーブル名 */
+const DYNAMO_AUTH_TOKENS_TABLE = process.env.DYNAMODB_AUTH_TOKENS_TABLE ?? "";
+
+/** DynamoDB ドキュメントクライアント */
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB authTokens DAO */
+const dynamoAuthTokens = new DynamoAuthTokens(
+  dynamoDB,
+  DYNAMO_AUTH_TOKENS_TABLE,
+);
 
 /**
  * WebSocket 用のオーサライザ
@@ -8,5 +26,9 @@ import { successAuthorize } from "./lambda-authorizer/authorizer-response";
  */
 export const wsAuthorizer = async (event: AuthorizerEvent) => {
   const resource = event.methodArn;
-  return successAuthorize("user", resource);
+  const { token } = event.queryStringParameters;
+  const tokenHash = await dynamoAuthTokens.getTokenHash(token);
+  return tokenHash !== null
+    ? successAuthorize(tokenHash.tokenHash, resource)
+    : failedAuthorize("", resource);
 };

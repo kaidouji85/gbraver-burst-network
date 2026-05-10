@@ -66,7 +66,7 @@ export class DynamoAuthTokens {
    * @param token トークン文字列
    * @returns 取得結果、トークンが存在しない場合はnull
    */
-  async getHashToken(token: string): Promise<DynamoAuthToken | null> {
+  async getTokenHash(token: string): Promise<DynamoAuthToken | null> {
     const tokenHash = toTokenHash(token);
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
