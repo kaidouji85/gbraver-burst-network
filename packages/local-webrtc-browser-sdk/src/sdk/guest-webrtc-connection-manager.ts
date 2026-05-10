@@ -1,4 +1,4 @@
-import { waitUntilDataChannel } from "../wbtc/guest/wait-until-data-channel";
+import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
 import { AuthTokenManager } from "./auth-token-manager";
 import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
