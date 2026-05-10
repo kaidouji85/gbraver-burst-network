@@ -1,4 +1,4 @@
-import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
+import { waitUntilDataChannel } from "../wbtc/guest/wait-until-data-channel";
 import { AuthTokenManager } from "./auth-token-manager";
 import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
@@ -61,10 +61,15 @@ export class GuestWebRTCConnectionManager {
     dataChannelPromise: Promise<RTCDataChannel>;
   } {
     if (this.#connectionState.type === "disconnected") {
-      const connectionPromise = createRTCPeerConnection({
-        webRTCHelperApiURL: this.#webRTCHelperApiURL,
-        coturnDomainName: this.#coturnDomainName,
-      });
+      const connectionPromise = this.#authToken
+        .getOrIssueAuthToken()
+        .then((authToken) =>
+          createRTCPeerConnection({
+            webRTCHelperApiURL: this.#webRTCHelperApiURL,
+            coturnDomainName: this.#coturnDomainName,
+            authToken: authToken.token,
+          }),
+        );
       const dataChannelPromise = connectionPromise.then((connection) =>
         waitUntilDataChannel(connection),
       );
