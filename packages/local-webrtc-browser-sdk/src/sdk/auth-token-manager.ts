@@ -25,8 +25,19 @@ const canReuseToken = (authToken: AuthToken): boolean => {
   return now < authToken.expiresAt - TOKEN_REUSE_CUTOFF_SECONDS;
 };
 
-/** 認証トークン管理クラス */
-export class AuthTokenManager {
+/** 認証トークンマネージャー */
+export interface AuthTokenManager {
+  /**
+   * 認証トークンを取得する（必要なら再発行する）
+   * キャッシュ済みトークンが再利用可能ならそれを返し、
+   * そうでなければ新しいトークンを発行して返す
+   * @returns 認証トークン
+   */
+  getOrIssueAuthToken(): Promise<AuthToken>;
+}
+
+/** 認証トークンマネージャーのシンプルな実装 */
+class SimpleAuthTokenManager implements AuthTokenManager {
   /** WebRTCヘルパーAPIのURL */
   #webRTCHelperApiURL: string;
   /** 認証トークン */
@@ -40,12 +51,7 @@ export class AuthTokenManager {
     this.#webRTCHelperApiURL = webRTCHelperApiURL;
   }
 
-  /**
-   * 認証トークンを取得する（必要なら再発行する）
-   * キャッシュ済みトークンが再利用可能ならそれを返し、
-   * そうでなければ新しいトークンを発行して返す
-   * @returns 認証トークン
-   */
+  /** @override */
   async getOrIssueAuthToken(): Promise<AuthToken> {
     if (this.#authToken && canReuseToken(this.#authToken)) {
       return this.#authToken;
@@ -56,3 +62,14 @@ export class AuthTokenManager {
     return this.#authToken;
   }
 }
+
+/**
+ * 認証トークンマネージャーを生成する
+ * @param webRTCHelperApiURL WebRTCヘルパーAPIのURL
+ * @returns 生成した認証トークンマネージャー
+ */
+export const createAuthTokenManager = (
+  webRTCHelperApiURL: string,
+): AuthTokenManager => {
+  return new SimpleAuthTokenManager(webRTCHelperApiURL);
+};
