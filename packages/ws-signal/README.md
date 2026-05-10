@@ -47,9 +47,9 @@ npm install -g wscat
 
 # 以下URLを参考にAPI GatewayのURLを取得する
 # https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html
-WS_DOMAIN=<WebSocket APIのドメイン名>
+WS_API_DOMAIN=<WebSocket APIのドメイン名>
 
-wscat -c "wss://${WS_DOMAIN}"
+wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 {"action":"ping"}
 -> サーバからメッセージが返される
 ```
