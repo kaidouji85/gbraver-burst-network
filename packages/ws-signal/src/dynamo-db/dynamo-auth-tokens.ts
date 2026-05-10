@@ -61,12 +61,12 @@ export class DynamoAuthTokens {
   }
 
   /**
-   * 指定したトークンを取得する
-   * 安全のためにハッシュ化されたトークンを返す
+   * トークンに対応するハッシュ化されたトークンを取得する
+   * トークンの存在確認、ユーザーの一意の識別などに利用することを想定している
    * @param token トークン文字列
    * @returns 取得結果、トークンが存在しない場合はnull
    */
-  async getToken(token: string): Promise<DynamoAuthToken | null> {
+  async getHashToken(token: string): Promise<DynamoAuthToken | null> {
     const tokenHash = toTokenHash(token);
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,

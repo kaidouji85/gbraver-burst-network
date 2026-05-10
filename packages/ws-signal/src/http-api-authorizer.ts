@@ -1,4 +1,4 @@
-import type {
+import {
   APIGatewayProxyEventV2,
   APIGatewaySimpleAuthorizerResult,
   APIGatewaySimpleAuthorizerWithContextResult,
@@ -36,7 +36,7 @@ export const httpAPIAuthorizer = async (
     return { isAuthorized: false };
   }
 
-  const authToken = await dynamoAuthTokens.getToken(token);
+  const authToken = await dynamoAuthTokens.getHashToken(token);
   if (!authToken) {
     return { isAuthorized: false };
   }
