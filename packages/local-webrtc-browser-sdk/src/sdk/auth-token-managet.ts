@@ -8,17 +8,21 @@ export type AuthToken = {
   expiresAt: number;
 };
 
-/** 認証トークンの有効期限のマージン（秒） */
-const TOKEN_EXPIRY_MARGIN_SECONDS = 60 * 5;
+/**
+ * トークン再利用のしきい値（秒）
+ * 残り有効時間がこの値以下になったら、再利用せず再発行する
+ */
+const TOKEN_REUSE_CUTOFF_SECONDS = 60 * 5;
 
 /**
- * 認証トークンが使用可能かどうかを判定する
+ * トークンを再利用できるか判定する
+ * 残り有効時間がしきい値より長い場合のみ、再利用可能とする
  * @param authToken 認証トークン
- * @returns 使用可能であればtrue、そうでなければfalse
+ * @returns 判定結果、再利用可能ならtrue、トークンの再発行が必要ならfalse
  */
-const isTokenUsable = (authToken: AuthToken): boolean => {
+const canReuseToken = (authToken: AuthToken): boolean => {
   const now = Date.now() / 1000;
-  return TOKEN_EXPIRY_MARGIN_SECONDS < now - authToken.expiresAt;
+  return now < authToken.expiresAt - TOKEN_REUSE_CUTOFF_SECONDS;
 };
 
 /** 認証トークン管理クラス */
@@ -37,11 +41,13 @@ export class AuthTokenManager {
   }
 
   /**
-   * 認証トークンを取得する
-   * @returns 取得結果
+   * 認証トークンを取得する（必要なら再発行する）
+   * キャッシュ済みトークンが再利用可能ならそれを返し、
+   * そうでなければ新しいトークンを発行して返す
+   * @returns 認証トークン
    */
-  async getAuthToken(): Promise<AuthToken> {
-    if (this.#authToken && isTokenUsable(this.#authToken)) {
+  async getOrIssueAuthToken(): Promise<AuthToken> {
+    if (this.#authToken && canReuseToken(this.#authToken)) {
       return this.#authToken;
     }
 
