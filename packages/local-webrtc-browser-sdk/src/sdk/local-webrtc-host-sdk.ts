@@ -9,6 +9,7 @@ import {
 } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
+import { AuthTokenManager } from "./auth-token-manager";
 
 /** ローカルWebRTCホスト用SDK */
 export type LocalWebRTCHostSDK = {
@@ -52,6 +53,8 @@ type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
 
 /** ローカルWebRTCホスト用SDKの実装 */
 class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
+  /** 認証トークンマネージャー */
+  #authToken: AuthTokenManager;
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -63,6 +66,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
    */
   constructor(options: LocalWebRTCHostSDKImplOptions) {
     const { wsSignalUrl } = options;
+    this.#authToken = new AuthTokenManager(wsSignalUrl);
     this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
   }
