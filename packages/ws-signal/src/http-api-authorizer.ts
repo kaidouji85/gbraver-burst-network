@@ -4,7 +4,7 @@ import type {
   APIGatewaySimpleAuthorizerWithContextResult,
 } from "aws-lambda";
 
-import { AuthToken, extractBearerToken } from "./core/auth-token";
+import { extractBearerToken, HashAuthToken } from "./core/auth-token";
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 
@@ -28,7 +28,7 @@ const dynamoAuthTokens = new DynamoAuthTokens(
 export const httpAPIAuthorizer = async (
   event: APIGatewayProxyEventV2,
 ): Promise<
-  | APIGatewaySimpleAuthorizerWithContextResult<AuthToken>
+  | APIGatewaySimpleAuthorizerWithContextResult<HashAuthToken>
   | APIGatewaySimpleAuthorizerResult
 > => {
   const token = extractBearerToken(event.headers.authorization || "");

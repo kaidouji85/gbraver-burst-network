@@ -15,6 +15,16 @@ export const AuthTokenSchema = z.object({
   expiresAt: z.number(),
 });
 
+/**
+ * ハッシュ化された認証用トークン
+ */
+export type HashAuthToken = {
+  /** ハッシュ化されたトークン */
+  tokenHash: string;
+  /** トークンの有効期限（Unixタイムスタンプ） */
+  expiresAt: number;
+};
+
 /** 認証用トークンの有効期限（秒） */
 export const AUTH_TOKEN_TTL_SECONDS = 60 * 15;
 

@@ -2,7 +2,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { createHash } from "crypto";
 import { z } from "zod";
 
-import { AuthToken, AuthTokenSchema } from "../core/auth-token";
+import { AuthToken } from "../core/auth-token";
 
 /**
  * トークンをハッシュ化する
@@ -62,10 +62,11 @@ export class DynamoAuthTokens {
 
   /**
    * 指定したトークンを取得する
+   * 安全のためにハッシュ化されたトークンを返す
    * @param token トークン文字列
    * @returns 取得結果、トークンが存在しない場合はnull
    */
-  async getToken(token: string): Promise<AuthToken | null> {
+  async getToken(token: string): Promise<DynamoAuthToken | null> {
     const tokenHash = toTokenHash(token);
     const result = await this.#dynamoDB.get({
       TableName: this.#tableName,
@@ -76,6 +77,6 @@ export class DynamoAuthTokens {
       return null;
     }
 
-    return AuthTokenSchema.parse({ token, expiresAt: result.Item.expiresAt });
+    return DynamoAuthTokenSchema.parse(result.Item);
   }
 }
