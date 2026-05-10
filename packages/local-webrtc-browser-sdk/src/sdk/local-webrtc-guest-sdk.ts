@@ -70,9 +70,8 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
    * @param options コンストラクタのオプション
    */
   constructor(options: LocalWebRTCGuestSDKImplOptions) {
-    const { wsSignalUrl } = options;
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
-    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(options);
   }
 
   /** @override */

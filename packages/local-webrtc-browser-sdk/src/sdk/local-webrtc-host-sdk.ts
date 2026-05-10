@@ -62,8 +62,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
    * @param options コンストラクタのオプション
    */
   constructor(options: LocalWebRTCHostSDKImplOptions) {
-    const { wsSignalUrl } = options;
-    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
   }
 
