@@ -81,11 +81,17 @@ provider:
 
 functions:
   # WebSocket API
+  webSocketAPIAuthorizer:
+    handler: src/ws-authorizer.wsAuthorizer
   connect:
     handler: src/connect.connect
     events:
       - websocket:
           route: $connect
+          # authorizer:
+          #   name: webSocketAPIAuthorizer
+          #   identitySource:
+          #     - "route.request.querystring.token"
   disconnect:
     handler: src/disconnect.disconnect
     events:
