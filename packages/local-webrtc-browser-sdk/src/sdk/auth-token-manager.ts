@@ -36,12 +36,12 @@ export interface AuthTokenManager {
   getOrIssueAuthToken(): Promise<AuthToken>;
 }
 
-/** 認証トークンマネージャーのシンプルな実装 */
-class SimpleAuthTokenManager implements AuthTokenManager {
+/** 認証トークンマネージャーの実装 */
+class AuthTokenManagerImpl implements AuthTokenManager {
   /** WebRTCヘルパーAPIのURL */
   #webRTCHelperApiURL: string;
-  /** 認証トークン */
-  #authToken: AuthToken | null = null;
+  /** 認証トークンPromise、未発行時はnull */
+  #authTokenPromise: Promise<AuthToken> | null = null;
 
   /**
    * コンストラクタ
@@ -53,13 +53,17 @@ class SimpleAuthTokenManager implements AuthTokenManager {
 
   /** @override */
   async getOrIssueAuthToken(): Promise<AuthToken> {
-    if (this.#authToken && canReuseToken(this.#authToken)) {
-      return this.#authToken;
+    if (this.#authTokenPromise === null) {
+      this.#authTokenPromise = issueAuthToken(this.#webRTCHelperApiURL);
+      return this.#authTokenPromise;
     }
 
-    const resp = await issueAuthToken(this.#webRTCHelperApiURL);
-    this.#authToken = resp;
-    return this.#authToken;
+    this.#authTokenPromise = this.#authTokenPromise.then((token) => {
+      return canReuseToken(token)
+        ? token
+        : issueAuthToken(this.#webRTCHelperApiURL);
+    });
+    return this.#authTokenPromise;
   }
 }
 
@@ -71,5 +75,5 @@ class SimpleAuthTokenManager implements AuthTokenManager {
 export const createAuthTokenManager = (
   webRTCHelperApiURL: string,
 ): AuthTokenManager => {
-  return new SimpleAuthTokenManager(webRTCHelperApiURL);
+  return new AuthTokenManagerImpl(webRTCHelperApiURL);
 };
