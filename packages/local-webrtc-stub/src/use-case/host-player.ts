@@ -59,5 +59,8 @@ export class HostPlayer implements UseCase {
       battery: 5,
     });
     console.log(update05);
+
+    this.#hostSDK.disconnectWebRTC();
+    this.#hostSDK.disconnectWebSocket();
   }
 }

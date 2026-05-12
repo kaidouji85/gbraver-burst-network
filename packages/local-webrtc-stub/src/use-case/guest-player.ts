@@ -64,5 +64,8 @@ export class GuestPlayer implements UseCase {
       battery: 0,
     });
     console.log(update05);
+
+    this.#guestSDK.disconnectWebRTC();
+    this.#guestSDK.disconnectWebSocket();
   }
 }
