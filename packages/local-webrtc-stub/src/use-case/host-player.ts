@@ -1,4 +1,4 @@
-import { LocalWebRTCHostSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import { HostLocalWebRTCSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase } from "./use-case";
@@ -6,13 +6,13 @@ import { UseCase } from "./use-case";
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
   /** ローカルWebRTCホスト用SDK */
-  #hostSDK: LocalWebRTCHostSDK;
+  #hostSDK: HostLocalWebRTCSDK;
 
   /**
    * コンストラクタ
    * @param hostSDK ローカルWebRTCホスト用SDK
    */
-  constructor(hostSDK: LocalWebRTCHostSDK) {
+  constructor(hostSDK: HostLocalWebRTCSDK) {
     this.#hostSDK = hostSDK;
   }
 

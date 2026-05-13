@@ -17,7 +17,7 @@ import {
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
-export type LocalWebRTCGuestSDK = {
+export type GuestLocalWebRTCSDK = {
   /**
    * ルームに参加する
    * @param options ルーム参加のオプション
@@ -59,7 +59,7 @@ type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */
-class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
+class LocalWebRTCGuestSDKImpl implements GuestLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -187,6 +187,6 @@ type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
  */
 export function createLocalWebRTCGuestSDK(
   options: CreateLocalWebRTCGuestSDKOptions,
-): LocalWebRTCGuestSDK {
+): GuestLocalWebRTCSDK {
   return new LocalWebRTCGuestSDKImpl(options);
 }

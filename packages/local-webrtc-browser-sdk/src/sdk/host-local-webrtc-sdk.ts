@@ -11,7 +11,7 @@ import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCホスト用SDK */
-export type LocalWebRTCHostSDK = {
+export type HostLocalWebRTCSDK = {
   /**
    * ルームを生成する
    * @param options ルーム生成のオプション
@@ -51,7 +51,7 @@ type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCホスト用SDKの実装 */
-class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
+class LocalWebRTCHostSDKImpl implements HostLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -128,6 +128,6 @@ type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
  */
 export function createLocalWebRTCHostSDK(
   options: CreateLocalWebRTCHostSDKOptions,
-): LocalWebRTCHostSDK {
+): HostLocalWebRTCSDK {
   return new LocalWebRTCHostSDKImpl(options);
 }

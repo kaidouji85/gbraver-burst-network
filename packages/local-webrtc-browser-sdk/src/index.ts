@@ -5,10 +5,10 @@ export {
 export { BattleSDK } from "./sdk/battle-sdk";
 export {
   createLocalWebRTCGuestSDK,
-  LocalWebRTCGuestSDK,
-} from "./sdk/local-webrtc-guest-sdk";
+  GuestLocalWebRTCSDK,
+} from "./sdk/guest-local-webrtc-sdk";
 export {
   createLocalWebRTCHostSDK,
-  LocalWebRTCHostSDK,
-} from "./sdk/local-webrtc-host-sdk";
+  HostLocalWebRTCSDK,
+} from "./sdk/host-local-webrtc-sdk";
 export { LocalWebRTCRoom } from "./sdk/local-webrtc-room";
