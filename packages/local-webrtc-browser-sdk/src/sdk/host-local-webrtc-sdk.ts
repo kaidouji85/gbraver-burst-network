@@ -14,6 +14,8 @@ import { WebSocketConnectionManager } from "./websocket-connection-manager";
 export type HostLocalWebRTCSDK = {
   /**
    * ルームを生成する
+   * 本メソッドでは新しいWebRTCコネクションを生成し、シグナリングも行うため、
+   * 既存のWebRTCコネクションやシグナリングは本メソッド内で切断される
    * @param options ルーム生成のオプション
    * @param options.armdozerId ホストが選択したアームドーザのID
    * @param options.pilotId ホストが選択したパイロットのID
@@ -72,6 +74,9 @@ class LocalWebRTCHostSDKImpl implements HostLocalWebRTCSDK {
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
     try {
+      this.#websocketConnection.gracefulDisconnect();
+      this.#webRTCConnection.disconnect();
+
       const connection =
         await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
