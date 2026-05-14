@@ -14,7 +14,7 @@ const toTokenHash = (token: string): string =>
 
 /**
  * DynamoDBスキーマ AuthToken
- * パーティションキー hashToken
+ * パーティションキー tokenHash
  */
 export type DynamoAuthToken = {
   /** ハッシュ化されたトークン */
