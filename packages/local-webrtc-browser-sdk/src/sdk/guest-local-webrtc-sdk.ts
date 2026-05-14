@@ -61,7 +61,7 @@ type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */
-class LocalWebRTCGuestSDKImpl implements GuestLocalWebRTCSDK {
+class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -193,5 +193,5 @@ type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
 export function createLocalWebRTCGuestSDK(
   options: CreateLocalWebRTCGuestSDKOptions,
 ): GuestLocalWebRTCSDK {
-  return new LocalWebRTCGuestSDKImpl(options);
+  return new GuestLocalWebRTCSDKImpl(options);
 }
