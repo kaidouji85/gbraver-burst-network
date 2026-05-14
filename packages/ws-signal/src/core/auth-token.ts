@@ -15,9 +15,7 @@ export const AuthTokenSchema = z.object({
   expiresAt: z.number(),
 });
 
-/**
- * ハッシュ化された認証用トークン
- */
+/** ハッシュ化された認証用トークン */
 export type HashAuthToken = {
   /** ハッシュ化されたトークン */
   tokenHash: string;
