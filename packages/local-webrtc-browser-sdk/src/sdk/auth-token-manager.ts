@@ -51,17 +51,6 @@ class AuthTokenManagerImpl implements AuthTokenManager {
     this.#webRTCHelperApiURL = webRTCHelperApiURL;
   }
 
-  /**
-   * 認証トークンを発行する
-   * 失敗した場合はキャッシュをクリアし、次回呼び出しで再試行できるようにする
-   */
-  #issueAuthTokenWithReset(): Promise<AuthToken> {
-    return issueAuthToken(this.#webRTCHelperApiURL).catch((error: unknown) => {
-      this.#authTokenPromise = null;
-      throw error;
-    });
-  }
-
   /** @override */
   async getOrIssueAuthToken(): Promise<AuthToken> {
     if (this.#authTokenPromise === null) {
@@ -70,11 +59,21 @@ class AuthTokenManagerImpl implements AuthTokenManager {
     }
 
     this.#authTokenPromise = this.#authTokenPromise.then((token) => {
-      return canReuseToken(token)
-        ? token
-        : this.#issueAuthTokenWithReset();
+      return canReuseToken(token) ? token : this.#issueAuthTokenWithReset();
     });
     return this.#authTokenPromise;
+  }
+
+  /**
+   * 認証トークンを発行する
+   * 失敗した場合はキャッシュをクリアし、次回呼び出しで再試行できるようにする
+   * @return 発行した認証トークン
+   */
+  #issueAuthTokenWithReset(): Promise<AuthToken> {
+    return issueAuthToken(this.#webRTCHelperApiURL).catch((error: unknown) => {
+      this.#authTokenPromise = null;
+      throw error;
+    });
   }
 }
 
