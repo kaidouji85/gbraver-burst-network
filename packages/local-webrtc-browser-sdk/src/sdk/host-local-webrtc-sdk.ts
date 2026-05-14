@@ -53,7 +53,7 @@ type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCホスト用SDKの実装 */
-class LocalWebRTCHostSDKImpl implements HostLocalWebRTCSDK {
+class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -134,5 +134,5 @@ type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
 export function createLocalWebRTCHostSDK(
   options: CreateLocalWebRTCHostSDKOptions,
 ): HostLocalWebRTCSDK {
-  return new LocalWebRTCHostSDKImpl(options);
+  return new HostLocalWebRTCSDKImpl(options);
 }
