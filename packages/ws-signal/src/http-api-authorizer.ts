@@ -23,6 +23,7 @@ const dynamoAuthTokens = new DynamoAuthTokens(
 
 /**
  * HTTP API用のオーソライザー
+ * @param event API Gatewayから渡されるイベント
  * @returns 認証結果
  */
 export const httpAPIAuthorizer = async (
