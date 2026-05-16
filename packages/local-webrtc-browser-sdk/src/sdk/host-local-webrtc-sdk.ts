@@ -131,7 +131,7 @@ type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
  * @param options SDK生成のオプション
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
-export function createLocalWebRTCHostSDK(
+export function createHostLocalWebRTCSDK(
   options: CreateLocalWebRTCHostSDKOptions,
 ): HostLocalWebRTCSDK {
   return new HostLocalWebRTCSDKImpl(options);

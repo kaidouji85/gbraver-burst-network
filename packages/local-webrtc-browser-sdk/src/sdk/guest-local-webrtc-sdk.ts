@@ -190,7 +190,7 @@ type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
  * @param options オプション
  * @returns ローカルWebRTCゲスト用SDKのインスタンス
  */
-export function createLocalWebRTCGuestSDK(
+export function createGuestLocalWebRTCSDK(
   options: CreateLocalWebRTCGuestSDKOptions,
 ): GuestLocalWebRTCSDK {
   return new GuestLocalWebRTCSDKImpl(options);
