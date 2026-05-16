@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.24.0
+
+### Minor Changes
+
+- あいことば対戦に匿名トークンを追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.24.0
+
 ## 1.23.1
 
 ### Patch Changes
