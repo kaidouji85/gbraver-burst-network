@@ -1,7 +1,7 @@
 import {
   createAuthTokenManager,
-  createLocalWebRTCGuestSDK,
-  createLocalWebRTCHostSDK,
+  createGuestLocalWebRTCSDK,
+  createHostLocalWebRTCSDK,
 } from "@gbraver-burst-network/local-webrtc-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
@@ -55,13 +55,13 @@ const getRoomIDInput = (): HTMLInputElement => {
  */
 window.onload = () => {
   const authToken = createAuthTokenManager(WEBRTC_HELPER_API_URL);
-  const hostSDK = createLocalWebRTCHostSDK({
+  const hostSDK = createHostLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
     webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });
-  const guestSDK = createLocalWebRTCGuestSDK({
+  const guestSDK = createGuestLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
     webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,

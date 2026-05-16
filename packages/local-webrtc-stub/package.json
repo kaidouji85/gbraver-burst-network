@@ -1,14 +1,14 @@
 {
   "name": "@gbraver-burst-network/local-webrtc-stub",
   "description": "gbraver burst local webrtc stub.",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",
     "email": "kaidouji85@gmail.com"
   },
   "dependencies": {
-    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.24.0",
+    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.25.0",
     "dotenv": "^17.4.2",
     "gbraver-burst-core": "^1.44.0"
   },

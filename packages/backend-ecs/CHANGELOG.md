@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.25.0
+
+### Minor Changes
+
+- b7cb5dd: 関数名の不整合を修正
+- 関数名の不整合を修正した
+
+## 1.25.0-beta.0
+
+### Minor Changes
+
+- 関数名の不整合を修正
+
 ## 1.24.0
 
 ### Minor Changes
