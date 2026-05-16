@@ -1,4 +1,5 @@
 import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
+import { AuthTokenManager } from "./auth-token-manager";
 import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
 /** 接続中 */
@@ -20,6 +21,8 @@ type ConnectionState = Connected | Disconnected;
 
 /** GuestWebRTCConnectionManagerコンストラクタのオプション */
 export type GuestWebRTCConnectionManagerOptions = {
+  /** 認証トークンマネージャー */
+  authToken: AuthTokenManager;
   /** WebRTCヘルパーAPIのURL */
   webRTCHelperApiURL: string;
   /** coturnサーバーのドメイン名 */
@@ -28,6 +31,8 @@ export type GuestWebRTCConnectionManagerOptions = {
 
 /** ゲストのWebRTCコネクション管理 */
 export class GuestWebRTCConnectionManager {
+  /** 認証トークンマネージャー */
+  #authToken: AuthTokenManager;
   /** コネクションの状態 */
   #connectionState: ConnectionState = { type: "disconnected" };
   /** WebRTCヘルパーAPIのURL */
@@ -39,6 +44,7 @@ export class GuestWebRTCConnectionManager {
    * @param options オプション
    */
   constructor(options: GuestWebRTCConnectionManagerOptions) {
+    this.#authToken = options.authToken;
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
     this.#coturnDomainName = options.coturnDomainName;
   }
@@ -55,10 +61,15 @@ export class GuestWebRTCConnectionManager {
     dataChannelPromise: Promise<RTCDataChannel>;
   } {
     if (this.#connectionState.type === "disconnected") {
-      const connectionPromise = createRTCPeerConnection({
-        webRTCHelperApiURL: this.#webRTCHelperApiURL,
-        coturnDomainName: this.#coturnDomainName,
-      });
+      const connectionPromise = this.#authToken
+        .getOrIssueAuthToken()
+        .then((authToken) =>
+          createRTCPeerConnection({
+            webRTCHelperApiURL: this.#webRTCHelperApiURL,
+            coturnDomainName: this.#coturnDomainName,
+            authToken: authToken.token,
+          }),
+        );
       const dataChannelPromise = connectionPromise.then((connection) =>
         waitUntilDataChannel(connection),
       );

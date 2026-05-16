@@ -4,6 +4,7 @@ frameworkVersion: "4"
 custom:
   connections: ${self:service}__${sls:stage}__connections
   rooms: ${self:service}__${sls:stage}__rooms
+  authTokens: ${self:service}__${sls:stage}__auth-tokens
 
 provider:
   name: aws
@@ -28,6 +29,12 @@ provider:
         - POST
         - OPTIONS
       maxAge: 600
+    authorizers:
+      httpAuthorizer:
+        type: request
+        functionName: httpAuthorizerFunc
+        enableSimpleResponses: true
+        payloadVersion: "2.0"
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -39,6 +46,7 @@ provider:
     WEBRTC_HELPER_CORS_ORIGIN: ${env:WEBRTC_HELPER_CORS_ORIGIN}
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
+    DYNAMODB_AUTH_TOKENS_TABLE: ${self:custom.authTokens}
   iam:
     role:
       statements:
@@ -64,6 +72,7 @@ provider:
           Resource:
             - Fn::GetAtt: [ConnectionsTable, Arn]
             - Fn::GetAtt: [RoomsTable, Arn]
+            - Fn::GetAtt: [AuthTokensTable, Arn]
         - Effect: Allow
           Action:
             - "secretsmanager:GetSecretValue"
@@ -71,11 +80,18 @@ provider:
             - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:${env:COTURN_SHARED_SECRET}*"
 
 functions:
+  # WebSocket API
+  webSocketAPIAuthorizer:
+    handler: src/ws-authorizer.wsAuthorizer
   connect:
     handler: src/connect.connect
     events:
       - websocket:
           route: $connect
+          authorizer:
+            name: webSocketAPIAuthorizer
+            identitySource:
+              - "route.request.querystring.token"
   disconnect:
     handler: src/disconnect.disconnect
     events:
@@ -101,12 +117,24 @@ functions:
     events:
       - websocket:
           route: send-guest-signal
+
+  # HTTP API
+  issueAuthToken:
+    handler: src/issue-auth-token.issueAuthToken
+    events:
+      - httpApi:
+          path: /auth-token
+          method: post
   issueCoturnCredential:
-    handler: src/issue-credential.issueCoturnCredential
+    handler: src/issue-coturn-credential.issueCoturnCredential
     events:
       - httpApi:
           path: /coturn/credentials
           method: post
+          authorizer:
+            name: httpAuthorizer
+  httpAuthorizerFunc:
+    handler: src/http-api-authorizer.httpAPIAuthorizer
 
 resources:
   Resources:
@@ -131,4 +159,18 @@ resources:
         KeySchema:
           - AttributeName: roomID
             KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    AuthTokensTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.authTokens}
+        AttributeDefinitions:
+          - AttributeName: tokenHash
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tokenHash
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
         BillingMode: PAY_PER_REQUEST

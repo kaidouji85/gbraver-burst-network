@@ -17,9 +17,11 @@ import {
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCゲスト用SDK */
-export type LocalWebRTCGuestSDK = {
+export type GuestLocalWebRTCSDK = {
   /**
    * ルームに参加する
+   * 本メソッドでは新しいWebRTCコネクションを生成し、シグナリングも行うため、
+   * 既存のWebRTCコネクションやシグナリングは本メソッド内で切断される
    * @param options ルーム参加のオプション
    * @param options.roomID ルームID
    * @param options.armdozerId ゲストが選択したアームドーザのID
@@ -59,7 +61,7 @@ type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */
-class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
+class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -70,9 +72,8 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
    * @param options コンストラクタのオプション
    */
   constructor(options: LocalWebRTCGuestSDKImplOptions) {
-    const { wsSignalUrl } = options;
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
-    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(options);
   }
 
   /** @override */
@@ -82,6 +83,9 @@ class LocalWebRTCGuestSDKImpl implements LocalWebRTCGuestSDK {
     pilotId: PilotId;
   }) {
     const { roomID, armdozerId, pilotId } = options;
+
+    this.#websocketConnection.gracefulDisconnect();
+    this.#webRTCConnection.disconnect();
 
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
@@ -188,6 +192,6 @@ type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
  */
 export function createLocalWebRTCGuestSDK(
   options: CreateLocalWebRTCGuestSDKOptions,
-): LocalWebRTCGuestSDK {
-  return new LocalWebRTCGuestSDKImpl(options);
+): GuestLocalWebRTCSDK {
+  return new GuestLocalWebRTCSDKImpl(options);
 }
