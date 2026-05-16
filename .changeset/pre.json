@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "beta",
   "initialVersions": {
     "@gbraver-burst-network/aws-vpc": "1.24.0",
@@ -14,5 +14,7 @@
     "@gbraver-burst-network/serverless-stub": "1.24.0",
     "@gbraver-burst-network/ws-signal": "1.24.0"
   },
-  "changesets": ["better-boxes-write"]
+  "changesets": [
+    "better-boxes-write"
+  ]
 }
