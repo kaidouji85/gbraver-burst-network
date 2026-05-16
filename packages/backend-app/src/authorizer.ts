@@ -32,7 +32,7 @@ export async function authorizer(
     );
   } catch (error) {
     console.error("Failed to verify access token", error);
-    return failedAuthorize("", resource);
+    return failedAuthorize("unauthorized", resource);
   }
 
   const principalId = token.sub;

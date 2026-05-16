@@ -30,5 +30,5 @@ export const wsAuthorizer = async (event: AuthorizerEvent) => {
   const tokenHash = await dynamoAuthTokens.getTokenHash(token);
   return tokenHash !== null
     ? successAuthorize(tokenHash.tokenHash, resource)
-    : failedAuthorize("", resource);
+    : failedAuthorize("unauthorized", resource);
 };
