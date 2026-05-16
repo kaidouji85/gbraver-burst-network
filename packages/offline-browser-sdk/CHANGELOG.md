@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.24.0
+
+### Minor Changes
+
+- あいことば対戦に匿名トークンを追加した
+
 ## 1.23.1
 
 ### Patch Changes
