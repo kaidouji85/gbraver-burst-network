@@ -11,9 +11,11 @@ import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTCホスト用SDK */
-export type LocalWebRTCHostSDK = {
+export type HostLocalWebRTCSDK = {
   /**
    * ルームを生成する
+   * 本メソッドでは新しいWebRTCコネクションを生成し、シグナリングも行うため、
+   * 既存のWebRTCコネクションやシグナリングは本メソッド内で切断される
    * @param options ルーム生成のオプション
    * @param options.armdozerId ホストが選択したアームドーザのID
    * @param options.pilotId ホストが選択したパイロットのID
@@ -51,7 +53,7 @@ type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
 };
 
 /** ローカルWebRTCホスト用SDKの実装 */
-class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
+class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -62,8 +64,7 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
    * @param options コンストラクタのオプション
    */
   constructor(options: LocalWebRTCHostSDKImplOptions) {
-    const { wsSignalUrl } = options;
-    this.#websocketConnection = new WebSocketConnectionManager(wsSignalUrl);
+    this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
   }
 
@@ -73,6 +74,9 @@ class LocalWebRTCHostSDKImpl implements LocalWebRTCHostSDK {
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
     try {
+      this.#websocketConnection.gracefulDisconnect();
+      this.#webRTCConnection.disconnect();
+
       const connection =
         await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
@@ -127,8 +131,8 @@ type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
  * @param options SDK生成のオプション
  * @returns ローカルWebRTCホスト用SDKのインスタンス
  */
-export function createLocalWebRTCHostSDK(
+export function createHostLocalWebRTCSDK(
   options: CreateLocalWebRTCHostSDKOptions,
-): LocalWebRTCHostSDK {
-  return new LocalWebRTCHostSDKImpl(options);
+): HostLocalWebRTCSDK {
+  return new HostLocalWebRTCSDKImpl(options);
 }

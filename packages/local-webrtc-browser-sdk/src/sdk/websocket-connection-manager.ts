@@ -1,10 +1,14 @@
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
 import { connectWSSignal } from "../ws-signal/connect-ws-signal";
+import { AuthTokenManager } from "./auth-token-manager";
 
+/** WebSocketコネクション管理 */
 export class WebSocketConnectionManager {
   /** WebSocketシグナルサーバーのURL */
   readonly wsSignalUrl: string;
+  /** 認証トークンマネージャー */
+  #authToken: AuthTokenManager;
   /** WebSocketコネクション */
   #websocket: WebSocket | null = null;
   /** Web Socket エラー通知 */
@@ -14,10 +18,13 @@ export class WebSocketConnectionManager {
 
   /**
    * コンストラクタ
-   * @param wsSignalUrl WebSocketシグナルサーバーのURL
+   * @param options オプション
+   * @param options.wsSignalUrl WebSocketシグナルサーバーのURL
+   * @param options.authToken 認証トークンマネージャー
    */
-  constructor(wsSignalUrl: string) {
-    this.wsSignalUrl = wsSignalUrl;
+  constructor(options: { wsSignalUrl: string; authToken: AuthTokenManager }) {
+    this.wsSignalUrl = options.wsSignalUrl;
+    this.#authToken = options.authToken;
     this.#websocketError = new Subject();
     this.#websocketSubscriptions = [];
   }
@@ -32,7 +39,8 @@ export class WebSocketConnectionManager {
       return this.#websocket;
     }
 
-    const websocket = await connectWSSignal(this.wsSignalUrl);
+    const authToken = await this.#authToken.getOrIssueAuthToken();
+    const websocket = await connectWSSignal(this.wsSignalUrl, authToken.token);
     this.#websocketSubscriptions = [
       fromEvent(websocket, "error").subscribe(this.#websocketError),
       fromEvent(websocket, "close").subscribe(this.#websocketError),

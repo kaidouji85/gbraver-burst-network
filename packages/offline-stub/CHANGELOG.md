@@ -1,5 +1,48 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.25.0
+
+### Minor Changes
+
+- b7cb5dd: 関数名の不整合を修正
+- 関数名の不整合を修正した
+
+### Patch Changes
+
+- Updated dependencies [b7cb5dd]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.25.0
+
+## 1.25.0-beta.0
+
+### Minor Changes
+
+- 関数名の不整合を修正
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.25.0-beta.0
+
+## 1.24.0
+
+### Minor Changes
+
+- あいことば対戦に匿名トークンを追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.24.0
+
+## 1.23.1
+
+### Patch Changes
+
+- 依存パッケージを更新
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.23.1
+
 ## 1.23.0
 
 ### Minor Changes

@@ -30,16 +30,26 @@ npx sls deploy --stage <ステージ名>
 npx sls remove --stage <ステージ名>
 ```
 
-### WebSocketAPI 動作確認
+### 動作確認
 
 ```shell
+# 匿名トークンを発行する（以降のコマンド例ではこのトークンを使用する）
+REST_API_DOMAIN=<WebRTC ヘルパーAPIのドメイン名>
+curl -X POST "https://${REST_API_DOMAIN}/auth-token"
+
+AUTH_TOKEN=<発行された認証トークン>
+
+# coturn用の認証トークンを発行する
+curl -X POST -H "Authorization: Bearer $AUTH_TOKEN" "https://${REST_API_DOMAIN}/coturn/credentials"
+
+# 事前にwscatをインストールしておく
 npm install -g wscat
 
 # 以下URLを参考にAPI GatewayのURLを取得する
 # https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html
-API_URL=<AWS APIGatewayのURL>
+WS_API_DOMAIN=<WebSocket APIのドメイン名>
 
-wscat -c "$API_URL"
+wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 {"action":"ping"}
 -> サーバからメッセージが返される
 ```

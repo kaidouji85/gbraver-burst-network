@@ -1,3 +1,4 @@
+import { AuthTokenManager } from "./auth-token-manager";
 import { createRTCPeerConnection } from "./create-rtc-peer-connection";
 
 /** 接続中 */
@@ -19,6 +20,8 @@ type ConnectionState = Connected | Disconnected;
 
 /** HostWebRTCConnectionManagerコンストラクタのオプション */
 export type HostWebRTCConnectionManagerOptions = {
+  /** 認証トークンマネージャー */
+  authToken: AuthTokenManager;
   /** WebRTCヘルパーAPIのURL */
   webRTCHelperApiURL: string;
   /** coturnサーバーのドメイン名 */
@@ -27,6 +30,8 @@ export type HostWebRTCConnectionManagerOptions = {
 
 /** ホストのWebRTCコネクション管理 */
 export class HostWebRTCConnectionManager {
+  /** 認証トークンマネージャー */
+  #authToken: AuthTokenManager;
   /** コネクションの状態 */
   #connectionState: ConnectionState = { type: "disconnected" };
   /** WebRTCヘルパーAPIのURL */
@@ -39,6 +44,7 @@ export class HostWebRTCConnectionManager {
    * @param options オプション
    */
   constructor(options: HostWebRTCConnectionManagerOptions) {
+    this.#authToken = options.authToken;
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
     this.#coturnDomainName = options.coturnDomainName;
   }
@@ -55,10 +61,15 @@ export class HostWebRTCConnectionManager {
     dataChannelPromise: Promise<RTCDataChannel>;
   } {
     if (this.#connectionState.type === "disconnected") {
-      const connectionPromise = createRTCPeerConnection({
-        webRTCHelperApiURL: this.#webRTCHelperApiURL,
-        coturnDomainName: this.#coturnDomainName,
-      });
+      const connectionPromise = this.#authToken
+        .getOrIssueAuthToken()
+        .then((authToken) =>
+          createRTCPeerConnection({
+            webRTCHelperApiURL: this.#webRTCHelperApiURL,
+            coturnDomainName: this.#coturnDomainName,
+            authToken: authToken.token,
+          }),
+        );
       const dataChannelPromise = connectionPromise.then((connection) =>
         connection.createDataChannel("sendDataChannel"),
       );
