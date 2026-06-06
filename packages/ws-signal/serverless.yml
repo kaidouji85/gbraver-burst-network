@@ -12,9 +12,6 @@ provider:
     - name: ${sls:stage}.${env:WS_SIGNAL_DOMAIN_NAME}
       apiType: websocket
       certificateArn: ${env:WS_SIGNAL_CERT_ARN}
-    - name: ${sls:stage}.${env:WEBRTC_HELPER_DOMAIN_NAME}
-      apiType: http
-      certificateArn: ${env:WEBRTC_HELPER_CERT_ARN}
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
@@ -123,13 +120,13 @@ functions:
     handler: src/issue-auth-token.issueAuthToken
     events:
       - httpApi:
-          path: /auth-token
+          path: /${sls:stage}/auth-token
           method: post
   issueCoturnCredential:
     handler: src/issue-coturn-credential.issueCoturnCredential
     events:
       - httpApi:
-          path: /coturn/credentials
+          path: /${sls:stage}/coturn/credentials
           method: post
           authorizer:
             name: httpAuthorizer
