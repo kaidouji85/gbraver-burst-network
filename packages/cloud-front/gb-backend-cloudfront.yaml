@@ -4,9 +4,9 @@ Mappings:
   # このIDはすべてのアカウント、リージョンで共通であるため、マッピングに定義して参照する
   AWSManagedPolicyIds:
     CachePolicy:
-      CACHING_DISABLED: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+      CachingDisabled: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
     OriginRequestPolicy:
-      ALL_VIEWER_EXCEPT_HOST_HEADER: "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+      AllViewerExceptHostHeader: "b689b0a8-53d0-40ab-baf2-68738e2966ac"
 Parameters:
   # WebRTC HelperのAPI Gatewayのドメイン名
   WebRTCHelperDomainName:
@@ -86,12 +86,12 @@ Resources:
             - "GET"
           SmoothStreaming: false
           CachePolicyId:
-            !FindInMap [AWSManagedPolicyIds, CachePolicy, CACHING_DISABLED]
+            !FindInMap [AWSManagedPolicyIds, CachePolicy, CachingDisabled]
           OriginRequestPolicyId:
             !FindInMap [
               AWSManagedPolicyIds,
               OriginRequestPolicy,
-              ALL_VIEWER_EXCEPT_HOST_HEADER,
+              AllViewerExceptHostHeader,
             ]
         Staging: false
         CustomErrorResponses: []
