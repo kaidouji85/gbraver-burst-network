@@ -18,8 +18,12 @@ Parameters:
   AcmCertificateArn:
     Type: String
   # 関連づけるWebACLのARN
+  # WebACLを関連づけない場合は、空文字を指定する
   WebACLArn:
     Type: String
+    Default: ""
+Conditions:
+  HasWebACL: !Not [!Equals [!Ref WebACLArn, ""]]
 Resources:
   CloudFrontDistribution:
     UpdateReplacePolicy: "Retain"
@@ -99,7 +103,10 @@ Resources:
         Aliases:
           - !Ref DistributionAlias
         IPV6Enabled: true
-        WebACLId: !Ref WebACLArn
+        WebACLId: !If
+          - HasWebACL
+          - !Ref WebACLArn
+          - !Ref AWS::NoValue
         HttpVersion: "http2"
         Restrictions:
           GeoRestriction:
