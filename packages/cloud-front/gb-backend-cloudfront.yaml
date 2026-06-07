@@ -59,7 +59,6 @@ Resources:
         ViewerCertificate:
           MinimumProtocolVersion: "TLSv1.2_2021"
           SslSupportMethod: "sni-only"
-          CloudFrontDefaultCertificate: false
           AcmCertificateArn: !Ref AcmCertificateArn
         PriceClass: "PriceClass_All"
         DefaultCacheBehavior:
