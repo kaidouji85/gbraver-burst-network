@@ -10,8 +10,8 @@ env:
     WS_API_CERT_ARN: /GbraverBurst/dev/wsApiCertArn
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
-    WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/dev/webrtcHelperDomainName
-    WEBRTC_HELPER_CERT_ARN: /GbraverBurst/dev/webrtcHelperCertArn
+    BACKEND_CLOUDFRONT_DOMAIN_NAME: /GbraverBurst/dev/backendCloudFrontDomainName
+    BACKEND_CLOUDFRONT_CERT_ARN: /GbraverBurst/dev/backendCloudFrontCertArn
     WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/dev/webrtcHelperCorsOrigin
     COGNITO_USER_POOL_ID: /GbraverBurst/dev/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/dev/cognitoClientId
