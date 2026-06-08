@@ -35,7 +35,7 @@ Resources:
           IncludeCookies: false
           Bucket: ""
           Prefix: ""
-        Comment: "GB Web RTC Helper (dev)"
+        Comment: "GB Web RTC Helper"
         DefaultRootObject: ""
         Origins:
           - ConnectionTimeout: 10

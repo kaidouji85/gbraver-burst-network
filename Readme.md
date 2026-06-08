@@ -129,27 +129,29 @@ npm run build
 
 ローカル環境に以下の環境変数を定義する。
 
-| 環境変数名                     | 記載内容                                                                                                                                                     |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| SERVICE                        | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                                                           |
-| WS_SIGNAL_SERVICE              | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                                                                  |
-| STAGE                          | デプロイする環境のステージ名を記入する                                                                                                                       |
-| WS_API_DOMAIN_NAME             | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                                                       |
-| WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある                                           |
-| WS_SIGNAL_DOMAIN_NAME          | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                                                    |
-| WS_SIGNAL_CERT_ARN             | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある                                     |
-| BACKEND_CLOUDFRONT_DOMAIN_NAME | バックエンドAPIの前段に配置するCloudFrontのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある。                                         |
-| BACKEND_CLOUDFRONT_CERT_ARN    | バックエンドAPIの前段に配置するCloudFrontのSSL証明書ARN、本証明書はAWS ACMで発行されたBACKEND_CLOUDFRONT_DOMAIN_NAMEのワイルドカード証明書である必要がある。 |
-| WEBRTC_HELPER_CORS_ORIGIN      | WebRTC Helper APIのCORS設定で許可するオリジン                                                                                                                |
-| COTURN_SHARED_SECRET           | coturnサーバーで使用する共有秘密鍵を保存したAWS Secrets Managerのシークレット名                                                                              |
-| COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                                                    |
-| COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                                                      |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                                            |
-| DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                          |
-| DOCKER_USER                    | Docker Hubのユーザ名                                                                                                                                         |
-| DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                                          |
-| AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                                                    |
-| VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                                                                   |
+| 環境変数名                      | 記載内容                                                                                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SERVICE                         | デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する                                                           |
+| WS_SIGNAL_SERVICE               | デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する                                                                  |
+| STAGE                           | デプロイする環境のステージ名を記入する                                                                                                                       |
+| WS_API_DOMAIN_NAME              | WebSocket APIのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                                                       |
+| WS_API_CERT_ARN                 | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある                                           |
+| WS_SIGNAL_DOMAIN_NAME           | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                                                    |
+| WS_SIGNAL_CERT_ARN              | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある                                     |
+| BACKEND_CLOUDFRONT_SERVICE_NAME | バックエンドAPIの前段に配置するCloudFrontのサービス名、gb-backend-cloudfront-dev、gb-backend-cloudfront-prodなどを記入する                                   |
+| BACKEND_CLOUDFRONT_DOMAIN_NAME  | バックエンドAPIの前段に配置するCloudFrontのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある。                                         |
+| BACKEND_CLOUDFRONT_CERT_ARN     | バックエンドAPIの前段に配置するCloudFrontのSSL証明書ARN、本証明書はAWS ACMで発行されたBACKEND_CLOUDFRONT_DOMAIN_NAMEのワイルドカード証明書である必要がある。 |
+| BACKEND_CLOUDFRONT_WEB_ACL_ARN  | バックエンドAPIの前段に配置するCloudFrontにアタッチするWebACLのARN、WebACLを関連づけない場合は空文字を指定する                                               |
+| WEBRTC_HELPER_CORS_ORIGIN       | WebRTC Helper APIのCORS設定で許可するオリジン                                                                                                                |
+| COTURN_SHARED_SECRET            | coturnサーバーで使用する共有秘密鍵を保存したAWS Secrets Managerのシークレット名                                                                              |
+| COGNITO_USER_POOL_ID            | CognitoのユーザープールID                                                                                                                                    |
+| COGNITO_CLIENT_ID               | CognitoのクライアントID                                                                                                                                      |
+| MATCH_MAKE_ECR_REPOSITORY_NAME  | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                                            |
+| DOCKER_IMAGE_TAG                | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                          |
+| DOCKER_USER                     | Docker Hubのユーザ名                                                                                                                                         |
+| DOCKER_TOKEN                    | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                                          |
+| AWS_DEFAULT_REGION              | デプロイ先のAWSリージョン                                                                                                                                    |
+| VPC_SUBNET_COUNT                | FARGATEが動作するVPCのPublicサブネット個数                                                                                                                   |
 
 ### serverlessデプロイ
 
