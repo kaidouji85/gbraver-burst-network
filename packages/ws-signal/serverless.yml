@@ -170,3 +170,10 @@ resources:
           AttributeName: expiresAt
           Enabled: true
         BillingMode: PAY_PER_REQUEST
+  Outputs:
+    HttpApiDomainName:
+      Description: "HTTP API Endpoint"
+      Value:
+        Fn::Sub: "${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}"
+      Export:
+        Name: ${self:service}:${sls:stage}:HttpApiDomainName
