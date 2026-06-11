@@ -257,9 +257,9 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/wsSignalService             | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_SERVICE を参照              |
 | /GbraverBurst/dev/backendCloudfrontService    | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_SERVICE を参照     |
 | /GbraverBurst/dev/stage                       | String       | [環境変数定義の定義](#環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/dev/backendCloudFrontDomainName | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_DOMAIN_NAME を参照 |
-| /GbraverBurst/dev/backendCloudFrontCertArn    | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_CERT_ARN を参照    |
-| /GbraverBurst/dev/backendCloudFrontWebAclArn  | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_WEB_ACL_ARN を参照 |
+| /GbraverBurst/dev/backendCloudfrontDomainName | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_DOMAIN_NAME を参照 |
+| /GbraverBurst/dev/backendCloudfrontCertArn    | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_CERT_ARN を参照    |
+| /GbraverBurst/dev/backendCloudfrontWebAclArn  | String       | [環境変数定義の定義](#環境変数の定義) BACKEND_CLOUDFRONT_WEB_ACL_ARN を参照 |
 | /GbraverBurst/dev/wsApiDomainName             | String       | [環境変数定義の定義](#環境変数の定義) WS_API_DOMAIN_NAME を参照             |
 | /GbraverBurst/dev/wsSignalDomainName          | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
 | /GbraverBurst/dev/wsSignalCertArn             | String       | [環境変数定義の定義](#環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
