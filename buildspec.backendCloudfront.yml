@@ -17,4 +17,4 @@ phases:
       - npm ci
   build:
     commands:
-      - ./deploy-serverless.bash
+      - ./deploy-backend-cloudfont.bash
