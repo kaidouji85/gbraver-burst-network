@@ -12,9 +12,6 @@ phases:
   install:
     runtime-versions:
       nodejs: 22
-  pre_build:
-    commands:
-      - npm ci
   build:
     commands:
       - ./deploy-backend-cloudfont.bash
