@@ -5,6 +5,26 @@
 を用いたモノレポ構造となっている。
 特に断りがない限り、本書のコマンド例のカレントディレクトリは`本リポジトリをcloneした場所の直下`であるとする。
 
+## パッケージ解説
+
+本リポジトリは`packages`ディレクトリ以下に複数のパッケージを持っている。
+以下が、その一覧である。
+
+| パッケージ名             | 説明                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| aws-vpc                  | VPCを構築するAWS CDKプロジェクト                                                                 |
+| backend-app              | ユーザー登録必須の各種APIを実装したServerless Frameworkプロジェクト                              |
+| backend-ecs              | カジュアルマッチを行う常時起動しているFargate環境を構築するAWS CDKプロジェクト                   |
+| browser-sdk              | ユーザー登録必須のAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                      |
+| cloudfront               | 各種CloudFrontを構築するCloudFormationテンプレート                                               |
+| local-webrtc-browser-sdk | ログインなしAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                            |
+| local-webrtc-stub        | ログインなしAPIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト  |
+| offline-backend-app      | オフライン対戦サーバーを実装したTypeScriptプロジェクト                                           |
+| offline-browser-sdk      | オフライン対戦クライアントを実装したブラウザ向けSDKを実装したnpmパッケージ                       |
+| offline-stub             | オフライン対戦サーバーをローカルで動作させるためのスタブサーバーを実装したTypeScriptプロジェクト |
+| serverless-stub          | ログイン必須APIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト  |
+| ws-signal                | シグナルサーバーを構築するServerless Frameworkプロジェクト                                       |
+
 ## 必須ソフト一覧
 
 - aws cli(2.3.4以上)
