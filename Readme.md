@@ -17,7 +17,6 @@
 
 - [AWS](https://aws.amazon.com/jp/?nc2=h_lg)
 - [Docker Hub](https://hub.docker.com/)
-- [auth0](https://auth0.com/)
 - [serverless dashboard](https://www.serverless.com/dashboard)
 
 ## 事前作業
