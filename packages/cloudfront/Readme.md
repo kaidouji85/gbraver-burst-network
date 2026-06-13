@@ -2,6 +2,12 @@
 
 本リポジトリはCloudFrontを管理するCloudFormationテンプレートを提供します。
 
+## あらかじめ作成しておくべきリソース
+
+- CloudFrontのドメイン名（Route53のホストゾーン）
+- CloudFrontのSSL証明書（us-east-1リージョンで作成したACM）
+- [ws-signal](../ws-signal)でデプロイしCloudFormationスタック
+
 ## 各種手順
 
 本CloudFormationテンプレートでは従量課金形式のCloudFrontを構築します。
