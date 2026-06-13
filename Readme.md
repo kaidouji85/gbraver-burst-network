@@ -348,6 +348,7 @@ AWS Secrets Managerに以下のシークレットをセットする。
 | バックエンドECS通常デプロイ                                                                  | buildspec.backendEcs.yml         | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 | シグナルサーバーデプロイ                                                                     | buildspec.wsSignal.yml           | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [開発環境CD用webhook](#開発環境cd用webhook) |
 | シグナルサーバー削除                                                                         | buildspec.wsSignal.remove.yml    | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| バックエンドCloudFrontデプロイ                                                               | buildspec.backendCloudfront.yml  | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
 ##### webhook
 
