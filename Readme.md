@@ -110,22 +110,22 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 以下手順書に従ってcoturnサーバーを構築する。  
 [coturnセットアップ手順（さくらのVPS / Debian）](./coturn-setup.md)
 
-## ローカル環境構築方法
+## ローカル環境からのデプロイ方法
 
-### 各種ツールの認証設定
+### 1. 各種ツールの認証設定
 
 - [ここ](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html)を参考に`cdk bootstrap`を実行する
 - [ここ](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-files.html)を参考にaws cliの認証設定をする
 - [ここ](https://www.serverless.com/framework/docs-guides-upgrading-v4)を参考にserverless cliの認証設定をする
 
-### モノレポの依存パッケージ解決
+### 2. モノレポの依存パッケージ解決
 
 ```shell
 pm ci
 npm run build
 ```
 
-### 環境変数の定義
+### 3. 環境変数の定義
 
 ローカル環境に以下の環境変数を定義する。
 
@@ -153,49 +153,48 @@ npm run build
 | AWS_DEFAULT_REGION             | デプロイ先のAWSリージョン                                                                                                                                    |
 | VPC_SUBNET_COUNT               | FARGATEが動作するVPCのPublicサブネット個数                                                                                                                   |
 
-### serverlessデプロイ
+### 4. デプロイ
+
+#### 4.1. 初回デプロイ
+
+各モジュールには依存関係があるので、以下の順番で初回デプロイを行う必要がある。
 
 ```shell
+# serverlessデプロイ
 ./deploy-serverless.bash
-```
 
-### serverless環境削除
-
-```shell
-./remove-serverless.bash
-```
-
-### ECRリポジトリPush
-
-```shell
+# ECRリポジトリPush
 ./push-match-make-container.bash
-```
 
-### バックエンド処理用ECSデプロイ
-
-```shell
-# 通常デプロイ
+# Fargate通常デプロイ
 ./deploy-backend-ecs.bash
 
-# ホットスワップデプロイ
-./deploy-backend-ecs-with-hotswap.bash
-```
-
-### バックエンド処理用ECS環境削除
-
-```shell
-./remove-backend-ecs.bash
-```
-
-### シグナルサーバーデプロイ
-
-```shell
+# シグナルサーバーデプロイ
 ./deploy-ws-signal.bash
 ```
 
-### シグナルサーバー環境削除
+### 4.2. 2回目以降のデプロイ
+
+各モジュールのI/Oに変更がなければ、4.1のスクリプトを任意の順番で実行してよい。
+また、Fargateにはホットスワップデプロイのスクリプトも用意されている。
 
 ```shell
+# Fargateホットスワップデプロイ
+./deploy-backend-ecs-with-hotswap.bash
+```
+
+### 5. 環境削除
+
+各モジュールには依存関係があるので、以下の順番で環境削除を行う必要がある。
+
+```shell
+# Fargate削除
+./remove-backend-ecs.bash
+
+# サーバーレス削除
+./remove-serverless.bash
+
+# シグナルサーバー削除
 ./remove-ws-signal.bash
 ```
 
