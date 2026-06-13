@@ -95,15 +95,15 @@ ACM証明書はシグナルサーバー用のドメイン名のワイルドカ�
 - シグナルサーバー用のドメイン名: ws-signal.example.com
 - ACM証明書: \*.ws-signal.example.com
 
-#### 7.3. WebRTC Helper API用のドメイン名およびACM証明書の準備
+#### 7.3. バックエンドCloudFront用のドメイン名およびACM証明書の準備
 
-WebRTC Helper API用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
-ACM証明書はWebRTC Helper API用のドメイン名のワイルドカード証明書である必要がある。
+バックエンドCloudFront用のドメイン名をRoute53で準備し、ACMでSSL証明書を発行する。
+ACM証明書はバックエンドCloudFront用のドメイン名のワイルドカード証明書である必要がある。
 
 例
 
-- WebRTC Helper API用のドメイン名: webrtc-helper.example.com
-- ACM証明書: \*.webrtc-helper.example.com
+- バックエンドCloudFront用のドメイン名: backend.example.com
+- ACM証明書: \*.backend.example.com
 
 ### 8. coturnサーバーの構築
 
