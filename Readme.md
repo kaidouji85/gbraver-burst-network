@@ -9,9 +9,9 @@
 
 本リポジトリは、以下の3サービスを提供している。
 
-1. ユーザー登録必須API（AWS環境）
-2. ログインなしAPI（AWS環境）
-3. オフライン対戦サーバー（イントラネット環境）
+- ユーザー登録必須API（AWS環境）
+- ログインなしAPI（AWS環境）
+- オフライン対戦サーバー（イントラネット環境）
 
 本リポジトリは`packages`ディレクトリに、以下のモジュールが配置されている。
 
@@ -23,12 +23,42 @@
 | ユーザー登録必須API    | browser-sdk              | ユーザー登録必須のAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                      |
 | ユーザー登録必須API    | serverless-stub          | ログイン必須APIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト  |
 | ログインなしAPI        | cloudfront               | 各種CloudFrontを構築するCloudFormationテンプレート                                               |
+| ログインなしAPI        | ws-signal                | シグナルサーバーを構築するServerless Frameworkプロジェクト                                       |
 | ログインなしAPI        | local-webrtc-browser-sdk | ログインなしAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                            |
 | ログインなしAPI        | local-webrtc-stub        | ログインなしAPIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト  |
-| ログインなしAPI        | ws-signal                | シグナルサーバーを構築するServerless Frameworkプロジェクト                                       |
 | オフライン対戦サーバー | offline-backend-app      | オフライン対戦サーバーを実装したTypeScriptプロジェクト                                           |
 | オフライン対戦サーバー | offline-browser-sdk      | オフライン対戦クライアントを実装したブラウザ向けSDKを実装したnpmパッケージ                       |
 | オフライン対戦サーバー | offline-stub             | オフライン対戦サーバーをローカルで動作させるためのスタブサーバーを実装したTypeScriptプロジェクト |
+
+**ユーザー登録必須APIの依存関係**
+
+```mermaid
+graph TD;
+    backend-ecs-->aws-vpc;
+    backend-ecs-->backend-app;
+    browser-sdk-->backend-app;
+    serverless-stub-->backend-app;
+    serverless-stub-->browser-sdk;
+```
+
+**ログインなしAPIの依存関係**
+
+```mermaid
+graph TD;
+    ws-signal-->cloudfront;
+    local-webrtc-browser-sdk-->ws-signal;
+    local-webrtc-stub-->ws-signal;
+    local-webrtc-stub-->local-webrtc-browser-sdk;
+```
+
+**オフライン対戦サーバーの依存関係**
+
+```mermaid
+graph TD;
+    offline-browser-sdk-->offline-backend-app;
+    offline-stub-->offline-backend-app;
+    offline-stub-->offline-browser-sdk;
+```
 
 ## 必須ソフト一覧
 
