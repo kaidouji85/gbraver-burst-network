@@ -1,5 +1,12 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.25.2
+
+### Patch Changes
+
+- 4e12a98: npm publishの設定変更
+- npm publish設定を修正
+
 ## 1.25.2-beta.0
 
 ### Patch Changes

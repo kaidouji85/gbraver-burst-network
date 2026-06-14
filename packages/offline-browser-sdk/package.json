@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/offline-browser-sdk",
   "description": "gbraver burst offline browser sdk",
-  "version": "1.25.2-beta.0",
+  "version": "1.25.2",
   "author": "Y.Takeuchi",
   "bugs": {
     "url": "https://github.com/kaidouji85/gbraver-burst-network/issues",

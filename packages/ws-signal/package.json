@@ -1,7 +1,7 @@
 {
   "name": "@gbraver-burst-network/ws-signal",
   "description": "gbraver burst webrtc signal cache",
-  "version": "1.25.2-beta.0",
+  "version": "1.25.2",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-lambda-powertools/parameters": "^2.33.1",
