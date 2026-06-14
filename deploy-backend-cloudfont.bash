@@ -15,5 +15,5 @@ aws cloudformation deploy \
   WebRTCHelperDomainName="${WEB_RTC_HELPER_DOMAIN_NAME}" \
   DistributionAlias="${BACKEND_CLOUDFRONT_DOMAIN_NAME:?}" \
   AcmCertificateArn="${BACKEND_CLOUDFRONT_CERT_ARN:?}" \
-  WebACLArn="${BACKEND_CLOUDFRONT_WEB_ACL_ARN:?}" \
+  WebACLArn="${BACKEND_CLOUDFRONT_WEB_ACL_ARN:-}" \
   --no-fail-on-empty-changeset
