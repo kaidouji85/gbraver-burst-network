@@ -7,7 +7,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "gbraver-burst-core": "^1.44.0",
+    "gbraver-burst-core": "^1.45.0",
     "p-queue": "^9.3.0",
     "socket.io": "^4.8.3",
     "uuid": "^14.0.0",
