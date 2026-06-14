@@ -285,12 +285,11 @@ npm run build
 ActionsのSecretsを設定する。
 以下が設定内容である。
 
-| シークレット名        | 値                                                                                      |
-| --------------------- | --------------------------------------------------------------------------------------- |
-| SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey                                               |
-| AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID                                                          |
-| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー                                                        |
-| NPM_TOKEN             | [npmのPersonal Access Token](https://docs.npmjs.com/creating-and-viewing-access-tokens) |
+| シークレット名        | 値                                        |
+| --------------------- | ----------------------------------------- |
+| SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey |
+| AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID            |
+| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー          |
 
 ## AWS CodeBuild CD環境構築方法
 
