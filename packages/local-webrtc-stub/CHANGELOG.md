@@ -1,5 +1,13 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.25.2-beta.0
+
+### Patch Changes
+
+- npm publishの設定変更
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.25.2-beta.0
+
 ## 1.25.1
 
 ### Patch Changes
