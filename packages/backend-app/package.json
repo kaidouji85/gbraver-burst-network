@@ -11,7 +11,7 @@
     "@aws-sdk/signature-v4-crt": "^3.1068.0",
     "aws-jwt-verify": "^5.2.1",
     "dotenv": "^17.4.2",
-    "gbraver-burst-core": "^1.44.0",
+    "gbraver-burst-core": "^1.45.0",
     "nanoid": "^5.1.11",
     "ramda": "^0.32.0",
     "uuid": "^14.0.0",

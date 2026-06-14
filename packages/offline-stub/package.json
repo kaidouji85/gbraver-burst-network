@@ -6,7 +6,7 @@
   "dependencies": {
     "@gbraver-burst-network/offline-browser-sdk": "1.25.2",
     "dotenv": "^17.4.2",
-    "gbraver-burst-core": "^1.44.0"
+    "gbraver-burst-core": "^1.45.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
