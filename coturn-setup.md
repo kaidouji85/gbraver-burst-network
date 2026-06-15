@@ -157,6 +157,12 @@ EOF
 
 - `use-auth-secret`では、アプリサーバーとcoturnが同じ共通シークレットを持ち、アプリサーバー側で一時クレデンシャルを生成してクライアントへ渡します。
 
+> [!NOTE] 強力な共通シークレットの生成コマンド例
+>
+> ```shell
+> openssl rand -base64 32
+> ```
+
 ## 8. 起動と自動起動設定
 
 ```shell
@@ -250,7 +256,7 @@ sudo cp /etc/turnserver.conf "/etc/turnserver.conf.bak.$(date +%Y%m%d%H%M%S)"
 
 # 共通シークレットの更新
 NEW_COTURN_SHARED_SECRET=<強力な共通シークレット>
-sudo sed -i "s/^static-auth-secret=.*/static-auth-secret=${NEW_COTURN_SHARED_SECRET}/" /etc/turnserver.conf
+sudo sed -i "s|^static-auth-secret=.*|static-auth-secret=${NEW_COTURN_SHARED_SECRET}|" /etc/turnserver.conf
 
 # 正しくシークレットが更新されたかを確認
 grep '^static-auth-secret=' /etc/turnserver.conf
