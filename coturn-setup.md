@@ -265,13 +265,20 @@ grep '^static-auth-secret=' /etc/turnserver.conf
 ### 11.2. ソフトウェアのアップグレード
 
 apt系パッケージを更新します。
-必要に応じて、サーバーを再起動してください。
 
 ```bash
 sudo apt update
 sudo apt list --upgradable
 sudo apt upgrade
 sudo apt autoremove
+```
+
+### 11.3. 再起動
+
+必要に応じて、サーバーを再起動してください。
+
+```bash
+sudo reboot
 ```
 
 ## 12. 運用上の注意
