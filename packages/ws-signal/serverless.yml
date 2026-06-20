@@ -32,6 +32,7 @@ provider:
         functionName: httpAuthorizerFunc
         enableSimpleResponses: true
         payloadVersion: "2.0"
+    metrics: true
   logs:
     httpApi:
       format: >-
