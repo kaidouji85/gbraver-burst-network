@@ -48,6 +48,7 @@ provider:
         "principalId":"$context.authorizer.principalId",
         "userAgent":"$context.identity.userAgent"
         }
+    websocket: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
