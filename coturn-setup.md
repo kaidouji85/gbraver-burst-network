@@ -157,6 +157,12 @@ EOF
 
 - `use-auth-secret`では、アプリサーバーとcoturnが同じ共通シークレットを持ち、アプリサーバー側で一時クレデンシャルを生成してクライアントへ渡します。
 
+> [!NOTE] 強力な共通シークレットの生成コマンド例
+>
+> ```shell
+> openssl rand -base64 32
+> ```
+
 ## 8. 起動と自動起動設定
 
 ```shell
@@ -238,7 +244,44 @@ const pc = new RTCPeerConnection({
 });
 ```
 
-## 11. 運用上の注意
+## 11. メンテナンス（ソフトウェアアップグレード）
+
+### 11.1. 共通シークレットの更新
+
+本手順を実施する前に、強力な<共通シークレット>をあらかじめ作成しておいてください。
+
+```bash
+# 設定ファイルのバックアップ
+sudo cp /etc/turnserver.conf "/etc/turnserver.conf.bak.$(date +%Y%m%d%H%M%S)"
+
+# 共通シークレットの更新
+NEW_COTURN_SHARED_SECRET=<強力な共通シークレット>
+sudo sed -i "s|^static-auth-secret=.*|static-auth-secret=${NEW_COTURN_SHARED_SECRET}|" /etc/turnserver.conf
+
+# 正しくシークレットが更新されたかを確認
+grep '^static-auth-secret=' /etc/turnserver.conf
+```
+
+### 11.2. ソフトウェアのアップグレード
+
+apt系パッケージを更新します。
+
+```bash
+sudo apt update
+sudo apt list --upgradable
+sudo apt upgrade
+sudo apt autoremove
+```
+
+### 11.3. 再起動
+
+必要に応じて、サーバーを再起動してください。
+
+```bash
+sudo reboot
+```
+
+## 12. 運用上の注意
 
 - 共通シークレットは十分に長いランダム値を使用し、定期的に更新してください。
 - さくらのVPSパケットフィルター制約により、リレーポートは`1-32767`の範囲で設計してください。
