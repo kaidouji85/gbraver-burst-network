@@ -44,7 +44,7 @@ provider:
         "status":"$context.status",
         "protocol":"$context.protocol",
         "responseLength":"$context.responseLength",
-        "principalId":"$context.authorizer.tokenHash",
+        "principalId":"$context.authorizer.principalId",
         "userAgent":"$context.identity.userAgent"
         }
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
