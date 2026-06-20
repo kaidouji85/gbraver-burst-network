@@ -32,6 +32,21 @@ provider:
         functionName: httpAuthorizerFunc
         enableSimpleResponses: true
         payloadVersion: "2.0"
+  logs:
+    httpApi:
+      format: >-
+        {
+        "requestId":"$context.requestId",
+        "ip":"$context.identity.sourceIp",
+        "requestTime":"$context.requestTime",
+        "httpMethod":"$context.httpMethod",
+        "routeKey":"$context.routeKey",
+        "status":"$context.status",
+        "protocol":"$context.protocol",
+        "responseLength":"$context.responseLength",
+        "principalId":"$context.authorizer.principalId",
+        "userAgent":"$context.identity.userAgent"
+        }
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
