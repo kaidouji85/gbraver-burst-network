@@ -4,7 +4,7 @@ import {
   APIGatewaySimpleAuthorizerWithContextResult,
 } from "aws-lambda";
 
-import { extractBearerToken, HashAuthToken } from "./core/auth-token";
+import { extractBearerToken } from "./core/auth-token";
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 
