@@ -32,6 +32,8 @@ provider:
         functionName: httpAuthorizerFunc
         enableSimpleResponses: true
         payloadVersion: "2.0"
+  logs:
+    httpApi: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
