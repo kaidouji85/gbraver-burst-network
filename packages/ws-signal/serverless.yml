@@ -33,36 +33,6 @@ provider:
         enableSimpleResponses: true
         payloadVersion: "2.0"
     metrics: true
-  logs:
-    httpApi:
-      format: >-
-        {
-        "requestId":"$context.requestId",
-        "ip":"$context.identity.sourceIp",
-        "requestTime":"$context.requestTime",
-        "httpMethod":"$context.httpMethod",
-        "routeKey":"$context.routeKey",
-        "status":"$context.status",
-        "protocol":"$context.protocol",
-        "responseLength":"$context.responseLength",
-        "principalId":"$context.authorizer.principalId",
-        "userAgent":"$context.identity.userAgent"
-        }
-    websocket:
-      accessLogging: true
-      format: >-
-        {
-        "ip": "$context.identity.sourceIp",
-        "caller": "$context.identity.caller",
-        "user": "$context.identity.user",
-        "requestTime": "$context.requestTime",
-        "eventType": "$context.eventType",
-        "routeKey": "$context.routeKey",
-        "connectionId": "$context.connectionId",
-        "requestId": "$context.requestId",
-        "principalId": "$context.authorizer.principalId"
-        }
-      executionLogging: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
@@ -105,6 +75,36 @@ provider:
             - "secretsmanager:GetSecretValue"
           Resource:
             - "arn:aws:secretsmanager:${self:provider.region}:${aws:accountId}:secret:${env:COTURN_SHARED_SECRET}*"
+  logs:
+    httpApi:
+      format: >-
+        {
+        "requestId":"$context.requestId",
+        "ip":"$context.identity.sourceIp",
+        "requestTime":"$context.requestTime",
+        "httpMethod":"$context.httpMethod",
+        "routeKey":"$context.routeKey",
+        "status":"$context.status",
+        "protocol":"$context.protocol",
+        "responseLength":"$context.responseLength",
+        "principalId":"$context.authorizer.principalId",
+        "userAgent":"$context.identity.userAgent"
+        }
+    websocket:
+      accessLogging: true
+      executionLogging: true
+      format: >-
+        {
+        "ip": "$context.identity.sourceIp",
+        "caller": "$context.identity.caller",
+        "user": "$context.identity.user",
+        "requestTime": "$context.requestTime",
+        "eventType": "$context.eventType",
+        "routeKey": "$context.routeKey",
+        "connectionId": "$context.connectionId",
+        "requestId": "$context.requestId",
+        "principalId": "$context.authorizer.principalId"
+        }
 
 functions:
   # WebSocket API
