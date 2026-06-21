@@ -48,6 +48,21 @@ provider:
         "principalId":"$context.authorizer.principalId",
         "userAgent":"$context.identity.userAgent"
         }
+    websocket:
+      accessLogging: true
+      format: >-
+        {
+        "ip": "$context.identity.sourceIp",
+        "caller": "$context.identity.caller",
+        "user": "$context.identity.user",
+        "requestTime": "$context.requestTime",
+        "eventType": "$context.eventType",
+        "routeKey": "$context.routeKey",
+        "connectionId": "$context.connectionId",
+        "requestId": "$context.requestId",
+        "principalId": "$context.authorizer.principalId"
+        }
+      executionLogging: true
   websocketsApiName: ${self:service}__${sls:stage}__ws-signal
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
