@@ -63,6 +63,22 @@ provider:
             - "execute-api:ManageConnections"
           Resource:
             - "arn:aws:execute-api:*:*:**/@connections/*"
+  logs:
+    websocket:
+      accessLogging: true
+      executionLogging: true
+      format: >-
+        {
+        "ip": "$context.identity.sourceIp",
+        "caller": "$context.identity.caller",
+        "user": "$context.identity.user",
+        "requestTime": "$context.requestTime",
+        "eventType": "$context.eventType",
+        "routeKey": "$context.routeKey",
+        "connectionId": "$context.connectionId",
+        "requestId": "$context.requestId",
+        "principalId": "$context.authorizer.principalId"
+        }
 
 functions:
   webSocketAPIAuthorizer:
