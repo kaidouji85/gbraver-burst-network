@@ -154,6 +154,7 @@ no-cli
 # Logging
 simple-log
 log-file=/var/log/turnserver/turn.log
+log-binding
 EOF
 ```
 
@@ -264,17 +265,7 @@ sudo reboot
 TURN/STUNの利用比率は、一定期間のcoturnログを集計して確認できます。
 ここでは「リクエスト比（STUN Binding系リクエスト数 : TURN Allocate系リクエスト数）」を算出します。
 
-### 1. STUNログを有効化
-
-`/etc/turnserver.conf`に`log-binding`を追加し、coturnを再起動します。
-
-```bash
-sudo cp /etc/turnserver.conf "/etc/turnserver.conf.bak.$(date +%Y%m%d%H%M%S)"
-grep -q '^log-binding$' /etc/turnserver.conf || echo 'log-binding' | sudo tee -a /etc/turnserver.conf
-sudo systemctl restart coturn
-```
-
-### 2. 計測開始前にログをローテーション
+### 1. 計測開始前にログをローテーション
 
 計測対象期間を明確にするため、ログを退避して新しいログで計測を開始します。
 
@@ -283,11 +274,11 @@ sudo mv /var/log/turnserver/turn.log "/var/log/turnserver/turn.log.$(date +%Y%m%
 sudo systemctl restart coturn
 ```
 
-### 3. 計測時間を決めて運用
+### 2. 計測時間を決めて運用
 
 例: 1時間分を計測する場合は、通常運用のまま1時間待機します。
 
-### 4. TURN/STUNリクエスト比を集計
+### 3. TURN/STUNリクエスト比を集計
 
 ```bash
 LOG_FILE=/var/log/turnserver/turn.log
@@ -321,14 +312,7 @@ END {
 - 上記は「リクエスト数ベース」の比率です。`refresh`や`channelbind`を含むため、セッション数ベースとは一致しません。
 - セッション数ベースで見たい場合は、`allocate`をTURN開始イベントとして別集計してください。
 
-### 5. 計測後に不要な詳細ログを戻す（任意）
 
-常時運用で`log-binding`が不要な場合は削除して再起動してください。
-
-```bash
-sudo sed -i '/^log-binding$/d' /etc/turnserver.conf
-sudo systemctl restart coturn
-```
 
 ## 運用上の注意
 
