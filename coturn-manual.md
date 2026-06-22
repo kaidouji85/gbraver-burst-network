@@ -292,25 +292,14 @@ sudo reboot
 TURN/STUNの利用比率は、一定期間のcoturnログを集計して確認できます。
 ここでは「リクエスト比（STUN Binding系リクエスト数 : TURN Allocate系リクエスト数）」を算出します。
 
-### 1. 計測開始前にログをローテーション
-
-計測対象期間を明確にするため、ログを退避して新しいログで計測を開始します。
+### 1. TURN/STUNリクエスト比を集計
 
 ```bash
-sudo mv /var/log/turnserver/turn.log "/var/log/turnserver/turn.log.$(date +%Y%m%d%H%M%S).bak" 2>/dev/null || true
-sudo systemctl restart coturn
-```
+LOG_FILES="/var/log/turnserver/turn.log*"
 
-### 2. 計測時間を決めて運用
-
-例: 1時間分を計測する場合は、通常運用のまま1時間待機します。
-
-### 3. TURN/STUNリクエスト比を集計
-
-```bash
-LOG_FILE=/var/log/turnserver/turn.log
-
-awk '
+# Handle rotated and compressed logs as well (e.g. turn.log, turn.log.1, turn.log.2.gz)
+# `zcat -f` will read both compressed and plain files; suppress errors from missing files.
+zcat -f "/var/log/turnserver/turn.log*" 2>/dev/null | awk '
 BEGIN { stun=0; turn=0 }
 {
   line=tolower($0)
@@ -331,14 +320,13 @@ END {
     printf("No STUN/TURN requests found in log.\n")
   }
 }
-' "$LOG_FILE"
+'
 ```
 
 補足:
 
 - 上記は「リクエスト数ベース」の比率です。`refresh`や`channelbind`を含むため、セッション数ベースとは一致しません。
 - セッション数ベースで見たい場合は、`allocate`をTURN開始イベントとして別集計してください。
-
 
 
 ## 運用上の注意
