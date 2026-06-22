@@ -168,7 +168,34 @@ EOF
 > openssl rand -base64 32
 > ```
 
-### 8. 起動と自動起動設定
+### 8. coturnのログローテーション設定
+
+Debian 標準の `logrotate` を使って、coturnのログローテーションを設定します。
+
+```sh
+sudo tee /etc/logrotate.d/turnserver > /dev/null <<'EOF'
+/var/log/turnserver/turn.log {
+  daily
+  rotate 14
+  compress
+  missingok
+  notifempty
+  create 640 turnserver turnserver
+  sharedscripts
+  postrotate
+    systemctl restart coturn > /dev/null 2>&1 || true
+  endscript
+}
+EOF
+```
+
+設定完了後に以下でデバッグします。
+
+```shell
+sudo logrotate -d /etc/logrotate.d/turnserver
+```
+
+### 9. 起動と自動起動設定
 
 ```shell
 sudo mkdir -p /var/log/turnserver
@@ -184,7 +211,7 @@ sudo systemctl status coturn --no-pager
 sudo ss -lntup | grep -E '3478|5349|turn'
 ```
 
-### 9. 動作確認（Trickle ICE）
+### 10. 動作確認（Trickle ICE）
 
 `use-auth-secret`の場合、先に一時クレデンシャルを生成します。
 
