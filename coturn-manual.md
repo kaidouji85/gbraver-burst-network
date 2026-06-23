@@ -154,7 +154,6 @@ no-cli
 # Logging
 simple-log
 log-file=/var/log/turnserver/turn.log
-log-binding
 EOF
 ```
 
@@ -286,48 +285,6 @@ sudo apt autoremove
 ```bash
 sudo reboot
 ```
-
-## 統計情報取得
-
-TURN/STUNの利用比率は、一定期間のcoturnログを集計して確認できます。
-ここでは「リクエスト比（STUN Binding系リクエスト数 : TURN Allocate系リクエスト数）」を算出します。
-
-### 1. TURN/STUNリクエスト比を集計
-
-```bash
-LOG_FILES="/var/log/turnserver/turn.log*"
-
-# Handle rotated and compressed logs as well (e.g. turn.log, turn.log.1, turn.log.2.gz)
-# `zcat -f` will read both compressed and plain files; suppress errors from missing files.
-zcat -f "/var/log/turnserver/turn.log*" 2>/dev/null | awk '
-BEGIN { stun=0; turn=0 }
-{
-  line=tolower($0)
-  # STUN: Binding系
-  if (line ~ /binding/) stun++
-
-  # TURN: Allocate/CreatePermission/ChannelBind/Refresh系
-  if (line ~ /allocate|createpermission|channelbind|refresh/) turn++
-}
-END {
-  total=stun+turn
-  printf("STUN requests: %d\n", stun)
-  printf("TURN requests: %d\n", turn)
-  if (total > 0) {
-    printf("STUN ratio: %.2f%%\n", (stun/total)*100)
-    printf("TURN ratio: %.2f%%\n", (turn/total)*100)
-  } else {
-    printf("No STUN/TURN requests found in log.\n")
-  }
-}
-'
-```
-
-補足:
-
-- 上記は「リクエスト数ベース」の比率です。`refresh`や`channelbind`を含むため、セッション数ベースとは一致しません。
-- セッション数ベースで見たい場合は、`allocate`をTURN開始イベントとして別集計してください。
-
 
 ## 運用上の注意
 
