@@ -3,8 +3,8 @@
   "description": "gbraver burst network module.",
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
-    "prettier": "3.8.4",
-    "turbo": "^2.9.18",
+    "prettier": "3.8.5",
+    "turbo": "^2.10.0",
     "typescript": "^6.0.3"
   },
   "license": "MIT",
