@@ -1,0 +1,55 @@
+import * as crypto from "crypto";
+
+import { generatePrivateMatchRoomID } from "../../../src/core/generate-private-match-room-id";
+
+jest.mock("crypto", () => ({
+  randomInt: jest.fn(),
+}));
+
+/**
+ * モック用のランダムインデックス生成関数
+ * 以下のように、引数に指定したインデックスを順番に返すようにしている
+ * 例: kanaIndexes(0, 1, 2)
+ *     0 -> あ
+ *     1 -> い
+ *     2 -> う
+ * @param indexes 返すインデックスの配列
+ */
+const kanaIndexes = (...indexes: number[]) =>
+  jest.mocked(crypto.randomInt).mockImplementation(() => {
+    const index = indexes.shift();
+    if (index === undefined) {
+      throw new Error("randomInt is called more times than expected");
+    }
+
+    return index;
+  });
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+test("NGワードを含まないルームIDを返す", () => {
+  kanaIndexes(5, 6, 7, 8, 9);
+  const roomID = generatePrivateMatchRoomID(["あい", "さし"]);
+  expect(roomID).toBe("かきくけこ");
+});
+
+test("NGワードを含む候補は再生成して返す", () => {
+  kanaIndexes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  const roomID = generatePrivateMatchRoomID(["あい"]);
+  expect(roomID).toBe("かきくけこ");
+});
+
+test("再生成上限までNGワードに一致するとエラーになる", () => {
+  kanaIndexes(
+    ...[0, 1, 2, 3, 4],
+    ...[0, 1, 2, 3, 4],
+    ...[0, 1, 2, 3, 4],
+    ...[0, 1, 2, 3, 4],
+    ...[0, 1, 2, 3, 4],
+  );
+  expect(() => generatePrivateMatchRoomID(["あい"])).toThrow(
+    "failed to create private match room ID after maximum retries",
+  );
+});
