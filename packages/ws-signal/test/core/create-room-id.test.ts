@@ -1,6 +1,6 @@
-import { createRoomID } from "../../src/core/create-room-id";
-
 import * as crypto from "crypto";
+
+import { createRoomID } from "../../src/core/create-room-id";
 
 jest.mock("crypto", () => ({
   randomInt: jest.fn(),
