@@ -21,11 +21,32 @@ const kana = [
 const ROOM_ID_LENGTH = 5;
 
 /**
- * ランダムなルームIDを生成する
- * @return 生成されたルームID
+ * デフォルトのNGワード
+ * NGワードをコードに直接記載するのは憚られたので、Unicodeエスケープシーケンスで記載している
  */
-export const createRoomID = (): string =>
-  Array.from(
+const DEFAULT_NG_WORDS = [
+  "\u3057\u306d",
+  "\u3053\u308d\u3059",
+  "\u3061\u3093",
+  "\u307e\u3093",
+];
+
+/**
+ * ランダムなルームIDを生成する
+ * @param ngWords NGワードの配列。指定しない場合はデフォルトのNGワードが使用される
+ * @return 生成されたルームID、または生成に失敗した場合はnull
+ */
+export const createRoomID = (
+  ngWords: string[] = DEFAULT_NG_WORDS,
+): string | null => {
+  const roomID = Array.from(
     { length: ROOM_ID_LENGTH },
     () => kana[crypto.randomInt(kana.length)],
   ).join("");
+  const hasNGWord = ngWords.some((ngWord) => roomID.includes(ngWord));
+  if (hasNGWord) {
+    return null;
+  }
+
+  return roomID;
+};
