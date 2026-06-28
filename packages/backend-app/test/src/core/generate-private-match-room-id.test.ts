@@ -35,20 +35,8 @@ test("NGワードを含まないルームIDを返す", () => {
   expect(roomID).toBe("かきくけこ");
 });
 
-test("NGワードを含む候補は再生成して返す", () => {
+test("NGワードを含む候補は失敗としてnullを返す", () => {
   kanaIndexes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-  const roomID = generatePrivateMatchRoomID(["あい"]);
-  expect(roomID).toBe("かきくけこ");
-});
-
-test("再生成上限までNGワードに一致すると失敗してnullを返す", () => {
-  kanaIndexes(
-    ...[0, 1, 2, 3, 4],
-    ...[0, 1, 2, 3, 4],
-    ...[0, 1, 2, 3, 4],
-    ...[0, 1, 2, 3, 4],
-    ...[0, 1, 2, 3, 4],
-  );
   const roomID = generatePrivateMatchRoomID(["あい"]);
   expect(roomID).toBeNull();
 });

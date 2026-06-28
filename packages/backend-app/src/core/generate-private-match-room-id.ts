@@ -22,9 +22,6 @@ const kana = [
 /** ルームIDの文字数 */
 const ROOM_ID_LENGTH = 5;
 
-/** ルームIDの最大生成試行回数 */
-const MAX_ROOM_CREATION_RETRY = 5;
-
 /**
  * デフォルトのNGワード
  * NGワードをコードに直接記載するのは憚られたので、Unicodeエスケープシーケンスで記載している
@@ -44,16 +41,14 @@ const DEFAULT_NG_WORDS = [
 export const generatePrivateMatchRoomID = (
   ngWords: string[] = DEFAULT_NG_WORDS,
 ): PrivateMatchRoomID | null => {
-  for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
-    const roomID = Array.from(
-      { length: ROOM_ID_LENGTH },
-      () => kana[crypto.randomInt(kana.length)],
-    ).join("");
-    const hasNGWord = ngWords.some((ngWord) => roomID.includes(ngWord));
-    if (!hasNGWord) {
-      return roomID;
-    }
+  const roomID = Array.from(
+    { length: ROOM_ID_LENGTH },
+    () => kana[crypto.randomInt(kana.length)],
+  ).join("");
+  const hasNGWord = ngWords.some((ngWord) => roomID.includes(ngWord));
+  if (hasNGWord) {
+    return null;
   }
 
-  return null;
+  return roomID;
 };
