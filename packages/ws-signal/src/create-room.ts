@@ -56,6 +56,10 @@ const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = createRoomID();
+    if (!roomID) {
+      continue;
+    }
+
     const { sdp, iceCandidates } = body;
     const isRoomCreationSuccessful = await dynamoRooms.put({
       roomID,
@@ -66,6 +70,7 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
       return roomID;
     }
   }
+
   return null;
 }
 
