@@ -41,7 +41,7 @@ test("NGワードを含む候補は再生成して返す", () => {
   expect(roomID).toBe("かきくけこ");
 });
 
-test("再生成上限までNGワードに一致するとエラーになる", () => {
+test("再生成上限までNGワードに一致すると失敗してnullを返す", () => {
   kanaIndexes(
     ...[0, 1, 2, 3, 4],
     ...[0, 1, 2, 3, 4],
@@ -49,7 +49,6 @@ test("再生成上限までNGワードに一致するとエラーになる", () 
     ...[0, 1, 2, 3, 4],
     ...[0, 1, 2, 3, 4],
   );
-  expect(() => generatePrivateMatchRoomID(["あい"])).toThrow(
-    "failed to create private match room ID after maximum retries",
-  );
+  const roomID = generatePrivateMatchRoomID(["あい"]);
+  expect(roomID).toBeNull();
 });

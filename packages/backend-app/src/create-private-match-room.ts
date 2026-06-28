@@ -74,8 +74,12 @@ async function createRoomWithRetry(options: {
   const { armdozerId, pilotId } = data;
   const { userID: owner } = user;
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
+    const roomID = generatePrivateMatchRoomID();
+    if (!roomID) {
+      continue;
+    }
     const room: PrivateMatchRoom = {
-      roomID: generatePrivateMatchRoomID(),
+      roomID,
       expiresAt: createPrivateMatchRoomExpiresAt(),
       owner,
       ownerConnectionId,

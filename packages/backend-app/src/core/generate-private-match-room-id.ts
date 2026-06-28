@@ -39,11 +39,11 @@ const DEFAULT_NG_WORDS = [
 /**
  * プライベートマッチのルームIDを生成する
  * @param ngWords NGワードの配列。指定しない場合はデフォルトのNGワードが使用される
- * @returns 生成されたルームID
+ * @returns 生成されたルームID、または生成に失敗した場合はnull
  */
 export const generatePrivateMatchRoomID = (
   ngWords: string[] = DEFAULT_NG_WORDS,
-): PrivateMatchRoomID => {
+): PrivateMatchRoomID | null => {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = Array.from(
       { length: ROOM_ID_LENGTH },
@@ -55,7 +55,5 @@ export const generatePrivateMatchRoomID = (
     }
   }
 
-  throw new Error(
-    "failed to create private match room ID after maximum retries",
-  );
+  return null;
 };
