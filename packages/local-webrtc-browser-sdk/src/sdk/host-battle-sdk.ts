@@ -10,7 +10,15 @@ import {
   startGBraverBurst,
 } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { EMPTY, Observable } from "rxjs";
+import {
+  filter,
+  from,
+  fromEvent,
+  map,
+  merge,
+  mergeMap,
+  Observable,
+} from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
 import { sendHostMessage } from "../webrtc/host/host-message";
@@ -32,7 +40,6 @@ export class HostBattleSDK implements BattleSDK {
   #core: GBraverBurstCore;
   /** ホスト側のWebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
-  /** ゲストからのコマンド受信プロミス */
   #sendCommandPromise: Promise<SendCommand>;
 
   /**
@@ -106,7 +113,20 @@ export class HostBattleSDK implements BattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown> {
-    // TODO 中身を実装する
-    return EMPTY;
+    return from(
+      this.#webRTCConnection.getOrCreateConnection().connectionPromise,
+    ).pipe(
+      mergeMap((connection) =>
+        merge(
+          fromEvent(connection, "connectionstatechange").pipe(
+            map(() => connection.connectionState),
+          ),
+          fromEvent(connection, "iceconnectionstatechange").pipe(
+            map(() => connection.iceConnectionState),
+          ),
+        ),
+      ),
+      filter((state) => state === "failed"),
+    );
   }
 }
