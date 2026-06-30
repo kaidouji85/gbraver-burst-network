@@ -1,5 +1,14 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
-import { EMPTY, Observable } from "rxjs";
+import {
+  filter,
+  from,
+  fromEvent,
+  map,
+  merge,
+  mergeMap,
+  Observable,
+  take,
+} from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
@@ -62,7 +71,21 @@ export class GuestBattleSDK implements BattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown> {
-    // TODO 中身を実装する
-    return EMPTY;
+    return from(
+      this.#webRTCConnection.getOrCreateConnection().connectionPromise,
+    ).pipe(
+      mergeMap((connection) =>
+        merge(
+          fromEvent(connection, "connectionstatechange").pipe(
+            map(() => connection.connectionState),
+          ),
+          fromEvent(connection, "iceconnectionstatechange").pipe(
+            map(() => connection.iceConnectionState),
+          ),
+        ),
+      ),
+      filter((state) => state === "failed"),
+      take(1),
+    );
   }
 }

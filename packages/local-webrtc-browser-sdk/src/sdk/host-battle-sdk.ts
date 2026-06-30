@@ -18,6 +18,7 @@ import {
   merge,
   mergeMap,
   Observable,
+  take,
 } from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
@@ -127,6 +128,7 @@ export class HostBattleSDK implements BattleSDK {
         ),
       ),
       filter((state) => state === "failed"),
+      take(1),
     );
   }
 }
