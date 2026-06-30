@@ -67,7 +67,9 @@ export class HostPlayer implements UseCase {
       battery: 5,
     });
     console.log(update05);
+    await waitTime(1000);
 
+    console.log("end battle");
     this.#hostSDK.disconnectWebRTC();
     this.#hostSDK.disconnectWebSocket();
   }
