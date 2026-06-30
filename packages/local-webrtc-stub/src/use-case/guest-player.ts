@@ -2,6 +2,7 @@ import { GuestLocalWebRTCSDK } from "@gbraver-burst-network/local-webrtc-browser
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase, UseCaseContext } from "./use-case";
+import { waitTime } from "../wait-time";
 
 /** ゲスト側プレイヤー */
 export class GuestPlayer implements UseCase {
@@ -44,21 +45,25 @@ export class GuestPlayer implements UseCase {
       battery: 3,
     });
     console.log(update01);
+    await waitTime(1000);
     const update02 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 5,
     });
     console.log(update02);
+    await waitTime(1000);
     const update03 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 5,
     });
     console.log(update03);
+    await waitTime(1000);
     const update04 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 0,
     });
     console.log(update04);
+    await waitTime(1000);
     const update05 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 0,
