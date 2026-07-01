@@ -1,5 +1,13 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.26.1-beta.0
+
+### Patch Changes
+
+- DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.26.1-beta.0
+
 ## 1.26.0
 
 ### Minor Changes

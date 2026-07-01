@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.26.1-beta.0
+
+### Patch Changes
+
+- DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+
 ## 1.26.0
 
 ### Minor Changes
