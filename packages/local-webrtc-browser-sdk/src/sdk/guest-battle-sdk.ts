@@ -65,10 +65,7 @@ export class GuestBattleSDK implements BattleSDK {
     return battleProgressed.update;
   }
 
-  /**
-   * バトル強制終了の通知ストリーム
-   * @returns 通知ストリーム
-   */
+  /** @override */
   suddenlyBattleEndNotifier(): Observable<unknown> {
     return from(
       this.#webRTCConnection.getOrCreateConnection().connectionPromise,
