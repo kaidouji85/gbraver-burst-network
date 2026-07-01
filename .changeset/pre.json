@@ -1,0 +1,18 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@gbraver-burst-network/aws-vpc": "1.25.2",
+    "@gbraver-burst-network/backend-app": "1.25.2",
+    "@gbraver-burst-network/backend-ecs": "1.25.2",
+    "@gbraver-burst-network/browser-sdk": "1.25.2",
+    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.25.2",
+    "@gbraver-burst-network/local-webrtc-stub": "1.25.2",
+    "@gbraver-burst-network/offline-backend-app": "1.25.2",
+    "@gbraver-burst-network/offline-browser-sdk": "1.25.2",
+    "@gbraver-burst-network/offline-stub": "1.25.2",
+    "@gbraver-burst-network/serverless-stub": "1.25.2",
+    "@gbraver-burst-network/ws-signal": "1.25.2"
+  },
+  "changesets": []
+}
