@@ -10,7 +10,7 @@ import {
   startGBraverBurst,
 } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { from, mergeMap, Observable, take } from "rxjs";
+import { from, mergeMap, Observable, Subject, take } from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
 import { sendHostMessage } from "../webrtc/host/host-message";
@@ -35,6 +35,8 @@ export class HostBattleSDK implements BattleSDK {
   #webRTCConnection: HostWebRTCConnectionManager;
   /** ゲストからのコマンド受信プロミス */
   #sendCommandPromise: Promise<SendCommand>;
+  /** dataChannel.sendの例外通知ストリーム */
+  #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
 
   /**
    * コンストラクタ
@@ -94,11 +96,16 @@ export class HostBattleSDK implements BattleSDK {
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     this.#sendCommandPromise = receiveSendCommand(dataChannel, this.flowID);
-    sendHostMessage(dataChannel, {
-      type: "battle-progressed",
-      flowID: this.flowID,
-      update,
-    });
+    try {
+      sendHostMessage(dataChannel, {
+        type: "battle-progressed",
+        flowID: this.flowID,
+        update,
+      });
+    } catch (error) {
+      this.#sendExceptionSubject.next(error);
+      throw error;
+    }
     return update;
   }
 
