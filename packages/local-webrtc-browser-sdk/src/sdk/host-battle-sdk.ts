@@ -33,6 +33,7 @@ export class HostBattleSDK implements BattleSDK {
   #core: GBraverBurstCore;
   /** ホスト側のWebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
+  /** ゲストからのコマンド受信プロミス */
   #sendCommandPromise: Promise<SendCommand>;
 
   /**
