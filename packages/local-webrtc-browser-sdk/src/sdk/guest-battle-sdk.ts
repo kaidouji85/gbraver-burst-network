@@ -1,17 +1,9 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
-import {
-  filter,
-  from,
-  fromEvent,
-  map,
-  merge,
-  mergeMap,
-  Observable,
-  take,
-} from "rxjs";
+import { from, mergeMap, Observable, take } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
+import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
 import { BattleSDK } from "./battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
@@ -74,17 +66,7 @@ export class GuestBattleSDK implements BattleSDK {
     return from(
       this.#webRTCConnection.getOrCreateConnection().connectionPromise,
     ).pipe(
-      mergeMap((connection) =>
-        merge(
-          fromEvent(connection, "connectionstatechange").pipe(
-            map(() => connection.connectionState),
-          ),
-          fromEvent(connection, "iceconnectionstatechange").pipe(
-            map(() => connection.iceConnectionState),
-          ),
-        ),
-      ),
-      filter((state) => state === "failed"),
+      mergeMap((connection) => notifyConnectionFailed(connection)),
       take(1),
     );
   }
