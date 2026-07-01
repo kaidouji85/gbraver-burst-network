@@ -1,5 +1,12 @@
 # @gbraver-burst-network/backend-app
 
+## 1.26.0
+
+### Minor Changes
+
+- ba38c15: あいことば対戦に切断通知を追加した
+- あいことば対戦に切断通知を追加した
+
 ## 1.25.2
 
 ### Patch Changes

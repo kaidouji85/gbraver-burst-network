@@ -1,5 +1,18 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.26.0
+
+### Minor Changes
+
+- ba38c15: あいことば対戦に切断通知を追加した
+- あいことば対戦に切断通知を追加した
+
+### Patch Changes
+
+- Updated dependencies [ba38c15]
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.26.0
+
 ## 1.25.2
 
 ### Patch Changes
