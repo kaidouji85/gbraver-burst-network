@@ -1,5 +1,12 @@
 # @gbraver-burst-network/backend-app
 
+## 1.26.1
+
+### Patch Changes
+
+- 0d2c8f1: DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- webrtcのメッセージ送信が失敗した場合はバトル終了通知を出さないようにした
+
 ## 1.26.1-beta.0
 
 ### Patch Changes
