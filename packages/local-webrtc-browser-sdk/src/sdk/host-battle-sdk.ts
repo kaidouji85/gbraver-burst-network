@@ -10,7 +10,7 @@ import {
   startGBraverBurst,
 } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { from, mergeMap, Observable, Subject, take } from "rxjs";
+import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { SendCommand } from "../webrtc/guest/guest-message";
 import { sendHostMessage } from "../webrtc/host/host-message";
@@ -118,6 +118,7 @@ export class HostBattleSDK implements BattleSDK {
       this.#webRTCConnection.getOrCreateConnection().connectionPromise,
     ).pipe(
       mergeMap((connection) => notifyConnectionFailed(connection)),
+      takeUntil(this.#sendExceptionSubject),
       take(1),
     );
   }
