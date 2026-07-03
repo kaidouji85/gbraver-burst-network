@@ -1,8 +1,8 @@
 import { HostLocalWebRTCSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
-import { UseCase } from "./use-case";
 import { waitTime } from "../wait-time";
+import { UseCase } from "./use-case";
 
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
