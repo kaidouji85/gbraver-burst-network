@@ -1,5 +1,36 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.26.1
+
+### Patch Changes
+
+- 0d2c8f1: DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- webrtcのメッセージ送信が失敗した場合はバトル終了通知を出さないようにした
+- Updated dependencies [0d2c8f1]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.1
+
+## 1.26.1-beta.0
+
+### Patch Changes
+
+- DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.1-beta.0
+
+## 1.26.0
+
+### Minor Changes
+
+- ba38c15: あいことば対戦に切断通知を追加した
+- あいことば対戦に切断通知を追加した
+
+### Patch Changes
+
+- Updated dependencies [ba38c15]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.0
+
 ## 1.25.2
 
 ### Patch Changes

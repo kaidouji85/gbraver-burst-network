@@ -1,8 +1,9 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
-import { EMPTY, Observable } from "rxjs";
+import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
+import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
 import { BattleSDK } from "./battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
@@ -18,6 +19,8 @@ export class GuestBattleSDK implements BattleSDK {
   flowID: string;
   /** ホストのWebRTCコネクションマネージャー */
   #webRTCConnection: GuestWebRTCConnectionManager;
+  /** dataChannel.sendの例外通知ストリーム */
+  #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
 
   /**
    * コンストラクタ
@@ -47,22 +50,29 @@ export class GuestBattleSDK implements BattleSDK {
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     const battleProgressedPromise = receiveBattleProgressed(dataChannel);
-    sendGuestMessage(dataChannel, {
-      type: "send-command",
-      flowID: this.flowID,
-      command,
-    });
+    try {
+      sendGuestMessage(dataChannel, {
+        type: "send-command",
+        flowID: this.flowID,
+        command,
+      });
+    } catch (error) {
+      this.#sendExceptionSubject.next(error);
+      throw error;
+    }
     const battleProgressed = await battleProgressedPromise;
     this.flowID = battleProgressed.flowID;
     return battleProgressed.update;
   }
 
-  /**
-   * バトル強制終了の通知ストリーム
-   * @returns 通知ストリーム
-   */
+  /** @override */
   suddenlyBattleEndNotifier(): Observable<unknown> {
-    // TODO 中身を実装する
-    return EMPTY;
+    return from(
+      this.#webRTCConnection.getOrCreateConnection().connectionPromise,
+    ).pipe(
+      mergeMap((connection) => notifyConnectionFailed(connection)),
+      takeUntil(this.#sendExceptionSubject),
+      take(1),
+    );
   }
 }
