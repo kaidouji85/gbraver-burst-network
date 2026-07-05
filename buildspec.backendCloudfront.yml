@@ -9,9 +9,6 @@ env:
     BACKEND_CLOUDFRONT_CERT_ARN: /GbraverBurst/dev/backendCloudfrontCertArn
     BACKEND_CLOUDFRONT_WEB_ACL_ARN: /GbraverBurst/dev/backendCloudfrontWebAclArn
 phases:
-  install:
-    runtime-versions:
-      nodejs: 22
   build:
     commands:
       - ./deploy-backend-cloudfont.bash
