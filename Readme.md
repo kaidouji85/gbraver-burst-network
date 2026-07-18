@@ -366,9 +366,9 @@ developブランチにpushされた時にCodeBuildが実行されるように、
     - **イベントタイプ**
       - プッシュ
     - **フィルター**
-      | 条件 | タイプ | パターン |
-      |-----|--------|---------|
-      |START_BUILD |HEAD_REF | ^refs/heads/develop$ |
+      | 条件        | タイプ   | パターン             |
+      | ----------- | -------- | -------------------- |
+      | START_BUILD | HEAD_REF | ^refs/heads/develop$ |
 
 ### AWS CodeBuild本番環境
 
@@ -417,9 +417,9 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
     - **イベントタイプ**
       - プッシュ
     - **フィルター**
-      | 条件 | タイプ | パターン |
-      |-----|--------|---------|
-      |START_BUILD |HEAD_REF | ^refs/heads/master$ |
+      | 条件        | タイプ   | パターン            |
+      | ----------- | -------- | ------------------- |
+      | START_BUILD | HEAD_REF | ^refs/heads/master$ |
 
 ## パッケージ公開
 

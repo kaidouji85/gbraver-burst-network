@@ -59,9 +59,7 @@ export const BattleProgressedSchema = z.object({
 
 /** ホストから送信されるメッセージ */
 export type HostMessage =
-  | RequestSelectedPlayer
-  | BattleStart
-  | BattleProgressed;
+  RequestSelectedPlayer | BattleStart | BattleProgressed;
 
 /**
  * ホストメッセージをゲストに送信する

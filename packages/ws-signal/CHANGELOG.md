@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 1.26.2
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+
 ## 1.26.1
 
 ### Patch Changes
