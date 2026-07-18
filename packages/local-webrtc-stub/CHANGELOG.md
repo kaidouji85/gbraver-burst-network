@@ -1,5 +1,13 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.26.2
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.26.2
+
 ## 1.26.1
 
 ### Patch Changes
