@@ -1,5 +1,13 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.26.3
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.3
+
 ## 1.26.2
 
 ### Patch Changes
