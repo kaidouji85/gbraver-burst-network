@@ -85,13 +85,13 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
         await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
 
-      console.log(`${spanId} ICE_CANDIDATE_START`);
+      console.log(`${spanId} HOST_ICE_CANDIDATE_START`);
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         waitUntilIceCandidate(connection),
         connection.setLocalDescription(sdp),
       ]);
-      console.log(`${spanId} ICE_CANDIDATE_END`);
+      console.log(`${spanId} HOST_ICE_CANDIDATE_END`);
 
       const websocket = await this.#websocketConnection.getOrCreate();
       const roomID = await createRoom({ websocket, sdp, iceCandidates });
