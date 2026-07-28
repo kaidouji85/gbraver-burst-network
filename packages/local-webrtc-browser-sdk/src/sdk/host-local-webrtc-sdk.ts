@@ -1,4 +1,5 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
@@ -73,18 +74,24 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
+    const spanId = nanoid();
     try {
+      console.log(`${spanId} CREATE_ROOM_START`);
+
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
       const connection =
         await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
+
+      console.log(`${spanId} ICE_CANDIDATE_START`);
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         waitUntilIceCandidate(connection),
         connection.setLocalDescription(sdp),
       ]);
+      console.log(`${spanId} ICE_CANDIDATE_END`);
 
       const websocket = await this.#websocketConnection.getOrCreate();
       const roomID = await createRoom({ websocket, sdp, iceCandidates });
@@ -104,6 +111,8 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();
       throw e;
+    } finally {
+      console.log(`${spanId} CREATE_ROOM_END`);
     }
   }
 
