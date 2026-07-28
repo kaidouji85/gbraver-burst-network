@@ -103,6 +103,7 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
       const { armdozerId: hostArmdozerId, pilotId: hostPilotId } = options;
       return new LocalWebRTCRoomImpl({
         roomID,
+        spanId,
         webRTCConnection: this.#webRTCConnection,
         websocketConnection: this.#websocketConnection,
         hostArmdozerId,

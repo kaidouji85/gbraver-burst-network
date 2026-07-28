@@ -27,6 +27,8 @@ export type LocalWebRTCRoom = {
 export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /** ルームID */
   roomID: string;
+  /** ログ用の識別子 */
+  #spanId: string;
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -39,12 +41,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /**
    * コンストラクタ
    * @param options ルームの生成に必要なオプション
+   * @param options.spanId ログ用の識別子
    * @param options.roomID ルームID
    * @param options.webRTCConnection WebRTCコネクションマネジャー
    * @param options.websocketConnection WebSocketコネクションマネジャー
    */
   constructor(options: {
     roomID: string;
+    spanId: string;
     webRTCConnection: HostWebRTCConnectionManager;
     websocketConnection: WebSocketConnectionManager;
     hostArmdozerId: ArmdozerId;
@@ -52,12 +56,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   }) {
     const {
       roomID,
+      spanId,
       webRTCConnection,
       websocketConnection,
       hostArmdozerId,
       hostPilotId,
     } = options;
     this.roomID = roomID;
+    this.#spanId = spanId;
     this.#webRTCConnection = webRTCConnection;
     this.#websocketConnection = websocketConnection;
     this.#hostArmdozerId = hostArmdozerId;
@@ -69,30 +75,35 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<BattleSDK> {
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    await Promise.all([
-      this.#signaling(),
-      waitUntilDataChannelOpen(dataChannel),
-    ]);
-    const flowID = nanoid();
-    const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
-      await requestSelectedPlayer(dataChannel, flowID);
-    const battleSDK = new HostBattleSDK({
-      hostArmdozerId: this.#hostArmdozerId,
-      hostPilotId: this.#hostPilotId,
-      guestArmdozerId,
-      guestPilotId,
-      webRTCConnection: this.#webRTCConnection,
-    });
-    sendHostMessage(dataChannel, {
-      type: "battle-start",
-      flowID: battleSDK.flowID,
-      hostPlayer: battleSDK.player,
-      guestPlayer: battleSDK.enemy,
-      update: battleSDK.initialState,
-    });
-    return battleSDK;
+    try {
+      console.log(`${this.#spanId} MATCHING_START`);
+      const dataChannel =
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+      await Promise.all([
+        this.#signaling(),
+        waitUntilDataChannelOpen(dataChannel),
+      ]);
+      const flowID = nanoid();
+      const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
+        await requestSelectedPlayer(dataChannel, flowID);
+      const battleSDK = new HostBattleSDK({
+        hostArmdozerId: this.#hostArmdozerId,
+        hostPilotId: this.#hostPilotId,
+        guestArmdozerId,
+        guestPilotId,
+        webRTCConnection: this.#webRTCConnection,
+      });
+      sendHostMessage(dataChannel, {
+        type: "battle-start",
+        flowID: battleSDK.flowID,
+        hostPlayer: battleSDK.player,
+        guestPlayer: battleSDK.enemy,
+        update: battleSDK.initialState,
+      });
+      return battleSDK;
+    } finally {
+      console.log(`${this.#spanId} MATCHING_END`);
+    }
   }
 
   /**
@@ -101,6 +112,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async #signaling() {
     try {
+      console.log(`${this.#spanId} SIGNALING_START`);
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
       const connection =
@@ -112,6 +124,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       await waitUntilConnected(connection);
     } finally {
       this.#websocketConnection.gracefulDisconnect();
+      console.log(`${this.#spanId} SIGNALING_END`);
     }
   }
 }
