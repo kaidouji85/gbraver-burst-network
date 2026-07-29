@@ -112,7 +112,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async #signaling() {
     try {
-      console.log(`${this.#spanId} SIGNALING_START`);
+      console.log(`${this.#spanId} HOST_SIGNALING_START`);
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
       const connection =
@@ -124,7 +124,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       await waitUntilConnected(connection);
     } finally {
       this.#websocketConnection.gracefulDisconnect();
-      console.log(`${this.#spanId} SIGNALING_END`);
+      console.log(`${this.#spanId} HOST_SIGNALING_END`);
     }
   }
 }

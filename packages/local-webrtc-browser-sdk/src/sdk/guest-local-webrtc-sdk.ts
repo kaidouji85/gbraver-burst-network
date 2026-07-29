@@ -1,4 +1,5 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
+import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
@@ -82,44 +83,52 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }) {
-    const { roomID, armdozerId, pilotId } = options;
+    const spanId = nanoid();
+    try {
+      console.log(`${spanId} JOIN_ROOM_START`);
+      const { roomID, armdozerId, pilotId } = options;
 
-    this.#websocketConnection.gracefulDisconnect();
-    this.#webRTCConnection.disconnect();
+      this.#websocketConnection.gracefulDisconnect();
+      this.#webRTCConnection.disconnect();
 
-    const requestSelectedPlayerPromise = (async () => {
+      const requestSelectedPlayerPromise = (async () => {
+        const dataChannel =
+          await this.#webRTCConnection.getOrCreateConnection()
+            .dataChannelPromise;
+        return await receiveRequestSelectedPlayer(dataChannel);
+      })();
+      const battleStartPromise = (async () => {
+        const dataChannel =
+          await this.#webRTCConnection.getOrCreateConnection()
+            .dataChannelPromise;
+        return await receiveBattleStart(dataChannel);
+      })();
+
+      const isSignalingSuccessful = await this.#signaling({ roomID, spanId });
+      if (!isSignalingSuccessful) {
+        return null;
+      }
+
+      const { flowID } = await requestSelectedPlayerPromise;
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveRequestSelectedPlayer(dataChannel);
-    })();
-    const battleStartPromise = (async () => {
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveBattleStart(dataChannel);
-    })();
-
-    const isSignalingSuccessful = await this.#signaling(roomID);
-    if (!isSignalingSuccessful) {
-      return null;
+      sendGuestMessage(dataChannel, {
+        type: "send-player",
+        flowID,
+        armdozerId,
+        pilotId,
+      });
+      const battleStart = await battleStartPromise;
+      return new GuestBattleSDK({
+        hostPlayer: battleStart.hostPlayer,
+        guestPlayer: battleStart.guestPlayer,
+        initialState: battleStart.update,
+        initialFlowID: battleStart.flowID,
+        webRTCConnection: this.#webRTCConnection,
+      });
+    } finally {
+      console.log(`${spanId} JOIN_ROOM_END`);
     }
-
-    const { flowID } = await requestSelectedPlayerPromise;
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    sendGuestMessage(dataChannel, {
-      type: "send-player",
-      flowID,
-      armdozerId,
-      pilotId,
-    });
-    const battleStart = await battleStartPromise;
-    return new GuestBattleSDK({
-      hostPlayer: battleStart.hostPlayer,
-      guestPlayer: battleStart.guestPlayer,
-      initialState: battleStart.update,
-      initialFlowID: battleStart.flowID,
-      webRTCConnection: this.#webRTCConnection,
-    });
   }
 
   /** @override */
@@ -139,10 +148,16 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
 
   /**
    * シグナリングを行う
-   * @param roomID ルームID
-   * @returns シグナリングが完了したら発火するPromise
+   * @param options シグナリングのオプション
+   * @param options.roomID ルームID
+   * @param options.spanId ログ用の識別子
+   * @returns シグナリングが完了したらtrue、失敗したらfalse
    */
-  async #signaling(roomID: string) {
+  async #signaling(options: {
+    roomID: string;
+    spanId: string;
+  }): Promise<boolean> {
+    const { roomID } = options;
     try {
       const websocket = await this.#websocketConnection.getOrCreate();
       const joinRoomAccepted = await joinRoom({ websocket, roomID });
@@ -159,11 +174,16 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         hostIceCandidates.map((c) => connection.addIceCandidate(c)),
       );
       const guestSDP = await connection.createAnswer();
+
+      console.log(`${options.spanId} GUEST_ICE_CANDIDATE_START`);
       const [guestIceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         waitUntilIceCandidate(connection),
         connection.setLocalDescription(guestSDP),
       ]);
+      console.log(`${options.spanId} GUEST_ICE_CANDIDATE_END`);
+
+      console.log(`${options.spanId} GUEST_SIGNALING_START`);
       const { reservationID } = joinRoomAccepted;
       await Promise.all([
         sendGuestSignal({
@@ -177,6 +197,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       ]);
       return true;
     } finally {
+      console.log(`${options.spanId} GUEST_SIGNALING_END`);
       this.#websocketConnection.gracefulDisconnect();
     }
   }
