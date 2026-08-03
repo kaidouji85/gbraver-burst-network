@@ -7,9 +7,10 @@ import { parseJSON } from "./json/parse";
 
 /**
  * フロントエンド側のログを記録する
+ * @param event API Gatewayのイベント
  * @returns レスポンス
  */
-export const log = async (
+export const frontendLog = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
   const parsedBody = parseJSON(event.body);
