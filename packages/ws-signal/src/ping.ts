@@ -3,10 +3,10 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import { Notifier } from "./api-gateway/notifier";
-import { Pong } from "./response/pong";
+import { createAPIGatewayEndpoint } from "./websocket/api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./websocket/api-gateway/management";
+import { Notifier } from "./websocket/api-gateway/notifier";
+import { Pong } from "./websocket/response/pong";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
