@@ -14,11 +14,11 @@ import {
 } from "./signaling";
 
 /** フロントエンドログ */
-export type FrontEndLog =
+export type FrontendLog =
   ICECandidateStart | ICECandidateEnd | SignalingStart | SignalingEnd;
 
 /** FrontendLog zodスキーマ */
-export const FrontEndLogSchema = z.union([
+export const FrontendLogSchema = z.union([
   ICECandidateStartSchema,
   ICECandidateEndSchema,
   SignalingStartSchema,
