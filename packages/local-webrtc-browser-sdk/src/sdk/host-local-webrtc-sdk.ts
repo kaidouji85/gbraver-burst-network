@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { createRoom } from "../websocket/create-room";
+import { FrontendLogManager } from "./frontend-log-manager";
 import {
   HostWebRTCConnectionManager,
   HostWebRTCConnectionManagerOptions,
@@ -59,6 +60,8 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
+  /** フロントエンドログマネージャー */
+  #frontendLog: FrontendLogManager;
 
   /**
    * コンストラクタ
@@ -67,6 +70,7 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   constructor(options: LocalWebRTCHostSDKImplOptions) {
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
+    this.#frontendLog = new FrontendLogManager(options);
   }
 
   /** @override */
@@ -76,8 +80,6 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   }): Promise<LocalWebRTCRoom | null> {
     const spanId = nanoid();
     try {
-      console.log(`${spanId} CREATE_ROOM_START`);
-
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
@@ -85,13 +87,13 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
         await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
       const sdp = await connection.createOffer();
 
-      console.log(`${spanId} HOST_ICE_CANDIDATE_START`);
+      await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
       const [iceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         waitUntilIceCandidate(connection),
         connection.setLocalDescription(sdp),
       ]);
-      console.log(`${spanId} HOST_ICE_CANDIDATE_END`);
+      await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
 
       const websocket = await this.#websocketConnection.getOrCreate();
       const roomID = await createRoom({ websocket, sdp, iceCandidates });
@@ -106,14 +108,13 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
         spanId,
         webRTCConnection: this.#webRTCConnection,
         websocketConnection: this.#websocketConnection,
+        frontendLog: this.#frontendLog,
         hostArmdozerId,
         hostPilotId,
       });
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();
       throw e;
-    } finally {
-      console.log(`${spanId} CREATE_ROOM_END`);
     }
   }
 

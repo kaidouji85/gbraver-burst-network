@@ -174,15 +174,15 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       );
       const guestSDP = await connection.createAnswer();
 
-      this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
+      await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
       const [guestIceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         waitUntilIceCandidate(connection),
         connection.setLocalDescription(guestSDP),
       ]);
-      this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
+      await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
 
-      this.#frontendLog.log({ type: "SIGNALING_START", spanId });
+      await this.#frontendLog.log({ type: "SIGNALING_START", spanId });
       const { reservationID } = joinRoomAccepted;
       await Promise.all([
         sendGuestSignal({
@@ -194,9 +194,9 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         }),
         waitUntilConnected(connection),
       ]);
+      await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
       return true;
     } finally {
-      this.#frontendLog.log({ type: "SIGNALING_END", spanId });
       this.#websocketConnection.gracefulDisconnect();
     }
   }
