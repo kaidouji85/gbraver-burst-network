@@ -1,0 +1,34 @@
+import { frontendLog } from "../http-api/frontend-log";
+import { FrontendLog } from "../http-api/request/frontend-log";
+import { AuthTokenManager } from "./auth-token-manager";
+
+/** フロントエンドログ管理オブジェクト */
+export class FrontEndLogManager {
+  /** 認証トークンマネージャー */
+  #authTokenManager: AuthTokenManager;
+  /** WebRTCヘルパーAPIのURL */
+  #webRTCHelperApiURL: string;
+
+  /**
+   * コンストラクタ
+   * @param options コンストラクタのオプション
+   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+   * @param options.authTokenManager 認証トークンマネージャー
+   */
+  constructor(options: {
+    webRTCHelperApiURL: string;
+    authTokenManager: AuthTokenManager;
+  }) {
+    this.#authTokenManager = options.authTokenManager;
+    this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
+  }
+
+  async log(body: FrontendLog): Promise<boolean> {
+    const authToken = await this.#authTokenManager.getOrIssueAuthToken();
+    return frontendLog({
+      apiURL: this.#webRTCHelperApiURL,
+      authToken: authToken.token,
+      body,
+    });
+  }
+}
