@@ -14,14 +14,19 @@ export const frontendLog = async (options: {
   body: FrontendLog;
 }): Promise<boolean> => {
   const { apiURL, authToken, body } = options;
-  const response = await fetch(`${apiURL}/frontend-log`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify(body),
-  });
+  try {
+    const response = await fetch(`${apiURL}/frontend-log`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(body),
+    });
 
-  return response.status === 200;
+    return response.status === 201;
+  } catch {
+    // ログの失敗で以降の処理を止めるべきではないため、例外は握りつぶす
+    return false;
+  }
 };

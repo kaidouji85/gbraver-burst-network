@@ -114,7 +114,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async #signaling() {
     try {
-      this.#frontendLog.log({ type: "SIGNALING_START", spanId: this.#spanId });
+      await this.#frontendLog.log({
+        type: "SIGNALING_START",
+        spanId: this.#spanId,
+      });
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
       const connection =
@@ -124,7 +127,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
       ]);
       await waitUntilConnected(connection);
-      this.#frontendLog.log({ type: "SIGNALING_END", spanId: this.#spanId });
+      await this.#frontendLog.log({
+        type: "SIGNALING_END",
+        spanId: this.#spanId,
+      });
     } finally {
       this.#websocketConnection.gracefulDisconnect();
     }
