@@ -1,4 +1,4 @@
-import { issueAuthToken } from "../webrtc-helper/issue-auth-token";
+import { issueAuthToken } from "../http-api/issue-auth-token";
 
 /** 認証トークン */
 export type AuthToken = {

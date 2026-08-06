@@ -5,7 +5,7 @@ import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
-import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { waitUntilMatching } from "../websocket/wait-until-matching";
 import { BattleSDK } from "./battle-sdk";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";

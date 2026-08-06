@@ -7,8 +7,8 @@ import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
-import { joinRoom } from "../ws-signal/join-room";
-import { sendGuestSignal } from "../ws-signal/send-guest-signal";
+import { joinRoom } from "../websocket/join-room";
+import { sendGuestSignal } from "../websocket/send-guest-signal";
 import { BattleSDK } from "./battle-sdk";
 import { GuestBattleSDK } from "./guest-battle-sdk";
 import {

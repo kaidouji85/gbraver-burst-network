@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
 import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
-import { createRoom } from "../ws-signal/create-room";
+import { createRoom } from "../websocket/create-room";
 import {
   HostWebRTCConnectionManager,
   HostWebRTCConnectionManagerOptions,
