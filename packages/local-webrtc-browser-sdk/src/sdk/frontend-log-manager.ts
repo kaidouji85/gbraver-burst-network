@@ -2,10 +2,10 @@ import { frontendLog } from "../http-api/frontend-log";
 import { FrontendLog } from "../http-api/request/frontend-log";
 import { AuthTokenManager } from "./auth-token-manager";
 
-/** フロントエンドログ管理オブジェクト */
-export class FrontEndLogManager {
+/** フロントエンドログマネージャー */
+export class FrontendLogManager {
   /** 認証トークンマネージャー */
-  #authTokenManager: AuthTokenManager;
+  #authToken: AuthTokenManager;
   /** WebRTCヘルパーAPIのURL */
   #webRTCHelperApiURL: string;
 
@@ -17,14 +17,14 @@ export class FrontEndLogManager {
    */
   constructor(options: {
     webRTCHelperApiURL: string;
-    authTokenManager: AuthTokenManager;
+    authToken: AuthTokenManager;
   }) {
-    this.#authTokenManager = options.authTokenManager;
+    this.#authToken = options.authToken;
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
   }
 
   async log(body: FrontendLog): Promise<boolean> {
-    const authToken = await this.#authTokenManager.getOrIssueAuthToken();
+    const authToken = await this.#authToken.getOrIssueAuthToken();
     return frontendLog({
       apiURL: this.#webRTCHelperApiURL,
       authToken: authToken.token,
