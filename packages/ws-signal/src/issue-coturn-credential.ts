@@ -2,6 +2,8 @@ import { getSecret } from "@aws-lambda-powertools/parameters/secrets";
 import { APIGatewayProxyResultV2 } from "aws-lambda";
 import { createHmac } from "crypto";
 
+import { createIssueCoturnCredentialSuccessResponse } from "./http-api/response/issue-coturn-credential-success";
+
 /** coturnサーバーとの共有秘密鍵が格納されているAWS Secrets Managerのシークレット名 */
 const COTURN_SHARED_SECRET = process.env.COTURN_SHARED_SECRET ?? "";
 /** coturnクレデンシャル有効期限（秒） */
@@ -24,11 +26,5 @@ export const issueCoturnCredential =
       .update(username)
       .digest("base64");
 
-    return {
-      statusCode: 201,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    };
+    return createIssueCoturnCredentialSuccessResponse(username, password);
   };

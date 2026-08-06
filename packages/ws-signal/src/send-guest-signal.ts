@@ -3,14 +3,14 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import { Notifier } from "./api-gateway/notifier";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { parseJSON } from "./json/parse";
-import { SendGuestSignalSchema } from "./request/send-guest-signal";
+import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
+import { Notifier } from "./websocket-api/api-gateway/notifier";
+import { SendGuestSignalSchema } from "./websocket-api/request/send-guest-signal";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";

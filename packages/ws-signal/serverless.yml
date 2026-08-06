@@ -160,6 +160,14 @@ functions:
           method: post
           authorizer:
             name: httpAuthorizer
+  frontendLog:
+    handler: src/frontend-log.frontendLog
+    events:
+      - httpApi:
+          path: /${sls:stage}/frontend-log
+          method: post
+          authorizer:
+            name: httpAuthorizer
   httpAuthorizerFunc:
     handler: src/http-api-authorizer.httpAPIAuthorizer
 

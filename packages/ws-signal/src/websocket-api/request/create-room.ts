@@ -5,7 +5,7 @@ import {
   RTCIceCandidateInitSchema,
   RTCSessionDescriptionInit,
   RTCSessionDescriptionInitSchema,
-} from "../core/webrtc";
+} from "../../core/webrtc";
 
 /** ホストがルームを作成する */
 export type CreateRoom = {
