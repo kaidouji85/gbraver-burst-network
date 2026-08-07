@@ -52,7 +52,7 @@ class AuthTokenManagerImpl implements AuthTokenManager {
   }
 
   /** @override */
-  async getOrIssueAuthToken(): Promise<AuthToken> {
+  getOrIssueAuthToken(): Promise<AuthToken> {
     if (this.#authTokenPromise === null) {
       this.#authTokenPromise = this.#issueAuthTokenWithReset();
       return this.#authTokenPromise;
