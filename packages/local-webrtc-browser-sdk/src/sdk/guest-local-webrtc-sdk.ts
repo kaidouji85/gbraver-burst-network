@@ -193,6 +193,9 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
           iceCandidates: guestIceCandidates.iceCandidates,
         }),
         waitUntilConnected(connection),
+        ...guestIceCandidates.iceCandidateErrors.map((error) =>
+          this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
+        ),
       ]);
       await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
       return true;

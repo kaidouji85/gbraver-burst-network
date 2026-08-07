@@ -88,7 +88,7 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
       const sdp = await connection.createOffer();
 
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
-      const [{ iceCandidates }] = await Promise.all([
+      const [{ iceCandidates, iceCandidateErrors }] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
         gatherAllIceCandidates(connection),
         connection.setLocalDescription(sdp),
@@ -96,7 +96,14 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
 
       const websocket = await this.#websocketConnection.getOrCreate();
-      const roomID = await createRoom({ websocket, sdp, iceCandidates });
+      const [roomID] = await Promise.all([
+        createRoom({ websocket, sdp, iceCandidates }),
+        ...iceCandidateErrors.map((error) =>
+          this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
+        ),
+      ]);
+      await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
+      
       if (roomID === null) {
         this.#websocketConnection.gracefulDisconnect();
         return null;
