@@ -1,3 +1,12 @@
+/**
+ * ICE Candidateの収集中に発生したエラーのメッセージを作成する
+ * @param error ICE Candidateの収集中に発生したエラー
+ * @returns エラーメッセージ
+ */
+export const createICECandidateErrorMessage = (
+  error: RTCPeerConnectionIceErrorEvent,
+) => `${error.errorCode} ${error.url} ${error.errorText}`;
+
 /** ICE Candidateの収集結果 */
 type Result = {
   /** 収集したICE Candidate */
@@ -31,7 +40,8 @@ export const gatherAllIceCandidates = (
     };
 
     icecandidateErrorHandler = (event: RTCPeerConnectionIceErrorEvent) => {
-      iceCandidateErrors = [...iceCandidateErrors, event.errorText];
+      const errorMessage = createICECandidateErrorMessage(event);
+      iceCandidateErrors = [...iceCandidateErrors, errorMessage];
     };
 
     connection.addEventListener("icecandidate", icecandidateHandler);
