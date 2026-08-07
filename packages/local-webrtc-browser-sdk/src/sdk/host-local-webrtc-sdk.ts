@@ -102,8 +102,7 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
           this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
         ),
       ]);
-      await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
-      
+
       if (roomID === null) {
         this.#websocketConnection.gracefulDisconnect();
         return null;
