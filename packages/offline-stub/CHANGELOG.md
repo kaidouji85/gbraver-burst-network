@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.27.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦にフロントエンド用ログを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.27.0-beta.0
+
 ## 1.26.3
 
 ### Patch Changes

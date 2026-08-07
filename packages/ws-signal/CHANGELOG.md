@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 1.27.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦にフロントエンド用ログを追加
+
 ## 1.26.3
 
 ### Patch Changes
