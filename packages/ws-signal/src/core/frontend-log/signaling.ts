@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { SpanIdContainer, SpanIdContainerSchema } from "./span-id";
 
 /** ログ：シグナリング開始 */
