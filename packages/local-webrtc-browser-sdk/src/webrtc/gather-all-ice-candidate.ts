@@ -20,6 +20,7 @@ export const gatherAllIceCandidates = (
     ((event: RTCPeerConnectionIceErrorEvent) => void) | null = null;
   let candidates: RTCIceCandidate[] = [];
   let iceCandidateErrors: string[] = [];
+
   return new Promise<Result>((resolve) => {
     icecandidateHandler = (event: RTCPeerConnectionIceEvent) => {
       if (event.candidate === null) {
