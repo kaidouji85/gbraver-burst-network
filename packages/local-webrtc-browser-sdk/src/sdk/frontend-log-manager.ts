@@ -23,6 +23,11 @@ export class FrontendLogManager {
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
   }
 
+  /**
+   * フロントエンドログを送信する
+   * @param body ログ内容
+   * @returns ログ送信結果、成功ならtrue
+   */
   async log(body: FrontendLog): Promise<boolean> {
     const authToken = await this.#authToken.getOrIssueAuthToken();
     return frontendLog({
