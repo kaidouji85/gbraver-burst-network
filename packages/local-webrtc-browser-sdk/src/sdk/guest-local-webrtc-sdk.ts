@@ -2,11 +2,11 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
+import { gatherAllIceCandidates } from "../webrtc/gather-all-ice-candidate";
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
 import { joinRoom } from "../websocket/join-room";
 import { sendGuestSignal } from "../websocket/send-guest-signal";
 import { BattleSDK } from "./battle-sdk";
@@ -177,7 +177,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
       const [guestIceCandidates] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-        waitUntilIceCandidate(connection),
+        gatherAllIceCandidates(connection),
         connection.setLocalDescription(guestSDP),
       ]);
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
@@ -190,7 +190,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
           roomID,
           reservationID,
           sdp: guestSDP,
-          iceCandidates: guestIceCandidates,
+          iceCandidates: guestIceCandidates.iceCandidates,
         }),
         waitUntilConnected(connection),
       ]);

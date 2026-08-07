@@ -2,7 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
-import { waitUntilIceCandidate } from "../webrtc/wait-untilIce-candidate";
+import { gatherAllIceCandidates } from "../webrtc/gather-all-ice-candidate";
 import { createRoom } from "../websocket/create-room";
 import { FrontendLogManager } from "./frontend-log-manager";
 import {
@@ -88,9 +88,9 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
       const sdp = await connection.createOffer();
 
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
-      const [iceCandidates] = await Promise.all([
+      const [{ iceCandidates }] = await Promise.all([
         // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-        waitUntilIceCandidate(connection),
+        gatherAllIceCandidates(connection),
         connection.setLocalDescription(sdp),
       ]);
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
