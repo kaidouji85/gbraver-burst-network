@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 1.27.0-beta.2
+
+### Minor Changes
+
+- ICE Candidate Errorのメッセージを調整
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/local-webrtc-browser-sdk@1.27.0-beta.2
+
 ## 1.27.0-beta.1
 
 ### Minor Changes

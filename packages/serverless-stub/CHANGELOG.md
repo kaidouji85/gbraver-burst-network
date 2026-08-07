@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.27.0-beta.2
+
+### Minor Changes
+
+- ICE Candidate Errorのメッセージを調整
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.27.0-beta.2
+
 ## 1.27.0-beta.1
 
 ### Minor Changes

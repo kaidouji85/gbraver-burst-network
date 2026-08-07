@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 1.27.0-beta.2
+
+### Minor Changes
+
+- ICE Candidate Errorのメッセージを調整
+
 ## 1.27.0-beta.1
 
 ### Minor Changes
