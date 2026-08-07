@@ -15,6 +15,7 @@
     "@gbraver-burst-network/ws-signal": "1.26.3"
   },
   "changesets": [
-    "moody-plums-find"
+    "moody-plums-find",
+    "smooth-things-cheer"
   ]
 }

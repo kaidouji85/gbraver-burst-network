@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 1.27.0-beta.1
+
+### Minor Changes
+
+- ICE収集エラーをフロントエンドログに追加した
+
 ## 1.27.0-beta.0
 
 ### Minor Changes
