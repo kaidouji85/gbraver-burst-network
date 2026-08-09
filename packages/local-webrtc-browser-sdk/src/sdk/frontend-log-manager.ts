@@ -23,12 +23,22 @@ export class FrontendLogManager {
     this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
   }
 
+  /**
+   * フロントエンドログを送信する
+   * ログの失敗で以降の処理を止めるべきではないため、例外は握りつぶしてfalseを返す
+   * @param body ログ内容
+   * @returns ログ送信結果、成功ならtrue
+   */
   async log(body: FrontendLog): Promise<boolean> {
-    const authToken = await this.#authToken.getOrIssueAuthToken();
-    return frontendLog({
-      apiURL: this.#webRTCHelperApiURL,
-      authToken: authToken.token,
-      body,
-    });
+    try {
+      const authToken = await this.#authToken.getOrIssueAuthToken();
+      return await frontendLog({
+        apiURL: this.#webRTCHelperApiURL,
+        authToken: authToken.token,
+        body,
+      });
+    } catch {
+      return false;
+    }
   }
 }

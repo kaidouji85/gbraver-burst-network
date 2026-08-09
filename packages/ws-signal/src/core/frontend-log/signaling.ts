@@ -1,27 +1,23 @@
 import { z } from "zod";
 
+import { SpanIdContainer, SpanIdContainerSchema } from "./span-id";
+
 /** ログ：シグナリング開始 */
-export type SignalingStart = {
+export type SignalingStart = SpanIdContainer & {
   type: "SIGNALING_START";
-  /** スパンID */
-  spanId: string;
 };
 
 /** SignalingStart zodスキーマ */
-export const SignalingStartSchema = z.object({
+export const SignalingStartSchema = SpanIdContainerSchema.extend({
   type: z.literal("SIGNALING_START"),
-  spanId: z.string(),
 });
 
 /** ログ：シグナリング終了 */
-export type SignalingEnd = {
+export type SignalingEnd = SpanIdContainer & {
   type: "SIGNALING_END";
-  /** スパンID */
-  spanId: string;
 };
 
 /** SignalingEnd zodスキーマ */
-export const SignalingEndSchema = z.object({
+export const SignalingEndSchema = SpanIdContainerSchema.extend({
   type: z.literal("SIGNALING_END"),
-  spanId: z.string(),
 });
