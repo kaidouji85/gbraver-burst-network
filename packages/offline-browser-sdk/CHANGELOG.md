@@ -1,5 +1,14 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.27.0
+
+### Minor Changes
+
+- フロントエンドログにICE Candidate Errorを追加
+- 5be6fb0: あいことば対戦にフロントエンド用ログを追加
+- 3556f85: ICE収集エラーをフロントエンドログに追加した
+- 70b5b93: ICE Candidate Errorのメッセージを調整
+
 ## 1.27.0-beta.2
 
 ### Minor Changes
