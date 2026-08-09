@@ -33,14 +33,27 @@ npx sls remove --stage <ステージ名>
 ### 動作確認
 
 ```shell
+STAGE=<ステージ名>
+
 # 匿名トークンを発行する（以降のコマンド例ではこのトークンを使用する）
 REST_API_DOMAIN=<WebRTC ヘルパーAPIのドメイン名>
-curl -X POST "https://${REST_API_DOMAIN}/auth-token"
+curl -X POST "https://${REST_API_DOMAIN}/${STAGE}/auth-token"
 
 AUTH_TOKEN=<発行された認証トークン>
 
 # coturn用の認証トークンを発行する
-curl -X POST -H "Authorization: Bearer $AUTH_TOKEN" "https://${REST_API_DOMAIN}/coturn/credentials"
+curl -X POST -H "Authorization: Bearer $AUTH_TOKEN" "https://${REST_API_DOMAIN}/${STAGE}/coturn/credentials"
+
+# 事前にnanoidをインストールしておく
+npm install -g nanoid
+
+# フロントエンド用ログ
+SPAN_ID=$(nanoid)
+curl -X POST \
+  -H "Authorization: Bearer $AUTH_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"spanId\": \"${SPAN_ID}\", \"type\": \"SIGNALING_START\"}" \
+  "https://${REST_API_DOMAIN}/${STAGE}/frontend-log"
 
 # 事前にwscatをインストールしておく
 npm install -g wscat

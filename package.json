@@ -2,13 +2,13 @@
   "name": "root",
   "description": "gbraver burst network module.",
   "devDependencies": {
-    "@changesets/cli": "^2.31.0",
-    "prettier": "3.8.3",
-    "turbo": "^2.9.16",
+    "@changesets/cli": "^2.31.1",
+    "prettier": "3.9.6",
+    "turbo": "^2.10.8",
     "typescript": "^6.0.3"
   },
   "license": "MIT",
-  "packageManager": "npm@11.16.0",
+  "packageManager": "npm@12.0.2",
   "private": true,
   "scripts": {
     "build": "turbo run build",

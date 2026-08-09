@@ -1,15 +1,19 @@
-# coturnセットアップ手順（さくらのVPS / Debian）
+# coturnマニュアル（さくらのVPS / Debian）
+
+Gブレイバーバーストで利用するcoturnのマニュアルです。
+
+## セットアップ
 
 ローカルWebRTC接続を安定化するために、TURNサーバーとしてcoturnを構築する手順です。
 
-## 1. IPv6有効化
+### 1. IPv6有効化
 
 2026/04/11現在、さくらのVPSはIPv6がデフォルトで無効化されています。
 以下の公式ドキュメントの手順に従ってIPv6を有効化してください。
 
 [IPv6有効化手順（Debian 12）](https://manual.sakura.ad.jp/vps/network/ipv6/debian-12.html)
 
-## 2. サーバー初期化
+### 2. サーバー初期化
 
 VPSへSSH接続後、パッケージを最新化します。
 
@@ -19,7 +23,7 @@ sudo apt upgrade -y
 sudo apt install -y coturn
 ```
 
-## 3. さくらのVPSパケットフィルターを設定
+### 3. さくらのVPSパケットフィルターを設定
 
 さくらのVPSコントロールパネル側で、以下を許可してください。
 
@@ -29,7 +33,7 @@ sudo apt install -y coturn
 - TURN(TLS): `5349/tcp`（TLSを使う場合）
 - リレー用UDPポートレンジ: 例 `20000:20100/udp`
 
-## 4. Route53でDNSレコードを設定
+### 4. Route53でDNSレコードを設定
 
 Route53ホストゾーン上で、coturnサーバー向けのサブドメインを作成します。
 作成するレコードは以下の通りです。
@@ -39,15 +43,15 @@ Route53ホストゾーン上で、coturnサーバー向けのサブドメイン�
 | COTURN用サブドメイン | A      | VPSのグローバルIPv4 |
 | COTURN用サブドメイン | AAAA   | VPSのグローバルIPv6 |
 
-## 5. TLS証明書の取得（certbot + HTTP-01）
+### 5. TLS証明書の取得（certbot + HTTP-01）
 
-### 5-1. certbotをインストール
+#### 5-1. certbotをインストール
 
 ```shell
 sudo apt install -y certbot acl
 ```
 
-### 5-2. 証明書を取得（HTTP-01 / standalone）
+#### 5-2. 証明書を取得（HTTP-01 / standalone）
 
 `<COTURN用ドメイン>`を実値に置き換えてください（例: `turn.example.com`）。
 
@@ -65,7 +69,7 @@ sudo certbot certonly \
 - 公開鍵: `/etc/letsencrypt/live/<COTURN用ドメイン>/fullchain.pem`
 - 秘密鍵: `/etc/letsencrypt/live/<COTURN用ドメイン>/privkey.pem`
 
-### 5-3. coturnへの証明書読み取り権限を付与
+#### 5-3. coturnへの証明書読み取り権限を付与
 
 certbotが生成する証明書はデフォルトでroot管理です。`turnserver`ユーザーが辿って読めるように、適切にACLを設定します。
 
@@ -82,7 +86,7 @@ sudo -u turnserver test -r /etc/letsencrypt/live/<COTURN用ドメイン>/fullcha
 sudo -u turnserver test -r /etc/letsencrypt/live/<COTURN用ドメイン>/privkey.pem && echo ok_privkey
 ```
 
-### 5-4. 証明書自動更新時にcoturnを再起動
+#### 5-4. 証明書自動更新時にcoturnを再起動
 
 Debianのcertbotは通常、systemd timerで自動更新されます。更新後にcoturnを再起動するフックを作成します。
 
@@ -104,7 +108,7 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/coturn.sh
 sudo certbot renew --dry-run
 ```
 
-## 6. coturnを有効化
+### 6. coturnを有効化
 
 Debianでは`/etc/default/coturn`でサービス有効化します。
 
@@ -112,7 +116,7 @@ Debianでは`/etc/default/coturn`でサービス有効化します。
 sudo sed -i 's/^#\?TURNSERVER_ENABLED=.*/TURNSERVER_ENABLED=1/' /etc/default/coturn
 ```
 
-## 7. turnserver.confを作成
+### 7. turnserver.confを作成
 
 `<VPSのグローバルIPv4>`、`<VPSのグローバルIPv6>`、`<COTURN用ドメイン>`、`<強力な共通シークレット>`を実値に置き換えてください。
 IPv6を使う場合は `ip -6 addr` で確認できる実アドレスを設定し、使わない場合は `listening-ip` と `relay-ip` のIPv6行を削除してください。
@@ -157,7 +161,40 @@ EOF
 
 - `use-auth-secret`では、アプリサーバーとcoturnが同じ共通シークレットを持ち、アプリサーバー側で一時クレデンシャルを生成してクライアントへ渡します。
 
-## 8. 起動と自動起動設定
+> [!NOTE] 強力な共通シークレットの生成コマンド例
+>
+> ```shell
+> openssl rand -base64 32
+> ```
+
+### 8. coturnのログローテーション設定
+
+Debian 標準の `logrotate` を使って、coturnのログローテーションを設定します。
+
+```sh
+sudo tee /etc/logrotate.d/turnserver > /dev/null <<'EOF'
+/var/log/turnserver/turn.log {
+  daily
+  rotate 14
+  compress
+  missingok
+  notifempty
+  create 640 turnserver turnserver
+  sharedscripts
+  postrotate
+    systemctl restart coturn > /dev/null 2>&1 || true
+  endscript
+}
+EOF
+```
+
+設定完了後に以下でデバッグします。
+
+```shell
+sudo logrotate -d /etc/logrotate.d/turnserver
+```
+
+### 9. 起動と自動起動設定
 
 ```shell
 sudo mkdir -p /var/log/turnserver
@@ -173,7 +210,7 @@ sudo systemctl status coturn --no-pager
 sudo ss -lntup | grep -E '3478|5349|turn'
 ```
 
-## 9. 動作確認（Trickle ICE）
+### 10. 動作確認（Trickle ICE）
 
 `use-auth-secret`の場合、先に一時クレデンシャルを生成します。
 
@@ -212,33 +249,44 @@ echo "$TURN_CREDENTIAL"
 `Type`が`srflx`のレコードが含まれていれば、STUNサーバー経由での到達性確認ができています。
 `Type`が`relay`のレコードが含まれていれば、TURNサーバー経由での接続が成功しています。
 
-## 10. SDK利用時の設定例
+## メンテナンス
 
-アプリケーション側で`RTCPeerConnection`に渡す`iceServers`へ、サーバーが生成した一時クレデンシャルを設定してください。
+### 1. 共通シークレットの更新
 
-```ts
-const turnUsername = "<TURN_USERNAME>";
-const turnCredential = "<TURN_CREDENTIAL>";
+本手順を実施する前に、強力な<共通シークレット>をあらかじめ作成しておいてください。
 
-const pc = new RTCPeerConnection({
-  iceServers: [
-    {
-      urls: ["stun:<COTURN用ドメイン>:3478"],
-    },
-    {
-      urls: [
-        "turn:<COTURN用ドメイン>:3478?transport=udp",
-        "turn:<COTURN用ドメイン>:3478?transport=tcp",
-        "turns:<COTURN用ドメイン>:5349?transport=tcp",
-      ],
-      username: turnUsername,
-      credential: turnCredential,
-    },
-  ],
-});
+```bash
+# 設定ファイルのバックアップ
+sudo cp /etc/turnserver.conf "/etc/turnserver.conf.bak.$(date +%Y%m%d%H%M%S)"
+
+# 共通シークレットの更新
+NEW_COTURN_SHARED_SECRET=<強力な共通シークレット>
+sudo sed -i "s|^static-auth-secret=.*|static-auth-secret=${NEW_COTURN_SHARED_SECRET}|" /etc/turnserver.conf
+
+# 正しくシークレットが更新されたかを確認
+grep '^static-auth-secret=' /etc/turnserver.conf
 ```
 
-## 11. 運用上の注意
+### 2. ソフトウェアのアップグレード
+
+apt系パッケージを更新します。
+
+```bash
+sudo apt update
+sudo apt list --upgradable
+sudo apt upgrade
+sudo apt autoremove
+```
+
+### 3. 再起動
+
+必要に応じて、サーバーを再起動してください。
+
+```bash
+sudo reboot
+```
+
+## 運用上の注意
 
 - 共通シークレットは十分に長いランダム値を使用し、定期的に更新してください。
 - さくらのVPSパケットフィルター制約により、リレーポートは`1-32767`の範囲で設計してください。

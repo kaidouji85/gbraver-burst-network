@@ -4,7 +4,7 @@ import {
   APIGatewaySimpleAuthorizerWithContextResult,
 } from "aws-lambda";
 
-import { extractBearerToken, HashAuthToken } from "./core/auth-token";
+import { extractBearerToken } from "./core/auth-token";
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 
@@ -21,6 +21,12 @@ const dynamoAuthTokens = new DynamoAuthTokens(
   DYNAMO_AUTH_TOKENS_TABLE,
 );
 
+/** 認証成功時のコンテキスト */
+type HttpAPIGatewayContext = {
+  /** プリンシパルID */
+  principalId: string;
+};
+
 /**
  * HTTP API用のオーソライザー
  * @param event API Gatewayから渡されるイベント
@@ -29,7 +35,7 @@ const dynamoAuthTokens = new DynamoAuthTokens(
 export const httpAPIAuthorizer = async (
   event: APIGatewayProxyEventV2,
 ): Promise<
-  | APIGatewaySimpleAuthorizerWithContextResult<HashAuthToken>
+  | APIGatewaySimpleAuthorizerWithContextResult<HttpAPIGatewayContext>
   | APIGatewaySimpleAuthorizerResult
 > => {
   const token = extractBearerToken(event.headers.authorization || "");
@@ -42,5 +48,5 @@ export const httpAPIAuthorizer = async (
     return { isAuthorized: false };
   }
 
-  return { isAuthorized: true, context: tokenHash };
+  return { isAuthorized: true, context: { principalId: tokenHash.tokenHash } };
 };

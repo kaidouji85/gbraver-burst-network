@@ -5,8 +5,9 @@ import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
-import { waitUntilMatching } from "../ws-signal/wait-until-matching";
+import { waitUntilMatching } from "../websocket/wait-until-matching";
 import { BattleSDK } from "./battle-sdk";
+import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
@@ -27,10 +28,14 @@ export type LocalWebRTCRoom = {
 export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /** ルームID */
   roomID: string;
+  /** ログ用の識別子 */
+  #spanId: string;
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
   #websocketConnection: WebSocketConnectionManager;
+  /** フロントエンドログマネージャー */
+  #frontendLog: FrontendLogManager;
   /** ホストが選択したアームドーザID */
   #hostArmdozerId: ArmdozerId;
   /** ホストが選択したパイロットID */
@@ -39,29 +44,37 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /**
    * コンストラクタ
    * @param options ルームの生成に必要なオプション
+   * @param options.spanId ログ用の識別子
    * @param options.roomID ルームID
    * @param options.webRTCConnection WebRTCコネクションマネジャー
    * @param options.websocketConnection WebSocketコネクションマネジャー
+   * @param options.frontendLog フロントエンドログマネジャー
    */
   constructor(options: {
     roomID: string;
+    spanId: string;
     webRTCConnection: HostWebRTCConnectionManager;
     websocketConnection: WebSocketConnectionManager;
+    frontendLog: FrontendLogManager;
     hostArmdozerId: ArmdozerId;
     hostPilotId: PilotId;
   }) {
     const {
       roomID,
+      spanId,
       webRTCConnection,
       websocketConnection,
       hostArmdozerId,
       hostPilotId,
+      frontendLog,
     } = options;
     this.roomID = roomID;
+    this.#spanId = spanId;
     this.#webRTCConnection = webRTCConnection;
     this.#websocketConnection = websocketConnection;
     this.#hostArmdozerId = hostArmdozerId;
     this.#hostPilotId = hostPilotId;
+    this.#frontendLog = frontendLog;
   }
 
   /**
@@ -101,6 +114,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    */
   async #signaling() {
     try {
+      await this.#frontendLog.log({
+        type: "SIGNALING_START",
+        spanId: this.#spanId,
+      });
       const websocket = await this.#websocketConnection.getOrCreate();
       const signal = await waitUntilMatching(websocket);
       const connection =
@@ -110,6 +127,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
       ]);
       await waitUntilConnected(connection);
+      await this.#frontendLog.log({
+        type: "SIGNALING_END",
+        spanId: this.#spanId,
+      });
     } finally {
       this.#websocketConnection.gracefulDisconnect();
     }

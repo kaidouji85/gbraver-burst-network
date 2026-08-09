@@ -1,4 +1,4 @@
-import { issueAuthToken } from "../webrtc-helper/issue-auth-token";
+import { issueAuthToken } from "../http-api/issue-auth-token";
 
 /** 認証トークン */
 export type AuthToken = {
@@ -52,7 +52,7 @@ class AuthTokenManagerImpl implements AuthTokenManager {
   }
 
   /** @override */
-  async getOrIssueAuthToken(): Promise<AuthToken> {
+  getOrIssueAuthToken(): Promise<AuthToken> {
     if (this.#authTokenPromise === null) {
       this.#authTokenPromise = this.#issueAuthTokenWithReset();
       return this.#authTokenPromise;

@@ -3,15 +3,18 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
-import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
-import { createApiGatewayManagementApi } from "./api-gateway/management";
-import { Notifier } from "./api-gateway/notifier";
 import { createRoomID } from "./core/create-room-id";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
 import { parseJSON } from "./json/parse";
-import { CreateRoom, CreateRoomSchema } from "./request/create-room";
+import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
+import { Notifier } from "./websocket-api/api-gateway/notifier";
+import {
+  CreateRoom,
+  CreateRoomSchema,
+} from "./websocket-api/request/create-room";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -56,6 +59,10 @@ const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = createRoomID();
+    if (!roomID) {
+      continue;
+    }
+
     const { sdp, iceCandidates } = body;
     const isRoomCreationSuccessful = await dynamoRooms.put({
       roomID,
@@ -66,6 +73,7 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
       return roomID;
     }
   }
+
   return null;
 }
 

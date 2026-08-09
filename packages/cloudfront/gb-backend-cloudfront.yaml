@@ -1,0 +1,117 @@
+---
+Mappings:
+  # AWSマネージドポリシーID
+  # このIDはすべてのアカウント、リージョンで共通であるため、マッピングに定義して参照する
+  AWSManagedPolicyIds:
+    CachePolicy:
+      CachingDisabled: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+    OriginRequestPolicy:
+      AllViewerExceptHostHeader: "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+Parameters:
+  # WebRTC HelperのAPI Gatewayのドメイン名
+  WebRTCHelperDomainName:
+    Type: String
+  # CloudFront Distributionのインターネットアクセス用のドメイン名
+  DistributionAlias:
+    Type: String
+  # サーバー証明書のARN
+  AcmCertificateArn:
+    Type: String
+  # 関連づけるWebACLのARN
+  # WebACLを関連づけない場合は、空文字を指定する
+  WebACLArn:
+    Type: String
+    Default: ""
+Conditions:
+  HasWebACL: !Not [!Equals [!Ref WebACLArn, ""]]
+Resources:
+  CloudFrontDistribution:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::Distribution"
+    DeletionPolicy: "Delete"
+    Properties:
+      DistributionConfig:
+        Logging:
+          IncludeCookies: false
+          Bucket: ""
+          Prefix: ""
+        Comment: "GB Web RTC Helper"
+        DefaultRootObject: ""
+        Origins:
+          - ConnectionTimeout: 10
+            OriginAccessControlId: ""
+            ConnectionAttempts: 3
+            OriginCustomHeaders: []
+            DomainName: !Ref WebRTCHelperDomainName
+            OriginShield:
+              Enabled: false
+            OriginPath: ""
+            Id: !Ref WebRTCHelperDomainName
+            CustomOriginConfig:
+              IpAddressType: "ipv4"
+              OriginReadTimeout: 30
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginSSLProtocols:
+                - "TLSv1.2"
+              HTTPPort: 80
+              OriginProtocolPolicy: "https-only"
+        ViewerCertificate:
+          MinimumProtocolVersion: "TLSv1.2_2021"
+          SslSupportMethod: "sni-only"
+          AcmCertificateArn: !Ref AcmCertificateArn
+        PriceClass: "PriceClass_All"
+        DefaultCacheBehavior:
+          Compress: true
+          FunctionAssociations: []
+          LambdaFunctionAssociations: []
+          TargetOriginId: !Ref WebRTCHelperDomainName
+          ViewerProtocolPolicy: "redirect-to-https"
+          GrpcConfig:
+            Enabled: false
+          TrustedSigners: []
+          FieldLevelEncryptionId: ""
+          TrustedKeyGroups: []
+          AllowedMethods:
+            - "HEAD"
+            - "DELETE"
+            - "POST"
+            - "GET"
+            - "OPTIONS"
+            - "PUT"
+            - "PATCH"
+          CachedMethods:
+            - "HEAD"
+            - "GET"
+          SmoothStreaming: false
+          CachePolicyId:
+            !FindInMap [AWSManagedPolicyIds, CachePolicy, CachingDisabled]
+          OriginRequestPolicyId:
+            !FindInMap [
+              AWSManagedPolicyIds,
+              OriginRequestPolicy,
+              AllViewerExceptHostHeader,
+            ]
+        Staging: false
+        CustomErrorResponses: []
+        ContinuousDeploymentPolicyId: ""
+        OriginGroups:
+          Quantity: 0
+          Items: []
+        Enabled: true
+        Aliases:
+          - !Ref DistributionAlias
+        IPV6Enabled: true
+        WebACLId: !If
+          - HasWebACL
+          - !Ref WebACLArn
+          - !Ref AWS::NoValue
+        HttpVersion: "http2"
+        Restrictions:
+          GeoRestriction:
+            Locations: []
+            RestrictionType: "none"
+        CacheBehaviors: []
+      Tags:
+        - Value: "gb-backend"
+          Key: "Name"

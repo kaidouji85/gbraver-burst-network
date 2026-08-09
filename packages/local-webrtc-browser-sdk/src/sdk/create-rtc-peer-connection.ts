@@ -1,4 +1,4 @@
-import { issueCoturnCredential } from "../webrtc-helper/issue-coturn-credential";
+import { issueCoturnCredential } from "../http-api/issue-coturn-credential";
 
 /**
  * RTCPeerConnectionを作成する

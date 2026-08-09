@@ -89,11 +89,7 @@ export const PrivateMatchMakingSchema = z.object({
 
 /** コネクションの状態 */
 export type ConnectionState =
-  | None
-  | CasualMatchMaking
-  | InBattle
-  | HoldPrivateMatch
-  | PrivateMatchMaking;
+  None | CasualMatchMaking | InBattle | HoldPrivateMatch | PrivateMatchMaking;
 
 /** ConnectionState zodスキーマ */
 export const ConnectionStateSchema = z.union([

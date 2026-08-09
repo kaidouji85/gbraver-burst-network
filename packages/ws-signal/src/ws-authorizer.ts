@@ -1,10 +1,10 @@
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
-import { AuthorizerEvent } from "./lambda-authorizer/authorizer-event";
+import { AuthorizerEvent } from "./websocket-api/lambda-authorizer/authorizer-event";
 import {
   failedAuthorize,
   successAuthorize,
-} from "./lambda-authorizer/authorizer-response";
+} from "./websocket-api/lambda-authorizer/authorizer-response";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";

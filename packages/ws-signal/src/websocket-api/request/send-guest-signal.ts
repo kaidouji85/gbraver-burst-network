@@ -5,7 +5,7 @@ import {
   RTCIceCandidateInitSchema,
   RTCSessionDescriptionInit,
   RTCSessionDescriptionInitSchema,
-} from "../core/webrtc";
+} from "../../core/webrtc";
 
 /** ゲストのシグナルを送信 */
 export type SendGuestSignal = {

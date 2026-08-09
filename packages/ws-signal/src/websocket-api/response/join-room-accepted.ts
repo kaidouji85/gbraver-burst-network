@@ -1,4 +1,7 @@
-import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
+import {
+  RTCIceCandidateInit,
+  RTCSessionDescriptionInit,
+} from "../../core/webrtc";
 
 /** ルーム参加承認 */
 export type JoinRoomAccepted = {

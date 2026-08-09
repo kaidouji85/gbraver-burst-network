@@ -1,5 +1,128 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.27.0
+
+### Minor Changes
+
+- フロントエンドログにICE Candidate Errorを追加
+- 5be6fb0: あいことば対戦にフロントエンド用ログを追加
+- 3556f85: ICE収集エラーをフロントエンドログに追加した
+- 70b5b93: ICE Candidate Errorのメッセージを調整
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [5be6fb0]
+- Updated dependencies [3556f85]
+- Updated dependencies [70b5b93]
+  - @gbraver-burst-network/offline-browser-sdk@1.27.0
+
+## 1.27.0-beta.2
+
+### Minor Changes
+
+- ICE Candidate Errorのメッセージを調整
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.27.0-beta.2
+
+## 1.27.0-beta.1
+
+### Minor Changes
+
+- ICE収集エラーをフロントエンドログに追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.27.0-beta.1
+
+## 1.27.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦にフロントエンド用ログを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.27.0-beta.0
+
+## 1.26.3
+
+### Patch Changes
+
+- 依存ライブラリをアップデート
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.3
+
+## 1.26.2
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.2
+
+## 1.26.1
+
+### Patch Changes
+
+- 0d2c8f1: DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- webrtcのメッセージ送信が失敗した場合はバトル終了通知を出さないようにした
+- Updated dependencies [0d2c8f1]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.1
+
+## 1.26.1-beta.0
+
+### Patch Changes
+
+- DataChannel.sendが例外を投げたらバトル終了通知をしないように修正
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.1-beta.0
+
+## 1.26.0
+
+### Minor Changes
+
+- ba38c15: あいことば対戦に切断通知を追加した
+- あいことば対戦に切断通知を追加した
+
+### Patch Changes
+
+- Updated dependencies [ba38c15]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.26.0
+
+## 1.25.2
+
+### Patch Changes
+
+- 4e12a98: npm publishの設定変更
+- npm publish設定を修正
+- Updated dependencies [4e12a98]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.25.2
+
+## 1.25.2-beta.0
+
+### Patch Changes
+
+- npm publishの設定変更
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.25.2-beta.0
+
+## 1.25.1
+
+### Patch Changes
+
+- 依存ライブラリをアップデートした
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.25.1
+
 ## 1.25.0
 
 ### Minor Changes
