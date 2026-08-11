@@ -42,11 +42,11 @@ export class DynamoSignalingChannels {
     guestConnectionId: string;
   }): Promise<DynamoSignalingChannel> {
     const channel = createSignalingChannel(options);
-    const result = await this.#dynamoDB.put({
+    await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: channel,
     });
-    return DynamoSignalingChannelSchema.parse(result.Attributes);
+    return channel;
   }
 
   /**
