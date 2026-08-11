@@ -5,6 +5,7 @@ import {
 
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
 import { parseJSON } from "./json/parse";
 import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
@@ -19,6 +20,9 @@ const STAGE = process.env.STAGE ?? "";
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 /** DynamoDB rooms テーブル名 */
 const DYNAMODB_ROOMS_TABLE = process.env.DYNAMODB_ROOMS_TABLE ?? "";
+/** DynamoDB signaling-channels テーブル名 */
+const DYNAMODB_SIGNALING_CHANNELS_TABLE =
+  process.env.DYNAMODB_SIGNALING_CHANNELS_TABLE ?? "";
 
 /** API エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
@@ -35,6 +39,11 @@ const notifier = new Notifier(apiGateway);
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
 /** DynamoDB rooms DAO */
 const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+/** DynamoDB signaling-channels DAO */
+const dynamoSignalingChannels = new DynamoSignalingChannels(
+  dynamoDB,
+  DYNAMODB_SIGNALING_CHANNELS_TABLE,
+);
 
 /**
  * ゲストが入室する
@@ -63,7 +72,8 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const updatedRoom = await dynamoRooms.updateToAwaitingSignalingChannelCreated(roomID);
+  const updatedRoom =
+    await dynamoRooms.updateToAwaitingSignalingChannelCreated(roomID);
   if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
@@ -71,10 +81,22 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  // const { reservationID } = updatedRoom;
-  // await notifier.notifyToClient(guestConnectionId, {
-  //   type: "join-room-accepted",
-  //   reservationID,
-  // });
+  const { hostConnectionId } = updatedRoom;
+  const signalingChannel = await dynamoSignalingChannels.put({
+    hostConnectionId,
+    guestConnectionId,
+  });
+  const { signalingID } = signalingChannel;
+  Promise.all([
+    notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-accepted",
+      signalingID,
+    }),
+    notifier.notifyToClient(hostConnectionId, {
+      type: "matching",
+      signalingID,
+    }),
+    dynamoRooms.delete(roomID),
+  ]);
   return { statusCode: 200, body: "join room success" };
 }

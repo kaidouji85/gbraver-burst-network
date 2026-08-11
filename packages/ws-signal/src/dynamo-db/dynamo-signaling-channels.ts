@@ -35,17 +35,18 @@ export class DynamoSignalingChannels {
   /**
    * シグナリングチャネルを新規作成する
    * @param channel 保存内容
-   * @returns 処理が完了したら発火するPromise
+   * @returns 生成したシグナリングチャネル
    */
   async put(options: {
     hostConnectionId: string;
     guestConnectionId: string;
-  }): Promise<void> {
+  }): Promise<DynamoSignalingChannel> {
     const channel = createSignalingChannel(options);
-    await this.#dynamoDB.put({
+    const result = await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: channel,
     });
+    return DynamoSignalingChannelSchema.parse(result.Attributes);
   }
 
   /**
