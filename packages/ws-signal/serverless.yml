@@ -72,6 +72,7 @@ provider:
             - Fn::GetAtt: [ConnectionsTable, Arn]
             - Fn::GetAtt: [RoomsTable, Arn]
             - Fn::GetAtt: [AuthTokensTable, Arn]
+            - Fn::GetAtt: [SignalingChannelsTable, Arn]
         - Effect: Allow
           Action:
             - "secretsmanager:GetSecretValue"
