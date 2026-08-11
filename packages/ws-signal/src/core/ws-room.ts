@@ -26,7 +26,7 @@ export type WSSignalRoom = {
    * シグナルサーバー側はこれが一致しているかで検証する
    */
   reservationID: string;
-  /** ホストのコネクションID */
+  /** ホストのWebSocket API Gateway コネクションID */
   hostConnectionId: string;
   /** ルームのホストのシグナル情報 */
   hostSignal: {
