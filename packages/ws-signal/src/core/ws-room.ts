@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-import {
-  RTCIceCandidateInit,
-  RTCIceCandidateInitSchema,
-  RTCSessionDescriptionInit,
-  RTCSessionDescriptionInitSchema,
-} from "./webrtc";
-
 /** ルームの状態 */
 export type WSSignalRoomState = "awaiting-guest-join" | "awaiting-guest-signal";
 
@@ -28,13 +21,6 @@ export type WSSignalRoom = {
   reservationID: string;
   /** ホストのWebSocket API Gateway コネクションID */
   hostConnectionId: string;
-  /** ルームのホストのシグナル情報 */
-  hostSignal: {
-    /** WebRTCのセッション記述 */
-    sdp: RTCSessionDescriptionInit;
-    /** WebRTCのICE候補 */
-    iceCandidates: RTCIceCandidateInit[];
-  };
   /** ルームの状態 */
   state: WSSignalRoomState;
 };
@@ -44,9 +30,5 @@ export const WSSignalRoomSchema = z.object({
   roomID: z.string(),
   reservationID: z.string(),
   hostConnectionId: z.string(),
-  hostSignal: z.object({
-    sdp: RTCSessionDescriptionInitSchema,
-    iceCandidates: z.array(RTCIceCandidateInitSchema),
-  }),
   state: WSSignalRoomStateSchema,
 });

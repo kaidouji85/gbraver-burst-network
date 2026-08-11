@@ -1,7 +1,6 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { nanoid } from "nanoid";
 
-import { RTCIceCandidateInit, RTCSessionDescriptionInit } from "../core/webrtc";
 import { WSSignalRoom, WSSignalRoomSchema } from "../core/ws-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
@@ -35,24 +34,19 @@ export class DynamoRooms {
    * ルームを新規作成する
    * 条件付きPutを行うため、同じルームIDが存在する場合は何もしない
    * @param options ルーム情報の保存に必要な情報
+   * @param options.roomID ルームID
+   * @param options.hostConnectionId ホストのコネクションID
    * @return ルーム情報の保存に成功した場合はtrue、同じルームIDが存在する場合はfalse
    */
   async put(options: {
-    /** ルームID */
     roomID: string;
-    /** ホストのコネクションID */
     hostConnectionId: string;
-    /** ホストのシグナル情報 */
-    hostSignal: {
-      /** ホストのSDP */
-      sdp: RTCSessionDescriptionInit;
-      /** ホストのICE候補 */
-      iceCandidates: RTCIceCandidateInit[];
-    };
   }): Promise<boolean> {
     try {
+      const { roomID, hostConnectionId } = options;
       const room: DynamoRoom = {
-        ...options,
+        roomID,
+        hostConnectionId,
         reservationID: nanoid(),
         state: "awaiting-guest-join",
       };

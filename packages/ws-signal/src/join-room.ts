@@ -72,12 +72,9 @@ export async function joinRoom(
   }
 
   const { reservationID } = updatedRoom;
-  const { sdp, iceCandidates } = updatedRoom.hostSignal;
   await notifier.notifyToClient(guestConnectionId, {
     type: "join-room-accepted",
     reservationID,
-    sdp,
-    iceCandidates,
   });
   return { statusCode: 200, body: "join room success" };
 }

@@ -7,14 +7,9 @@ import { createRoomID } from "./core/create-room-id";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
-import { parseJSON } from "./json/parse";
 import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
 import { Notifier } from "./websocket-api/api-gateway/notifier";
-import {
-  CreateRoom,
-  CreateRoomSchema,
-} from "./websocket-api/request/create-room";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -53,21 +48,17 @@ const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
 /**
  * リトライありでルーム生成をする
  * @param connectionId コネクションID
- * @param body リクエストボディ
  * @returns 生成できた場合はルームID、生成できなかった場合はnull
  */
-async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
+async function createRoomWithRetry(connectionId: string) {
   for (let i = 0; i < MAX_ROOM_CREATION_RETRY; i++) {
     const roomID = createRoomID();
     if (!roomID) {
       continue;
     }
-
-    const { sdp, iceCandidates } = body;
     const isRoomCreationSuccessful = await dynamoRooms.put({
       roomID,
       hostConnectionId: connectionId,
-      hostSignal: { sdp, iceCandidates },
     });
     if (isRoomCreationSuccessful) {
       return roomID;
@@ -85,19 +76,8 @@ async function createRoomWithRetry(connectionId: string, body: CreateRoom) {
 export async function createRoom(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
-  const parsedBody = parseJSON(event.body);
-  const parsedCreateRoom = CreateRoomSchema.safeParse(parsedBody);
   const { connectionId } = event.requestContext;
-  if (!parsedCreateRoom.success) {
-    await notifier.notifyToClient(connectionId, {
-      type: "room-creation-result",
-      isSuccess: false,
-    });
-    return { statusCode: 400, body: "invalid request" };
-  }
-
-  const createRoomRequest = parsedCreateRoom.data;
-  const roomID = await createRoomWithRetry(connectionId, createRoomRequest);
+  const roomID = await createRoomWithRetry(connectionId);
   if (!roomID) {
     await notifier.notifyToClient(connectionId, {
       type: "room-creation-result",
