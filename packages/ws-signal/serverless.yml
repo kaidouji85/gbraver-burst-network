@@ -141,11 +141,6 @@ functions:
     events:
       - websocket:
           route: join-room
-  sendGuestSignal:
-    handler: src/send-guest-signal.sendGuestSignal
-    events:
-      - websocket:
-          route: send-guest-signal
 
   # HTTP API
   issueAuthToken:
