@@ -5,6 +5,7 @@ custom:
   connections: ${self:service}__${sls:stage}__connections
   rooms: ${self:service}__${sls:stage}__rooms
   authTokens: ${self:service}__${sls:stage}__auth-tokens
+  signalingChannels: ${self:service}__${sls:stage}__signaling-channels
 
 provider:
   name: aws
@@ -44,6 +45,7 @@ provider:
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
     DYNAMODB_AUTH_TOKENS_TABLE: ${self:custom.authTokens}
+    DYNAMODB_SIGNALING_CHANNELS_TABLE: ${self:custom.signalingChannels}
   iam:
     role:
       statements:
@@ -204,6 +206,20 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: tokenHash
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST
+    SignalingChannelsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.signalingChannels}
+        AttributeDefinitions:
+          - AttributeName: signalingID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: signalingID
             KeyType: HASH
         TimeToLiveSpecification:
           AttributeName: expiresAt
