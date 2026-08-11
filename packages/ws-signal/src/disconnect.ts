@@ -40,7 +40,7 @@ export async function disconnect(
 
   if (deletedConnection.state.type === "room-host") {
     const { roomID } = deletedConnection.state;
-    await dynamoRooms.forceDelete(roomID);
+    await dynamoRooms.delete(roomID);
   }
   return { statusCode: 200, body: "disconnected." };
 }

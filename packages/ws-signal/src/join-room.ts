@@ -63,7 +63,7 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const updatedRoom = await dynamoRooms.updateToAwaitingGuestSignal(roomID);
+  const updatedRoom = await dynamoRooms.updateToAwaitingSignalingChannelCreated(roomID);
   if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
@@ -71,10 +71,10 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { reservationID } = updatedRoom;
-  await notifier.notifyToClient(guestConnectionId, {
-    type: "join-room-accepted",
-    reservationID,
-  });
+  // const { reservationID } = updatedRoom;
+  // await notifier.notifyToClient(guestConnectionId, {
+  //   type: "join-room-accepted",
+  //   reservationID,
+  // });
   return { statusCode: 200, body: "join room success" };
 }
