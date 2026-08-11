@@ -47,4 +47,18 @@ export class DynamoSignalingChannels {
       Item: channel,
     });
   }
+
+  /**
+   * シグナリングチャネルを取得する
+   * @param signalingID シグナリングID
+   * @returns 取得結果、存在しない場合はnull
+   */
+  async get(signalingID: string): Promise<DynamoSignalingChannel | null> {
+    const result = await this.#dynamoDB.get({
+      TableName: this.#tableName,
+      Key: { signalingID },
+      ConsistentRead: true,
+    });
+    return result.Item ? DynamoSignalingChannelSchema.parse(result.Item) : null;
+  }
 }
