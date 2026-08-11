@@ -87,7 +87,7 @@ export async function joinRoom(
     guestConnectionId,
   });
   const { signalingID } = signalingChannel;
-  Promise.all([
+  await Promise.all([
     notifier.notifyToClient(guestConnectionId, {
       type: "join-room-accepted",
       signalingID,
