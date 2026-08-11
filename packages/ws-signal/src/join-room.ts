@@ -82,6 +82,14 @@ export async function joinRoom(
   }
 
   const { hostConnectionId } = updatedRoom;
+  const isSelfJoinAttempt = hostConnectionId === guestConnectionId;
+  if (isSelfJoinAttempt) {
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-rejected",
+    });
+    return { statusCode: 200, body: "join room rejected" };
+  }
+
   const signalingChannel = await dynamoSignalingChannels.put({
     hostConnectionId,
     guestConnectionId,
