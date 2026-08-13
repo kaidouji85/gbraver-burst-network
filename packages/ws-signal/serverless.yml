@@ -142,6 +142,11 @@ functions:
     events:
       - websocket:
           route: join-room
+  sendSDP:
+    handler: src/send-sdp.sendSDP
+    events:
+      - websocket:
+          route: send-sdp
 
   # HTTP API
   issueAuthToken:
