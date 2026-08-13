@@ -89,6 +89,8 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 {"action":"create-room"}
 -> サーバからルームIDが返されるので、ゲストに伝える
 -> ゲストとマッチングしたらシグナリングIDが返される（以降はこれを使用する）
+
+{"action":"send-sdp","sdp":{"type":"offer","sdp":"DUMMY_HOST_SDP"},"signalingID":"<ゲストから返されたシグナリングID>"}
 ```
 
 ##### ゲスト
@@ -107,4 +109,6 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 
 {"action":"join-room","roomID":"<ホストから伝えられたルームID>"}
 -> マッチングしたらシグナリングIDが返される（以降はこれを使用する）
+
+{"action":"send-sdp","sdp":{"type":"answer","sdp":"DUMMY_GUEST_SDP"},"signalingID":"<ホストから返されたシグナリングID>"}
 ```
