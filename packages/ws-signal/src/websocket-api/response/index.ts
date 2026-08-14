@@ -1,3 +1,5 @@
+import { DeleteSignalingChannelAccepted } from "./delete-signaling-channel-accepted";
+import { DeleteSignalingChannelRejected } from "./delete-signaling-channel-rejected";
 import { JoinRoomAccepted } from "./join-room-accepted";
 import { JoinRoomRejected } from "./join-room-rejected";
 import { Matching } from "./matching";
@@ -18,4 +20,6 @@ export type WebsocketResponse =
   | ReceiveRemoteSDP
   | SendSDPRejected
   | ReceiveICECandidate
-  | SendICECandidateRejected;
+  | SendICECandidateRejected
+  | DeleteSignalingChannelAccepted
+  | DeleteSignalingChannelRejected;
