@@ -3,6 +3,7 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
 import { parseJSON } from "./json/parse";
@@ -17,6 +18,8 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 /** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+/** DynamoDB connections テーブル名 */
+const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
 /** DynamoDB signaling-channels テーブル名 */
 const DYNAMODB_SIGNALING_CHANNELS_TABLE =
   process.env.DYNAMODB_SIGNALING_CHANNELS_TABLE ?? "";
@@ -34,6 +37,11 @@ const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB connections DAO */
+const dynamoConnections = new DynamoConnections(
+  dynamoDB,
+  DYNAMODB_CONNECTIONS_TABLE,
+);
 /** DynamoDB signaling-channels DAO */
 const dynamoSignalingChannels = new DynamoSignalingChannels(
   dynamoDB,
@@ -60,6 +68,10 @@ export const deleteSignalingChannel = async (
   }
 
   const { signalingID } = deleteSignalingChannelRequest.data;
-  await dynamoSignalingChannels.delete(signalingID);
+  const deletedChannel = await dynamoSignalingChannels.delete(signalingID);
+  if (!deletedChannel) {
+    return { statusCode: 404, body: "signaling channel not found." };
+  }
+
   return { statusCode: 200, body: "delete signaling channel success" };
 };

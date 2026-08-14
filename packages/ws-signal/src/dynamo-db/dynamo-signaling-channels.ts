@@ -66,12 +66,15 @@ export class DynamoSignalingChannels {
   /**
    * 指定したシグナリングチャネルを削除する
    * @param signalingID シグナリングID
-   * @returns 処理が完了したら発火するPromise
+   * @returns 削除対象が存在した場合は削除されたアイテム、存在しない場合はnull
    */
-  async delete(signalingID: string): Promise<void> {
-    await this.#dynamoDB.delete({
+  async delete(signalingID: string): Promise<DynamoSignalingChannel | null> {
+    const result = await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: { signalingID },
+      ReturnValues: "ALL_OLD",
     });
+    const parsed = DynamoSignalingChannelSchema.safeParse(result.Attributes);
+    return parsed.success ? parsed.data : null;
   }
 }
