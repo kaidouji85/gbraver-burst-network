@@ -152,6 +152,11 @@ functions:
     events:
       - websocket:
           route: send-ice-candidate
+  deleteSignalingChannel:
+    handler: src/delete-signaling-channel.deleteSignalingChannel
+    events:
+      - websocket:
+          route: delete-signaling-channel
 
   # HTTP API
   issueAuthToken:
