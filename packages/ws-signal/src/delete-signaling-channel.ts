@@ -3,6 +3,7 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { getChannelConnectionIds } from "./core/signaling-channel";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
@@ -70,8 +71,19 @@ export const deleteSignalingChannel = async (
   const { signalingID } = deleteSignalingChannelRequest.data;
   const deletedChannel = await dynamoSignalingChannels.delete(signalingID);
   if (!deletedChannel) {
+    await notifier.notifyToClient(connectionId, {
+      type: "delete-signaling-channel-rejected",
+    });
     return { statusCode: 404, body: "signaling channel not found." };
   }
 
+  await Promise.all([
+    ...getChannelConnectionIds(deletedChannel).map((id) =>
+      dynamoConnections.put({ connectionId: id, state: { type: "none" } }),
+    ),
+    notifier.notifyToClient(connectionId, {
+      type: "delete-signaling-channel-accepted",
+    }),
+  ]);
   return { statusCode: 200, body: "delete signaling channel success" };
 };
