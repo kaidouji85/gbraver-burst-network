@@ -1,3 +1,4 @@
+import { AbortSignaling } from "./abort-signaling";
 import { DeleteSignalingChannelAccepted } from "./delete-signaling-channel-accepted";
 import { DeleteSignalingChannelRejected } from "./delete-signaling-channel-rejected";
 import { JoinRoomAccepted } from "./join-room-accepted";
@@ -22,4 +23,5 @@ export type WebsocketResponse =
   | ReceiveICECandidate
   | SendICECandidateRejected
   | DeleteSignalingChannelAccepted
-  | DeleteSignalingChannelRejected;
+  | DeleteSignalingChannelRejected
+  | AbortSignaling;
