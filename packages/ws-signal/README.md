@@ -91,6 +91,10 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 -> ゲストとマッチングしたらシグナリングIDが返される（以降はこれを使用する）
 
 {"action":"send-sdp","sdp":{"type":"offer","sdp":"DUMMY_HOST_SDP"},"signalingID":"<ゲストから返されたシグナリングID>"}
+-> ゲストにSDPが送信される
+
+{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:1 1 UDP 2122260223 192.0.2.1 54321 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_HOST_ICE"},"signalingID":"<ゲストから返されたシグナリングID>"}
+-> ゲストにホスト側のICE Candidateが送信される
 ```
 
 ##### ゲスト
@@ -111,4 +115,8 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 -> マッチングしたらシグナリングIDが返される（以降はこれを使用する）
 
 {"action":"send-sdp","sdp":{"type":"answer","sdp":"DUMMY_GUEST_SDP"},"signalingID":"<ホストから返されたシグナリングID>"}
+-> ホストにSDPが送信される
+
+{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:2 1 UDP 2122260222 192.0.2.2 54322 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_GUEST_ICE"},"signalingID":"<ホストから返されたシグナリングID>"}
+-> ホストにゲスト側のICE Candidateが送信される
 ```
