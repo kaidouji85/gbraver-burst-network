@@ -95,6 +95,10 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 
 {"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:1 1 UDP 2122260223 192.0.2.1 54321 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_HOST_ICE"},"signalingID":"<ゲストから返されたシグナリングID>"}
 -> ゲストにホスト側のICE Candidateが送信される
+
+{"action":"delete-signaling-channel","signalingID":"<ゲストから返されたシグナリングID>"}
+-> シグナリングチャネル破棄
+-> 以降はSDP、ICE Candidateの送受信はできなくなる
 ```
 
 ##### ゲスト
