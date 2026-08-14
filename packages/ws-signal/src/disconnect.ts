@@ -55,10 +55,11 @@ const dynamoSignalingChannels = new DynamoSignalingChannels(
 
 /**
  * シグナリング中に接続が切断された場合の処理
+ * @param connectionId コネクションID
  * @param signaling シグナリンング中のステート
  * @returns 処理が完了したら発火するPromise
  */
-const onSignaling = async (signaling: Signaling) => {
+const onSignaling = async (connectionId: string, signaling: Signaling) => {
   const { signalingID } = signaling;
   const deletedSignalingChannel =
     await dynamoSignalingChannels.delete(signalingID);
@@ -68,11 +69,12 @@ const onSignaling = async (signaling: Signaling) => {
 
   const channelConnectionIds = getChannelConnectionIds(deletedSignalingChannel);
   const peerConnectionId = channelConnectionIds.find(
-    (id) => id !== signaling.signalingID,
+    (id) => id !== connectionId,
   );
   if (!peerConnectionId) {
     return;
   }
+
   await Promise.all([
     dynamoConnections.put({
       connectionId: peerConnectionId,
@@ -102,7 +104,7 @@ export async function disconnect(
     const { roomID } = deletedConnection.state;
     await dynamoRooms.delete(roomID);
   } else if (deletedConnection.state.type === "signaling") {
-    await onSignaling(deletedConnection.state);
+    await onSignaling(connectionId, deletedConnection.state);
   }
 
   return { statusCode: 200, body: "disconnected." };
