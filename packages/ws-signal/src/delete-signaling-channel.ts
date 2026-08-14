@@ -1,10 +1,65 @@
-import { APIGatewayProxyResultV2 } from "aws-lambda";
+import {
+  APIGatewayProxyResultV2,
+  APIGatewayProxyWebsocketEventV2,
+} from "aws-lambda";
+
+import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
+import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
+import { parseJSON } from "./json/parse";
+import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
+import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
+import { Notifier } from "./websocket-api/api-gateway/notifier";
+import { DeleteSignalingChannelSchema } from "./websocket-api/request/delete-signaling-channel";
+
+/** AWSリージョン */
+const AWS_REGION = process.env.AWS_REGION ?? "";
+/** ステージ */
+const STAGE = process.env.STAGE ?? "";
+/** Websocket API ID */
+const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+/** DynamoDB signaling-channels テーブル名 */
+const DYNAMODB_SIGNALING_CHANNELS_TABLE =
+  process.env.DYNAMODB_SIGNALING_CHANNELS_TABLE ?? "";
+
+/** API エンドポイント */
+const apiGatewayEndpoint = createAPIGatewayEndpoint(
+  WEBSOCKET_API_ID,
+  AWS_REGION,
+  STAGE,
+);
+/** API Gateway Management API */
+const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** WebSocket用メッセージ通知オブジェクト */
+const notifier = new Notifier(apiGateway);
+
+/** DynamoDB ドキュメントクライアント */
+const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB signaling-channels DAO */
+const dynamoSignalingChannels = new DynamoSignalingChannels(
+  dynamoDB,
+  DYNAMODB_SIGNALING_CHANNELS_TABLE,
+);
 
 /**
  * シグナリングチャネルを削除する
+ * @param event イベント
  * @returns レスポンス
  */
-export const deleteSignalingChannel =
-  async (): Promise<APIGatewayProxyResultV2> => {
-    return { statusCode: 200, body: "delete signaling channel success" };
-  };
+export const deleteSignalingChannel = async (
+  event: APIGatewayProxyWebsocketEventV2,
+): Promise<APIGatewayProxyResultV2> => {
+  const { connectionId } = event.requestContext;
+  const parsedBody = parseJSON(event.body);
+  const deleteSignalingChannelRequest =
+    DeleteSignalingChannelSchema.safeParse(parsedBody);
+  if (!deleteSignalingChannelRequest.success) {
+    await notifier.notifyToClient(connectionId, {
+      type: "delete-signaling-channel-rejected",
+    });
+    return { statusCode: 400, body: "invalid request" };
+  }
+
+  const { signalingID } = deleteSignalingChannelRequest.data;
+  await dynamoSignalingChannels.delete(signalingID);
+  return { statusCode: 200, body: "delete signaling channel success" };
+};
