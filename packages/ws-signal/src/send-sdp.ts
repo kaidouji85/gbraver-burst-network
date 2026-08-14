@@ -51,7 +51,7 @@ export const sendSDP = async (
   const { connectionId } = event.requestContext;
   const parsedBody = parseJSON(event.body);
   const sendSDPRequest = SendSDPSchema.safeParse(parsedBody);
-  if (sendSDPRequest.success === false) {
+  if (!sendSDPRequest.success) {
     await notifier.notifyToClient(connectionId, {
       type: "send-sdp-rejected",
     });
