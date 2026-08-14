@@ -3,6 +3,7 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { getChannelConnectionIds } from "./core/signaling-channel";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
 import { parseJSON } from "./json/parse";
@@ -67,10 +68,7 @@ export const sendSDP = async (
     return { statusCode: 200, body: "signaling channel not found" };
   }
 
-  const channelConnectionIds = [
-    signalingChannel.hostConnectionId,
-    signalingChannel.guestConnectionId,
-  ];
+  const channelConnectionIds = getChannelConnectionIds(signalingChannel);
   const isChannelParticipant = channelConnectionIds.includes(connectionId);
   const peerConnectionId = channelConnectionIds.find(
     (id) => id !== connectionId,

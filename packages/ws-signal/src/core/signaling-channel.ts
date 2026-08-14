@@ -42,3 +42,15 @@ export const createSignalingChannel = (options: {
     expiresAt: Math.floor(Date.now() / 1000) + SIGNALING_CHANNEL_TTL_SECONDS,
   };
 };
+
+/**
+ * チャネルにある全てのコネクションIDを取得する
+ * @param signalingChannel シグナリングチャネル
+ * @returns 取得結果
+ */
+export const getChannelConnectionIds = (
+  signalingChannel: SignalingChannel,
+): string[] => [
+  signalingChannel.hostConnectionId,
+  signalingChannel.guestConnectionId,
+];
