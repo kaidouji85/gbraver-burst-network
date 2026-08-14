@@ -147,6 +147,11 @@ functions:
     events:
       - websocket:
           route: send-sdp
+  sendICECandidate:
+    handler: src/send-ice-candidate.sendICECandidate
+    events:
+      - websocket:
+          route: send-ice-candidate
 
   # HTTP API
   issueAuthToken:
