@@ -3,9 +3,9 @@ import { ReceiveRemoteSDPSchema } from "./response/recieve-remote-sdp";
 import { SendSDPRejectedSchema } from "./response/send-sdp-rejected";
 
 /**
- * ホストがSDPを受信するまで待機する
+ * 相手からSDPを受信するまで待機する
  * @param websocket WebSocketコネクション
- * @returns シグナリングID
+ * @returns 受信したSDP
  */
 export const waitUntilSDPReceive = (
   websocket: WebSocket,
