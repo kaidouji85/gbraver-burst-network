@@ -7,18 +7,10 @@ import { sendToWSSignal } from "./send-to-ws-signal";
 
 /**
  * ルームを生成する
- * @param options オプション
- * @param options.websocket WebSocketコネクション
- * @param options.sdp ホストのSDP
- * @param options.iceCandidates ホストのICE候補
+ * @param websocket WebSocketコネクション
  * @returns 成功したらルームID、失敗したらnull
  */
-export const createRoom = (options: {
-  websocket: WebSocket;
-  sdp: RTCSessionDescriptionInit;
-  iceCandidates: RTCIceCandidateInit[];
-}): Promise<string | null> => {
-  const { websocket, sdp, iceCandidates } = options;
+export const createRoom = (websocket: WebSocket): Promise<string | null> => {
   let handler: ((event: MessageEvent) => void) | null = null;
   return new Promise<string | null>((resolve) => {
     handler = (event) => {
