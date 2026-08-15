@@ -3,18 +3,24 @@ import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 import { connectWSSignal } from "../websocket/connect-ws-signal";
 import { AuthTokenManager } from "./auth-token-manager";
 
+/** WebSocketコネクションおよび関連オブジェクト */
+type Connection = {
+  /** WebSocketコネクション */
+  websocket: WebSocket;
+  /** WebSocketコネクションストリームのアンサブスクライバ */
+  websocketSubscriptions: Subscription[];
+};
+
 /** WebSocketコネクション管理 */
 export class WebSocketConnectionManager {
   /** WebSocketシグナルサーバーのURL */
   readonly wsSignalUrl: string;
   /** 認証トークンマネージャー */
   #authToken: AuthTokenManager;
-  /** WebSocketコネクション */
-  #websocket: WebSocket | null = null;
   /** Web Socket エラー通知 */
   #websocketError: Subject<unknown>;
-  /** Web Socket イベントストリーム */
-  #websocketSubscriptions: Subscription[];
+  /** コネクション情報、nullで未接続 */
+  #connection: Promise<Connection> | null = null;
 
   /**
    * コンストラクタ
@@ -26,7 +32,6 @@ export class WebSocketConnectionManager {
     this.wsSignalUrl = options.wsSignalUrl;
     this.#authToken = options.authToken;
     this.#websocketError = new Subject();
-    this.#websocketSubscriptions = [];
   }
 
   /**
@@ -34,19 +39,28 @@ export class WebSocketConnectionManager {
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
    * @returns 取得、生成結果
    */
-  async getOrCreate(): Promise<WebSocket> {
-    if (this.#websocket) {
-      return this.#websocket;
+  getOrCreate(): Promise<WebSocket> {
+    if (this.#connection) {
+      return this.#connection.then((v) => v.websocket);
     }
 
-    const authToken = await this.#authToken.getOrIssueAuthToken();
-    const websocket = await connectWSSignal(this.wsSignalUrl, authToken.token);
-    this.#websocketSubscriptions = [
-      fromEvent(websocket, "error").subscribe(this.#websocketError),
-      fromEvent(websocket, "close").subscribe(this.#websocketError),
-    ];
-    this.#websocket = websocket;
-    return websocket;
+    this.#connection = (async () => {
+      const authToken = await this.#authToken.getOrIssueAuthToken();
+      const websocket = await connectWSSignal(
+        this.wsSignalUrl,
+        authToken.token,
+      );
+      const websocketSubscriptions = [
+        fromEvent(websocket, "error").subscribe(this.#websocketError),
+        fromEvent(websocket, "close").subscribe(this.#websocketError),
+      ];
+      return { websocket, websocketSubscriptions };
+    })().catch((err) => {
+      this.#connection = null;
+      throw err;
+    });
+
+    return this.#connection.then((v) => v.websocket);
   }
 
   /**
@@ -54,13 +68,15 @@ export class WebSocketConnectionManager {
    * 本メソッドを呼び出すことで、WebSocketコネクションに関連するイベントストリームの購読も解除する
    */
   gracefulDisconnect(): void {
-    this.#websocket?.close();
-    this.#websocket = null;
+    if (!this.#connection) {
+      return;
+    }
 
-    this.#websocketSubscriptions.forEach((v) => {
-      v.unsubscribe();
+    this.#connection.then((v) => {
+      v.websocket.close();
+      v.websocketSubscriptions.forEach((s) => s.unsubscribe());
     });
-    this.#websocketSubscriptions = [];
+    this.#connection = null;
   }
 
   /**
