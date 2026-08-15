@@ -77,9 +77,7 @@ export class HostBattleSDK implements BattleSDK {
     this.#webRTCConnection = options.webRTCConnection;
     this.#sendCommandPromise = this.#webRTCConnection
       .getOrCreateConnection()
-      .dataChannelPromise.then((dataChannel) =>
-        receiveSendCommand(dataChannel, this.flowID),
-      );
+      .then(({ dataChannel }) => receiveSendCommand(dataChannel, this.flowID));
   }
 
   /** @override */
@@ -93,8 +91,8 @@ export class HostBattleSDK implements BattleSDK {
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     this.flowID = nanoid();
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+    const { dataChannel } =
+      await this.#webRTCConnection.getOrCreateConnection();
     this.#sendCommandPromise = receiveSendCommand(dataChannel, this.flowID);
     try {
       sendHostMessage(dataChannel, {
@@ -115,7 +113,7 @@ export class HostBattleSDK implements BattleSDK {
    */
   suddenlyBattleEndNotifier(): Observable<unknown> {
     return from(
-      this.#webRTCConnection.getOrCreateConnection().connectionPromise,
+      this.#webRTCConnection.getOrCreateConnection().then((v) => v.connection),
     ).pipe(
       mergeMap((connection) => notifyConnectionFailed(connection)),
       takeUntil(this.#sendExceptionSubject),
