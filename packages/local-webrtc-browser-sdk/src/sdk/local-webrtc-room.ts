@@ -3,7 +3,6 @@ import { nanoid } from "nanoid";
 
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
-import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
 import { waitUntilMatching } from "../websocket-api/wait-until-matching";
 import { BattleSDK } from "./battle-sdk";
@@ -12,6 +11,7 @@ import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
+import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -129,12 +129,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         signalingID,
         sdp,
       });
-      // const signal = await waitUntilMatching(websocket);
-      // await connection.setRemoteDescription(signal.sdp);
-      // await Promise.all([
-      //   ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
-      // ]);
-      // await waitUntilConnected(connection);
+      const remoteSDP = await waitUntilSDPReceive(websocket);
+      await connection.setRemoteDescription(remoteSDP);
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,
