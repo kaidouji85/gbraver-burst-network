@@ -96,8 +96,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
     this.#websocketConnection.gracefulDisconnect();
     this.#webRTCConnection.disconnect();
 
-    // データチャネルのメッセージ受信を取り逃がさないために、
-    // あらかじめイベントを登録しておく
+    // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
@@ -183,8 +182,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         this.#webRTCConnection.getOrCreateConnection();
       const connection = await connectionPromise;
 
-      // オファー開始直後にイベント発火することがあるので、
-      // あらじめイベント購読をする
+      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
       unSubscribers = [
         notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
           connection.addIceCandidate(iceCandidate);

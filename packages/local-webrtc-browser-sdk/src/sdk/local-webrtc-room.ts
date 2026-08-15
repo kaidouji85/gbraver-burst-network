@@ -127,8 +127,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
-      // オファー開始直後にイベント発火することがあるので、
-      // あらじめイベント購読をする
+      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
       unSubscribers = [
         notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
           connection.addIceCandidate(iceCandidate);
@@ -158,6 +157,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       ];
 
       const sdp = await connection.createOffer();
+      await connection.setLocalDescription(sdp);
       sendToWSSignal(websocket, {
         action: "send-sdp",
         signalingID,
@@ -165,7 +165,6 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       });
       const remoteSDP = await waitUntilSDPReceive(websocket);
       await Promise.all([
-        connection.setLocalDescription(sdp),
         connection.setRemoteDescription(remoteSDP),
         waitUntilConnected(connection),
         waitUntilDataChannelOpen(dataChannel),
