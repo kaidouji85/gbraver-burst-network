@@ -4,6 +4,7 @@ import { fromEvent, Unsubscribable } from "rxjs";
 
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
+import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
 import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
@@ -85,12 +86,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<BattleSDK> {
+    await this.#signaling();
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
-    await Promise.all([
-      this.#signaling(),
-      waitUntilDataChannelOpen(dataChannel),
-    ]);
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       await requestSelectedPlayer(dataChannel, flowID);
@@ -125,7 +123,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
       const websocket = await this.#websocketConnection.getOrCreate();
       const signalingID = await waitUntilMatching(websocket);
-      const { connection } =
+      const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
       // オファー開始直後にイベント発火することがあるので、
@@ -156,6 +154,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       });
       const remoteSDP = await waitUntilSDPReceive(websocket);
       await connection.setRemoteDescription(remoteSDP);
+      await Promise.all([
+        waitUntilConnected(connection),
+        waitUntilDataChannelOpen(dataChannel),
+      ]);
 
       await this.#frontendLog.log({
         type: "SIGNALING_END",
