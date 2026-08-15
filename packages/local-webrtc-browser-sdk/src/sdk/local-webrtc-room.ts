@@ -118,15 +118,15 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_START",
         spanId: this.#spanId,
       });
-      const websocket = await this.#websocketConnection.getOrCreate();
-      const signal = await waitUntilMatching(websocket);
-      const { connection } =
-        await this.#webRTCConnection.getOrCreateConnection();
-      await connection.setRemoteDescription(signal.sdp);
-      await Promise.all([
-        ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
-      ]);
-      await waitUntilConnected(connection);
+      // const websocket = await this.#websocketConnection.getOrCreate();
+      // const signal = await waitUntilMatching(websocket);
+      // const { connection } =
+      //   await this.#webRTCConnection.getOrCreateConnection();
+      // await connection.setRemoteDescription(signal.sdp);
+      // await Promise.all([
+      //   ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
+      // ]);
+      // await waitUntilConnected(connection);
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,

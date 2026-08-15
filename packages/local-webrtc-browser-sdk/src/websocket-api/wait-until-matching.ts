@@ -1,22 +1,20 @@
 import { parseJSON } from "../json/parse";
-import { Signal } from "../webrtc/signal";
 import { MatchingSchema } from "./response/matching";
 
 /**
  * ホストがマッチングするまで待機する
  * @param websocket WebSocketコネクション
- * @returns シグナル情報
+ * @returns シグナリングID
  */
-export const waitUntilMatching = (websocket: WebSocket): Promise<Signal> => {
+export const waitUntilMatching = (websocket: WebSocket): Promise<string> => {
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<Signal>((resolve) => {
+  return new Promise<string>((resolve) => {
     handler = (event) => {
       const parsedData = parseJSON(event.data);
       const parsedMatching = MatchingSchema.safeParse(parsedData);
       if (parsedMatching.success) {
-        const matching = parsedMatching.data;
-        const { sdp, iceCandidates } = matching;
-        resolve({ sdp, iceCandidates });
+        const { signalingID } = parsedMatching.data;
+        resolve(signalingID);
       }
     };
     websocket.addEventListener("message", handler);
