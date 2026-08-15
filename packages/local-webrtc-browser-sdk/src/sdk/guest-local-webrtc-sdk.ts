@@ -91,7 +91,6 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   }) {
     const spanId = nanoid();
     const { roomID, armdozerId, pilotId } = options;
-
     try {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
@@ -169,39 +168,39 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       return false;
     }
 
-    const { sdp: hostSDP, iceCandidates: hostIceCandidates } = joinRoomAccepted;
-    const connection =
-      await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
-    await connection.setRemoteDescription(hostSDP);
-    await Promise.all(
-      hostIceCandidates.map((c) => connection.addIceCandidate(c)),
-    );
-    const guestSDP = await connection.createAnswer();
+    // const { sdp: hostSDP, iceCandidates: hostIceCandidates } = joinRoomAccepted;
+    // const connection =
+    //   await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
+    // await connection.setRemoteDescription(hostSDP);
+    // await Promise.all(
+    //   hostIceCandidates.map((c) => connection.addIceCandidate(c)),
+    // );
+    // const guestSDP = await connection.createAnswer();
 
-    await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
-    const [guestIceCandidates] = await Promise.all([
-      // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-      gatherAllIceCandidates(connection),
-      connection.setLocalDescription(guestSDP),
-    ]);
-    await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
+    // await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
+    // const [guestIceCandidates] = await Promise.all([
+    //   // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
+    //   gatherAllIceCandidates(connection),
+    //   connection.setLocalDescription(guestSDP),
+    // ]);
+    // await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
 
-    await this.#frontendLog.log({ type: "SIGNALING_START", spanId });
-    const { reservationID } = joinRoomAccepted;
-    await Promise.all([
-      sendGuestSignal({
-        websocket,
-        roomID,
-        reservationID,
-        sdp: guestSDP,
-        iceCandidates: guestIceCandidates.iceCandidates,
-      }),
-      waitUntilConnected(connection),
-      ...guestIceCandidates.iceCandidateErrors.map((error) =>
-        this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
-      ),
-    ]);
-    await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
+    // await this.#frontendLog.log({ type: "SIGNALING_START", spanId });
+    // const { reservationID } = joinRoomAccepted;
+    // await Promise.all([
+    //   sendGuestSignal({
+    //     websocket,
+    //     roomID,
+    //     reservationID,
+    //     sdp: guestSDP,
+    //     iceCandidates: guestIceCandidates.iceCandidates,
+    //   }),
+    //   waitUntilConnected(connection),
+    //   ...guestIceCandidates.iceCandidateErrors.map((error) =>
+    //     this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
+    //   ),
+    // ]);
+    // await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
     return true;
   }
 }
