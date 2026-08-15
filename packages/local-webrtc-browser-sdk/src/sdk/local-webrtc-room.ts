@@ -11,6 +11,7 @@ import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
+import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -118,10 +119,17 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_START",
         spanId: this.#spanId,
       });
-      // const websocket = await this.#websocketConnection.getOrCreate();
+      const websocket = await this.#websocketConnection.getOrCreate();
+      const signalingID = await waitUntilMatching(websocket);
+      const { connection } =
+        await this.#webRTCConnection.getOrCreateConnection();
+      const sdp = await connection.createOffer();
+      sendToWSSignal(websocket, {
+        action: "send-sdp",
+        signalingID,
+        sdp,
+      });
       // const signal = await waitUntilMatching(websocket);
-      // const { connection } =
-      //   await this.#webRTCConnection.getOrCreateConnection();
       // await connection.setRemoteDescription(signal.sdp);
       // await Promise.all([
       //   ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
