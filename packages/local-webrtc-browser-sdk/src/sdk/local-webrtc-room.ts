@@ -127,10 +127,17 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
+      let isRemoteDescriptionSet = false;
+      const pendingIceCandidates: RTCIceCandidateInit[] = [];
+
       // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
       unSubscribers = [
         notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
-          connection.addIceCandidate(iceCandidate);
+          if (isRemoteDescriptionSet) {
+            connection.addIceCandidate(iceCandidate);
+          } else {
+            pendingIceCandidates.push(iceCandidate);
+          }
         }),
         fromEvent<RTCPeerConnectionIceEvent>(
           connection,
@@ -164,8 +171,12 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         sdp,
       });
       const remoteSDP = await waitUntilSDPReceive(websocket);
+      await connection.setRemoteDescription(remoteSDP);
+      isRemoteDescriptionSet = true;
+      pendingIceCandidates.forEach((iceCandidate) => {
+        connection.addIceCandidate(iceCandidate);
+      });
       await Promise.all([
-        connection.setRemoteDescription(remoteSDP),
         waitUntilConnected(connection),
         waitUntilDataChannelOpen(dataChannel),
       ]);

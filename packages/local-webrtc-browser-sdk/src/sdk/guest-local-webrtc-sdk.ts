@@ -182,10 +182,17 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         this.#webRTCConnection.getOrCreateConnection();
       const connection = await connectionPromise;
 
+      let isRemoteDescriptionSet = false;
+      const pendingIceCandidates: RTCIceCandidateInit[] = [];
+
       // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
       unSubscribers = [
         notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
-          connection.addIceCandidate(iceCandidate);
+          if (isRemoteDescriptionSet) {
+            connection.addIceCandidate(iceCandidate);
+          } else {
+            pendingIceCandidates.push(iceCandidate);
+          }
         }),
         fromEvent<RTCPeerConnectionIceEvent>(
           connection,
@@ -213,6 +220,10 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
 
       const remoteSDP = await waitUntilSDPReceive(websocket);
       await connection.setRemoteDescription(remoteSDP);
+      isRemoteDescriptionSet = true;
+      pendingIceCandidates.forEach((iceCandidate) => {
+        connection.addIceCandidate(iceCandidate);
+      });
       const sdp = await connection.createAnswer();
       await connection.setLocalDescription(sdp);
       sendToWSSignal(websocket, {
@@ -226,6 +237,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         type: "SIGNALING_END",
         spanId,
       });
+
       return true;
     } finally {
       this.#websocketConnection.gracefulDisconnect();
