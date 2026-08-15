@@ -59,7 +59,10 @@ export class HostWebRTCConnectionManager {
       });
       const dataChannel = connection.createDataChannel("sendDataChannel");
       return { connection, dataChannel };
-    })();
+    })().catch((err) => {
+      this.#connection = null;
+      throw err;
+    });
     return this.#connection;
   }
 
