@@ -7,6 +7,7 @@ import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
+import { deleteSignalingChannel } from "../websocket-api/delete-signaling-channel";
 import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
 import { waitUntilMatching } from "../websocket-api/wait-until-matching";
@@ -181,6 +182,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         waitUntilDataChannelOpen(dataChannel),
       ]);
 
+      await deleteSignalingChannel({ websocket, signalingID });
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,
