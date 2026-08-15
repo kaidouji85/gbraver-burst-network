@@ -55,7 +55,10 @@ export class WebSocketConnectionManager {
         fromEvent(websocket, "close").subscribe(this.#websocketError),
       ];
       return { websocket, websocketSubscriptions };
-    })();
+    })().catch((err) => {
+      this.#connection = null;
+      throw err;
+    });
 
     return this.#connection.then((v) => v.websocket);
   }
