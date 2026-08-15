@@ -91,10 +91,13 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   }) {
     const spanId = nanoid();
     const { roomID, armdozerId, pilotId } = options;
+
     try {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
+      // データチャネルのメッセージ受信を取り逃がさないために、
+      // あらかじめイベントを登録しておく
       const requestSelectedPlayerPromise = (async () => {
         const dataChannel =
           await this.#webRTCConnection.getOrCreateConnection()
@@ -108,7 +111,17 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         return await receiveBattleStart(dataChannel);
       })();
 
-      const isSignalingSuccessful = await this.#signaling({ roomID, spanId });
+      const websocket = await this.#websocketConnection.getOrCreate();
+      const joinRoomAccepted = await joinRoom({ websocket, roomID });
+      if (!joinRoomAccepted) {
+        return null;
+      }
+
+      const { signalingID } = joinRoomAccepted;
+      const isSignalingSuccessful = await this.#signaling({
+        signalingID,
+        spanId,
+      });
       if (!isSignalingSuccessful) {
         return null;
       }
@@ -153,20 +166,21 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   /**
    * シグナリングを行う
    * @param options シグナリングのオプション
-   * @param options.roomID ルームID
+   * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
    * @returns シグナリングが完了したらtrue、失敗したらfalse
    */
   async #signaling(options: {
-    roomID: string;
+    signalingID: string;
     spanId: string;
   }): Promise<boolean> {
-    const { roomID, spanId } = options;
-    const websocket = await this.#websocketConnection.getOrCreate();
-    const joinRoomAccepted = await joinRoom({ websocket, roomID });
-    if (!joinRoomAccepted) {
-      return false;
-    }
+    const { signalingID, spanId } = options;
+
+    // const websocket = await this.#websocketConnection.getOrCreate();
+    // const joinRoomAccepted = await joinRoom({ websocket, roomID });
+    // if (!joinRoomAccepted) {
+    //   return false;
+    // }
 
     // const { sdp: hostSDP, iceCandidates: hostIceCandidates } = joinRoomAccepted;
     // const connection =
