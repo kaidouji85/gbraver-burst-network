@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { RTCSessionDescriptionInitSchema } from "../../webrtc/rtc-session-description-init-schema";
 
 /** 相手からSDPを受信した */

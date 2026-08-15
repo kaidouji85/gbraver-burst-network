@@ -1,6 +1,6 @@
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
-import { connectWSSignal } from "../websocket/connect-ws-signal";
+import { connectWSSignal } from "../websocket-api/connect-ws-signal";
 import { AuthTokenManager } from "./auth-token-manager";
 
 /** WebSocketコネクションおよび関連オブジェクト */

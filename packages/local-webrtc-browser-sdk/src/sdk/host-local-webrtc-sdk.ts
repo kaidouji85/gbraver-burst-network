@@ -2,7 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
-import { createRoom } from "../websocket/create-room";
+import { createRoom } from "../websocket-api/create-room";
 import { FrontendLogManager } from "./frontend-log-manager";
 import {
   HostWebRTCConnectionManager,
