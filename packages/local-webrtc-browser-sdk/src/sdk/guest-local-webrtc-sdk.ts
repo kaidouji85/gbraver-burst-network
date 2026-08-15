@@ -221,6 +221,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       ];
 
       await Promise.all([
+        connection.setLocalDescription(sdp),
         connection.setRemoteDescription(remoteSDP),
         waitUntilConnected(connection),
       ]);

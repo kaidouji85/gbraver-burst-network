@@ -164,8 +164,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         sdp,
       });
       const remoteSDP = await waitUntilSDPReceive(websocket);
-      await connection.setRemoteDescription(remoteSDP);
       await Promise.all([
+        connection.setLocalDescription(sdp),
+        connection.setRemoteDescription(remoteSDP),
         waitUntilConnected(connection),
         waitUntilDataChannelOpen(dataChannel),
       ]);
