@@ -182,13 +182,6 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       const { connectionPromise } =
         this.#webRTCConnection.getOrCreateConnection();
       const connection = await connectionPromise;
-      const sdp = await connection.createAnswer();
-      sendToWSSignal(websocket, {
-        action: "send-sdp",
-        signalingID,
-        sdp,
-      });
-      const remoteSDP = await waitUntilSDPReceive(websocket);
 
       // オファー開始直後にイベント発火することがあるので、
       // あらじめイベント購読をする
@@ -220,11 +213,16 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         }),
       ];
 
-      await Promise.all([
-        connection.setLocalDescription(sdp),
-        connection.setRemoteDescription(remoteSDP),
-        waitUntilConnected(connection),
-      ]);
+      const remoteSDP = await waitUntilSDPReceive(websocket);
+      await connection.setRemoteDescription(remoteSDP);
+      const sdp = await connection.createAnswer();
+      await connection.setLocalDescription(sdp);
+      sendToWSSignal(websocket, {
+        action: "send-sdp",
+        signalingID,
+        sdp,
+      });
+      await waitUntilConnected(connection);
 
       await this.#frontendLog.log({
         type: "SIGNALING_END",
