@@ -40,7 +40,7 @@ export const createRoom = (options: {
       }
     };
     websocket.addEventListener("message", handler);
-    sendToWSSignal(websocket, { action: "create-room", sdp, iceCandidates });
+    sendToWSSignal(websocket, { action: "create-room" });
   }).finally(() => {
     if (handler) {
       websocket.removeEventListener("message", handler);
