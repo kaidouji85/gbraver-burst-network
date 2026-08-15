@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { Unsubscribable } from "rxjs";
+import { fromEvent, Unsubscribable } from "rxjs";
 
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
@@ -122,14 +122,29 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_START",
         spanId: this.#spanId,
       });
+
       const websocket = await this.#websocketConnection.getOrCreate();
       const signalingID = await waitUntilMatching(websocket);
       const { connection } =
         await this.#webRTCConnection.getOrCreateConnection();
 
+      // オファー開始直後にイベント発火することがあるので、
+      // あらじめイベント購読をする
       unSubscribers = [
         notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
           connection.addIceCandidate(iceCandidate);
+        }),
+        fromEvent<RTCPeerConnectionIceEvent>(
+          connection,
+          "icecandidate",
+        ).subscribe((event) => {
+          if (event.candidate) {
+            sendToWSSignal(websocket, {
+              action: "send-ice-candidate",
+              signalingID,
+              iceCandidate: event.candidate,
+            });
+          }
         }),
       ];
 
@@ -141,6 +156,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       });
       const remoteSDP = await waitUntilSDPReceive(websocket);
       await connection.setRemoteDescription(remoteSDP);
+
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,
