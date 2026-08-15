@@ -1,5 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
+import { Subscription } from "rxjs";
 
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
@@ -12,6 +13,7 @@ import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
 import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
+import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -114,6 +116,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling() {
+    let iceCandidateReceivedSubscription: Subscription | null = null;
     try {
       await this.#frontendLog.log({
         type: "SIGNALING_START",
@@ -123,6 +126,13 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       const signalingID = await waitUntilMatching(websocket);
       const { connection } =
         await this.#webRTCConnection.getOrCreateConnection();
+
+      iceCandidateReceivedSubscription = notifyIceCandidateReceived(
+        websocket,
+      ).subscribe((iceCandidate) => {
+        connection.addIceCandidate(iceCandidate);
+      });
+
       const sdp = await connection.createOffer();
       sendToWSSignal(websocket, {
         action: "send-sdp",
@@ -136,6 +146,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         spanId: this.#spanId,
       });
     } finally {
+      if (iceCandidateReceivedSubscription) {
+        iceCandidateReceivedSubscription.unsubscribe();
+      }
       this.#websocketConnection.gracefulDisconnect();
     }
   }
