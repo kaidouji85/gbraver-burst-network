@@ -83,8 +83,8 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
-      const connection =
-        await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
+      const { connection } =
+        await this.#webRTCConnection.getOrCreateConnection();
       const sdp = await connection.createOffer();
 
       await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
