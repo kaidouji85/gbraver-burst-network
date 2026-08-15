@@ -115,13 +115,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
     }
 
     const { signalingID } = joinRoomAccepted;
-    const isSignalingSuccessful = await this.#signaling({
-      signalingID,
-      spanId,
-    });
-    if (!isSignalingSuccessful) {
-      return null;
-    }
+    await this.#signaling({ signalingID, spanId });
 
     const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
@@ -162,12 +156,12 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
-   * @returns シグナリングが完了したらtrue、失敗したらfalse
+   * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling(options: {
     signalingID: string;
     spanId: string;
-  }): Promise<boolean> {
+  }): Promise<void> {
     const { signalingID, spanId } = options;
     let unSubscribers: Unsubscribable[] = [];
 
@@ -237,8 +231,6 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         type: "SIGNALING_END",
         spanId,
       });
-
-      return true;
     } finally {
       this.#websocketConnection.gracefulDisconnect();
       unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
