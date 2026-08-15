@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
+import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
@@ -143,6 +144,16 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
               iceCandidate: event.candidate,
             });
           }
+        }),
+        fromEvent<RTCPeerConnectionIceErrorEvent>(
+          connection,
+          "icecandidateerror",
+        ).subscribe((event) => {
+          this.#frontendLog.log({
+            type: "ICE_CANDIDATE_ERROR",
+            spanId: this.#spanId,
+            error: createICECandidateErrorMessage(event),
+          });
         }),
       ];
 
