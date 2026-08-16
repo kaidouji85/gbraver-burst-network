@@ -3,8 +3,10 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
+import { DynamoSignalingChannels } from "./dynamo-db/dynamo-signaling-channels";
 import { parseJSON } from "./json/parse";
 import { createAPIGatewayEndpoint } from "./websocket-api/api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./websocket-api/api-gateway/management";
@@ -17,8 +19,13 @@ const AWS_REGION = process.env.AWS_REGION ?? "";
 const STAGE = process.env.STAGE ?? "";
 /** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
+/** DynamoDB connections テーブル名 */
+const DYNAMODB_CONNECTIONS_TABLE = process.env.DYNAMODB_CONNECTIONS_TABLE ?? "";
 /** DynamoDB rooms テーブル名 */
 const DYNAMODB_ROOMS_TABLE = process.env.DYNAMODB_ROOMS_TABLE ?? "";
+/** DynamoDB signaling-channels テーブル名 */
+const DYNAMODB_SIGNALING_CHANNELS_TABLE =
+  process.env.DYNAMODB_SIGNALING_CHANNELS_TABLE ?? "";
 
 /** API エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
@@ -33,8 +40,18 @@ const notifier = new Notifier(apiGateway);
 
 /** DynamoDB ドキュメントクライアント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** DynamoDB connections DAO */
+const dynamoConnections = new DynamoConnections(
+  dynamoDB,
+  DYNAMODB_CONNECTIONS_TABLE,
+);
 /** DynamoDB rooms DAO */
 const dynamoRooms = new DynamoRooms(dynamoDB, DYNAMODB_ROOMS_TABLE);
+/** DynamoDB signaling-channels DAO */
+const dynamoSignalingChannels = new DynamoSignalingChannels(
+  dynamoDB,
+  DYNAMODB_SIGNALING_CHANNELS_TABLE,
+);
 
 /**
  * ゲストが入室する
@@ -63,7 +80,8 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const updatedRoom = await dynamoRooms.updateToAwaitingGuestSignal(roomID);
+  const updatedRoom =
+    await dynamoRooms.updateToAwaitingSignalingChannelCreated(roomID);
   if (!updatedRoom) {
     await notifier.notifyToClient(guestConnectionId, {
       type: "join-room-rejected",
@@ -71,13 +89,48 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const { reservationID } = updatedRoom;
-  const { sdp, iceCandidates } = updatedRoom.hostSignal;
-  await notifier.notifyToClient(guestConnectionId, {
-    type: "join-room-accepted",
-    reservationID,
-    sdp,
-    iceCandidates,
+  const { hostConnectionId } = updatedRoom;
+  const isSelfJoinAttempt = hostConnectionId === guestConnectionId;
+  if (isSelfJoinAttempt) {
+    await notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-rejected",
+    });
+    return { statusCode: 200, body: "join room rejected" };
+  }
+
+  const signalingChannel = await dynamoSignalingChannels.put({
+    hostConnectionId,
+    guestConnectionId,
   });
+  const { signalingID } = signalingChannel;
+  await Promise.all([
+    notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-accepted",
+      signalingID,
+    }),
+    dynamoConnections.put({
+      connectionId: guestConnectionId,
+      state: {
+        type: "signaling",
+        signalingID,
+        isHost: false,
+      },
+    }),
+
+    notifier.notifyToClient(hostConnectionId, {
+      type: "matching",
+      signalingID,
+    }),
+    dynamoConnections.put({
+      connectionId: hostConnectionId,
+      state: {
+        type: "signaling",
+        signalingID,
+        isHost: true,
+      },
+    }),
+
+    dynamoRooms.delete(roomID),
+  ]);
   return { statusCode: 200, body: "join room success" };
 }

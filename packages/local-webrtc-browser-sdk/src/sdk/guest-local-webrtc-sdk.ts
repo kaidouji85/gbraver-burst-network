@@ -1,14 +1,16 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { Observable } from "rxjs";
+import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
-import { gatherAllIceCandidates } from "../webrtc/gather-all-ice-candidate";
+import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { joinRoom } from "../websocket/join-room";
-import { sendGuestSignal } from "../websocket/send-guest-signal";
+import { joinRoom } from "../websocket-api/join-room";
+import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
+import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
 import { BattleSDK } from "./battle-sdk";
 import { FrontendLogManager } from "./frontend-log-manager";
 import { GuestBattleSDK } from "./guest-battle-sdk";
@@ -91,10 +93,10 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   }) {
     const spanId = nanoid();
     const { roomID, armdozerId, pilotId } = options;
-
     this.#websocketConnection.gracefulDisconnect();
     this.#webRTCConnection.disconnect();
 
+    // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
@@ -106,10 +108,14 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
       return await receiveBattleStart(dataChannel);
     })();
 
-    const isSignalingSuccessful = await this.#signaling({ roomID, spanId });
-    if (!isSignalingSuccessful) {
+    const websocket = await this.#websocketConnection.getOrCreate();
+    const joinRoomAccepted = await joinRoom({ websocket, roomID });
+    if (!joinRoomAccepted) {
       return null;
     }
+
+    const { signalingID } = joinRoomAccepted;
+    await this.#signaling({ signalingID, spanId });
 
     const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
@@ -148,59 +154,86 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   /**
    * シグナリングを行う
    * @param options シグナリングのオプション
-   * @param options.roomID ルームID
+   * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
-   * @returns シグナリングが完了したらtrue、失敗したらfalse
+   * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling(options: {
-    roomID: string;
+    signalingID: string;
     spanId: string;
-  }): Promise<boolean> {
-    const { roomID, spanId } = options;
+  }): Promise<void> {
+    const { signalingID, spanId } = options;
+    let unSubscribers: Unsubscribable[] = [];
+
     try {
+      await this.#frontendLog.log({
+        type: "SIGNALING_START",
+        spanId,
+      });
+
       const websocket = await this.#websocketConnection.getOrCreate();
-      const joinRoomAccepted = await joinRoom({ websocket, roomID });
-      if (!joinRoomAccepted) {
-        return false;
-      }
+      const { connectionPromise } =
+        this.#webRTCConnection.getOrCreateConnection();
+      const connection = await connectionPromise;
 
-      const { sdp: hostSDP, iceCandidates: hostIceCandidates } =
-        joinRoomAccepted;
-      const connection =
-        await this.#webRTCConnection.getOrCreateConnection().connectionPromise;
-      await connection.setRemoteDescription(hostSDP);
-      await Promise.all(
-        hostIceCandidates.map((c) => connection.addIceCandidate(c)),
-      );
-      const guestSDP = await connection.createAnswer();
+      let isRemoteDescriptionSet = false;
+      const pendingIceCandidates: RTCIceCandidateInit[] = [];
 
-      await this.#frontendLog.log({ type: "ICE_CANDIDATE_START", spanId });
-      const [guestIceCandidates] = await Promise.all([
-        // icecandidateイベントはsetLocalDescriptionの後に発生するため、先に待機しておく
-        gatherAllIceCandidates(connection),
-        connection.setLocalDescription(guestSDP),
-      ]);
-      await this.#frontendLog.log({ type: "ICE_CANDIDATE_END", spanId });
-
-      await this.#frontendLog.log({ type: "SIGNALING_START", spanId });
-      const { reservationID } = joinRoomAccepted;
-      await Promise.all([
-        sendGuestSignal({
-          websocket,
-          roomID,
-          reservationID,
-          sdp: guestSDP,
-          iceCandidates: guestIceCandidates.iceCandidates,
+      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
+      unSubscribers = [
+        notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
+          if (isRemoteDescriptionSet) {
+            connection.addIceCandidate(iceCandidate);
+          } else {
+            pendingIceCandidates.push(iceCandidate);
+          }
         }),
-        waitUntilConnected(connection),
-        ...guestIceCandidates.iceCandidateErrors.map((error) =>
-          this.#frontendLog.log({ type: "ICE_CANDIDATE_ERROR", spanId, error }),
-        ),
-      ]);
-      await this.#frontendLog.log({ type: "SIGNALING_END", spanId });
-      return true;
+        fromEvent<RTCPeerConnectionIceEvent>(
+          connection,
+          "icecandidate",
+        ).subscribe((event) => {
+          if (event.candidate) {
+            sendToWSSignal(websocket, {
+              action: "send-ice-candidate",
+              signalingID,
+              iceCandidate: event.candidate,
+            });
+          }
+        }),
+        fromEvent<RTCPeerConnectionIceErrorEvent>(
+          connection,
+          "icecandidateerror",
+        ).subscribe((event) => {
+          this.#frontendLog.log({
+            type: "ICE_CANDIDATE_ERROR",
+            spanId,
+            error: createICECandidateErrorMessage(event),
+          });
+        }),
+      ];
+
+      const remoteSDP = await waitUntilSDPReceive(websocket);
+      await connection.setRemoteDescription(remoteSDP);
+      isRemoteDescriptionSet = true;
+      pendingIceCandidates.forEach((iceCandidate) => {
+        connection.addIceCandidate(iceCandidate);
+      });
+      const sdp = await connection.createAnswer();
+      await connection.setLocalDescription(sdp);
+      sendToWSSignal(websocket, {
+        action: "send-sdp",
+        signalingID,
+        sdp,
+      });
+      await waitUntilConnected(connection);
+
+      await this.#frontendLog.log({
+        type: "SIGNALING_END",
+        spanId,
+      });
     } finally {
       this.#websocketConnection.gracefulDisconnect();
+      unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
     }
   }
 }

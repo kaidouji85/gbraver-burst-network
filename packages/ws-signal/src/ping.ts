@@ -35,7 +35,7 @@ export async function ping(
   event: APIGatewayProxyWebsocketEventV2,
 ): Promise<APIGatewayProxyResultV2> {
   const data: Pong = {
-    action: "pong",
+    type: "pong",
     message: "welcome to gbraver burst signal server",
   };
   await notifier.notifyToClient(event.requestContext.connectionId, data);

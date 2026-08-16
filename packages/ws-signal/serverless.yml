@@ -5,6 +5,7 @@ custom:
   connections: ${self:service}__${sls:stage}__connections
   rooms: ${self:service}__${sls:stage}__rooms
   authTokens: ${self:service}__${sls:stage}__auth-tokens
+  signalingChannels: ${self:service}__${sls:stage}__signaling-channels
 
 provider:
   name: aws
@@ -44,6 +45,7 @@ provider:
     DYNAMODB_CONNECTIONS_TABLE: ${self:custom.connections}
     DYNAMODB_ROOMS_TABLE: ${self:custom.rooms}
     DYNAMODB_AUTH_TOKENS_TABLE: ${self:custom.authTokens}
+    DYNAMODB_SIGNALING_CHANNELS_TABLE: ${self:custom.signalingChannels}
   iam:
     role:
       statements:
@@ -70,6 +72,7 @@ provider:
             - Fn::GetAtt: [ConnectionsTable, Arn]
             - Fn::GetAtt: [RoomsTable, Arn]
             - Fn::GetAtt: [AuthTokensTable, Arn]
+            - Fn::GetAtt: [SignalingChannelsTable, Arn]
         - Effect: Allow
           Action:
             - "secretsmanager:GetSecretValue"
@@ -139,11 +142,21 @@ functions:
     events:
       - websocket:
           route: join-room
-  sendGuestSignal:
-    handler: src/send-guest-signal.sendGuestSignal
+  sendSDP:
+    handler: src/send-sdp.sendSDP
     events:
       - websocket:
-          route: send-guest-signal
+          route: send-sdp
+  sendICECandidate:
+    handler: src/send-ice-candidate.sendICECandidate
+    events:
+      - websocket:
+          route: send-ice-candidate
+  deleteSignalingChannel:
+    handler: src/delete-signaling-channel.deleteSignalingChannel
+    events:
+      - websocket:
+          route: delete-signaling-channel
 
   # HTTP API
   issueAuthToken:
@@ -204,6 +217,20 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: tokenHash
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST
+    SignalingChannelsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.signalingChannels}
+        AttributeDefinitions:
+          - AttributeName: signalingID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: signalingID
             KeyType: HASH
         TimeToLiveSpecification:
           AttributeName: expiresAt

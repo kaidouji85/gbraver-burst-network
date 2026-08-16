@@ -1,11 +1,17 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
+import { fromEvent, Unsubscribable } from "rxjs";
 
+import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
-import { waitUntilMatching } from "../websocket/wait-until-matching";
+import { deleteSignalingChannel } from "../websocket-api/delete-signaling-channel";
+import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
+import { waitUntilMatching } from "../websocket-api/wait-until-matching";
+import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
 import { BattleSDK } from "./battle-sdk";
 import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
@@ -82,12 +88,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<BattleSDK> {
+    await this.#signaling();
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
-    await Promise.all([
-      this.#signaling(),
-      waitUntilDataChannelOpen(dataChannel),
-    ]);
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       await requestSelectedPlayer(dataChannel, flowID);
@@ -113,25 +116,79 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling() {
+    let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({
         type: "SIGNALING_START",
         spanId: this.#spanId,
       });
+
       const websocket = await this.#websocketConnection.getOrCreate();
-      const signal = await waitUntilMatching(websocket);
-      const { connection } =
+      const signalingID = await waitUntilMatching(websocket);
+      const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
-      await connection.setRemoteDescription(signal.sdp);
+
+      let isRemoteDescriptionSet = false;
+      const pendingIceCandidates: RTCIceCandidateInit[] = [];
+
+      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
+      unSubscribers = [
+        notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
+          if (isRemoteDescriptionSet) {
+            connection.addIceCandidate(iceCandidate);
+          } else {
+            pendingIceCandidates.push(iceCandidate);
+          }
+        }),
+        fromEvent<RTCPeerConnectionIceEvent>(
+          connection,
+          "icecandidate",
+        ).subscribe((event) => {
+          if (event.candidate) {
+            sendToWSSignal(websocket, {
+              action: "send-ice-candidate",
+              signalingID,
+              iceCandidate: event.candidate,
+            });
+          }
+        }),
+        fromEvent<RTCPeerConnectionIceErrorEvent>(
+          connection,
+          "icecandidateerror",
+        ).subscribe((event) => {
+          this.#frontendLog.log({
+            type: "ICE_CANDIDATE_ERROR",
+            spanId: this.#spanId,
+            error: createICECandidateErrorMessage(event),
+          });
+        }),
+      ];
+
+      const sdp = await connection.createOffer();
+      await connection.setLocalDescription(sdp);
+      sendToWSSignal(websocket, {
+        action: "send-sdp",
+        signalingID,
+        sdp,
+      });
+      const remoteSDP = await waitUntilSDPReceive(websocket);
+      await connection.setRemoteDescription(remoteSDP);
+      isRemoteDescriptionSet = true;
+      pendingIceCandidates.forEach((iceCandidate) => {
+        connection.addIceCandidate(iceCandidate);
+      });
       await Promise.all([
-        ...signal.iceCandidates.map((c) => connection.addIceCandidate(c)),
+        waitUntilConnected(connection),
+        waitUntilDataChannelOpen(dataChannel),
       ]);
-      await waitUntilConnected(connection);
+
+      await deleteSignalingChannel({ websocket, signalingID });
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,
       });
     } finally {
+      unSubscribers.forEach((u) => u.unsubscribe());
       this.#websocketConnection.gracefulDisconnect();
     }
   }

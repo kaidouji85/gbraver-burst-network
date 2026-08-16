@@ -1,11 +1,15 @@
-import { Error } from "./error";
+import { AbortSignaling } from "./abort-signaling";
+import { DeleteSignalingChannelAccepted } from "./delete-signaling-channel-accepted";
+import { DeleteSignalingChannelRejected } from "./delete-signaling-channel-rejected";
 import { JoinRoomAccepted } from "./join-room-accepted";
 import { JoinRoomRejected } from "./join-room-rejected";
 import { Matching } from "./matching";
 import { Pong } from "./pong";
+import { ReceiveICECandidate } from "./receive-ice-candidate";
+import { ReceiveRemoteSDP } from "./receive-remote-sdp";
 import { RoomCreationResult } from "./room-creation-result";
-import { SendGuestSignalAccepted } from "./send-guest-signal-accepted";
-import { SendGuestSignalRejected } from "./send-guest-signal-rejected";
+import { SendICECandidateRejected } from "./send-ice-candidate-rejected";
+import { SendSDPRejected } from "./send-sdp-rejected";
 
 /** websocketがクライアントに返すデータ */
 export type WebsocketResponse =
@@ -13,7 +17,11 @@ export type WebsocketResponse =
   | RoomCreationResult
   | JoinRoomAccepted
   | JoinRoomRejected
-  | SendGuestSignalAccepted
-  | SendGuestSignalRejected
   | Matching
-  | Error;
+  | ReceiveRemoteSDP
+  | SendSDPRejected
+  | ReceiveICECandidate
+  | SendICECandidateRejected
+  | DeleteSignalingChannelAccepted
+  | DeleteSignalingChannelRejected
+  | AbortSignaling;
