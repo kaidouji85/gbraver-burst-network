@@ -11,7 +11,7 @@ export const waitUntilSDPReceive = (
   websocket: WebSocket,
 ): Promise<RTCSessionDescriptionInit> => {
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<RTCSessionDescriptionInit>((resolve) => {
+  return new Promise<RTCSessionDescriptionInit>((resolve, reject) => {
     handler = (event) => {
       const parsedData = parseJSON(event.data);
       const remoteSDP = ReceiveRemoteSDPSchema.safeParse(parsedData);
@@ -21,7 +21,7 @@ export const waitUntilSDPReceive = (
 
       const sendSDPRejected = SendSDPRejectedSchema.safeParse(parsedData);
       if (sendSDPRejected.success) {
-        throw new Error("send sdp rejected");
+        reject(new Error("send sdp rejected"));
       }
     };
     websocket.addEventListener("message", handler);
