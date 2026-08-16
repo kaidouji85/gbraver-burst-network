@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-app
 
+## 1.28.0
+
+### Minor Changes
+
+- 222404b: あいことば対戦をTricle ICEに対応させた
+- あいことば対戦をTrickle ICEに対応させた
+
+## 1.28.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦をTricle ICEに対応させた
+
 ## 1.27.0
 
 ### Minor Changes
