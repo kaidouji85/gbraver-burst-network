@@ -17,6 +17,7 @@ import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
+import { getSelectedLocalIceCandidateSummary } from "../webrtc/get-selected-local-ice-candidate-summary";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -187,6 +188,13 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_END",
         spanId: this.#spanId,
       });
+
+      const selectedLocalIceCandidateSummary =
+        await getSelectedLocalIceCandidateSummary(connection);
+      console.log(
+        "selectedLocalIceCandidateSummary",
+        selectedLocalIceCandidateSummary,
+      );
     } finally {
       unSubscribers.forEach((u) => u.unsubscribe());
       this.#websocketConnection.gracefulDisconnect();
