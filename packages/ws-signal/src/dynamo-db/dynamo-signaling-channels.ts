@@ -5,6 +5,7 @@ import {
   SignalingChannel,
   SignalingChannelSchema,
 } from "../core/signaling-channel";
+import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /**
  * DynamoDBスキーマ signaling-channel
@@ -65,10 +66,45 @@ export class DynamoSignalingChannels {
 
   /**
    * 指定したシグナリングチャネルを削除する
+   * ホストのみが削除できるように、引数のコネクションIDがホストのコネクションIDが一致した場合に削除する
+   * @param options オプション
+   * @param options.signalingID シグナリングID
+   * @param options.connectionId 実行者のコネクションID
+   * @returns 削除対象が存在した場合は削除されたアイテム、存在しない場合はnull
+   */
+  async delete(options: {
+    signalingID: string;
+    connectionId: string;
+  }): Promise<DynamoSignalingChannel | null> {
+    const { signalingID, connectionId } = options;
+    try {
+      const result = await this.#dynamoDB.delete({
+        TableName: this.#tableName,
+        Key: { signalingID },
+        ConditionExpression: "hostConnectionId = :connectionId",
+        ExpressionAttributeValues: {
+          ":connectionId": connectionId,
+        },
+        ReturnValues: "ALL_OLD",
+      });
+      const parsed = DynamoSignalingChannelSchema.safeParse(result.Attributes);
+      return parsed.success ? parsed.data : null;
+    } catch (error) {
+      if (!isConditionalCheckFailedException(error)) {
+        throw error;
+      }
+      return null;
+    }
+  }
+
+  /**
+   * 指定したシグナリングチャネルを強制削除する
    * @param signalingID シグナリングID
    * @returns 削除対象が存在した場合は削除されたアイテム、存在しない場合はnull
    */
-  async delete(signalingID: string): Promise<DynamoSignalingChannel | null> {
+  async forceDelete(
+    signalingID: string,
+  ): Promise<DynamoSignalingChannel | null> {
     const result = await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: { signalingID },

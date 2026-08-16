@@ -62,7 +62,7 @@ const dynamoSignalingChannels = new DynamoSignalingChannels(
 const onSignaling = async (connectionId: string, signaling: Signaling) => {
   const { signalingID } = signaling;
   const deletedSignalingChannel =
-    await dynamoSignalingChannels.delete(signalingID);
+    await dynamoSignalingChannels.forceDelete(signalingID);
   if (!deletedSignalingChannel) {
     return;
   }

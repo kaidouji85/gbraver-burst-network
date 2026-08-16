@@ -69,7 +69,10 @@ export const deleteSignalingChannel = async (
   }
 
   const { signalingID } = deleteSignalingChannelRequest.data;
-  const deletedChannel = await dynamoSignalingChannels.delete(signalingID);
+  const deletedChannel = await dynamoSignalingChannels.delete({
+    signalingID,
+    connectionId,
+  });
   if (!deletedChannel) {
     await notifier.notifyToClient(connectionId, {
       type: "delete-signaling-channel-rejected",
