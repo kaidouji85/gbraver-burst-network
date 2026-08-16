@@ -5,7 +5,7 @@ import { JoinRoomAccepted } from "./join-room-accepted";
 import { JoinRoomRejected } from "./join-room-rejected";
 import { Matching } from "./matching";
 import { Pong } from "./pong";
-import { ReceiveICECandidate } from "./receive--ice-candidate";
+import { ReceiveICECandidate } from "./receive-ice-candidate";
 import { ReceiveRemoteSDP } from "./receive-remote-sdp";
 import { RoomCreationResult } from "./room-creation-result";
 import { SendICECandidateRejected } from "./send-ice-candidate-rejected";
