@@ -90,13 +90,13 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 -> サーバからルームIDが返されるので、ゲストに伝える
 -> ゲストとマッチングしたらシグナリングIDが返される（以降はこれを使用する）
 
-{"action":"send-sdp","sdp":{"type":"offer","sdp":"DUMMY_HOST_SDP"},"signalingID":"<ゲストから返されたシグナリングID>"}
+{"action":"send-sdp","sdp":{"type":"offer","sdp":"DUMMY_HOST_SDP"},"signalingID":"<シグナリングID>"}
 -> ゲストにSDPが送信される
 
-{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:1 1 UDP 2122260223 192.0.2.1 54321 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_HOST_ICE"},"signalingID":"<ゲストから返されたシグナリングID>"}
+{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:1 1 UDP 2122260223 192.0.2.1 54321 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_HOST_ICE"},"signalingID":"<シグナリングID>"}
 -> ゲストにホスト側のICE Candidateが送信される
 
-{"action":"delete-signaling-channel","signalingID":"<ゲストから返されたシグナリングID>"}
+{"action":"delete-signaling-channel","signalingID":"<シグナリングID>"}
 -> シグナリングチャネル破棄
 -> 以降はSDP、ICE Candidateの送受信はできなくなる
 ```
@@ -118,9 +118,9 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 {"action":"join-room","roomID":"<ホストから伝えられたルームID>"}
 -> マッチングしたらシグナリングIDが返される（以降はこれを使用する）
 
-{"action":"send-sdp","sdp":{"type":"answer","sdp":"DUMMY_GUEST_SDP"},"signalingID":"<ホストから返されたシグナリングID>"}
+{"action":"send-sdp","sdp":{"type":"answer","sdp":"DUMMY_GUEST_SDP"},"signalingID":"<シグナリングID>"}
 -> ホストにSDPが送信される
 
-{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:2 1 UDP 2122260222 192.0.2.2 54322 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_GUEST_ICE"},"signalingID":"<ホストから返されたシグナリングID>"}
+{"action":"send-ice-candidate","iceCandidate":{"candidate":"candidate:2 1 UDP 2122260222 192.0.2.2 54322 typ host","sdpMid":"0","sdpMLineIndex":0,"usernameFragment":"DUMMY_GUEST_ICE"},"signalingID":"<シグナリングID>"}
 -> ホストにゲスト側のICE Candidateが送信される
 ```
