@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.28.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦をTricle ICEに対応させた
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.28.0-beta.0
+
 ## 1.27.0
 
 ### Minor Changes
