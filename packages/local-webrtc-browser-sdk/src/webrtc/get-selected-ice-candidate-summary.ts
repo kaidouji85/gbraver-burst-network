@@ -3,7 +3,7 @@
  * @param connection WebRTCコネクション
  * @returns 経路として選択されたローカル ICE Candidate の概要文字列、存在しない場合は null
  */
-export const getSelectedLocalIceCandidateSummary = async (
+export const getSelectedIceCandidateSummary = async (
   connection: RTCPeerConnection,
 ) => {
   const stats = await connection.getStats();

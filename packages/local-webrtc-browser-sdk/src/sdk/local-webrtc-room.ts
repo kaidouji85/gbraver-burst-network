@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
 import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
-import { getSelectedLocalIceCandidateSummary } from "../webrtc/get-selected-local-ice-candidate-summary";
+import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
@@ -190,7 +190,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       });
 
       const selectedLocalIceCandidateSummary =
-        await getSelectedLocalIceCandidateSummary(connection);
+        await getSelectedIceCandidateSummary(connection);
       console.log(
         "selectedLocalIceCandidateSummary",
         selectedLocalIceCandidateSummary,
