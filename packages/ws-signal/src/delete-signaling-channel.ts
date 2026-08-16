@@ -65,7 +65,7 @@ export const deleteSignalingChannel = async (
     await notifier.notifyToClient(connectionId, {
       type: "delete-signaling-channel-rejected",
     });
-    return { statusCode: 400, body: "invalid request" };
+    return { statusCode: 200, body: "invalid request" };
   }
 
   const { signalingID } = deleteSignalingChannelRequest.data;
@@ -74,7 +74,7 @@ export const deleteSignalingChannel = async (
     await notifier.notifyToClient(connectionId, {
       type: "delete-signaling-channel-rejected",
     });
-    return { statusCode: 404, body: "signaling channel not found." };
+    return { statusCode: 200, body: "signaling channel not found." };
   }
 
   await Promise.all([

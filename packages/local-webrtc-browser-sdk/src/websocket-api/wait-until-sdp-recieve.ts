@@ -1,5 +1,5 @@
 import { parseJSON } from "../json/parse";
-import { ReceiveRemoteSDPSchema } from "./response/recieve-remote-sdp";
+import { ReceiveRemoteSDPSchema } from "./response/receive-remote-sdp";
 import { SendSDPRejectedSchema } from "./response/send-sdp-rejected";
 
 /**

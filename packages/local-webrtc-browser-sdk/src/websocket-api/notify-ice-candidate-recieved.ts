@@ -1,7 +1,7 @@
 import { filter, fromEvent, map, Observable } from "rxjs";
 
 import { parseJSON } from "../json/parse";
-import { ReceiveICECandidateSchema } from "./response/recieve-ice-candidate";
+import { ReceiveICECandidateSchema } from "./response/receive-ice-candidate";
 
 /**
  * ICE candidate を受信したことを通知する
