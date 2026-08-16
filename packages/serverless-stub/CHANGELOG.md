@@ -1,5 +1,18 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.28.0
+
+### Minor Changes
+
+- 222404b: あいことば対戦をTricle ICEに対応させた
+- あいことば対戦をTrickle ICEに対応させた
+
+### Patch Changes
+
+- Updated dependencies [222404b]
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@1.28.0
+
 ## 1.28.0-beta.0
 
 ### Minor Changes
