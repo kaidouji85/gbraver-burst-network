@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
 import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
+import { getSelectedLocalIceCandidateSummary } from "../webrtc/get-selected-local-ice-candidate-summary";
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
@@ -17,7 +18,6 @@ import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
-import { getSelectedLocalIceCandidateSummary } from "../webrtc/get-selected-local-ice-candidate-summary";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {

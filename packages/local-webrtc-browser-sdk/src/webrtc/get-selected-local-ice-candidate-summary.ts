@@ -15,6 +15,13 @@ export const getSelectedLocalIceCandidateSummary = async (
     return null;
   }
 
-  const { localCandidate: local } = candidatePair;
-  return `${local?.candidateType} ${local?.protocol} ${local?.relayProtocol}`;
+  const local = stats.get(candidatePair.localCandidateId);
+  if (!local) {
+    return null;
+  }
+
+  const candidateType = local.candidateType ?? "no-candidate-type";
+  const protocol = local.protocol ?? "no-protocol";
+  const relayProtocol = local.relayProtocol ?? "";
+  return `${candidateType} ${protocol} ${relayProtocol}`;
 };
