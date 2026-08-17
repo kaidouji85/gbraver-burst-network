@@ -8,7 +8,7 @@
     "email": "kaidouji85@gmail.com"
   },
   "dependencies": {
-    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.28.0",
+    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.29.0-beta.0",
     "dotenv": "^17.4.2",
     "gbraver-burst-core": "^1.45.0"
   },
