@@ -22,6 +22,8 @@ export const getSelectedIceCandidateSummary = async (
 
   const candidateType = local.candidateType ?? "no-candidate-type";
   const protocol = local.protocol ?? "no-protocol";
-  const relayProtocol = local.relayProtocol ?? "";
-  return `${candidateType} ${protocol} ${relayProtocol}`;
+  const relayProtocol = local.relayProtocol ?? null;
+  return [candidateType, protocol, relayProtocol]
+    .filter((v) => v !== null)
+    .join(" ");
 };
