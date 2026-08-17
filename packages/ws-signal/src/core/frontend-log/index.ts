@@ -4,7 +4,10 @@ import {
   ICECandidateError,
   ICECandidateErrorSchema,
 } from "./ice-candidate-error";
-import { SelectedIceCandidateSummary } from "./selected-ice-candidate-summary";
+import {
+  SelectedIceCandidateSummary,
+  SelectedIceCandidateSummarySchema,
+} from "./selected-ice-candidate-summary";
 import {
   SignalingEnd,
   SignalingEndSchema,
@@ -21,6 +24,7 @@ export type FrontendLog =
 
 /** FrontendLog zodスキーマ */
 export const FrontendLogSchema = z.union([
+  SelectedIceCandidateSummarySchema,
   ICECandidateErrorSchema,
   SignalingStartSchema,
   SignalingEndSchema,
