@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
 import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
@@ -231,6 +232,16 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
         type: "SIGNALING_END",
         spanId,
       });
+
+      const selectedLocalIceCandidateSummary =
+        await getSelectedIceCandidateSummary(connection);
+      if (selectedLocalIceCandidateSummary !== null) {
+        await this.#frontendLog.log({
+          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
+          spanId,
+          summary: selectedLocalIceCandidateSummary,
+        });
+      }
     } finally {
       this.#websocketConnection.gracefulDisconnect();
       unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());

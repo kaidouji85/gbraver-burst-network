@@ -1,6 +1,8 @@
 /** 選択されたICE Candidateの概要 */
 export type SelectedIceCandidateSummary = {
   type: "SELECTED_ICE_CANDIDATE_SUMMARY";
+  /** スパンID */
+  spanId: string;
   /** ICE Candidate概要 */
   summary: string;
 };

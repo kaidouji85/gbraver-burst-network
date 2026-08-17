@@ -188,13 +188,15 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_END",
         spanId: this.#spanId,
       });
-
       const selectedLocalIceCandidateSummary =
         await getSelectedIceCandidateSummary(connection);
-      console.log(
-        "selectedLocalIceCandidateSummary",
-        selectedLocalIceCandidateSummary,
-      );
+      if (selectedLocalIceCandidateSummary !== null) {
+        await this.#frontendLog.log({
+          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
+          spanId: this.#spanId,
+          summary: selectedLocalIceCandidateSummary,
+        });
+      }
     } finally {
       unSubscribers.forEach((u) => u.unsubscribe());
       this.#websocketConnection.gracefulDisconnect();
