@@ -17,6 +17,5 @@ export type SelectedIceCandidateSummary = SpanIdContainer & {
 /** SelectedIceCandidateSummary zodスキーマ */
 export const SelectedIceCandidateSummarySchema = SpanIdContainerSchema.extend({
   type: z.literal("SELECTED_ICE_CANDIDATE_SUMMARY"),
-  spanId: z.string(),
   summary: z.string().max(MAX_SUMMARY_LENGTH),
 });
