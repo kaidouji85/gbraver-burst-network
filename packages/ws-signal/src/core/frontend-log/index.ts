@@ -1,15 +1,13 @@
 import { z } from "zod";
 
 import {
-  ICECandidateEnd,
-  ICECandidateEndSchema,
-  ICECandidateStart,
-  ICECandidateStartSchema,
-} from "./ice-candidate";
-import {
   ICECandidateError,
   ICECandidateErrorSchema,
 } from "./ice-candidate-error";
+import {
+  SelectedIceCandidateSummary,
+  SelectedIceCandidateSummarySchema,
+} from "./selected-ice-candidate-summary";
 import {
   SignalingEnd,
   SignalingEndSchema,
@@ -19,16 +17,14 @@ import {
 
 /** フロントエンドログ */
 export type FrontendLog =
-  | ICECandidateStart
-  | ICECandidateEnd
+  | SelectedIceCandidateSummary
   | ICECandidateError
   | SignalingStart
   | SignalingEnd;
 
 /** FrontendLog zodスキーマ */
 export const FrontendLogSchema = z.union([
-  ICECandidateStartSchema,
-  ICECandidateEndSchema,
+  SelectedIceCandidateSummarySchema,
   ICECandidateErrorSchema,
   SignalingStartSchema,
   SignalingEndSchema,

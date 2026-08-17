@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
 import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
 import { sendHostMessage } from "../webrtc/host/host-message";
 import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../webrtc/wait-until-connected";
@@ -187,6 +188,15 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         type: "SIGNALING_END",
         spanId: this.#spanId,
       });
+      const selectedLocalIceCandidateSummary =
+        await getSelectedIceCandidateSummary(connection);
+      if (selectedLocalIceCandidateSummary !== null) {
+        await this.#frontendLog.log({
+          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
+          spanId: this.#spanId,
+          summary: selectedLocalIceCandidateSummary,
+        });
+      }
     } finally {
       unSubscribers.forEach((u) => u.unsubscribe());
       this.#websocketConnection.gracefulDisconnect();
