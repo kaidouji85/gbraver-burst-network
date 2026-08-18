@@ -1,5 +1,12 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 1.29.0
+
+### Minor Changes
+
+- WebRTCで選択された経路をログに記載するようにした
+- 6638b7c: WebRTCで選択された経路をログに記載するようにした
+
 ## 1.29.0-beta.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.29.0
+
+### Minor Changes
+
+- WebRTCで選択された経路をログに記載するようにした
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [6638b7c]
+  - @gbraver-burst-network/browser-sdk@1.29.0
+
 ## 1.28.0
 
 ### Minor Changes

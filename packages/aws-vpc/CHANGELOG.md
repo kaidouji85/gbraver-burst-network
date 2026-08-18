@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.29.0
+
+### Minor Changes
+
+- WebRTCで選択された経路をログに記載するようにした
+
 ## 1.28.0
 
 ### Minor Changes
