@@ -264,7 +264,7 @@ NEW_COTURN_SHARED_SECRET=<強力な共通シークレット>
 sudo sed -i "s|^static-auth-secret=.*|static-auth-secret=${NEW_COTURN_SHARED_SECRET}|" /etc/turnserver.conf
 
 # 正しくシークレットが更新されたかを確認
-grep '^static-auth-secret=' /etc/turnserver.conf
+sudo grep '^static-auth-secret=' /etc/turnserver.conf
 ```
 
 ### 2. ソフトウェアのアップグレード
