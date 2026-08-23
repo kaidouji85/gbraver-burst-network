@@ -2,6 +2,10 @@
 
 本書では本番環境の構築手順を記載する。
 
+## 事前準備
+
+- serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する。
+
 ## AWS Parameter Store
 
 AWS Parameter Storeに以下の値をセットする。

@@ -168,6 +168,10 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 
 [ローカル環境マニュアル](./docs/local-env.md)を参照。
 
+## 本番環境について
+
+[本番環境マニュアル](./docs/prod-env.md)を参照。
+
 ## AWS CodeBuild CD環境構築方法
 
 ### 事前作業
