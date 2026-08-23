@@ -162,7 +162,7 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 ### 8. coturnサーバーの構築
 
 以下手順書にしたがってcoturnサーバーを構築する。  
-[coturnマニュアル（さくらのVPS / Debian）/ セットアップ](./docs/coturn-manual.md)
+[coturnマニュアル（さくらのVPS / Debian）/ セットアップ](./docs/coturn.md)
 
 ## ローカル環境について
 
