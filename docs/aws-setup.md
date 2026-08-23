@@ -85,7 +85,3 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 
 - バックエンドCloudFront用のドメイン名: backend.example.com
 - ACM証明書: \*.backend.example.com
-
-## 8. CloudFrontのデプロイ
-
-[ここ](../packages/cloudfront/Readme.md#各種手順)を参考に、CloudFrontをデプロイする。
