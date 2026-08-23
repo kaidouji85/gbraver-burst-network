@@ -78,7 +78,10 @@ npm run build
 ## 5. スタブによる動作確認
 
 本リポジトリにはブラウザ用SDKが含まれているので、スタブによりE2Eの動作確認が可能である。
-詳細は[ここ](../packages/serverless-stub/Readme.md)を参
+詳細は以下のドキュメントを参照。
+
+- [通常バックエンドのスタブ](../packages/serverless-stub/Readme.md)
+- [匿名バックエンドのスタブ](../packages/local-webrtc-stub/Readme.md)
 
 ## 6. 環境削除
 
