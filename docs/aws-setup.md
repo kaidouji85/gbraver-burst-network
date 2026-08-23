@@ -4,7 +4,7 @@
 
 ## 1. VPC作成
 
-[ここ](./packages/aws-vpc/README.md#deploy-command)を参考に、VPCを作成する。
+[ここ](../packages/aws-vpc/README.md#deploy-command)を参考に、VPCを作成する。
 
 ## 2. マッチメイク用ECRリポジトリ作成
 

@@ -36,7 +36,7 @@ npm run build
 | COTURN_SHARED_SECRET           | coturnサーバーで使用する共有秘密鍵を保存したAWS Secrets Managerのシークレット名                                                                              |
 | COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                                                    |
 | COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                                                      |
-| MATCH_MAKE_ECR_REPOSITORY_NAME | [2. マッチメイク用ECRリポジトリ作成](#2-マッチメイク用ecrリポジトリ作成)で作成したマッチメイク用ECRのリポジトリ名                                            |
+| MATCH_MAKE_ECR_REPOSITORY_NAME | マッチメイク用ECRのリポジトリ名                                                                                                                              |
 | DOCKER_IMAGE_TAG               | デプロイするDockerイメージのタグ、gitのコミットタグをセットする想定                                                                                          |
 | DOCKER_USER                    | Docker Hubのユーザ名                                                                                                                                         |
 | DOCKER_TOKEN                   | Docker Hubのアクセストークン、詳細は[ここ](https://docs.docker.com/docker-hub/access-tokens/)を参照                                                          |
