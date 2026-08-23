@@ -88,4 +88,4 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 
 ## 8. CloudFrontのデプロイ
 
-[ここ](../packages/cloudfront/README.md#各種手順)を参考に、CloudFrontをデプロイする。
+[ここ](../packages/cloudfront/Readme.md#各種手順)を参考に、CloudFrontをデプロイする。
