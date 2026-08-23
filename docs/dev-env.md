@@ -77,15 +77,16 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 
 ## 環境構築　手順
 
-#### 環境新規作成
+### 環境新規作成
 
 以下の順番でCodeBuildを実行する。
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 2. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
 3. CodeBuildで「バックエンドCloudFrontのデプロイ」を実行
+4. Route53、AWS Certificate Managerを用いてCloudFrontのドメイン名、SSL証明書を設定する
 
-#### ブルーグリーンデプロイ
+### ブルーグリーンデプロイ
 
 - 0. 事前準備
   - 0.1. Parameter Storeの「/GbraverBurst/dev/stage」の「旧ステージ」をメモする
