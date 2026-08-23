@@ -3,7 +3,7 @@
 本リポジトリは、Gブレイバーバーストのネットワーク関連モジュールである。
 リポジトリは[npm workspace](https://docs.npmjs.com/cli/v7/using-npm/workspaces)、[turborepo](https://turbo.build/repo/docs/handbook)
 を用いたモノレポ構造となっている。
-特に断りがない限り、本書のコマンド例のカレントディレクトリは`本リポジトリをcloneした場所の直下`であるとする。
+とくに断りがない限り、本書のコマンド例のカレントディレクトリは`本リポジトリをcloneした場所の直下`であるとする。
 
 ## リポジトリ構成
 
@@ -74,7 +74,7 @@ graph BT;
 - [Docker Hub](https://hub.docker.com/)
 - [serverless dashboard](https://www.serverless.com/dashboard)
 
-## 事前作業
+## セットアップ
 
 本セクションではすべての環境で必要な事前作業を述べる。
 
@@ -175,7 +175,7 @@ ACM証明書はバックエンドCloudFront用のドメイン名のワイルド�
 ### 2. モノレポの依存パッケージ解決
 
 ```shell
-pm ci
+npm ci
 npm run build
 ```
 
