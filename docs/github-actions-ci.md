@@ -36,5 +36,5 @@ ActionsのSecretsを設定する。
 | シークレット名        | 値                                        |
 | --------------------- | ----------------------------------------- |
 | SERVERLESS_ACCESS_KEY | serverless dashboardから発行したaccesskey |
-| AWS_ACCESS_KEY_ID     | AWS IMAユーザー アクセスキーID            |
-| AWS_SECRET_ACCESS_KEY | AWS IMAユーザー シークレットキー          |
+| AWS_ACCESS_KEY_ID     | AWS IAMユーザー アクセスキーID            |
+| AWS_SECRET_ACCESS_KEY | AWS IAMユーザー シークレットキー          |
