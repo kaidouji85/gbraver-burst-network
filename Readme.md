@@ -56,7 +56,7 @@ graph BT;
     local-webrtc-stub-->local-webrtc-browser-sdk;
 ```
 
-**オフラインの依存関係**
+**オフライン対戦の依存関係**
 
 ```mermaid
 graph BT;
