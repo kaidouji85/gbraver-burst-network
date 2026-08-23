@@ -4,7 +4,7 @@
 
 ## 事前準備
 
-- serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からasccesskeyを生成する。
+- serverless dashboardにサインインし、[このページ](https://app.serverless.com/settings/accessKeys)からaccesskeyを生成する。
 
 ## AWS Parameter Store
 

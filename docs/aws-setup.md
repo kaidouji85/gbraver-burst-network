@@ -52,7 +52,7 @@ CognitoのアイデンティティプロバイダーにGoogleを以下条件で�
 | picture            | picture    |
 | preferred_username | name       |
 
-CgonitoのホストされたUIのID プロバイダーにGoogleを追加する。
+CognitoのホストされたUIのID プロバイダーにGoogleを追加する。
 
 ## 7. 各種ドメイン名の準備
 
