@@ -79,8 +79,6 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 
 ### 環境新規作成
 
-以下の順番でCodeBuildを実行する。
-
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 2. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
 3. CodeBuildで「バックエンドCloudFrontのデプロイ」を実行
