@@ -5,7 +5,7 @@
 を用いたモノレポ構造となっている。
 特に断りがない限り、本書のコマンド例のカレントディレクトリは`本リポジトリをcloneした場所の直下`であるとする。
 
-## リポジトリ構成解説
+## リポジトリ構成
 
 本リポジトリは、以下の3サービスを提供している。
 
@@ -33,7 +33,7 @@
 **ユーザー登録必須APIの依存関係**
 
 ```mermaid
-graph TD;
+graph BT;
     backend-ecs-->aws-vpc;
     backend-ecs-->backend-app;
     browser-sdk-->backend-app;
@@ -44,7 +44,7 @@ graph TD;
 **ログインなしAPIの依存関係**
 
 ```mermaid
-graph TD;
+graph BT;
     ws-signal-->cloudfront;
     local-webrtc-browser-sdk-->ws-signal;
     local-webrtc-stub-->ws-signal;
@@ -54,7 +54,7 @@ graph TD;
 **オフライン対戦サーバーの依存関係**
 
 ```mermaid
-graph TD;
+graph BT;
     offline-browser-sdk-->offline-backend-app;
     offline-stub-->offline-backend-app;
     offline-stub-->offline-browser-sdk;
