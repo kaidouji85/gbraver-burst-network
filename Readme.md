@@ -73,6 +73,7 @@ graph BT;
 - [AWS](https://aws.amazon.com/jp/?nc2=h_lg)
 - [Docker Hub](https://hub.docker.com/)
 - [serverless dashboard](https://www.serverless.com/dashboard)
+- さくらインターネット会員ID
 
 ## 本リポジトリが想定する環境
 
