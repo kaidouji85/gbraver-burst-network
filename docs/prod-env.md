@@ -28,13 +28,13 @@ AWS Parameter Storeに以下の値をセットする。
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割                | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| デプロイ            | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| serverless削除      | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
-| バックエンドECS削除 | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| 役割                             | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
+| -------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| 通常バックエンドのフルデプロイ   | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
+| 通常バックエンドのserverless削除 | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+| 通常バックエンドのECS削除        | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
 
-### webhook
+### 本番環境cd用webhook
 
 masterブランチにpushされた時にCodeBuildが実行されるように、以下のwebhookを設定する。
 
@@ -52,3 +52,20 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
       | 条件        | タイプ   | パターン            |
       | ----------- | -------- | ------------------- |
       | START_BUILD | HEAD_REF | ^refs/heads/master$ |
+
+### 環境新規作成
+
+以下の順番でCodeBuildを実行する。
+
+1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
+
+### ブルーグリーンデプロイ
+
+- 0. 事前準備
+  - 0.1. Parameter Storeの「/GbraverBurst/prod/stage」の「旧ステージ」をメモする
+- 1. 新規環境作成
+  - 1.2. Parameter Storeの「/GbraverBurst/prod/stage」に「新ステージ」をセットする
+  - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
+- 2. 旧環境削除
+  - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
