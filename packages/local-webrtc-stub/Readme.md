@@ -3,7 +3,7 @@
 ## セットアップ
 
 ```bash
-# 環境に応じてた値を.envに設定する
+# 環境に応じた値を.envに設定する
 cp .env.template .env
 
 npm ci
