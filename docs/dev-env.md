@@ -92,9 +92,9 @@ developブランチにpushされた時にCodeBuildが実行されるように、
   - 0.1. Parameter Storeの「/GbraverBurst/dev/stage」の「旧ステージ」をメモする
 - 1. 新規環境作成
   - 1.2. Parameter Storeの「/GbraverBurst/dev/stage」に「新ステージ」をセットする
-  - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 1.4. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 1.5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を実行
+  - 1.4. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
+  - 1.5. CodeBuildで「バックエンドCloudFrontのデプロイ」を実行
 - 2. 旧環境への切り戻し（必要に応じて）
   - 2.1. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「旧ステージ」を指定して実行
   - 2.2. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行

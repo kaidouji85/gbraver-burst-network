@@ -65,7 +65,7 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
   - 0.1. Parameter Storeの「/GbraverBurst/prod/stage」の「旧ステージ」をメモする
 - 1. 新規環境作成
   - 1.2. Parameter Storeの「/GbraverBurst/prod/stage」に「新ステージ」をセットする
-  - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 - 2. 旧環境削除
   - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
   - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
