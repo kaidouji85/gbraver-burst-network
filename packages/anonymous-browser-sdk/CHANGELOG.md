@@ -1,5 +1,11 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 1.30.0-beta.0
+
+### Minor Changes
+
+- パッケージ名を変更
+
 ## 1.29.0
 
 ### Minor Changes

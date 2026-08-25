@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 1.30.0-beta.0
+
+### Minor Changes
+
+- パッケージ名を変更
+
 ## 1.29.0
 
 ### Minor Changes
