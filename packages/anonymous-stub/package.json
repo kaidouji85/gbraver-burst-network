@@ -1,6 +1,6 @@
 {
-  "name": "@gbraver-burst-network/local-webrtc-stub",
-  "description": "gbraver burst local webrtc stub.",
+  "name": "@gbraver-burst-network/anonymous-stub",
+  "description": "gbraver burst anonymous stub.",
   "version": "1.29.0",
   "author": "Y.Takeuchi",
   "bugs": {
