@@ -1,6 +1,6 @@
 {
-  "name": "@gbraver-burst-network/ws-signal",
-  "description": "gbraver burst webrtc signal cache",
+  "name": "@gbraver-burst-network/anonymous-backend",
+  "description": "gbraver burst anonymous backend",
   "version": "1.29.0",
   "author": "Y.Takeuchi",
   "dependencies": {
