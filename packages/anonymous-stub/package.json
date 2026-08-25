@@ -8,7 +8,7 @@
     "email": "kaidouji85@gmail.com"
   },
   "dependencies": {
-    "@gbraver-burst-network/local-webrtc-browser-sdk": "1.29.0",
+    "@gbraver-burst-network/anonymous-browser-sdk": "1.29.0",
     "dotenv": "^17.4.2",
     "gbraver-burst-core": "^1.45.0"
   },
@@ -28,7 +28,7 @@
     "webpack-cli": "^7.2.2",
     "webpack-dev-server": "^6.0.0"
   },
-  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-webrtc-stub",
+  "homepage": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/anonymous-stub",
   "keywords": [
     "browser",
     "gbraver-burst",
@@ -38,7 +38,7 @@
   "license": "MIT",
   "main": "index.js",
   "private": true,
-  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/local-webrtc-stub",
+  "repository": "https://github.com/kaidouji85/gbraver-burst-network/tree/develop/packages/anonymous-stub",
   "scripts": {
     "build": "run-s clean transpile",
     "clean": "rimraf build",
