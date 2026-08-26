@@ -1,5 +1,5 @@
 ---
-"@gbraver-burst-network/anonymous-backend": minor
+"@gbraver-burst-network/anonymous-backend-app": minor
 "@gbraver-burst-network/anonymous-browser-sdk": minor
 "@gbraver-burst-network/anonymous-stub": minor
 "@gbraver-burst-network/aws-vpc": minor
@@ -12,4 +12,4 @@
 "@gbraver-burst-network/serverless-stub": minor
 ---
 
-パッケージ名を変更
+ドキュメント最新化
