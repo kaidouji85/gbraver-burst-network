@@ -50,10 +50,10 @@ graph BT;
 
 ```mermaid
 graph BT;
-    ws-signal-->cloudfront;
-    local-webrtc-browser-sdk-->ws-signal;
-    local-webrtc-stub-->ws-signal;
-    local-webrtc-stub-->local-webrtc-browser-sdk;
+    anonymous-backend-app-->cloudfront;
+    anonymous-browser-sdk-->anonymous-backend-app;
+    anonymous-stub-->anonymous-backend-app;
+    anonymous-stub-->anonymous-browser-sdk;
 ```
 
 **オフライン用バックエンドの依存関係**
