@@ -1,5 +1,18 @@
 # @gbraver-burst-network/serverless-stub
 
+## 1.30.0
+
+### Minor Changes
+
+- パッケージ名変更
+- 4de966a: ドキュメント最新化
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [4de966a]
+  - @gbraver-burst-network/browser-sdk@1.30.0
+
 ## 1.30.0-beta.1
 
 ### Minor Changes
