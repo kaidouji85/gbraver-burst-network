@@ -1,6 +1,6 @@
 {
   "name": "@gbraver-burst-network/anonymous-browser-sdk",
-  "description": "gbraver burst local webrtc browser sdk",
+  "description": "gbraver burst anonymous browser sdk",
   "version": "1.30.0",
   "author": "Y.Takeuchi",
   "bugs": {

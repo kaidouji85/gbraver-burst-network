@@ -28,7 +28,7 @@
 | 通常バックエンド         | browser-sdk           | ユーザー登録必須のAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                                |
 | 通常バックエンド         | serverless-stub       | ログイン必須APIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト            |
 | 匿名バックエンド         | cloudfront            | 各種CloudFrontを構築するCloudFormationテンプレート                                                         |
-| 匿名バックエンド         | anonymous-backend     | 匿名バックエンドのServerless Frameworkプロジェクト                                                         |
+| 匿名バックエンド         | anonymous-backend-app | 匿名バックエンドのServerless Frameworkプロジェクト                                                         |
 | 匿名バックエンド         | anonymous-browser-sdk | 匿名バックエンドのブラウザ向けSDKを実装したnpmパッケージ                                                   |
 | 匿名バックエンド         | anonymous-stub        | 匿名バックエンドをローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト                         |
 | オフライン用バックエンド | offline-backend-app   | オフライン用バックエンドサーバーを実装したTypeScriptプロジェクト                                           |
