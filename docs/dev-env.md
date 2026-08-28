@@ -23,7 +23,7 @@ AWS Parameter Storeに以下の値をセットする。
 | /GbraverBurst/dev/wsSignalDomainName          | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
 | /GbraverBurst/dev/wsSignalCertArn             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
 | /GbraverBurst/dev/wsApiCertArn                | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_API_CERT_ARN を参照                |
-| /GbraverBurst/dev/webrtcHelperCorsOrigin      | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) ANONYMOUS_BACKEND_CORS_ORIGIN を参照      |
+| /GbraverBurst/dev/anonymousBackendCorsOrigin  | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) ANONYMOUS_BACKEND_CORS_ORIGIN を参照  |
 | /GbraverBurst/dev/cognitoUserPoolId           | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_USER_POOL_ID を参照           |
 | /GbraverBurst/dev/cognitoClientId             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_CLIENT_ID を参照              |
 | /GbraverBurst/dev/matchMakeEcrRepositoryName  | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
