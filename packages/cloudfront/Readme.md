@@ -27,7 +27,7 @@ aws cloudformation deploy \
   --stack-name ${STACK_NAME} \
   --region ${AWS_DEFAULT_REGION} \
   --parameter-overrides \
-  WebRTCHelperDomainName=${ANONYMOUS_BACKEND_DOMAIN_NAME} \
+  AnonymousBackendDomainName=${ANONYMOUS_BACKEND_DOMAIN_NAME} \
   DistributionAlias=${BACKEND_CLOUDFRONT_DOMAIN_NAME} \
   AcmCertificateArn=${BACKEND_CLOUDFRONT_CERT_ARN} \
   --no-fail-on-empty-changeset
@@ -42,7 +42,7 @@ aws cloudformation deploy \
   --stack-name ${STACK_NAME} \
   --region ${AWS_DEFAULT_REGION:?} \
   --parameter-overrides \
-  WebRTCHelperDomainName=${ANONYMOUS_BACKEND_DOMAIN_NAME} \
+  AnonymousBackendDomainName=${ANONYMOUS_BACKEND_DOMAIN_NAME} \
   DistributionAlias=${BACKEND_CLOUDFRONT_DOMAIN_NAME:?} \
   AcmCertificateArn=${BACKEND_CLOUDFRONT_CERT_ARN:?} \
   WebACLArn=${BACKEND_CLOUDFRONT_WEB_ACL_ARN:?} \
