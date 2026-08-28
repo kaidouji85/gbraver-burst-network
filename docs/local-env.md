@@ -81,7 +81,7 @@ npm run build
 詳細は以下のドキュメントを参照。
 
 - [通常バックエンドのスタブ](../packages/serverless-stub/Readme.md)
-- [匿名バックエンドのスタブ](../packages/local-webrtc-stub/Readme.md)
+- [匿名バックエンドのスタブ](../packages/anonymous-stub/Readme.md)
 
 ## 6. 環境削除
 
