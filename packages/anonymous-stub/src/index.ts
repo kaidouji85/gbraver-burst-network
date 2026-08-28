@@ -2,7 +2,7 @@ import {
   createAuthTokenManager,
   createGuestLocalWebRTCSDK,
   createHostLocalWebRTCSDK,
-} from "@gbraver-burst-network/local-webrtc-browser-sdk";
+} from "@gbraver-burst-network/anonymous-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
 import { HostPlayer } from "./use-case/host-player";

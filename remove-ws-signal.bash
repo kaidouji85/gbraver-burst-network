@@ -2,5 +2,5 @@
 set -Ceu
 
 OWN_PATH=$(cd "$(dirname "${0}")" && pwd)
-cd "${OWN_PATH}"/packages/ws-signal || exit
+cd "${OWN_PATH}"/packages/anonymous-backend-app || exit
 npx sls remove --stage "${STAGE:?}"

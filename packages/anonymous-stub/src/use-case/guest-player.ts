@@ -1,4 +1,4 @@
-import { GuestLocalWebRTCSDK } from "@gbraver-burst-network/local-webrtc-browser-sdk";
+import { GuestLocalWebRTCSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { waitTime } from "../wait-time";

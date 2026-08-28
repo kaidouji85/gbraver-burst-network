@@ -1,7 +1,7 @@
 {
-  "name": "@gbraver-burst-network/ws-signal",
-  "description": "gbraver burst webrtc signal cache",
-  "version": "1.29.0",
+  "name": "@gbraver-burst-network/anonymous-backend-app",
+  "description": "gbraver burst anonymous backend",
+  "version": "1.30.0",
   "author": "Y.Takeuchi",
   "dependencies": {
     "@aws-lambda-powertools/parameters": "^2.34.0",

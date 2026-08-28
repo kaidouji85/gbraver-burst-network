@@ -20,20 +20,20 @@
 
 本リポジトリは`packages`ディレクトリに、以下のモジュールが配置されている。
 
-| サービス                 | パッケージ名             | 説明                                                                                                       |
-| ------------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| 通常バックエンド         | aws-vpc                  | VPCを構築するAWS CDKプロジェクト                                                                           |
-| 通常バックエンド         | backend-app              | ユーザー登録必須の各種APIを実装したServerless Frameworkプロジェクト                                        |
-| 通常バックエンド         | backend-ecs              | カジュアルマッチを行う常時起動しているFargate環境を構築するAWS CDKプロジェクト                             |
-| 通常バックエンド         | browser-sdk              | ユーザー登録必須のAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                                |
-| 通常バックエンド         | serverless-stub          | ログイン必須APIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト            |
-| 匿名バックエンド         | cloudfront               | 各種CloudFrontを構築するCloudFormationテンプレート                                                         |
-| 匿名バックエンド         | ws-signal                | シグナルサーバーを構築するServerless Frameworkプロジェクト                                                 |
-| 匿名バックエンド         | local-webrtc-browser-sdk | ログインなしAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                                      |
-| 匿名バックエンド         | local-webrtc-stub        | ログインなしAPIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト            |
-| オフライン用バックエンド | offline-backend-app      | オフライン用バックエンドサーバーを実装したTypeScriptプロジェクト                                           |
-| オフライン用バックエンド | offline-browser-sdk      | オフライン用バックエンドクライアントを実装したブラウザ向けSDKを実装したnpmパッケージ                       |
-| オフライン用バックエンド | offline-stub             | オフライン用バックエンドサーバーをローカルで動作させるためのスタブサーバーを実装したTypeScriptプロジェクト |
+| サービス                 | パッケージ名          | 説明                                                                                                       |
+| ------------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 通常バックエンド         | aws-vpc               | VPCを構築するAWS CDKプロジェクト                                                                           |
+| 通常バックエンド         | backend-app           | ユーザー登録必須の各種APIを実装したServerless Frameworkプロジェクト                                        |
+| 通常バックエンド         | backend-ecs           | カジュアルマッチを行う常時起動しているFargate環境を構築するAWS CDKプロジェクト                             |
+| 通常バックエンド         | browser-sdk           | ユーザー登録必須のAPIを呼び出すためのブラウザ向けSDKを実装したnpmパッケージ                                |
+| 通常バックエンド         | serverless-stub       | ログイン必須APIを呼び出すためのローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト            |
+| 匿名バックエンド         | cloudfront            | 各種CloudFrontを構築するCloudFormationテンプレート                                                         |
+| 匿名バックエンド         | anonymous-backend-app | 匿名バックエンドのServerless Frameworkプロジェクト                                                         |
+| 匿名バックエンド         | anonymous-browser-sdk | 匿名バックエンドのブラウザ向けSDKを実装したnpmパッケージ                                                   |
+| 匿名バックエンド         | anonymous-stub        | 匿名バックエンドをローカルで動作するスタブサーバーを実装したTypeScriptプロジェクト                         |
+| オフライン用バックエンド | offline-backend-app   | オフライン用バックエンドサーバーを実装したTypeScriptプロジェクト                                           |
+| オフライン用バックエンド | offline-browser-sdk   | オフライン用バックエンドクライアントを実装したブラウザ向けSDKを実装したnpmパッケージ                       |
+| オフライン用バックエンド | offline-stub          | オフライン用バックエンドサーバーをローカルで動作させるためのスタブサーバーを実装したTypeScriptプロジェクト |
 
 **通常バックエンドの依存関係**
 
@@ -50,10 +50,10 @@ graph BT;
 
 ```mermaid
 graph BT;
-    ws-signal-->cloudfront;
-    local-webrtc-browser-sdk-->ws-signal;
-    local-webrtc-stub-->ws-signal;
-    local-webrtc-stub-->local-webrtc-browser-sdk;
+    anonymous-backend-app-->cloudfront;
+    anonymous-browser-sdk-->anonymous-backend-app;
+    anonymous-stub-->anonymous-backend-app;
+    anonymous-stub-->anonymous-browser-sdk;
 ```
 
 **オフライン用バックエンドの依存関係**

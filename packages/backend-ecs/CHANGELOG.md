@@ -1,5 +1,24 @@
 # @gbraver-burst-network/backend-ecs
 
+## 1.30.0
+
+### Minor Changes
+
+- パッケージ名変更
+- 4de966a: ドキュメント最新化
+
+## 1.30.0-beta.1
+
+### Minor Changes
+
+- ドキュメント最新化
+
+## 1.30.0-beta.0
+
+### Minor Changes
+
+- パッケージ名を変更
+
 ## 1.29.0
 
 ### Minor Changes
