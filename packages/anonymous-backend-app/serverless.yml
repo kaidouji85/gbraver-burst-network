@@ -22,7 +22,7 @@ provider:
   httpApi:
     cors:
       allowedOrigins:
-        - ${env:WEBRTC_HELPER_CORS_ORIGIN}
+        - ${env:ANONYMOUS_BACKEND_CORS_ORIGIN}
       allowedMethods:
         - POST
         - OPTIONS

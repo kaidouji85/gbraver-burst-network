@@ -32,7 +32,7 @@ npm run build
 | WS_API_CERT_ARN                | WebSocket APIのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_API_DOMAIN_NAMEのワイルドカード証明書である必要がある                                           |
 | WS_SIGNAL_DOMAIN_NAME          | シグナルサーバーのドメイン名、本ドメイン名はRoute53にホストゾーンが存在している必要がある                                                                    |
 | WS_SIGNAL_CERT_ARN             | シグナルサーバーのSSL証明書ARN、本証明書はAWS ACMで発行されたWS_SIGNAL_DOMAIN_NAMEのワイルドカード証明書である必要がある                                     |
-| WEBRTC_HELPER_CORS_ORIGIN      | WebRTC Helper APIのCORS設定で許可するオリジン                                                                                                                |
+| ANONYMOUS_BACKEND_CORS_ORIGIN  | 匿名バックエンドのCORS設定で許可するオリジン                                                                                                        |
 | COTURN_SHARED_SECRET           | coturnサーバーで使用する共有秘密鍵を保存したAWS Secrets Managerのシークレット名                                                                              |
 | COGNITO_USER_POOL_ID           | CognitoのユーザープールID                                                                                                                                    |
 | COGNITO_CLIENT_ID              | CognitoのクライアントID                                                                                                                                      |
