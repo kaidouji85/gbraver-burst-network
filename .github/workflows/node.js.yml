@@ -18,7 +18,7 @@ env:
   WS_SIGNAL_CERT_ARN: test-signal-certificate-arn # ビルド用のダミー値
   WEBRTC_HELPER_DOMAIN_NAME: test-webrtc-helper-domain-name # ビルド用のダミー値
   WEBRTC_HELPER_CERT_ARN: test-webrtc-helper-certificate-arn # ビルド用のダミー値
-  ANONYMOUS_BACKEND_CORS_ORIGIN: test-webrtc-helper-cors-origin # ビルド用のダミー値
+  ANONYMOUS_BACKEND_CORS_ORIGIN: test-anonymous-backend-cors-origin # ビルド用のダミー値
   COTURN_SHARED_SECRET: test-coturn-shared-secret # ビルド用のダミー値
 jobs:
   test:

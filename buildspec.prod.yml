@@ -12,7 +12,7 @@ env:
     # WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn #あいことば対戦を本番リリースするまでコメントアウト
     # WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/prod/webrtcHelperDomainName #あいことば対戦を本番リリースするまでコメントアウト
     # WEBRTC_HELPER_CERT_ARN: /GbraverBurst/prod/webrtcHelperCertArn #あいことば対戦を本番リリースするまでコメントアウト
-    # ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/prod/webrtcHelperCorsOrigin #あいことば対戦を本番リリースするまでコメントアウト
+    # ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/prod/anonymousBackendCorsOrigin #あいことば対戦を本番リリースするまでコメントアウト
     COGNITO_USER_POOL_ID: /GbraverBurst/prod/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/prod/cognitoClientId
     DOCKER_USER: /GbraverBurst/prod/dockerUser

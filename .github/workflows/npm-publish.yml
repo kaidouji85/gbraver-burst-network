@@ -17,7 +17,7 @@ env:
   WS_SIGNAL_CERT_ARN: "arn:aws:acm:region:account:certificate/dummy-value-not-used"
   WEBRTC_HELPER_DOMAIN_NAME: "test-webrtc-helper-domain-name"
   WEBRTC_HELPER_CERT_ARN: "test-webrtc-helper-certificate-arn"
-  ANONYMOUS_BACKEND_CORS_ORIGIN: "test-webrtc-helper-cors-origin"
+  ANONYMOUS_BACKEND_CORS_ORIGIN: "test-anonymous-backend-cors-origin"
   COTURN_SHARED_SECRET: "test-coturn-shared-secret"
 jobs:
   build:
