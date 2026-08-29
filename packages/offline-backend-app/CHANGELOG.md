@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 1.31.0-beta.0
+
+### Minor Changes
+
+- SDK名を変更
+
 ## 1.30.0
 
 ### Minor Changes
