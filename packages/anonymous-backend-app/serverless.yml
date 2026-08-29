@@ -1,4 +1,4 @@
-service: ${env:WS_SIGNAL_SERVICE, "gb-ws-signal-dev"}
+service: ${env:ANONYMOUS_SERVICE, "gb-anonymous-dev"}
 frameworkVersion: "4"
 
 custom:
@@ -22,7 +22,7 @@ provider:
   httpApi:
     cors:
       allowedOrigins:
-        - ${env:WEBRTC_HELPER_CORS_ORIGIN}
+        - ${env:ANONYMOUS_BACKEND_CORS_ORIGIN}
       allowedMethods:
         - POST
         - OPTIONS

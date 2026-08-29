@@ -76,7 +76,7 @@ wscat -c "wss://${WS_API_DOMAIN}?token=${AUTH_TOKEN}"
 ```bash
 # 接続先をセット
 STAGE=<ステージ名>
-REST_API_DOMAIN=<WebRTC ヘルパーAPIのドメイン名>
+REST_API_DOMAIN=<REST APIのドメイン名>
 WS_API_DOMAIN=<WebSocket APIのドメイン名>
 
 # 匿名トークンを発行する（以降のコマンド例ではこのトークンを使用する）

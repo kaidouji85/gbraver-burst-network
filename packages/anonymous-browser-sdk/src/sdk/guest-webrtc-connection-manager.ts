@@ -23,8 +23,8 @@ type ConnectionState = Connected | Disconnected;
 export type GuestWebRTCConnectionManagerOptions = {
   /** 認証トークンマネージャー */
   authToken: AuthTokenManager;
-  /** WebRTCヘルパーAPIのURL */
-  webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  anonymousBackendApiURL: string;
   /** coturnサーバーのドメイン名 */
   coturnDomainName: string;
 };
@@ -35,8 +35,8 @@ export class GuestWebRTCConnectionManager {
   #authToken: AuthTokenManager;
   /** コネクションの状態 */
   #connectionState: ConnectionState = { type: "disconnected" };
-  /** WebRTCヘルパーAPIのURL */
-  #webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  #anonymousBackendApiURL: string;
   /** coturnサーバーのドメイン名 */
   #coturnDomainName: string;
 
@@ -45,7 +45,7 @@ export class GuestWebRTCConnectionManager {
    */
   constructor(options: GuestWebRTCConnectionManagerOptions) {
     this.#authToken = options.authToken;
-    this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
+    this.#anonymousBackendApiURL = options.anonymousBackendApiURL;
     this.#coturnDomainName = options.coturnDomainName;
   }
 
@@ -65,7 +65,7 @@ export class GuestWebRTCConnectionManager {
         .getOrIssueAuthToken()
         .then((authToken) =>
           createRTCPeerConnection({
-            webRTCHelperApiURL: this.#webRTCHelperApiURL,
+            anonymousBackendApiURL: this.#anonymousBackendApiURL,
             coturnDomainName: this.#coturnDomainName,
             authToken: authToken.token,
           }),

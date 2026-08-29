@@ -11,8 +11,8 @@ import {
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
-/** ローカルWebRTCホスト用SDK */
-export type HostLocalWebRTCSDK = {
+/** ホスト用匿名バックエンドSDK */
+export type HostAnonymousSDK = {
   /**
    * ルームを生成する
    * 本メソッドでは新しいWebRTCコネクションを生成し、シグナリングも行うため、
@@ -47,14 +47,14 @@ export type HostLocalWebRTCSDK = {
   disconnectWebRTC(): void;
 };
 
-/** LocalWebRTCHostSDKImplコンストラクタのオプション */
-type LocalWebRTCHostSDKImplOptions = HostWebRTCConnectionManagerOptions & {
+/** HostAnonymousSDKImplコンストラクタのオプション */
+type HostAnonymousSDKImplOptions = HostWebRTCConnectionManagerOptions & {
   /** WebSocketシグナルサーバーのURL */
   wsSignalUrl: string;
 };
 
-/** ローカルWebRTCホスト用SDKの実装 */
-class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
+/** ホスト用匿名バックエンドSDKの実装 */
+class HostAnonymousSDKImpl implements HostAnonymousSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: HostWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -66,7 +66,7 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
    * コンストラクタ
    * @param options コンストラクタのオプション
    */
-  constructor(options: LocalWebRTCHostSDKImplOptions) {
+  constructor(options: HostAnonymousSDKImplOptions) {
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
@@ -121,16 +121,16 @@ class HostLocalWebRTCSDKImpl implements HostLocalWebRTCSDK {
   }
 }
 
-/** LocalWebRTCHostSDKを生成するオプション */
-type CreateLocalWebRTCHostSDKOptions = LocalWebRTCHostSDKImplOptions;
+/** HostAnonymousSDKを生成するオプション */
+type CreateHostAnonymousSDKOptions = HostAnonymousSDKImplOptions;
 
 /**
- * ローカルWebRTCホスト用SDKを生成する
+ * ホスト用匿名バックエンドSDKを生成する
  * @param options SDK生成のオプション
- * @returns ローカルWebRTCホスト用SDKのインスタンス
+ * @returns ホスト用匿名バックエンドSDKのインスタンス
  */
-export function createHostLocalWebRTCSDK(
-  options: CreateLocalWebRTCHostSDKOptions,
-): HostLocalWebRTCSDK {
-  return new HostLocalWebRTCSDKImpl(options);
+export function createHostAnonymousSDK(
+  options: CreateHostAnonymousSDKOptions,
+): HostAnonymousSDK {
+  return new HostAnonymousSDKImpl(options);
 }

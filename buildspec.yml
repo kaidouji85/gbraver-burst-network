@@ -4,13 +4,13 @@ env:
     COTURN_SHARED_SECRET: /GbraverBurst/dev/coturnSharedSecret
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
-    WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
+    ANONYMOUS_SERVICE: /GbraverBurst/dev/anonymousService
     STAGE: /GbraverBurst/dev/stage
     WS_API_DOMAIN_NAME: /GbraverBurst/dev/wsApiDomainName
     WS_API_CERT_ARN: /GbraverBurst/dev/wsApiCertArn
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
-    WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/dev/webrtcHelperCorsOrigin
+    ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/dev/anonymousBackendCorsOrigin
     COGNITO_USER_POOL_ID: /GbraverBurst/dev/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/dev/cognitoClientId
     DOCKER_USER: /GbraverBurst/dev/dockerUser
@@ -31,4 +31,4 @@ phases:
       - ./deploy-serverless.bash
       - ./push-match-make-container.bash
       - ./deploy-backend-ecs.bash
-      - ./deploy-ws-signal.bash
+      - ./deploy-anonymous.bash

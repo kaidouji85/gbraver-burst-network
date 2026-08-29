@@ -38,17 +38,17 @@ export interface AuthTokenManager {
 
 /** 認証トークンマネージャーの実装 */
 class AuthTokenManagerImpl implements AuthTokenManager {
-  /** WebRTCヘルパーAPIのURL */
-  #webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  #anonymousBackendApiURL: string;
   /** 認証トークンPromise、未発行時はnull */
   #authTokenPromise: Promise<AuthToken> | null = null;
 
   /**
    * コンストラクタ
-   * @param webRTCHelperApiURL WebRTCヘルパーAPIのURL
+   * @param anonymousBackendApiURL 匿名バックエンドREST APIのURL
    */
-  constructor(webRTCHelperApiURL: string) {
-    this.#webRTCHelperApiURL = webRTCHelperApiURL;
+  constructor(anonymousBackendApiURL: string) {
+    this.#anonymousBackendApiURL = anonymousBackendApiURL;
   }
 
   /** @override */
@@ -70,20 +70,22 @@ class AuthTokenManagerImpl implements AuthTokenManager {
    * @return 発行した認証トークン
    */
   #issueAuthTokenWithReset(): Promise<AuthToken> {
-    return issueAuthToken(this.#webRTCHelperApiURL).catch((error: unknown) => {
-      this.#authTokenPromise = null;
-      throw error;
-    });
+    return issueAuthToken(this.#anonymousBackendApiURL).catch(
+      (error: unknown) => {
+        this.#authTokenPromise = null;
+        throw error;
+      },
+    );
   }
 }
 
 /**
  * 認証トークンマネージャーを生成する
- * @param webRTCHelperApiURL WebRTCヘルパーAPIのURL
+ * @param anonymousBackendApiURL 匿名バックエンドREST APIのURL
  * @returns 生成した認証トークンマネージャー
  */
 export const createAuthTokenManager = (
-  webRTCHelperApiURL: string,
+  anonymousBackendApiURL: string,
 ): AuthTokenManager => {
-  return new AuthTokenManagerImpl(webRTCHelperApiURL);
+  return new AuthTokenManagerImpl(anonymousBackendApiURL);
 };

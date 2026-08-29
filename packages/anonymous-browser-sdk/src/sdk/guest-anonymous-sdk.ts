@@ -21,8 +21,8 @@ import {
 } from "./guest-webrtc-connection-manager";
 import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
-/** ローカルWebRTCゲスト用SDK */
-export type GuestLocalWebRTCSDK = {
+/** ゲスト用匿名バックエンドSDK */
+export type GuestAnonymousSDK = {
   /**
    * ルームに参加する
    * 本メソッドでは新しいWebRTCコネクションを生成し、シグナリングも行うため、
@@ -60,15 +60,15 @@ export type GuestLocalWebRTCSDK = {
 };
 
 /** LocalWebRTCGuestSDKImplコンストラクタのオプション */
-type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
+type GuestAnonymousSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
   /** WebSocketシグナルサーバーのURL */
   wsSignalUrl: string;
-  /** WebRTCヘルパーAPIのURL */
-  webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  anonymousBackendApiURL: string;
 };
 
-/** ローカルWebRTCゲスト用SDKの実装 */
-class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
+/** ゲスト用匿名バックエンドSDKの実装 */
+class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   /** WebRTCコネクションマネージャー */
   #webRTCConnection: GuestWebRTCConnectionManager;
   /** WebSocketコネクションマネージャー */
@@ -80,7 +80,7 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
    * コンストラクタ
    * @param options コンストラクタのオプション
    */
-  constructor(options: LocalWebRTCGuestSDKImplOptions) {
+  constructor(options: GuestAnonymousSDKImplOptions) {
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
@@ -249,16 +249,16 @@ class GuestLocalWebRTCSDKImpl implements GuestLocalWebRTCSDK {
   }
 }
 
-/** LocalWebRTCGuestSDKを生成するオプション */
-type CreateLocalWebRTCGuestSDKOptions = LocalWebRTCGuestSDKImplOptions;
+/** GuestAnonymousSDKを生成するオプション */
+type CreateGuestAnonymousSDKOptions = GuestAnonymousSDKImplOptions;
 
 /**
- * ローカルWebRTCゲスト用SDKを生成する
+ * ゲスト用匿名バックエンドSDKを生成する
  * @param options オプション
- * @returns ローカルWebRTCゲスト用SDKのインスタンス
+ * @returns ゲスト用匿名バックエンドSDKのインスタンス
  */
-export function createGuestLocalWebRTCSDK(
-  options: CreateLocalWebRTCGuestSDKOptions,
-): GuestLocalWebRTCSDK {
-  return new GuestLocalWebRTCSDKImpl(options);
+export function createGuestAnonymousSDK(
+  options: CreateGuestAnonymousSDKOptions,
+): GuestAnonymousSDK {
+  return new GuestAnonymousSDKImpl(options);
 }

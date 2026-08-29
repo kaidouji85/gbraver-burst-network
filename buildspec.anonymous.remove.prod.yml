@@ -4,12 +4,10 @@ env:
   variables:
     COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret
   parameter-store:
-    WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
+    ANONYMOUS_SERVICE: /GbraverBurst/prod/anonymousService
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn
-    WEBRTC_HELPER_DOMAIN_NAME: /GbraverBurst/prod/webrtcHelperDomainName
-    WEBRTC_HELPER_CERT_ARN: /GbraverBurst/prod/webrtcHelperCertArn
-    WEBRTC_HELPER_CORS_ORIGIN: /GbraverBurst/prod/webrtcHelperCorsOrigin
+    ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/prod/anonymousBackendCorsOrigin
     SERVERLESS_ACCESS_KEY: /GbraverBurst/prod/serverlessAccessKey
 phases:
   install:
@@ -20,4 +18,4 @@ phases:
       - npm ci
   build:
     commands:
-      - ./remove-ws-signal.bash
+      - ./remove-anonymous.bash

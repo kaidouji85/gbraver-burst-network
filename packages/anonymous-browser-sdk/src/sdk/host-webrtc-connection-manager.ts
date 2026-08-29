@@ -13,8 +13,8 @@ type Connection = {
 export type HostWebRTCConnectionManagerOptions = {
   /** 認証トークンマネージャー */
   authToken: AuthTokenManager;
-  /** WebRTCヘルパーAPIのURL */
-  webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  anonymousBackendApiURL: string;
   /** coturnサーバーのドメイン名 */
   coturnDomainName: string;
 };
@@ -25,8 +25,8 @@ export class HostWebRTCConnectionManager {
   #authToken: AuthTokenManager;
   /** コネクション情報、nullで未接続 */
   #connection: Promise<Connection> | null = null;
-  /** WebRTCヘルパーAPIのURL */
-  #webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  #anonymousBackendApiURL: string;
   /** coturnサーバーのドメイン名 */
   #coturnDomainName: string;
 
@@ -36,7 +36,7 @@ export class HostWebRTCConnectionManager {
    */
   constructor(options: HostWebRTCConnectionManagerOptions) {
     this.#authToken = options.authToken;
-    this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
+    this.#anonymousBackendApiURL = options.anonymousBackendApiURL;
     this.#coturnDomainName = options.coturnDomainName;
   }
 
@@ -53,7 +53,7 @@ export class HostWebRTCConnectionManager {
     this.#connection = (async () => {
       const authToken = await this.#authToken.getOrIssueAuthToken();
       const connection = await createRTCPeerConnection({
-        webRTCHelperApiURL: this.#webRTCHelperApiURL,
+        anonymousBackendApiURL: this.#anonymousBackendApiURL,
         coturnDomainName: this.#coturnDomainName,
         authToken: authToken.token,
       });

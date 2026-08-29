@@ -44,8 +44,8 @@ module.exports = {
       "process.env.WS_SIGNAL_SERVER_URL": JSON.stringify(
         process.env.WS_SIGNAL_SERVER_URL,
       ),
-      "process.env.WEBRTC_HELPER_API_URL": JSON.stringify(
-        process.env.WEBRTC_HELPER_API_URL,
+      "process.env.ANONYMOUS_BACKEND_API_URL": JSON.stringify(
+        process.env.ANONYMOUS_BACKEND_API_URL,
       ),
       "process.env.COTURN_DOMAIN_NAME": JSON.stringify(
         process.env.COTURN_DOMAIN_NAME,

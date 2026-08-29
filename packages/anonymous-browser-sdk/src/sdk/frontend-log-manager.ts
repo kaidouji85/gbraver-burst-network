@@ -6,21 +6,21 @@ import { AuthTokenManager } from "./auth-token-manager";
 export class FrontendLogManager {
   /** 認証トークンマネージャー */
   #authToken: AuthTokenManager;
-  /** WebRTCヘルパーAPIのURL */
-  #webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  #anonymousBackendApiURL: string;
 
   /**
    * コンストラクタ
    * @param options コンストラクタのオプション
-   * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+   * @param options.anonymousBackendApiURL 匿名バックエンドREST APIのURL
    * @param options.authTokenManager 認証トークンマネージャー
    */
   constructor(options: {
-    webRTCHelperApiURL: string;
+    anonymousBackendApiURL: string;
     authToken: AuthTokenManager;
   }) {
     this.#authToken = options.authToken;
-    this.#webRTCHelperApiURL = options.webRTCHelperApiURL;
+    this.#anonymousBackendApiURL = options.anonymousBackendApiURL;
   }
 
   /**
@@ -33,7 +33,7 @@ export class FrontendLogManager {
     try {
       const authToken = await this.#authToken.getOrIssueAuthToken();
       return await frontendLog({
-        apiURL: this.#webRTCHelperApiURL,
+        apiURL: this.#anonymousBackendApiURL,
         authToken: authToken.token,
         body,
       });

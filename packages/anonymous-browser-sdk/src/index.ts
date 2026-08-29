@@ -4,11 +4,11 @@ export {
 } from "./sdk/auth-token-manager";
 export { BattleSDK } from "./sdk/battle-sdk";
 export {
-  createGuestLocalWebRTCSDK,
-  GuestLocalWebRTCSDK,
-} from "./sdk/guest-local-webrtc-sdk";
+  createGuestAnonymousSDK,
+  GuestAnonymousSDK,
+} from "./sdk/guest-anonymous-sdk";
 export {
-  createHostLocalWebRTCSDK,
-  HostLocalWebRTCSDK,
-} from "./sdk/host-local-webrtc-sdk";
+  createHostAnonymousSDK,
+  HostAnonymousSDK,
+} from "./sdk/host-anonymous-sdk";
 export { LocalWebRTCRoom } from "./sdk/local-webrtc-room";
