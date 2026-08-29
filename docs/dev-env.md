@@ -72,9 +72,8 @@ AWS Parameter Storeに以下の値をセットする。
 
 AWS Secrets Managerに以下のシークレットをセットする。
 
-| シークレットの名前                   | シークレットのタイプ                                                                                     |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| /GbraverBurst/dev/coturnSharedSecret | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COTURN_SHARED_SECRET を参照 |
+- `/GbraverBurst/dev/coturnSharedSecret`
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COTURN_SHARED_SECRET` を参照
 
 ## CodeBuild
 
