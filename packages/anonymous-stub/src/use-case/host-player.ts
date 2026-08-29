@@ -1,4 +1,4 @@
-import { HostLocalWebRTCSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
+import { HostAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { waitTime } from "../wait-time";
@@ -7,13 +7,13 @@ import { UseCase } from "./use-case";
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
   /** ローカルWebRTCホスト用SDK */
-  #hostSDK: HostLocalWebRTCSDK;
+  #hostSDK: HostAnonymousSDK;
 
   /**
    * コンストラクタ
    * @param hostSDK ローカルWebRTCホスト用SDK
    */
-  constructor(hostSDK: HostLocalWebRTCSDK) {
+  constructor(hostSDK: HostAnonymousSDK) {
     this.#hostSDK = hostSDK;
   }
 

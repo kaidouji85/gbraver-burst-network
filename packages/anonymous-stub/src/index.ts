@@ -1,7 +1,7 @@
 import {
   createAuthTokenManager,
-  createGuestLocalWebRTCSDK,
-  createHostLocalWebRTCSDK,
+  createGuestAnonymousSDK,
+  createHostAnonymousSDK,
 } from "@gbraver-burst-network/anonymous-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
@@ -55,15 +55,15 @@ const getRoomIDInput = (): HTMLInputElement => {
  */
 window.onload = () => {
   const authToken = createAuthTokenManager(ANONYMOUS_BACKEND_API_URL);
-  const hostSDK = createHostLocalWebRTCSDK({
+  const hostSDK = createHostAnonymousSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
     anonymousBackendApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });
-  const guestSDK = createGuestLocalWebRTCSDK({
+  const guestSDK = createGuestAnonymousSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
-    anonymousBackebdApiURL: ANONYMOUS_BACKEND_API_URL,
+    anonymousBackendApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });

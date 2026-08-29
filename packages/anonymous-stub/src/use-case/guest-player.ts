@@ -1,4 +1,4 @@
-import { GuestLocalWebRTCSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
+import { GuestAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { waitTime } from "../wait-time";
@@ -7,13 +7,13 @@ import { UseCase, UseCaseContext } from "./use-case";
 /** ゲスト側プレイヤー */
 export class GuestPlayer implements UseCase {
   /** ローカルWebRTCゲスト用SDK */
-  #guestSDK: GuestLocalWebRTCSDK;
+  #guestSDK: GuestAnonymousSDK;
 
   /**
    * コンストラクタ
    * @param guestSDK ローカルWebRTCゲスト用SDK
    */
-  constructor(guestSDK: GuestLocalWebRTCSDK) {
+  constructor(guestSDK: GuestAnonymousSDK) {
     this.#guestSDK = guestSDK;
   }
 
