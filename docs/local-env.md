@@ -20,7 +20,12 @@ npm run build
 ローカル環境に以下の環境変数を定義する。
 
 - `SERVICE`
-  - デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する
+  - デプロイするWebSocket APIのサービス名
+    - 推奨値
+      - gbraver-burst-sls-dev
+        - 開発環境用
+      - gbraver-burst-sls-prod
+        - 本番環境用
 - `ANONYMOUS_SERVICE`
   - デプロイする匿名バックエンドのサービス名、gbraver-burst-anonymous-dev、gbraver-burst-anonymous-prodなどを記入する
 - `BACKEND_CLOUDFRONT_SERVICE`
