@@ -80,11 +80,13 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
       | ----------- | -------- | ------------------- |
       | START_BUILD | HEAD_REF | ^refs/heads/master$ |
 
-## 環境新規作成
+## 環境構築手順
+
+### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 
-## ブルーグリーンデプロイ
+### ブルーグリーンデプロイ
 
 - 0. 事前準備
   - 0.1. Parameter Storeの「/GbraverBurst/prod/stage」の「旧ステージ」をメモする

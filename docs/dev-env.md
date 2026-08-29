@@ -138,7 +138,7 @@ developブランチにpushされた時にCodeBuildが実行されるように、
       | ----------- | -------- | -------------------- |
       | START_BUILD | HEAD_REF | ^refs/heads/develop$ |
 
-## 環境構築　手順
+## 環境構築手順
 
 ### 環境新規作成
 
