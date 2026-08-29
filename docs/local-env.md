@@ -29,9 +29,9 @@ npm run build
 - `ANONYMOUS_SERVICE`
   - デプロイする匿名バックエンドのサービス名
     - 推奨値
-      - gbraver-burst-anonymous-dev
+      - gb-anonymous-dev
         - 開発環境用
-      - gbraver-burst-anonymous-prod
+      - gb-anonymous-prod
         - 本番環境用
 - `BACKEND_CLOUDFRONT_SERVICE`
   - バックエンドAPIの前段に配置するCloudFrontのサービス名、gb-backend-cloudfront-dev、gb-backend-cloudfront-prodなどを記入する
