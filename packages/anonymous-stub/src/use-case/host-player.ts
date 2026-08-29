@@ -6,12 +6,12 @@ import { UseCase } from "./use-case";
 
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
-  /** ローカルWebRTCホスト用SDK */
+  /** ホスト用匿名バックエンドSDK */
   #hostSDK: HostAnonymousSDK;
 
   /**
    * コンストラクタ
-   * @param hostSDK ローカルWebRTCホスト用SDK
+   * @param hostSDK ホスト用匿名バックエンドSDK
    */
   constructor(hostSDK: HostAnonymousSDK) {
     this.#hostSDK = hostSDK;

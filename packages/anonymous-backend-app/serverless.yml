@@ -1,4 +1,4 @@
-service: ${env:ANONYMOUS_SERVICE, "gbraver-burst-anonymous-dev"}
+service: ${env:ANONYMOUS_SERVICE, "gb-anonymous-dev"}
 frameworkVersion: "4"
 
 custom:
