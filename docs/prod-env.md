@@ -13,15 +13,39 @@ AWS Parameter Storeに以下の値をセットする。
 - `/GbraverBurst/prod/service`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `SERVICE` を参照
+- `/GbraverBurst/prod/wsSignalService`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_SERVICE` を参照
+- `/GbraverBurst/prod/backendCloudfrontService`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_SERVICE` を参照
 - `/GbraverBurst/prod/stage`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `STAGE` を参照
+- `/GbraverBurst/prod/backendCloudfrontDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_DOMAIN_NAME` を参照
+- `/GbraverBurst/prod/backendCloudfrontCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_CERT_ARN` を参照
+- `/GbraverBurst/prod/backendCloudfrontWebAclArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照
 - `/GbraverBurst/prod/wsApiDomainName`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_DOMAIN_NAME` を参照
+- `/GbraverBurst/prod/wsSignalDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_DOMAIN_NAME` を参照
+- `/GbraverBurst/prod/wsSignalCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_CERT_ARN` を参照
 - `/GbraverBurst/prod/wsApiCertArn`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_CERT_ARN` を参照
+- `/GbraverBurst/prod/anonymousBackendCorsOrigin`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `ANONYMOUS_BACKEND_CORS_ORIGIN` を参照
 - `/GbraverBurst/prod/cognitoUserPoolId`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COGNITO_USER_POOL_ID` を参照
@@ -44,7 +68,14 @@ AWS Parameter Storeに以下の値をセットする。
   - SecureString
   - serverless dashboardから発行したaccesskey
 
-## Code Build
+## AWS Secrets Manager
+
+AWS Secrets Managerに以下のシークレットをセットする。
+
+- `/GbraverBurst/prod/coturnSharedSecret`
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COTURN_SHARED_SECRET` を参照
+
+## CodeBuild
 
 以下のCode Buildプロジェクトを生成する。
 
