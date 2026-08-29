@@ -10,27 +10,63 @@
 
 AWS Parameter Storeに以下の値をセットする。
 
-| 名前                                          | 種類         | 値                                                                                                                 |
-| --------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| /GbraverBurst/dev/service                     | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) SERVICE を参照                        |
-| /GbraverBurst/dev/wsSignalService             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_SIGNAL_SERVICE を参照              |
-| /GbraverBurst/dev/backendCloudfrontService    | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) BACKEND_CLOUDFRONT_SERVICE を参照     |
-| /GbraverBurst/dev/stage                       | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/dev/backendCloudfrontDomainName | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) BACKEND_CLOUDFRONT_DOMAIN_NAME を参照 |
-| /GbraverBurst/dev/backendCloudfrontCertArn    | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) BACKEND_CLOUDFRONT_CERT_ARN を参照    |
-| /GbraverBurst/dev/backendCloudfrontWebAclArn  | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) BACKEND_CLOUDFRONT_WEB_ACL_ARN を参照 |
-| /GbraverBurst/dev/wsApiDomainName             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_API_DOMAIN_NAME を参照             |
-| /GbraverBurst/dev/wsSignalDomainName          | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_SIGNAL_DOMAIN_NAME を参照          |
-| /GbraverBurst/dev/wsSignalCertArn             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_SIGNAL_CERT_ARN を参照             |
-| /GbraverBurst/dev/wsApiCertArn                | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_API_CERT_ARN を参照                |
-| /GbraverBurst/dev/anonymousBackendCorsOrigin  | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) ANONYMOUS_BACKEND_CORS_ORIGIN を参照  |
-| /GbraverBurst/dev/cognitoUserPoolId           | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_USER_POOL_ID を参照           |
-| /GbraverBurst/dev/cognitoClientId             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_CLIENT_ID を参照              |
-| /GbraverBurst/dev/matchMakeEcrRepositoryName  | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
-| /GbraverBurst/dev/dockerUser                  | SecureString | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) DOCKER_USER を参照                    |
-| /GbraverBurst/dev/dockerToken                 | SecureString | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) DOCKER_TOKEN を参照                   |
-| /GbraverBurst/dev/vpcSubnetCount              | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) VPC_SUBNET_COUNT を参照               |
-| /GbraverBurst/dev/serverlessAccessKey         | SecureString | serverless dashboardから発行したaccesskey                                                                          |
+- `/GbraverBurst/dev/service`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `SERVICE` を参照
+- `/GbraverBurst/dev/wsSignalService`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_SERVICE` を参照
+- `/GbraverBurst/dev/backendCloudfrontService`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_SERVICE` を参照
+- `/GbraverBurst/dev/stage`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `STAGE` を参照
+- `/GbraverBurst/dev/backendCloudfrontDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_DOMAIN_NAME` を参照
+- `/GbraverBurst/dev/backendCloudfrontCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_CERT_ARN` を参照
+- `/GbraverBurst/dev/backendCloudfrontWebAclArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照
+- `/GbraverBurst/dev/wsApiDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_DOMAIN_NAME` を参照
+- `/GbraverBurst/dev/wsSignalDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_DOMAIN_NAME` を参照
+- `/GbraverBurst/dev/wsSignalCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_CERT_ARN` を参照
+- `/GbraverBurst/dev/wsApiCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_CERT_ARN` を参照
+- `/GbraverBurst/dev/anonymousBackendCorsOrigin`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `ANONYMOUS_BACKEND_CORS_ORIGIN` を参照
+- `/GbraverBurst/dev/cognitoUserPoolId`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COGNITO_USER_POOL_ID` を参照
+- `/GbraverBurst/dev/cognitoClientId`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COGNITO_CLIENT_ID` を参照
+- `/GbraverBurst/dev/matchMakeEcrRepositoryName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `MATCH_MAKE_ECR_REPOSITORY_NAME` を参照
+- `/GbraverBurst/dev/dockerUser`
+  - SecureString
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `DOCKER_USER` を参照
+- `/GbraverBurst/dev/dockerToken`
+  - SecureString
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `DOCKER_TOKEN` を参照
+- `/GbraverBurst/dev/vpcSubnetCount`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `VPC_SUBNET_COUNT` を参照
+- `/GbraverBurst/dev/serverlessAccessKey`
+  - SecureString
+  - serverless dashboardから発行したaccesskey
 
 ## AWS Secrets Manager
 
