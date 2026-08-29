@@ -5,8 +5,8 @@ export {
 export { BattleSDK } from "./sdk/battle-sdk";
 export {
   createGuestLocalWebRTCSDK,
-  GuestLocalWebRTCSDK,
-} from "./sdk/guest-local-webrtc-sdk";
+  GuestAnonymousSDK,
+} from "./sdk/guest-anonymous-sdk";
 export {
   createHostLocalWebRTCSDK,
   HostLocalWebRTCSDK,
