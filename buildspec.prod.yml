@@ -1,16 +1,16 @@
 version: 0.2
 env:
-  # variables:
-  #   COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret #あいことば対戦を本番リリースするまでコメントアウト
+  variables:
+    COTURN_SHARED_SECRET: /GbraverBurst/prod/coturnSharedSecret
   parameter-store:
     SERVICE: /GbraverBurst/prod/service
-    # WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
+    WS_SIGNAL_SERVICE: /GbraverBurst/prod/wsSignalService
     STAGE: /GbraverBurst/prod/stage
     WS_API_DOMAIN_NAME: /GbraverBurst/prod/wsApiDomainName
     WS_API_CERT_ARN: /GbraverBurst/prod/wsApiCertArn
-    # WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName #あいことば対戦を本番リリースするまでコメントアウト
-    # WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn #あいことば対戦を本番リリースするまでコメントアウト
-    # ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/prod/anonymousBackendCorsOrigin #あいことば対戦を本番リリースするまでコメントアウト
+    WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/prod/wsSignalDomainName
+    WS_SIGNAL_CERT_ARN: /GbraverBurst/prod/wsSignalCertArn
+    ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/prod/anonymousBackendCorsOrigin
     COGNITO_USER_POOL_ID: /GbraverBurst/prod/cognitoUserPoolId
     COGNITO_CLIENT_ID: /GbraverBurst/prod/cognitoClientId
     DOCKER_USER: /GbraverBurst/prod/dockerUser
@@ -31,4 +31,4 @@ phases:
       - ./deploy-serverless.bash
       - ./push-match-make-container.bash
       - ./deploy-backend-ecs.bash
-      # - ./deploy-ws-signal.bash #あいことば対戦を本番リリースするまでコメントアウト
+      - ./deploy-ws-signal.bash
