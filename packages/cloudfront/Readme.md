@@ -6,7 +6,7 @@
 
 - CloudFrontのドメイン名（Route53のホストゾーン）
 - CloudFrontのSSL証明書（us-east-1リージョンで作成したACM）
-- [ws-signal](../ws-signal)でデプロイしCloudFormationスタック
+- [anonymous-backend-app](../anonymous-backend-app)でデプロイして作成されたCloudFormationスタック
 
 ## 各種手順
 
