@@ -4,7 +4,7 @@ env:
   variables:
     COTURN_SHARED_SECRET: /GbraverBurst/dev/coturnSharedSecret
   parameter-store:
-    WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
+    ANONYMOUS_SERVICE: /GbraverBurst/dev/anonymousService
     WS_SIGNAL_DOMAIN_NAME: /GbraverBurst/dev/wsSignalDomainName
     WS_SIGNAL_CERT_ARN: /GbraverBurst/dev/wsSignalCertArn
     ANONYMOUS_BACKEND_CORS_ORIGIN: /GbraverBurst/dev/anonymousBackendCorsOrigin

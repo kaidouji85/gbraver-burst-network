@@ -21,8 +21,8 @@ npm run build
 
 - `SERVICE`
   - デプロイするWebSocket APIのサービス名、gbraver-burst-sls-dev、gbraver-burst-sls-prodなどを記入する
-- `WS_SIGNAL_SERVICE`
-  - デプロイするシグナルサーバーのサービス名、gb-ws-signal-dev、gb-ws-signal-prodなどを記入する
+- `ANONYMOUS_SERVICE`
+  - デプロイする匿名バックエンドのサービス名、gbraver-burst-anonymous-dev、gbraver-burst-anonymous-prodなどを記入する
 - `BACKEND_CLOUDFRONT_SERVICE`
   - バックエンドAPIの前段に配置するCloudFrontのサービス名、gb-backend-cloudfront-dev、gb-backend-cloudfront-prodなどを記入する
 - `STAGE`

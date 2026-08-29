@@ -13,9 +13,9 @@ AWS Parameter Storeに以下の値をセットする。
 - `/GbraverBurst/dev/service`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `SERVICE` を参照
-- `/GbraverBurst/dev/wsSignalService`
+- `/GbraverBurst/dev/anonymousService`
   - String
-  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_SIGNAL_SERVICE` を参照
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `ANONYMOUS_SERVICE` を参照
 - `/GbraverBurst/dev/backendCloudfrontService`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_SERVICE` を参照

@@ -5,7 +5,7 @@ OWN_PATH=$(cd "$(dirname "${0}")" && pwd)
 cd "${OWN_PATH}"/packages/cloudfront || exit
 
 STACK_NAME="${BACKEND_CLOUDFRONT_SERVICE:?}-g1"
-EXPORT_NAME="${WS_SIGNAL_SERVICE:?}:${STAGE:?}:HttpApiDomainName"
+EXPORT_NAME="${ANONYMOUS_SERVICE:?}:${STAGE:?}:HttpApiDomainName"
 ANONYMOUS_BACKEND_DOMAIN_NAME=$(aws cloudformation list-exports --query "Exports[?Name=='${EXPORT_NAME}'].Value" --output text)
 aws cloudformation deploy \
   --template-file gb-backend-cloudfront.yaml \

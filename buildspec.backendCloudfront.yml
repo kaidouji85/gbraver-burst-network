@@ -3,7 +3,7 @@ env:
   parameter-store:
     SERVICE: /GbraverBurst/dev/service
     STAGE: /GbraverBurst/dev/stage
-    WS_SIGNAL_SERVICE: /GbraverBurst/dev/wsSignalService
+    ANONYMOUS_SERVICE: /GbraverBurst/dev/anonymousService
     BACKEND_CLOUDFRONT_SERVICE: /GbraverBurst/dev/backendCloudfrontService
     BACKEND_CLOUDFRONT_DOMAIN_NAME: /GbraverBurst/dev/backendCloudfrontDomainName
     BACKEND_CLOUDFRONT_CERT_ARN: /GbraverBurst/dev/backendCloudfrontCertArn
