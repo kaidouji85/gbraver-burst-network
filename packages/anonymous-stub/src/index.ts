@@ -10,8 +10,8 @@ import { UseCase } from "./use-case/use-case";
 
 /** WebSocketシグナルサーバーのURL */
 const WS_SIGNAL_SERVER_URL = process.env.WS_SIGNAL_SERVER_URL || "";
-/** WebRTC Helper APIのURL */
-const WEBRTC_HELPER_API_URL = process.env.WEBRTC_HELPER_API_URL || "";
+/** 匿名バックエンドREST APIのURL */
+const ANONYMOUS_BACKEND_API_URL = process.env.ANONYMOUS_BACKEND_API_URL || "";
 /** coturnサーバーのドメイン名 */
 const COTURN_DOMAIN_NAME = process.env.COTURN_DOMAIN_NAME || "";
 
@@ -54,16 +54,16 @@ const getRoomIDInput = (): HTMLInputElement => {
  * エントリポイント
  */
 window.onload = () => {
-  const authToken = createAuthTokenManager(WEBRTC_HELPER_API_URL);
+  const authToken = createAuthTokenManager(ANONYMOUS_BACKEND_API_URL);
   const hostSDK = createHostLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
-    webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
+    webRTCHelperApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });
   const guestSDK = createGuestLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
-    webRTCHelperApiURL: WEBRTC_HELPER_API_URL,
+    webRTCHelperApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });
