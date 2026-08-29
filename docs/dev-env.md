@@ -106,8 +106,8 @@ AWS Secrets Managerに以下のシークレットをセットする。
   - buildspec.backendEcs.yml
   - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
   - webhook: なし
-- 匿名バックエンドのシグナルサーバーデプロイ
-  - buildspec.wsSignal.yml
+- 匿名バックエンドをデプロイ
+  - buildspec.anonymous.yml
   - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
   - webhook: [開発環境CD用webhook](#開発環境cd用webhook)
 - 匿名バックエンドのシグナルサーバー削除
