@@ -57,13 +57,13 @@ window.onload = () => {
   const authToken = createAuthTokenManager(ANONYMOUS_BACKEND_API_URL);
   const hostSDK = createHostLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
-    webRTCHelperApiURL: ANONYMOUS_BACKEND_API_URL,
+    anonymousBackendApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });
   const guestSDK = createGuestLocalWebRTCSDK({
     wsSignalUrl: WS_SIGNAL_SERVER_URL,
-    webRTCHelperApiURL: ANONYMOUS_BACKEND_API_URL,
+    anonymousBackebdApiURL: ANONYMOUS_BACKEND_API_URL,
     coturnDomainName: COTURN_DOMAIN_NAME,
     authToken,
   });

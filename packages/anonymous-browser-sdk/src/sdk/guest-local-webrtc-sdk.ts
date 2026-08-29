@@ -63,8 +63,8 @@ export type GuestLocalWebRTCSDK = {
 type LocalWebRTCGuestSDKImplOptions = GuestWebRTCConnectionManagerOptions & {
   /** WebSocketシグナルサーバーのURL */
   wsSignalUrl: string;
-  /** WebRTCヘルパーAPIのURL */
-  webRTCHelperApiURL: string;
+  /** 匿名バックエンドREST APIのURL */
+  anonymousBackendApiURL: string;
 };
 
 /** ローカルWebRTCゲスト用SDKの実装 */

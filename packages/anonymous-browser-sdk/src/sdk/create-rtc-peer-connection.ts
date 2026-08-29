@@ -3,19 +3,19 @@ import { issueCoturnCredential } from "../http-api/issue-coturn-credential";
 /**
  * RTCPeerConnectionを作成する
  * @param options オプション
- * @param options.webRTCHelperApiURL WebRTCヘルパーAPIのURL
+ * @param options.anonymousBackendApiURL 匿名バックエンドREST APIのURL
  * @param options.coturnDomainName coturnサーバーのドメイン名
  * @param options.authToken 認証トークン
  * @returns 作成したRTCPeerConnection
  */
 export const createRTCPeerConnection = async (options: {
-  webRTCHelperApiURL: string;
+  anonymousBackendApiURL: string;
   coturnDomainName: string;
   authToken: string;
 }): Promise<RTCPeerConnection> => {
-  const { webRTCHelperApiURL, coturnDomainName, authToken } = options;
+  const { anonymousBackendApiURL, coturnDomainName, authToken } = options;
   const { username, password: credential } = await issueCoturnCredential({
-    apiURL: webRTCHelperApiURL,
+    apiURL: anonymousBackendApiURL,
     authToken,
   });
   return new RTCPeerConnection({
