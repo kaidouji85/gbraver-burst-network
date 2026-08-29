@@ -31,4 +31,4 @@ phases:
       - ./deploy-serverless.bash
       - ./push-match-make-container.bash
       - ./deploy-backend-ecs.bash
-      - ./deploy-ws-signal.bash
+      - ./deploy-anonymous.bash

@@ -90,8 +90,8 @@ npm run build
 # Fargate通常デプロイ
 ./deploy-backend-ecs.bash
 
-# シグナルサーバーデプロイ
-./deploy-ws-signal.bash
+# 匿名バックエンドデプロイ
+./deploy-anonymous.bash
 ```
 
 ### 4.2. 2回目以降のデプロイ
