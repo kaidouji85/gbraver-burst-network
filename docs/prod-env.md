@@ -10,19 +10,39 @@
 
 AWS Parameter Storeに以下の値をセットする。
 
-| 名前                                          | 種類         | 値                                                                                                                 |
-| --------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| /GbraverBurst/prod/service                    | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) SERVICE を参照                        |
-| /GbraverBurst/prod/stage                      | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) STAGE を参照                          |
-| /GbraverBurst/prod/wsApiDomainName            | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_API_DOMAIN_NAME を参照             |
-| /GbraverBurst/prod/wsApiCertArn               | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) WS_API_CERT_ARN を参照                |
-| /GbraverBurst/prod/cognitoUserPoolId          | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_USER_POOL_ID を参照           |
-| /GbraverBurst/prod/cognitoClientId            | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) COGNITO_CLIENT_ID を参照              |
-| /GbraverBurst/prod/matchMakeEcrRepositoryName | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) MATCH_MAKE_ECR_REPOSITORY_NAME を参照 |
-| /GbraverBurst/prod/dockerUser                 | SecureString | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) DOCKER_USER を参照                    |
-| /GbraverBurst/prod/dockerToken                | SecureString | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) DOCKER_TOKEN を参照                   |
-| /GbraverBurst/prod/vpcSubnetCount             | String       | [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) VPC_SUBNET_COUNT を参照               |
-| /GbraverBurst/prod/serverlessAccessKey        | SecureString | serverless dashboardから発行したaccesskey                                                                          |
+- `/GbraverBurst/prod/service`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `SERVICE` を参照
+- `/GbraverBurst/prod/stage`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `STAGE` を参照
+- `/GbraverBurst/prod/wsApiDomainName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_DOMAIN_NAME` を参照
+- `/GbraverBurst/prod/wsApiCertArn`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_CERT_ARN` を参照
+- `/GbraverBurst/prod/cognitoUserPoolId`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COGNITO_USER_POOL_ID` を参照
+- `/GbraverBurst/prod/cognitoClientId`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `COGNITO_CLIENT_ID` を参照
+- `/GbraverBurst/prod/matchMakeEcrRepositoryName`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `MATCH_MAKE_ECR_REPOSITORY_NAME` を参照
+- `/GbraverBurst/prod/dockerUser`
+  - SecureString
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `DOCKER_USER` を参照
+- `/GbraverBurst/prod/dockerToken`
+  - SecureString
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `DOCKER_TOKEN` を参照
+- `/GbraverBurst/prod/vpcSubnetCount`
+  - String
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `VPC_SUBNET_COUNT` を参照
+- `/GbraverBurst/prod/serverlessAccessKey`
+  - SecureString
+  - serverless dashboardから発行したaccesskey
 
 ## Code Build
 
