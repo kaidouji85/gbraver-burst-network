@@ -257,7 +257,7 @@ type CreateGuestAnonymousSDKOptions = GuestAnonymousSDKImplOptions;
  * @param options オプション
  * @returns ゲスト用匿名バックエンドSDKのインスタンス
  */
-export function createGuestLocalWebRTCSDK(
+export function createGuestAnonymousSDK(
   options: CreateGuestAnonymousSDKOptions,
 ): GuestAnonymousSDK {
   return new GuestAnonymousSDKImpl(options);
