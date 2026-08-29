@@ -1,5 +1,12 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.31.0
+
+### Minor Changes
+
+- SDKの名前を変更
+- 15d5669: SDK名を変更
+
 ## 1.31.0-beta.0
 
 ### Minor Changes

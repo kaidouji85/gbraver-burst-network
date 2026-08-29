@@ -1,5 +1,18 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.31.0
+
+### Minor Changes
+
+- SDKの名前を変更
+- 15d5669: SDK名を変更
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [15d5669]
+  - @gbraver-burst-network/offline-browser-sdk@1.31.0
+
 ## 1.31.0-beta.0
 
 ### Minor Changes
