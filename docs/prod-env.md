@@ -91,8 +91,8 @@ AWS Secrets Managerに以下のシークレットをセットする。
   - buildspec.backendEcs.remove.prod.yml
   - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
   - webhook: なし
-- 匿名バックエンドのシグナルサーバー削除
-  - buildspec.wsSignal.remove.prod.yml
+- 匿名バックエンドを削除
+  - buildspec.anonymous.remove.prod.yml
   - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
   - webhook: なし
 
