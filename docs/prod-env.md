@@ -48,11 +48,18 @@ AWS Parameter Storeに以下の値をセットする。
 
 以下のCode Buildプロジェクトを生成する。
 
-| 役割                             | buildspec                            | 環境                                                                                                                       | 　webhook                                   |
-| -------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| 通常バックエンドのフルデプロイ   | buildspec.prod.yml                   | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | [本番環境CD用webhook](#本番環境cd用webhook) |
-| 通常バックエンドのserverless削除 | buildspec.sls.remove.prod.yml        | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
-| 通常バックエンドのECS削除        | buildspec.backendEcs.remove.prod.yml | [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0) | なし                                        |
+- 通常バックエンドのフルデプロイ
+  - buildspec.prod.yml
+  - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
+  - webhook: [本番環境CD用webhook](#本番環境cd用webhook) |
+- 通常バックエンドのserverless削除
+  - buildspec.sls.remove.prod.yml
+  - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
+  - webhook: なし
+- 通常バックエンドのECS削除
+  - buildspec.backendEcs.remove.prod.yml
+  - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
+  - webhook: なし
 
 ### 本番環境cd用webhook
 
