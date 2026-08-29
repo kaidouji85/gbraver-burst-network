@@ -123,6 +123,6 @@ npm run build
 # サーバーレス削除
 ./remove-serverless.bash
 
-# シグナルサーバー削除
-./remove-ws-signal.bash
+# 匿名バックエンド削除
+./remove-anonymous.bash
 ```
