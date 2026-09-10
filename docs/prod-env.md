@@ -95,6 +95,10 @@ AWS Secrets Managerに以下のシークレットをセットする。
   - buildspec.anonymous.remove.prod.yml
   - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
   - webhook: なし
+- バックエンドCloudFrontのデプロイ
+  - buildspec.backendCloudfront.prod.yml
+  - 環境: [amazonlinux-aarch64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/tree/master/al/aarch64/standard/3.0)
+  - webhook: なし
 
 ### 本番環境cd用webhook
 
@@ -120,6 +124,10 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
+2. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
+3. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
+4. `/GbraverBurst/prod/backendCloudfrontWebAclArn`に3で生成したWebACLのARNをセットする
+5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に`/GbraverBurst/prod/stage`を指定して実行
 
 ### ブルーグリーンデプロイ
 
@@ -128,6 +136,14 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 - 1. 新規環境作成
   - 1.2. Parameter Storeの「/GbraverBurst/prod/stage」に「新ステージ」をセットする
   - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-- 2. 旧環境削除
-  - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
-  - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 1.4. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
+  - 1.5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
+- 2. 旧環境への切り戻し（必要に応じて）
+  - 2.1. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 2.2. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 2.3. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 2.4. CodeBuildで「匿名バックエンドのシグナルサーバー削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+- 3. 旧環境削除
+  - 3.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 3.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 3.3. CodeBuildで「匿名バックエンドのシグナルサーバー削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
