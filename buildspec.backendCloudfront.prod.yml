@@ -1,0 +1,14 @@
+version: 0.2
+env:
+  parameter-store:
+    SERVICE: /GbraverBurst/prod/service
+    STAGE: /GbraverBurst/prod/stage
+    ANONYMOUS_SERVICE: /GbraverBurst/prod/anonymousService
+    BACKEND_CLOUDFRONT_SERVICE: /GbraverBurst/prod/backendCloudfrontService
+    BACKEND_CLOUDFRONT_DOMAIN_NAME: /GbraverBurst/prod/backendCloudfrontDomainName
+    BACKEND_CLOUDFRONT_CERT_ARN: /GbraverBurst/prod/backendCloudfrontCertArn
+    BACKEND_CLOUDFRONT_WEB_ACL_ARN: /GbraverBurst/prod/backendCloudfrontWebAclArn
+phases:
+  build:
+    commands:
+      - ./deploy-backend-cloudfont.bash

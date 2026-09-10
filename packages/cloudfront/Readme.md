@@ -32,7 +32,7 @@ aws cloudformation deploy \
   AcmCertificateArn=${BACKEND_CLOUDFRONT_CERT_ARN} \
   --no-fail-on-empty-changeset
 
-# 必要に応じてマネコンからCloudFrontを定額プランに変更
+# マネコンからCloudFrontを定額プランに変更
 # 定額プランで追加されたWeb ACLのARNをメモしておく
 
 # 2回目以降のリリース
