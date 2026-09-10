@@ -144,8 +144,9 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 2. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
-3. CodeBuildで「バックエンドCloudFrontのデプロイ」を実行
-4. Route53、AWS Certificate Managerを用いてCloudFrontのドメイン名、SSL証明書を設定する
+3. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
+4. `/GbraverBurst/dev/backendCloudfrontWebAclArn`に3で生成したWebACLのARNをセットする
+5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に`/GbraverBurst/dev/stage`を指定して実行
 
 ### ブルーグリーンデプロイ
 
