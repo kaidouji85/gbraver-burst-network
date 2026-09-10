@@ -125,7 +125,7 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 2. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
-3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に3で生成したWebACLのARNをセットする
+3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行
 
 ### ブルーグリーンデプロイ
@@ -147,9 +147,6 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 
 - 1. 旧環境への切り戻し
   - 1.1. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「旧ステージ」を指定して実行
-  - 1.2. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 1.3. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 1.4. CodeBuildで「匿名バックエンドの削除」を環境変数「STAGE」に「新ステージ」を指定して実行
 - 2. 新規作成環境の削除
   - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
   - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
