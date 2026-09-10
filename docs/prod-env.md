@@ -124,12 +124,13 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-2. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
-3. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
-4. `/GbraverBurst/prod/backendCloudfrontWebAclArn`に3で生成したWebACLのARNをセットする
-5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に`/GbraverBurst/prod/stage`を指定して実行
+2. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
+3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に3で生成したWebACLのARNをセットする
+4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行
 
 ### ブルーグリーンデプロイ
+
+**正常系**
 
 - 0. 事前準備
   - 0.1. Parameter Storeの「/GbraverBurst/prod/stage」の「旧ステージ」をメモする
@@ -138,12 +139,19 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
   - 1.3. CodeBuildで「通常バックエンドのフルデプロイ」を実行
   - 1.4. CodeBuildで「匿名バックエンドのシグナルサーバーデプロイ」を実行
   - 1.5. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「新ステージ」を指定して実行
-- 2. 旧環境への切り戻し（必要に応じて）
-  - 2.1. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「旧ステージ」を指定して実行
-  - 2.2. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 2.3. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
-  - 2.4. CodeBuildで「匿名バックエンドのシグナルサーバー削除」を環境変数「STAGE」に「新ステージ」を指定して実行
-- 3. 旧環境削除
-  - 3.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
-  - 3.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
-  - 3.3. CodeBuildで「匿名バックエンドのシグナルサーバー削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+- 2. 旧環境削除
+  - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 2.3. CodeBuildで「匿名バックエンドの削除」を環境変数「STAGE」に「旧ステージ」を指定して実行
+
+**リリース失敗時**
+
+- 1. 旧環境への切り戻し
+  - 1.1. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」に「旧ステージ」を指定して実行
+  - 1.2. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 1.3. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 1.4. CodeBuildで「匿名バックエンドの除」を環境変数「STAGE」に「新ステージ」を指定して実行
+- 2. 新規作成環境の削除
+  - 2.1. CodeBuildで「通常バックエンドのECS削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 2.2. CodeBuildで「通常バックエンドのserverless削除」を環境変数「STAGE」に「新ステージ」を指定して実行
+  - 2.3. CodeBuildで「匿名バックエンドの削除」を環境変数「STAGE」に「新ステージ」を指定して実行
