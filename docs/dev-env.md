@@ -156,6 +156,7 @@ developブランチにpushされた時にCodeBuildが実行されるように、
    ```
 3. Parameter Store「/GbraverBurst/dev/backendCloudfrontWebAclArn」を新規作成し、2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/dev/stage」の値を指定して実行
+5. Route53でバックエンドCloudFrontのドメインを設定する
 
 ### ブルーグリーンデプロイ
 
