@@ -77,7 +77,7 @@ AWS Secrets Managerに以下のシークレットをセットする。
 
 ## CodeBuild
 
-以下のCode Buildプロジェクトを生成する。
+以下のCodeBuildプロジェクトを生成する。
 
 - 通常バックエンドのフルデプロイ
   - buildspec.prod.yml
@@ -132,8 +132,7 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
    export BACKEND_CLOUDFRONT_SERVICE=<Parameter Store「/GbraverBurst/prod/backendCloudfrontService」にセットした値>
    export BACKEND_CLOUDFRONT_DOMAIN_NAME=<Parameter Store「/GbraverBurst/prod/backendCloudfrontDomainName」にセットした値>
    export BACKEND_CLOUDFRONT_CERT_ARN=<Parameter Store「/GbraverBurst/prod/backendCloudfrontCertArn」にセットした値>
-   export BACKEND_CLOUDFRONT_WEB_ACL_ARN=<Parameter Store「/GbraverBurst/prod/backendCloudfrontWebAclArn」にセットした値>
-   ./deploy-cloudfront.sh
+   ./deploy-backend-cloudfont.bash
    ```
 3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行

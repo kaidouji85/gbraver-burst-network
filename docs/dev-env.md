@@ -151,8 +151,7 @@ developブランチにpushされた時にCodeBuildが実行されるように、
    export BACKEND_CLOUDFRONT_SERVICE=<Parameter Store「/GbraverBurst/dev/backendCloudfrontService」にセットした値>
    export BACKEND_CLOUDFRONT_DOMAIN_NAME=<Parameter Store「/GbraverBurst/dev/backendCloudfrontDomainName」にセットした値>
    export BACKEND_CLOUDFRONT_CERT_ARN=<Parameter Store「/GbraverBurst/dev/backendCloudfrontCertArn」にセットした値>
-   export BACKEND_CLOUDFRONT_WEB_ACL_ARN=<Parameter Store「/GbraverBurst/dev/backendCloudfrontWebAclArn」にセットした値>
-   ./deploy-cloudfront.sh
+   ./deploy-backend-cloudfont.bash
    ```
 3. Parameter Storeの「/GbraverBurst/dev/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/dev/stage」の値を指定して実行
