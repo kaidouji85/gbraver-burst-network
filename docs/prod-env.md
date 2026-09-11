@@ -30,7 +30,7 @@ AWS Parameter Storeに以下の値をセットする。
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_CERT_ARN` を参照
 - `/GbraverBurst/prod/backendCloudfrontWebAclArn`
   - String
-  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照、初期値は空欄
 - `/GbraverBurst/prod/wsApiDomainName`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_DOMAIN_NAME` を参照
@@ -77,7 +77,7 @@ AWS Secrets Managerに以下のシークレットをセットする。
 
 ## CodeBuild
 
-以下のCode Buildプロジェクトを生成する。
+以下のCodeBuildプロジェクトを生成する。
 
 - 通常バックエンドのフルデプロイ
   - buildspec.prod.yml
@@ -124,9 +124,20 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-2. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
-3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
+2. 以下コマンドでCloudFrontを新規作成する
+   ```bash
+   export AWS_DEFAULT_REGION=<デプロイ対象のAWSリージョン>
+   export SERVICE=<Parameter Store「/GbraverBurst/prod/service」にセットした値>
+   export STAGE=<Parameter Store「/GbraverBurst/prod/stage」にセットした値>
+   export ANONYMOUS_SERVICE=<Parameter Store「/GbraverBurst/prod/anonymousService」にセットした値>
+   export BACKEND_CLOUDFRONT_SERVICE=<Parameter Store「/GbraverBurst/prod/backendCloudfrontService」にセットした値>
+   export BACKEND_CLOUDFRONT_DOMAIN_NAME=<Parameter Store「/GbraverBurst/prod/backendCloudfrontDomainName」にセットした値>
+   export BACKEND_CLOUDFRONT_CERT_ARN=<Parameter Store「/GbraverBurst/prod/backendCloudfrontCertArn」にセットした値>
+   ./deploy-backend-cloudfont.bash
+   ```
+3. Parameter Store「/GbraverBurst/prod/backendCloudfrontWebAclArn」を新規作成し、2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行
+5. Route53でバックエンドCloudFrontのドメインを設定する
 
 ### ブルーグリーンデプロイ
 
