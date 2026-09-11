@@ -145,6 +145,7 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
 2. 以下コマンドでCloudFrontを新規作成する
    ```bash
+   export AWS_DEFAULT_REGION=<デプロイ対象のAWSリージョン>
    export SERVICE=<Parameter Store「/GbraverBurst/dev/service」にセットした値>
    export STAGE=<Parameter Store「/GbraverBurst/dev/stage」にセットした値>
    export ANONYMOUS_SERVICE=<Parameter Store「/GbraverBurst/dev/anonymousService」にセットした値>
