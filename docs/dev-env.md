@@ -143,7 +143,17 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-2. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
+2. 以下コマンドでCloudFrontを新規作成する
+   ```bash
+   export SERVICE=<Parameter Store「/GbraverBurst/dev/service」にセットした値>
+   export STAGE=<Parameter Store「/GbraverBurst/dev/stage」にセットした値>
+   export ANONYMOUS_SERVICE=<Parameter Store「/GbraverBurst/dev/anonymousService」にセットした値>
+   export BACKEND_CLOUDFRONT_SERVICE=<Parameter Store「/GbraverBurst/dev/backendCloudfrontService」にセットした値>
+   export BACKEND_CLOUDFRONT_DOMAIN_NAME=<Parameter Store「/GbraverBurst/dev/backendCloudfrontDomainName」にセットした値>
+   export BACKEND_CLOUDFRONT_CERT_ARN=<Parameter Store「/GbraverBurst/dev/backendCloudfrontCertArn」にセットした値>
+   export BACKEND_CLOUDFRONT_WEB_ACL_ARN=<Parameter Store「/GbraverBurst/dev/backendCloudfrontWebAclArn」にセットした値>
+   ./deploy-cloudfront.sh
+   ```
 3. Parameter Storeの「/GbraverBurst/dev/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/dev/stage」の値を指定して実行
 
