@@ -30,7 +30,7 @@ AWS Parameter Storeに以下の値をセットする。
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_CERT_ARN` を参照
 - `/GbraverBurst/prod/backendCloudfrontWebAclArn`
   - String
-  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照
+  - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `BACKEND_CLOUDFRONT_WEB_ACL_ARN` を参照、初期値は空欄
 - `/GbraverBurst/prod/wsApiDomainName`
   - String
   - [ローカル環境マニュアル/環境変数定義の定義](./local-env.md#3-環境変数の定義) `WS_API_DOMAIN_NAME` を参照
@@ -124,9 +124,7 @@ masterブランチにpushされた時にCodeBuildが実行されるように、�
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-2. CodeBuildで「バックエンドCloudFrontのデプロイ」を以下条件で実行
-   - 環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定
-   - 環境変数「WEB_ACL_ARN」に空欄を指定
+2. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行
 3. Parameter Storeの「/GbraverBurst/prod/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/prod/stage」の値を指定して実行
 
