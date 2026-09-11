@@ -1,5 +1,56 @@
 # @gbraver-burst-network/aws-vpc
 
+## 1.31.0
+
+### Minor Changes
+
+- SDKの名前を変更
+- 15d5669: SDK名を変更
+
+## 1.31.0-beta.0
+
+### Minor Changes
+
+- SDK名を変更
+
+## 1.30.0
+
+### Minor Changes
+
+- パッケージ名変更
+- 4de966a: ドキュメント最新化
+
+## 1.30.0-beta.1
+
+### Minor Changes
+
+- ドキュメント最新化
+
+## 1.30.0-beta.0
+
+### Minor Changes
+
+- パッケージ名を変更
+
+## 1.29.0
+
+### Minor Changes
+
+- WebRTCで選択された経路をログに記載するようにした
+
+## 1.28.0
+
+### Minor Changes
+
+- 222404b: あいことば対戦をTricle ICEに対応させた
+- あいことば対戦をTrickle ICEに対応させた
+
+## 1.28.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦をTricle ICEに対応させた
+
 ## 1.27.0
 
 ### Minor Changes

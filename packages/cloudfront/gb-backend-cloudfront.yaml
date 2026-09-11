@@ -8,8 +8,8 @@ Mappings:
     OriginRequestPolicy:
       AllViewerExceptHostHeader: "b689b0a8-53d0-40ab-baf2-68738e2966ac"
 Parameters:
-  # WebRTC HelperのAPI Gatewayのドメイン名
-  WebRTCHelperDomainName:
+  # 匿名バックエンドのドメイン名
+  AnonymousBackendDomainName:
     Type: String
   # CloudFront Distributionのインターネットアクセス用のドメイン名
   DistributionAlias:
@@ -42,11 +42,11 @@ Resources:
             OriginAccessControlId: ""
             ConnectionAttempts: 3
             OriginCustomHeaders: []
-            DomainName: !Ref WebRTCHelperDomainName
+            DomainName: !Ref AnonymousBackendDomainName
             OriginShield:
               Enabled: false
             OriginPath: ""
-            Id: !Ref WebRTCHelperDomainName
+            Id: !Ref AnonymousBackendDomainName
             CustomOriginConfig:
               IpAddressType: "ipv4"
               OriginReadTimeout: 30
@@ -65,7 +65,7 @@ Resources:
           Compress: true
           FunctionAssociations: []
           LambdaFunctionAssociations: []
-          TargetOriginId: !Ref WebRTCHelperDomainName
+          TargetOriginId: !Ref AnonymousBackendDomainName
           ViewerProtocolPolicy: "redirect-to-https"
           GrpcConfig:
             Enabled: false

@@ -1,5 +1,100 @@
 # @gbraver-burst-network/offline-stub
 
+## 1.31.0
+
+### Minor Changes
+
+- SDKの名前を変更
+- 15d5669: SDK名を変更
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [15d5669]
+  - @gbraver-burst-network/offline-browser-sdk@1.31.0
+
+## 1.31.0-beta.0
+
+### Minor Changes
+
+- SDK名を変更
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.31.0-beta.0
+
+## 1.30.0
+
+### Minor Changes
+
+- パッケージ名変更
+- 4de966a: ドキュメント最新化
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [4de966a]
+  - @gbraver-burst-network/offline-browser-sdk@1.30.0
+
+## 1.30.0-beta.1
+
+### Minor Changes
+
+- ドキュメント最新化
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.30.0-beta.1
+
+## 1.30.0-beta.0
+
+### Minor Changes
+
+- パッケージ名を変更
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.30.0-beta.0
+
+## 1.29.0
+
+### Minor Changes
+
+- WebRTCで選択された経路をログに記載するようにした
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [6638b7c]
+  - @gbraver-burst-network/offline-browser-sdk@1.29.0
+
+## 1.28.0
+
+### Minor Changes
+
+- 222404b: あいことば対戦をTricle ICEに対応させた
+- あいことば対戦をTrickle ICEに対応させた
+
+### Patch Changes
+
+- Updated dependencies [222404b]
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.28.0
+
+## 1.28.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦をTricle ICEに対応させた
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@1.28.0-beta.0
+
 ## 1.27.0
 
 ### Minor Changes

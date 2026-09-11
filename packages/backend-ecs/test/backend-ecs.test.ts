@@ -8,13 +8,20 @@ test("バックエンドECSスタックがスナップショットと一致し�
   const stack = new BackendEcsStack(app, "MyTestStack", {
     service: "gbraver-buesr-sls-dev",
     stage: "v1-5-1",
-    vpcId: "MyVpcId",
+    vpcId: "vpc-0123456789abcdef0",
     subnetAzs: ["az-a", "az-b", "az-c"],
-    publicSubnetIds: ["subnet-id-0", "subnet-id-1", "subnet-id-2"],
+    publicSubnetIds: [
+      "subnet-0123456789abcdef0",
+      "subnet-0123456789abcdef1",
+      "subnet-0123456789abcdef2",
+    ],
     websocketAPIID: "MyWebsocketAPIID",
-    connectionsTableARN: "MyConnectionsTableARN",
-    casualMatchEntriesTableARN: "MyCasualMatchEntriesTableARN",
-    battlesTableARN: "MyBattlesTableARN",
+    connectionsTableARN:
+      "arn:aws:dynamodb:ap-northeast-1:123456789012:table/MyConnectionsTable",
+    casualMatchEntriesTableARN:
+      "arn:aws:dynamodb:ap-northeast-1:123456789012:table/MyCasualMatchEntriesTable",
+    battlesTableARN:
+      "arn:aws:dynamodb:ap-northeast-1:123456789012:table/MyBattlesTable",
     matchMakeEcrRepositoryName: "MyMatchMakeRepositoryName",
     dockerImageTag: "MyDockerImageTag",
   });
