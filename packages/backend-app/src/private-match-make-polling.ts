@@ -1,9 +1,9 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { isValidPrivateMatch } from "./core/is-valid-private-match";
-import { privateMatchMake } from "./core/private-match-make";
-import { startPrivateMatch } from "./core/start-private-match";
+import { isValidPrivateMatch } from "./core/matching/private-match/is-valid-private-match";
+import { privateMatchMake } from "./core/matching/private-match/private-match-make";
+import { startPrivateMatch } from "./core/matching/private-match/start-private-match";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";

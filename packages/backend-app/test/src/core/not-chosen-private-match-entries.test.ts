@@ -1,9 +1,9 @@
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
-import { BattleEntry } from "../../../src/core/battle-entry";
-import { notChosenPrivateMatchEntries } from "../../../src/core/not-chosen-private-match-entries";
-import { PrivateMatchEntry } from "../../../src/core/private-match-entry";
-import { PrivateMatching } from "../../../src/core/private-match-make";
+import { BattleEntry } from "../../../src/core/matching/battle-entry";
+import { notChosenPrivateMatchEntries } from "../../../src/core/matching/private-match/not-chosen-private-match-entries";
+import { PrivateMatchEntry } from "../../../src/core/matching/private-match/private-match-entry";
+import { PrivateMatching } from "../../../src/core/matching/private-match/private-match-make";
 
 const owner: BattleEntry = {
   userID: "owner",

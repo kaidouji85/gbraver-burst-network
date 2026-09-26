@@ -4,7 +4,7 @@ import {
   PrivateMatchRoom,
   PrivateMatchRoomID,
   PrivateMatchRoomSchema,
-} from "../core/private-match-room";
+} from "../core/matching/private-match/private-match-room";
 import { isConditionalCheckFailedException } from "./is-conditional-check-failed-exception";
 
 /**

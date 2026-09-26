@@ -1,9 +1,9 @@
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
-import { BattleEntry } from "../../../src/core/battle-entry";
-import { PrivateMatchEntry } from "../../../src/core/private-match-entry";
-import { privateMatchMake } from "../../../src/core/private-match-make";
-import { PrivateMatchRoom } from "../../../src/core/private-match-room";
+import { BattleEntry } from "../../../src/core/matching/battle-entry";
+import { PrivateMatchEntry } from "../../../src/core/matching/private-match/private-match-entry";
+import { privateMatchMake } from "../../../src/core/matching/private-match/private-match-make";
+import { PrivateMatchRoom } from "../../../src/core/matching/private-match/private-match-room";
 
 const room: PrivateMatchRoom = {
   roomID: "test-room",

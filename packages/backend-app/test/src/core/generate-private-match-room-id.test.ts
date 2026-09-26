@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 
-import { generatePrivateMatchRoomID } from "../../../src/core/generate-private-match-room-id";
+import { generatePrivateMatchRoomID } from "../../../src/core/matching/private-match/generate-private-match-room-id";
 
 jest.mock("crypto", () => ({
   randomInt: jest.fn(),

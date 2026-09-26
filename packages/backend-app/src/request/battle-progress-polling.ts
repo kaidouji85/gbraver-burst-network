@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   CanBattleProgressQueryFromPoller,
   CanBattleProgressQueryFromPollerSchema,
-} from "../core/can-battle-progress";
+} from "../core/battle/can-battle-progress";
 
 /** バトル進行ポーリング */
 export type BattleProgressPolling = CanBattleProgressQueryFromPoller & {

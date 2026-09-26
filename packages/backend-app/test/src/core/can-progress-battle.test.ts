@@ -5,12 +5,12 @@ import {
   BattleID,
   BattlePlayer,
   FlowID,
-} from "../../../src/core/battle";
-import { BattleCommand } from "../../../src/core/battle-command";
+} from "../../../src/core/battle/battle";
+import { BattleCommand } from "../../../src/core/battle/battle-command";
 import {
   CanBattleProgressQueryFromPoller,
   canProgressBattle,
-} from "../../../src/core/can-battle-progress";
+} from "../../../src/core/battle/can-battle-progress";
 import { UserID } from "../../../src/core/user";
 
 /** ポーリング実行プレイヤー */

@@ -1,4 +1,4 @@
-import { casualMatchMake } from "../../../src/core/casual-match-make";
+import { casualMatchMake } from "../../../src/core/matching/casual-match/casual-match-make";
 import { EMPTY_CASUAL_MATCH_ENTRY } from "../../data/casual-match";
 
 const entry1 = { ...EMPTY_CASUAL_MATCH_ENTRY, userID: "user01" };

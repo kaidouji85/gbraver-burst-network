@@ -1,4 +1,4 @@
-import { BattleEntry } from "./battle-entry";
+import { BattleEntry } from "../battle-entry";
 import { PrivateMatchEntry } from "./private-match-entry";
 import { PrivateMatchRoom } from "./private-match-room";
 
