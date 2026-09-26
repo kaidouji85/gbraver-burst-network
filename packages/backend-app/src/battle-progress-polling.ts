@@ -2,13 +2,13 @@ import { DynamoBattleCommandsFetcher } from "./adapter/dynamo-battle-commands-fe
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { BattleCommandsFetcher } from "./core/battle-commands-fetcher";
-import { canProgressBattle } from "./core/can-battle-progress";
+import { BattleCommandsFetcher } from "./core/battle/battle-commands-fetcher";
+import { canProgressBattle } from "./core/battle/can-battle-progress";
 import {
   BattleContinue,
   BattleEnd,
   progressBattle,
-} from "./core/progress-battle";
+} from "./core/battle/progress-battle";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";

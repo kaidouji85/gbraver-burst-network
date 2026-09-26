@@ -1,9 +1,9 @@
-import { Battle, BattlePlayer } from "./battle";
+import { Battle, BattlePlayer } from "../../battle/battle";
+import { createBattle } from "../../battle/create-battle";
+import { Connection } from "../../connection";
+import { createBattlePlayer } from "../create-battle-player";
 import { CasualMatchEntry } from "./casual-match-entry";
 import { CasualMatching } from "./casual-match-make";
-import { Connection } from "./connection";
-import { createBattle } from "./create-battle";
-import { createBattlePlayer } from "./create-battle-player";
 
 /** カジュアルマッチ開始情報 */
 type MatchStartResponse = {
