@@ -1,7 +1,7 @@
 import { Battle, BattlePlayer } from "../../battle/battle";
 import { createBattle } from "../../battle/create-battle";
-import { createBattlePlayer } from "../../battle/create-battle-player";
 import { Connection } from "../../connection";
+import { createBattlePlayer } from "../create-battle-player";
 import { notChosenPrivateMatchEntries } from "./not-chosen-private-match-entries";
 import { PrivateMatchEntry } from "./private-match-entry";
 import { PrivateMatching } from "./private-match-make";

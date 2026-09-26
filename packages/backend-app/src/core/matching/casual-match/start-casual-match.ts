@@ -1,7 +1,7 @@
 import { Battle, BattlePlayer } from "../../battle/battle";
 import { createBattle } from "../../battle/create-battle";
-import { createBattlePlayer } from "../../battle/create-battle-player";
 import { Connection } from "../../connection";
+import { createBattlePlayer } from "../create-battle-player";
 import { CasualMatchEntry } from "./casual-match-entry";
 import { CasualMatching } from "./casual-match-make";
 

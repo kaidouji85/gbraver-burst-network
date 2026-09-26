@@ -1,8 +1,8 @@
 import { Armdozers, Pilots } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { BattleEntry } from "../matching/battle-entry";
-import type { BattlePlayer } from "./battle";
+import type { BattlePlayer } from "../battle/battle";
+import { BattleEntry } from "./battle-entry";
 
 /**
  * BattleEntryからBattlePlayerを生成するヘルパー関数
