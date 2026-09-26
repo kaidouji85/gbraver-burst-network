@@ -1,7 +1,7 @@
 import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { Connection } from "../connection";
+import { Connection } from "../connection/connection";
 import { Battle, BattleID, BattlePlayer } from "./battle";
 import { BattleCommand } from "./battle-command";
 import { createPlayerCommands } from "./create-player-commands";
