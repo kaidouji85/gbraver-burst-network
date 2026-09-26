@@ -1,7 +1,12 @@
-import { UserID } from "./user";
+import { z } from "zod";
+
+import { UserID, UserIDSchema } from "../../user";
 
 /** 再戦ID（ユニークな識別子） */
 export type RematchId = string;
+
+/** Rematch ID zod スキーマ */
+export const RematchIdSchema = z.string();
 
 /** 再戦管理オブジェクト */
 export type Rematch = {
@@ -14,3 +19,11 @@ export type Rematch = {
   /** 再戦の有効期限（Unix秒） */
   expiresAt: number;
 };
+
+/** Rematch zod スキーマ */
+export const RematchSchema = z.object({
+  id: RematchIdSchema,
+  hostUserID: UserIDSchema,
+  guestUserID: UserIDSchema,
+  expiresAt: z.number(),
+});
