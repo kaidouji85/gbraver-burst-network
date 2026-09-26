@@ -1,9 +1,9 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { createPrivateMatchRoomExpiresAt } from "./core/create-private-match-room-expires-at";
-import { generatePrivateMatchRoomID } from "./core/generate-private-match-room-id";
-import { PrivateMatchRoom } from "./core/private-match-room";
+import { createPrivateMatchRoomExpiresAt } from "./core/matching/private-match/create-private-match-room-expires-at";
+import { generatePrivateMatchRoomID } from "./core/matching/private-match/generate-private-match-room-id";
+import { PrivateMatchRoom } from "./core/matching/private-match/private-match-room";
 import { User } from "./core/user";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";

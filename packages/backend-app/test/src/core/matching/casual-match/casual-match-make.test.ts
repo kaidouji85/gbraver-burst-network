@@ -1,5 +1,5 @@
-import { casualMatchMake } from "../../../src/core/casual-match-make";
-import { EMPTY_CASUAL_MATCH_ENTRY } from "../../data/casual-match";
+import { casualMatchMake } from "../../../../../src/core/matching/casual-match/casual-match-make";
+import { EMPTY_CASUAL_MATCH_ENTRY } from "../../../../data/casual-match";
 
 const entry1 = { ...EMPTY_CASUAL_MATCH_ENTRY, userID: "user01" };
 const entry2 = { ...EMPTY_CASUAL_MATCH_ENTRY, userID: "user02" };

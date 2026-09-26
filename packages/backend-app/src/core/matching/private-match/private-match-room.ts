@@ -6,11 +6,11 @@ import {
 } from "gbraver-burst-core";
 import { z } from "zod";
 
-import { UserID, UserIDSchema } from "./user";
+import { UserID, UserIDSchema } from "../../user";
 import {
   WSAPIGatewayConnectionId,
   WSAPIGatewayConnectionIdSchema,
-} from "./ws-api-gateway-connection";
+} from "../../ws-api-gateway-connection";
 
 /** ルームID */
 export type PrivateMatchRoomID = string;

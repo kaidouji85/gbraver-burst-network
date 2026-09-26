@@ -1,8 +1,8 @@
 import { Command, CommandSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
+import { UserID, UserIDSchema } from "../user";
 import { BattleID, BattleIDSchema, FlowID, FlowIDSchema } from "./battle";
-import { UserID, UserIDSchema } from "./user";
 
 /** バトルコマンド */
 export type BattleCommand = {

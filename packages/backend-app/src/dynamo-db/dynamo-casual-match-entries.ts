@@ -4,7 +4,7 @@ import { z } from "zod";
 import {
   CasualMatchEntry,
   CasualMatchEntrySchema,
-} from "../core/casual-match-entry";
+} from "../core/matching/casual-match/casual-match-entry";
 
 /**
  * DynamoDB スキーマ casual_match_entries

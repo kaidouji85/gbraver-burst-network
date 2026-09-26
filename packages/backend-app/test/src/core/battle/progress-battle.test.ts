@@ -7,10 +7,10 @@ import {
 } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { Battle, BattlePlayer } from "../../../src/core/battle";
-import { BattleCommand } from "../../../src/core/battle-command";
-import { progressBattle } from "../../../src/core/progress-battle";
-import { mockUniqUUID } from "../../mock-unique-uuid";
+import { Battle, BattlePlayer } from "../../../../src/core/battle/battle";
+import { BattleCommand } from "../../../../src/core/battle/battle-command";
+import { progressBattle } from "../../../../src/core/battle/progress-battle";
+import { mockUniqUUID } from "../../../mock-unique-uuid";
 
 jest.mock("uuid");
 

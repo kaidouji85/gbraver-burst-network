@@ -1,6 +1,6 @@
 import { GameState } from "gbraver-burst-core";
 
-import { FlowID } from "../core/battle";
+import { FlowID } from "../core/battle/battle";
 
 /** バトル進行通知 */
 export type BattleProgressed = {

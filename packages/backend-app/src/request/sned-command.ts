@@ -2,8 +2,8 @@ import type { Command } from "gbraver-burst-core";
 import { CommandSchema } from "gbraver-burst-core";
 import { z } from "zod";
 
-import type { BattleID, FlowID } from "../core/battle";
-import { BattleIDSchema, FlowIDSchema } from "../core/battle";
+import type { BattleID, FlowID } from "../core/battle/battle";
+import { BattleIDSchema, FlowIDSchema } from "../core/battle/battle";
 
 /** バトルコマンド送信 */
 export type SendCommand = {
