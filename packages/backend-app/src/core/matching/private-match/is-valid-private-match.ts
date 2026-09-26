@@ -1,6 +1,6 @@
+import { User } from "../../user";
 import { PrivateMatchEntry } from "./private-match-entry";
 import { PrivateMatchRoom } from "./private-match-room";
-import { User } from "../../user";
 
 /** パラメータ */
 type Param = {
