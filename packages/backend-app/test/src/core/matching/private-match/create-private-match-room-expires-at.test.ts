@@ -1,4 +1,4 @@
-import { createPrivateMatchRoomExpiresAt } from "../../../src/core/matching/private-match/create-private-match-room-expires-at";
+import { createPrivateMatchRoomExpiresAt } from "../../../../../src/core/matching/private-match/create-private-match-room-expires-at";
 
 test("現在時刻の12時間後をUNIX時間で返す", () => {
   const currentTimeMs = 1775309385;

@@ -1,11 +1,11 @@
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { BattleEntry } from "../../../src/core/matching/battle-entry";
-import { PrivateMatchEntry } from "../../../src/core/matching/private-match/private-match-entry";
-import { PrivateMatching } from "../../../src/core/matching/private-match/private-match-make";
-import { startPrivateMatch } from "../../../src/core/matching/private-match/start-private-match";
-import { mockUniqUUID } from "../../mock-unique-uuid";
+import { BattleEntry } from "../../../../../src/core/matching/battle-entry";
+import { PrivateMatchEntry } from "../../../../../src/core/matching/private-match/private-match-entry";
+import { PrivateMatching } from "../../../../../src/core/matching/private-match/private-match-make";
+import { startPrivateMatch } from "../../../../../src/core/matching/private-match/start-private-match";
+import { mockUniqUUID } from "../../../../mock-unique-uuid";
 
 jest.mock("uuid");
 
