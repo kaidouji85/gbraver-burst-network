@@ -1,12 +1,10 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import {
-  Connection,
-  HoldPrivateMatch,
-  InBattle,
-  PrivateMatchMaking,
-} from "./core/connection";
+import { Connection } from "./core/connection/connection";
+import { HoldPrivateMatch } from "./core/connection/state/hold-private-match";
+import { InBattle } from "./core/connection/state/in-battle";
+import { PrivateMatchMaking } from "./core/connection/state/private-match-making";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
