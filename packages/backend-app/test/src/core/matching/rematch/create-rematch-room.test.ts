@@ -1,7 +1,7 @@
 import { EMPTY_PLAYER } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 
-import { BattlePlayer } from "../../../../../src/core/battle/battle";
+import { Battle, BattlePlayer } from "../../../../../src/core/battle/battle";
 import {
   createRematchRoom,
   REMATCH_ROOM_TTL_SECONDS,
@@ -10,6 +10,10 @@ import {
 jest.mock("nanoid", () => ({
   nanoid: jest.fn(),
 }));
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 /** ホストプレイヤー */
 const hostPlayer: BattlePlayer = {
@@ -28,38 +32,21 @@ const guestPlayer: BattlePlayer = {
 };
 
 /** バトル情報 */
-const battle = {
+const battle: Battle<BattlePlayer> = {
   battleID: "battle-id",
   flowID: "flow-id",
-  players: [hostPlayer, guestPlayer] as [BattlePlayer, BattlePlayer],
+  players: [hostPlayer, guestPlayer],
   poller: hostPlayer.playerId,
   stateHistory: [],
 };
 
-test("nanoidが生成したIDをroomIDに設定する", () => {
+test("バトルから再戦ルームが正しく生成できる", () => {
   jest.spyOn(Date, "now").mockReturnValue(1_600_000_000_000);
   jest.mocked(nanoid).mockReturnValue("mocked-room-id");
-
-  const result = createRematchRoom(battle);
-
-  expect(result.roomID).toBe("mocked-room-id");
-});
-
-test("プレイヤー0番目をhostUserID、1番目をguestUserIDに設定する", () => {
-  jest.spyOn(Date, "now").mockReturnValue(1_600_000_000_000);
-  jest.mocked(nanoid).mockReturnValue("mocked-room-id");
-
-  const result = createRematchRoom(battle);
-
-  expect(result.hostUserID).toBe(hostPlayer.playerId);
-  expect(result.guestUserID).toBe(guestPlayer.playerId);
-});
-
-test("Date.now()から有効期限を算出する", () => {
-  jest.spyOn(Date, "now").mockReturnValue(1_600_000_000_000);
-  jest.mocked(nanoid).mockReturnValue("mocked-room-id");
-
-  const result = createRematchRoom(battle);
-
-  expect(result.expiresAt).toBe(1_600_000_000 + REMATCH_ROOM_TTL_SECONDS);
+  expect(createRematchRoom(battle)).toEqual({
+    roomID: "mocked-room-id",
+    hostUserID: hostPlayer.playerId,
+    guestUserID: guestPlayer.playerId,
+    expiresAt: 1_600_000_000 + REMATCH_ROOM_TTL_SECONDS,
+  });
 });
