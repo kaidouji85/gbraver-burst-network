@@ -103,9 +103,10 @@ export async function joinRoom(
     hostConnectionId,
     guestConnectionId,
   });
+  await dynamoSignalingChannels.put(signalingChannel);
+
   const { signalingID } = signalingChannel;
   await Promise.all([
-    dynamoSignalingChannels.put(signalingChannel),
     dynamoConnections.put({
       connectionId: guestConnectionId,
       state: {
