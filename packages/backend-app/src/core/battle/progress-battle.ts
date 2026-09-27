@@ -24,7 +24,7 @@ export type BattleEnd = {
   isGameEnd: true;
   /** アップデートされたステートヒストリー */
   update: GameState[];
-  /** 戦闘後のコネクションステート */
+  /** @deprecated 戦闘後のコネクションステート */
   connections: Connection[];
   /** 終了したバトルのID */
   endBattleID: BattleID;
