@@ -104,10 +104,6 @@ export async function joinRoom(
   });
   const { signalingID } = signalingChannel;
   await Promise.all([
-    notifier.notifyToClient(guestConnectionId, {
-      type: "join-room-accepted",
-      signalingID,
-    }),
     dynamoConnections.put({
       connectionId: guestConnectionId,
       state: {
@@ -115,11 +111,6 @@ export async function joinRoom(
         signalingID,
         isHost: false,
       },
-    }),
-
-    notifier.notifyToClient(hostConnectionId, {
-      type: "matching",
-      signalingID,
     }),
     dynamoConnections.put({
       connectionId: hostConnectionId,
@@ -129,8 +120,18 @@ export async function joinRoom(
         isHost: true,
       },
     }),
-
     dynamoRooms.delete(roomID),
+  ]);
+  // データ不整合を防ぐために、データ更新が完了した後にクライアントに通知をする
+  await Promise.all([
+    notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-accepted",
+      signalingID,
+    }),
+    notifier.notifyToClient(hostConnectionId, {
+      type: "matching",
+      signalingID,
+    }),
   ]);
   return { statusCode: 200, body: "join room success" };
 }
