@@ -4,6 +4,7 @@ import { Connection } from "../../connection/connection";
 import { createBattlePlayer } from "../create-battle-player";
 import { Rematching } from "./rematch-make";
 
+/** 再戦開始情報 */
 export type RematchResponse = {
   /** 新しく作成されたバトル情報 */
   battle: Battle<BattlePlayer>;
@@ -11,6 +12,11 @@ export type RematchResponse = {
   connections: Connection[];
 };
 
+/**
+ * 再戦を開始する
+ * @param matching 再戦マッチング結果
+ * @returns 再戦開始情報
+ */
 export const startRematch = (matching: Rematching) => {
   const battle = createBattle([
     createBattlePlayer(matching[0]),
