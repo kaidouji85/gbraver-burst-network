@@ -19,6 +19,7 @@ const hostEntry: RematchEntry = {
   connectionId: "host-connection",
   armdozerId: ArmdozerIds.SHIN_BRAVER,
   pilotId: PilotIds.SHINYA,
+  expiresAt: 0,   
 };
 
 /** ゲストのエントリ */
@@ -28,6 +29,7 @@ const guestEntry: RematchEntry = {
   connectionId: "guest-connection",
   armdozerId: ArmdozerIds.NEO_LANDOZER,
   pilotId: PilotIds.GAI,
+  expiresAt: 0,
 };
 
 /** 関係ない人のエントリ */
@@ -37,6 +39,7 @@ const otherEntry: RematchEntry = {
   connectionId: "other-connection",
   armdozerId: ArmdozerIds.WING_DOZER,
   pilotId: PilotIds.TSUBASA,
+  expiresAt: 0,
 };
 
 test("ホスト、ゲストでマッチングされる", () => {
