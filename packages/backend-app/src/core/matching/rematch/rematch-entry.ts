@@ -3,6 +3,7 @@ import { RematchRoomID, RematchRoomIDSchema } from "./rematch-room";
 
 /** 再戦エントリ */
 export type RematchEntry = BattleEntry & {
+  /** ルームID */
   roomID: RematchRoomID;
 };
 
