@@ -1,8 +1,8 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
+import { UserID } from "../../user";
 import { RematchEntry } from "./rematch-entry";
 import { RematchRoomID } from "./rematch-room";
-import { UserID } from "../../user";
 
 /** 再戦エントリのTTL(UNIX秒) */
 export const REMATCH_ENTRY_EXPIRATION_SECONDS = 60 * 5;

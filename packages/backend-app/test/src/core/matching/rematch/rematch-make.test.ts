@@ -19,7 +19,7 @@ const hostEntry: RematchEntry = {
   connectionId: "host-connection",
   armdozerId: ArmdozerIds.SHIN_BRAVER,
   pilotId: PilotIds.SHINYA,
-  expiresAt: 0,   
+  expiresAt: 0,
 };
 
 /** ゲストのエントリ */
