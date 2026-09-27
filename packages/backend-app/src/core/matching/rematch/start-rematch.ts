@@ -2,25 +2,16 @@ import { Battle, BattlePlayer } from "../../battle/battle";
 import { createBattle } from "../../battle/create-battle";
 import { Connection } from "../../connection/connection";
 import { createBattlePlayer } from "../create-battle-player";
-import { CasualMatchEntry } from "./casual-match-entry";
-import { CasualMatching } from "./casual-match-make";
+import { Rematching } from "./rematch-make";
 
-/** カジュアルマッチ開始情報 */
-type MatchStartResponse = {
-  /** バトル情報 */
+export type RematchResponse = {
+  /** 新しく作成されたバトル情報 */
   battle: Battle<BattlePlayer>;
   /** バトル参加者コネクション更新結果をあつめたもの */
   connections: Connection[];
 };
 
-/**
- * カジュアルマッチを開始する
- * @param matching マッチング
- * @returns バトルとコネクションのリスト
- */
-export function startCasualMatch<X extends CasualMatchEntry>(
-  matching: CasualMatching<X>,
-): MatchStartResponse {
+export const startRematch = (matching: Rematching) => {
   const battle = createBattle([
     createBattlePlayer(matching[0]),
     createBattlePlayer(matching[1]),
@@ -35,4 +26,4 @@ export function startCasualMatch<X extends CasualMatchEntry>(
     },
   }));
   return { battle, connections };
-}
+};

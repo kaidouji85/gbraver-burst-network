@@ -10,9 +10,9 @@ import { PrivateMatching } from "./private-match-make";
 type MatchStartResponse = {
   /** バトル情報 */
   battle: Battle<BattlePlayer>;
-  /** バトル参加者のコネクション */
+  /** バトル参加者コネクション更新結果をあつめたもの */
   battleConnections: Connection[];
-  /** マッチングしなかったプレイヤーのコネクション */
+  /** マッチングしなかったプレイヤーのコネクションをあつめたもの */
   notChosenConnections: Connection[];
 };
 
