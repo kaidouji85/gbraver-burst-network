@@ -11,10 +11,16 @@ import {
   PrivateMatchMaking,
   PrivateMatchMakingSchema,
 } from "./private-match-making";
+import { RematchMaking, RematchMakingSchema } from "./rematch-making";
 
 /** コネクションの状態 */
 export type ConnectionState =
-  None | CasualMatchMaking | InBattle | HoldPrivateMatch | PrivateMatchMaking;
+  | None
+  | CasualMatchMaking
+  | InBattle
+  | HoldPrivateMatch
+  | PrivateMatchMaking
+  | RematchMaking;
 
 /** ConnectionState zodスキーマ */
 export const ConnectionStateSchema = z.union([
@@ -23,4 +29,5 @@ export const ConnectionStateSchema = z.union([
   InBattleSchema,
   HoldPrivateMatchSchema,
   PrivateMatchMakingSchema,
+  RematchMakingSchema,
 ]);
