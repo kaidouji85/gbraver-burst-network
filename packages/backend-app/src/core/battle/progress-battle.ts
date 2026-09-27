@@ -1,7 +1,6 @@
 import { GameState, restoreGBraverBurst } from "gbraver-burst-core";
 import { v4 as uuidv4 } from "uuid";
 
-import { Connection } from "../connection/connection";
 import { Battle, BattleID, BattlePlayer } from "./battle";
 import { BattleCommand } from "./battle-command";
 import { createPlayerCommands } from "./create-player-commands";
@@ -24,24 +23,9 @@ export type BattleEnd = {
   isGameEnd: true;
   /** アップデートされたステートヒストリー */
   update: GameState[];
-  /** @deprecated 戦闘後のコネクションステート */
-  connections: Connection[];
   /** 終了したバトルのID */
   endBattleID: BattleID;
 };
-
-/**
- * プレイヤーからバトル終了後のコネクションステートを生成する
- * @param player プレイヤー
- * @returns 生成結果
- */
-const createPostBattleConnection = (player: BattlePlayer): Connection => ({
-  connectionId: player.connectionId,
-  userID: player.userID,
-  state: {
-    type: "None",
-  },
-});
 
 /**
  * バトル情報を更新する
@@ -83,11 +67,9 @@ export function progressBattle(
   const lastState = update.at(-1);
   const isGameEnd = lastState?.effect.name === "GameEnd";
   if (isGameEnd) {
-    const connections = battle.players.map(createPostBattleConnection);
     return {
       isGameEnd,
       update,
-      connections,
       endBattleID: battle.battleID,
     };
   }

@@ -2,22 +2,6 @@
 
 exports[`バトル進行の結果、バトル終了となる 1`] = `
 {
-  "connections": [
-    {
-      "connectionId": "defender-connection",
-      "state": {
-        "type": "None",
-      },
-      "userID": "defender-userid",
-    },
-    {
-      "connectionId": "attacker--connection",
-      "state": {
-        "type": "None",
-      },
-      "userID": "attacker-userid",
-    },
-  ],
   "endBattleID": "test-battle",
   "isGameEnd": true,
   "update": [
