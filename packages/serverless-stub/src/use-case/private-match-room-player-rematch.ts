@@ -36,7 +36,12 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
     battle.suddenlyBattleEndNotifier().subscribe(() => {
       console.log("suddenly battle end");
     });
-    console.log(battle.player, battle.enemy, battle.initialState);
+    console.log(
+      "first battle",
+      battle.player,
+      battle.enemy,
+      battle.initialState,
+    );
 
     await this.#executeBattle(battle);
     const rematchRoom = battle.getRematchRoom();
@@ -48,6 +53,15 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
       armdozerId: ArmdozerIds.NEO_LANDOZER,
       pilotId: PilotIds.GAI,
     });
+    rematchBattle.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
+    });
+    console.log(
+      "rematch battle",
+      rematchBattle.player,
+      rematchBattle.enemy,
+      rematchBattle.initialState,
+    );
     await this.#executeBattle(rematchBattle);
   }
 
