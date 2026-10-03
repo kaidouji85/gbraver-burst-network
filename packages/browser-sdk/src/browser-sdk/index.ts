@@ -14,9 +14,9 @@ import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import { BattleSDK } from "./battle-sdk";
+import { BattleSDK } from "./battle/battle-sdk";
+import { createBattleSDKFromBattleStart } from "./battle/create-battle-sdk-from-battle-start";
 import { CasualMatch } from "./casual-match";
-import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 import { LoginCheck, Logout, UniversalLogin } from "./login";
 import { Ping } from "./ping";
 import {
@@ -24,8 +24,8 @@ import {
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "./private-match";
-import { PrivateMatchRoomSDK } from "./private-match-room-sdk";
+} from "./private-match/private-match";
+import { PrivateMatchRoomImpl } from "./private-match/private-match-room-impl";
 import {
   LoggedInUserDelete,
   UserMailGet,
@@ -140,7 +140,7 @@ class BrowserSDKImpl implements BrowserSDK {
   ): Promise<PrivateMatchRoom> {
     const websocket = await this.#getOrCreateWebSocket();
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
-    return new PrivateMatchRoomSDK(resp.roomID, websocket);
+    return new PrivateMatchRoomImpl(resp.roomID, websocket);
   }
 
   /** @override */

@@ -1,20 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { BattleSDK } from "./battle-sdk";
-
-/** プライベートマッチルーム生成 */
-export interface PrivateMatchCreate {
-  /**
-   * プライベートマッチルームを生成する
-   * @param armdozerId 選択したアームドーザのID
-   * @param pilotId 選択したパイロットのID
-   * @returns 生成したプライベートマッチルームのID
-   */
-  createPrivateMatchRoom(
-    armdozerId: ArmdozerId,
-    pilotId: PilotId,
-  ): Promise<PrivateMatchRoom>;
-}
+import { BattleSDK } from "../battle/battle-sdk";
 
 /** プライベートマッチルームID */
 export type PrivateMatchRoomID = string;
@@ -29,6 +15,20 @@ export interface PrivateMatchRoom {
    * @returns バトル
    */
   waitUntilMatching(): Promise<BattleSDK>;
+}
+
+/** プライベートマッチルーム生成 */
+export interface PrivateMatchCreate {
+  /**
+   * プライベートマッチルームを生成する
+   * @param armdozerId 選択したアームドーザのID
+   * @param pilotId 選択したパイロットのID
+   * @returns 生成したプライベートマッチルームのID
+   */
+  createPrivateMatchRoom(
+    armdozerId: ArmdozerId,
+    pilotId: PilotId,
+  ): Promise<PrivateMatchRoom>;
 }
 
 /** プライベートマッチルーム入室 */
