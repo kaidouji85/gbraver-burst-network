@@ -1,6 +1,7 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
-import { BattleSDK, RematchRoom } from "./battle";
+
 import { rematchMakingHost } from "../../websocket/rematch-making-host";
+import { BattleSDK, RematchRoom } from "./battle";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 
 /** 再戦ルーム（ホスト側） */

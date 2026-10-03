@@ -15,7 +15,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { RematchMakePollingSchema } from "./request/rematch-make-polling";
 import { createBattleStart } from "./response/battle-start";
-import { COULD_NOT_REMATCH_MAKE } from "./response/cloud-not-rematch-make";
+import { CLOUD_NOT_REMATCH_MAKE } from "./response/cloud-not-rematch-make";
 import { Error } from "./response/error";
 
 /** AWSリージョン */
@@ -98,7 +98,7 @@ export const rematchMakePolling = async (
   );
   const room = await dynamoRematchRooms.get(roomID);
   if (!room) {
-    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    await notifier.notifyToClient(connectionId, CLOUD_NOT_REMATCH_MAKE);
     return endRematchMakePolling;
   }
 
@@ -109,13 +109,13 @@ export const rematchMakePolling = async (
     entries,
   });
   if (!isValidMatchMake) {
-    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    await notifier.notifyToClient(connectionId, CLOUD_NOT_REMATCH_MAKE);
     return endRematchMakePolling;
   }
 
   const matching = rematchMake(room, entries);
   if (matching === null) {
-    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    await notifier.notifyToClient(connectionId, CLOUD_NOT_REMATCH_MAKE);
     return endRematchMakePolling;
   }
 
