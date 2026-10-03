@@ -7,7 +7,7 @@ import {
   sendCommand,
   sendCommandWithPolling,
 } from "../../websocket/send-command";
-import { BattleSDK } from ".";
+import { BattleSDK } from "./battle-sdk";
 
 /** コンストラクタのパラメータ */
 type Param = {

@@ -1,5 +1,5 @@
 import { BattleStart } from "../../response/battle-start";
-import { BattleSDK } from ".";
+import { BattleSDK } from "./battle-sdk";
 import { BattleSDKImpl } from "./battle-sdk-impl";
 
 /**

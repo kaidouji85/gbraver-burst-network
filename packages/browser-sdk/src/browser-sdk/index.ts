@@ -14,7 +14,7 @@ import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
 import { enterPrivateMatchRoom } from "../websocket/enter-private-match-room";
 import { ping } from "../websocket/ping";
-import { BattleSDK } from "./battle";
+import { BattleSDK } from "./battle/battle-sdk";
 import { createBattleSDKFromBattleStart } from "./battle/create-battle-sdk-from-battle-start";
 import { CasualMatch } from "./casual-match";
 import { LoginCheck, Logout, UniversalLogin } from "./login";
@@ -24,7 +24,7 @@ import {
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "./private-match";
+} from "./private-match/private-match";
 import { PrivateMatchRoomImpl } from "./private-match/private-match-room-impl";
 import {
   LoggedInUserDelete,
