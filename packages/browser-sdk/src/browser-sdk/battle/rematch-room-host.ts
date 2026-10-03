@@ -5,7 +5,7 @@ import { BattleSDK, RematchRoom } from "./battle";
 import { createBattleSDKFromBattleStart } from "./create-battle-sdk-from-battle-start";
 
 /** 再戦ルーム（ホスト側） */
-export class HostRematchRoom implements RematchRoom {
+export class RematchRoomHost implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
   /** 再戦ルームID */

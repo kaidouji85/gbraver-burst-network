@@ -1,9 +1,10 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
-import { sendToAPIServer } from "./send-to-api-server";
-import { waitUntil } from "./wait-until";
+
+import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
 import { BattleStart, BattleStartSchema } from "../response/battle-start";
-import { parseJSON } from "../json/parse";
+import { sendToAPIServer } from "./send-to-api-server";
+import { waitUntil } from "./wait-until";
 
 /**
  * ゲスト側の再戦マッチメイク
