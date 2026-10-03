@@ -113,14 +113,6 @@ async function endWithGameEnd(options: {
   const { update, endBattleID } = battleEnd;
 
   const rematchRoom = createRematchRoom(battle);
-  // TODO 再戦情報を伝える
-  const notifiers = players.map(
-    (v) =>
-      ({
-        connectionId: v.connectionId,
-        data: { action: "battle-end", update },
-      }) as const,
-  );
   const updatedConnections: Connection[] = players.map((p) => ({
     userID: p.userID,
     connectionId: p.connectionId,
@@ -135,6 +127,18 @@ async function endWithGameEnd(options: {
     dynamoBattles.delete(endBattleID),
     dynamoRematchRooms.put(rematchRoom),
   ]);
+
+  const notifiers = players.map(
+    (v) =>
+      ({
+        connectionId: v.connectionId,
+        data: {
+          action: "battle-end",
+          update,
+          rematchRoomID: rematchRoom.roomID,
+        },
+      }) as const,
+  );
   await Promise.all(
     notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
   );
