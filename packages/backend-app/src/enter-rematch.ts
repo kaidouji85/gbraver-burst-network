@@ -12,6 +12,7 @@ import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { EnterRematchSchema } from "./request/enter-rematch";
 import { Error } from "./response/error";
+import { REJECT_REMATCH_ENTRY } from "./response/reject-rematch-entry";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -80,7 +81,7 @@ export const enterRematch = async (
 
   const room = await dynamoRematchRooms.get(roomID);
   if (!room) {
-    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
+    await notifier.notifyToClient(connectionId, REJECT_REMATCH_ENTRY);
     return invalidRequestBody;
   }
 
@@ -88,7 +89,7 @@ export const enterRematch = async (
     event.requestContext.authorizer,
   );
   if (!canEntryRematchRoom({ room, user })) {
-    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
+    await notifier.notifyToClient(connectionId, REJECT_REMATCH_ENTRY);
     return invalidRequestBody;
   }
 

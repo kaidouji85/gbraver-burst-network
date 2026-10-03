@@ -6,8 +6,12 @@ import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoRematchEntries } from "./dynamo-db/create-dynamo-rematch-entries";
 import { createDynamoRematchRooms } from "./dynamo-db/create-dynamo-rematch-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
+import { parseJSON } from "./json/parse";
+import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
+import { RematchMakePollingSchema } from "./request/rematch-make-polling";
+import { Error } from "./response/error";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -44,6 +48,18 @@ const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
 /** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** 無効なリクエストボディ */
+const invalidRequestBody: WebsocketAPIResponse = {
+  statusCode: 400,
+  body: "invalid request body",
+};
+
+/** 無効なリクエストボディのエラー */
+const invalidRequestBodyError: Error = {
+  action: "error",
+  error: "invalid request body",
+};
+
 /**
  * 再戦マッチメークポーリング
  * @param event イベント
@@ -52,6 +68,18 @@ const notifier = new Notifier(apiGateway);
 export const rematchMakePolling = async (
   event: WebsocketAPIEvent,
 ): Promise<WebsocketAPIResponse> => {
+  const body = parseJSON(event.body);
+  const { connectionId } = event.requestContext;
+  const data = RematchMakePollingSchema.safeParse(body);
+  if (!data.success) {
+    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
+    return invalidRequestBody;
+  }
+
+  const user = extractUserFromWebSocketAuthorizer(
+    event.requestContext.authorizer,
+  );
+  
   return {
     statusCode: 200,
     body: "end rematch make polling",
