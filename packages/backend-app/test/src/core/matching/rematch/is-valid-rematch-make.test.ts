@@ -3,7 +3,6 @@ import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 import { isValidRematchMatch } from "../../../../../src/core/matching/rematch/is-valid-rematch-make";
 import { RematchEntry } from "../../../../../src/core/matching/rematch/rematch-entry";
 import { RematchRoom } from "../../../../../src/core/matching/rematch/rematch-room";
-import { User } from "../../../../../src/core/user";
 
 /** テスト用ルーム */
 const room: RematchRoom = {
@@ -44,27 +43,25 @@ const otherRoomEntry: RematchEntry = {
 };
 
 test("ホストが実行者で、関連ルームのエントリーであればマッチメイク可能", () => {
-  const executor: User = { userID: room.hostUserID };
-  expect(isValidRematchMatch({ executor, room, entries: [guestEntry] })).toBe(
-    true,
-  );
+  const executor = { userID: room.hostUserID };
+  const entries = [hostEntry, guestEntry];
+  expect(isValidRematchMatch({ executor, room, entries })).toBe(true);
 });
 
-test("ホストが実行者でも、関連ルームのエントリーでなければマッチメイク不可", () => {
-  const executor: User = { userID: room.hostUserID };
-  expect(
-    isValidRematchMatch({ executor, room, entries: [otherRoomEntry] }),
-  ).toBe(false);
+test("ホストが実行者でも、関連ルームのエントリー以外が含まれていればマッチメイク不可", () => {
+  const executor = { userID: room.hostUserID };
+  const entries = [hostEntry, guestEntry, otherRoomEntry];
+  expect(isValidRematchMatch({ executor, room, entries })).toBe(false);
 });
 
 test("ホスト以外が実行者の場合、関連ルームエントリーであってもマッチメイク不可", () => {
-  const executor: User = { userID: room.guestUserID };
-  expect(isValidRematchMatch({ executor, room, entries: [guestEntry] })).toBe(
-    false,
-  );
+  const executor = { userID: room.guestUserID };
+  const entries = [hostEntry, guestEntry];
+  expect(isValidRematchMatch({ executor, room, entries })).toBe(false);
 });
 
 test("ホストが実行者の場合、関連ルームエントリーが0でもマッチメイク可能", () => {
-  const executor: User = { userID: room.hostUserID };
-  expect(isValidRematchMatch({ executor, room, entries: [] })).toBe(true);
+  const executor = { userID: room.hostUserID };
+  const entries: RematchEntry[] = [];
+  expect(isValidRematchMatch({ executor, room, entries })).toBe(true);
 });

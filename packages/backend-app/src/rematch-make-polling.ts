@@ -1,6 +1,9 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { isValidRematchMatch } from "./core/matching/rematch/is-valid-rematch-make";
+import { rematchMake } from "./core/matching/rematch/rematch-make";
+import { startRematch } from "./core/matching/rematch/start-rematch";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoRematchEntries } from "./dynamo-db/create-dynamo-rematch-entries";
@@ -11,9 +14,9 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { RematchMakePollingSchema } from "./request/rematch-make-polling";
+import { createBattleStart } from "./response/battle-start";
 import { COULD_NOT_REMATCH_MAKE } from "./response/cloud-not-rematch-make";
 import { Error } from "./response/error";
-import { isValidRematchMatch } from "./core/matching/rematch/is-valid-rematch-make";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -62,6 +65,12 @@ const invalidRequestBodyError: Error = {
   error: "invalid request body",
 };
 
+/** 再戦マッチメイク正常終了 */
+export const endRematchMakePolling: WebsocketAPIResponse = {
+  statusCode: 200,
+  body: "end rematch make polling",
+};
+
 /**
  * 再戦マッチメークポーリング
  * @param event イベント
@@ -90,7 +99,7 @@ export const rematchMakePolling = async (
   const room = await dynamoRematchRooms.get(roomID);
   if (!room) {
     await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
-    return invalidRequestBody;
+    return endRematchMakePolling;
   }
 
   const entries = await dynamoRematchEntries.getEntries(roomID);
@@ -101,11 +110,28 @@ export const rematchMakePolling = async (
   });
   if (!isValidMatchMake) {
     await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
-    return invalidRequestBody;
+    return endRematchMakePolling;
   }
 
-  return {
-    statusCode: 200,
-    body: "end rematch make polling",
-  };
+  const matching = rematchMake(room, entries);
+  if (matching === null) {
+    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    return endRematchMakePolling;
+  }
+
+  const { battle, connections } = startRematch(matching);
+  await Promise.all([
+    dynamoBattles.put(battle),
+    ...connections.map((v) => dynamoConnections.put(v)),
+    ...entries.map(({ roomID, userID }) =>
+      dynamoRematchEntries.delete(roomID, userID),
+    ),
+    dynamoRematchRooms.delete(roomID),
+  ]);
+  await Promise.all(
+    connections.map(({ connectionId, userID }) =>
+      notifier.notifyToClient(connectionId, createBattleStart(userID, battle)),
+    ),
+  );
+  return endRematchMakePolling;
 };
