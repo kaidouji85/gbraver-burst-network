@@ -9,4 +9,6 @@ export type BattleEnd = {
   update: GameState[];
   /** 再戦ルームID */
   rematchRoomID: RematchRoomID;
+  /** 自分がホストか否か、trueの場合は自分がホスト */
+  isHost: boolean;
 };

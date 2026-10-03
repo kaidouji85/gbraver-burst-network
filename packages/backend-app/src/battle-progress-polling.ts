@@ -136,6 +136,7 @@ async function endWithGameEnd(options: {
           action: "battle-end",
           update,
           rematchRoomID: rematchRoom.roomID,
+          isHost: v.userID === rematchRoom.hostUserID,
         },
       }) as const,
   );
