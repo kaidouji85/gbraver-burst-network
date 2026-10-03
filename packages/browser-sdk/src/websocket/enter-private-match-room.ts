@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { PrivateMatchRoomID } from "../browser-sdk/private-match-sdk/private-match-sdk";
+import { PrivateMatchRoomID } from "../browser-sdk/private-match/private-match-sdk";
 import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
 import { BattleStart, parseBattleStart } from "../response/battle-start";
