@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 再戦機能を追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0-beta.0
+
 ## 1.31.0
 
 ### Minor Changes
