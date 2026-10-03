@@ -7,7 +7,9 @@ import {
   sendCommand,
   sendCommandWithPolling,
 } from "../../websocket/send-command";
-import { BattleSDK } from "./battle";
+import { BattleSDK, RematchRoom } from "./battle";
+import { RematchRoomGuest } from "./rematch-room-guest";
+import { RematchRoomHost } from "./rematch-room-host";
 
 /** コンストラクタのパラメータ */
 type Param = {
@@ -45,6 +47,8 @@ export class BattleSDKImpl implements BattleSDK {
   readonly #isPoller: boolean;
   /** バトル突然終了通知ストリーム */
   readonly #suddenlyBattleEnd: Observable<unknown>;
+  /** 再戦ルーム */
+  #rematchRoom: RematchRoom | null;
 
   /**
    * コンストラクタ
@@ -66,6 +70,7 @@ export class BattleSDKImpl implements BattleSDK {
       map((data) => parseSuddenlyBattleEnd(data)),
       filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
     );
+    this.#rematchRoom = null;
   }
 
   /** @override */
@@ -83,9 +88,16 @@ export class BattleSDKImpl implements BattleSDK {
           this.#flowID,
           command,
         );
-
     if (result.action === "battle-progressed") {
       this.#flowID = result.flowID;
+    } else if (result.action === "battle-end") {
+      const options = {
+        websocket: this.#websocket,
+        roomID: result.rematchRoomID,
+      };
+      this.#rematchRoom = result.isHost
+        ? new RematchRoomHost(options)
+        : new RematchRoomGuest(options);
     }
 
     return result.update;
@@ -94,5 +106,10 @@ export class BattleSDKImpl implements BattleSDK {
   /** @override */
   suddenlyBattleEndNotifier(): Observable<unknown> {
     return this.#suddenlyBattleEnd;
+  }
+
+  /** @override */
+  getRematchRoom(): RematchRoom | null {
+    return this.#rematchRoom;
   }
 }

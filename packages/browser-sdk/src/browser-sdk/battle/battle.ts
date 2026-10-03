@@ -33,6 +33,12 @@ export interface BattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown>;
+
+  /**
+   * バトルが正常終了した後に、再戦ルームを取得する
+   * @return バトル正常終了後であれば再戦ルーム、そうでなければnull
+   */
+  getRematchRoom(): RematchRoom | null;
 }
 
 /** 再戦ルーム */
