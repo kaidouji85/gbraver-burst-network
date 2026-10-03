@@ -1,6 +1,9 @@
 import { OfflineBrowserSDK } from "./offline-browser-sdk";
 import { OfflineBrowserSDKImpl } from "./offline-browser-sdk-impl";
 
+/** オフライン用ブラウザSDK */
+export { OfflineBrowserSDK };
+
 /** オフライン用ブラウザSDKオプション */
 export type OfflineBrowserSDKOptions = {
   /** バックエンドURL */
