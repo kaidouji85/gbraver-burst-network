@@ -8,7 +8,10 @@ import { RematchRoom } from "./rematch-room";
  * @param options.user ユーザー
  * @returns 再戦ルームにエントリ可能かどうか、trueでエントリ可能
  */
-export const canEntryRematchRoom = (options: { room: RematchRoom; user: User }) => {
+export const canEntryRematchRoom = (options: {
+  room: RematchRoom;
+  user: User;
+}) => {
   const { room, user } = options;
   return [room.hostUserID, room.guestUserID].includes(user.userID);
 };

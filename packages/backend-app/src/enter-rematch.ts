@@ -1,6 +1,7 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { canEntryRematchRoom } from "./core/matching/rematch/can-entry-rematch-room";
 import { createRematchEntry } from "./core/matching/rematch/create-rematch-entry";
 import { createDynamoRematchEntries } from "./dynamo-db/create-dynamo-rematch-entries";
 import { createDynamoRematchRooms } from "./dynamo-db/create-dynamo-rematch-rooms";
@@ -86,6 +87,11 @@ export const enterRematch = async (
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
+  if (!canEntryRematchRoom({ room, user })) {
+    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
+    return invalidRequestBody;
+  }
+
   const { userID } = user;
   const { armdozerId, pilotId } = data.data;
   const entry = createRematchEntry({

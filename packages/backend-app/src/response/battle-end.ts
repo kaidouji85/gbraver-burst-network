@@ -1,4 +1,5 @@
 import { GameState } from "gbraver-burst-core";
+
 import { RematchRoomID } from "../core/matching/rematch/rematch-room";
 
 /** バトル終了 */
