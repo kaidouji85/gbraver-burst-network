@@ -1,10 +1,10 @@
-import { privateMatchMakePolling } from "../websocket/private-match-make-polling";
-import { BattleSDK } from "./battle-sdk/battle-sdk";
-import { createBattleSDKFromBattleStart } from "./battle-sdk/create-battle-sdk-from-battle-start";
-import { PrivateMatchRoom, PrivateMatchRoomID } from "./private-match";
+import { privateMatchMakePolling } from "../../websocket/private-match-make-polling";
+import { BattleSDK } from "../battle-sdk/battle-sdk";
+import { createBattleSDKFromBattleStart } from "../battle-sdk/create-battle-sdk-from-battle-start";
+import { PrivateMatchRoom, PrivateMatchRoomID } from "./private-match-sdk";
 
-/** プライベートマッチSDK */
-export class PrivateMatchRoomSDK implements PrivateMatchRoom {
+/** プライベートマッチルームの実装 */
+export class PrivateMatchRoomImpl implements PrivateMatchRoom {
   /** @override */
   roomID: PrivateMatchRoomID;
   /** websocketクライアント */

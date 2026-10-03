@@ -8,7 +8,7 @@ export {
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "./browser-sdk/private-match";
+} from "./browser-sdk/private-match-sdk/private-match-sdk";
 export {
   LoggedInUserDelete,
   UserMailGet,
