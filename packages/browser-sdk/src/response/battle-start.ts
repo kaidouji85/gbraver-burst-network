@@ -35,6 +35,7 @@ export const BattleStartSchema = z.object({
 });
 
 /**
+ * @deprecated BattleStartSchemaを使うこと
  * 任意のオブジェクトをStartBattleにパースする
  * パースできない場合はnullを返す
  * @param data パース元となる文字列
