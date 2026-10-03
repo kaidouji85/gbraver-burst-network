@@ -11,6 +11,7 @@ import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
 import { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { RematchMakePollingSchema } from "./request/rematch-make-polling";
+import { COULD_NOT_REMATCH_MAKE } from "./response/cloud-not-rematch-make";
 import { Error } from "./response/error";
 
 /** AWSリージョン */
@@ -76,10 +77,29 @@ export const rematchMakePolling = async (
     return invalidRequestBody;
   }
 
+  const { roomID } = data.data;
+  if (roomID === "") {
+    await notifier.notifyToClient(connectionId, invalidRequestBodyError);
+    return invalidRequestBody;
+  }
+
   const user = extractUserFromWebSocketAuthorizer(
     event.requestContext.authorizer,
   );
-  
+  const room = await dynamoRematchRooms.get(roomID);
+  if (!room) {
+    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    return invalidRequestBody;
+  }
+
+  const isRoomHost = room.hostUserID === user.userID;
+  if (!isRoomHost) {
+    await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
+    return invalidRequestBody;
+  }
+
+  const entries = await dynamoRematchEntries.getEntries(roomID);
+
   return {
     statusCode: 200,
     body: "end rematch make polling",

@@ -3,6 +3,7 @@ import { BattleEnd } from "./battle-end";
 import { BattleProgressed } from "./battle-progressed";
 import { BattleStart } from "./battle-start";
 import { CouldNotPrivateMatchMaking } from "./cloud-not-private-match-make";
+import { CouldNotRematchMaking } from "./cloud-not-rematch-make";
 import { CreatedPrivateMatchRoom } from "./created-private-match-room";
 import { EnteredCasualMatch } from "./entered-casual-match";
 import { Error } from "./error";
@@ -26,4 +27,5 @@ export type WebsocketResponse =
   | CouldNotPrivateMatchMaking
   | RejectPrivateMatchEntry
   | RejectRematchEntry
+  | CouldNotRematchMaking
   | Error;
