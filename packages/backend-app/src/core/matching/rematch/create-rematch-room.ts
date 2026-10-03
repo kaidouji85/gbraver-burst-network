@@ -15,8 +15,8 @@ export const createRematchRoom = <X extends BattlePlayer>(
   battle: Battle<X>,
 ): RematchRoom => {
   const roomID = nanoid();
-  const hostUserID = battle.players[0].playerId;
-  const guestUserID = battle.players[1].playerId;
+  const hostUserID = battle.players[0].userID;
+  const guestUserID = battle.players[1].userID;
   const now = Math.floor(Date.now() / 1000);
   const expiresAt = now + REMATCH_ROOM_TTL_SECONDS;
   return {

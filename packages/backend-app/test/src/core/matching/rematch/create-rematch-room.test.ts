@@ -18,7 +18,6 @@ afterEach(() => {
 /** ホストプレイヤー */
 const hostPlayer: BattlePlayer = {
   ...EMPTY_PLAYER,
-  playerId: "host-player",
   userID: "host-user",
   connectionId: "host-connection",
 };
@@ -26,7 +25,6 @@ const hostPlayer: BattlePlayer = {
 /** ゲストプレイヤー */
 const guestPlayer: BattlePlayer = {
   ...EMPTY_PLAYER,
-  playerId: "guest-player",
   userID: "guest-user",
   connectionId: "guest-connection",
 };
@@ -36,7 +34,7 @@ const battle: Battle<BattlePlayer> = {
   battleID: "battle-id",
   flowID: "flow-id",
   players: [hostPlayer, guestPlayer],
-  poller: hostPlayer.playerId,
+  poller: hostPlayer.userID,
   stateHistory: [],
 };
 
@@ -45,8 +43,8 @@ test("バトルから再戦ルームが正しく生成できる", () => {
   jest.mocked(nanoid).mockReturnValue("mocked-room-id");
   expect(createRematchRoom(battle)).toEqual({
     roomID: "mocked-room-id",
-    hostUserID: hostPlayer.playerId,
-    guestUserID: guestPlayer.playerId,
+    hostUserID: hostPlayer.userID,
+    guestUserID: guestPlayer.userID,
     expiresAt: 1_600_000_000 + REMATCH_ROOM_TTL_SECONDS,
   });
 });
