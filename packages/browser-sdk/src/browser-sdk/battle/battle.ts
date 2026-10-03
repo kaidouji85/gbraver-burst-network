@@ -1,4 +1,10 @@
-import type { Command, GameState, Player } from "gbraver-burst-core";
+import type {
+  ArmdozerId,
+  Command,
+  GameState,
+  PilotId,
+  Player,
+} from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 /**
@@ -27,4 +33,19 @@ export interface BattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown>;
+}
+
+/** 再戦ルーム */
+export interface RematchRoom {
+  /**
+   * 再戦をリクエストする
+   * @param options オプション
+   * @param options.armdozerId 選択したアームドーザのID
+   * @param options.pilotId 選択したパイロットのID  
+   * @returns 正立した場合は新しいBattleSDKインスタンスを返す
+   */
+  requestRematch(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<BattleSDK>;
 }
