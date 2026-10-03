@@ -19,13 +19,13 @@ import { createBattleSDKFromBattleStart } from "./battle/create-battle-sdk-from-
 import { CasualMatch } from "./casual-match";
 import { LoginCheck, Logout, UniversalLogin } from "./login";
 import { Ping } from "./ping";
-import { PrivateMatchRoomImpl } from "./private-match/private-match-room-impl";
 import {
   PrivateMatchCreate,
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "./private-match/private-match-sdk";
+} from "./private-match/private-match";
+import { PrivateMatchRoomImpl } from "./private-match/private-match-room-impl";
 import {
   LoggedInUserDelete,
   UserMailGet,
