@@ -1,6 +1,6 @@
 import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import type { BattleSDK } from "./battle-sdk";
+import type { BattleSDK } from "./battle/battle-sdk";
 
 /**
  * カジュアルマッチ
