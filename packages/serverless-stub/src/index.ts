@@ -12,9 +12,10 @@ import { GetUserPictureURLCase } from "./use-case/get-user-picture-url";
 import { MailAddressGet } from "./use-case/mail-address-get";
 import { PingUseCase } from "./use-case/ping";
 import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
-import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
-import { UseCase } from "./use-case/use-case";
 import { PrivateMatchRoomOwnerRematch } from "./use-case/private-match-room-owner-rematch";
+import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
+import { PrivateMatchRoomPlayerRematch } from "./use-case/private-match-room-player-rematch";
+import { UseCase } from "./use-case/use-case";
 
 const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID ?? "";
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
@@ -40,6 +41,7 @@ window.onload = async () => {
     new PrivateMatchRoomOwner(browserSDK),
     new PrivateMatchRoomOwnerRematch(browserSDK),
     new PrivateMatchRoomPlayer(browserSDK),
+    new PrivateMatchRoomPlayerRematch(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
     new MailAddressGet(browserSDK),

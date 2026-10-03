@@ -1,10 +1,10 @@
-import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
+import { BattleSDK, BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
 import { UseCase, UseCaseContext } from "./use-case";
 
-/** プライベートマッチ参加者 */
-export class PrivateMatchRoomPlayer implements UseCase {
+/** プライベートマッチ参加者（再戦あり） */
+export class PrivateMatchRoomPlayerRematch implements UseCase {
   /** ブラウザSDK */
   #sdk: BrowserSDK;
 
@@ -18,7 +18,7 @@ export class PrivateMatchRoomPlayer implements UseCase {
 
   /** @override */
   name(): string {
-    return "プライベートマッチ　参加者";
+    return "プライベートマッチ　参加者（再戦あり）";
   }
 
   /** @override */
@@ -38,6 +38,27 @@ export class PrivateMatchRoomPlayer implements UseCase {
     });
     console.log(battle.player, battle.enemy, battle.initialState);
 
+    await this.#executeBattle(battle);
+    const rematchRoom = battle.getRematchRoom();
+    if (!rematchRoom) {
+      throw new Error("再戦ルームが存在しません");
+    }
+
+    const rematchBattle = await rematchRoom.requestRematch({
+      armdozerId: ArmdozerIds.NEO_LANDOZER,
+      pilotId: PilotIds.GAI,
+    });
+    await this.#executeBattle(rematchBattle);
+  }
+
+  /**
+   * バトルを実行するヘルパーメソッド
+   * 本メソッドではバトル終了確認をしていないが、
+   * バトル終了になるようにゲーム進行することを確認している
+   * @param battle バトルSDK
+   * @returns バトルが完了したら発火するPromise
+   */
+  async #executeBattle(battle: BattleSDK) {
     const update01 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 3,

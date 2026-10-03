@@ -29,7 +29,12 @@ export class PrivateMatchRoomOwnerRematch implements UseCase {
     );
     console.log(room.roomID);
     const battle = await room.waitUntilMatching();
-    await this.executeBattle(battle);
+    battle.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
+    });
+    console.log(battle.player, battle.enemy, battle.initialState);
+
+    await this.#executeBattle(battle);
     const rematchRoom = battle.getRematchRoom();
     if (!rematchRoom) {
       throw new Error("再戦ルームが存在しません");
@@ -39,15 +44,17 @@ export class PrivateMatchRoomOwnerRematch implements UseCase {
       armdozerId: ArmdozerIds.SHIN_BRAVER,
       pilotId: PilotIds.SHINYA,
     });
-    await this.executeBattle(rematchBattle);
+    await this.#executeBattle(rematchBattle);
   }
 
   /**
-   * バトルを実施するヘルパー関数
+   * バトルを実施するヘルパーメソッド
+   * 本メソッドではバトル終了確認をしていないが、
+   * バトル終了になるようにゲーム進行することを確認している
    * @param battle バトルSDK
    * @returns バトルが完了したら発火するPromise
    */
-  async executeBattle(battle: BattleSDK) {
+  async #executeBattle(battle: BattleSDK) {
     const update01 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 5,
@@ -71,6 +78,5 @@ export class PrivateMatchRoomOwnerRematch implements UseCase {
       battery: 5,
     });
     console.log(update05);
-    1;
   }
 }
