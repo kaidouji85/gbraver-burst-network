@@ -131,11 +131,13 @@ async function endWithGameEnd(options: {
   }));
 
   await Promise.all([
-    ...notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
     ...updatedConnections.map((v) => dynamoConnections.put(v)),
     dynamoBattles.delete(endBattleID),
     dynamoRematchRooms.put(rematchRoom),
   ]);
+  await Promise.all(
+    notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+  );
   return webSocketAPIResponseOfSendCommandSuccess;
 }
 
