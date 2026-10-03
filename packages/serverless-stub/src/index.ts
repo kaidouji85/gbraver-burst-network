@@ -14,6 +14,7 @@ import { PingUseCase } from "./use-case/ping";
 import { PrivateMatchRoomOwner } from "./use-case/private-match-room-owner";
 import { PrivateMatchRoomPlayer } from "./use-case/private-match-room-player";
 import { UseCase } from "./use-case/use-case";
+import { PrivateMatchRoomOwnerRematch } from "./use-case/private-match-room-owner-rematch";
 
 const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID ?? "";
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID ?? "";
@@ -37,6 +38,7 @@ window.onload = async () => {
     new BattlePlayer01(browserSDK),
     new BattlePlayer02(browserSDK),
     new PrivateMatchRoomOwner(browserSDK),
+    new PrivateMatchRoomOwnerRematch(browserSDK),
     new PrivateMatchRoomPlayer(browserSDK),
     new GetUserNameCase(browserSDK),
     new GetUserPictureURLCase(browserSDK),
