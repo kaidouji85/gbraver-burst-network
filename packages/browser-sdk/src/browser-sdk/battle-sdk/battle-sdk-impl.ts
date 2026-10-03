@@ -1,9 +1,9 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
 import { filter, fromEvent, map, Observable } from "rxjs";
 
-import { parseJSON } from "../json/parse";
-import { parseSuddenlyBattleEnd } from "../response/suddenly-battle-end";
-import { sendCommand, sendCommandWithPolling } from "../websocket/send-command";
+import { parseJSON } from "../../json/parse";
+import { parseSuddenlyBattleEnd } from "../../response/suddenly-battle-end";
+import { sendCommand, sendCommandWithPolling } from "../../websocket/send-command";
 import { BattleSDK } from "./battle-sdk";
 
 /** コンストラクタのパラメータ */
