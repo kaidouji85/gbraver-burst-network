@@ -141,6 +141,11 @@ functions:
     events:
       - websocket:
           route: enter-rematch
+  rematchMakingPolling:
+    handler: src/rematch-make-polling.rematchMakePolling
+    events:
+      - websocket:
+          route: rematch-make-polling
 
 resources:
   Resources:
