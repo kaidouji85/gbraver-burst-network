@@ -136,6 +136,11 @@ functions:
     events:
       - websocket:
           route: private-match-make-polling
+  enterRematch:
+    handler: src/entry-rematch.entryRematch
+    events:
+      - websocket:
+          route: enter-rematch
 
 resources:
   Resources:
