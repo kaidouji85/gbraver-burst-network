@@ -13,6 +13,7 @@ import { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 import { RematchMakePollingSchema } from "./request/rematch-make-polling";
 import { COULD_NOT_REMATCH_MAKE } from "./response/cloud-not-rematch-make";
 import { Error } from "./response/error";
+import { isValidRematchMatch } from "./core/matching/rematch/is-valid-rematch-make";
 
 /** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
@@ -92,13 +93,16 @@ export const rematchMakePolling = async (
     return invalidRequestBody;
   }
 
-  const isRoomHost = room.hostUserID === user.userID;
-  if (!isRoomHost) {
+  const entries = await dynamoRematchEntries.getEntries(roomID);
+  const isValidMatchMake = await isValidRematchMatch({
+    executor: user,
+    room,
+    entries,
+  });
+  if (!isValidMatchMake) {
     await notifier.notifyToClient(connectionId, COULD_NOT_REMATCH_MAKE);
     return invalidRequestBody;
   }
-
-  const entries = await dynamoRematchEntries.getEntries(roomID);
 
   return {
     statusCode: 200,
