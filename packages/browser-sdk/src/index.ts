@@ -1,5 +1,5 @@
 export { BrowserSDK, createBrowserSDK } from "./browser-sdk";
-export { BattleSDK } from "./browser-sdk/battle/battle-sdk";
+export { BattleSDK } from "./browser-sdk/battle";
 export { CasualMatch } from "./browser-sdk/casual-match";
 export { LoginCheck, Logout, UniversalLogin } from "./browser-sdk/login";
 export { Ping } from "./browser-sdk/ping";
@@ -8,7 +8,7 @@ export {
   PrivateMatchRoom,
   PrivateMatchRoomEnter,
   PrivateMatchRoomID,
-} from "./browser-sdk/private-match/private-match";
+} from "./browser-sdk/private-match";
 export {
   LoggedInUserDelete,
   UserMailGet,

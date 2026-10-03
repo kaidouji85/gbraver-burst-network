@@ -1,7 +1,7 @@
 import { privateMatchMakePolling } from "../../websocket/private-match-make-polling";
-import { BattleSDK } from "../battle/battle-sdk";
+import { BattleSDK } from "../battle";
 import { createBattleSDKFromBattleStart } from "../battle/create-battle-sdk-from-battle-start";
-import { PrivateMatchRoom, PrivateMatchRoomID } from "./private-match";
+import { PrivateMatchRoom, PrivateMatchRoomID } from ".";
 
 /** プライベートマッチルームの実装 */
 export class PrivateMatchRoomImpl implements PrivateMatchRoom {
