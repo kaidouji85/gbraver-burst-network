@@ -2,10 +2,10 @@ import { Command, GameState, Player } from "gbraver-burst-core";
 import { fromEvent, Observable } from "rxjs";
 import { Socket } from "socket.io-client";
 
+import { GameEndedSchema } from "../socket-io-events/game-ended";
+import { ProgressedSchema } from "../socket-io-events/progressed";
 import { OfflineBattleSDK } from "./offline-battle-sdk";
 import { BattleInfo } from "./offline-browser-sdk";
-import { GameEndedSchema } from "./socket-io-events/game-ended";
-import { ProgressedSchema } from "./socket-io-events/progressed";
 
 /** オフライン用バトルSDK実装 */
 export class OfflineBattleSDKImpl implements OfflineBattleSDK {
