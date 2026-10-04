@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes

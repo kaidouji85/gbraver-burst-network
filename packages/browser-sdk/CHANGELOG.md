@@ -1,5 +1,11 @@
 # @gbraver-burst-network/browser-sdk
 
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
 ## 2.0.0-beta.0
 
 ### Major Changes
