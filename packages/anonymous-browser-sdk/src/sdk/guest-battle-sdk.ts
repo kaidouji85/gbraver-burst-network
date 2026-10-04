@@ -4,11 +4,11 @@ import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 import { sendGuestMessage } from "../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
 import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
-import { BattleSDK } from "./battle-sdk";
+import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
 /** ゲスト側バトルSDK */
-export class GuestBattleSDK implements BattleSDK {
+export class GuestBattleSDK implements AnonymousBattleSDK {
   /** プレイヤーの情報 */
   player: Player;
   /** 対戦相手の情報 */

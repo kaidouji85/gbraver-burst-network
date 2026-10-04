@@ -13,7 +13,7 @@ import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidat
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
 import { waitUntilMatching } from "../websocket-api/wait-until-matching";
 import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { BattleSDK } from "./battle-sdk";
+import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
 import { FrontendLogManager } from "./frontend-log-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
@@ -28,7 +28,7 @@ export type LocalWebRTCRoom = {
    * マッチングするまで待機する
    * @returns マッチングした相手とのバトルSDK
    */
-  waitUntilMatching: () => Promise<BattleSDK>;
+  waitUntilMatching: () => Promise<AnonymousBattleSDK>;
 };
 
 /** ローカルWebRTCルームの実装 */
@@ -88,7 +88,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * マッチングするまで待機する
    * @returns マッチングしたら発火するPromise
    */
-  async waitUntilMatching(): Promise<BattleSDK> {
+  async waitUntilMatching(): Promise<AnonymousBattleSDK> {
     await this.#signaling();
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
