@@ -1,5 +1,5 @@
 export { BrowserSDK, createBrowserSDK } from "./browser-sdk";
-export { BattleSDK } from "./browser-sdk/battle/battle";
+export { BattleSDK, RematchRoom } from "./browser-sdk/battle/battle";
 export { CasualMatch } from "./browser-sdk/casual-match";
 export { LoginCheck, Logout, UniversalLogin } from "./browser-sdk/login";
 export { Ping } from "./browser-sdk/ping";
