@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- RematchRoomをexportに追加
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

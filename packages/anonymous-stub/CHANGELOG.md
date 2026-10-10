@@ -1,5 +1,13 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- RematchRoomをexportに追加
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Minor Changes
