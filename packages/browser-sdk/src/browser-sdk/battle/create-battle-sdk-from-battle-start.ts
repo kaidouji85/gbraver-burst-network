@@ -118,7 +118,7 @@ class BattleSDKImpl implements BattleSDK {
 }
 
 /** 再戦ルーム（ゲスト側） */
-export class RematchRoomGuest implements RematchRoom {
+class RematchRoomGuest implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
   /** 再戦ルームID */
@@ -151,7 +151,7 @@ export class RematchRoomGuest implements RematchRoom {
 }
 
 /** 再戦ルーム（ホスト側） */
-export class RematchRoomHost implements RematchRoom {
+class RematchRoomHost implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
   /** 再戦ルームID */
