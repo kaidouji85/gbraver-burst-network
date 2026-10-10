@@ -103,7 +103,7 @@ export const rematchMakePolling = async (
   }
 
   const entries = await dynamoRematchEntries.getEntries(roomID);
-  const isValidMatchMake = await isValidRematchMatch({
+  const isValidMatchMake = isValidRematchMatch({
     executor: user,
     room,
     entries,

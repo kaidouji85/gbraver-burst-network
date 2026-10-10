@@ -21,6 +21,6 @@ export const isValidRematchMatch = (options: {
   const { executor, room, entries } = options;
   return (
     executor.userID === room.hostUserID &&
-    entries.map((v) => v.roomID === room.roomID).reduce((a, b) => a && b, true)
+    entries.every((v) => v.roomID === room.roomID)
   );
 };
