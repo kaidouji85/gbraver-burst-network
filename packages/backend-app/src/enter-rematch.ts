@@ -57,6 +57,12 @@ const invalidRequestBodyError: Error = {
   error: "invalid request body",
 };
 
+/** なんらかの理由でプライベートマッチに参加できなかった */
+const rejectRematchEntryResponse: WebsocketAPIResponse = {
+  statusCode: 403,
+  body: "reject rematch entry",
+};
+
 /**
  * 再戦にエントリする
  * @param event イベント
@@ -82,7 +88,7 @@ export const enterRematch = async (
   const room = await dynamoRematchRooms.get(roomID);
   if (!room) {
     await notifier.notifyToClient(connectionId, REJECT_REMATCH_ENTRY);
-    return invalidRequestBody;
+    return rejectRematchEntryResponse;
   }
 
   const user = extractUserFromWebSocketAuthorizer(
@@ -90,7 +96,7 @@ export const enterRematch = async (
   );
   if (!canEntryRematchRoom({ room, user })) {
     await notifier.notifyToClient(connectionId, REJECT_REMATCH_ENTRY);
-    return invalidRequestBody;
+    return rejectRematchEntryResponse;
   }
 
   const { userID } = user;
