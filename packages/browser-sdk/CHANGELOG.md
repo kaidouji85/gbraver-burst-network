@@ -1,5 +1,20 @@
 # @gbraver-burst-network/browser-sdk
 
+## 2.0.0
+
+### Major Changes
+
+- ログインあり対戦に再戦機能を追加
+- 9255953: 再戦機能を追加した
+
+### Minor Changes
+
+- 4631e64: exportを追加
+
+### Patch Changes
+
+- 7b16acf: RematchRoomをexportに追加
+
 ## 2.0.0-beta.2
 
 ### Patch Changes

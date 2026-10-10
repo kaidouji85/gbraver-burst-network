@@ -1,5 +1,25 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.0.0
+
+### Major Changes
+
+- ログインあり対戦に再戦機能を追加
+- 9255953: 再戦機能を追加した
+
+### Minor Changes
+
+- 4631e64: exportを追加
+
+### Patch Changes
+
+- 7b16acf: RematchRoomをexportに追加
+- Updated dependencies
+- Updated dependencies [9255953]
+- Updated dependencies [4631e64]
+- Updated dependencies [7b16acf]
+  - @gbraver-burst-network/offline-browser-sdk@2.0.0
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
