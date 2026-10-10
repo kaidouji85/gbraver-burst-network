@@ -2,6 +2,7 @@ import { DynamoBattleCommandsFetcher } from "./adapter/dynamo-battle-commands-fe
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
+import { Battle, BattlePlayer } from "./core/battle/battle";
 import { BattleCommandsFetcher } from "./core/battle/battle-commands-fetcher";
 import { canProgressBattle } from "./core/battle/can-battle-progress";
 import {
@@ -9,9 +10,12 @@ import {
   BattleEnd,
   progressBattle,
 } from "./core/battle/progress-battle";
+import { Connection } from "./core/connection/connection";
+import { createRematchRoom } from "./core/matching/rematch/create-rematch-room";
 import { createDynamoBattleCommands } from "./dynamo-db/create-dynamo-battle-commands";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
+import { createDynamoRematchRooms } from "./dynamo-db/create-dynamo-rematch-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { parseJSON } from "./json/parse";
 import { extractUserFromWebSocketAuthorizer } from "./lambda/extract-user";
@@ -56,6 +60,8 @@ const dynamoBattleCommands = createDynamoBattleCommands(
   SERVICE,
   STAGE,
 );
+/** rematch-rooms テーブル DAO */
+const dynamoRematchRooms = createDynamoRematchRooms(dynamoDB, SERVICE, STAGE);
 
 /** DynamoDBからゲーム参加プレイヤーのバトルコマンドを取得するポート */
 const battleCommandsFetcher: BattleCommandsFetcher =
@@ -93,28 +99,50 @@ async function endWithNotReadyBattleProgress(
 
 /**
  * 「ゲーム終了」でAPIを終了する
- * @param battleEnd バトル終了情報
+ * @param options オプション
+ * @param options.battle バトル情報
+ * @param options.battleEnd バトル終了情報
  * @returns websocket apiに返すデータ
  */
-async function endWithGameEnd(
-  battleEnd: BattleEnd,
-): Promise<WebsocketAPIResponse> {
-  const { update, connections, endBattleID } = battleEnd;
-  const notifiers = connections.map(
+async function endWithGameEnd(options: {
+  battle: Battle<BattlePlayer>;
+  battleEnd: BattleEnd;
+}): Promise<WebsocketAPIResponse> {
+  const { battleEnd, battle } = options;
+  const { players } = battle;
+  const { update, endBattleID } = battleEnd;
+
+  const rematchRoom = createRematchRoom(battle);
+  const updatedConnections: Connection[] = players.map((p) => ({
+    userID: p.userID,
+    connectionId: p.connectionId,
+    state: {
+      type: "RematchMaking",
+      roomID: rematchRoom.roomID,
+    },
+  }));
+
+  await Promise.all([
+    ...updatedConnections.map((v) => dynamoConnections.put(v)),
+    dynamoBattles.delete(endBattleID),
+    dynamoRematchRooms.put(rematchRoom),
+  ]);
+
+  const notifiers = players.map(
     (v) =>
       ({
         connectionId: v.connectionId,
         data: {
           action: "battle-end",
           update,
+          rematchRoomID: rematchRoom.roomID,
+          isHost: v.userID === rematchRoom.hostUserID,
         },
       }) as const,
   );
-  await Promise.all([
-    ...notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
-    ...connections.map((v) => dynamoConnections.put(v)),
-    dynamoBattles.delete(endBattleID),
-  ]);
+  await Promise.all(
+    notifiers.map((v) => notifier.notifyToClient(v.connectionId, v.data)),
+  );
   return webSocketAPIResponseOfSendCommandSuccess;
 }
 
@@ -189,7 +217,7 @@ export async function battleProgressPolling(
   }
 
   if (result.isGameEnd) {
-    return await endWithGameEnd(result);
+    return await endWithGameEnd({ battle, battleEnd: result });
   }
 
   return await endWithGameContinue(result);

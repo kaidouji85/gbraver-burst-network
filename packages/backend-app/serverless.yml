@@ -8,6 +8,8 @@ custom:
   battles: ${self:service}__${sls:stage}__battles
   privateMatchRooms: ${self:service}__${sls:stage}__private-match-rooms
   privateMatchEntries: ${self:service}__${sls:stage}__private-match-entries
+  rematchRooms: ${self:service}__${sls:stage}__rematch-rooms
+  rematchEntries: ${self:service}__${sls:stage}__rematch-entries
 
 provider:
   name: aws
@@ -58,6 +60,8 @@ provider:
             - Fn::GetAtt: [BattlesTable, Arn]
             - Fn::GetAtt: [PrivateMatchRoomsTable, Arn]
             - Fn::GetAtt: [PrivateMatchEntriesTable, Arn]
+            - Fn::GetAtt: [RematchRoomsTable, Arn]
+            - Fn::GetAtt: [RematchEntriesTable, Arn]
         - Effect: Allow
           Action:
             - "execute-api:ManageConnections"
@@ -132,6 +136,16 @@ functions:
     events:
       - websocket:
           route: private-match-make-polling
+  enterRematch:
+    handler: src/enter-rematch.enterRematch
+    events:
+      - websocket:
+          route: enter-rematch
+  rematchMakingPolling:
+    handler: src/rematch-make-polling.rematchMakePolling
+    events:
+      - websocket:
+          route: rematch-make-polling
 
 resources:
   Resources:
@@ -216,6 +230,38 @@ resources:
             KeyType: HASH
           - AttributeName: userID
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+    RematchRoomsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.rematchRooms}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST
+    RematchEntriesTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:custom.rematchEntries}
+        AttributeDefinitions:
+          - AttributeName: roomID
+            AttributeType: S
+          - AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomID
+            KeyType: HASH
+          - AttributeName: userID
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
         BillingMode: PAY_PER_REQUEST
   Outputs:
     WebsocketApiId:

@@ -9,7 +9,7 @@ import { CasualMatching } from "./casual-match-make";
 type MatchStartResponse = {
   /** バトル情報 */
   battle: Battle<BattlePlayer>;
-  /** バトル参加者のコネクション */
+  /** バトル参加者コネクション更新結果をあつめたもの */
   connections: Connection[];
 };
 

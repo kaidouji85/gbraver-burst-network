@@ -12,7 +12,7 @@ import { joinRoom } from "../websocket-api/join-room";
 import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
 import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
 import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { BattleSDK } from "./battle-sdk";
+import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
 import { FrontendLogManager } from "./frontend-log-manager";
 import { GuestBattleSDK } from "./guest-battle-sdk";
 import {
@@ -37,7 +37,7 @@ export type GuestAnonymousSDK = {
     roomID: string;
     armdozerId: ArmdozerId;
     pilotId: PilotId;
-  }) => Promise<BattleSDK | null>;
+  }) => Promise<AnonymousBattleSDK | null>;
 
   /**
    * WebSocketのエラーを通知する

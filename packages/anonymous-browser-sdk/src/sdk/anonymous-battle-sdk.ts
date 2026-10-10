@@ -2,10 +2,10 @@ import { Command, GameState, Player } from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 /**
- * バトルSDK
+ * 匿名ユーザー用バトルSDK
  * 本操作はログイン後に実行することを想定している
  */
-export interface BattleSDK {
+export interface AnonymousBattleSDK {
   /** プレイヤーの情報 */
   player: Player;
   /** 対戦相手の情報 */

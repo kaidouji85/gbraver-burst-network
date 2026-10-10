@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { BattleSDK } from "../battle/battle-sdk";
+import { BattleSDK } from "../battle/battle";
 
 /** プライベートマッチルームID */
 export type PrivateMatchRoomID = string;

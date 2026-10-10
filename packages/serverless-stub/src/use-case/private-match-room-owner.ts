@@ -29,6 +29,11 @@ export class PrivateMatchRoomOwner implements UseCase {
     );
     console.log(room.roomID);
     const battle = await room.waitUntilMatching();
+    battle.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
+    });
+    console.log(battle.player, battle.enemy, battle.initialState);
+
     const update01 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 5,
