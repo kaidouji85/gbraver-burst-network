@@ -5,6 +5,7 @@ import { Connection } from "./core/connection/connection";
 import { HoldPrivateMatch } from "./core/connection/state/hold-private-match";
 import { InBattle } from "./core/connection/state/in-battle";
 import { PrivateMatchMaking } from "./core/connection/state/private-match-making";
+import { RematchMaking } from "./core/connection/state/rematch-making";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
@@ -60,26 +61,6 @@ const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
 );
 
 /**
- * Websocket API $disconnect エントリポイント
- * @param event イベント
- * @returns レスポンス
- */
-export async function disconnect(
-  event: WebsocketAPIEvent,
-): Promise<WebsocketAPIResponse> {
-  const connectionId = event.requestContext.connectionId;
-  const connection = await dynamoConnections.get(connectionId);
-  await Promise.all([
-    dynamoConnections.delete(connectionId),
-    connection ? cleanUp(connection) : Promise.resolve(),
-  ]);
-  return {
-    statusCode: 200,
-    body: "disconnected",
-  };
-}
-
-/**
  * Websocket切断時のクリーンアップを行う
  *
  * @param connection 接続情報
@@ -128,6 +109,8 @@ async function cleanUp(connection: Connection): Promise<void> {
     await dynamoPrivateMatchEntries.delete(state.roomID, connection.userID);
   };
 
+  const inRematchMaking = async (state: RematchMaking) => {};
+
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
   } else if (connection.state.type === "InBattle") {
@@ -136,5 +119,27 @@ async function cleanUp(connection: Connection): Promise<void> {
     await holdPrivateMatch(connection.state);
   } else if (connection.state.type === "PrivateMatchMaking") {
     await privateMatchMaking(connection.state);
+  } else if (connection.state.type === "RematchMaking") {
+    await inRematchMaking(connection.state);
   }
+}
+
+/**
+ * Websocket API $disconnect エントリポイント
+ * @param event イベント
+ * @returns レスポンス
+ */
+export async function disconnect(
+  event: WebsocketAPIEvent,
+): Promise<WebsocketAPIResponse> {
+  const connectionId = event.requestContext.connectionId;
+  const connection = await dynamoConnections.get(connectionId);
+  await Promise.all([
+    dynamoConnections.delete(connectionId),
+    connection ? cleanUp(connection) : Promise.resolve(),
+  ]);
+  return {
+    statusCode: 200,
+    body: "disconnected",
+  };
 }
