@@ -75,12 +75,15 @@ export class DynamoRematchRooms {
   /**
    * ルームIDを指定してルームを削除する
    * @param roomID ルームID
-   * @returns 削除受付したら発火するPromise
+   * @returns 削除した項目、存在しない場合はnull
    */
-  async delete(roomID: RematchRoomID): Promise<void> {
-    await this.#dynamoDB.delete({
+  async delete(roomID: RematchRoomID): Promise<DynamoRematchRoom | null> {
+    const result = await this.#dynamoDB.delete({
       TableName: this.#tableName,
       Key: { roomID },
+      ReturnValues: "ALL_OLD",
     });
+    const parsed = DynamoRematchRoomsSchema.safeParse(result.Attributes);
+    return parsed.success ? parsed.data : null;
   }
 }
