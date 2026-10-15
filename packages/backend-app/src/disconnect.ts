@@ -72,7 +72,6 @@ const dynamoRematchEntries = createDynamoRematchEntries(
 
 /**
  * Websocket切断時のクリーンアップを行う
- *
  * @param connection 接続情報
  * @returns クリーンアップ完了時に発火するPromise
  */
