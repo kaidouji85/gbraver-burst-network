@@ -8,7 +8,9 @@ import { RematchRoom } from "../../../../../src/core/matching/rematch/rematch-ro
 const room: RematchRoom = {
   roomID: "test-room",
   hostUserID: "host",
+  hostUserConnectionId: "host-connection",
   guestUserID: "guest",
+  guestUserConnectionId: "guest-connection",
   expiresAt: 0,
 };
 

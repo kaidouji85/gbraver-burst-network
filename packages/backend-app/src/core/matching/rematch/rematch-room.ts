@@ -14,8 +14,12 @@ export type RematchRoom = {
   roomID: RematchRoomID;
   /** ホストユーザーID */
   hostUserID: UserID;
+  /** ホストユーザーの接続ID */
+  hostUserConnectionId: string;
   /** ゲストユーザーID */
   guestUserID: UserID;
+  /** ゲストユーザーの接続ID */
+  guestUserConnectionId: string;
   /** 再戦の有効期限（Unix秒） */
   expiresAt: number;
 };
@@ -24,6 +28,8 @@ export type RematchRoom = {
 export const RematchRoomSchema = z.object({
   roomID: RematchRoomIDSchema,
   hostUserID: UserIDSchema,
+  hostUserConnectionId: z.string(),
   guestUserID: UserIDSchema,
+  guestUserConnectionId: z.string(),
   expiresAt: z.number(),
 });

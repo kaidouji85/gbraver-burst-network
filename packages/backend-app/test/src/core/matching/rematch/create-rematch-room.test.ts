@@ -44,7 +44,9 @@ test("バトルから再戦ルームが正しく生成できる", () => {
   expect(createRematchRoom(battle)).toEqual({
     roomID: "mocked-room-id",
     hostUserID: hostPlayer.userID,
+    hostUserConnectionId: hostPlayer.connectionId,
     guestUserID: guestPlayer.userID,
+    guestUserConnectionId: guestPlayer.connectionId,
     expiresAt: 1_600_000_000 + REMATCH_ROOM_TTL_SECONDS,
   });
 });
