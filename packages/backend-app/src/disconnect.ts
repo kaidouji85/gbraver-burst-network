@@ -14,32 +14,45 @@ import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway 管理 API */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** DynamoDB ドキュメント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** connections テーブル DAO  */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+/** casualMatchEntries テーブル DAO */
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** battles テーブル DAO */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+/** privateMatchRooms テーブル DAO */
 const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** privateMatchEntries テーブル DAO */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
   dynamoDB,
   SERVICE,
@@ -48,7 +61,6 @@ const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
 
 /**
  * Websocket API $disconnect エントリポイント
- *
  * @param event イベント
  * @returns レスポンス
  */
