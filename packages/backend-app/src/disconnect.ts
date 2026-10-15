@@ -11,6 +11,8 @@ import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
 import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
+import { createDynamoRematchEntries } from "./dynamo-db/create-dynamo-rematch-entries";
+import { createDynamoRematchRooms } from "./dynamo-db/create-dynamo-rematch-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
@@ -55,6 +57,14 @@ const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
 );
 /** privateMatchEntries テーブル DAO */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+/** rematchRooms テーブル DAO */
+const dynamoRematchRooms = createDynamoRematchRooms(dynamoDB, SERVICE, STAGE);
+/** rematchEntries テーブル DAO */
+const dynamoRematchEntries = createDynamoRematchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
@@ -109,7 +119,21 @@ async function cleanUp(connection: Connection): Promise<void> {
     await dynamoPrivateMatchEntries.delete(state.roomID, connection.userID);
   };
 
-  const inRematchMaking = async (state: RematchMaking) => {};
+  const inRematchMaking = async (state: RematchMaking) => {
+    const [entries] = await Promise.all([
+      dynamoRematchEntries.getEntries(state.roomID),
+      dynamoRematchRooms.delete(state.roomID),
+    ]);
+    await Promise.all(
+      entries
+        .filter((e) => e.userID !== connection.userID)
+        .map((e) =>
+          notifier.notifyToClient(e.connectionId, {
+            action: "reject-rematch-entry",
+          }),
+        ),
+    );
+  };
 
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
