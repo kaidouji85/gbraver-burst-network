@@ -119,19 +119,30 @@ async function cleanUp(connection: Connection): Promise<void> {
   };
 
   const inRematchMaking = async (state: RematchMaking) => {
-    const [entries] = await Promise.all([
-      dynamoRematchEntries.getEntries(state.roomID),
-      dynamoRematchRooms.delete(state.roomID),
+    await Promise.all([
+      (async () => {
+        const entries = await dynamoRematchEntries.getEntries(state.roomID);
+        await Promise.all(
+          entries.map((e) =>
+            dynamoRematchEntries.delete(state.roomID, e.userID),
+          ),
+        );
+      })(),
+      (async () => {
+        const room = await dynamoRematchRooms.delete(state.roomID);
+        if (!room) {
+          return;
+        }
+
+        const otherConnectionId =
+          room.hostUserConnectionId === connection.connectionId
+            ? room.guestUserConnectionId
+            : room.hostUserConnectionId;
+        await notifier.notifyToClient(otherConnectionId, {
+          action: "rematch-cancelled",
+        });
+      })(),
     ]);
-    await Promise.all(
-      entries
-        .filter((e) => e.userID !== connection.userID)
-        .map((e) =>
-          notifier.notifyToClient(e.connectionId, {
-            action: "reject-rematch-entry",
-          }),
-        ),
-    );
   };
 
   if (connection.state.type === "CasualMatchMaking") {
