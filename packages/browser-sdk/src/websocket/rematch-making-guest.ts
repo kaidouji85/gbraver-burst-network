@@ -10,7 +10,7 @@ import { waitUntil } from "./wait-until";
 /**
  * ゲスト側の再戦マッチメイク
  * @param options オプション
- * @param options.signal 中止信号 (AbortSignal)
+ * @param options.signal アボートシグナル
  * @param options.websocket WebSocketインスタンス
  * @param options.roomID ルームID
  * @param options.armdozerId アームドーザID
