@@ -9,6 +9,7 @@ import {
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
+import { createAbortError } from "../abort-controller/abort-error";
 import { AbortManager } from "../abort-controller/abort-manager";
 import { SignalContainer } from "../abort-controller/signal-container";
 import { connect } from "../websocket/connect";
@@ -199,7 +200,9 @@ class BrowserSDKImpl implements BrowserSDK {
     this.#websocket?.close();
     this.#websocket = null;
 
-    this.#websocketAbortManager.getAbortController().abort();
+    this.#websocketAbortManager
+      .getAbortController()
+      .abort(createAbortError("WebSocket disconnected"));
   }
 
   /** @override */
@@ -216,7 +219,7 @@ class BrowserSDKImpl implements BrowserSDK {
   async #getOrCreateWebSocket(options: SignalContainer): Promise<WebSocket> {
     const { signal } = options;
     if (signal.aborted) {
-      throw new Error(signal.reason);
+      throw signal.reason;
     }
 
     if (this.#websocket) {

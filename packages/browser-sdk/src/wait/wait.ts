@@ -6,7 +6,10 @@ import { SignalContainer } from "../abort-controller/signal-container";
  * @param options オプション
  * @returns 待ち時間が終了したら発火するPromise
  */
-export function wait(ms: number, options?: Partial<SignalContainer>): Promise<void> {
+export function wait(
+  ms: number,
+  options?: Partial<SignalContainer>,
+): Promise<void> {
   const signal = options?.signal;
   let onAbort: (() => void) | null = null;
   return new Promise<void>((resolve, reject) => {
