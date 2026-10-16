@@ -12,23 +12,22 @@ export function connect(
   options?: Partial<SignalContainer>,
 ): Promise<WebSocket> {
   const signal = options?.signal;
+  if (signal?.aborted) {
+    return Promise.reject(signal.reason);
+  }
+
   let handler: (() => void) | null = null;
   let errorHandler: Reject | null = null;
   let onAbort: (() => void) | null = null;
   const websocket = new WebSocket(url);
   return new Promise<WebSocket>((resolve, reject) => {
-    if (signal?.aborted) {
-      reject(signal.reason);
-      return;
-    }
-
     onAbort = () => {
       websocket.close();
       reject(signal?.reason);
     };
 
     handler = () => {
-        resolve(websocket);
+      resolve(websocket);
     };
 
     errorHandler = reject;
