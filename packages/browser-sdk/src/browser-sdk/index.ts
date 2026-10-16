@@ -33,6 +33,8 @@ import {
   UserPictureGet,
 } from "./user";
 import { WebsocketDisconnect, WebsocketErrorNotifier } from "./websocket";
+import { AbortManager } from "../abort-controller/abort-manager";
+import { SignalContainer } from "../abort-controller/signal-container";
 
 /** ブラウザSDK */
 export interface BrowserSDK
@@ -57,6 +59,8 @@ class BrowserSDKImpl implements BrowserSDK {
   #websocketAPIURL: string;
   /** Web Socket クライアント */
   #websocket: WebSocket | null;
+  /** Web Socket 用の AbortManager */
+  #websocketAbortManager: AbortManager;
   /** Web Socket エラー通知 */
   #websocketError: Subject<unknown>;
   /** Web Socket イベントストリーム */
@@ -69,6 +73,7 @@ class BrowserSDKImpl implements BrowserSDK {
   constructor(websocketAPIURL: string) {
     this.#websocketAPIURL = websocketAPIURL;
     this.#websocket = null;
+    this.#websocketAbortManager = new AbortManager();
     this.#websocketError = new Subject();
     this.#websocketSubscriptions = [];
   }
@@ -118,8 +123,9 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async ping(): Promise<string> {
-    const websocket = await this.#getOrCreateWebSocket();
-    const resp = await ping(websocket);
+    const { signal } = this.#websocketAbortManager.getAbortController();
+    const websocket = await this.#getOrCreateWebSocket({ signal });
+    const resp = await ping(websocket, { signal });
     return resp.message;
   }
 
@@ -128,8 +134,11 @@ class BrowserSDKImpl implements BrowserSDK {
     armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<BattleSDK> {
-    const websocket = await this.#getOrCreateWebSocket();
-    const resp = await enterCasualMatch(websocket, armdozerId, pilotId);
+    const { signal } = this.#websocketAbortManager.getAbortController();
+    const websocket = await this.#getOrCreateWebSocket({ signal });
+    const resp = await enterCasualMatch(websocket, armdozerId, pilotId, {
+      signal,
+    });
     return createBattleSDKFromBattleStart(resp, websocket);
   }
 
@@ -138,8 +147,11 @@ class BrowserSDKImpl implements BrowserSDK {
     armdozerId: ArmdozerId,
     pilotId: PilotId,
   ): Promise<PrivateMatchRoom> {
-    const websocket = await this.#getOrCreateWebSocket();
-    const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId);
+    const { signal } = this.#websocketAbortManager.getAbortController();
+    const websocket = await this.#getOrCreateWebSocket({ signal });
+    const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId, {
+      signal,
+    });
     return new PrivateMatchRoomImpl(resp.roomID, websocket);
   }
 
@@ -149,12 +161,14 @@ class BrowserSDKImpl implements BrowserSDK {
     armdozerId: string,
     pilotId: string,
   ): Promise<BattleSDK | null> {
-    const websocket = await this.#getOrCreateWebSocket();
+    const { signal } = this.#websocketAbortManager.getAbortController();
+    const websocket = await this.#getOrCreateWebSocket({ signal });
     const resp = await enterPrivateMatchRoom(
       websocket,
       roomID,
       armdozerId,
       pilotId,
+      { signal },
     );
     if (resp.action !== "battle-start") {
       return null;
@@ -165,14 +179,15 @@ class BrowserSDKImpl implements BrowserSDK {
 
   /** @override */
   async disconnectWebsocket(): Promise<void> {
-    this.#websocket?.close();
-    this.#websocket = null;
-
     this.#websocketSubscriptions.forEach((v) => {
       v.unsubscribe();
     });
-
     this.#websocketSubscriptions = [];
+
+    this.#websocket?.close();
+    this.#websocket = null;
+
+    this.#websocketAbortManager.getAbortController().abort();
   }
 
   /** @override */
@@ -183,9 +198,15 @@ class BrowserSDKImpl implements BrowserSDK {
   /**
    * WebSocketクライアントの取得を行う
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
+   * @param options オプション
    * @returns 取得、生成結果
    */
-  async #getOrCreateWebSocket(): Promise<WebSocket> {
+  async #getOrCreateWebSocket(options: SignalContainer): Promise<WebSocket> {
+    const { signal } = options;
+    if (signal.aborted) {
+      throw new Error(signal.reason);
+    }
+
     if (this.#websocket) {
       return this.#websocket;
     }
@@ -194,6 +215,7 @@ class BrowserSDKImpl implements BrowserSDK {
     const accessToken = authSession.tokens?.accessToken.toString() ?? "";
     const websocket = await connect(
       `${this.#websocketAPIURL}?token=${accessToken}`,
+      options,
     );
     this.#websocketSubscriptions = [
       fromEvent(websocket, "error").subscribe(this.#websocketError),
