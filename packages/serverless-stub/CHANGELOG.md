@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.1.0-beta.0
+
+### Minor Changes
+
+- ログインあり対戦のWebSocket通信にabort controllerを追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.1.0-beta.0
+
 ## 2.0.0
 
 ### Major Changes

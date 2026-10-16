@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 2.1.0-beta.0
+
+### Minor Changes
+
+- ログインあり対戦のWebSocket通信にabort controllerを追加した
+
 ## 2.0.0
 
 ### Major Changes
