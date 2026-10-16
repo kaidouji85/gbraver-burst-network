@@ -9,6 +9,8 @@ import {
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 
+import { AbortManager } from "../abort-controller/abort-manager";
+import { SignalContainer } from "../abort-controller/signal-container";
 import { connect } from "../websocket/connect";
 import { createPrivateMatchRoom } from "../websocket/create-private-match-room";
 import { enterCasualMatch } from "../websocket/enter-casual-match";
@@ -33,8 +35,6 @@ import {
   UserPictureGet,
 } from "./user";
 import { WebsocketDisconnect, WebsocketErrorNotifier } from "./websocket";
-import { AbortManager } from "../abort-controller/abort-manager";
-import { SignalContainer } from "../abort-controller/signal-container";
 
 /** ブラウザSDK */
 export interface BrowserSDK
@@ -139,7 +139,11 @@ class BrowserSDKImpl implements BrowserSDK {
     const resp = await enterCasualMatch(websocket, armdozerId, pilotId, {
       signal,
     });
-    return createBattleSDKFromBattleStart(resp, websocket);
+    return createBattleSDKFromBattleStart(
+      resp,
+      websocket,
+      this.#websocketAbortManager,
+    );
   }
 
   /** @override */
@@ -152,7 +156,11 @@ class BrowserSDKImpl implements BrowserSDK {
     const resp = await createPrivateMatchRoom(websocket, armdozerId, pilotId, {
       signal,
     });
-    return new PrivateMatchRoomImpl(resp.roomID, websocket);
+    return new PrivateMatchRoomImpl(
+      resp.roomID,
+      websocket,
+      this.#websocketAbortManager,
+    );
   }
 
   /** @override */
@@ -174,7 +182,11 @@ class BrowserSDKImpl implements BrowserSDK {
       return null;
     }
 
-    return createBattleSDKFromBattleStart(resp, websocket);
+    return createBattleSDKFromBattleStart(
+      resp,
+      websocket,
+      this.#websocketAbortManager,
+    );
   }
 
   /** @override */
