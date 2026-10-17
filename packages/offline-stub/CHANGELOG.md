@@ -1,5 +1,18 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.1.0
+
+### Minor Changes
+
+- ログインあり対戦にAbort Controllerを追加した
+- dc1f177: ログインあり対戦のWebSocket通信にabort controllerを追加した
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [dc1f177]
+  - @gbraver-burst-network/offline-browser-sdk@2.1.0
+
 ## 2.1.0-beta.0
 
 ### Minor Changes
