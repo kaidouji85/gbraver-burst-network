@@ -49,6 +49,9 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
       throw new Error("再戦ルームが存在しません");
     }
 
+    rematchRoom.rematchCancelledNotifier().subscribe(() => {
+      console.log("rematch cancelled");
+    });
     const rematchBattle = await rematchRoom.requestRematch({
       armdozerId: ArmdozerIds.NEO_LANDOZER,
       pilotId: PilotIds.GAI,
