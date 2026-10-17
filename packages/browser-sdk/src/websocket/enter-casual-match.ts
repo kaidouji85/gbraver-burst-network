@@ -1,5 +1,6 @@
 import type { ArmdozerId, PilotId } from "gbraver-burst-core";
 
+import type { SignalContainer } from "../abort-controller/signal-container";
 import { parseJSON } from "../json/parse";
 import type { Resolve } from "../promise/promise";
 import type { BattleStart } from "../response/battle-start";
@@ -13,13 +14,20 @@ import { waitUntil } from "./wait-until";
  * @param websocket websocketクライアント
  * @param armdozerId アームドーザID
  * @param pilotId パイロットID
+ * @param options オプション
  * @returns バトル情報
  */
 export function enterCasualMatch(
   websocket: WebSocket,
   armdozerId: ArmdozerId,
   pilotId: PilotId,
+  options?: Partial<SignalContainer>,
 ): Promise<BattleStart> {
+  const signal = options?.signal;
+  if (signal?.aborted) {
+    return Promise.reject(signal.reason);
+  }
+
   sendToAPIServer(websocket, {
     action: "enter-casual-match",
     armdozerId,
@@ -34,5 +42,6 @@ export function enterCasualMatch(
         resolve(response);
       }
     },
+    options,
   );
 }
