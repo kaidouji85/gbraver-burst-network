@@ -10,6 +10,7 @@ import { filter, fromEvent, map, Observable } from "rxjs";
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { parseJSON } from "../../json/parse";
 import { BattleStart } from "../../response/battle-start";
+import { RematchCancelledSchema } from "../../response/rematch-cancelled";
 import { parseSuddenlyBattleEnd } from "../../response/suddenly-battle-end";
 import { rematchMakingGuest } from "../../websocket/rematch-making-guest";
 import { rematchMakingHost } from "../../websocket/rematch-making-host";
@@ -126,12 +127,32 @@ class BattleSDKImpl implements BattleSDK {
   }
 }
 
+/**
+ * 再戦キャンセル通知ストリームを生成する
+ * @param websocket websocketコネクション
+ * @returns 生成結果
+ */
+const createRematchCancelledNotifier = (
+  websocket: WebSocket,
+): Observable<unknown> => {
+  return fromEvent(websocket, "message").pipe(
+    map((e) => e as MessageEvent),
+    map((e) => parseJSON(e.data)),
+    filter((data) => data),
+    map((data) => RematchCancelledSchema.safeParse(data)),
+    map((result) => (result.success ? result.data : null)),
+    filter((rematchCancelled) => !!rematchCancelled),
+  );
+};
+
 /** 再戦ルーム（ゲスト側） */
 class RematchRoomGuest implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
   /** websocket用のAbortManager */
   readonly #websocketAbortManager: AbortManager;
+  /** 再戦がキャンセルされたことを通知するストリーム */
+  readonly rematchCancelled: Observable<unknown>;
   /** 再戦ルームID */
   readonly #roomID: string;
 
@@ -149,6 +170,7 @@ class RematchRoomGuest implements RematchRoom {
   }) {
     this.#websocket = options.websocket;
     this.#websocketAbortManager = options.websocketAbortManager;
+    this.rematchCancelled = createRematchCancelledNotifier(this.#websocket);
     this.#roomID = options.roomID;
   }
 
@@ -171,6 +193,11 @@ class RematchRoomGuest implements RematchRoom {
       this.#websocketAbortManager,
     );
   }
+
+  /** @override */
+  rematchCancelledNotifier(): Observable<unknown> {
+    return this.rematchCancelled;
+  }
 }
 
 /** 再戦ルーム（ホスト側） */
@@ -179,6 +206,8 @@ class RematchRoomHost implements RematchRoom {
   readonly #websocket: WebSocket;
   /** websocket用のAbortManager */
   readonly #websocketAbortManager: AbortManager;
+  /** 再戦がキャンセルされたことを通知するストリーム */
+  readonly rematchCancelled: Observable<unknown>;
   /** 再戦ルームID */
   readonly #roomID: string;
 
@@ -196,6 +225,7 @@ class RematchRoomHost implements RematchRoom {
   }) {
     this.#websocket = options.websocket;
     this.#websocketAbortManager = options.websocketAbortManager;
+    this.rematchCancelled = createRematchCancelledNotifier(this.#websocket);
     this.#roomID = options.roomID;
   }
 
@@ -217,6 +247,10 @@ class RematchRoomHost implements RematchRoom {
       this.#websocket,
       this.#websocketAbortManager,
     );
+  }
+  /** @override */
+  rematchCancelledNotifier(): Observable<unknown> {
+    return this.rematchCancelled;
   }
 }
 

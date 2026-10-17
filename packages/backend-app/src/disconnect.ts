@@ -5,71 +5,73 @@ import { Connection } from "./core/connection/connection";
 import { HoldPrivateMatch } from "./core/connection/state/hold-private-match";
 import { InBattle } from "./core/connection/state/in-battle";
 import { PrivateMatchMaking } from "./core/connection/state/private-match-making";
+import { RematchMaking } from "./core/connection/state/rematch-making";
 import { createDynamoBattles } from "./dynamo-db/create-dynamo-battles";
 import { createDynamoCasualMatchEntries } from "./dynamo-db/create-dynamo-casual-match-entries";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
 import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
+import { createDynamoRematchEntries } from "./dynamo-db/create-dynamo-rematch-entries";
+import { createDynamoRematchRooms } from "./dynamo-db/create-dynamo-rematch-rooms";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import type { WebsocketAPIEvent } from "./lambda/websocket-api-event";
 import type { WebsocketAPIResponse } from "./lambda/websocket-api-response";
 
+/** AWSリージョン */
 const AWS_REGION = process.env.AWS_REGION ?? "";
+/** サービス */
 const SERVICE = process.env.SERVICE ?? "";
+/** ステージ */
 const STAGE = process.env.STAGE ?? "";
+/** Websocket API ID */
 const WEBSOCKET_API_ID = process.env.WEBSOCKET_API_ID ?? "";
 
+/** API Gateway エンドポイント */
 const apiGatewayEndpoint = createAPIGatewayEndpoint(
   WEBSOCKET_API_ID,
   AWS_REGION,
   STAGE,
 );
+/** API Gateway 管理 API */
 const apiGateway = createApiGatewayManagementApi(apiGatewayEndpoint);
+/** 通知オブジェクト */
 const notifier = new Notifier(apiGateway);
 
+/** DynamoDB ドキュメント */
 const dynamoDB = createDynamoDBDocument(AWS_REGION);
+/** connections テーブル DAO  */
 const dynamoConnections = createDynamoConnections(dynamoDB, SERVICE, STAGE);
+/** casualMatchEntries テーブル DAO */
 const dynamoCasualMatchEntries = createDynamoCasualMatchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** battles テーブル DAO */
 const dynamoBattles = createDynamoBattles(dynamoDB, SERVICE, STAGE);
+/** privateMatchRooms テーブル DAO */
 const dynamoPrivateMatchRooms = createDynamoPrivateMatchRooms(
   dynamoDB,
   SERVICE,
   STAGE,
 );
+/** privateMatchEntries テーブル DAO */
 const dynamoPrivateMatchEntries = createDynamoPrivateMatchEntries(
+  dynamoDB,
+  SERVICE,
+  STAGE,
+);
+/** rematchRooms テーブル DAO */
+const dynamoRematchRooms = createDynamoRematchRooms(dynamoDB, SERVICE, STAGE);
+/** rematchEntries テーブル DAO */
+const dynamoRematchEntries = createDynamoRematchEntries(
   dynamoDB,
   SERVICE,
   STAGE,
 );
 
 /**
- * Websocket API $disconnect エントリポイント
- *
- * @param event イベント
- * @returns レスポンス
- */
-export async function disconnect(
-  event: WebsocketAPIEvent,
-): Promise<WebsocketAPIResponse> {
-  const connectionId = event.requestContext.connectionId;
-  const connection = await dynamoConnections.get(connectionId);
-  await Promise.all([
-    dynamoConnections.delete(connectionId),
-    connection ? cleanUp(connection) : Promise.resolve(),
-  ]);
-  return {
-    statusCode: 200,
-    body: "disconnected",
-  };
-}
-
-/**
  * Websocket切断時のクリーンアップを行う
- *
  * @param connection 接続情報
  * @returns クリーンアップ完了時に発火するPromise
  */
@@ -116,6 +118,33 @@ async function cleanUp(connection: Connection): Promise<void> {
     await dynamoPrivateMatchEntries.delete(state.roomID, connection.userID);
   };
 
+  const inRematchMaking = async (state: RematchMaking) => {
+    await Promise.all([
+      (async () => {
+        const entries = await dynamoRematchEntries.getEntries(state.roomID);
+        await Promise.all(
+          entries.map((e) =>
+            dynamoRematchEntries.delete(state.roomID, e.userID),
+          ),
+        );
+      })(),
+      (async () => {
+        const room = await dynamoRematchRooms.delete(state.roomID);
+        if (!room) {
+          return;
+        }
+
+        const otherConnectionId =
+          room.hostUserConnectionId === connection.connectionId
+            ? room.guestUserConnectionId
+            : room.hostUserConnectionId;
+        await notifier.notifyToClient(otherConnectionId, {
+          action: "rematch-cancelled",
+        });
+      })(),
+    ]);
+  };
+
   if (connection.state.type === "CasualMatchMaking") {
     await inCasualMatchMaking();
   } else if (connection.state.type === "InBattle") {
@@ -124,5 +153,27 @@ async function cleanUp(connection: Connection): Promise<void> {
     await holdPrivateMatch(connection.state);
   } else if (connection.state.type === "PrivateMatchMaking") {
     await privateMatchMaking(connection.state);
+  } else if (connection.state.type === "RematchMaking") {
+    await inRematchMaking(connection.state);
   }
+}
+
+/**
+ * Websocket API $disconnect エントリポイント
+ * @param event イベント
+ * @returns レスポンス
+ */
+export async function disconnect(
+  event: WebsocketAPIEvent,
+): Promise<WebsocketAPIResponse> {
+  const connectionId = event.requestContext.connectionId;
+  const connection = await dynamoConnections.get(connectionId);
+  await Promise.all([
+    dynamoConnections.delete(connectionId),
+    connection ? cleanUp(connection) : Promise.resolve(),
+  ]);
+  return {
+    statusCode: 200,
+    body: "disconnected",
+  };
 }

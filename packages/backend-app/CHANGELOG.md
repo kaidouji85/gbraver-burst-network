@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-app
 
+## 2.2.0
+
+### Minor Changes
+
+- 再戦キャンセル通知を追加
+- e8bc8c9: 再戦キャンセル通知を追加
+
+## 2.2.0-beta.0
+
+### Minor Changes
+
+- 再戦キャンセル通知を追加
+
 ## 2.1.0
 
 ### Minor Changes

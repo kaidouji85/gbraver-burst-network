@@ -54,4 +54,10 @@ export interface RematchRoom {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<BattleSDK>;
+
+  /**
+   * 再戦がキャンセルされたことを通知するストリーム
+   * @returns 通知ストリーム
+   */
+  rematchCancelledNotifier(): Observable<unknown>;
 }
