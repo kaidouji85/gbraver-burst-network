@@ -127,6 +127,11 @@ class BattleSDKImpl implements BattleSDK {
   }
 }
 
+/**
+ * 再戦キャンセル通知ストリームを生成する
+ * @param websocket websocketコネクション
+ * @returns 生成結果
+ */
 const createRematchCancelledNotifier = (
   websocket: WebSocket,
 ): Observable<unknown> => {
