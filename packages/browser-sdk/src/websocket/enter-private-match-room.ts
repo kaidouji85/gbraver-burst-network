@@ -1,5 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
+import type { SignalContainer } from "../abort-controller/signal-container";
 import { PrivateMatchRoomID } from "../browser-sdk/private-match/private-match";
 import { parseJSON } from "../json/parse";
 import { Resolve } from "../promise/promise";
@@ -17,6 +18,7 @@ import { waitUntil } from "./wait-until";
  * @param roomID ルームID
  * @param armdozerId アームドーザID
  * @param pilotId パイロットID
+ * @param options オプション
  * @returns 入室結果
  */
 export function enterPrivateMatchRoom(
@@ -24,7 +26,13 @@ export function enterPrivateMatchRoom(
   roomID: PrivateMatchRoomID,
   armdozerId: ArmdozerId,
   pilotId: PilotId,
+  options?: Partial<SignalContainer>,
 ): Promise<BattleStart | RejectPrivateMatchEntry> {
+  const signal = options?.signal;
+  if (signal?.aborted) {
+    return Promise.reject(signal.reason);
+  }
+
   sendToAPIServer(websocket, {
     action: "enter-private-match-room",
     roomID,
@@ -49,5 +57,6 @@ export function enterPrivateMatchRoom(
         resolve(rejectPrivateMatchEntry);
       }
     },
+    options,
   );
 }

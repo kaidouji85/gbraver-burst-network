@@ -1,5 +1,6 @@
 import type { Command } from "gbraver-burst-core";
 
+import type { SignalContainer } from "../abort-controller/signal-container";
 import { parseJSON } from "../json/parse";
 import type { Reject, Resolve } from "../promise/promise";
 import type { AcceptCommand } from "../response/accept-command";
@@ -16,11 +17,11 @@ import { waitUntil } from "./wait-until";
 /**
  * コマンドをAPIサーバに送信する
  * バトル進行、バトル終了がサーバが送信されるまで待機して、その内容を返す
- *
  * @param websocket websocketクライアント
  * @param battleID バトルID
  * @param flowID フローID
  * @param command コマンド
+ * @param options オプション
  * @returns サーバからのレスポンス
  */
 export function sendCommand(
@@ -28,7 +29,12 @@ export function sendCommand(
   battleID: string,
   flowID: string,
   command: Command,
+  options?: Partial<SignalContainer>,
 ): Promise<BattleProgressed | BattleEnd> {
+  if (options?.signal?.aborted) {
+    return Promise.reject(options.signal.reason);
+  }
+
   sendToAPIServer(websocket, {
     action: "send-command",
     battleID,
@@ -52,16 +58,17 @@ export function sendCommand(
         return;
       }
     },
+    options,
   );
 }
 
 /**
  * 更新確認ポーリング付きでAPIサーバにコマンド送信を行う
- *
  * @param websocket Websocketクライアント
  * @param battleID バトルID
  * @param flowID フローID
  * @param command コマンド
+ * @param options オプション
  * @returns APIサーバからのレスポンス
  */
 export async function sendCommandWithPolling(
@@ -69,7 +76,13 @@ export async function sendCommandWithPolling(
   battleID: string,
   flowID: string,
   command: Command,
+  options?: Partial<SignalContainer>,
 ): Promise<BattleProgressed | BattleEnd> {
+  const { signal } = options ?? {};
+  if (signal?.aborted) {
+    return Promise.reject(signal.reason);
+  }
+
   sendToAPIServer(websocket, {
     action: "send-command",
     battleID,
@@ -85,6 +98,7 @@ export async function sendCommandWithPolling(
         resolve(acceptCommand);
       }
     },
+    options,
   );
 
   const maxPollingCount = 100;
@@ -109,33 +123,38 @@ export async function sendCommandWithPolling(
       resolve: Resolve<BattleProgressed | BattleEnd>,
       reject: Reject,
     ): Promise<void> => {
-      const data = parseJSON(e.data);
-      const notReadyBattleProgress = parseNotReadyBattleProgress(data);
-      const isOverPollingCount = maxPollingCount <= pollingCount;
-      if (notReadyBattleProgress && isOverPollingCount) {
-        reject(new Error("max polling count over"));
-        return;
-      }
+      try {
+        const data = parseJSON(e.data);
+        const notReadyBattleProgress = parseNotReadyBattleProgress(data);
+        const isOverPollingCount = maxPollingCount <= pollingCount;
+        if (notReadyBattleProgress && isOverPollingCount) {
+          reject(new Error("max polling count over"));
+          return;
+        }
 
-      if (notReadyBattleProgress) {
-        const pollingTime = Date.now() - lastPollingTime;
-        const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
-        await wait(waitTime);
-        battleProgressPolling();
-        return;
-      }
+        if (notReadyBattleProgress) {
+          const pollingTime = Date.now() - lastPollingTime;
+          const waitTime = Math.max(pollingIntervalMilliSec - pollingTime, 0);
+          await wait(waitTime, options);
+          battleProgressPolling();
+          return;
+        }
 
-      const battleProgressed = parseBattleProgressed(data);
-      if (battleProgressed) {
-        resolve(battleProgressed);
-        return;
-      }
+        const battleProgressed = parseBattleProgressed(data);
+        if (battleProgressed) {
+          resolve(battleProgressed);
+          return;
+        }
 
-      const battleEnd = parseBattleEnd(data);
-      if (battleEnd) {
-        resolve(battleEnd);
-        return;
+        const battleEnd = parseBattleEnd(data);
+        if (battleEnd) {
+          resolve(battleEnd);
+          return;
+        }
+      } catch (err) {
+        reject(err);
       }
     },
+    options,
   );
 }

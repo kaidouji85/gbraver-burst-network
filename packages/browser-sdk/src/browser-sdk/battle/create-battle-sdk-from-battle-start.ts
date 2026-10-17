@@ -7,6 +7,7 @@ import {
 } from "gbraver-burst-core";
 import { filter, fromEvent, map, Observable } from "rxjs";
 
+import { AbortManager } from "../../abort-controller/abort-manager";
 import { parseJSON } from "../../json/parse";
 import { BattleStart } from "../../response/battle-start";
 import { parseSuddenlyBattleEnd } from "../../response/suddenly-battle-end";
@@ -28,6 +29,8 @@ class BattleSDKImpl implements BattleSDK {
   readonly initialState: GameState[];
   /** websocketクライアント */
   readonly #websocket: WebSocket;
+  /** websocket用のAbortManager */
+  readonly #websocketAbortManager: AbortManager;
   /** バトルID */
   readonly #battleID: string;
   /** フローID */
@@ -58,6 +61,7 @@ class BattleSDKImpl implements BattleSDK {
     initialFlowID: string;
     isPoller: boolean;
     websocket: WebSocket;
+    websocketAbortManager: AbortManager;
   }) {
     this.player = options.player;
     this.enemy = options.enemy;
@@ -74,28 +78,33 @@ class BattleSDKImpl implements BattleSDK {
       filter((sudenlyBattleEnd) => !!sudenlyBattleEnd),
     );
     this.#rematchRoom = null;
+    this.#websocketAbortManager = options.websocketAbortManager;
   }
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
+    const { signal } = this.#websocketAbortManager.getAbortController();
     const result = this.#isPoller
       ? await sendCommandWithPolling(
           this.#websocket,
           this.#battleID,
           this.#flowID,
           command,
+          { signal },
         )
       : await sendCommand(
           this.#websocket,
           this.#battleID,
           this.#flowID,
           command,
+          { signal },
         );
     if (result.action === "battle-progressed") {
       this.#flowID = result.flowID;
     } else if (result.action === "battle-end") {
       const options = {
         websocket: this.#websocket,
+        websocketAbortManager: this.#websocketAbortManager,
         roomID: result.rematchRoomID,
       };
       this.#rematchRoom = result.isHost
@@ -121,6 +130,8 @@ class BattleSDKImpl implements BattleSDK {
 class RematchRoomGuest implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
+  /** websocket用のAbortManager */
+  readonly #websocketAbortManager: AbortManager;
   /** 再戦ルームID */
   readonly #roomID: string;
 
@@ -128,10 +139,16 @@ class RematchRoomGuest implements RematchRoom {
    * コンストラクタ
    * @param options オプション
    * @param options.websocket WebSocketクライアント
+   * @param options.websocketAbortManager websocket用のAbortManager
    * @param options.roomID 再戦ルームID
    */
-  constructor(options: { websocket: WebSocket; roomID: string }) {
+  constructor(options: {
+    websocket: WebSocket;
+    websocketAbortManager: AbortManager;
+    roomID: string;
+  }) {
     this.#websocket = options.websocket;
+    this.#websocketAbortManager = options.websocketAbortManager;
     this.#roomID = options.roomID;
   }
 
@@ -140,13 +157,19 @@ class RematchRoomGuest implements RematchRoom {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<BattleSDK> {
+    const { signal } = this.#websocketAbortManager.getAbortController();
     const battleStart = await rematchMakingGuest({
       websocket: this.#websocket,
       roomID: this.#roomID,
       armdozerId: options.armdozerId,
       pilotId: options.pilotId,
+      signal,
     });
-    return createBattleSDKFromBattleStart(battleStart, this.#websocket);
+    return createBattleSDKFromBattleStart(
+      battleStart,
+      this.#websocket,
+      this.#websocketAbortManager,
+    );
   }
 }
 
@@ -154,6 +177,8 @@ class RematchRoomGuest implements RematchRoom {
 class RematchRoomHost implements RematchRoom {
   /** websocketクライアント */
   readonly #websocket: WebSocket;
+  /** websocket用のAbortManager */
+  readonly #websocketAbortManager: AbortManager;
   /** 再戦ルームID */
   readonly #roomID: string;
 
@@ -161,10 +186,16 @@ class RematchRoomHost implements RematchRoom {
    * コンストラクタ
    * @param options オプション
    * @param options.websocket WebSocketクライアント
+   * @param options.websocketAbortManager websocket用のAbortManager
    * @param options.roomID 再戦ルームID
    */
-  constructor(options: { websocket: WebSocket; roomID: string }) {
+  constructor(options: {
+    websocket: WebSocket;
+    websocketAbortManager: AbortManager;
+    roomID: string;
+  }) {
     this.#websocket = options.websocket;
+    this.#websocketAbortManager = options.websocketAbortManager;
     this.#roomID = options.roomID;
   }
 
@@ -173,13 +204,19 @@ class RematchRoomHost implements RematchRoom {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<BattleSDK> {
+    const { signal } = this.#websocketAbortManager.getAbortController();
     const battleStart = await rematchMakingHost({
       websocket: this.#websocket,
       roomID: this.#roomID,
       armdozerId: options.armdozerId,
       pilotId: options.pilotId,
+      signal,
     });
-    return createBattleSDKFromBattleStart(battleStart, this.#websocket);
+    return createBattleSDKFromBattleStart(
+      battleStart,
+      this.#websocket,
+      this.#websocketAbortManager,
+    );
   }
 }
 
@@ -187,11 +224,13 @@ class RematchRoomHost implements RematchRoom {
  * BattleStartからBattleSDKを生成する
  * @param battleStart BattleStartのデータ
  * @param websocket websocketクライアント
+ * @param websocketAbortManager websocket用のAbortManager
  * @returns 生成結果
  */
 export function createBattleSDKFromBattleStart(
   battleStart: BattleStart,
   websocket: WebSocket,
+  websocketAbortManager: AbortManager,
 ): BattleSDK {
   return new BattleSDKImpl({
     player: battleStart.player,
@@ -201,5 +240,6 @@ export function createBattleSDKFromBattleStart(
     initialFlowID: battleStart.flowID,
     isPoller: battleStart.isPoller,
     websocket,
+    websocketAbortManager,
   });
 }

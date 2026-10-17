@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-app
 
+## 2.1.0
+
+### Minor Changes
+
+- ログインあり対戦にAbort Controllerを追加した
+- dc1f177: ログインあり対戦のWebSocket通信にabort controllerを追加した
+
+## 2.1.0-beta.0
+
+### Minor Changes
+
+- ログインあり対戦のWebSocket通信にabort controllerを追加した
+
 ## 2.0.0
 
 ### Major Changes
