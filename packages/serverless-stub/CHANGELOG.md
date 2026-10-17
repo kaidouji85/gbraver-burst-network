@@ -1,5 +1,18 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.2.0
+
+### Minor Changes
+
+- 再戦キャンセル通知を追加
+- e8bc8c9: 再戦キャンセル通知を追加
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [e8bc8c9]
+  - @gbraver-burst-network/browser-sdk@2.2.0
+
 ## 2.2.0-beta.0
 
 ### Minor Changes
