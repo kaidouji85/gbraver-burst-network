@@ -89,7 +89,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<AnonymousBattleSDK> {
-    await this.#signaling();
+    const websocket = await this.#websocketConnection.getOrCreate();
+    const signalingID = await this.#signaling(websocket);
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
     const flowID = nanoid();
@@ -109,14 +110,16 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestPlayer: battleSDK.enemy,
       update: battleSDK.initialState,
     });
+    await deleteSignalingChannel({ signalingID, websocket });
     return battleSDK;
   }
 
   /**
    * シグナリングを行う
-   * @returns シグナリングが完了したら発火するPromise
+   * @param websocket WebSocketコネクション
+   * @returns シグナリングID
    */
-  async #signaling() {
+  async #signaling(websocket: WebSocket): Promise<string> {
     let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({
@@ -124,7 +127,6 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         spanId: this.#spanId,
       });
 
-      const websocket = await this.#websocketConnection.getOrCreate();
       const signalingID = await waitUntilMatching(websocket);
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
@@ -183,7 +185,6 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         waitUntilDataChannelOpen(dataChannel),
       ]);
 
-      await deleteSignalingChannel({ websocket, signalingID });
       await this.#frontendLog.log({
         type: "SIGNALING_END",
         spanId: this.#spanId,
@@ -197,9 +198,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
           summary: selectedLocalIceCandidateSummary,
         });
       }
+      return signalingID;
     } finally {
       unSubscribers.forEach((u) => u.unsubscribe());
-      this.#websocketConnection.gracefulDisconnect();
     }
   }
 }
