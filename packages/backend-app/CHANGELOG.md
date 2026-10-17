@@ -1,5 +1,18 @@
 # @gbraver-burst-network/backend-app
 
+## 2.3.0
+
+### Minor Changes
+
+- あいことば対戦でマッチんング後にWebSocket接続を切るようにした
+- aac6aae: あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+## 2.3.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
 ## 2.2.0
 
 ### Minor Changes

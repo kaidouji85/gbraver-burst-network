@@ -1,5 +1,29 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.3.0
+
+### Minor Changes
+
+- あいことば対戦でマッチんング後にWebSocket接続を切るようにした
+- aac6aae: あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [aac6aae]
+  - @gbraver-burst-network/offline-browser-sdk@2.3.0
+
+## 2.3.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.3.0-beta.0
+
 ## 2.2.0
 
 ### Minor Changes
