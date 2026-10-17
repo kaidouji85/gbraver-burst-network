@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.3.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.3.0-beta.0
+
 ## 2.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 2.3.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
 ## 2.2.0
 
 ### Minor Changes
