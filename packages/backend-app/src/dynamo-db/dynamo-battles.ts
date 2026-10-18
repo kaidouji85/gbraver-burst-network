@@ -7,7 +7,7 @@ import {
   BattlePlayer,
   BattlePlayerSchema,
   FlowIDSchema,
-} from "../core/battle";
+} from "../core/battle/battle";
 
 /**
  * DynamoDB スキーマ battles

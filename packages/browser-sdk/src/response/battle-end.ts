@@ -6,15 +6,22 @@ export type BattleEnd = {
   action: "battle-end";
   /** 更新されたゲームステート */
   update: GameState[];
+  /** 再戦ルームID */
+  rematchRoomID: string;
+  /** 自分がホストか否か、trueの場合は自分がホスト */
+  isHost: boolean;
 };
 
 /** BattleEnd zodスキーマ */
 export const BattleEndSchema = z.object({
   action: z.literal("battle-end"),
   update: z.array(GameStateSchema),
+  rematchRoomID: z.string(),
+  isHost: z.boolean(),
 });
 
 /**
+ * @deprecated BattleEndSchemaを利用すること
  * 任意オブジェクトをBattleEndにパースする
  * パースできない場合はnullを返す
  * @param data パース元オブジェクト

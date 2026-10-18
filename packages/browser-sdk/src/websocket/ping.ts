@@ -1,3 +1,4 @@
+import type { SignalContainer } from "../abort-controller/signal-container";
 import { parseJSON } from "../json/parse";
 import type { Resolve } from "../promise/promise";
 import type { Pong } from "../response/pong";
@@ -9,9 +10,18 @@ import { waitUntil } from "./wait-until";
  * API サーバへの疎通確認
  *
  * @param websocket websocketクライアント
+ * @param options オプション
  * @returns APIサーバからの返答内容
  */
-export function ping(websocket: WebSocket): Promise<Pong> {
+export function ping(
+  websocket: WebSocket,
+  options?: Partial<SignalContainer>,
+): Promise<Pong> {
+  const signal = options?.signal;
+  if (signal?.aborted) {
+    return Promise.reject(signal.reason);
+  }
+
   sendToAPIServer(websocket, {
     action: "ping",
   });
@@ -24,5 +34,6 @@ export function ping(websocket: WebSocket): Promise<Pong> {
         resolve(response);
       }
     },
+    options,
   );
 }

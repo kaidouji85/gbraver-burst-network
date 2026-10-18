@@ -3,6 +3,7 @@ import {
   APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 
+import { createSignalingChannel } from "./core/signaling-channel";
 import { DynamoConnections } from "./dynamo-db/dynamo-connections";
 import { createDynamoDBDocument } from "./dynamo-db/dynamo-db-document";
 import { DynamoRooms } from "./dynamo-db/dynamo-rooms";
@@ -98,16 +99,14 @@ export async function joinRoom(
     return { statusCode: 200, body: "join room rejected" };
   }
 
-  const signalingChannel = await dynamoSignalingChannels.put({
+  const signalingChannel = createSignalingChannel({
     hostConnectionId,
     guestConnectionId,
   });
+  await dynamoSignalingChannels.put(signalingChannel);
+
   const { signalingID } = signalingChannel;
   await Promise.all([
-    notifier.notifyToClient(guestConnectionId, {
-      type: "join-room-accepted",
-      signalingID,
-    }),
     dynamoConnections.put({
       connectionId: guestConnectionId,
       state: {
@@ -115,11 +114,6 @@ export async function joinRoom(
         signalingID,
         isHost: false,
       },
-    }),
-
-    notifier.notifyToClient(hostConnectionId, {
-      type: "matching",
-      signalingID,
     }),
     dynamoConnections.put({
       connectionId: hostConnectionId,
@@ -129,8 +123,18 @@ export async function joinRoom(
         isHost: true,
       },
     }),
-
     dynamoRooms.delete(roomID),
+  ]);
+  // データ不整合を防ぐために、データ更新が完了した後にクライアントに通知をする
+  await Promise.all([
+    notifier.notifyToClient(guestConnectionId, {
+      type: "join-room-accepted",
+      signalingID,
+    }),
+    notifier.notifyToClient(hostConnectionId, {
+      type: "matching",
+      signalingID,
+    }),
   ]);
   return { statusCode: 200, body: "join room success" };
 }

@@ -1,7 +1,7 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 
-import { Connection, ConnectionSchema } from "../core/connection";
+import { Connection, ConnectionSchema } from "../core/connection/connection";
 
 /** userID の GSI 名 */
 const USER_ID_INDEX = "userID";

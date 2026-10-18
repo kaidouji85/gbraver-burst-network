@@ -1,6 +1,6 @@
-import { BattlePlayer } from "../core/battle";
-import { BattleCommand } from "../core/battle-command";
-import { BattleCommandsFetcher } from "../core/battle-commands-fetcher";
+import { BattlePlayer } from "../core/battle/battle";
+import { BattleCommand } from "../core/battle/battle-command";
+import { BattleCommandsFetcher } from "../core/battle/battle-commands-fetcher";
 import { DynamoBattleCommands } from "../dynamo-db/dynamo-battle-commands";
 
 /** DynamoDBからゲーム参加プレイヤーのバトルコマンドを取得する */

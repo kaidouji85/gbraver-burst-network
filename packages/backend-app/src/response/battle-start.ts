@@ -1,7 +1,7 @@
 import { GameState, Player } from "gbraver-burst-core";
 
-import { Battle, BattleID, BattlePlayer, FlowID } from "../core/battle";
-import { toPlayer } from "../core/to-player";
+import { Battle, BattleID, BattlePlayer, FlowID } from "../core/battle/battle";
+import { toPlayer } from "../core/battle/to-player";
 import { UserID } from "../core/user";
 
 /** 戦闘開始 */

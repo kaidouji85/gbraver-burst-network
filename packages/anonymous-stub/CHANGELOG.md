@@ -1,5 +1,127 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.3.0
+
+### Minor Changes
+
+- あいことば対戦でマッチんング後にWebSocket接続を切るようにした
+- aac6aae: あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [aac6aae]
+  - @gbraver-burst-network/anonymous-browser-sdk@2.3.0
+
+## 2.3.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦で対戦初期化が終わった後にWebSocket切断するようにした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.3.0-beta.0
+
+## 2.2.0
+
+### Minor Changes
+
+- 再戦キャンセル通知を追加
+- e8bc8c9: 再戦キャンセル通知を追加
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [e8bc8c9]
+  - @gbraver-burst-network/anonymous-browser-sdk@2.2.0
+
+## 2.2.0-beta.0
+
+### Minor Changes
+
+- 再戦キャンセル通知を追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.2.0-beta.0
+
+## 2.1.0
+
+### Minor Changes
+
+- ログインあり対戦にAbort Controllerを追加した
+- dc1f177: ログインあり対戦のWebSocket通信にabort controllerを追加した
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [dc1f177]
+  - @gbraver-burst-network/anonymous-browser-sdk@2.1.0
+
+## 2.1.0-beta.0
+
+### Minor Changes
+
+- ログインあり対戦のWebSocket通信にabort controllerを追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.1.0-beta.0
+
+## 2.0.0
+
+### Major Changes
+
+- ログインあり対戦に再戦機能を追加
+- 9255953: 再戦機能を追加した
+
+### Minor Changes
+
+- 4631e64: exportを追加
+
+### Patch Changes
+
+- 7b16acf: RematchRoomをexportに追加
+- Updated dependencies
+- Updated dependencies [9255953]
+- Updated dependencies [4631e64]
+- Updated dependencies [7b16acf]
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- RematchRoomをexportに追加
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0-beta.1
+
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 再戦機能を追加した
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.0.0-beta.0
+
 ## 1.31.0
 
 ### Minor Changes

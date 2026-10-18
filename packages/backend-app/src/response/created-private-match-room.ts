@@ -1,4 +1,4 @@
-import { PrivateMatchRoomID } from "../core/private-match-room";
+import { PrivateMatchRoomID } from "../core/matching/private-match/private-match-room";
 
 /** オーナーがプライベートマッチルーム作成に成功した */
 export type CreatedPrivateMatchRoom = {

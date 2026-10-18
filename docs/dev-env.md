@@ -143,9 +143,20 @@ developブランチにpushされた時にCodeBuildが実行されるように、
 ### 環境新規作成
 
 1. CodeBuildで「通常バックエンドのフルデプロイ」を実行
-2. 「[CloudFront](../packages/cloudfront/Readme.md)」の「各種手順 | 初回リリース」を参考にCloudFrontを新規作成する
-3. Parameter Storeの「/GbraverBurst/dev/backendCloudfrontWebAclArn」に2で生成したWebACLのARNをセットする
+2. 以下コマンドでCloudFrontを新規作成する
+   ```bash
+   export AWS_DEFAULT_REGION=<デプロイ対象のAWSリージョン>
+   export SERVICE=<Parameter Store「/GbraverBurst/dev/service」にセットした値>
+   export STAGE=<Parameter Store「/GbraverBurst/dev/stage」にセットした値>
+   export ANONYMOUS_SERVICE=<Parameter Store「/GbraverBurst/dev/anonymousService」にセットした値>
+   export BACKEND_CLOUDFRONT_SERVICE=<Parameter Store「/GbraverBurst/dev/backendCloudfrontService」にセットした値>
+   export BACKEND_CLOUDFRONT_DOMAIN_NAME=<Parameter Store「/GbraverBurst/dev/backendCloudfrontDomainName」にセットした値>
+   export BACKEND_CLOUDFRONT_CERT_ARN=<Parameter Store「/GbraverBurst/dev/backendCloudfrontCertArn」にセットした値>
+   ./deploy-backend-cloudfont.bash
+   ```
+3. Parameter Store「/GbraverBurst/dev/backendCloudfrontWebAclArn」を新規作成し、2で生成したWebACLのARNをセットする
 4. CodeBuildで「バックエンドCloudFrontのデプロイ」を環境変数「STAGE」にParameter Store「/GbraverBurst/dev/stage」の値を指定して実行
+5. Route53でバックエンドCloudFrontのドメインを設定する
 
 ### ブルーグリーンデプロイ
 

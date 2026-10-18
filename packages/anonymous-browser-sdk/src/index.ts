@@ -1,8 +1,8 @@
+export { AnonymousBattleSDK } from "./sdk/anonymous-battle-sdk";
 export {
   AuthTokenManager,
   createAuthTokenManager,
 } from "./sdk/auth-token-manager";
-export { BattleSDK } from "./sdk/battle-sdk";
 export {
   createGuestAnonymousSDK,
   GuestAnonymousSDK,

@@ -4,8 +4,8 @@ import { z } from "zod";
 import {
   PrivateMatchEntry,
   PrivateMatchEntrySchema,
-} from "../core/private-match-entry";
-import { PrivateMatchRoomID } from "../core/private-match-room";
+} from "../core/matching/private-match/private-match-entry";
+import { PrivateMatchRoomID } from "../core/matching/private-match/private-match-room";
 import { UserID } from "../core/user";
 
 /**

@@ -1,7 +1,6 @@
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
 import {
-  createSignalingChannel,
   SignalingChannel,
   SignalingChannelSchema,
 } from "../core/signaling-channel";
@@ -36,18 +35,13 @@ export class DynamoSignalingChannels {
   /**
    * シグナリングチャネルを新規作成する
    * @param channel 保存内容
-   * @returns 生成したシグナリングチャネル
+   * @returns 処理が完了したら発火するPromise
    */
-  async put(options: {
-    hostConnectionId: string;
-    guestConnectionId: string;
-  }): Promise<DynamoSignalingChannel> {
-    const channel = createSignalingChannel(options);
+  async put(channel: DynamoSignalingChannel): Promise<void> {
     await this.#dynamoDB.put({
       TableName: this.#tableName,
       Item: channel,
     });
-    return channel;
   }
 
   /**

@@ -1,5 +1,7 @@
-import { createOfflineBrowserSDK } from "@gbraver-burst-network/offline-browser-sdk";
-import { OfflineBattleSDK } from "@gbraver-burst-network/offline-browser-sdk/lib/offline-battle-sdk";
+import {
+  createOfflineBrowserSDK,
+  OfflineBattleSDK,
+} from "@gbraver-burst-network/offline-browser-sdk";
 import {
   Armdozers,
   Command,

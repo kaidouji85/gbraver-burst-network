@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { PrivateMatchRoomID } from "../core/private-match-room";
+import { PrivateMatchRoomID } from "../core/matching/private-match/private-match-room";
 
 /** プライベートルームマッチポーリング */
 export type PrivateMatchMakePolling = {

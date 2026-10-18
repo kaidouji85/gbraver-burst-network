@@ -1,6 +1,6 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 
-import { PrivateMatchRoomID } from "../browser-sdk/private-match";
+import { PrivateMatchRoomID } from "../browser-sdk/private-match/private-match";
 
 /** プライベートマッチルームエントリ */
 export type EnterPrivateMatchRoom = {

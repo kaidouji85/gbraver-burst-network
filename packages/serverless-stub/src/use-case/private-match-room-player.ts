@@ -37,6 +37,7 @@ export class PrivateMatchRoomPlayer implements UseCase {
       console.log("suddenly battle end");
     });
     console.log(battle.player, battle.enemy, battle.initialState);
+
     const update01 = await battle.progress({
       type: "BATTERY_COMMAND",
       battery: 3,

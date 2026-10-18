@@ -1,7 +1,7 @@
 import { createAPIGatewayEndpoint } from "./api-gateway/endpoint";
 import { createApiGatewayManagementApi } from "./api-gateway/management";
 import { Notifier } from "./api-gateway/notifier";
-import { PrivateMatchEntry } from "./core/private-match-entry";
+import { PrivateMatchEntry } from "./core/matching/private-match/private-match-entry";
 import { createDynamoConnections } from "./dynamo-db/create-dynamo-connections";
 import { createDynamoPrivateMatchEntries } from "./dynamo-db/create-dynamo-private-match-entries";
 import { createDynamoPrivateMatchRooms } from "./dynamo-db/create-dynamo-private-match-rooms";
