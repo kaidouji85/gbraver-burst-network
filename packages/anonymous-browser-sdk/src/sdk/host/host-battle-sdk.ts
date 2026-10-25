@@ -12,11 +12,11 @@ import {
 import { nanoid } from "nanoid";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
-import { SendCommand } from "../webrtc/guest/guest-message";
-import { sendHostMessage } from "../webrtc/host/host-message";
-import { receiveSendCommand } from "../webrtc/host/receive-send-command";
-import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
+import { SendCommand } from "../../webrtc/guest/guest-message";
+import { sendHostMessage } from "../../webrtc/host/host-message";
+import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
+import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
 /** ホスト側バトルSDK */

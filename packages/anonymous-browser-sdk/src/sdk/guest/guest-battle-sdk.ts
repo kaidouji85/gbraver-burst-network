@@ -1,10 +1,10 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
-import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { receiveBattleProgressed } from "../webrtc/guest/receive-battle-progressed";
-import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
+import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { receiveBattleProgressed } from "../../webrtc/guest/receive-battle-progressed";
+import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
 /** ゲスト側バトルSDK */

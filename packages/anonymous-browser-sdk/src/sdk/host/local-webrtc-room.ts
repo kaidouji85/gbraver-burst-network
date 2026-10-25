@@ -2,22 +2,22 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
-import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
-import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
-import { sendHostMessage } from "../webrtc/host/host-message";
-import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
-import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
-import { deleteSignalingChannel } from "../websocket-api/delete-signaling-channel";
-import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
-import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
-import { waitUntilMatching } from "../websocket-api/wait-until-matching";
-import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
+import { sendHostMessage } from "../../webrtc/host/host-message";
+import { requestSelectedPlayer } from "../../webrtc/host/request-selected-player";
+import { waitUntilConnected } from "../../webrtc/wait-until-connected";
+import { waitUntilDataChannelOpen } from "../../webrtc/wait-until-data-channel-ready";
+import { deleteSignalingChannel } from "../../websocket-api/delete-signaling-channel";
+import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
+import { waitUntilMatching } from "../../websocket-api/wait-until-matching";
+import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {

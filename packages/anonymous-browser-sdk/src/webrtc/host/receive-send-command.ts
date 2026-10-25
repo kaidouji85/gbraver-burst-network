@@ -10,10 +10,12 @@ import { SendCommand, SendCommandSchema } from "../guest/guest-message";
  * @param options.signal Promise強制終了用シグナル
  * @returns ゲストから送信されたSendCommandメッセージ
  */
-export const receiveSendCommand = (options: {
-  dataChannel: RTCDataChannel;
-  flowID: string;
-} & Partial<SignalContainer>): Promise<SendCommand> => {
+export const receiveSendCommand = (
+  options: {
+    dataChannel: RTCDataChannel;
+    flowID: string;
+  } & Partial<SignalContainer>,
+): Promise<SendCommand> => {
   const { dataChannel, flowID, signal } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
   let onAbort: (() => void) | null = null;

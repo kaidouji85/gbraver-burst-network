@@ -6,9 +6,9 @@ export {
 export {
   createGuestAnonymousSDK,
   GuestAnonymousSDK,
-} from "./sdk/guest-anonymous-sdk";
+} from "./sdk/guest/guest-anonymous-sdk";
 export {
   createHostAnonymousSDK,
   HostAnonymousSDK,
-} from "./sdk/host-anonymous-sdk";
-export { LocalWebRTCRoom } from "./sdk/local-webrtc-room";
+} from "./sdk/host/host-anonymous-sdk";
+export { LocalWebRTCRoom } from "./sdk/host/local-webrtc-room";

@@ -2,14 +2,14 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
-import { createRoom } from "../websocket-api/create-room";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { createRoom } from "../../websocket-api/create-room";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import {
   HostWebRTCConnectionManager,
   HostWebRTCConnectionManagerOptions,
 } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ホスト用匿名バックエンドSDK */
 export type HostAnonymousSDK = {

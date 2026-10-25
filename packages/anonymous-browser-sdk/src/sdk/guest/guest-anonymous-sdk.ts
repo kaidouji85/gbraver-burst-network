@@ -2,24 +2,24 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
-import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
-import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
-import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
-import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
-import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { joinRoom } from "../websocket-api/join-room";
-import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
-import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
-import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
+import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
+import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
+import { waitUntilConnected } from "../../webrtc/wait-until-connected";
+import { joinRoom } from "../../websocket-api/join-room";
+import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
+import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { GuestBattleSDK } from "./guest-battle-sdk";
 import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
