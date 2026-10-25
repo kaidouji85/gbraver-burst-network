@@ -128,9 +128,17 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
             .dataChannelPromise;
         return await receiveRequestSelectedPlayer({ dataChannel, signal });
       })();
+      const sdpPromise = waitUntilSDPReceive({ websocket, signal });
+
 
       const { signalingID } = joinRoomAccepted;
-      await this.#signaling({ signalingID, spanId, signal });
+      await this.#signaling({
+        signalingID,
+        spanId,
+        sdpPromise,
+        websocket,
+        signal,
+      });
       await pingPongPromise;
       this.#websocketConnection.gracefulDisconnect();
 
@@ -184,15 +192,19 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
+   * @param options.sdpPromise 事前に待ち受けを開始している、相手SDPの受信Promise
+   * @param options.websocket WebSocketコネクション
    * @param options.signal アボートシグナル
    * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling(options: {
     signalingID: string;
     spanId: string;
+    sdpPromise: Promise<RTCSessionDescriptionInit>;
+    websocket: WebSocket;
     signal: AbortSignal;
   }): Promise<void> {
-    const { signalingID, spanId, signal } = options;
+    const { signalingID, spanId, sdpPromise, websocket, signal } = options;
     if (signal.aborted) {
       return Promise.reject(signal.reason);
     }
@@ -204,7 +216,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         spanId,
       });
 
-      const websocket = await this.#websocketConnection.getOrCreate();
       const { connectionPromise } =
         this.#webRTCConnection.getOrCreateConnection();
       const connection = await connectionPromise;
@@ -245,7 +256,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         }),
       ];
 
-      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
+      const remoteSDP = await sdpPromise;
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
