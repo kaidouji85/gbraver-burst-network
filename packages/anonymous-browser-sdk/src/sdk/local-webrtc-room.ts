@@ -127,7 +127,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         spanId: this.#spanId,
       });
 
-      const signalingID = await waitUntilMatching(websocket);
+      const signalingID = await waitUntilMatching({ websocket });
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
