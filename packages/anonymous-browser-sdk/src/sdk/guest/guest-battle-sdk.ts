@@ -1,6 +1,7 @@
 import { Command, GameState, Player } from "gbraver-burst-core";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
+import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../../webrtc/guest/receive-battle-progressed";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
@@ -21,6 +22,8 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
   #webRTCConnection: GuestWebRTCConnectionManager;
   /** dataChannel.sendの例外通知ストリーム */
   #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager = new AbortManager();
 
   /**
    * コンストラクタ
@@ -47,9 +50,17 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    const battleProgressedPromise = receiveBattleProgressed({ dataChannel });
+    const battleProgressedPromise = receiveBattleProgressed({
+      dataChannel,
+      signal,
+    });
     try {
       sendGuestMessage(dataChannel, {
         type: "send-command",

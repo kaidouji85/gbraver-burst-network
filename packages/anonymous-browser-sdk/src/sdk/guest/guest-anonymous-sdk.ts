@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
+import { AbortManager } from "../../abort-controller/abort-manager";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
@@ -20,7 +21,6 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
-import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
