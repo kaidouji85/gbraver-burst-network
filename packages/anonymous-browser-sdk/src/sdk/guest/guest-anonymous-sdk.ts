@@ -20,6 +20,7 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
+import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
@@ -75,6 +76,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -84,6 +87,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
+    this.#abortManager = new AbortManager();
   }
 
   /** @override */
@@ -92,6 +96,11 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }) {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const spanId = nanoid();
     const { roomID, armdozerId, pilotId } = options;
     this.#websocketConnection.gracefulDisconnect();
@@ -101,16 +110,16 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveRequestSelectedPlayer({ dataChannel });
+      return await receiveRequestSelectedPlayer({ dataChannel, signal });
     })();
     const battleStartPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveBattleStart({ dataChannel });
+      return await receiveBattleStart({ dataChannel, signal });
     })();
 
     const websocket = await this.#websocketConnection.getOrCreate();
-    const joinRoomAccepted = await joinRoom({ websocket, roomID });
+    const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
     if (!joinRoomAccepted) {
       return null;
     }
@@ -163,9 +172,13 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     signalingID: string;
     spanId: string;
   }): Promise<void> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const { signalingID, spanId } = options;
     let unSubscribers: Unsubscribable[] = [];
-
     try {
       await this.#frontendLog.log({
         type: "SIGNALING_START",
@@ -213,7 +226,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         }),
       ];
 
-      const remoteSDP = await waitUntilSDPReceive({ websocket });
+      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
@@ -226,7 +239,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         signalingID,
         sdp,
       });
-      await waitUntilConnected(connection);
+      await waitUntilConnected(connection, { signal });
 
       await this.#frontendLog.log({
         type: "SIGNALING_END",
