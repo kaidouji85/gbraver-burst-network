@@ -30,9 +30,9 @@ export const pingPongCheck = (
 
     handler = (event) => {
       const data = parseJSON(event.data);
-      const parsedSendCommand = PongSchema.safeParse(data);
-      if (parsedSendCommand.success) {
-        resolve(parsedSendCommand.data);
+      const parsedPong = PongSchema.safeParse(data);
+      if (parsedPong.success) {
+        resolve(parsedPong.data);
         return;
       }
     };
