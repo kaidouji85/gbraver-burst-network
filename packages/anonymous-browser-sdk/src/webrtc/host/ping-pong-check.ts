@@ -4,13 +4,14 @@ import { PongSchema } from "../guest/guest-message";
 import { sendHostMessage } from "./host-message";
 
 /**
- * data channel の疎通確認を行う
+ * ping -> pong による疎通確認を行う
+ * ホストなので ping を送信して pong を待つ
  * @param options オプション
  * @param options.dataChannel データチャネル
  * @param options.signal アボートシグナル
  * @returns
  */
-export const handShake = (
+export const pingPongCheck = (
   options: { dataChannel: RTCDataChannel } & Partial<SignalContainer>,
 ) => {
   const { dataChannel, signal } = options;
