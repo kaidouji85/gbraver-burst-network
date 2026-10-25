@@ -107,7 +107,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
     await hostPingPongCheck({ dataChannel, signal });
-    await deleteSignalingChannel({ signalingID, websocket });
+    await deleteSignalingChannel({ signalingID, websocket, signal });
     this.#websocketConnection.gracefulDisconnect();
 
     const flowID = nanoid();
