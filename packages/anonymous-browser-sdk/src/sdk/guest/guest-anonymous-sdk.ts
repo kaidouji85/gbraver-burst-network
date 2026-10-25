@@ -126,7 +126,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     }
 
     const { signalingID } = joinRoomAccepted;
-    await this.#signaling({ signalingID, spanId });
+    await this.#signaling({ signalingID, spanId, signal });
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     await guestPingPongCheck({ dataChannel, signal });
@@ -172,18 +172,19 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
+   * @param options.signal アボートシグナル
    * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling(options: {
     signalingID: string;
     spanId: string;
+    signal: AbortSignal;
   }): Promise<void> {
-    const { signal } = this.#abortManager.getAbortController();
+    const { signalingID, spanId, signal } = options;
     if (signal.aborted) {
       return Promise.reject(signal.reason);
     }
 
-    const { signalingID, spanId } = options;
     let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({

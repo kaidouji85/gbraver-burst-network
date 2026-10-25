@@ -103,7 +103,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     }
 
     const websocket = await this.#websocketConnection.getOrCreate();
-    const signalingID = await this.#signaling(websocket);
+    const signalingID = await this.#signaling(websocket, signal);
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
     await hostPingPongCheck({ dataChannel, signal });
@@ -112,7 +112,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
-      await requestSelectedPlayer({ dataChannel, flowID });
+      await requestSelectedPlayer({ dataChannel, flowID, signal });
     const battleSDK = new HostBattleSDK({
       hostArmdozerId: this.#hostArmdozerId,
       hostPilotId: this.#hostPilotId,
@@ -134,10 +134,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   /**
    * シグナリングを行う
    * @param websocket WebSocketコネクション
+   * @param signal アボートシグナル
    * @returns シグナリングID
    */
-  async #signaling(websocket: WebSocket): Promise<string> {
-    const { signal } = this.#abortManager.getAbortController();
+  async #signaling(websocket: WebSocket, signal: AbortSignal): Promise<string> {
     if (signal.aborted) {
       return Promise.reject(signal.reason);
     }
