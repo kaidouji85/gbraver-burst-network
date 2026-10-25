@@ -18,6 +18,7 @@ import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
+import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -43,6 +44,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
   /** ホストが選択したアームドーザID */
   #hostArmdozerId: ArmdozerId;
   /** ホストが選択したパイロットID */
@@ -56,6 +59,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @param options.webRTCConnection WebRTCコネクションマネジャー
    * @param options.websocketConnection WebSocketコネクションマネジャー
    * @param options.frontendLog フロントエンドログマネジャー
+   * @param options.abortManager アボート管理オブジェクト
    */
   constructor(options: {
     roomID: string;
@@ -65,6 +69,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     frontendLog: FrontendLogManager;
     hostArmdozerId: ArmdozerId;
     hostPilotId: PilotId;
+    abortManager: AbortManager;
   }) {
     const {
       roomID,
@@ -74,6 +79,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       hostArmdozerId,
       hostPilotId,
       frontendLog,
+      abortManager,
     } = options;
     this.roomID = roomID;
     this.#spanId = spanId;
@@ -82,6 +88,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     this.#hostArmdozerId = hostArmdozerId;
     this.#hostPilotId = hostPilotId;
     this.#frontendLog = frontendLog;
+    this.#abortManager = abortManager;
   }
 
   /**
@@ -120,6 +127,11 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns シグナリングID
    */
   async #signaling(websocket: WebSocket): Promise<string> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({
@@ -127,7 +139,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         spanId: this.#spanId,
       });
 
-      const signalingID = await waitUntilMatching({ websocket });
+      const signalingID = await waitUntilMatching({ websocket, signal });
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
@@ -174,15 +186,15 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         signalingID,
         sdp,
       });
-      const remoteSDP = await waitUntilSDPReceive({ websocket });
+      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
         connection.addIceCandidate(iceCandidate);
       });
       await Promise.all([
-        waitUntilConnected(connection),
-        waitUntilDataChannelOpen(dataChannel),
+        waitUntilConnected(connection, { signal }),
+        waitUntilDataChannelOpen(dataChannel, { signal }),
       ]);
 
       await this.#frontendLog.log({

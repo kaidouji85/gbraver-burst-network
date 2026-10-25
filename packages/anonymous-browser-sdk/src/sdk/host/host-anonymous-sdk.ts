@@ -107,6 +107,7 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
         frontendLog: this.#frontendLog,
         hostArmdozerId,
         hostPilotId,
+        abortManager: this.#abortManager,
       });
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();
