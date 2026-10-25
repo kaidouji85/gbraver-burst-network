@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
 ## 2.4.0
 
 ### Minor Changes

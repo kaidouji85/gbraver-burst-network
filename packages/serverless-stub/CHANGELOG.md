@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.5.0-beta.0
+
 ## 2.4.0
 
 ### Minor Changes
