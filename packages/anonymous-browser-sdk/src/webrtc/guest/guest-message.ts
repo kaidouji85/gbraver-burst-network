@@ -6,6 +6,16 @@ import {
 } from "gbraver-burst-core";
 import { z } from "zod";
 
+/** Pong */
+export type Pong = {
+  type: "pong";
+};
+
+/** Pong zod のスキーマ */
+export const PongSchema = z.object({
+  type: z.literal("pong"),
+});
+
 /** 選択したプレイヤーをホストに送信する */
 export type SendPlayer = {
   type: "send-player";
@@ -42,7 +52,7 @@ export const SendCommandSchema = z.object({
 });
 
 /** ゲストから送信されるメッセージ */
-export type GuestMessage = SendPlayer | SendCommand;
+export type GuestMessage = Pong | SendPlayer | SendCommand;
 
 /**
  * ゲストメッセージをホストに送信する
