@@ -1,5 +1,18 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.5.0-beta.1
+
 ## 2.5.0-beta.0
 
 ### Minor Changes

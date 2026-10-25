@@ -1,5 +1,12 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
 ## 2.5.0-beta.0
 
 ### Minor Changes
