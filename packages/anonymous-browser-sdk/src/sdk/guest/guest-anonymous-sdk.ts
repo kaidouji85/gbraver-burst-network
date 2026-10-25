@@ -109,6 +109,11 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     this.#webRTCConnection.disconnect();
 
     // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
+    const pingPongCheckPromise = (async () => {
+      const dataChannel =
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+      return await guestPingPongCheck({ dataChannel, signal });
+    })();
     const requestSelectedPlayerPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
@@ -128,12 +133,12 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
     const { signalingID } = joinRoomAccepted;
     await this.#signaling({ signalingID, spanId, signal });
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    await guestPingPongCheck({ dataChannel, signal });
+    await pingPongCheckPromise;
+    this.#websocketConnection.gracefulDisconnect();
 
     const { flowID } = await requestSelectedPlayerPromise;
-    this.#websocketConnection.gracefulDisconnect();
+    const dataChannel =
+      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
     sendGuestMessage(dataChannel, {
       type: "send-player",
       flowID,
