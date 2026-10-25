@@ -143,6 +143,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       initialState: battleStart.update,
       initialFlowID: battleStart.flowID,
       webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
     });
   }
 
@@ -154,11 +155,13 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   /** @override */
   disconnectWebSocket(): void {
     this.#websocketConnection.gracefulDisconnect();
+    this.#abortManager.getAbortController().abort("WebSocket disconnected");
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
+    this.#abortManager.getAbortController().abort("WebRTC disconnected");
   }
 
   /**

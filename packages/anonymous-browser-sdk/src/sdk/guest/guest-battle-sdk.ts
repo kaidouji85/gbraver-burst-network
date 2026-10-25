@@ -23,7 +23,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
   /** dataChannel.sendの例外通知ストリーム */
   #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
   /** アボート管理オブジェクト */
-  #abortManager: AbortManager = new AbortManager();
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -33,6 +33,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
    * @param options.initialState ゲームの初期状態
    * @param options.initialFlowID 初期のフローID
    * @param options.webRTCConnection ホストのWebRTCコネクションマネージャー
+   * @param options.abortManager アボート管理オブジェクト
    */
   constructor(options: {
     hostPlayer: Player;
@@ -40,12 +41,14 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
     initialState: GameState[];
     initialFlowID: string;
     webRTCConnection: GuestWebRTCConnectionManager;
+    abortManager: AbortManager;
   }) {
     this.player = options.guestPlayer;
     this.enemy = options.hostPlayer;
     this.initialState = options.initialState;
     this.flowID = options.initialFlowID;
     this.#webRTCConnection = options.webRTCConnection;
+    this.#abortManager = options.abortManager;
   }
 
   /** @override */
