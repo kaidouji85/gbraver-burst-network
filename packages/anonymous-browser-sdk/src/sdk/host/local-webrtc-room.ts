@@ -107,6 +107,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
     await hostPingPongCheck({ dataChannel, signal });
+    await deleteSignalingChannel({ signalingID, websocket });
     this.#websocketConnection.gracefulDisconnect();
 
     const flowID = nanoid();
@@ -127,7 +128,6 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestPlayer: battleSDK.enemy,
       update: battleSDK.initialState,
     });
-    await deleteSignalingChannel({ signalingID, websocket });
     return battleSDK;
   }
 
