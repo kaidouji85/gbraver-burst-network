@@ -123,7 +123,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         await guestPingPongCheck({ dataChannel, signal });
       })();
 
-      
       const { signalingID } = joinRoomAccepted;
       await this.#signaling({ signalingID, spanId, signal });
       await pingPongPromise;
