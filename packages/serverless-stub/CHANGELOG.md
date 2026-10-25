@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.6.0
+
+### Minor Changes
+
+- 匿名ブラウザゲストのシグナリングを改良
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.6.0
+
 ## 2.5.0
 
 ### Minor Changes

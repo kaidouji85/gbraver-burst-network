@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-app
 
+## 2.6.0
+
+### Minor Changes
+
+- 匿名ブラウザゲストのシグナリングを改良
+
 ## 2.5.0
 
 ### Minor Changes

@@ -115,13 +115,21 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         return null;
       }
 
+      // イベントの取りこぼしを防ぐために、あらかじリスナーを登録する
+      const pingPongPromise = (async () => {
+        const dataChannel =
+          await this.#webRTCConnection.getOrCreateConnection()
+            .dataChannelPromise;
+        await guestPingPongCheck({ dataChannel, signal });
+      })();
+
       const { signalingID } = joinRoomAccepted;
       await this.#signaling({ signalingID, spanId, signal });
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      await guestPingPongCheck({ dataChannel, signal });
+      await pingPongPromise;
       this.#websocketConnection.gracefulDisconnect();
 
+      const dataChannel =
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       const { flowID } = await receiveRequestSelectedPlayer({
         dataChannel,
         signal,
