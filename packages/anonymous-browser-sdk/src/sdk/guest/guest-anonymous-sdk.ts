@@ -21,6 +21,7 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
+import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
@@ -126,10 +127,12 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
     const { signalingID } = joinRoomAccepted;
     await this.#signaling({ signalingID, spanId });
-
-    const { flowID } = await requestSelectedPlayerPromise;
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+    await guestPingPongCheck({ dataChannel, signal });
+
+    const { flowID } = await requestSelectedPlayerPromise;
+    this.#websocketConnection.gracefulDisconnect();
     sendGuestMessage(dataChannel, {
       type: "send-player",
       flowID,
@@ -259,7 +262,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         });
       }
     } finally {
-      this.#websocketConnection.gracefulDisconnect();
       unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
     }
   }

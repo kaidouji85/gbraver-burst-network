@@ -1,17 +1,17 @@
 import { SignalContainer } from "../../abort-controller/signal-container";
 import { parseJSON } from "../../json/parse";
-import { sendGuestMessage } from "../guest/guest-message";
-import { PingSchema } from "../host/host-message";
+import { PongSchema } from "../guest/guest-message";
+import { sendHostMessage } from "./host-message";
 
 /**
  * ping -> pong による疎通確認を行う
- * ゲストなので ping を待って pong を送信する
+ * ホストなので ping を送信して pong を待つ
  * @param options オプション
  * @param options.dataChannel データチャネル
  * @param options.signal アボートシグナル
  * @returns
  */
-export const pingPongCheck = (
+export const hostPingPongCheck = (
   options: { dataChannel: RTCDataChannel } & Partial<SignalContainer>,
 ) => {
   const { dataChannel, signal } = options;
@@ -30,14 +30,15 @@ export const pingPongCheck = (
 
     handler = (event) => {
       const data = parseJSON(event.data);
-      const parsedPing = PingSchema.safeParse(data);
-      if (parsedPing.success) {
-        sendGuestMessage(dataChannel, { type: "pong" });
-        resolve(parsedPing.data);
+      const parsedPong = PongSchema.safeParse(data);
+      if (parsedPong.success) {
+        resolve(parsedPong.data);
         return;
       }
     };
     dataChannel.addEventListener("message", handler);
+
+    sendHostMessage(dataChannel, { type: "ping" });
   }).finally(() => {
     if (handler) {
       dataChannel.removeEventListener("message", handler);
