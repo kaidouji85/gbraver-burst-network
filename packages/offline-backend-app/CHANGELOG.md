@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.4.0
+
+### Minor Changes
+
+- 依存ライブラリをアップデート
+
 ## 2.3.0
 
 ### Minor Changes
