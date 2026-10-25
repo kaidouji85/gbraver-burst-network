@@ -98,62 +98,53 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }) {
-    const { signal } = this.#abortManager.getAbortController();
-    if (signal.aborted) {
-      return Promise.reject(signal.reason);
+    try {
+      const { signal } = this.#abortManager.getAbortController();
+      if (signal.aborted) {
+        return Promise.reject(signal.reason);
+      }
+
+      const spanId = nanoid();
+      const { roomID, armdozerId, pilotId } = options;
+      this.#websocketConnection.gracefulDisconnect();
+      this.#webRTCConnection.disconnect();
+
+      const websocket = await this.#websocketConnection.getOrCreate();
+      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
+      if (!joinRoomAccepted) {
+        return null;
+      }
+
+      const { signalingID } = joinRoomAccepted;
+      await this.#signaling({ signalingID, spanId, signal });
+      const dataChannel =
+        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+      await guestPingPongCheck({ dataChannel, signal });
+      this.#websocketConnection.gracefulDisconnect();
+
+      const { flowID } = await receiveRequestSelectedPlayer({
+        dataChannel,
+        signal,
+      });
+      sendGuestMessage(dataChannel, {
+        type: "send-player",
+        flowID,
+        armdozerId,
+        pilotId,
+      });
+      const battleStart = await receiveBattleStart({ dataChannel, signal });
+      return new GuestBattleSDK({
+        hostPlayer: battleStart.hostPlayer,
+        guestPlayer: battleStart.guestPlayer,
+        initialState: battleStart.update,
+        initialFlowID: battleStart.flowID,
+        webRTCConnection: this.#webRTCConnection,
+        abortManager: this.#abortManager,
+      });
+    } catch (e) {
+      this.#websocketConnection.gracefulDisconnect();
+      throw e;
     }
-
-    const spanId = nanoid();
-    const { roomID, armdozerId, pilotId } = options;
-    this.#websocketConnection.gracefulDisconnect();
-    this.#webRTCConnection.disconnect();
-
-    // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
-    const pingPongCheckPromise = (async () => {
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await guestPingPongCheck({ dataChannel, signal });
-    })();
-    const requestSelectedPlayerPromise = (async () => {
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveRequestSelectedPlayer({ dataChannel, signal });
-    })();
-    const battleStartPromise = (async () => {
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveBattleStart({ dataChannel, signal });
-    })();
-
-    const websocket = await this.#websocketConnection.getOrCreate();
-    const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
-    if (!joinRoomAccepted) {
-      return null;
-    }
-
-    const { signalingID } = joinRoomAccepted;
-    await this.#signaling({ signalingID, spanId, signal });
-    await pingPongCheckPromise;
-    this.#websocketConnection.gracefulDisconnect();
-
-    const { flowID } = await requestSelectedPlayerPromise;
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    sendGuestMessage(dataChannel, {
-      type: "send-player",
-      flowID,
-      armdozerId,
-      pilotId,
-    });
-    const battleStart = await battleStartPromise;
-    return new GuestBattleSDK({
-      hostPlayer: battleStart.hostPlayer,
-      guestPlayer: battleStart.guestPlayer,
-      initialState: battleStart.update,
-      initialFlowID: battleStart.flowID,
-      webRTCConnection: this.#webRTCConnection,
-      abortManager: this.#abortManager,
-    });
   }
 
   /** @override */
