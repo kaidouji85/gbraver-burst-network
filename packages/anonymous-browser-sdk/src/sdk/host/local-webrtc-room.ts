@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
+import { AbortManager } from "../../abort-controller/abort-manager";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { sendHostMessage } from "../../webrtc/host/host-message";
@@ -18,7 +19,6 @@ import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -109,6 +109,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestArmdozerId,
       guestPilotId,
       webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
     });
     sendHostMessage(dataChannel, {
       type: "battle-start",

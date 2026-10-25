@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
+import { AbortManager } from "../../abort-controller/abort-manager";
 import { createRoom } from "../../websocket-api/create-room";
 import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
@@ -10,7 +11,6 @@ import {
   HostWebRTCConnectionManagerOptions,
 } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
-import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ホスト用匿名バックエンドSDK */
 export type HostAnonymousSDK = {
