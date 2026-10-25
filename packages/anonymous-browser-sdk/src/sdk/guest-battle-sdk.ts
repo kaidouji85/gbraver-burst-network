@@ -49,7 +49,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
   async progress(command: Command): Promise<GameState[]> {
     const dataChannel =
       await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    const battleProgressedPromise = receiveBattleProgressed(dataChannel);
+    const battleProgressedPromise = receiveBattleProgressed({ dataChannel });
     try {
       sendGuestMessage(dataChannel, {
         type: "send-command",
