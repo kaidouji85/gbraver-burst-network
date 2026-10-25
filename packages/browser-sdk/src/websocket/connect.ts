@@ -16,9 +16,9 @@ export function connect(
     return Promise.reject(signal.reason);
   }
 
+  let onAbort: (() => void) | null = null;
   let handler: (() => void) | null = null;
   let errorHandler: Reject | null = null;
-  let onAbort: (() => void) | null = null;
   const websocket = new WebSocket(url);
   return new Promise<WebSocket>((resolve, reject) => {
     onAbort = () => {
@@ -36,16 +36,16 @@ export function connect(
     websocket.addEventListener("open", handler);
     websocket.addEventListener("error", errorHandler);
   }).finally(() => {
+    if (onAbort) {
+      signal?.removeEventListener("abort", onAbort);
+    }
+
     if (handler) {
       websocket.removeEventListener("open", handler);
     }
 
     if (errorHandler) {
       websocket.removeEventListener("error", errorHandler);
-    }
-
-    if (onAbort) {
-      signal?.removeEventListener("abort", onAbort);
     }
   });
 }
