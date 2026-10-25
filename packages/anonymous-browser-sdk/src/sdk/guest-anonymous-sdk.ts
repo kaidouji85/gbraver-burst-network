@@ -106,7 +106,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     const battleStartPromise = (async () => {
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveBattleStart(dataChannel);
+      return await receiveBattleStart({ dataChannel });
     })();
 
     const websocket = await this.#websocketConnection.getOrCreate();
