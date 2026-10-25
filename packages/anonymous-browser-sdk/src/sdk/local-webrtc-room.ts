@@ -174,7 +174,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         signalingID,
         sdp,
       });
-      const remoteSDP = await waitUntilSDPReceive(websocket);
+      const remoteSDP = await waitUntilSDPReceive({ websocket });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {

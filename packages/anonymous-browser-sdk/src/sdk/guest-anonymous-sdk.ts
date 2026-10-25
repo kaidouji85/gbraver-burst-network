@@ -213,7 +213,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         }),
       ];
 
-      const remoteSDP = await waitUntilSDPReceive(websocket);
+      const remoteSDP = await waitUntilSDPReceive({ websocket });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
