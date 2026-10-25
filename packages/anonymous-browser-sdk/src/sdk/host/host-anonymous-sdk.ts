@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
+import { createAbortError } from "../../abort-controller/abort-error";
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { createRoom } from "../../websocket-api/create-room";
 import { FrontendLogManager } from "../frontend-log-manager";
@@ -123,13 +124,17 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
   /** @override */
   disconnectWebSocket() {
     this.#websocketConnection.gracefulDisconnect();
-    this.#abortManager.getAbortController().abort("WebSocket disconnected");
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebSocket disconnected"));
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
-    this.#abortManager.getAbortController().abort("WebRTC disconnected");
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebRTC disconnected"));
   }
 }
 

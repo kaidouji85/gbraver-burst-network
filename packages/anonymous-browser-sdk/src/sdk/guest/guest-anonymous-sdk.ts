@@ -2,6 +2,7 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
+import { createAbortError } from "../../abort-controller/abort-error";
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
@@ -158,13 +159,17 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   /** @override */
   disconnectWebSocket(): void {
     this.#websocketConnection.gracefulDisconnect();
-    this.#abortManager.getAbortController().abort("WebSocket disconnected");
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebSocket disconnected"));
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
-    this.#abortManager.getAbortController().abort("WebRTC disconnected");
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebRTC disconnected"));
   }
 
   /**
