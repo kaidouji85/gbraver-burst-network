@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.7.0-beta.0
+
+### Minor Changes
+
+- 匿名バックエンドのシグナリングのバグを改善
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.7.0-beta.0
+
 ## 2.6.0
 
 ### Minor Changes

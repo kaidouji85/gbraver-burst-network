@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 2.7.0-beta.0
+
+### Minor Changes
+
+- 匿名バックエンドのシグナリングのバグを改善
+
 ## 2.6.0
 
 ### Minor Changes
