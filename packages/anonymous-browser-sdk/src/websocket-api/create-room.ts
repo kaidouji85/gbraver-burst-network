@@ -1,3 +1,4 @@
+import { SignalContainer } from "../abort-controller/signal-container";
 import { parseJSON } from "../json/parse";
 import {
   RoomCreationFailureSchema,
@@ -8,11 +9,27 @@ import { sendToWSSignal } from "./send-to-ws-signal";
 /**
  * ルームを生成する
  * @param websocket WebSocketコネクション
+ * @param options オプション
  * @returns 成功したらルームID、失敗したらnull
  */
-export const createRoom = (websocket: WebSocket): Promise<string | null> => {
+export const createRoom = (
+  websocket: WebSocket,
+  options?: Partial<SignalContainer>,
+): Promise<string | null> => {
+  const signal = options?.signal;
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<string | null>((resolve) => {
+  let onAbort: (() => void) | null = null;
+  return new Promise<string | null>((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(signal.reason);
+      return;
+    }
+
+    onAbort = () => {
+      reject(signal?.reason);
+    };
+    signal?.addEventListener("abort", onAbort);
+
     handler = (event) => {
       const parsedData = parseJSON(event.data);
 
@@ -36,6 +53,10 @@ export const createRoom = (websocket: WebSocket): Promise<string | null> => {
   }).finally(() => {
     if (handler) {
       websocket.removeEventListener("message", handler);
+    }
+
+    if (onAbort) {
+      signal?.removeEventListener("abort", onAbort);
     }
   });
 };
