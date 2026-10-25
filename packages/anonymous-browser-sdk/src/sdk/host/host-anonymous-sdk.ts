@@ -10,6 +10,7 @@ import {
   HostWebRTCConnectionManagerOptions,
 } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
+import { AbortManager } from "../../abort-controller/abort-manager";
 
 /** ホスト用匿名バックエンドSDK */
 export type HostAnonymousSDK = {
@@ -61,6 +62,8 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -70,6 +73,7 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
+    this.#abortManager = new AbortManager();
   }
 
   /** @override */
@@ -77,13 +81,18 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const spanId = nanoid();
     try {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
       const websocket = await this.#websocketConnection.getOrCreate();
-      const roomID = await createRoom({ websocket });
+      const roomID = await createRoom({ websocket, signal });
       if (roomID === null) {
         this.#websocketConnection.gracefulDisconnect();
         return null;
@@ -113,11 +122,13 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
   /** @override */
   disconnectWebSocket() {
     this.#websocketConnection.gracefulDisconnect();
+    this.#abortManager.getAbortController().abort("WebSocket disconnected");
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
+    this.#abortManager.getAbortController().abort("WebRTC disconnected");
   }
 }
 
