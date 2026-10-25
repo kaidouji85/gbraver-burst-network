@@ -6,6 +6,7 @@ import { AbortManager } from "../../abort-controller/abort-manager";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { sendHostMessage } from "../../webrtc/host/host-message";
+import { hostPingPongCheck } from "../../webrtc/host/host-ping-pong-check";
 import { requestSelectedPlayer } from "../../webrtc/host/request-selected-player";
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
 import { waitUntilDataChannelOpen } from "../../webrtc/wait-until-data-channel-ready";
@@ -96,10 +97,18 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<AnonymousBattleSDK> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const websocket = await this.#websocketConnection.getOrCreate();
     const signalingID = await this.#signaling(websocket);
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
+    await hostPingPongCheck({ dataChannel, signal });
+    this.#websocketConnection.gracefulDisconnect();
+
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       await requestSelectedPlayer({ dataChannel, flowID });

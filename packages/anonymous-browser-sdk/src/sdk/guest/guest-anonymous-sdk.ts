@@ -6,6 +6,7 @@ import { AbortManager } from "../../abort-controller/abort-manager";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
@@ -21,7 +22,6 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
-import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
