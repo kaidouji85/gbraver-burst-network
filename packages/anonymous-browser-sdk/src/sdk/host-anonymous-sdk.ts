@@ -83,7 +83,7 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
       this.#webRTCConnection.disconnect();
 
       const websocket = await this.#websocketConnection.getOrCreate();
-      const roomID = await createRoom(websocket);
+      const roomID = await createRoom({ websocket });
       if (roomID === null) {
         this.#websocketConnection.gracefulDisconnect();
         return null;

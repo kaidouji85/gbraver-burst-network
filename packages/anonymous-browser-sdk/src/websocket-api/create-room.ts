@@ -10,13 +10,14 @@ import { sendToWSSignal } from "./send-to-ws-signal";
  * ルームを生成する
  * @param websocket WebSocketコネクション
  * @param options オプション
+ * @param options.websocket WebSocketコネクション
+ * @param options.signal Promise強制終了用シグナル
  * @returns 成功したらルームID、失敗したらnull
  */
 export const createRoom = (
-  websocket: WebSocket,
-  options?: Partial<SignalContainer>,
+  options: { websocket: WebSocket } & Partial<SignalContainer>,
 ): Promise<string | null> => {
-  const signal = options?.signal;
+  const { websocket, signal } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
   let onAbort: (() => void) | null = null;
   return new Promise<string | null>((resolve, reject) => {
