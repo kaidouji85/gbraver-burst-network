@@ -4,18 +4,17 @@ import { SendCommand, SendCommandSchema } from "../guest/guest-message";
 
 /**
  * ゲストからflowIDが一致した「SendCommand」メッセージを待ち受ける
- * @param dataChannel データチャネル
- * @param flowID フローID
  * @param options オプション
+ * @param options.dataChannel データチャネル
+ * @param options.flowID フローID
  * @param options.signal Promise強制終了用シグナル
- * @returns フローID
+ * @returns ゲストから送信されたSendCommandメッセージ
  */
-export const receiveSendCommand = (
-  dataChannel: RTCDataChannel,
-  flowID: string,
-  options?: Partial<SignalContainer>,
-): Promise<SendCommand> => {
-  const signal = options?.signal;
+export const receiveSendCommand = (options: {
+  dataChannel: RTCDataChannel;
+  flowID: string;
+} & Partial<SignalContainer>): Promise<SendCommand> => {
+  const { dataChannel, flowID, signal } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
   let onAbort: (() => void) | null = null;
   return new Promise<SendCommand>((resolve, reject) => {
