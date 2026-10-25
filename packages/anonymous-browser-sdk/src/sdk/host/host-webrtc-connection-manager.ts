@@ -1,5 +1,5 @@
-import { AuthTokenManager } from "./auth-token-manager";
-import { createRTCPeerConnection } from "./create-rtc-peer-connection";
+import { AuthTokenManager } from "../auth-token-manager";
+import { createRTCPeerConnection } from "../create-rtc-peer-connection";
 
 /** コネクション情報 */
 type Connection = {

@@ -1,5 +1,46 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.5.0
+
+### Minor Changes
+
+- 匿名バックエンドにAbort Controllerを追加した
+- 926faae: C
+- c153e69: 匿名サーバーにAbortControllerを追加
+- 926faae: Abort例外がまちがっていたので　修正
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [926faae]
+- Updated dependencies [c153e69]
+- Updated dependencies [926faae]
+  - @gbraver-burst-network/anonymous-browser-sdk@2.5.0
+
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.5.0-beta.1
+
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.5.0-beta.0
+
 ## 2.4.0
 
 ### Minor Changes

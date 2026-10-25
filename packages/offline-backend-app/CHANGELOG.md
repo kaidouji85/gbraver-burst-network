@@ -1,5 +1,27 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.5.0
+
+### Minor Changes
+
+- 匿名バックエンドにAbort Controllerを追加した
+- 926faae: C
+- c153e69: 匿名サーバーにAbortControllerを追加
+- 926faae: Abort例外がまちがっていたので　修正
+
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
 ## 2.4.0
 
 ### Minor Changes

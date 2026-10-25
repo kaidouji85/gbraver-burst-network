@@ -6,6 +6,16 @@ import {
 } from "gbraver-burst-core";
 import { z } from "zod";
 
+/** Ping */
+export type Ping = {
+  type: "ping";
+};
+
+/** Ping zod のスキーマ */
+export const PingSchema = z.object({
+  type: z.literal("ping"),
+});
+
 /** 選択したキャラクターをホストに送信するように要求する */
 export type RequestSelectedPlayer = {
   type: "request-selected-player";
@@ -59,7 +69,7 @@ export const BattleProgressedSchema = z.object({
 
 /** ホストから送信されるメッセージ */
 export type HostMessage =
-  RequestSelectedPlayer | BattleStart | BattleProgressed;
+  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed;
 
 /**
  * ホストメッセージをゲストに送信する

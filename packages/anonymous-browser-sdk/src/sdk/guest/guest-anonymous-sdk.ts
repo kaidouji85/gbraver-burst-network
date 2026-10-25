@@ -2,24 +2,27 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Observable, Unsubscribable } from "rxjs";
 
-import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
-import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
-import { sendGuestMessage } from "../webrtc/guest/guest-message";
-import { receiveBattleStart } from "../webrtc/guest/receive-battle-start";
-import { receiveRequestSelectedPlayer } from "../webrtc/guest/receive-request-selected-player";
-import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { joinRoom } from "../websocket-api/join-room";
-import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
-import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
-import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { createAbortError } from "../../abort-controller/abort-error";
+import { AbortManager } from "../../abort-controller/abort-manager";
+import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
+import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
+import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
+import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
+import { waitUntilConnected } from "../../webrtc/wait-until-connected";
+import { joinRoom } from "../../websocket-api/join-room";
+import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
+import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { GuestBattleSDK } from "./guest-battle-sdk";
 import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
@@ -75,6 +78,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -84,6 +89,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     this.#webRTCConnection = new GuestWebRTCConnectionManager(options);
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
+    this.#abortManager = new AbortManager();
   }
 
   /** @override */
@@ -92,49 +98,53 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }) {
-    const spanId = nanoid();
-    const { roomID, armdozerId, pilotId } = options;
-    this.#websocketConnection.gracefulDisconnect();
-    this.#webRTCConnection.disconnect();
+    try {
+      const { signal } = this.#abortManager.getAbortController();
+      if (signal.aborted) {
+        return Promise.reject(signal.reason);
+      }
 
-    // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
-    const requestSelectedPlayerPromise = (async () => {
+      const spanId = nanoid();
+      const { roomID, armdozerId, pilotId } = options;
+      this.#websocketConnection.gracefulDisconnect();
+      this.#webRTCConnection.disconnect();
+
+      const websocket = await this.#websocketConnection.getOrCreate();
+      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
+      if (!joinRoomAccepted) {
+        return null;
+      }
+
+      const { signalingID } = joinRoomAccepted;
+      await this.#signaling({ signalingID, spanId, signal });
       const dataChannel =
         await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveRequestSelectedPlayer(dataChannel);
-    })();
-    const battleStartPromise = (async () => {
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-      return await receiveBattleStart(dataChannel);
-    })();
+      await guestPingPongCheck({ dataChannel, signal });
+      this.#websocketConnection.gracefulDisconnect();
 
-    const websocket = await this.#websocketConnection.getOrCreate();
-    const joinRoomAccepted = await joinRoom({ websocket, roomID });
-    if (!joinRoomAccepted) {
-      return null;
+      const { flowID } = await receiveRequestSelectedPlayer({
+        dataChannel,
+        signal,
+      });
+      sendGuestMessage(dataChannel, {
+        type: "send-player",
+        flowID,
+        armdozerId,
+        pilotId,
+      });
+      const battleStart = await receiveBattleStart({ dataChannel, signal });
+      return new GuestBattleSDK({
+        hostPlayer: battleStart.hostPlayer,
+        guestPlayer: battleStart.guestPlayer,
+        initialState: battleStart.update,
+        initialFlowID: battleStart.flowID,
+        webRTCConnection: this.#webRTCConnection,
+        abortManager: this.#abortManager,
+      });
+    } catch (e) {
+      this.#websocketConnection.gracefulDisconnect();
+      throw e;
     }
-
-    const { signalingID } = joinRoomAccepted;
-    await this.#signaling({ signalingID, spanId });
-
-    const { flowID } = await requestSelectedPlayerPromise;
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
-    sendGuestMessage(dataChannel, {
-      type: "send-player",
-      flowID,
-      armdozerId,
-      pilotId,
-    });
-    const battleStart = await battleStartPromise;
-    return new GuestBattleSDK({
-      hostPlayer: battleStart.hostPlayer,
-      guestPlayer: battleStart.guestPlayer,
-      initialState: battleStart.update,
-      initialFlowID: battleStart.flowID,
-      webRTCConnection: this.#webRTCConnection,
-    });
   }
 
   /** @override */
@@ -145,11 +155,17 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   /** @override */
   disconnectWebSocket(): void {
     this.#websocketConnection.gracefulDisconnect();
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebSocket disconnected"));
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebRTC disconnected"));
   }
 
   /**
@@ -157,15 +173,20 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
+   * @param options.signal アボートシグナル
    * @returns シグナリングが完了したら発火するPromise
    */
   async #signaling(options: {
     signalingID: string;
     spanId: string;
+    signal: AbortSignal;
   }): Promise<void> {
-    const { signalingID, spanId } = options;
-    let unSubscribers: Unsubscribable[] = [];
+    const { signalingID, spanId, signal } = options;
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
 
+    let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({
         type: "SIGNALING_START",
@@ -213,7 +234,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         }),
       ];
 
-      const remoteSDP = await waitUntilSDPReceive(websocket);
+      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
@@ -226,7 +247,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         signalingID,
         sdp,
       });
-      await waitUntilConnected(connection);
+      await waitUntilConnected(connection, { signal });
 
       await this.#frontendLog.log({
         type: "SIGNALING_END",
@@ -243,7 +264,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         });
       }
     } finally {
-      this.#websocketConnection.gracefulDisconnect();
       unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
     }
   }

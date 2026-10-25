@@ -1,3 +1,4 @@
+import { SignalContainer } from "../abort-controller/signal-container";
 import { parseJSON } from "../json/parse";
 import {
   JoinRoomAccepted,
@@ -11,15 +12,29 @@ import { sendToWSSignal } from "./send-to-ws-signal";
  * @param options オプション
  * @param options.websocket WebSocketコネクション
  * @param options.roomID 参加するルームのID
+ * @param options.signal Promise強制終了用シグナル
  * @return ルームへの参加に成功したらJoinRoomAccepted、失敗したらnull
  */
-export const joinRoom = (options: {
-  websocket: WebSocket;
-  roomID: string;
-}): Promise<JoinRoomAccepted | null> => {
-  const { websocket, roomID } = options;
+export const joinRoom = (
+  options: {
+    websocket: WebSocket;
+    roomID: string;
+  } & Partial<SignalContainer>,
+): Promise<JoinRoomAccepted | null> => {
+  const { websocket, roomID, signal } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
-  return new Promise<JoinRoomAccepted | null>((resolve) => {
+  let onAbort: (() => void) | null = null;
+  return new Promise<JoinRoomAccepted | null>((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(signal.reason);
+      return;
+    }
+
+    onAbort = () => {
+      reject(signal?.reason);
+    };
+    signal?.addEventListener("abort", onAbort);
+
     handler = (event) => {
       const parsedData = parseJSON(event.data);
       const parsedJoinRoomAccepted =
@@ -41,6 +56,10 @@ export const joinRoom = (options: {
   }).finally(() => {
     if (handler) {
       websocket.removeEventListener("message", handler);
+    }
+
+    if (onAbort) {
+      signal?.removeEventListener("abort", onAbort);
     }
   });
 };

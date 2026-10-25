@@ -12,11 +12,12 @@ import {
 import { nanoid } from "nanoid";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
-import { SendCommand } from "../webrtc/guest/guest-message";
-import { sendHostMessage } from "../webrtc/host/host-message";
-import { receiveSendCommand } from "../webrtc/host/receive-send-command";
-import { notifyConnectionFailed } from "../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
+import { AbortManager } from "../../abort-controller/abort-manager";
+import { SendCommand } from "../../webrtc/guest/guest-message";
+import { sendHostMessage } from "../../webrtc/host/host-message";
+import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
+import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
 /** ホスト側バトルSDK */
@@ -37,6 +38,8 @@ export class HostBattleSDK implements AnonymousBattleSDK {
   #sendCommandPromise: Promise<SendCommand>;
   /** dataChannel.sendの例外通知ストリーム */
   #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -46,6 +49,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
    * @param options.guestArmdozerId ゲスト側のアームドーザID
    * @param options.guestPilotId ゲスト側のパイロットID
    * @param options.webRTCConnection ホスト側のWebRTC接続マネージャー
+   * @param options.abortManager アボート管理オブジェクト
    */
   constructor(options: {
     hostArmdozerId: ArmdozerId;
@@ -53,6 +57,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     guestArmdozerId: ArmdozerId;
     guestPilotId: PilotId;
     webRTCConnection: HostWebRTCConnectionManager;
+    abortManager: AbortManager;
   }) {
     const hostPlayerId = nanoid();
     this.player = {
@@ -73,15 +78,25 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     this.#core = startGBraverBurst([this.player, this.enemy]);
     this.initialState = this.#core.stateHistory();
 
+    this.#abortManager = options.abortManager;
+    const { signal } = this.#abortManager.getAbortController();
+
     this.flowID = nanoid();
     this.#webRTCConnection = options.webRTCConnection;
     this.#sendCommandPromise = this.#webRTCConnection
       .getOrCreateConnection()
-      .then(({ dataChannel }) => receiveSendCommand(dataChannel, this.flowID));
+      .then(({ dataChannel }) =>
+        receiveSendCommand({ dataChannel, flowID: this.flowID, signal }),
+      );
   }
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const sendCommand = await this.#sendCommandPromise;
     const hostCommand = { playerId: this.player.playerId, command };
     const guestCommand = {
@@ -93,7 +108,11 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     this.flowID = nanoid();
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
-    this.#sendCommandPromise = receiveSendCommand(dataChannel, this.flowID);
+    this.#sendCommandPromise = receiveSendCommand({
+      dataChannel,
+      flowID: this.flowID,
+      signal,
+    });
     try {
       sendHostMessage(dataChannel, {
         type: "battle-progressed",

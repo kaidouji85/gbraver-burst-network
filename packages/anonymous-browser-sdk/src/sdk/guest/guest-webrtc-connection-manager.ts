@@ -1,6 +1,6 @@
-import { waitUntilDataChannel } from "../webrtc/guest/wait-until-data-channel";
-import { AuthTokenManager } from "./auth-token-manager";
-import { createRTCPeerConnection } from "./create-rtc-peer-connection";
+import { waitUntilDataChannel } from "../../webrtc/guest/wait-until-data-channel";
+import { AuthTokenManager } from "../auth-token-manager";
+import { createRTCPeerConnection } from "../create-rtc-peer-connection";
 
 /** 接続中 */
 type Connected = {
