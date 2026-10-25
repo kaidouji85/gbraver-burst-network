@@ -3,6 +3,13 @@ import { parseJSON } from "../../json/parse";
 import { PongSchema } from "../guest/guest-message";
 import { sendHostMessage } from "./host-message";
 
+/**
+ * data channel の疎通確認を行う
+ * @param options オプション
+ * @param options.dataChannel データチャネル
+ * @param options.signal アボートシグナル
+ * @returns
+ */
 export const handShake = (
   options: { dataChannel: RTCDataChannel } & Partial<SignalContainer>,
 ) => {
