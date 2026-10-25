@@ -95,7 +95,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       await this.#webRTCConnection.getOrCreateConnection();
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
-      await requestSelectedPlayer(dataChannel, flowID);
+      await requestSelectedPlayer({ dataChannel, flowID });
     const battleSDK = new HostBattleSDK({
       hostArmdozerId: this.#hostArmdozerId,
       hostPilotId: this.#hostPilotId,
