@@ -23,6 +23,7 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
+import { signaling } from "./signaling";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
@@ -136,10 +137,11 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
       const { signalingID } = joinRoomAccepted;
       const remoteSDP = await waitSDPRecievePromise;
-      await this.#signaling({
+      await signaling({
         signalingID,
         spanId,
         remoteSDP,
+        frontendLog: this.#frontendLog,
         websocket,
         connection,
         signal,
@@ -191,107 +193,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     this.#abortManager
       .getAbortController()
       .abort(createAbortError("WebRTC disconnected"));
-  }
-
-  /**
-   * シグナリングを行う
-   * @param options シグナリングのオプション
-   * @param options.signalingID シグナリングID
-   * @param options.spanId ログ用の識別子
-   * @param options.remoteSDP ホスト側のSDP
-   * @param options.rconnection WebRTCコネクション
-   * @param options.websocket WebSocketコネクション
-   * @param options.signal アボートシグナル
-   * @returns シグナリングが完了したら発火するPromise
-   */
-  async #signaling(options: {
-    signalingID: string;
-    spanId: string;
-    remoteSDP: RTCSessionDescriptionInit;
-    websocket: WebSocket;
-    connection: RTCPeerConnection;
-    signal: AbortSignal;
-  }): Promise<void> {
-    const { signalingID, spanId, remoteSDP, websocket, connection, signal } =
-      options;
-    if (signal.aborted) {
-      return Promise.reject(signal.reason);
-    }
-
-    let unSubscribers: Unsubscribable[] = [];
-    try {
-      await this.#frontendLog.log({
-        type: "SIGNALING_START",
-        spanId,
-      });
-
-      let isRemoteDescriptionSet = false;
-      const pendingIceCandidates: RTCIceCandidateInit[] = [];
-
-      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
-      unSubscribers = [
-        notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
-          if (isRemoteDescriptionSet) {
-            connection.addIceCandidate(iceCandidate);
-          } else {
-            pendingIceCandidates.push(iceCandidate);
-          }
-        }),
-        fromEvent<RTCPeerConnectionIceEvent>(
-          connection,
-          "icecandidate",
-        ).subscribe((event) => {
-          if (event.candidate) {
-            sendToWSSignal(websocket, {
-              action: "send-ice-candidate",
-              signalingID,
-              iceCandidate: event.candidate,
-            });
-          }
-        }),
-        fromEvent<RTCPeerConnectionIceErrorEvent>(
-          connection,
-          "icecandidateerror",
-        ).subscribe((event) => {
-          this.#frontendLog.log({
-            type: "ICE_CANDIDATE_ERROR",
-            spanId,
-            error: createICECandidateErrorMessage(event),
-          });
-        }),
-      ];
-
-      await connection.setRemoteDescription(remoteSDP);
-      isRemoteDescriptionSet = true;
-      pendingIceCandidates.forEach((iceCandidate) => {
-        connection.addIceCandidate(iceCandidate);
-      });
-      const sdp = await connection.createAnswer();
-      await connection.setLocalDescription(sdp);
-      sendToWSSignal(websocket, {
-        action: "send-sdp",
-        signalingID,
-        sdp,
-      });
-      await waitUntilConnected(connection, { signal });
-
-      await this.#frontendLog.log({
-        type: "SIGNALING_END",
-        spanId,
-      });
-
-      const selectedLocalIceCandidateSummary =
-        await getSelectedIceCandidateSummary(connection);
-      if (selectedLocalIceCandidateSummary !== null) {
-        await this.#frontendLog.log({
-          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
-          spanId,
-          summary: selectedLocalIceCandidateSummary,
-        });
-      }
-    } finally {
-      unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
-    }
   }
 }
 

@@ -9,6 +9,7 @@ import { FrontendLogManager } from "../frontend-log-manager";
 
   /**
    * シグナリングを行う
+   * 本処理の前にRemoteSDPを取得しておく必要がある
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
