@@ -1,5 +1,16 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.7.0-beta.1
+
+### Minor Changes
+
+- ゲストのシグナリングのコードを大幅整理
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@2.7.0-beta.1
+
 ## 2.7.0-beta.0
 
 ### Minor Changes

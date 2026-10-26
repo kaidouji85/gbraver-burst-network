@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.7.0-beta.1
+
+### Minor Changes
+
+- ゲストのシグナリングのコードを大幅整理
+
 ## 2.7.0-beta.0
 
 ### Minor Changes
