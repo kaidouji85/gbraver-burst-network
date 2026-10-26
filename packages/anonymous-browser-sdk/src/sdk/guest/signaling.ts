@@ -82,7 +82,6 @@ export const signaling = async (options: {
       }),
     ];
     await setRemoteSDPPromise;
-
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
     sendToWSSignal(websocket, {
