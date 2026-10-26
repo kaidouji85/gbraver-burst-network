@@ -112,26 +112,20 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         connectionPromise,
       ]);
 
-      // 相手からのメッセージを待つものは、イベントの取りこぼしを防ぐためにあらかじめリスナーを登録する
-      const joinRoomPromise = joinRoom({ websocket, roomID, signal });
-      const pingPongPromise = dataChannelPromise.then((dataChannel) =>
-        guestPingPongCheck({ dataChannel, signal }),
-      );
-      const receiveRequestSelectedPlayerPromise = dataChannelPromise.then(
-        (dataChannel) => receiveRequestSelectedPlayer({ dataChannel, signal }),
-      );
-      const waitSDPRecievePromise = waitUntilSDPReceive({ websocket, signal });
-      const revcieveBattleStartPromise = dataChannelPromise.then(
-        (dataChannel) => receiveBattleStart({ dataChannel, signal }),
-      );
-
-      const joinRoomAccepted = await joinRoomPromise;
+      const waitUntilSDPReceivePromise = waitUntilSDPReceive({
+        websocket,
+        signal,
+      }); // joinRoomの成功直後にSDPが送信されるので、取りこぼし防止のために先にイベントを登録する
+      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
       if (!joinRoomAccepted) {
         return null;
       }
 
       const { signalingID } = joinRoomAccepted;
-      const remoteSDP = await waitSDPRecievePromise;
+      const remoteSDP = await waitUntilSDPReceivePromise;
+      const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
+        guestPingPongCheck({ dataChannel, signal }),
+      ); // signalingの成功直後にホストからPingが送信されるので、取りこぼし防止のために先にイベントを登録する
       await signaling({
         signalingID,
         spanId,
@@ -141,20 +135,24 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         connection,
         signal,
       });
+
       const [dataChannel] = await Promise.all([
         dataChannelPromise,
-        pingPongPromise,
+        guestPingPongCheckPromise,
       ]);
       this.#websocketConnection.gracefulDisconnect();
 
-      const { flowID } = await receiveRequestSelectedPlayerPromise;
+      const { flowID } = await receiveRequestSelectedPlayer({
+        dataChannel,
+        signal,
+      });
       sendGuestMessage(dataChannel, {
         type: "send-player",
         flowID,
         armdozerId,
         pilotId,
       });
-      const battleStart = await revcieveBattleStartPromise;
+      const battleStart = await receiveBattleStart({ dataChannel, signal });
       return new GuestBattleSDK({
         hostPlayer: battleStart.hostPlayer,
         guestPlayer: battleStart.guestPlayer,
