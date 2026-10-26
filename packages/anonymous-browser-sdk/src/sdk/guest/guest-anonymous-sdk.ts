@@ -125,6 +125,9 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         (dataChannel) => receiveRequestSelectedPlayer({ dataChannel, signal }),
       );
       const waitSDPRecievePromise = waitUntilSDPReceive({ websocket, signal });
+      const revcieveBattleStartPromise = dataChannelPromise.then(
+        (dataChannel) => receiveBattleStart({ dataChannel, signal }),
+      );
 
       const joinRoomAccepted = await joinRoomPromise;
       if (!joinRoomAccepted) {
@@ -154,7 +157,7 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         armdozerId,
         pilotId,
       });
-      const battleStart = await receiveBattleStart({ dataChannel, signal });
+      const battleStart = await revcieveBattleStartPromise;
       return new GuestBattleSDK({
         hostPlayer: battleStart.hostPlayer,
         guestPlayer: battleStart.guestPlayer,
