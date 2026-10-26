@@ -109,41 +109,44 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
-      const websocket = await this.#websocketConnection.getOrCreate();
-      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
+      const { connectionPromise, dataChannelPromise } =
+        this.#webRTCConnection.getOrCreateConnection();
+      const [websocket, connection] = await Promise.all([
+        this.#websocketConnection.getOrCreate(),
+        connectionPromise,
+      ]);
+
+      // 相手からのメッセージを待つものは、イベントの取りこぼしを防ぐためにあらかじめリスナーを登録する
+      const joinRoomPromise = joinRoom({ websocket, roomID, signal });
+      const pingPongPromise = dataChannelPromise.then((dataChannel) =>
+        guestPingPongCheck({ dataChannel, signal }),
+      );
+      const receiveRequestSelectedPlayerPromise = dataChannelPromise.then(
+        (dataChannel) => receiveRequestSelectedPlayer({ dataChannel, signal }),
+      );
+      const waitSDPRecievePromise = waitUntilSDPReceive({ websocket, signal });
+
+      const joinRoomAccepted = await joinRoomPromise;
       if (!joinRoomAccepted) {
         return null;
       }
 
-      // 相手からのメッセージを待つものは、イベントの取りこぼしを防ぐためにあらかじめリスナーを登録する
-      const pingPongPromise = (async () => {
-        const dataChannel =
-          await this.#webRTCConnection.getOrCreateConnection()
-            .dataChannelPromise;
-        await guestPingPongCheck({ dataChannel, signal });
-      })();
-      const receiveRequestSelectedPlayerPromise = (async () => {
-        const dataChannel =
-          await this.#webRTCConnection.getOrCreateConnection()
-            .dataChannelPromise;
-        return await receiveRequestSelectedPlayer({ dataChannel, signal });
-      })();
-      const sdpPromise = waitUntilSDPReceive({ websocket, signal });
-
-
       const { signalingID } = joinRoomAccepted;
+      const remoteSDP = await waitSDPRecievePromise;
       await this.#signaling({
         signalingID,
         spanId,
-        sdpPromise,
+        remoteSDP,
         websocket,
+        connection,
         signal,
       });
-      await pingPongPromise;
+      const [dataChannel] = await Promise.all([
+        dataChannelPromise,
+        pingPongPromise,
+      ]);
       this.#websocketConnection.gracefulDisconnect();
 
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       const { flowID } = await receiveRequestSelectedPlayerPromise;
       sendGuestMessage(dataChannel, {
         type: "send-player",
@@ -192,7 +195,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
    * @param options シグナリングのオプション
    * @param options.signalingID シグナリングID
    * @param options.spanId ログ用の識別子
-   * @param options.sdpPromise 事前に待ち受けを開始している、相手SDPの受信Promise
+   * @param options.remoteSDP ホスト側のSDP
+   * @param options.rconnection WebRTCコネクション
    * @param options.websocket WebSocketコネクション
    * @param options.signal アボートシグナル
    * @returns シグナリングが完了したら発火するPromise
@@ -200,11 +204,13 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
   async #signaling(options: {
     signalingID: string;
     spanId: string;
-    sdpPromise: Promise<RTCSessionDescriptionInit>;
+    remoteSDP: RTCSessionDescriptionInit;
     websocket: WebSocket;
+    connection: RTCPeerConnection;
     signal: AbortSignal;
   }): Promise<void> {
-    const { signalingID, spanId, sdpPromise, websocket, signal } = options;
+    const { signalingID, spanId, remoteSDP, websocket, connection, signal } =
+      options;
     if (signal.aborted) {
       return Promise.reject(signal.reason);
     }
@@ -215,10 +221,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         type: "SIGNALING_START",
         spanId,
       });
-
-      const { connectionPromise } =
-        this.#webRTCConnection.getOrCreateConnection();
-      const connection = await connectionPromise;
 
       let isRemoteDescriptionSet = false;
       const pendingIceCandidates: RTCIceCandidateInit[] = [];
@@ -256,7 +258,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         }),
       ];
 
-      const remoteSDP = await sdpPromise;
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
