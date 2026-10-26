@@ -1,5 +1,6 @@
 import { fromEvent, Unsubscribable } from "rxjs";
 
+import { SignalContainer } from "../../abort-controller/signal-container";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
@@ -20,15 +21,16 @@ import { FrontendLogManager } from "../frontend-log-manager";
  * @param options.signal アボートシグナル
  * @returns シグナリングが完了したら発火するPromise
  */
-export const signaling = async (options: {
-  signalingID: string;
-  spanId: string;
-  remoteSDP: RTCSessionDescriptionInit;
-  frontendLog: FrontendLogManager;
-  websocket: WebSocket;
-  connection: RTCPeerConnection;
-  signal: AbortSignal;
-}): Promise<void> => {
+export const signaling = async (
+  options: {
+    signalingID: string;
+    spanId: string;
+    remoteSDP: RTCSessionDescriptionInit;
+    frontendLog: FrontendLogManager;
+    websocket: WebSocket;
+    connection: RTCPeerConnection;
+  } & SignalContainer,
+): Promise<void> => {
   const {
     signalingID,
     spanId,
