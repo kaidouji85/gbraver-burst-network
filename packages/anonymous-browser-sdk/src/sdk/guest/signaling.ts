@@ -49,17 +49,14 @@ export const signaling = async (options: {
       spanId,
     });
 
-    let isRemoteDescriptionSet = false;
-    const pendingIceCandidates: RTCIceCandidateInit[] = [];
-
-    // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
+    const setRemoteSDPPromise = connection.setRemoteDescription(remoteSDP);
     unSubscribers = [
       notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
-        if (isRemoteDescriptionSet) {
+        // RemoteSDPがセットされた後にICE Candidateを追加する
+        // そのためにsetRemoteSDPPromiseを使って、RemoteSDPがセットされるまで待機する
+        setRemoteSDPPromise.then(() => {
           connection.addIceCandidate(iceCandidate);
-        } else {
-          pendingIceCandidates.push(iceCandidate);
-        }
+        });
       }),
       fromEvent<RTCPeerConnectionIceEvent>(
         connection,
@@ -84,12 +81,8 @@ export const signaling = async (options: {
         });
       }),
     ];
+    await setRemoteSDPPromise;
 
-    await connection.setRemoteDescription(remoteSDP);
-    isRemoteDescriptionSet = true;
-    pendingIceCandidates.forEach((iceCandidate) => {
-      connection.addIceCandidate(iceCandidate);
-    });
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
     sendToWSSignal(websocket, {
