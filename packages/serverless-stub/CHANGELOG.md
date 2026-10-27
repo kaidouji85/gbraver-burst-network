@@ -1,5 +1,20 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.7.0
+
+### Minor Changes
+
+- あいことば対戦の接続不良を改善した
+- bad385c: ゲストのシグナリングのコードを大幅整理
+- 6a03776: 匿名バックエンドのシグナリングのバグを改善
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [bad385c]
+- Updated dependencies [6a03776]
+  - @gbraver-burst-network/browser-sdk@2.7.0
+
 ## 2.7.0-beta.1
 
 ### Minor Changes
