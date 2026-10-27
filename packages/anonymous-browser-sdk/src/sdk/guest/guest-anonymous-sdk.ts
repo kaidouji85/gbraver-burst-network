@@ -1,19 +1,14 @@
 import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { fromEvent, Observable, Unsubscribable } from "rxjs";
+import { Observable } from "rxjs";
 
 import { createAbortError } from "../../abort-controller/abort-error";
 import { AbortManager } from "../../abort-controller/abort-manager";
-import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
-import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
-import { waitUntilConnected } from "../../webrtc/wait-until-connected";
 import { joinRoom } from "../../websocket-api/join-room";
-import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
-import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
 import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { FrontendLogManager } from "../frontend-log-manager";
@@ -23,6 +18,7 @@ import {
   GuestWebRTCConnectionManager,
   GuestWebRTCConnectionManagerOptions,
 } from "./guest-webrtc-connection-manager";
+import { signaling } from "./signaling";
 
 /** ゲスト用匿名バックエンドSDK */
 export type GuestAnonymousSDK = {
@@ -109,27 +105,45 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
-      const websocket = await this.#websocketConnection.getOrCreate();
+      const { connectionPromise, dataChannelPromise } =
+        this.#webRTCConnection.getOrCreateConnection();
+      const [websocket, connection] = await Promise.all([
+        this.#websocketConnection.getOrCreate(),
+        connectionPromise,
+      ]);
+
+      // joinRoomの成功直後にSDPが送信されるので、取りこぼし防止のために先にイベントを登録する
+      const waitUntilSDPReceivePromise = waitUntilSDPReceive({
+        websocket,
+        signal,
+      });
       const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
       if (!joinRoomAccepted) {
         return null;
       }
 
-      // イベントの取りこぼしを防ぐために、あらかじリスナーを登録する
-      const pingPongPromise = (async () => {
-        const dataChannel =
-          await this.#webRTCConnection.getOrCreateConnection()
-            .dataChannelPromise;
-        await guestPingPongCheck({ dataChannel, signal });
-      })();
-
       const { signalingID } = joinRoomAccepted;
-      await this.#signaling({ signalingID, spanId, signal });
-      await pingPongPromise;
+      const remoteSDP = await waitUntilSDPReceivePromise;
+      // signalingの成功直後にホストからPingが送信されるので、取りこぼし防止のために先にイベントを登録する
+      const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
+        guestPingPongCheck({ dataChannel, signal }),
+      );
+      await signaling({
+        signalingID,
+        spanId,
+        remoteSDP,
+        frontendLog: this.#frontendLog,
+        websocket,
+        connection,
+        signal,
+      });
+
+      const [dataChannel] = await Promise.all([
+        dataChannelPromise,
+        guestPingPongCheckPromise,
+      ]);
       this.#websocketConnection.gracefulDisconnect();
 
-      const dataChannel =
-        await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
       const { flowID } = await receiveRequestSelectedPlayer({
         dataChannel,
         signal,
@@ -174,106 +188,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
     this.#abortManager
       .getAbortController()
       .abort(createAbortError("WebRTC disconnected"));
-  }
-
-  /**
-   * シグナリングを行う
-   * @param options シグナリングのオプション
-   * @param options.signalingID シグナリングID
-   * @param options.spanId ログ用の識別子
-   * @param options.signal アボートシグナル
-   * @returns シグナリングが完了したら発火するPromise
-   */
-  async #signaling(options: {
-    signalingID: string;
-    spanId: string;
-    signal: AbortSignal;
-  }): Promise<void> {
-    const { signalingID, spanId, signal } = options;
-    if (signal.aborted) {
-      return Promise.reject(signal.reason);
-    }
-
-    let unSubscribers: Unsubscribable[] = [];
-    try {
-      await this.#frontendLog.log({
-        type: "SIGNALING_START",
-        spanId,
-      });
-
-      const websocket = await this.#websocketConnection.getOrCreate();
-      const { connectionPromise } =
-        this.#webRTCConnection.getOrCreateConnection();
-      const connection = await connectionPromise;
-
-      let isRemoteDescriptionSet = false;
-      const pendingIceCandidates: RTCIceCandidateInit[] = [];
-
-      // イベントを取り逃がさないように、あらかじめハンドラをセットしておく
-      unSubscribers = [
-        notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
-          if (isRemoteDescriptionSet) {
-            connection.addIceCandidate(iceCandidate);
-          } else {
-            pendingIceCandidates.push(iceCandidate);
-          }
-        }),
-        fromEvent<RTCPeerConnectionIceEvent>(
-          connection,
-          "icecandidate",
-        ).subscribe((event) => {
-          if (event.candidate) {
-            sendToWSSignal(websocket, {
-              action: "send-ice-candidate",
-              signalingID,
-              iceCandidate: event.candidate,
-            });
-          }
-        }),
-        fromEvent<RTCPeerConnectionIceErrorEvent>(
-          connection,
-          "icecandidateerror",
-        ).subscribe((event) => {
-          this.#frontendLog.log({
-            type: "ICE_CANDIDATE_ERROR",
-            spanId,
-            error: createICECandidateErrorMessage(event),
-          });
-        }),
-      ];
-
-      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
-      await connection.setRemoteDescription(remoteSDP);
-      isRemoteDescriptionSet = true;
-      pendingIceCandidates.forEach((iceCandidate) => {
-        connection.addIceCandidate(iceCandidate);
-      });
-      const sdp = await connection.createAnswer();
-      await connection.setLocalDescription(sdp);
-      sendToWSSignal(websocket, {
-        action: "send-sdp",
-        signalingID,
-        sdp,
-      });
-      await waitUntilConnected(connection, { signal });
-
-      await this.#frontendLog.log({
-        type: "SIGNALING_END",
-        spanId,
-      });
-
-      const selectedLocalIceCandidateSummary =
-        await getSelectedIceCandidateSummary(connection);
-      if (selectedLocalIceCandidateSummary !== null) {
-        await this.#frontendLog.log({
-          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
-          spanId,
-          summary: selectedLocalIceCandidateSummary,
-        });
-      }
-    } finally {
-      unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
-    }
   }
 }
 

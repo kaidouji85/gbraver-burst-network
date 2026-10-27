@@ -1,5 +1,25 @@
 # @gbraver-burst-network/ws-signal
 
+## 2.7.0
+
+### Minor Changes
+
+- あいことば対戦の接続不良を改善した
+- bad385c: ゲストのシグナリングのコードを大幅整理
+- 6a03776: 匿名バックエンドのシグナリングのバグを改善
+
+## 2.7.0-beta.1
+
+### Minor Changes
+
+- ゲストのシグナリングのコードを大幅整理
+
+## 2.7.0-beta.0
+
+### Minor Changes
+
+- 匿名バックエンドのシグナリングのバグを改善
+
 ## 2.6.0
 
 ### Minor Changes
