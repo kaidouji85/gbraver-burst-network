@@ -19,6 +19,7 @@ provider:
   ecr:
     images:
       anonymous-backend:
+        # monorepoのプロジェクトルートを相対パスで指定
         path: ../../
         file: packages/anonymous-backend-app/Dockerfile
         platform: linux/arm64

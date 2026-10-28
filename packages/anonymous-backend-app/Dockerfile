@@ -1,3 +1,4 @@
+# 本Dockerfileのホスト側カレントディレクトリは、 monorepoのプロジェクトルートである
 FROM node:24 AS builder
 
 WORKDIR /workspace
