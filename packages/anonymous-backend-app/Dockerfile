@@ -6,11 +6,11 @@ COPY package.json package-lock.json ./
 COPY packages/ packages/
 
 RUN npm ci --workspace=@gbraver-burst-network/anonymous-backend-app --include-workspace-root=false
-RUN npm run --workspace=@gbraver-burst-network/anonymous-backend-app build:container
+RUN npm run --workspace=@gbraver-burst-network/anonymous-backend-app build
 
 FROM public.ecr.aws/lambda/nodejs:24
 
-COPY --from=builder /workspace/packages/anonymous-backend-app/.serverless/container/ ${LAMBDA_TASK_ROOT}/
+COPY --from=builder /workspace/packages/anonymous-backend-app/container-dist/ ${LAMBDA_TASK_ROOT}/
 
 # 実行するハンドラは serverless.yml の関数ごとの image.command で指定する
 CMD ["issue-auth-token.issueAuthToken"]
