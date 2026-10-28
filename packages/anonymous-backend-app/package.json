@@ -34,7 +34,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "esbuild src/*.ts --bundle --platform=node --target=node24 --format=cjs --outdir=container-dist",
+    "build": "node build.mjs",
     "clean": "rimraf .serverless container-dist",
     "code-format": "prettier . --write",
     "code-format-check": "prettier . --check",
