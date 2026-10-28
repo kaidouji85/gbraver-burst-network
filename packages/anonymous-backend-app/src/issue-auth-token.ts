@@ -1,4 +1,4 @@
-import type { APIGatewayProxyResultV2 } from "aws-lambda";
+import { APIGatewayProxyResultV2 } from "aws-lambda";
 
 import { createAuthToken } from "./core/auth-token";
 import { DynamoAuthTokens } from "./dynamo-db/dynamo-auth-tokens";
