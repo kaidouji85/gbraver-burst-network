@@ -42,7 +42,8 @@
     "dependency-check": "depcruise src",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "build:container": "esbuild src/issue-auth-token.ts --bundle --platform=node --target=node24 --format=cjs --outfile=.serverless/container/issue-auth-token.js",
+    "build:container": "esbuild src/issue-auth-token.ts --bundle --platform=node --target=node24 --format=cjs --outfile=.container-build/issue-auth-token.js",
+    "deploy": "npm run build:container && sls deploy",
     "test": "jest",
     "transpile": "sls package",
     "type-check": "tsc --noEmit"

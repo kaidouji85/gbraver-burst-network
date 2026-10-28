@@ -1,4 +1,5 @@
 node_modules
 .serverless
+.container-build
 .env
 coverage
