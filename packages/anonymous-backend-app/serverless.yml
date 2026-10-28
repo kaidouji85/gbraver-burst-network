@@ -18,7 +18,7 @@ provider:
   region: ap-northeast-1
   ecr:
     images:
-      issue-auth-token:
+      anonymous-backend:
         path: ../../
         file: packages/anonymous-backend-app/Dockerfile
         platform: linux/arm64
@@ -118,9 +118,13 @@ provider:
 functions:
   # WebSocket API
   webSocketAPIAuthorizer:
-    handler: src/ws-authorizer.wsAuthorizer
+    image:
+      name: anonymous-backend
+      command: ["ws-authorizer.wsAuthorizer"]
   connect:
-    handler: src/connect.connect
+    image:
+      name: anonymous-backend
+      command: ["connect.connect"]
     events:
       - websocket:
           route: $connect
@@ -129,50 +133,68 @@ functions:
             identitySource:
               - "route.request.querystring.token"
   disconnect:
-    handler: src/disconnect.disconnect
+    image:
+      name: anonymous-backend
+      command: ["disconnect.disconnect"]
     events:
       - websocket:
           route: $disconnect
   ping:
-    handler: src/ping.ping
+    image:
+      name: anonymous-backend
+      command: ["ping.ping"]
     events:
       - websocket:
           route: ping
   createRoom:
-    handler: src/create-room.createRoom
+    image:
+      name: anonymous-backend
+      command: ["create-room.createRoom"]
     events:
       - websocket:
           route: create-room
   joinRoom:
-    handler: src/join-room.joinRoom
+    image:
+      name: anonymous-backend
+      command: ["join-room.joinRoom"]
     events:
       - websocket:
           route: join-room
   sendSDP:
-    handler: src/send-sdp.sendSDP
+    image:
+      name: anonymous-backend
+      command: ["send-sdp.sendSDP"]
     events:
       - websocket:
           route: send-sdp
   sendICECandidate:
-    handler: src/send-ice-candidate.sendICECandidate
+    image:
+      name: anonymous-backend
+      command: ["send-ice-candidate.sendICECandidate"]
     events:
       - websocket:
           route: send-ice-candidate
   deleteSignalingChannel:
-    handler: src/delete-signaling-channel.deleteSignalingChannel
+    image:
+      name: anonymous-backend
+      command: ["delete-signaling-channel.deleteSignalingChannel"]
     events:
       - websocket:
           route: delete-signaling-channel
 
   # HTTP API
   issueAuthToken:
-    image: issue-auth-token
+    image:
+      name: anonymous-backend
+      command: ["issue-auth-token.issueAuthToken"]
     events:
       - httpApi:
           path: /${sls:stage}/auth-token
           method: post
   issueCoturnCredential:
-    handler: src/issue-coturn-credential.issueCoturnCredential
+    image:
+      name: anonymous-backend
+      command: ["issue-coturn-credential.issueCoturnCredential"]
     events:
       - httpApi:
           path: /${sls:stage}/coturn/credentials
@@ -180,7 +202,9 @@ functions:
           authorizer:
             name: httpAuthorizer
   frontendLog:
-    handler: src/frontend-log.frontendLog
+    image:
+      name: anonymous-backend
+      command: ["frontend-log.frontendLog"]
     events:
       - httpApi:
           path: /${sls:stage}/frontend-log
@@ -188,7 +212,9 @@ functions:
           authorizer:
             name: httpAuthorizer
   httpAuthorizerFunc:
-    handler: src/http-api-authorizer.httpAPIAuthorizer
+    image:
+      name: anonymous-backend
+      command: ["http-api-authorizer.httpAPIAuthorizer"]
 
 resources:
   Resources:
