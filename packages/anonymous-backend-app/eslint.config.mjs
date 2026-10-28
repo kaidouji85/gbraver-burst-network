@@ -6,12 +6,7 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
-    ignores: [
-      "node_modules/*",
-      "coverage/*",
-      ".serverless/*",
-      ".container-build/*",
-    ],
+    ignores: ["node_modules/*", "coverage/*", ".serverless/*"],
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,

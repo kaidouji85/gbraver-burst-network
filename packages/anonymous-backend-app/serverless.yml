@@ -19,8 +19,8 @@ provider:
   ecr:
     images:
       issue-auth-token:
-        path: .
-        file: Dockerfile
+        path: ../../
+        file: packages/anonymous-backend-app/Dockerfile
         platform: linux/arm64
   tracing:
     apiGateway: true
