@@ -20,6 +20,9 @@ npm run type-check
 
 ### デプロイ
 
+`issueAuthToken` は Lambda コンテナイメージでデプロイされるため、Docker が必要である。
+Docker イメージは Node.js 24 / arm64 向けに Serverless Framework がビルドし、ECR に登録する。
+
 ```shell
 npx sls deploy --stage <ステージ名>
 ```

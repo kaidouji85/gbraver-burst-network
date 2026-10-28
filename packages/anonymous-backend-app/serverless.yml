@@ -16,6 +16,12 @@ provider:
   runtime: nodejs24.x
   architecture: arm64
   region: ap-northeast-1
+  ecr:
+    images:
+      issue-auth-token:
+        path: ../../
+        file: packages/anonymous-backend-app/Dockerfile
+        platform: linux/arm64
   tracing:
     apiGateway: true
     lambda: true
@@ -160,7 +166,7 @@ functions:
 
   # HTTP API
   issueAuthToken:
-    handler: src/issue-auth-token.issueAuthToken
+    image: issue-auth-token
     events:
       - httpApi:
           path: /${sls:stage}/auth-token

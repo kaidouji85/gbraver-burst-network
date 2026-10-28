@@ -1,0 +1,8 @@
+**
+!package.json
+!package-lock.json
+!packages/
+!packages/*/
+!packages/*/package.json
+!packages/anonymous-backend-app/src/
+!packages/anonymous-backend-app/src/**
