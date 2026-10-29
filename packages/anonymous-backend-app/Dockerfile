@@ -1,4 +1,4 @@
-# 本ファイルのホスト側カレントディレクトリはmonorepoのプロジェクトルートである
+# ビルドコンテキストはmonorepoのプロジェクトルートである
 FROM node:24 AS builder
 
 WORKDIR /workspace
