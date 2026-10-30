@@ -2,14 +2,16 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { Observable } from "rxjs";
 
-import { createRoom } from "../websocket-api/create-room";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { createAbortError } from "../../abort-controller/abort-error";
+import { AbortManager } from "../../abort-controller/abort-manager";
+import { createRoom } from "../../websocket-api/create-room";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import {
   HostWebRTCConnectionManager,
   HostWebRTCConnectionManagerOptions,
 } from "./host-webrtc-connection-manager";
 import { LocalWebRTCRoom, LocalWebRTCRoomImpl } from "./local-webrtc-room";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ホスト用匿名バックエンドSDK */
 export type HostAnonymousSDK = {
@@ -61,6 +63,8 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
 
   /**
    * コンストラクタ
@@ -70,6 +74,7 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
     this.#websocketConnection = new WebSocketConnectionManager(options);
     this.#webRTCConnection = new HostWebRTCConnectionManager(options);
     this.#frontendLog = new FrontendLogManager(options);
+    this.#abortManager = new AbortManager();
   }
 
   /** @override */
@@ -77,13 +82,18 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
     armdozerId: ArmdozerId;
     pilotId: PilotId;
   }): Promise<LocalWebRTCRoom | null> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const spanId = nanoid();
     try {
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
       const websocket = await this.#websocketConnection.getOrCreate();
-      const roomID = await createRoom(websocket);
+      const roomID = await createRoom({ websocket, signal });
       if (roomID === null) {
         this.#websocketConnection.gracefulDisconnect();
         return null;
@@ -98,6 +108,7 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
         frontendLog: this.#frontendLog,
         hostArmdozerId,
         hostPilotId,
+        abortManager: this.#abortManager,
       });
     } catch (e) {
       this.#websocketConnection.gracefulDisconnect();
@@ -113,11 +124,17 @@ class HostAnonymousSDKImpl implements HostAnonymousSDK {
   /** @override */
   disconnectWebSocket() {
     this.#websocketConnection.gracefulDisconnect();
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebSocket disconnected"));
   }
 
   /** @override */
   disconnectWebRTC() {
     this.#webRTCConnection.disconnect();
+    this.#abortManager
+      .getAbortController()
+      .abort(createAbortError("WebRTC disconnected"));
   }
 }
 

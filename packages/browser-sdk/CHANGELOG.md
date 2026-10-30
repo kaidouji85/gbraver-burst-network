@@ -1,5 +1,59 @@
 # @gbraver-burst-network/browser-sdk
 
+## 2.7.0
+
+### Minor Changes
+
+- あいことば対戦の接続不良を改善した
+- bad385c: ゲストのシグナリングのコードを大幅整理
+- 6a03776: 匿名バックエンドのシグナリングのバグを改善
+
+## 2.7.0-beta.1
+
+### Minor Changes
+
+- ゲストのシグナリングのコードを大幅整理
+
+## 2.7.0-beta.0
+
+### Minor Changes
+
+- 匿名バックエンドのシグナリングのバグを改善
+
+## 2.6.0
+
+### Minor Changes
+
+- 匿名ブラウザゲストのシグナリングを改良
+
+## 2.5.0
+
+### Minor Changes
+
+- 匿名バックエンドにAbort Controllerを追加した
+- 926faae: C
+- c153e69: 匿名サーバーにAbortControllerを追加
+- 926faae: Abort例外がまちがっていたので　修正
+
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
+## 2.4.0
+
+### Minor Changes
+
+- 依存ライブラリをアップデート
+
 ## 2.3.0
 
 ### Minor Changes

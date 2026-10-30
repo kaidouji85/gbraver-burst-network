@@ -2,22 +2,24 @@ import { ArmdozerId, PilotId } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import { fromEvent, Unsubscribable } from "rxjs";
 
-import { createICECandidateErrorMessage } from "../webrtc/gather-all-ice-candidate";
-import { getSelectedIceCandidateSummary } from "../webrtc/get-selected-ice-candidate-summary";
-import { sendHostMessage } from "../webrtc/host/host-message";
-import { requestSelectedPlayer } from "../webrtc/host/request-selected-player";
-import { waitUntilConnected } from "../webrtc/wait-until-connected";
-import { waitUntilDataChannelOpen } from "../webrtc/wait-until-data-channel-ready";
-import { deleteSignalingChannel } from "../websocket-api/delete-signaling-channel";
-import { notifyIceCandidateReceived } from "../websocket-api/notify-ice-candidate-recieved";
-import { sendToWSSignal } from "../websocket-api/send-to-ws-signal";
-import { waitUntilMatching } from "../websocket-api/wait-until-matching";
-import { waitUntilSDPReceive } from "../websocket-api/wait-until-sdp-recieve";
-import { AnonymousBattleSDK } from "./anonymous-battle-sdk";
-import { FrontendLogManager } from "./frontend-log-manager";
+import { AbortManager } from "../../abort-controller/abort-manager";
+import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
+import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
+import { sendHostMessage } from "../../webrtc/host/host-message";
+import { hostPingPongCheck } from "../../webrtc/host/host-ping-pong-check";
+import { requestSelectedPlayer } from "../../webrtc/host/request-selected-player";
+import { waitUntilConnected } from "../../webrtc/wait-until-connected";
+import { waitUntilDataChannelOpen } from "../../webrtc/wait-until-data-channel-ready";
+import { deleteSignalingChannel } from "../../websocket-api/delete-signaling-channel";
+import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
+import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
+import { waitUntilMatching } from "../../websocket-api/wait-until-matching";
+import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
+import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import { FrontendLogManager } from "../frontend-log-manager";
+import { WebSocketConnectionManager } from "../websocket-connection-manager";
 import { HostBattleSDK } from "./host-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { WebSocketConnectionManager } from "./websocket-connection-manager";
 
 /** ローカルWebRTC ルーム */
 export type LocalWebRTCRoom = {
@@ -43,6 +45,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
   #websocketConnection: WebSocketConnectionManager;
   /** フロントエンドログマネージャー */
   #frontendLog: FrontendLogManager;
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
   /** ホストが選択したアームドーザID */
   #hostArmdozerId: ArmdozerId;
   /** ホストが選択したパイロットID */
@@ -56,6 +60,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @param options.webRTCConnection WebRTCコネクションマネジャー
    * @param options.websocketConnection WebSocketコネクションマネジャー
    * @param options.frontendLog フロントエンドログマネジャー
+   * @param options.abortManager アボート管理オブジェクト
    */
   constructor(options: {
     roomID: string;
@@ -65,6 +70,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     frontendLog: FrontendLogManager;
     hostArmdozerId: ArmdozerId;
     hostPilotId: PilotId;
+    abortManager: AbortManager;
   }) {
     const {
       roomID,
@@ -74,6 +80,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       hostArmdozerId,
       hostPilotId,
       frontendLog,
+      abortManager,
     } = options;
     this.roomID = roomID;
     this.#spanId = spanId;
@@ -82,6 +89,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
     this.#hostArmdozerId = hostArmdozerId;
     this.#hostPilotId = hostPilotId;
     this.#frontendLog = frontendLog;
+    this.#abortManager = abortManager;
   }
 
   /**
@@ -89,19 +97,29 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
    * @returns マッチングしたら発火するPromise
    */
   async waitUntilMatching(): Promise<AnonymousBattleSDK> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     const websocket = await this.#websocketConnection.getOrCreate();
-    const signalingID = await this.#signaling(websocket);
+    const signalingID = await this.#signaling(websocket, signal);
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
+    await hostPingPongCheck({ dataChannel, signal });
+    await deleteSignalingChannel({ signalingID, websocket, signal });
+    this.#websocketConnection.gracefulDisconnect();
+
     const flowID = nanoid();
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
-      await requestSelectedPlayer(dataChannel, flowID);
+      await requestSelectedPlayer({ dataChannel, flowID, signal });
     const battleSDK = new HostBattleSDK({
       hostArmdozerId: this.#hostArmdozerId,
       hostPilotId: this.#hostPilotId,
       guestArmdozerId,
       guestPilotId,
       webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
     });
     sendHostMessage(dataChannel, {
       type: "battle-start",
@@ -110,16 +128,20 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestPlayer: battleSDK.enemy,
       update: battleSDK.initialState,
     });
-    await deleteSignalingChannel({ signalingID, websocket });
     return battleSDK;
   }
 
   /**
    * シグナリングを行う
    * @param websocket WebSocketコネクション
+   * @param signal アボートシグナル
    * @returns シグナリングID
    */
-  async #signaling(websocket: WebSocket): Promise<string> {
+  async #signaling(websocket: WebSocket, signal: AbortSignal): Promise<string> {
+    if (signal.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     let unSubscribers: Unsubscribable[] = [];
     try {
       await this.#frontendLog.log({
@@ -127,7 +149,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         spanId: this.#spanId,
       });
 
-      const signalingID = await waitUntilMatching(websocket);
+      const signalingID = await waitUntilMatching({ websocket, signal });
       const { connection, dataChannel } =
         await this.#webRTCConnection.getOrCreateConnection();
 
@@ -174,15 +196,15 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         signalingID,
         sdp,
       });
-      const remoteSDP = await waitUntilSDPReceive(websocket);
+      const remoteSDP = await waitUntilSDPReceive({ websocket, signal });
       await connection.setRemoteDescription(remoteSDP);
       isRemoteDescriptionSet = true;
       pendingIceCandidates.forEach((iceCandidate) => {
         connection.addIceCandidate(iceCandidate);
       });
       await Promise.all([
-        waitUntilConnected(connection),
-        waitUntilDataChannelOpen(dataChannel),
+        waitUntilConnected(connection, { signal }),
+        waitUntilDataChannelOpen(dataChannel, { signal }),
       ]);
 
       await this.#frontendLog.log({

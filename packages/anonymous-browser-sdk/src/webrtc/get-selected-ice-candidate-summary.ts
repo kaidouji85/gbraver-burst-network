@@ -5,7 +5,7 @@
  */
 export const getSelectedIceCandidateSummary = async (
   connection: RTCPeerConnection,
-) => {
+): Promise<string | null> => {
   const stats = await connection.getStats();
   const candidatePair = Array.from(stats.values()).find(
     (r) =>

@@ -70,7 +70,5 @@ export class HostPlayer implements UseCase {
     await waitTime(1000);
 
     console.log("end battle");
-    this.#hostSDK.disconnectWebRTC();
-    this.#hostSDK.disconnectWebSocket();
   }
 }

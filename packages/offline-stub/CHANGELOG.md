@@ -1,5 +1,105 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.7.0
+
+### Minor Changes
+
+- あいことば対戦の接続不良を改善した
+- bad385c: ゲストのシグナリングのコードを大幅整理
+- 6a03776: 匿名バックエンドのシグナリングのバグを改善
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [bad385c]
+- Updated dependencies [6a03776]
+  - @gbraver-burst-network/offline-browser-sdk@2.7.0
+
+## 2.7.0-beta.1
+
+### Minor Changes
+
+- ゲストのシグナリングのコードを大幅整理
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.7.0-beta.1
+
+## 2.7.0-beta.0
+
+### Minor Changes
+
+- 匿名バックエンドのシグナリングのバグを改善
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.7.0-beta.0
+
+## 2.6.0
+
+### Minor Changes
+
+- 匿名ブラウザゲストのシグナリングを改良
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.6.0
+
+## 2.5.0
+
+### Minor Changes
+
+- 匿名バックエンドにAbort Controllerを追加した
+- 926faae: C
+- c153e69: 匿名サーバーにAbortControllerを追加
+- 926faae: Abort例外がまちがっていたので　修正
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [926faae]
+- Updated dependencies [c153e69]
+- Updated dependencies [926faae]
+  - @gbraver-burst-network/offline-browser-sdk@2.5.0
+
+## 2.5.0-beta.1
+
+### Minor Changes
+
+- C
+- Abort例外がまちがっていたので　修正
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.5.0-beta.1
+
+## 2.5.0-beta.0
+
+### Minor Changes
+
+- 匿名サーバーにAbortControllerを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.5.0-beta.0
+
+## 2.4.0
+
+### Minor Changes
+
+- 依存ライブラリをアップデート
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@2.4.0
+
 ## 2.3.0
 
 ### Minor Changes
