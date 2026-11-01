@@ -46,10 +46,7 @@ export const signaling = async (
 
   let unSubscribers: Unsubscribable[] = [];
   try {
-    await frontendLog.log({
-      type: "SIGNALING_START",
-      spanId,
-    });
+    await frontendLog.log({ type: "SIGNALING_START", spanId }, { signal });
 
     const setRemoteSDPPromise = connection.setRemoteDescription(remoteSDP);
     unSubscribers = [
@@ -76,11 +73,14 @@ export const signaling = async (
         connection,
         "icecandidateerror",
       ).subscribe((event) => {
-        frontendLog.log({
-          type: "ICE_CANDIDATE_ERROR",
-          spanId,
-          error: createICECandidateErrorMessage(event),
-        });
+        frontendLog.log(
+          {
+            type: "ICE_CANDIDATE_ERROR",
+            spanId,
+            error: createICECandidateErrorMessage(event),
+          },
+          { signal },
+        );
       }),
     ];
     await setRemoteSDPPromise;
@@ -93,19 +93,19 @@ export const signaling = async (
     });
     await waitUntilConnected(connection, { signal });
 
-    await frontendLog.log({
-      type: "SIGNALING_END",
-      spanId,
-    });
+    await frontendLog.log({ type: "SIGNALING_END", spanId }, { signal });
 
     const selectedLocalIceCandidateSummary =
       await getSelectedIceCandidateSummary(connection);
     if (selectedLocalIceCandidateSummary !== null) {
-      await frontendLog.log({
-        type: "SELECTED_ICE_CANDIDATE_SUMMARY",
-        spanId,
-        summary: selectedLocalIceCandidateSummary,
-      });
+      await frontendLog.log(
+        {
+          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
+          spanId,
+          summary: selectedLocalIceCandidateSummary,
+        },
+        { signal },
+      );
     }
   } finally {
     unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
