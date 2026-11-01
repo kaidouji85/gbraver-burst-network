@@ -1,3 +1,4 @@
+import { isAbortError } from "../abort-controller/abort-error";
 import { SignalContainer } from "../abort-controller/signal-container";
 import { frontendLog } from "../http-api/frontend-log";
 import { FrontendLog } from "../http-api/request/frontend-log";
@@ -26,7 +27,8 @@ export class FrontendLogManager {
 
   /**
    * フロントエンドログを送信する
-   * ログの失敗で以降の処理を止めるべきではないため、例外は握りつぶしてfalseを返す
+   * ログの失敗で以降の処理を止めるべきではないため、
+   * AbortError以外の例外は握りつぶしてfalseを返す
    * @param body ログ内容
    * @param options オプション
    * @param options.signal アボートシグナル
@@ -45,7 +47,10 @@ export class FrontendLogManager {
         body,
         signal,
       });
-    } catch {
+    } catch (e) {
+      if (isAbortError(e)) {
+        throw e;
+      }
       return false;
     }
   }
