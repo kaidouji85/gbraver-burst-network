@@ -1,5 +1,9 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.8.0-beta.0
+
+No changes in this release.
+
 ## 2.7.0
 
 ### Minor Changes

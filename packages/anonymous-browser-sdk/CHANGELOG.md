@@ -1,5 +1,11 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 2.8.0-beta.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全Abort Controller対応した
+
 ## 2.7.0
 
 ### Minor Changes

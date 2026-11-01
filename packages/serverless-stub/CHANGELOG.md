@@ -1,5 +1,11 @@
 # @gbraver-burst-network/serverless-stub
 
+## 2.8.0-beta.0
+
+### Patch Changes
+
+- @gbraver-burst-network/browser-sdk@2.8.0-beta.0
+
 ## 2.7.0
 
 ### Minor Changes

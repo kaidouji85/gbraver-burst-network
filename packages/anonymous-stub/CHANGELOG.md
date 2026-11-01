@@ -1,5 +1,12 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.8.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.8.0-beta.0
+
 ## 2.7.0
 
 ### Minor Changes
