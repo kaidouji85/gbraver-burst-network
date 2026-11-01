@@ -70,7 +70,7 @@ class AuthTokenManagerImpl implements AuthTokenManager {
    * @return 発行した認証トークン
    */
   #issueAuthTokenWithReset(): Promise<AuthToken> {
-    return issueAuthToken(this.#anonymousBackendApiURL).catch(
+    return issueAuthToken({ apiURL: this.#anonymousBackendApiURL }).catch(
       (error: unknown) => {
         this.#authTokenPromise = null;
         throw error;
