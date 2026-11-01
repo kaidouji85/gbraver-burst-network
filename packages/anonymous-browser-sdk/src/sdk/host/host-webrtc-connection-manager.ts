@@ -48,7 +48,9 @@ export class HostWebRTCConnectionManager {
    * @param options.signal アボートシグナル
    * @returns 生成したコネクション
    */
-  getOrCreateConnection(options?: Partial<SignalContainer>): Promise<Connection> {
+  getOrCreateConnection(
+    options?: Partial<SignalContainer>,
+  ): Promise<Connection> {
     const signal = options?.signal;
     if (this.#connection) {
       return this.#connection;

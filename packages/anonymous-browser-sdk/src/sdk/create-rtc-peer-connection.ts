@@ -10,12 +10,15 @@ import { issueCoturnCredential } from "../http-api/issue-coturn-credential";
  * @param options.signal アボートシグナル
  * @returns 作成したRTCPeerConnection
  */
-export const createRTCPeerConnection = async (options: Partial<SignalContainer> & {
-  anonymousBackendApiURL: string;
-  coturnDomainName: string;
-  authToken: string;
-}): Promise<RTCPeerConnection> => {
-  const { anonymousBackendApiURL, coturnDomainName, authToken, signal } = options;
+export const createRTCPeerConnection = async (
+  options: Partial<SignalContainer> & {
+    anonymousBackendApiURL: string;
+    coturnDomainName: string;
+    authToken: string;
+  },
+): Promise<RTCPeerConnection> => {
+  const { anonymousBackendApiURL, coturnDomainName, authToken, signal } =
+    options;
   const { username, password: credential } = await issueCoturnCredential({
     apiURL: anonymousBackendApiURL,
     authToken,

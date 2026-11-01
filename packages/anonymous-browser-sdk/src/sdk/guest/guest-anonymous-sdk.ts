@@ -106,9 +106,9 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       this.#webRTCConnection.disconnect();
 
       const { connectionPromise, dataChannelPromise } =
-        this.#webRTCConnection.getOrCreateConnection();
+        this.#webRTCConnection.getOrCreateConnection({ signal });
       const [websocket, connection] = await Promise.all([
-        this.#websocketConnection.getOrCreate(),
+        this.#websocketConnection.getOrCreate({ signal }),
         connectionPromise,
       ]);
 

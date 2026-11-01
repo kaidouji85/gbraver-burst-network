@@ -102,7 +102,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       return Promise.reject(signal.reason);
     }
 
-    const websocket = await this.#websocketConnection.getOrCreate();
+    const websocket = await this.#websocketConnection.getOrCreate({ signal });
     const signalingID = await this.#signaling(websocket, signal);
     const { dataChannel } =
       await this.#webRTCConnection.getOrCreateConnection();
