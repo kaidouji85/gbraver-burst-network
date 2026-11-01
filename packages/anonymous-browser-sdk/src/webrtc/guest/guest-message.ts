@@ -51,8 +51,18 @@ export const SendCommandSchema = z.object({
   command: CommandSchema,
 });
 
+/** 通信切断 */
+export type Disconnected = {
+  type: "disconnected";
+};
+
+/** Disconnected zod のスキーマ */
+export const DisconnectedSchema = z.object({
+  type: z.literal("disconnected"),
+});
+
 /** ゲストから送信されるメッセージ */
-export type GuestMessage = Pong | SendPlayer | SendCommand;
+export type GuestMessage = Pong | SendPlayer | SendCommand | Disconnected;
 
 /**
  * ゲストメッセージをホストに送信する

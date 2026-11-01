@@ -67,9 +67,19 @@ export const BattleProgressedSchema = z.object({
   update: z.array(GameStateSchema),
 });
 
+/** 通信切断 */
+export type Disconnected = {
+  type: "disconnected";
+};
+
+/** Disconnected zod のスキーマ */
+export const DisconnectedSchema = z.object({
+  type: z.literal("disconnected"),
+});
+
 /** ホストから送信されるメッセージ */
 export type HostMessage =
-  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed;
+  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed | Disconnected;
 
 /**
  * ホストメッセージをゲストに送信する
