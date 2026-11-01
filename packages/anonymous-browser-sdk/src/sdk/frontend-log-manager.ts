@@ -37,12 +37,13 @@ export class FrontendLogManager {
     options?: Partial<SignalContainer>,
   ): Promise<boolean> {
     try {
-      const authToken = await this.#authToken.getOrIssueAuthToken();
+      const signal = options?.signal;
+      const authToken = await this.#authToken.getOrIssueAuthToken({ signal });
       return await frontendLog({
         apiURL: this.#anonymousBackendApiURL,
         authToken: authToken.token,
         body,
-        signal: options?.signal,
+        signal,
       });
     } catch {
       return false;

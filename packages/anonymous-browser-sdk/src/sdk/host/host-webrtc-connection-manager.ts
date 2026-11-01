@@ -1,3 +1,4 @@
+import { SignalContainer } from "../../abort-controller/signal-container";
 import { AuthTokenManager } from "../auth-token-manager";
 import { createRTCPeerConnection } from "../create-rtc-peer-connection";
 
@@ -43,19 +44,23 @@ export class HostWebRTCConnectionManager {
   /**
    * コネクションを取得する。
    * コネクションが存在しない場合は新たに作成する。
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @returns 生成したコネクション
    */
-  getOrCreateConnection(): Promise<Connection> {
+  getOrCreateConnection(options?: Partial<SignalContainer>): Promise<Connection> {
+    const signal = options?.signal;
     if (this.#connection) {
       return this.#connection;
     }
 
     this.#connection = (async () => {
-      const authToken = await this.#authToken.getOrIssueAuthToken();
+      const authToken = await this.#authToken.getOrIssueAuthToken({ signal });
       const connection = await createRTCPeerConnection({
         anonymousBackendApiURL: this.#anonymousBackendApiURL,
         coturnDomainName: this.#coturnDomainName,
         authToken: authToken.token,
+        signal,
       });
       const dataChannel = connection.createDataChannel("sendDataChannel");
       return { connection, dataChannel };

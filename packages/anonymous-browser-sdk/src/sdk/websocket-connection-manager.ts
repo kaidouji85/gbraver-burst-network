@@ -1,5 +1,6 @@
 import { fromEvent, Observable, Subject, Unsubscribable } from "rxjs";
 
+import { SignalContainer } from "../abort-controller/signal-container";
 import { connectWSSignal } from "../websocket-api/connect-ws-signal";
 import { AuthTokenManager } from "./auth-token-manager";
 
@@ -37,18 +38,22 @@ export class WebSocketConnectionManager {
   /**
    * WebSocketクライアントの取得を行う
    * WebSocketクライアントが存在しない場合は、本メソッド内で生成してから返す
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @returns 取得、生成結果
    */
-  getOrCreate(): Promise<WebSocket> {
+  getOrCreate(options?: Partial<SignalContainer>): Promise<WebSocket> {
+    const signal = options?.signal;
     if (this.#connection) {
       return this.#connection.then((v) => v.websocket);
     }
 
     this.#connection = (async () => {
-      const authToken = await this.#authToken.getOrIssueAuthToken();
+      const authToken = await this.#authToken.getOrIssueAuthToken({ signal });
       const websocket = await connectWSSignal(
         this.wsSignalUrl,
         authToken.token,
+        { signal },
       );
       const websocketSubscriptions = [
         fromEvent(websocket, "error").subscribe(this.#websocketError),
