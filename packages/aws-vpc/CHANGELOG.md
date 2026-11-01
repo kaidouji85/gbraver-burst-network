@@ -1,5 +1,11 @@
 # @gbraver-burst-network/aws-vpc
 
+## 2.8.0-beta.1
+
+### Minor Changes
+
+- フロントエンドログがAbortした時に止めるようにした
+
 ## 2.8.0-beta.0
 
 No changes in this release.

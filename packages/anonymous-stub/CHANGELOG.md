@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.8.0-beta.1
+
+### Minor Changes
+
+- フロントエンドログがAbortした時に止めるようにした
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.8.0-beta.1
+
 ## 2.8.0-beta.0
 
 ### Patch Changes

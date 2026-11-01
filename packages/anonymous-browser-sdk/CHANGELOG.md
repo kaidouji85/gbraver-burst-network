@@ -1,5 +1,11 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 2.8.0-beta.1
+
+### Minor Changes
+
+- フロントエンドログがAbortした時に止めるようにした
+
 ## 2.8.0-beta.0
 
 ### Minor Changes
