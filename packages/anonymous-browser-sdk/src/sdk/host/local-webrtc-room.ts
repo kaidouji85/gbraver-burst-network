@@ -104,8 +104,9 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
     const websocket = await this.#websocketConnection.getOrCreate({ signal });
     const signalingID = await this.#signaling(websocket, signal);
-    const { dataChannel } =
-      await this.#webRTCConnection.getOrCreateConnection();
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
     await hostPingPongCheck({ dataChannel, signal });
     await deleteSignalingChannel({ signalingID, websocket, signal });
     this.#websocketConnection.gracefulDisconnect();
@@ -151,7 +152,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
       const signalingID = await waitUntilMatching({ websocket, signal });
       const { connection, dataChannel } =
-        await this.#webRTCConnection.getOrCreateConnection();
+        await this.#webRTCConnection.getOrCreateConnection({ signal });
 
       let isRemoteDescriptionSet = false;
       const pendingIceCandidates: RTCIceCandidateInit[] = [];
