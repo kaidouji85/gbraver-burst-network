@@ -1,5 +1,12 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 2.8.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全にAbort Controllerに対応させた
+- 9148857: フロントエンドログがAbortした時に止めるようにした
+
 ## 2.8.0-beta.1
 
 ### Minor Changes

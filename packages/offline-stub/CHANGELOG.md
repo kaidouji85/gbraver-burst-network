@@ -1,5 +1,18 @@
 # @gbraver-burst-network/offline-stub
 
+## 2.8.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全にAbort Controllerに対応させた
+- 9148857: フロントエンドログがAbortした時に止めるようにした
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [9148857]
+  - @gbraver-burst-network/offline-browser-sdk@2.8.0
+
 ## 2.8.0-beta.1
 
 ### Minor Changes

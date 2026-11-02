@@ -1,5 +1,13 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 2.8.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全にAbort Controllerに対応させた
+- 9148857: フロントエンドログがAbortした時に止めるようにした
+- 53306b5: 匿名ブラウザSDKを完全Abort Controller対応した
+
 ## 2.8.0-beta.1
 
 ### Minor Changes
