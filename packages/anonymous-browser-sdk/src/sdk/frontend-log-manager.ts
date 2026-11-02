@@ -1,3 +1,5 @@
+import { isAbortError } from "../abort-controller/abort-error";
+import { SignalContainer } from "../abort-controller/signal-container";
 import { frontendLog } from "../http-api/frontend-log";
 import { FrontendLog } from "../http-api/request/frontend-log";
 import { AuthTokenManager } from "./auth-token-manager";
@@ -25,19 +27,30 @@ export class FrontendLogManager {
 
   /**
    * フロントエンドログを送信する
-   * ログの失敗で以降の処理を止めるべきではないため、例外は握りつぶしてfalseを返す
+   * ログの失敗で以降の処理を止めるべきではないため、
+   * AbortError以外の例外は握りつぶしてfalseを返す
    * @param body ログ内容
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @returns ログ送信結果、成功ならtrue
    */
-  async log(body: FrontendLog): Promise<boolean> {
+  async log(
+    body: FrontendLog,
+    options?: Partial<SignalContainer>,
+  ): Promise<boolean> {
     try {
-      const authToken = await this.#authToken.getOrIssueAuthToken();
+      const signal = options?.signal;
+      const authToken = await this.#authToken.getOrIssueAuthToken({ signal });
       return await frontendLog({
         apiURL: this.#anonymousBackendApiURL,
         authToken: authToken.token,
         body,
+        signal,
       });
-    } catch {
+    } catch (e) {
+      if (isAbortError(e)) {
+        throw e;
+      }
       return false;
     }
   }

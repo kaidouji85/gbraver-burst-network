@@ -58,8 +58,9 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       return Promise.reject(signal.reason);
     }
 
-    const dataChannel =
-      await this.#webRTCConnection.getOrCreateConnection().dataChannelPromise;
+    const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    }).dataChannelPromise;
     const battleProgressedPromise = receiveBattleProgressed({
       dataChannel,
       signal,
