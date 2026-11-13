@@ -30,14 +30,8 @@ export const signaling = async (
     connection: RTCPeerConnection;
   } & SignalContainer,
 ): Promise<void> => {
-  const {
-    signalingID,
-    spanId,
-    frontendLog,
-    websocket,
-    connection,
-    signal,
-  } = options;
+  const { signalingID, spanId, frontendLog, websocket, connection, signal } =
+    options;
   if (signal.aborted) {
     return Promise.reject(signal.reason);
   }
@@ -62,13 +56,13 @@ export const signaling = async (
         connection,
         "icecandidate",
       ).subscribe((event) => {
-          if (event.candidate) {
-            sendToWSSignal(websocket, {
-              action: "send-ice-candidate",
-              signalingID,
-              iceCandidate: event.candidate,
-            });
-          }
+        if (event.candidate) {
+          sendToWSSignal(websocket, {
+            action: "send-ice-candidate",
+            signalingID,
+            iceCandidate: event.candidate,
+          });
+        }
       }),
       fromEvent<RTCPeerConnectionIceErrorEvent>(
         connection,
