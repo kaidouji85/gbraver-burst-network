@@ -6,35 +6,33 @@ import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-ca
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
 import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
 import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
+import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { FrontendLogManager } from "../frontend-log-manager";
 
 /**
  * シグナリングを行う
  * 本処理の前にRemoteSDPを取得しておく必要がある
  * @param options シグナリングのオプション
- * @param options.signalingID シグナリングID
+ * @param options.signalingIDPromise シグナリングIDのPromise
  * @param options.spanId ログ用の識別子
- * @param options.remoteSDP ホスト側のSDP
  * @param options.frontendLog フロントエンドのログマネージャー
- * @param options.rconnection WebRTCコネクション
+ * @param options.connection WebRTCコネクション
  * @param options.websocket WebSocketコネクション
  * @param options.signal アボートシグナル
  * @returns シグナリングが完了したら発火するPromise
  */
 export const signaling = async (
   options: {
-    signalingID: string;
+    signalingIDPromise: Promise<string>;
     spanId: string;
-    remoteSDP: RTCSessionDescriptionInit;
     frontendLog: FrontendLogManager;
     websocket: WebSocket;
     connection: RTCPeerConnection;
   } & SignalContainer,
 ): Promise<void> => {
   const {
-    signalingID,
+    signalingIDPromise,
     spanId,
-    remoteSDP,
     frontendLog,
     websocket,
     connection,
@@ -46,7 +44,10 @@ export const signaling = async (
 
   let unSubscribers: Unsubscribable[] = [];
   try {
-    const setRemoteSDPPromise = connection.setRemoteDescription(remoteSDP);
+    const remoteSDPPromise = waitUntilSDPReceive({ websocket, signal });
+    const setRemoteSDPPromise = remoteSDPPromise.then((remoteSDP) =>
+      connection.setRemoteDescription(remoteSDP),
+    );
     unSubscribers = [
       notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
         // RemoteSDPがセットされた後にICE Candidateを追加する
@@ -59,13 +60,15 @@ export const signaling = async (
         connection,
         "icecandidate",
       ).subscribe((event) => {
-        if (event.candidate) {
-          sendToWSSignal(websocket, {
-            action: "send-ice-candidate",
-            signalingID,
-            iceCandidate: event.candidate,
-          });
-        }
+        signalingIDPromise.then((signalingID) => {
+          if (event.candidate) {
+            sendToWSSignal(websocket, {
+              action: "send-ice-candidate",
+              signalingID,
+              iceCandidate: event.candidate,
+            });
+          }
+        });
       }),
       fromEvent<RTCPeerConnectionIceErrorEvent>(
         connection,
@@ -81,9 +84,11 @@ export const signaling = async (
         );
       }),
     ];
+
     await setRemoteSDPPromise;
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
+    const signalingID = await signalingIDPromise;
     sendToWSSignal(websocket, {
       action: "send-sdp",
       signalingID,

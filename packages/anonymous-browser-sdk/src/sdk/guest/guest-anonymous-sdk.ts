@@ -113,17 +113,13 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       ]);
 
       // joinRoomの成功直後にSDPが送信されるので、取りこぼし防止のために先にイベントを登録する
-      const waitUntilSDPReceivePromise = waitUntilSDPReceive({
-        websocket,
-        signal,
-      });
+      
       const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
       if (!joinRoomAccepted) {
         return null;
       }
 
       const { signalingID } = joinRoomAccepted;
-      const remoteSDP = await waitUntilSDPReceivePromise;
       // signalingの成功直後にホストからPingが送信されるので、取りこぼし防止のために先にイベントを登録する
       const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
         guestPingPongCheck({ dataChannel, signal }),
