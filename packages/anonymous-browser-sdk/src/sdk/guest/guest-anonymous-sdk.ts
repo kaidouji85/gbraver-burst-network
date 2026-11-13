@@ -113,20 +113,14 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
       // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（Promise形式）
       const joinRoomAcceptedPromise = joinRoom({ websocket, roomID, signal });
-      const signalingPromise = joinRoomAcceptedPromise.then(
-        (joinRoomAccepted) => {
-          if (joinRoomAccepted) {
-            return signaling({
-              signalingID: joinRoomAccepted.signalingID,
-              spanId,
-              frontendLog: this.#frontendLog,
-              websocket,
-              connection,
-              signal,
-            });
-          }
-        },
-      );
+      const signalingPromise = signaling({
+        joinRoomAcceptedPromise,
+        spanId,
+        frontendLog: this.#frontendLog,
+        websocket,
+        connection,
+        signal,
+      });
       const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
         guestPingPongCheck({ dataChannel, signal }),
       );

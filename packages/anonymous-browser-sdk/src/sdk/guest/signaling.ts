@@ -5,6 +5,7 @@ import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-cand
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
 import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
+import { JoinRoomAccepted } from "../../websocket-api/response/join-room-accepted";
 import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
 import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { FrontendLogManager } from "../frontend-log-manager";
@@ -13,7 +14,7 @@ import { FrontendLogManager } from "../frontend-log-manager";
  * シグナリングを行う
  * 本処理の前にRemoteSDPを取得しておく必要がある
  * @param options シグナリングのオプション
- * @param options.signalingIDPromise シグナリングID
+ * @param options.joinRoomAcceptedPromise ルーム参加承認のPromise、参加できなかった場合にはnullで解決
  * @param options.spanId ログ用の識別子
  * @param options.frontendLog フロントエンドのログマネージャー
  * @param options.connection WebRTCコネクション
@@ -23,15 +24,21 @@ import { FrontendLogManager } from "../frontend-log-manager";
  */
 export const signaling = async (
   options: {
-    signalingID: string;
+    joinRoomAcceptedPromise: Promise<JoinRoomAccepted | null>;
     spanId: string;
     frontendLog: FrontendLogManager;
     websocket: WebSocket;
     connection: RTCPeerConnection;
   } & SignalContainer,
 ): Promise<void> => {
-  const { signalingID, spanId, frontendLog, websocket, connection, signal } =
-    options;
+  const {
+    joinRoomAcceptedPromise,
+    spanId,
+    frontendLog,
+    websocket,
+    connection,
+    signal,
+  } = options;
   if (signal.aborted) {
     return Promise.reject(signal.reason);
   }
@@ -56,13 +63,15 @@ export const signaling = async (
         connection,
         "icecandidate",
       ).subscribe((event) => {
-        if (event.candidate) {
-          sendToWSSignal(websocket, {
-            action: "send-ice-candidate",
-            signalingID,
-            iceCandidate: event.candidate,
-          });
-        }
+        joinRoomAcceptedPromise.then((joinRoomAccepted) => {
+          if (joinRoomAccepted && event.candidate) {
+            sendToWSSignal(websocket, {
+              action: "send-ice-candidate",
+              signalingID: joinRoomAccepted.signalingID,
+              iceCandidate: event.candidate,
+            });
+          }
+        });
       }),
       fromEvent<RTCPeerConnectionIceErrorEvent>(
         connection,
@@ -79,8 +88,14 @@ export const signaling = async (
       }),
     ];
 
+    const joinRoomAccepted = await joinRoomAcceptedPromise;
+    if (!joinRoomAccepted) {
+      return;
+    }
+
     await frontendLog.log({ type: "SIGNALING_START", spanId }, { signal });
 
+    const { signalingID } = joinRoomAccepted;
     await setRemoteSDPPromise;
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
