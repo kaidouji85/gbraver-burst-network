@@ -79,6 +79,8 @@ export const signaling = async (
       }),
     ];
 
+    await frontendLog.log({ type: "SIGNALING_START", spanId }, { signal });
+
     await setRemoteSDPPromise;
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
@@ -103,5 +105,6 @@ export const signaling = async (
     }
   } finally {
     unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
+    await frontendLog.log({ type: "SIGNALING_END", spanId }, { signal });
   }
 };
