@@ -162,8 +162,6 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         webRTCConnection: this.#webRTCConnection,
         abortManager: this.#abortManager,
       });
-    } catch (e) {
-      throw e;
     } finally {
       this.#websocketConnection.gracefulDisconnect();
     }
