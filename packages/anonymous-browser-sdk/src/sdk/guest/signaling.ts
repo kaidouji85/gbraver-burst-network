@@ -44,10 +44,12 @@ export const signaling = async (
 
   let unSubscribers: Unsubscribable[] = [];
   try {
+    // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（Promise形式）
     const remoteSDPPromise = waitUntilSDPReceive({ websocket, signal });
     const setRemoteSDPPromise = remoteSDPPromise.then((remoteSDP) =>
       connection.setRemoteDescription(remoteSDP),
     );
+    // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（RxJS形式）
     unSubscribers = [
       notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
         // RemoteSDPがセットされた後にICE Candidateを追加する
