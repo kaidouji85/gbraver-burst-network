@@ -101,6 +101,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
       const spanId = nanoid();
       const { roomID, armdozerId, pilotId } = options;
+
+      // 既存コネクションを切断して、クリーンな状態から開始する
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
@@ -134,18 +136,15 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
       const joinRoomAccepted = await joinRoomAcceptedPromise;
       if (!joinRoomAccepted) {
-        this.#websocketConnection.gracefulDisconnect();
         return null;
       }
 
-      const [dataChannel, requestSelectedPlayer] =
-        await Promise.all([
-          dataChannelPromise,
-          requestSelectedPlayerPromise,
-          signalingPromise,
-          guestPingPongCheckPromise,
-        ]);
-      this.#websocketConnection.gracefulDisconnect();
+      const [dataChannel, requestSelectedPlayer] = await Promise.all([
+        dataChannelPromise,
+        requestSelectedPlayerPromise,
+        signalingPromise,
+        guestPingPongCheckPromise,
+      ]);
 
       const { flowID } = requestSelectedPlayer;
       sendGuestMessage(dataChannel, {
@@ -164,8 +163,9 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         abortManager: this.#abortManager,
       });
     } catch (e) {
-      this.#websocketConnection.gracefulDisconnect();
       throw e;
+    } finally {
+      this.#websocketConnection.gracefulDisconnect();
     }
   }
 
