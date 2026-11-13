@@ -46,8 +46,6 @@ export const signaling = async (
 
   let unSubscribers: Unsubscribable[] = [];
   try {
-    await frontendLog.log({ type: "SIGNALING_START", spanId }, { signal });
-
     const setRemoteSDPPromise = connection.setRemoteDescription(remoteSDP);
     unSubscribers = [
       notifyIceCandidateReceived(websocket).subscribe((iceCandidate) => {
@@ -92,8 +90,6 @@ export const signaling = async (
       sdp,
     });
     await waitUntilConnected(connection, { signal });
-
-    await frontendLog.log({ type: "SIGNALING_END", spanId }, { signal });
 
     const selectedLocalIceCandidateSummary =
       await getSelectedIceCandidateSummary(connection);
