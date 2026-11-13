@@ -132,18 +132,20 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
           }),
       );
 
-      const [joinRoomAccepted, dataChannel, requestSelectedPlayer] =
+      const joinRoomAccepted = await joinRoomAcceptedPromise;
+      if (!joinRoomAccepted) {
+        this.#websocketConnection.gracefulDisconnect();
+        return null;
+      }
+
+      const [dataChannel, requestSelectedPlayer] =
         await Promise.all([
-          joinRoomAcceptedPromise,
           dataChannelPromise,
           requestSelectedPlayerPromise,
           signalingPromise,
           guestPingPongCheckPromise,
         ]);
       this.#websocketConnection.gracefulDisconnect();
-      if (!joinRoomAccepted) {
-        return null;
-      }
 
       const { flowID } = requestSelectedPlayer;
       sendGuestMessage(dataChannel, {
