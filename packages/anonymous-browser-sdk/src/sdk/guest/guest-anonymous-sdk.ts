@@ -9,7 +9,6 @@ import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
 import { joinRoom } from "../../websocket-api/join-room";
-import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
@@ -112,31 +111,30 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         connectionPromise,
       ]);
 
-      // joinRoomの成功直後にSDPが送信されるので、取りこぼし防止のために先にイベントを登録する
-      
-      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
-      if (!joinRoomAccepted) {
-        return null;
-      }
-
-      const { signalingID } = joinRoomAccepted;
-      // signalingの成功直後にホストからPingが送信されるので、取りこぼし防止のために先にイベントを登録する
+      const joinRoomAcceptedPromise = joinRoom({ websocket, roomID, signal });
+      const signalingPromise = joinRoomAcceptedPromise.then(
+        (joinRoomAccepted) => {
+          if (joinRoomAccepted) {
+            return signaling({
+              signalingID: joinRoomAccepted.signalingID,
+              spanId,
+              frontendLog: this.#frontendLog,
+              websocket,
+              connection,
+              signal,
+            });
+          }
+        },
+      );
       const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
         guestPingPongCheck({ dataChannel, signal }),
       );
-      await signaling({
-        signalingID,
-        spanId,
-        remoteSDP,
-        frontendLog: this.#frontendLog,
-        websocket,
-        connection,
-        signal,
-      });
 
       const [dataChannel] = await Promise.all([
         dataChannelPromise,
         guestPingPongCheckPromise,
+        joinRoomAcceptedPromise,
+        signalingPromise,
       ]);
       this.#websocketConnection.gracefulDisconnect();
 

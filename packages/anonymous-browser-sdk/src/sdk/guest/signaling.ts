@@ -13,7 +13,7 @@ import { FrontendLogManager } from "../frontend-log-manager";
  * シグナリングを行う
  * 本処理の前にRemoteSDPを取得しておく必要がある
  * @param options シグナリングのオプション
- * @param options.signalingIDPromise シグナリングIDのPromise
+ * @param options.signalingIDPromise シグナリングID
  * @param options.spanId ログ用の識別子
  * @param options.frontendLog フロントエンドのログマネージャー
  * @param options.connection WebRTCコネクション
@@ -23,7 +23,7 @@ import { FrontendLogManager } from "../frontend-log-manager";
  */
 export const signaling = async (
   options: {
-    signalingIDPromise: Promise<string>;
+    signalingID: string;
     spanId: string;
     frontendLog: FrontendLogManager;
     websocket: WebSocket;
@@ -31,7 +31,7 @@ export const signaling = async (
   } & SignalContainer,
 ): Promise<void> => {
   const {
-    signalingIDPromise,
+    signalingID,
     spanId,
     frontendLog,
     websocket,
@@ -60,7 +60,6 @@ export const signaling = async (
         connection,
         "icecandidate",
       ).subscribe((event) => {
-        signalingIDPromise.then((signalingID) => {
           if (event.candidate) {
             sendToWSSignal(websocket, {
               action: "send-ice-candidate",
@@ -68,7 +67,6 @@ export const signaling = async (
               iceCandidate: event.candidate,
             });
           }
-        });
       }),
       fromEvent<RTCPeerConnectionIceErrorEvent>(
         connection,
@@ -88,7 +86,6 @@ export const signaling = async (
     await setRemoteSDPPromise;
     const sdp = await connection.createAnswer();
     await connection.setLocalDescription(sdp);
-    const signalingID = await signalingIDPromise;
     sendToWSSignal(websocket, {
       action: "send-sdp",
       signalingID,
