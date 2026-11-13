@@ -130,13 +130,16 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
         guestPingPongCheck({ dataChannel, signal }),
       );
-      const [dataChannel] = await Promise.all([
-        dataChannelPromise,
-        guestPingPongCheckPromise,
+      const [joinRoomAccepted, dataChannel] = await Promise.all([
         joinRoomAcceptedPromise,
+        dataChannelPromise,
         signalingPromise,
+        guestPingPongCheckPromise,
       ]);
       this.#websocketConnection.gracefulDisconnect();
+      if (!joinRoomAccepted) {
+        return null;
+      }
 
       const { flowID } = await receiveRequestSelectedPlayer({
         dataChannel,
