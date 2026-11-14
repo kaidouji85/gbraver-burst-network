@@ -1,5 +1,11 @@
 # @gbraver-burst-network/backend-ecs
 
+## 2.9.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側シグナリングを最適化
+
 ## 2.8.0
 
 ### Minor Changes

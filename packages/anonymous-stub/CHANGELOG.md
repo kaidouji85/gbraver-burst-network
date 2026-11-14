@@ -1,5 +1,16 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 2.9.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側シグナリングを最適化
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@2.9.0-beta.0
+
 ## 2.8.0
 
 ### Minor Changes
