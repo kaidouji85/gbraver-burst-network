@@ -4,41 +4,34 @@ import { SignalContainer } from "../../abort-controller/signal-container";
 import { createICECandidateErrorMessage } from "../../webrtc/gather-all-ice-candidate";
 import { getSelectedIceCandidateSummary } from "../../webrtc/get-selected-ice-candidate-summary";
 import { waitUntilConnected } from "../../webrtc/wait-until-connected";
+import { joinRoom } from "../../websocket-api/join-room";
 import { notifyIceCandidateReceived } from "../../websocket-api/notify-ice-candidate-recieved";
-import { JoinRoomAccepted } from "../../websocket-api/response/join-room-accepted";
 import { sendToWSSignal } from "../../websocket-api/send-to-ws-signal";
 import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { FrontendLogManager } from "../frontend-log-manager";
 
 /**
  * シグナリングを行う
- * 本処理の前にRemoteSDPを取得しておく必要がある
  * @param options シグナリングのオプション
- * @param options.joinRoomAcceptedPromise ルーム参加承認のPromise、参加できなかった場合にはnullで解決
  * @param options.spanId ログ用の識別子
+ * @param options.roomID ルームID
  * @param options.frontendLog フロントエンドのログマネージャー
  * @param options.connection WebRTCコネクション
  * @param options.websocket WebSocketコネクション
  * @param options.signal アボートシグナル
- * @returns シグナリングが完了したら発火するPromise
+ * @returns シグナリングが成功した場合はtrue、失敗した場合はfalse
  */
 export const signaling = async (
   options: {
-    joinRoomAcceptedPromise: Promise<JoinRoomAccepted | null>;
     spanId: string;
+    roomID: string;
     frontendLog: FrontendLogManager;
     websocket: WebSocket;
     connection: RTCPeerConnection;
   } & SignalContainer,
-): Promise<void> => {
-  const {
-    joinRoomAcceptedPromise,
-    spanId,
-    frontendLog,
-    websocket,
-    connection,
-    signal,
-  } = options;
+): Promise<boolean> => {
+  const { roomID, spanId, frontendLog, websocket, connection, signal } =
+    options;
   if (signal.aborted) {
     return Promise.reject(signal.reason);
   }
@@ -46,6 +39,7 @@ export const signaling = async (
   let unSubscribers: Unsubscribable[] = [];
   try {
     // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（Promise形式）
+    const joinRoomAcceptedPromise = joinRoom({ websocket, roomID, signal });
     const remoteSDPPromise = waitUntilSDPReceive({ websocket, signal });
     const setRemoteSDPPromise = remoteSDPPromise.then((remoteSDP) =>
       connection.setRemoteDescription(remoteSDP),
@@ -90,7 +84,7 @@ export const signaling = async (
 
     const joinRoomAccepted = await joinRoomAcceptedPromise;
     if (!joinRoomAccepted) {
-      return;
+      return false;
     }
 
     await frontendLog.log({ type: "SIGNALING_START", spanId }, { signal });
@@ -118,6 +112,8 @@ export const signaling = async (
         { signal },
       );
     }
+
+    return true;
   } finally {
     unSubscribers.forEach((unSubscriber) => unSubscriber.unsubscribe());
     await frontendLog.log({ type: "SIGNALING_END", spanId }, { signal });

@@ -8,7 +8,6 @@ import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
-import { joinRoom } from "../../websocket-api/join-room";
 import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
@@ -114,9 +113,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
       ]);
 
       // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（Promise形式）
-      const joinRoomAcceptedPromise = joinRoom({ websocket, roomID, signal });
       const signalingPromise = signaling({
-        joinRoomAcceptedPromise,
+        roomID,
         spanId,
         frontendLog: this.#frontendLog,
         websocket,
@@ -134,8 +132,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
           }),
       );
 
-      const joinRoomAccepted = await joinRoomAcceptedPromise;
-      if (!joinRoomAccepted) {
+      const isSignalingSuccess = await signalingPromise;
+      if (!isSignalingSuccess) {
         return null;
       }
 
