@@ -8,8 +8,6 @@ import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { guestPingPongCheck } from "../../webrtc/guest/guest-ping-pong-check";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveRequestSelectedPlayer } from "../../webrtc/guest/receive-request-selected-player";
-import { joinRoom } from "../../websocket-api/join-room";
-import { waitUntilSDPReceive } from "../../websocket-api/wait-until-sdp-recieve";
 import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
 import { FrontendLogManager } from "../frontend-log-manager";
 import { WebSocketConnectionManager } from "../websocket-connection-manager";
@@ -102,6 +100,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
 
       const spanId = nanoid();
       const { roomID, armdozerId, pilotId } = options;
+
+      // 既存コネクションを切断して、クリーンな状態から開始する
       this.#websocketConnection.gracefulDisconnect();
       this.#webRTCConnection.disconnect();
 
@@ -112,42 +112,39 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         connectionPromise,
       ]);
 
-      // joinRoomの成功直後にSDPが送信されるので、取りこぼし防止のために先にイベントを登録する
-      const waitUntilSDPReceivePromise = waitUntilSDPReceive({
-        websocket,
-        signal,
-      });
-      const joinRoomAccepted = await joinRoom({ websocket, roomID, signal });
-      if (!joinRoomAccepted) {
-        return null;
-      }
-
-      const { signalingID } = joinRoomAccepted;
-      const remoteSDP = await waitUntilSDPReceivePromise;
-      // signalingの成功直後にホストからPingが送信されるので、取りこぼし防止のために先にイベントを登録する
-      const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
-        guestPingPongCheck({ dataChannel, signal }),
-      );
-      await signaling({
-        signalingID,
+      // 取りこぼしを防ぐために、あらかじめイベントを登録しておく（Promise形式）
+      const signalingPromise = signaling({
+        roomID,
         spanId,
-        remoteSDP,
         frontendLog: this.#frontendLog,
         websocket,
         connection,
         signal,
       });
+      const guestPingPongCheckPromise = dataChannelPromise.then((dataChannel) =>
+        guestPingPongCheck({ dataChannel, signal }),
+      );
+      const requestSelectedPlayerPromise = dataChannelPromise.then(
+        (dataChannel) =>
+          receiveRequestSelectedPlayer({
+            dataChannel,
+            signal,
+          }),
+      );
 
-      const [dataChannel] = await Promise.all([
+      const isSignalingSuccess = await signalingPromise;
+      if (!isSignalingSuccess) {
+        return null;
+      }
+
+      const [dataChannel, requestSelectedPlayer] = await Promise.all([
         dataChannelPromise,
+        requestSelectedPlayerPromise,
+        signalingPromise,
         guestPingPongCheckPromise,
       ]);
-      this.#websocketConnection.gracefulDisconnect();
 
-      const { flowID } = await receiveRequestSelectedPlayer({
-        dataChannel,
-        signal,
-      });
+      const { flowID } = requestSelectedPlayer;
       sendGuestMessage(dataChannel, {
         type: "send-player",
         flowID,
@@ -163,9 +160,8 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         webRTCConnection: this.#webRTCConnection,
         abortManager: this.#abortManager,
       });
-    } catch (e) {
+    } finally {
       this.#websocketConnection.gracefulDisconnect();
-      throw e;
     }
   }
 

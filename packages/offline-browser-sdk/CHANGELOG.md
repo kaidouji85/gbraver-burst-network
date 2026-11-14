@@ -1,5 +1,18 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 2.9.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側マッチングを最適化
+- a90f221: あいことば対戦のゲスト側シグナリングを最適化
+
+## 2.9.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側シグナリングを最適化
+
 ## 2.8.0
 
 ### Minor Changes
