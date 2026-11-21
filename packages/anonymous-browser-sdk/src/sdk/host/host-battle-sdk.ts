@@ -24,6 +24,7 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
+import { receiveEnterRematchRoom } from "../../webrtc/host/recieve-enter-rematch-room";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
@@ -195,24 +196,68 @@ export class HostBattleSDK implements AnonymousBattleSDK {
 
 /** ホスト側再戦ルーム */
 class HostRematchRoom {
+  /** 再戦ルームID */
+  readonly rematchRoomID: string;
   /** ホスト側のWebRTCコネクションマネージャー */
-  #webRTCConnection: HostWebRTCConnectionManager;
+  readonly #webRTCConnection: HostWebRTCConnectionManager;
   /** dataChannel.sendの例外通知ストリーム */
-  #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
+  readonly #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
   /** アボート管理オブジェクト */
-  #abortManager: AbortManager;
+  readonly #abortManager: AbortManager;
 
   /**
    * コンストラクタ
    * @param options オプション
+   * @param options.rematchRoomID 再戦ルームID
    * @param options.webRTCConnection ホスト側のWebRTCコネクションマネージャー
    * @param options.abortManager アボート管理オブジェクト
    */
   constructor(options: {
+    rematchRoomID: string;
     webRTCConnection: HostWebRTCConnectionManager;
     abortManager: AbortManager;
   }) {
+    this.rematchRoomID = options.rematchRoomID;
     this.#webRTCConnection = options.webRTCConnection;
     this.#abortManager = options.abortManager;
+  }
+
+  /** @override */
+  async requestRematch(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<AnonymousBattleSDK> {
+    const { armdozerId: hostArmdozerId, pilotId: hostPilotId } = options;
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
+    const enterRematchRoom = await receiveEnterRematchRoom({
+      dataChannel,
+      rematchRoomID: this.rematchRoomID,
+      signal,
+    });
+    const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
+      enterRematchRoom;
+    const battleSDK = new HostBattleSDK({
+      webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
+      hostArmdozerId,
+      hostPilotId,
+      guestArmdozerId,
+      guestPilotId,
+    });
+    sendHostMessage(dataChannel, {
+      type: "battle-start",
+      flowID: battleSDK.flowID,
+      hostPlayer: battleSDK.player,
+      guestPlayer: battleSDK.enemy,
+      update: battleSDK.initialState,
+    });
+    return battleSDK;
   }
 }
