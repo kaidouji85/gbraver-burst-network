@@ -1,4 +1,10 @@
-import { Command, GameState, Player } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  Command,
+  GameState,
+  PilotId,
+  Player,
+} from "gbraver-burst-core";
 import { Observable } from "rxjs";
 
 /**
@@ -25,4 +31,25 @@ export interface AnonymousBattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown>;
+}
+
+/** 匿名再戦ルーム */
+export interface AnonymousRematchRoom {
+  /**
+   * 再戦をリクエストする
+   * @param options オプション
+   * @param options.armdozerId 選択したアームドーザのID
+   * @param options.pilotId 選択したパイロットのID  
+   * @returns 正立した場合は新しいBattleSDKインスタンスを返す
+   */
+  requestRematch(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<AnonymousBattleSDK>;
+
+  /**
+   * 再戦がキャンセルされたことを通知するストリーム
+   * @returns 通知ストリーム
+   */
+  rematchCancelledNotifier(): Observable<unknown>;
 }
