@@ -13,6 +13,8 @@ import { nanoid } from "nanoid";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
+import { SignalContainer } from "../../abort-controller/signal-container";
+import { isGameEnd } from "../../core/is-game-end";
 import { SendCommand } from "../../webrtc/guest/guest-message";
 import { sendHostMessage } from "../../webrtc/host/host-message";
 import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
@@ -22,8 +24,6 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { SignalContainer } from "../../abort-controller/signal-container";
-import { isGameEnd } from "../../core/is-game-end";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
