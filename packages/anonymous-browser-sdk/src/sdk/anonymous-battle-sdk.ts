@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 
 /**
  * 匿名ユーザー用バトルSDK
- * 本操作はログイン後に実行することを想定している
+ * 本操作は匿名ログイン後に実行することを想定している
  */
 export interface AnonymousBattleSDK {
   /** プレイヤーの情報 */
