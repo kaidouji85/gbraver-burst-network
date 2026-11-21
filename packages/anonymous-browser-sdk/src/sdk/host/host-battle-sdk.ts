@@ -120,10 +120,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     return update;
   }
 
-  /**
-   * バトル強制終了の通知ストリーム
-   * @returns 通知ストリーム
-   */
+  /** @override */
   suddenlyBattleEndNotifier(): Observable<unknown> {
     return from(
       this.#webRTCConnection.getOrCreateConnection().then((v) => v.connection),
