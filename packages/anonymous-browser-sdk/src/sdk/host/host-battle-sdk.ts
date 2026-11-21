@@ -22,6 +22,8 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
+import { SignalContainer } from "../../abort-controller/signal-container";
+import { isGameEnd } from "../../core/is-game-end";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
@@ -110,7 +112,11 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     const hostCommand = { playerId: this.player.playerId, command };
     const update = this.#core.progress([hostCommand, guestCommand]);
 
-    await this.#continueGame({ signal, update });
+    if (isGameEnd(update)) {
+      await this.#continueGame({ signal, update });
+    } else {
+      await this.#endGame({ signal, update });
+    }
     return update;
   }
 
@@ -136,11 +142,11 @@ export class HostBattleSDK implements AnonymousBattleSDK {
   /**
    * ゲームを継続する
    * @param options オプション
-   * @param options.signal アボートシグナル
    * @param options.update ゲームステート更新結果
+   * @param options.signal アボートシグナル
    * @returns 処理が完了したら発火するPromise
    */
-  async #continueGame(options: { signal: AbortSignal; update: GameState[] }) {
+  async #continueGame(options: { update: GameState[] } & SignalContainer) {
     const { signal, update } = options;
     this.flowID = nanoid();
     const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
@@ -156,6 +162,32 @@ export class HostBattleSDK implements AnonymousBattleSDK {
         type: "battle-progressed",
         flowID: this.flowID,
         update,
+      });
+    } catch (error) {
+      this.#sendExceptionSubject.next(error);
+      throw error;
+    }
+  }
+
+  /**
+   * ゲームを終了する
+   * @param options オプション
+   * @param options.update ゲームステート更新結果
+   * @param options.signal アボートシグナル
+   * @returns 処理が完了したら発火するPromise
+   */
+  async #endGame(options: { update: GameState[] } & SignalContainer) {
+    const { signal, update } = options;
+    const rematchRoomID = nanoid();
+    // TODO 再戦ルーム生成およびプロパティへのセットを実装する
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
+    try {
+      sendHostMessage(dataChannel, {
+        type: "battle-end",
+        update,
+        rematchRoomID,
       });
     } catch (error) {
       this.#sendExceptionSubject.next(error);
