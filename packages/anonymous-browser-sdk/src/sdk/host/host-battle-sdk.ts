@@ -108,25 +108,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     const hostCommand = { playerId: this.player.playerId, command };
     const update = this.#core.progress([hostCommand, guestCommand]);
 
-    this.flowID = nanoid();
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
-    this.#sendCommandPromise = receiveSendCommand({
-      dataChannel,
-      flowID: this.flowID,
-      signal,
-    });
-    try {
-      sendHostMessage(dataChannel, {
-        type: "battle-progressed",
-        flowID: this.flowID,
-        update,
-      });
-    } catch (error) {
-      this.#sendExceptionSubject.next(error);
-      throw error;
-    }
+    await this.#continueGame({ signal, update });
     return update;
   }
 
@@ -148,5 +130,34 @@ export class HostBattleSDK implements AnonymousBattleSDK {
   getRematchRoom(): AnonymousRematchRoom | null {
     // TODO 実装する
     return null;
+  }
+
+  /**
+   * ゲームを継続する
+   * @param options オプション
+   * @param options.signal アボートシグナル
+   * @param options.update ゲームステート更新結果
+   */
+  async #continueGame(options: { signal: AbortSignal; update: GameState[] }) {
+    const { signal, update } = options;
+    this.flowID = nanoid();
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
+    this.#sendCommandPromise = receiveSendCommand({
+      dataChannel,
+      flowID: this.flowID,
+      signal,
+    });
+    try {
+      sendHostMessage(dataChannel, {
+        type: "battle-progressed",
+        flowID: this.flowID,
+        update,
+      });
+    } catch (error) {
+      this.#sendExceptionSubject.next(error);
+      throw error;
+    }
   }
 }
