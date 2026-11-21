@@ -17,7 +17,10 @@ import { SendCommand } from "../../webrtc/guest/guest-message";
 import { sendHostMessage } from "../../webrtc/host/host-message";
 import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import {
+  AnonymousBattleSDK,
+  AnonymousRematchRoom,
+} from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
 /** ホスト側バトルSDK */
@@ -139,5 +142,11 @@ export class HostBattleSDK implements AnonymousBattleSDK {
       takeUntil(this.#sendExceptionSubject),
       take(1),
     );
+  }
+
+  /** @override */
+  getRematchRoom(): AnonymousRematchRoom | null {
+    // TODO 実装する
+    return null;
   }
 }

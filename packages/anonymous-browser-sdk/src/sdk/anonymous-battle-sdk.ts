@@ -31,6 +31,12 @@ export interface AnonymousBattleSDK {
    * @returns 通知ストリーム
    */
   suddenlyBattleEndNotifier(): Observable<unknown>;
+
+  /**
+   * バトルが正常終了した後に、再戦ルームを取得する
+   * @return バトル正常終了後であれば再戦ルーム、そうでなければnull
+   */
+  getRematchRoom(): AnonymousRematchRoom | null;
 }
 
 /** 匿名再戦ルーム */

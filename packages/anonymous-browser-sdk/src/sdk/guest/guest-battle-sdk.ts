@@ -5,7 +5,10 @@ import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { receiveBattleProgressed } from "../../webrtc/guest/receive-battle-progressed";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import {
+  AnonymousBattleSDK,
+  AnonymousRematchRoom,
+} from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
 /** ゲスト側バトルSDK */
@@ -89,5 +92,11 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       takeUntil(this.#sendExceptionSubject),
       take(1),
     );
+  }
+
+  /** @override */
+  getRematchRoom(): AnonymousRematchRoom | null {
+    // TODO 実装する
+    return null;
   }
 }
