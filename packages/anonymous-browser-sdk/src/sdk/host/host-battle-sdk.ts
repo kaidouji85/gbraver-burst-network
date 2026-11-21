@@ -137,6 +137,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
    * @param options オプション
    * @param options.signal アボートシグナル
    * @param options.update ゲームステート更新結果
+   * @returns 処理が完了したら発火するPromise
    */
   async #continueGame(options: { signal: AbortSignal; update: GameState[] }) {
     const { signal, update } = options;
