@@ -67,9 +67,25 @@ export const BattleProgressedSchema = z.object({
   update: z.array(GameStateSchema),
 });
 
+/** バトルが終了した */
+export type BattleEnd = {
+  type: "battle-end";
+  /** 更新されたゲームステート */
+  update: GameState[];
+  /** 再戦ルームID */
+  rematchRoomID: string;
+};
+
+/** BattleEnd zod のスキーマ */
+export const BattleEndSchema = z.object({
+  type: z.literal("battle-end"),
+  update: z.array(GameStateSchema),
+  rematchRoomID: z.string(),
+});
+
 /** ホストから送信されるメッセージ */
 export type HostMessage =
-  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed;
+  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed | BattleEnd;
 
 /**
  * ホストメッセージをゲストに送信する
