@@ -43,6 +43,8 @@ export class HostBattleSDK implements AnonymousBattleSDK {
   #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
   /** アボート管理オブジェクト */
   #abortManager: AbortManager;
+  /** 再戦ルーム、バトルが終了したらセットされる */
+  #rematchRoom: AnonymousRematchRoom | null = null;
 
   /**
    * コンストラクタ
@@ -128,8 +130,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
 
   /** @override */
   getRematchRoom(): AnonymousRematchRoom | null {
-    // TODO 実装する
-    return null;
+    return this.#rematchRoom;
   }
 
   /**
