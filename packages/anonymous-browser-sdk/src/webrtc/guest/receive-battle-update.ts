@@ -1,23 +1,28 @@
 import { SignalContainer } from "../../abort-controller/signal-container";
 import { parseJSON } from "../../json/parse";
-import { BattleProgressed, BattleProgressedSchema } from "../host/host-message";
+import {
+  BattleEnd,
+  BattleEndSchema,
+  BattleProgressed,
+  BattleProgressedSchema,
+} from "../host/host-message";
 
 /**
- * ホストから「BattleProgressed」メッセージを待ち受ける
+ * ホストからのバトル更新メッセージを待ち受ける
  * @param options オプション
  * @param options.dataChannel データチャネル
  * @param options.signal Promise強制終了用シグナル
  * @returns BattleProgressedメッセージの内容
  */
-export const receiveBattleProgressed = (
+export const receiveBattleUpdate = (
   options: {
     dataChannel: RTCDataChannel;
   } & Partial<SignalContainer>,
-): Promise<BattleProgressed> => {
+): Promise<BattleProgressed | BattleEnd> => {
   const { dataChannel, signal } = options;
   let handler: ((event: MessageEvent) => void) | null = null;
   let onAbort: (() => void) | null = null;
-  return new Promise<BattleProgressed>((resolve, reject) => {
+  return new Promise<BattleProgressed | BattleEnd>((resolve, reject) => {
     if (signal?.aborted) {
       reject(signal.reason);
       return;
@@ -30,9 +35,16 @@ export const receiveBattleProgressed = (
 
     handler = (event) => {
       const data = parseJSON(event.data);
+
       const parsedBattleProgressed = BattleProgressedSchema.safeParse(data);
       if (parsedBattleProgressed.success) {
         resolve(parsedBattleProgressed.data);
+        return;
+      }
+
+      const parsedBattleEnd = BattleEndSchema.safeParse(data);
+      if (parsedBattleEnd.success) {
+        resolve(parsedBattleEnd.data);
         return;
       }
     };

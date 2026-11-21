@@ -3,7 +3,7 @@ import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
-import { receiveBattleProgressed } from "../../webrtc/guest/receive-battle-progressed";
+import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
 import {
   AnonymousBattleSDK,
@@ -64,7 +64,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
     const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
       signal,
     }).dataChannelPromise;
-    const battleProgressedPromise = receiveBattleProgressed({
+    const battleUpdatePromise = receiveBattleUpdate({
       dataChannel,
       signal,
     });
@@ -78,9 +78,11 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       this.#sendExceptionSubject.next(error);
       throw error;
     }
-    const battleProgressed = await battleProgressedPromise;
-    this.flowID = battleProgressed.flowID;
-    return battleProgressed.update;
+    const battleUpdate = await battleUpdatePromise;
+    if (battleUpdate.type === "battle-progressed") {
+      this.flowID = battleUpdate.flowID;
+    }
+    return battleUpdate.update;
   }
 
   /** @override */
