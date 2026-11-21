@@ -113,9 +113,9 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     if (isGameEnd(update)) {
-      await this.#continueGame({ signal, update });
-    } else {
       await this.#endGame({ signal, update });
+    } else {
+      await this.#continueGame({ signal, update });
     }
     return update;
   }
