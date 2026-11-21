@@ -192,3 +192,27 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     }
   }
 }
+
+/** ホスト側再戦ルーム */
+class HostRematchRoom {
+  /** ホスト側のWebRTCコネクションマネージャー */
+  #webRTCConnection: HostWebRTCConnectionManager;
+  /** dataChannel.sendの例外通知ストリーム */
+  #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
+  /** アボート管理オブジェクト */
+  #abortManager: AbortManager;
+
+  /**
+   * コンストラクタ
+   * @param options オプション
+   * @param options.webRTCConnection ホスト側のWebRTCコネクションマネージャー
+   * @param options.abortManager アボート管理オブジェクト
+   */
+  constructor(options: {
+    webRTCConnection: HostWebRTCConnectionManager;
+    abortManager: AbortManager;
+  }) {
+    this.#webRTCConnection = options.webRTCConnection;
+    this.#abortManager = options.abortManager;
+  }
+}
