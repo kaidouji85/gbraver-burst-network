@@ -101,11 +101,11 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     }
 
     const sendCommand = await this.#sendCommandPromise;
-    const hostCommand = { playerId: this.player.playerId, command };
     const guestCommand = {
       playerId: this.enemy.playerId,
       command: sendCommand.command,
     };
+    const hostCommand = { playerId: this.player.playerId, command };
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     this.flowID = nanoid();
