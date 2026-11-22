@@ -18,6 +18,7 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
+import { notifyHostRematchCancel } from "./notify-host-rematch-cancel";
 
 /** ゲスト側バトルSDK */
 export class GuestBattleSDK implements AnonymousBattleSDK {
@@ -78,6 +79,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       dataChannel,
       signal,
     });
+
     try {
       sendGuestMessage(dataChannel, {
         type: "send-command",
@@ -88,10 +90,24 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       this.#sendExceptionSubject.next(error);
       throw error;
     }
+
     const battleUpdate = await battleUpdatePromise;
     if (battleUpdate.type === "battle-progressed") {
       this.flowID = battleUpdate.flowID;
+    } else if (battleUpdate.type === "battle-end") {
+      const { rematchRoomID } = battleUpdate;
+      const hostRematchCancelNotifier = await notifyHostRematchCancel({
+        rematchRoomID,
+        dataChannel,
+      });
+      this.#rematchRoom = new GuestRematchRoom({
+        rematchRoomID,
+        webRTCConnection: this.#webRTCConnection,
+        abortManager: this.#abortManager,
+        hostRematchCancelNotifier,
+      });
     }
+
     return battleUpdate.update;
   }
 
