@@ -9,6 +9,7 @@ import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
 import {
@@ -16,7 +17,6 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
-import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 
 /** ゲスト側バトルSDK */
 export class GuestBattleSDK implements AnonymousBattleSDK {
