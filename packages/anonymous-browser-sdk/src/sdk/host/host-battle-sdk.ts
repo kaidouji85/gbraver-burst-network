@@ -18,13 +18,13 @@ import { isGameEnd } from "../../core/is-game-end";
 import { SendCommand } from "../../webrtc/guest/guest-message";
 import { sendHostMessage } from "../../webrtc/host/host-message";
 import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
+import { receiveEnterRematchRoom } from "../../webrtc/host/recieve-enter-rematch-room";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
 import {
   AnonymousBattleSDK,
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { receiveEnterRematchRoom } from "../../webrtc/host/recieve-enter-rematch-room";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
@@ -200,8 +200,6 @@ class HostRematchRoom {
   readonly rematchRoomID: string;
   /** ホスト側のWebRTCコネクションマネージャー */
   readonly #webRTCConnection: HostWebRTCConnectionManager;
-  /** dataChannel.sendの例外通知ストリーム */
-  readonly #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
   /** アボート管理オブジェクト */
   readonly #abortManager: AbortManager;
 
@@ -259,5 +257,21 @@ class HostRematchRoom {
       update: battleSDK.initialState,
     });
     return battleSDK;
+  }
+
+  /** @override */
+  async cancelRematch(): Promise<void> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
+    sendHostMessage(dataChannel, {
+      type: "host-cancel-rematch",
+      rematchRoomID: this.rematchRoomID,
+    });
   }
 }
