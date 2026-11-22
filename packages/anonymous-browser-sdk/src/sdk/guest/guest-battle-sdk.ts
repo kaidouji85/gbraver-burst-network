@@ -1,4 +1,10 @@
-import { Command, GameState, Player } from "gbraver-burst-core";
+import {
+  ArmdozerId,
+  Command,
+  GameState,
+  PilotId,
+  Player,
+} from "gbraver-burst-core";
 import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
@@ -10,6 +16,7 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
+import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 
 /** ゲスト側バトルSDK */
 export class GuestBattleSDK implements AnonymousBattleSDK {
@@ -128,5 +135,36 @@ class GuestRematchRoom {
     this.rematchRoomID = options.rematchRoomID;
     this.#webRTCConnection = options.webRTCConnection;
     this.#abortManager = options.abortManager;
+  }
+
+  /** @override */
+  async requestRematch(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<AnonymousBattleSDK> {
+    const { armdozerId, pilotId } = options;
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    }).dataChannelPromise;
+    sendGuestMessage(dataChannel, {
+      type: "enter-rematch-room",
+      rematchRoomID: this.rematchRoomID,
+      armdozerId,
+      pilotId,
+    });
+    const battleStart = await receiveBattleStart({ dataChannel, signal });
+    return new GuestBattleSDK({
+      hostPlayer: battleStart.hostPlayer,
+      guestPlayer: battleStart.guestPlayer,
+      initialState: battleStart.update,
+      initialFlowID: battleStart.flowID,
+      webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
+    });
   }
 }
