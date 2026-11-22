@@ -1,10 +1,10 @@
-import {
-  AnonymousBattleSDK,
-  HostAnonymousSDK,
-} from "@gbraver-burst-network/anonymous-browser-sdk";
-import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
+import { HostAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 
-import { waitTime } from "../wait-time";
+import {
+  executeHostBattle,
+  HOST_ARMDOZER,
+  HOST_PILOT,
+} from "./execute-battle/execute-host-battle";
 import { UseCase } from "./use-case";
 
 /** ホスト側プレイヤー（再戦） */
@@ -29,8 +29,8 @@ export class HostPlayerRematch implements UseCase {
   async execute(): Promise<void> {
     console.log("start create room");
     const room = await this.#hostSDK.createRoom({
-      armdozerId: ArmdozerIds.SHIN_BRAVER,
-      pilotId: PilotIds.SHINYA,
+      armdozerId: HOST_ARMDOZER,
+      pilotId: HOST_PILOT,
     });
     if (room === null) {
       console.error("create room failed");
@@ -43,7 +43,7 @@ export class HostPlayerRematch implements UseCase {
       console.log("suddenly battle end");
     });
     console.log("start battle", battle);
-    await this.#executeBattle(battle);
+    await executeHostBattle(battle);
     console.log("end battle");
 
     const rematchRoom = battle.getRematchRoom();
@@ -55,45 +55,14 @@ export class HostPlayerRematch implements UseCase {
       console.log("rematch cancelled");
     });
     const rematch = await rematchRoom.requestRematch({
-      armdozerId: ArmdozerIds.SHIN_BRAVER,
-      pilotId: PilotIds.SHINYA,
+      armdozerId: HOST_ARMDOZER,
+      pilotId: HOST_PILOT,
+    });
+    rematch.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
     });
     console.log("start rematch");
-    await this.#executeBattle(rematch);
+    await executeHostBattle(rematch);
     console.log("end rematch");
-  }
-
-  /**
-   * バトルを実行するヘルパー関数
-   * @param battle バトルSDK
-   */
-  async #executeBattle(battle: AnonymousBattleSDK) {
-    const update01 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update01);
-    await waitTime(1000);
-    const update02 = await battle.progress({
-      type: "BURST_COMMAND",
-    });
-    console.log(update02);
-    await waitTime(1000);
-    const update03 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update03);
-    await waitTime(1000);
-    const update04 = await battle.progress({
-      type: "PILOT_SKILL_COMMAND",
-    });
-    console.log(update04);
-    await waitTime(1000);
-    const update05 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update05);
   }
 }
