@@ -103,3 +103,30 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
     return this.#rematchRoom;
   }
 }
+
+/** ゲスト側再戦ルーム */
+class GuestRematchRoom {
+  /** 再戦ルームID */
+  readonly rematchRoomID: string;
+  /** ホスト側のWebRTCコネクションマネージャー */
+  readonly #webRTCConnection: GuestWebRTCConnectionManager;
+  /** アボート管理オブジェクト */
+  readonly #abortManager: AbortManager;
+
+  /**
+   * コンストラクタ
+   * @param options オプション
+   * @param options.rematchRoomID 再戦ルームID
+   * @param options.webRTCConnection ゲスト側のWebRTCコネクションマネージャー
+   * @param options.abortManager アボート管理オブジェクト
+   */
+  constructor(options: {
+    rematchRoomID: string;
+    webRTCConnection: GuestWebRTCConnectionManager;
+    abortManager: AbortManager;
+  }) {
+    this.rematchRoomID = options.rematchRoomID;
+    this.#webRTCConnection = options.webRTCConnection;
+    this.#abortManager = options.abortManager;
+  }
+}
