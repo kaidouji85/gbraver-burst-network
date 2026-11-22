@@ -167,4 +167,20 @@ class GuestRematchRoom {
       abortManager: this.#abortManager,
     });
   }
+
+  /** @override */
+  async cancelRematch(): Promise<void> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    }).dataChannelPromise;
+    sendGuestMessage(dataChannel, {
+      type: "guest-cancel-rematch",
+      rematchRoomID: this.rematchRoomID,
+    });
+  }
 }
