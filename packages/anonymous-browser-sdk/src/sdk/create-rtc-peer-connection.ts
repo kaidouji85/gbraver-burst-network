@@ -1,3 +1,4 @@
+import { SignalContainer } from "../abort-controller/signal-container";
 import { issueCoturnCredential } from "../http-api/issue-coturn-credential";
 
 /**
@@ -6,17 +7,22 @@ import { issueCoturnCredential } from "../http-api/issue-coturn-credential";
  * @param options.anonymousBackendApiURL 匿名バックエンドREST APIのURL
  * @param options.coturnDomainName coturnサーバーのドメイン名
  * @param options.authToken 認証トークン
+ * @param options.signal アボートシグナル
  * @returns 作成したRTCPeerConnection
  */
-export const createRTCPeerConnection = async (options: {
-  anonymousBackendApiURL: string;
-  coturnDomainName: string;
-  authToken: string;
-}): Promise<RTCPeerConnection> => {
-  const { anonymousBackendApiURL, coturnDomainName, authToken } = options;
+export const createRTCPeerConnection = async (
+  options: Partial<SignalContainer> & {
+    anonymousBackendApiURL: string;
+    coturnDomainName: string;
+    authToken: string;
+  },
+): Promise<RTCPeerConnection> => {
+  const { anonymousBackendApiURL, coturnDomainName, authToken, signal } =
+    options;
   const { username, password: credential } = await issueCoturnCredential({
     apiURL: anonymousBackendApiURL,
     authToken,
+    signal,
   });
   return new RTCPeerConnection({
     iceServers: [

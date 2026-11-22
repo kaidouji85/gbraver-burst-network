@@ -1,3 +1,4 @@
+import { SignalContainer } from "../abort-controller/signal-container";
 import {
   IssueCoturnCredentialResponse,
   IssueCoturnCredentialResponseSchema,
@@ -8,19 +9,23 @@ import {
  * @param options オプション
  * @param options.apiURL WebRTCヘルパーREST APIのURL
  * @param options.authToken 認証トークン
+ * @param options.signal アボートシグナル
  * @returns 発行したクレデンシャル
  */
-export const issueCoturnCredential = async (options: {
-  apiURL: string;
-  authToken: string;
-}): Promise<IssueCoturnCredentialResponse> => {
-  const { apiURL, authToken } = options;
+export const issueCoturnCredential = async (
+  options: Partial<SignalContainer> & {
+    apiURL: string;
+    authToken: string;
+  },
+): Promise<IssueCoturnCredentialResponse> => {
+  const { apiURL, authToken, signal } = options;
   const response = await fetch(`${apiURL}/coturn/credentials`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
+    signal,
   });
   if (response.status !== 201) {
     throw new Error(`Failed to issue coturn credential: ${response.status}`);

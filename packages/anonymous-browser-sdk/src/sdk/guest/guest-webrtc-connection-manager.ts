@@ -1,3 +1,4 @@
+import { SignalContainer } from "../../abort-controller/signal-container";
 import { waitUntilDataChannel } from "../../webrtc/guest/wait-until-data-channel";
 import { AuthTokenManager } from "../auth-token-manager";
 import { createRTCPeerConnection } from "../create-rtc-peer-connection";
@@ -52,26 +53,30 @@ export class GuestWebRTCConnectionManager {
   /**
    * コネクションを取得する。
    * コネクションが存在しない場合は新たに作成する。
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @returns 取得したコネクションとデータチャンネル
    */
-  getOrCreateConnection(): {
+  getOrCreateConnection(options?: Partial<SignalContainer>): {
     /** コネクション */
     connectionPromise: Promise<RTCPeerConnection>;
     /** データチャンネル */
     dataChannelPromise: Promise<RTCDataChannel>;
   } {
+    const signal = options?.signal;
     if (this.#connectionState.type === "disconnected") {
       const connectionPromise = this.#authToken
-        .getOrIssueAuthToken()
+        .getOrIssueAuthToken({ signal })
         .then((authToken) =>
           createRTCPeerConnection({
             anonymousBackendApiURL: this.#anonymousBackendApiURL,
             coturnDomainName: this.#coturnDomainName,
             authToken: authToken.token,
+            signal,
           }),
         );
       const dataChannelPromise = connectionPromise.then((connection) =>
-        waitUntilDataChannel(connection),
+        waitUntilDataChannel(connection, { signal }),
       );
       this.#connectionState = {
         type: "connected",

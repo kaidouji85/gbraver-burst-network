@@ -1,3 +1,4 @@
+import { SignalContainer } from "../abort-controller/signal-container";
 import { issueAuthToken } from "../http-api/issue-auth-token";
 
 /** 認証トークン */
@@ -31,9 +32,11 @@ export interface AuthTokenManager {
    * 認証トークンを取得する（必要なら再発行する）
    * キャッシュ済みトークンが再利用可能ならそれを返し、
    * そうでなければ新しいトークンを発行して返す
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @returns 認証トークン
    */
-  getOrIssueAuthToken(): Promise<AuthToken>;
+  getOrIssueAuthToken(options?: Partial<SignalContainer>): Promise<AuthToken>;
 }
 
 /** 認証トークンマネージャーの実装 */
@@ -52,14 +55,21 @@ class AuthTokenManagerImpl implements AuthTokenManager {
   }
 
   /** @override */
-  getOrIssueAuthToken(): Promise<AuthToken> {
+  getOrIssueAuthToken(options?: Partial<SignalContainer>): Promise<AuthToken> {
+    const signal = options?.signal;
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
     if (this.#authTokenPromise === null) {
-      this.#authTokenPromise = this.#issueAuthTokenWithReset();
+      this.#authTokenPromise = this.#issueAuthTokenWithReset({ signal });
       return this.#authTokenPromise;
     }
 
     this.#authTokenPromise = this.#authTokenPromise.then((token) => {
-      return canReuseToken(token) ? token : this.#issueAuthTokenWithReset();
+      return canReuseToken(token)
+        ? token
+        : this.#issueAuthTokenWithReset({ signal });
     });
     return this.#authTokenPromise;
   }
@@ -67,15 +77,21 @@ class AuthTokenManagerImpl implements AuthTokenManager {
   /**
    * 認証トークンを発行する
    * 失敗した場合はキャッシュをクリアし、次回呼び出しで再試行できるようにする
+   * @param options オプション
+   * @param options.signal アボートシグナル
    * @return 発行した認証トークン
    */
-  #issueAuthTokenWithReset(): Promise<AuthToken> {
-    return issueAuthToken(this.#anonymousBackendApiURL).catch(
-      (error: unknown) => {
-        this.#authTokenPromise = null;
-        throw error;
-      },
-    );
+  #issueAuthTokenWithReset(
+    options?: Partial<SignalContainer>,
+  ): Promise<AuthToken> {
+    const signal = options?.signal;
+    return issueAuthToken({
+      apiURL: this.#anonymousBackendApiURL,
+      signal,
+    }).catch((error: unknown) => {
+      this.#authTokenPromise = null;
+      throw error;
+    });
   }
 }
 

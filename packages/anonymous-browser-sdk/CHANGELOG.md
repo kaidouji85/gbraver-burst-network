@@ -1,5 +1,38 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 2.9.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側マッチングを最適化
+- a90f221: あいことば対戦のゲスト側シグナリングを最適化
+
+## 2.9.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦のゲスト側シグナリングを最適化
+
+## 2.8.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全にAbort Controllerに対応させた
+- 9148857: フロントエンドログがAbortした時に止めるようにした
+- 53306b5: 匿名ブラウザSDKを完全Abort Controller対応した
+
+## 2.8.0-beta.1
+
+### Minor Changes
+
+- フロントエンドログがAbortした時に止めるようにした
+
+## 2.8.0-beta.0
+
+### Minor Changes
+
+- 匿名ブラウザSDKを完全Abort Controller対応した
+
 ## 2.7.0
 
 ### Minor Changes

@@ -102,10 +102,11 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       return Promise.reject(signal.reason);
     }
 
-    const websocket = await this.#websocketConnection.getOrCreate();
+    const websocket = await this.#websocketConnection.getOrCreate({ signal });
     const signalingID = await this.#signaling(websocket, signal);
-    const { dataChannel } =
-      await this.#webRTCConnection.getOrCreateConnection();
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
     await hostPingPongCheck({ dataChannel, signal });
     await deleteSignalingChannel({ signalingID, websocket, signal });
     this.#websocketConnection.gracefulDisconnect();
@@ -144,14 +145,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
     let unSubscribers: Unsubscribable[] = [];
     try {
-      await this.#frontendLog.log({
-        type: "SIGNALING_START",
-        spanId: this.#spanId,
-      });
+      await this.#frontendLog.log(
+        { type: "SIGNALING_START", spanId: this.#spanId },
+        { signal },
+      );
 
       const signalingID = await waitUntilMatching({ websocket, signal });
       const { connection, dataChannel } =
-        await this.#webRTCConnection.getOrCreateConnection();
+        await this.#webRTCConnection.getOrCreateConnection({ signal });
 
       let isRemoteDescriptionSet = false;
       const pendingIceCandidates: RTCIceCandidateInit[] = [];
@@ -181,11 +182,14 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
           connection,
           "icecandidateerror",
         ).subscribe((event) => {
-          this.#frontendLog.log({
-            type: "ICE_CANDIDATE_ERROR",
-            spanId: this.#spanId,
-            error: createICECandidateErrorMessage(event),
-          });
+          this.#frontendLog.log(
+            {
+              type: "ICE_CANDIDATE_ERROR",
+              spanId: this.#spanId,
+              error: createICECandidateErrorMessage(event),
+            },
+            { signal },
+          );
         }),
       ];
 
@@ -207,18 +211,21 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
         waitUntilDataChannelOpen(dataChannel, { signal }),
       ]);
 
-      await this.#frontendLog.log({
-        type: "SIGNALING_END",
-        spanId: this.#spanId,
-      });
+      await this.#frontendLog.log(
+        { type: "SIGNALING_END", spanId: this.#spanId },
+        { signal },
+      );
       const selectedLocalIceCandidateSummary =
         await getSelectedIceCandidateSummary(connection);
       if (selectedLocalIceCandidateSummary !== null) {
-        await this.#frontendLog.log({
-          type: "SELECTED_ICE_CANDIDATE_SUMMARY",
-          spanId: this.#spanId,
-          summary: selectedLocalIceCandidateSummary,
-        });
+        await this.#frontendLog.log(
+          {
+            type: "SELECTED_ICE_CANDIDATE_SUMMARY",
+            spanId: this.#spanId,
+            summary: selectedLocalIceCandidateSummary,
+          },
+          { signal },
+        );
       }
       return signalingID;
     } finally {

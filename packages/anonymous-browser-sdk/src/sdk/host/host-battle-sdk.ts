@@ -84,7 +84,7 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     this.flowID = nanoid();
     this.#webRTCConnection = options.webRTCConnection;
     this.#sendCommandPromise = this.#webRTCConnection
-      .getOrCreateConnection()
+      .getOrCreateConnection({ signal })
       .then(({ dataChannel }) =>
         receiveSendCommand({ dataChannel, flowID: this.flowID, signal }),
       );
@@ -106,8 +106,9 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     this.flowID = nanoid();
-    const { dataChannel } =
-      await this.#webRTCConnection.getOrCreateConnection();
+    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    });
     this.#sendCommandPromise = receiveSendCommand({
       dataChannel,
       flowID: this.flowID,
