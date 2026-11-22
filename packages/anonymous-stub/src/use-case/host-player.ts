@@ -1,6 +1,5 @@
 import { HostAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 
-import { waitTime } from "../wait-time";
 import {
   executeHostBattle,
   HOST_ARMDOZER,
@@ -44,9 +43,7 @@ export class HostPlayer implements UseCase {
       console.log("suddenly battle end");
     });
     console.log("start battle", battle);
-    executeHostBattle(battle);
-    await waitTime(1000);
-
+    await executeHostBattle(battle);
     console.log("end battle");
   }
 }
