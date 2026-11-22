@@ -20,7 +20,7 @@ export const notifyGuestRematchCancel = (options: {
 }): Observable<GuestCancelRematch> => {
   const { rematchRoomID, dataChannel } = options;
   return fromEvent<MessageEvent>(dataChannel, "message").pipe(
-    map((event: MessageEvent) => parseJSON(event.data)),
+    map((event) => parseJSON(event.data)),
     map((parsedJson) => GuestCancelRematchSchema.safeParse(parsedJson)),
     filter((result) => result.success),
     map((result) => result.data),
