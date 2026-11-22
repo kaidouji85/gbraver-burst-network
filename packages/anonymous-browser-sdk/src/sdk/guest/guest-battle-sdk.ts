@@ -11,6 +11,7 @@ import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
+import { HostCancelRematch } from "../../webrtc/host/host-message";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
 import {
   AnonymousBattleSDK,
@@ -112,13 +113,15 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
 }
 
 /** ゲスト側再戦ルーム */
-class GuestRematchRoom {
+class GuestRematchRoom implements AnonymousRematchRoom {
   /** 再戦ルームID */
   readonly rematchRoomID: string;
   /** ホスト側のWebRTCコネクションマネージャー */
   readonly #webRTCConnection: GuestWebRTCConnectionManager;
   /** アボート管理オブジェクト */
   readonly #abortManager: AbortManager;
+  /** ホストからの再戦キャンセル通知 */
+  readonly #hostRematchCancelNotifier: Observable<HostCancelRematch>;
 
   /**
    * コンストラクタ
@@ -126,15 +129,18 @@ class GuestRematchRoom {
    * @param options.rematchRoomID 再戦ルームID
    * @param options.webRTCConnection ゲスト側のWebRTCコネクションマネージャー
    * @param options.abortManager アボート管理オブジェクト
+   * @param options.hostRematchCancelNotifier ホストからの再戦キャンセル通知
    */
   constructor(options: {
     rematchRoomID: string;
     webRTCConnection: GuestWebRTCConnectionManager;
     abortManager: AbortManager;
+    hostRematchCancelNotifier: Observable<HostCancelRematch>;
   }) {
     this.rematchRoomID = options.rematchRoomID;
     this.#webRTCConnection = options.webRTCConnection;
     this.#abortManager = options.abortManager;
+    this.#hostRematchCancelNotifier = options.hostRematchCancelNotifier;
   }
 
   /** @override */
@@ -182,5 +188,10 @@ class GuestRematchRoom {
       type: "guest-cancel-rematch",
       rematchRoomID: this.rematchRoomID,
     });
+  }
+
+  /** @override */
+  opponentCancelledRematchNotifier(): Observable<unknown> {
+    return this.#hostRematchCancelNotifier;
   }
 }
