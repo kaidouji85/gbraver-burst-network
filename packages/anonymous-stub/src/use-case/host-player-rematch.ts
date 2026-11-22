@@ -7,8 +7,8 @@ import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 import { waitTime } from "../wait-time";
 import { UseCase } from "./use-case";
 
-/** ホスト側プレイヤー */
-export class HostPlayer implements UseCase {
+/** ホスト側プレイヤー（再戦） */
+export class HostPlayerRematch implements UseCase {
   /** ホスト用匿名バックエンドSDK */
   #hostSDK: HostAnonymousSDK;
 
