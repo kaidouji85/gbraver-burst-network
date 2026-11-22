@@ -44,8 +44,23 @@ export class HostPlayerRematch implements UseCase {
     });
     console.log("start battle", battle);
     await this.#executeBattle(battle);
-    await waitTime(1000);
     console.log("end battle");
+
+    const rematchRoom = battle.getRematchRoom();
+    if (!rematchRoom) {
+      throw new Error("再戦ルームが存在しません");
+    }
+
+    rematchRoom.opponentCancelledRematchNotifier().subscribe(() => {
+      console.log("rematch cancelled");
+    });
+    const rematch = await rematchRoom.requestRematch({
+      armdozerId: ArmdozerIds.SHIN_BRAVER,
+      pilotId: PilotIds.SHINYA,
+    });
+    console.log("start rematch");
+    await this.#executeBattle(rematch);
+    console.log("end rematch");
   }
 
   /**
