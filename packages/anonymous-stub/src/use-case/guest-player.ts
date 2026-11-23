@@ -1,12 +1,12 @@
 import { GuestAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
 
+import { waitTime } from "../wait-time";
 import {
   GUEST_ARMDOZER,
   GUEST_PILOT,
 } from "./execute-battle/execute-guest-battle";
 import { executeGuestBattle } from "./execute-battle/execute-guest-battle";
 import { UseCase, UseCaseContext } from "./use-case";
-import { waitTime } from "../wait-time";
 
 /** ゲスト側プレイヤー */
 export class GuestPlayer implements UseCase {

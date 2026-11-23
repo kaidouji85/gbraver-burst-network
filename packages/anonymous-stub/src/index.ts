@@ -5,10 +5,10 @@ import {
 } from "@gbraver-burst-network/anonymous-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
+import { GuestPlayerRematch } from "./use-case/guest-player-rematch";
 import { HostPlayer } from "./use-case/host-player";
 import { HostPlayerRematch } from "./use-case/host-player-rematch";
 import { UseCase } from "./use-case/use-case";
-import { GuestPlayerRematch } from "./use-case/guest-player-rematch";
 
 /** WebSocketシグナルサーバーのURL */
 const WS_SIGNAL_SERVER_URL = process.env.WS_SIGNAL_SERVER_URL || "";
