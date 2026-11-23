@@ -12,7 +12,7 @@ import {
  * @param options オプション
  * @param options.dataChannel データチャネル
  * @param options.signal Promise強制終了用シグナル
- * @returns BattleProgressedメッセージの内容
+ * @returns バトル更新メッセージ
  */
 export const receiveBattleUpdate = (
   options: {

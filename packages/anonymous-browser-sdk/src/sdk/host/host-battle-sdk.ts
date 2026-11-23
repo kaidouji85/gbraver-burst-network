@@ -231,7 +231,7 @@ class HostRematchRoom implements AnonymousRematchRoom {
   readonly #webRTCConnection: HostWebRTCConnectionManager;
   /** アボート管理オブジェクト */
   readonly #abortManager: AbortManager;
-  /**. ゲストが再戦ルームに入室するのを待つPromise */
+  /** ゲストが再戦ルームに入室するのを待つPromise */
   readonly #receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
   /** ゲストからの再戦キャンセル通知 */
   readonly #guestRematchCancelNotifier: ReplaySubject<GuestCancelRematch> =
@@ -245,6 +245,7 @@ class HostRematchRoom implements AnonymousRematchRoom {
    * @param options.rematchRoomID 再戦ルームID
    * @param options.webRTCConnection ホスト側のWebRTCコネクションマネージャー
    * @param options.abortManager アボート管理オブジェクト
+   * @param options.receiveEnterRematchRoomPromise ゲストが再戦ルームに入室するのを待つPromise
    * @param options.guestRematchCancelNotifier ゲストからの再戦キャンセル通知
    */
   constructor(options: {
