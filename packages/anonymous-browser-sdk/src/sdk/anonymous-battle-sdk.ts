@@ -50,7 +50,7 @@ export interface AnonymousRematchRoom {
    * 再戦をリクエストする
    * @param options オプション
    * @param options.armdozerId 選択したアームドーザのID
-   * @param options.pilotId 選択したパイロットのID  
+   * @param options.pilotId 選択したパイロットのID
    * @returns 正立した場合は新しいBattleSDKインスタンスを返す
    */
   requestRematch(options: {
