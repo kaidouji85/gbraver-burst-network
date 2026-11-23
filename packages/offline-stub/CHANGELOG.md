@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 3.0.0-beta.2
+
+### Minor Changes
+
+- 再戦キャンセツ通知は相手がキャンセルしたことを明記するように
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@3.0.0-beta.2
+
 ## 3.0.0-beta.1
 
 ### Minor Changes
