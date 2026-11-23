@@ -56,8 +56,8 @@ export interface RematchRoom {
   }): Promise<BattleSDK>;
 
   /**
-   * 再戦がキャンセルされたことを通知するストリーム
+   * 対戦相手が再戦をキャンセルしたことを通知するストリーム
    * @returns 通知ストリーム
    */
-  rematchCancelledNotifier(): Observable<unknown>;
+  opponentCancelledRematchNotifier(): Observable<unknown>;
 }
