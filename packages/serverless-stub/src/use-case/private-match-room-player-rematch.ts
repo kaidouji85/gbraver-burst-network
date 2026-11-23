@@ -1,6 +1,10 @@
-import { BattleSDK, BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
+import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
 
+import {
+  executePlayer02Battle,
+  PLAYER_02_ARMDOZER,
+  PLAYER_02_PILOT,
+} from "./execute-battle/execute-player-02-battle";
 import { UseCase, UseCaseContext } from "./use-case";
 
 /** プライベートマッチ参加者（再戦あり） */
@@ -25,8 +29,8 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
   async execute(context: UseCaseContext): Promise<void> {
     const battle = await this.#sdk.enterPrivateMatchRoom(
       context.privateMatchRoomID,
-      ArmdozerIds.NEO_LANDOZER,
-      PilotIds.GAI,
+      PLAYER_02_ARMDOZER,
+      PLAYER_02_PILOT,
     );
     if (!battle) {
       console.log("cloud not matching");
@@ -43,7 +47,7 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
       battle.initialState,
     );
 
-    await this.#executeBattle(battle);
+    await executePlayer02Battle(battle);
     const rematchRoom = battle.getRematchRoom();
     if (!rematchRoom) {
       throw new Error("再戦ルームが存在しません");
@@ -53,8 +57,8 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
       console.log("rematch cancelled");
     });
     const rematchBattle = await rematchRoom.requestRematch({
-      armdozerId: ArmdozerIds.NEO_LANDOZER,
-      pilotId: PilotIds.GAI,
+      armdozerId: PLAYER_02_ARMDOZER,
+      pilotId: PLAYER_02_PILOT,
     });
     rematchBattle.suddenlyBattleEndNotifier().subscribe(() => {
       console.log("suddenly battle end");
@@ -65,41 +69,6 @@ export class PrivateMatchRoomPlayerRematch implements UseCase {
       rematchBattle.enemy,
       rematchBattle.initialState,
     );
-    await this.#executeBattle(rematchBattle);
-  }
-
-  /**
-   * バトルを実行するヘルパーメソッド
-   * 本メソッドではバトル終了確認をしていないが、
-   * バトル終了になるようにゲーム進行することを確認している
-   * @param battle バトルSDK
-   * @returns バトルが完了したら発火するPromise
-   */
-  async #executeBattle(battle: BattleSDK) {
-    const update01 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 3,
-    });
-    console.log(update01);
-    const update02 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update02);
-    const update03 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update03);
-    const update04 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 0,
-    });
-    console.log(update04);
-    const update05 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 0,
-    });
-    console.log(update05);
+    await executePlayer02Battle(rematchBattle);
   }
 }

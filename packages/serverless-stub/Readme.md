@@ -40,6 +40,13 @@ npm run build
 npm run start
 ```
 
+### バトル進行ヘルパー
+
+CPUごとのバトル進行関数と選択するアームドーザ・パイロットの定数は、
+`src/use-case/execute-battle/` にあります。
+プレイヤー01は `executePlayer01Battle`、`PLAYER_01_ARMDOZER`、`PLAYER_01_PILOT`、
+プレイヤー02は `executePlayer02Battle`、`PLAYER_02_ARMDOZER`、`PLAYER_02_PILOT` を使用します。
+
 ### 脆弱性チェック
 
 ```shell
