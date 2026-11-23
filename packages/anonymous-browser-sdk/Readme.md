@@ -32,6 +32,10 @@ npm audit --omit=dev
 fixpack
 ```
 
+## エラーハンドリング方針
+
+匿名ブラウザSDKでは各種エラーの通知だけを行い、コネクション切断、Promise Abortなどの後処理は利用者側で実施します。
+
 ## License
 
 MIT

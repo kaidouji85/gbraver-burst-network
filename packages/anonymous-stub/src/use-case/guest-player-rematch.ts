@@ -1,0 +1,68 @@
+import { GuestAnonymousSDK } from "@gbraver-burst-network/anonymous-browser-sdk";
+
+import {
+  GUEST_ARMDOZER,
+  GUEST_PILOT,
+} from "./execute-battle/execute-guest-battle";
+import { executeGuestBattle } from "./execute-battle/execute-guest-battle";
+import { UseCase, UseCaseContext } from "./use-case";
+
+/** ゲスト側プレイヤー（再戦） */
+export class GuestPlayerRematch implements UseCase {
+  /** ゲスト用匿名バックエンドSDK */
+  #guestSDK: GuestAnonymousSDK;
+
+  /**
+   * コンストラクタ
+   * @param guestSDK ゲスト用匿名バックエンドSDK
+   */
+  constructor(guestSDK: GuestAnonymousSDK) {
+    this.#guestSDK = guestSDK;
+  }
+
+  /** @override */
+  name(): string {
+    return "ゲスト側プレイヤー（再戦）";
+  }
+
+  /** @override */
+  async execute(context: UseCaseContext): Promise<void> {
+    const { roomID } = context;
+    console.log("start join room, roomID:", roomID);
+    const battle = await this.#guestSDK.joinRoom({
+      roomID,
+      armdozerId: GUEST_ARMDOZER,
+      pilotId: GUEST_PILOT,
+    });
+    if (!battle) {
+      console.log("Failed to join room");
+      return;
+    }
+
+    battle.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
+    });
+    console.log("start battle", battle);
+    await executeGuestBattle(battle);
+    console.log("end battle");
+
+    const rematchRoom = battle.getRematchRoom();
+    if (!rematchRoom) {
+      throw new Error("再戦ルームが存在しません");
+    }
+
+    rematchRoom.opponentCancelledRematchNotifier().subscribe(() => {
+      console.log("rematch cancelled");
+    });
+    const rematch = await rematchRoom.requestRematch({
+      armdozerId: GUEST_ARMDOZER,
+      pilotId: GUEST_PILOT,
+    });
+    rematch.suddenlyBattleEndNotifier().subscribe(() => {
+      console.log("suddenly battle end");
+    });
+    console.log("start rematch");
+    await executeGuestBattle(rematch);
+    console.log("end rematch");
+  }
+}

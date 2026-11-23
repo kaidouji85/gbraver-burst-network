@@ -5,7 +5,9 @@ import {
 } from "@gbraver-burst-network/anonymous-browser-sdk";
 
 import { GuestPlayer } from "./use-case/guest-player";
+import { GuestPlayerRematch } from "./use-case/guest-player-rematch";
 import { HostPlayer } from "./use-case/host-player";
+import { HostPlayerRematch } from "./use-case/host-player-rematch";
 import { UseCase } from "./use-case/use-case";
 
 /** WebSocketシグナルサーバーのURL */
@@ -70,6 +72,8 @@ window.onload = () => {
   const useCases: UseCase[] = [
     new HostPlayer(hostSDK),
     new GuestPlayer(guestSDK),
+    new HostPlayerRematch(hostSDK),
+    new GuestPlayerRematch(guestSDK),
   ];
 
   const useCaseSelector = getUseCaseSelector();

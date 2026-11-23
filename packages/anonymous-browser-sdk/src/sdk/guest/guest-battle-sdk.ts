@@ -1,11 +1,32 @@
-import { Command, GameState, Player } from "gbraver-burst-core";
-import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
+import {
+  ArmdozerId,
+  Command,
+  GameState,
+  PilotId,
+  Player,
+} from "gbraver-burst-core";
+import {
+  from,
+  mergeMap,
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  take,
+  takeUntil,
+} from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
-import { receiveBattleProgressed } from "../../webrtc/guest/receive-battle-progressed";
+import { notifyHostRematchCancel } from "../../webrtc/guest/notify-host-rematch-cancel";
+import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
+import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
+import { HostCancelRematch } from "../../webrtc/host/host-message";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
-import { AnonymousBattleSDK } from "../anonymous-battle-sdk";
+import {
+  AnonymousBattleSDK,
+  AnonymousRematchRoom,
+} from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
 
 /** ゲスト側バトルSDK */
@@ -24,6 +45,8 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
   #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
   /** アボート管理オブジェクト */
   #abortManager: AbortManager;
+  /** 再戦ルーム、バトルが終了したらセットされる */
+  #rematchRoom: AnonymousRematchRoom | null = null;
 
   /**
    * コンストラクタ
@@ -61,10 +84,11 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
     const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
       signal,
     }).dataChannelPromise;
-    const battleProgressedPromise = receiveBattleProgressed({
+    const battleUpdatePromise = receiveBattleUpdate({
       dataChannel,
       signal,
     });
+
     try {
       sendGuestMessage(dataChannel, {
         type: "send-command",
@@ -75,9 +99,25 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       this.#sendExceptionSubject.next(error);
       throw error;
     }
-    const battleProgressed = await battleProgressedPromise;
-    this.flowID = battleProgressed.flowID;
-    return battleProgressed.update;
+
+    const battleUpdate = await battleUpdatePromise;
+    if (battleUpdate.type === "battle-progressed") {
+      this.flowID = battleUpdate.flowID;
+    } else if (battleUpdate.type === "battle-end") {
+      const { rematchRoomID } = battleUpdate;
+      const hostRematchCancelNotifier = notifyHostRematchCancel({
+        rematchRoomID,
+        dataChannel,
+      });
+      this.#rematchRoom = new GuestRematchRoom({
+        rematchRoomID,
+        webRTCConnection: this.#webRTCConnection,
+        abortManager: this.#abortManager,
+        hostRematchCancelNotifier,
+      });
+    }
+
+    return battleUpdate.update;
   }
 
   /** @override */
@@ -89,5 +129,103 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       takeUntil(this.#sendExceptionSubject),
       take(1),
     );
+  }
+
+  /** @override */
+  getRematchRoom(): AnonymousRematchRoom | null {
+    return this.#rematchRoom;
+  }
+}
+
+/** ゲスト側再戦ルーム */
+class GuestRematchRoom implements AnonymousRematchRoom {
+  /** 再戦ルームID */
+  readonly rematchRoomID: string;
+  /** ホスト側のWebRTCコネクションマネージャー */
+  readonly #webRTCConnection: GuestWebRTCConnectionManager;
+  /** アボート管理オブジェクト */
+  readonly #abortManager: AbortManager;
+  /** ホストからの再戦キャンセル通知 */
+  readonly #hostRematchCancelNotifier: ReplaySubject<HostCancelRematch> =
+    new ReplaySubject<HostCancelRematch>(1);
+  readonly #unsubscribe: Subscription;
+
+  /**
+   * コンストラクタ
+   * @param options オプション
+   * @param options.rematchRoomID 再戦ルームID
+   * @param options.webRTCConnection ゲスト側のWebRTCコネクションマネージャー
+   * @param options.abortManager アボート管理オブジェクト
+   * @param options.hostRematchCancelNotifier ホストからの再戦キャンセル通知
+   */
+  constructor(options: {
+    rematchRoomID: string;
+    webRTCConnection: GuestWebRTCConnectionManager;
+    abortManager: AbortManager;
+    hostRematchCancelNotifier: Observable<HostCancelRematch>;
+  }) {
+    this.rematchRoomID = options.rematchRoomID;
+    this.#webRTCConnection = options.webRTCConnection;
+    this.#abortManager = options.abortManager;
+    this.#unsubscribe = options.hostRematchCancelNotifier.subscribe(
+      this.#hostRematchCancelNotifier,
+    );
+  }
+
+  /** @override */
+  destructor(): void {
+    this.#unsubscribe.unsubscribe();
+  }
+
+  /** @override */
+  async requestRematch(options: {
+    armdozerId: ArmdozerId;
+    pilotId: PilotId;
+  }): Promise<AnonymousBattleSDK> {
+    const { armdozerId, pilotId } = options;
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    }).dataChannelPromise;
+    sendGuestMessage(dataChannel, {
+      type: "enter-rematch-room",
+      rematchRoomID: this.rematchRoomID,
+      armdozerId,
+      pilotId,
+    });
+    const battleStart = await receiveBattleStart({ dataChannel, signal });
+    return new GuestBattleSDK({
+      hostPlayer: battleStart.hostPlayer,
+      guestPlayer: battleStart.guestPlayer,
+      initialState: battleStart.update,
+      initialFlowID: battleStart.flowID,
+      webRTCConnection: this.#webRTCConnection,
+      abortManager: this.#abortManager,
+    });
+  }
+
+  /** @override */
+  async cancelRematch(): Promise<void> {
+    const { signal } = this.#abortManager.getAbortController();
+    if (signal?.aborted) {
+      return Promise.reject(signal.reason);
+    }
+
+    const dataChannel = await this.#webRTCConnection.getOrCreateConnection({
+      signal,
+    }).dataChannelPromise;
+    sendGuestMessage(dataChannel, {
+      type: "guest-cancel-rematch",
+      rematchRoomID: this.rematchRoomID,
+    });
+  }
+
+  /** @override */
+  opponentCancelledRematchNotifier(): Observable<unknown> {
+    return this.#hostRematchCancelNotifier;
   }
 }

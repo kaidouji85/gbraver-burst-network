@@ -51,8 +51,41 @@ export const SendCommandSchema = z.object({
   command: CommandSchema,
 });
 
+/** 再戦ルームに入室する */
+export type EnterRematchRoom = {
+  type: "enter-rematch-room";
+  /** 再戦ルームID */
+  rematchRoomID: string;
+  /** 選択したアームドーザーのID */
+  armdozerId: ArmdozerId;
+  /** 選択したパイロットのID */
+  pilotId: PilotId;
+};
+
+/** EnterRematchRoom zod のスキーマ */
+export const EnterRematchRoomSchema = z.object({
+  type: z.literal("enter-rematch-room"),
+  rematchRoomID: z.string(),
+  armdozerId: z.string(),
+  pilotId: z.string(),
+});
+
+/** 再戦キャンセル（ゲスト側） */
+export type GuestCancelRematch = {
+  type: "guest-cancel-rematch";
+  /** 再戦ルームID */
+  rematchRoomID: string;
+};
+
+/** GuestCancelRematch zod のスキーマ */
+export const GuestCancelRematchSchema = z.object({
+  type: z.literal("guest-cancel-rematch"),
+  rematchRoomID: z.string(),
+});
+
 /** ゲストから送信されるメッセージ */
-export type GuestMessage = Pong | SendPlayer | SendCommand;
+export type GuestMessage =
+  Pong | SendPlayer | SendCommand | EnterRematchRoom | GuestCancelRematch;
 
 /**
  * ゲストメッセージをホストに送信する

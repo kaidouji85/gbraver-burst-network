@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
+import jest from "eslint-plugin-jest";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tseslint from "typescript-eslint";
 
@@ -16,6 +17,13 @@ export default defineConfig(
     rules: {
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+    },
+  },
+  {
+    files: ["test/**"],
+    ...jest.configs["flat/recommended"],
+    rules: {
+      ...jest.configs["flat/recommended"].rules,
     },
   },
 );
