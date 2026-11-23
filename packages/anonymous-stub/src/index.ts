@@ -8,6 +8,7 @@ import { GuestPlayer } from "./use-case/guest-player";
 import { HostPlayer } from "./use-case/host-player";
 import { HostPlayerRematch } from "./use-case/host-player-rematch";
 import { UseCase } from "./use-case/use-case";
+import { GuestPlayerRematch } from "./use-case/guest-player-rematch";
 
 /** WebSocketシグナルサーバーのURL */
 const WS_SIGNAL_SERVER_URL = process.env.WS_SIGNAL_SERVER_URL || "";
@@ -72,6 +73,7 @@ window.onload = () => {
     new HostPlayer(hostSDK),
     new GuestPlayer(guestSDK),
     new HostPlayerRematch(hostSDK),
+    new GuestPlayerRematch(guestSDK),
   ];
 
   const useCaseSelector = getUseCaseSelector();
