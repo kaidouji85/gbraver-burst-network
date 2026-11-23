@@ -1,4 +1,7 @@
-export { AnonymousBattleSDK } from "./sdk/anonymous-battle-sdk";
+export {
+  AnonymousBattleSDK,
+  AnonymousRematchRoom,
+} from "./sdk/anonymous-battle-sdk";
 export {
   AuthTokenManager,
   createAuthTokenManager,
