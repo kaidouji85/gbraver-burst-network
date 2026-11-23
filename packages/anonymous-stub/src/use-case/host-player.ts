@@ -6,6 +6,7 @@ import {
   HOST_PILOT,
 } from "./execute-battle/execute-host-battle";
 import { UseCase } from "./use-case";
+import { waitTime } from "../wait-time";
 
 /** ホスト側プレイヤー */
 export class HostPlayer implements UseCase {
@@ -45,5 +46,8 @@ export class HostPlayer implements UseCase {
     console.log("start battle", battle);
     await executeHostBattle(battle);
     console.log("end battle");
+
+    await waitTime(1000);
+    battle.getRematchRoom()?.cancelRematch();
   }
 }

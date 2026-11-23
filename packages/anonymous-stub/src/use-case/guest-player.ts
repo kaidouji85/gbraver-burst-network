@@ -6,6 +6,7 @@ import {
 } from "./execute-battle/execute-guest-battle";
 import { executeGuestBattle } from "./execute-battle/execute-guest-battle";
 import { UseCase, UseCaseContext } from "./use-case";
+import { waitTime } from "../wait-time";
 
 /** ゲスト側プレイヤー */
 export class GuestPlayer implements UseCase {
@@ -45,5 +46,8 @@ export class GuestPlayer implements UseCase {
     console.log("start battle", battle);
     await executeGuestBattle(battle);
     console.log("end battle");
+
+    await waitTime(1000);
+    battle.getRematchRoom()?.cancelRematch();
   }
 }
