@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 3.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@3.0.0-beta.1
+
 ## 3.0.0-beta.0
 
 ### Major Changes

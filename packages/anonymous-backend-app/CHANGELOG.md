@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 3.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
 ## 3.0.0-beta.0
 
 ### Major Changes
