@@ -1,5 +1,11 @@
 # @gbraver-burst-network/ws-signal
 
+## 3.0.0-beta.0
+
+### Major Changes
+
+- あいことば対戦の再戦を追加
+
 ## 2.9.0
 
 ### Minor Changes

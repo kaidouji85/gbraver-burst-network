@@ -1,5 +1,16 @@
 # @gbraver-burst-network/offline-stub
 
+## 3.0.0-beta.0
+
+### Major Changes
+
+- あいことば対戦の再戦を追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/offline-browser-sdk@3.0.0-beta.0
+
 ## 2.9.0
 
 ### Minor Changes
