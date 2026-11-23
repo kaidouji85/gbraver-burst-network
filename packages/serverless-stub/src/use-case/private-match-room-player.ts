@@ -1,6 +1,10 @@
 import { BrowserSDK } from "@gbraver-burst-network/browser-sdk";
-import { ArmdozerIds, PilotIds } from "gbraver-burst-core";
 
+import {
+  executePlayer02Battle,
+  PLAYER_02_ARMDOZER,
+  PLAYER_02_PILOT,
+} from "./execute-battle/execute-player-02-battle";
 import { UseCase, UseCaseContext } from "./use-case";
 
 /** プライベートマッチ参加者 */
@@ -25,8 +29,8 @@ export class PrivateMatchRoomPlayer implements UseCase {
   async execute(context: UseCaseContext): Promise<void> {
     const battle = await this.#sdk.enterPrivateMatchRoom(
       context.privateMatchRoomID,
-      ArmdozerIds.NEO_LANDOZER,
-      PilotIds.GAI,
+      PLAYER_02_ARMDOZER,
+      PLAYER_02_PILOT,
     );
     if (!battle) {
       console.log("cloud not matching");
@@ -38,30 +42,6 @@ export class PrivateMatchRoomPlayer implements UseCase {
     });
     console.log(battle.player, battle.enemy, battle.initialState);
 
-    const update01 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 3,
-    });
-    console.log(update01);
-    const update02 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update02);
-    const update03 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 5,
-    });
-    console.log(update03);
-    const update04 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 0,
-    });
-    console.log(update04);
-    const update05 = await battle.progress({
-      type: "BATTERY_COMMAND",
-      battery: 0,
-    });
-    console.log(update05);
+    await executePlayer02Battle(battle);
   }
 }
