@@ -10,7 +10,16 @@ import {
   startGBraverBurst,
 } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
-import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
+import {
+  from,
+  mergeMap,
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  take,
+  takeUntil,
+} from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { SignalContainer } from "../../abort-controller/signal-container";
@@ -20,6 +29,7 @@ import {
   SendCommand,
 } from "../../webrtc/guest/guest-message";
 import { sendHostMessage } from "../../webrtc/host/host-message";
+import { notifyGuestRematchCancel } from "../../webrtc/host/notify-guest-rematch-cancel";
 import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
 import { receiveEnterRematchRoom } from "../../webrtc/host/recieve-enter-rematch-room";
 import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
@@ -28,7 +38,6 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { notifyGuestRematchCancel } from "../../webrtc/host/notify-guest-rematch-cancel";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
@@ -216,7 +225,9 @@ class HostRematchRoom implements AnonymousRematchRoom {
   /** アボート管理オブジェクト */
   readonly #abortManager: AbortManager;
   /** ゲストからの再戦キャンセル通知 */
-  readonly #guestRematchCancelNotifier: Observable<GuestCancelRematch>;
+  readonly #guestRematchCancelNotifier: ReplaySubject<GuestCancelRematch> =
+    new ReplaySubject<GuestCancelRematch>(1);
+  readonly #unsubscribe: Subscription;
 
   /**
    * コンストラクタ
@@ -234,7 +245,14 @@ class HostRematchRoom implements AnonymousRematchRoom {
     this.rematchRoomID = options.rematchRoomID;
     this.#webRTCConnection = options.webRTCConnection;
     this.#abortManager = options.abortManager;
-    this.#guestRematchCancelNotifier = options.guestRematchCancelNotifier;
+    this.#unsubscribe = options.guestRematchCancelNotifier.subscribe(
+      this.#guestRematchCancelNotifier,
+    );
+  }
+
+  /** @override */
+  destructor(): void {
+    this.#unsubscribe.unsubscribe();
   }
 
   /** @override */

@@ -5,10 +5,20 @@ import {
   PilotId,
   Player,
 } from "gbraver-burst-core";
-import { from, mergeMap, Observable, Subject, take, takeUntil } from "rxjs";
+import {
+  from,
+  mergeMap,
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  take,
+  takeUntil,
+} from "rxjs";
 
 import { AbortManager } from "../../abort-controller/abort-manager";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
+import { notifyHostRematchCancel } from "../../webrtc/guest/notify-host-rematch-cancel";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
 import { HostCancelRematch } from "../../webrtc/host/host-message";
@@ -18,7 +28,6 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { GuestWebRTCConnectionManager } from "./guest-webrtc-connection-manager";
-import { notifyHostRematchCancel } from "../../webrtc/guest/notify-host-rematch-cancel";
 
 /** ゲスト側バトルSDK */
 export class GuestBattleSDK implements AnonymousBattleSDK {
@@ -96,7 +105,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       this.flowID = battleUpdate.flowID;
     } else if (battleUpdate.type === "battle-end") {
       const { rematchRoomID } = battleUpdate;
-      const hostRematchCancelNotifier = await notifyHostRematchCancel({
+      const hostRematchCancelNotifier = notifyHostRematchCancel({
         rematchRoomID,
         dataChannel,
       });
@@ -137,7 +146,9 @@ class GuestRematchRoom implements AnonymousRematchRoom {
   /** アボート管理オブジェクト */
   readonly #abortManager: AbortManager;
   /** ホストからの再戦キャンセル通知 */
-  readonly #hostRematchCancelNotifier: Observable<HostCancelRematch>;
+  readonly #hostRematchCancelNotifier: ReplaySubject<HostCancelRematch> =
+    new ReplaySubject<HostCancelRematch>(1);
+  readonly #unsubscribe: Subscription;
 
   /**
    * コンストラクタ
@@ -156,7 +167,14 @@ class GuestRematchRoom implements AnonymousRematchRoom {
     this.rematchRoomID = options.rematchRoomID;
     this.#webRTCConnection = options.webRTCConnection;
     this.#abortManager = options.abortManager;
-    this.#hostRematchCancelNotifier = options.hostRematchCancelNotifier;
+    this.#unsubscribe = options.hostRematchCancelNotifier.subscribe(
+      this.#hostRematchCancelNotifier,
+    );
+  }
+
+  /** @override */
+  destructor(): void {
+    this.#unsubscribe.unsubscribe();
   }
 
   /** @override */

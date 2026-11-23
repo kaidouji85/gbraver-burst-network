@@ -42,6 +42,11 @@ export interface AnonymousBattleSDK {
 /** 匿名再戦ルーム */
 export interface AnonymousRematchRoom {
   /**
+   * デストラクタ相当の処理
+   */
+  destructor(): void;
+
+  /**
    * 再戦をリクエストする
    * @param options オプション
    * @param options.armdozerId 選択したアームドーザのID
