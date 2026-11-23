@@ -28,7 +28,7 @@ import {
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
 import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
-import { notifyGuestRematchCancel } from "./notify-guest-rematch-cancel";
+import { notifyGuestRematchCancel } from "../../webrtc/host/notify-guest-rematch-cancel";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
