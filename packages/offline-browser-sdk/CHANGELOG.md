@@ -1,5 +1,17 @@
 # @gbraver-burst-network/offline-browser-sdk
 
+## 3.0.0
+
+### Major Changes
+
+- あいことば対戦に再戦を追加した
+- 5f44440: あいことば対戦の再戦を追加
+
+### Minor Changes
+
+- e0afcb9: 再戦キャンセツ通知は相手がキャンセルしたことを明記するように
+- ed57347: exportを追加
+
 ## 3.0.0-beta.2
 
 ### Minor Changes
