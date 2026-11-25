@@ -195,7 +195,7 @@ class RematchRoomGuest implements RematchRoom {
   }
 
   /** @override */
-  rematchCancelledNotifier(): Observable<unknown> {
+  opponentCancelledRematchNotifier(): Observable<unknown> {
     return this.rematchCancelled;
   }
 }
@@ -249,7 +249,7 @@ class RematchRoomHost implements RematchRoom {
     );
   }
   /** @override */
-  rematchCancelledNotifier(): Observable<unknown> {
+  opponentCancelledRematchNotifier(): Observable<unknown> {
     return this.rematchCancelled;
   }
 }

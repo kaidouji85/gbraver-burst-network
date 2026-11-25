@@ -49,7 +49,7 @@ export class PrivateMatchRoomOwnerRematch implements UseCase {
       throw new Error("再戦ルームが存在しません");
     }
 
-    rematchRoom.rematchCancelledNotifier().subscribe(() => {
+    rematchRoom.opponentCancelledRematchNotifier().subscribe(() => {
       console.log("rematch cancelled");
     });
     const rematchBattle = await rematchRoom.requestRematch({

@@ -1,5 +1,58 @@
 # @gbraver-burst-network/local-webrtc-stub
 
+## 3.0.0
+
+### Major Changes
+
+- あいことば対戦に再戦を追加した
+- 5f44440: あいことば対戦の再戦を追加
+
+### Minor Changes
+
+- e0afcb9: 再戦キャンセツ通知は相手がキャンセルしたことを明記するように
+- ed57347: exportを追加
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies [e0afcb9]
+- Updated dependencies [ed57347]
+- Updated dependencies [5f44440]
+  - @gbraver-burst-network/anonymous-browser-sdk@3.0.0
+
+## 3.0.0-beta.2
+
+### Minor Changes
+
+- 再戦キャンセツ通知は相手がキャンセルしたことを明記するように
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@3.0.0-beta.2
+
+## 3.0.0-beta.1
+
+### Minor Changes
+
+- exportを追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@3.0.0-beta.1
+
+## 3.0.0-beta.0
+
+### Major Changes
+
+- あいことば対戦の再戦を追加
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/anonymous-browser-sdk@3.0.0-beta.0
+
 ## 2.9.0
 
 ### Minor Changes
