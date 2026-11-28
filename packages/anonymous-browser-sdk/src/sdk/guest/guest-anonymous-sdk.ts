@@ -157,8 +157,9 @@ class GuestAnonymousSDKImpl implements GuestAnonymousSDK {
         guestPlayer: battleStart.guestPlayer,
         initialState: battleStart.update,
         initialFlowID: battleStart.flowID,
-        webRTCConnection: this.#webRTCConnection,
-        abortManager: this.#abortManager,
+        connection,
+        dataChannel,
+        signal,
       });
     } finally {
       this.#websocketConnection.gracefulDisconnect();

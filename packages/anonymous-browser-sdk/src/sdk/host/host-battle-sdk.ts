@@ -11,8 +11,6 @@ import {
 } from "gbraver-burst-core";
 import { nanoid } from "nanoid";
 import {
-  from,
-  mergeMap,
   Observable,
   ReplaySubject,
   Subject,
@@ -21,7 +19,6 @@ import {
   takeUntil,
 } from "rxjs";
 
-import { AbortManager } from "../../abort-controller/abort-manager";
 import { SignalContainer } from "../../abort-controller/signal-container";
 import { isGameEnd } from "../../core/is-game-end";
 import {
@@ -38,7 +35,6 @@ import {
   AnonymousBattleSDK,
   AnonymousRematchRoom,
 } from "../anonymous-battle-sdk";
-import { HostWebRTCConnectionManager } from "./host-webrtc-connection-manager";
 
 /** ホスト側バトルSDK */
 export class HostBattleSDK implements AnonymousBattleSDK {
@@ -51,15 +47,17 @@ export class HostBattleSDK implements AnonymousBattleSDK {
   /** 最新のフローID */
   flowID: string;
   /** Gブレイバーバーストコア */
-  #core: GBraverBurstCore;
-  /** ホスト側のWebRTCコネクションマネージャー */
-  #webRTCConnection: HostWebRTCConnectionManager;
+  readonly #core: GBraverBurstCore;
+  /** WebRTCコネクション */
+  readonly #connection: RTCPeerConnection;
+  /** データチャンネル */
+  readonly #dataChannel: RTCDataChannel;
   /** ゲストからのコマンド受信プロミス */
   #sendCommandPromise: Promise<SendCommand>;
   /** dataChannel.sendの例外通知ストリーム */
-  #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
-  /** アボート管理オブジェクト */
-  #abortManager: AbortManager;
+  readonly #sendExceptionSubject: Subject<unknown> = new Subject<unknown>();
+  /** アボートシグナル */
+  readonly #signal: AbortSignal;
   /** 再戦ルーム、バトルが終了したらセットされる */
   #rematchRoom: AnonymousRematchRoom | null = null;
 
@@ -70,17 +68,20 @@ export class HostBattleSDK implements AnonymousBattleSDK {
    * @param options.hostPilotId ホスト側のパイロットID
    * @param options.guestArmdozerId ゲスト側のアームドーザID
    * @param options.guestPilotId ゲスト側のパイロットID
-   * @param options.webRTCConnection ホスト側のWebRTC接続マネージャー
-   * @param options.abortManager アボート管理オブジェクト
+   * @param options.connection WebRTCコネクション
+   * @param options.dataChannel データチャンネル
+   * @param options.signal アボートシグナル
    */
-  constructor(options: {
-    hostArmdozerId: ArmdozerId;
-    hostPilotId: PilotId;
-    guestArmdozerId: ArmdozerId;
-    guestPilotId: PilotId;
-    webRTCConnection: HostWebRTCConnectionManager;
-    abortManager: AbortManager;
-  }) {
+  constructor(
+    options: {
+      hostArmdozerId: ArmdozerId;
+      hostPilotId: PilotId;
+      guestArmdozerId: ArmdozerId;
+      guestPilotId: PilotId;
+      connection: RTCPeerConnection;
+      dataChannel: RTCDataChannel;
+    } & SignalContainer,
+  ) {
     const hostPlayerId = nanoid();
     this.player = {
       playerId: hostPlayerId,
@@ -100,23 +101,22 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     this.#core = startGBraverBurst([this.player, this.enemy]);
     this.initialState = this.#core.stateHistory();
 
-    this.#abortManager = options.abortManager;
-    const { signal } = this.#abortManager.getAbortController();
+    this.#signal = options.signal;
 
     this.flowID = nanoid();
-    this.#webRTCConnection = options.webRTCConnection;
-    this.#sendCommandPromise = this.#webRTCConnection
-      .getOrCreateConnection({ signal })
-      .then(({ dataChannel }) =>
-        receiveSendCommand({ dataChannel, flowID: this.flowID, signal }),
-      );
+    this.#connection = options.connection;
+    this.#dataChannel = options.dataChannel;
+    this.#sendCommandPromise = receiveSendCommand({
+      dataChannel: this.#dataChannel,
+      flowID: this.flowID,
+      signal: this.#signal,
+    });
   }
 
   /** @override */
   async progress(command: Command): Promise<GameState[]> {
-    const { signal } = this.#abortManager.getAbortController();
-    if (signal.aborted) {
-      return Promise.reject(signal.reason);
+    if (this.#signal.aborted) {
+      return Promise.reject(this.#signal.reason);
     }
 
     const sendCommand = await this.#sendCommandPromise;
@@ -128,19 +128,16 @@ export class HostBattleSDK implements AnonymousBattleSDK {
     const update = this.#core.progress([hostCommand, guestCommand]);
 
     if (isGameEnd(update)) {
-      await this.#endGame({ signal, update });
+      await this.#endGame({ update });
     } else {
-      await this.#continueGame({ signal, update });
+      await this.#continueGame({ update });
     }
     return update;
   }
 
   /** @override */
   suddenlyBattleEndNotifier(): Observable<unknown> {
-    return from(
-      this.#webRTCConnection.getOrCreateConnection().then((v) => v.connection),
-    ).pipe(
-      mergeMap((connection) => notifyIceConnectionDisconnected(connection)),
+    return notifyIceConnectionDisconnected(this.#connection).pipe(
       takeUntil(this.#sendExceptionSubject),
       take(1),
     );
@@ -155,22 +152,18 @@ export class HostBattleSDK implements AnonymousBattleSDK {
    * ゲームを継続する
    * @param options オプション
    * @param options.update ゲームステート更新結果
-   * @param options.signal アボートシグナル
    * @returns 処理が完了したら発火するPromise
    */
-  async #continueGame(options: { update: GameState[] } & SignalContainer) {
-    const { signal, update } = options;
+  async #continueGame(options: { update: GameState[] }) {
+    const { update } = options;
     this.flowID = nanoid();
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
     this.#sendCommandPromise = receiveSendCommand({
-      dataChannel,
+      dataChannel: this.#dataChannel,
       flowID: this.flowID,
-      signal,
+      signal: this.#signal,
     });
     try {
-      sendHostMessage(dataChannel, {
+      sendHostMessage(this.#dataChannel, {
         type: "battle-progressed",
         flowID: this.flowID,
         update,
@@ -185,33 +178,30 @@ export class HostBattleSDK implements AnonymousBattleSDK {
    * ゲームを終了する
    * @param options オプション
    * @param options.update ゲームステート更新結果
-   * @param options.signal アボートシグナル
    * @returns 処理が完了したら発火するPromise
    */
-  async #endGame(options: { update: GameState[] } & SignalContainer) {
-    const { signal, update } = options;
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
+  async #endGame(options: { update: GameState[] }) {
+    const { update } = options;
     const rematchRoomID = nanoid();
     const receiveEnterRematchRoomPromise = receiveEnterRematchRoom({
-      dataChannel,
+      dataChannel: this.#dataChannel,
       rematchRoomID,
-      signal,
+      signal: this.#signal,
     });
     const guestRematchCancelNotifier = notifyGuestRematchCancel({
       rematchRoomID,
-      dataChannel,
+      dataChannel: this.#dataChannel,
     });
     this.#rematchRoom = new HostRematchRoom({
       rematchRoomID,
-      webRTCConnection: this.#webRTCConnection,
-      abortManager: this.#abortManager,
+      connection: this.#connection,
+      dataChannel: this.#dataChannel,
+      signal: this.#signal,
       receiveEnterRematchRoomPromise,
       guestRematchCancelNotifier,
     });
     try {
-      sendHostMessage(dataChannel, {
+      sendHostMessage(this.#dataChannel, {
         type: "battle-end",
         update,
         rematchRoomID,
@@ -227,10 +217,12 @@ export class HostBattleSDK implements AnonymousBattleSDK {
 class HostRematchRoom implements AnonymousRematchRoom {
   /** 再戦ルームID */
   readonly rematchRoomID: string;
-  /** ホスト側のWebRTCコネクションマネージャー */
-  readonly #webRTCConnection: HostWebRTCConnectionManager;
-  /** アボート管理オブジェクト */
-  readonly #abortManager: AbortManager;
+  /** WebRTCコネクション */
+  readonly #connection: RTCPeerConnection;
+  /** データチャンネル */
+  readonly #dataChannel: RTCDataChannel;
+  /** アボートシグナル */
+  readonly #signal: AbortSignal;
   /** ゲストが再戦ルームに入室するのを待つPromise */
   readonly #receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
   /** ゲストからの再戦キャンセル通知 */
@@ -243,21 +235,22 @@ class HostRematchRoom implements AnonymousRematchRoom {
    * コンストラクタ
    * @param options オプション
    * @param options.rematchRoomID 再戦ルームID
-   * @param options.webRTCConnection ホスト側のWebRTCコネクションマネージャー
-   * @param options.abortManager アボート管理オブジェクト
    * @param options.receiveEnterRematchRoomPromise ゲストが再戦ルームに入室するのを待つPromise
    * @param options.guestRematchCancelNotifier ゲストからの再戦キャンセル通知
    */
-  constructor(options: {
-    rematchRoomID: string;
-    webRTCConnection: HostWebRTCConnectionManager;
-    abortManager: AbortManager;
-    receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
-    guestRematchCancelNotifier: Observable<GuestCancelRematch>;
-  }) {
+  constructor(
+    options: {
+      rematchRoomID: string;
+      connection: RTCPeerConnection;
+      dataChannel: RTCDataChannel;
+      receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
+      guestRematchCancelNotifier: Observable<GuestCancelRematch>;
+    } & SignalContainer,
+  ) {
     this.rematchRoomID = options.rematchRoomID;
-    this.#webRTCConnection = options.webRTCConnection;
-    this.#abortManager = options.abortManager;
+    this.#connection = options.connection;
+    this.#dataChannel = options.dataChannel;
+    this.#signal = options.signal;
     this.#receiveEnterRematchRoomPromise =
       options.receiveEnterRematchRoomPromise;
     this.#unsubscribe = options.guestRematchCancelNotifier.subscribe(
@@ -276,26 +269,23 @@ class HostRematchRoom implements AnonymousRematchRoom {
     pilotId: PilotId;
   }): Promise<AnonymousBattleSDK> {
     const { armdozerId: hostArmdozerId, pilotId: hostPilotId } = options;
-    const { signal } = this.#abortManager.getAbortController();
-    if (signal?.aborted) {
-      return Promise.reject(signal.reason);
+    if (this.#signal.aborted) {
+      return Promise.reject(this.#signal.reason);
     }
 
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
     const enterRematchRoom = await this.#receiveEnterRematchRoomPromise;
     const { armdozerId: guestArmdozerId, pilotId: guestPilotId } =
       enterRematchRoom;
     const battleSDK = new HostBattleSDK({
-      webRTCConnection: this.#webRTCConnection,
-      abortManager: this.#abortManager,
+      connection: this.#connection,
+      dataChannel: this.#dataChannel,
+      signal: this.#signal,
       hostArmdozerId,
       hostPilotId,
       guestArmdozerId,
       guestPilotId,
     });
-    sendHostMessage(dataChannel, {
+    sendHostMessage(this.#dataChannel, {
       type: "battle-start",
       flowID: battleSDK.flowID,
       hostPlayer: battleSDK.player,
@@ -307,15 +297,11 @@ class HostRematchRoom implements AnonymousRematchRoom {
 
   /** @override */
   async cancelRematch(): Promise<void> {
-    const { signal } = this.#abortManager.getAbortController();
-    if (signal?.aborted) {
-      return Promise.reject(signal.reason);
+    if (this.#signal.aborted) {
+      return Promise.reject(this.#signal.reason);
     }
 
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
-    sendHostMessage(dataChannel, {
+    sendHostMessage(this.#dataChannel, {
       type: "host-cancel-rematch",
       rematchRoomID: this.rematchRoomID,
     });
