@@ -156,6 +156,7 @@ class GuestRematchRoom implements AnonymousRematchRoom {
    * @param options.hostRematchCancelNotifier ホストからの再戦キャンセル通知
    * @param options.connection WebRTCコネクション
    * @param options.dataChannel データチャネル
+   * @param options.signal アボートシグナル
    */
   constructor(
     options: {
