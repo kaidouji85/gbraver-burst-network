@@ -48,6 +48,6 @@ export class GuestPlayer implements UseCase {
     console.log("end battle");
 
     await waitTime(1000);
-    battle.getRematchRoom()?.cancelRematch();
+    this.#guestSDK.disconnectWebRTC();
   }
 }
