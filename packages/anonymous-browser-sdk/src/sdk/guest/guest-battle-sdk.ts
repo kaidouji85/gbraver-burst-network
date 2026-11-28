@@ -22,7 +22,7 @@ import { notifyHostRematchCancel } from "../../webrtc/guest/notify-host-rematch-
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
 import { HostCancelRematch } from "../../webrtc/host/host-message";
-import { notifyConnectionFailed } from "../../webrtc/notify-connection-failed";
+import { notifyDisconnected } from "../../webrtc/notify-disconnected";
 import {
   AnonymousBattleSDK,
   AnonymousRematchRoom,
@@ -125,7 +125,7 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
     return from(
       this.#webRTCConnection.getOrCreateConnection().connectionPromise,
     ).pipe(
-      mergeMap((connection) => notifyConnectionFailed(connection)),
+      mergeMap((connection) => notifyDisconnected(connection)),
       takeUntil(this.#sendExceptionSubject),
       take(1),
     );
