@@ -83,27 +83,9 @@ export const BattleEndSchema = z.object({
   rematchRoomID: z.string(),
 });
 
-/** 再戦キャンセル（ホスト側） */
-export type HostCancelRematch = {
-  type: "host-cancel-rematch";
-  /** 再戦ルームID */
-  rematchRoomID: string;
-};
-
-/** HostCancelRematch zod のスキーマ */
-export const HostCancelRematchSchema = z.object({
-  type: z.literal("host-cancel-rematch"),
-  rematchRoomID: z.string(),
-});
-
 /** ホストから送信されるメッセージ */
 export type HostMessage =
-  | Ping
-  | RequestSelectedPlayer
-  | BattleStart
-  | BattleProgressed
-  | BattleEnd
-  | HostCancelRematch;
+  Ping | RequestSelectedPlayer | BattleStart | BattleProgressed | BattleEnd;
 
 /**
  * ホストメッセージをゲストに送信する

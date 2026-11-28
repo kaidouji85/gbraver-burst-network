@@ -203,18 +203,6 @@ class GuestRematchRoom implements AnonymousRematchRoom {
   }
 
   /** @override */
-  async cancelRematch(): Promise<void> {
-    if (this.#signal.aborted) {
-      return Promise.reject(this.#signal.reason);
-    }
-
-    sendGuestMessage(this.#dataChannel, {
-      type: "guest-cancel-rematch",
-      rematchRoomID: this.rematchRoomID,
-    });
-  }
-
-  /** @override */
   opponentCancelledRematchNotifier(): Observable<unknown> {
     return this.#iceConnectionDisconnectedNotifier;
   }

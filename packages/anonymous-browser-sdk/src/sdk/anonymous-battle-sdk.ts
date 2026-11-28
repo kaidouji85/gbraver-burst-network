@@ -59,12 +59,6 @@ export interface AnonymousRematchRoom {
   }): Promise<AnonymousBattleSDK>;
 
   /**
-   * 再戦をキャンセルする
-   * @returns 処理が完了したら発火するPromise
-   */
-  cancelRematch(): Promise<void>;
-
-  /**
    * 対戦相手が再戦をキャンセルしたことを通知するストリーム
    * @returns 通知ストリーム
    */

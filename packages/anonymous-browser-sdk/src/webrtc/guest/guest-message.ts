@@ -70,22 +70,8 @@ export const EnterRematchRoomSchema = z.object({
   pilotId: z.string(),
 });
 
-/** 再戦キャンセル（ゲスト側） */
-export type GuestCancelRematch = {
-  type: "guest-cancel-rematch";
-  /** 再戦ルームID */
-  rematchRoomID: string;
-};
-
-/** GuestCancelRematch zod のスキーマ */
-export const GuestCancelRematchSchema = z.object({
-  type: z.literal("guest-cancel-rematch"),
-  rematchRoomID: z.string(),
-});
-
 /** ゲストから送信されるメッセージ */
-export type GuestMessage =
-  Pong | SendPlayer | SendCommand | EnterRematchRoom | GuestCancelRematch;
+export type GuestMessage = Pong | SendPlayer | SendCommand | EnterRematchRoom;
 
 /**
  * ゲストメッセージをホストに送信する
