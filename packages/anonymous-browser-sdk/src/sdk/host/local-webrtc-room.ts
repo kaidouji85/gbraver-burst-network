@@ -104,9 +104,10 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
 
     const websocket = await this.#websocketConnection.getOrCreate({ signal });
     const signalingID = await this.#signaling(websocket, signal);
-    const { dataChannel } = await this.#webRTCConnection.getOrCreateConnection({
-      signal,
-    });
+    const { dataChannel, connection } =
+      await this.#webRTCConnection.getOrCreateConnection({
+        signal,
+      });
     await hostPingPongCheck({ dataChannel, signal });
     await deleteSignalingChannel({ signalingID, websocket, signal });
     this.#websocketConnection.gracefulDisconnect();
@@ -119,7 +120,8 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       hostPilotId: this.#hostPilotId,
       guestArmdozerId,
       guestPilotId,
-      webRTCConnection: this.#webRTCConnection,
+      connection,
+      dataChannel,
       signal,
     });
     sendHostMessage(dataChannel, {
