@@ -23,11 +23,9 @@ import { SignalContainer } from "../../abort-controller/signal-container";
 import { isGameEnd } from "../../core/is-game-end";
 import {
   EnterRematchRoom,
-  GuestCancelRematch,
   SendCommand,
 } from "../../webrtc/guest/guest-message";
 import { sendHostMessage } from "../../webrtc/host/host-message";
-import { notifyGuestRematchCancel } from "../../webrtc/host/notify-guest-rematch-cancel";
 import { receiveSendCommand } from "../../webrtc/host/receive-send-command";
 import { receiveEnterRematchRoom } from "../../webrtc/host/recieve-enter-rematch-room";
 import { notifyIceConnectionDisconnected } from "../../webrtc/notify-ice-connection-disconnected";
@@ -188,17 +186,12 @@ export class HostBattleSDK implements AnonymousBattleSDK {
       rematchRoomID,
       signal: this.#signal,
     });
-    const guestRematchCancelNotifier = notifyGuestRematchCancel({
-      rematchRoomID,
-      dataChannel: this.#dataChannel,
-    });
     this.#rematchRoom = new HostRematchRoom({
       rematchRoomID,
       connection: this.#connection,
       dataChannel: this.#dataChannel,
       signal: this.#signal,
       receiveEnterRematchRoomPromise,
-      guestRematchCancelNotifier,
     });
     try {
       sendHostMessage(this.#dataChannel, {
@@ -225,9 +218,9 @@ class HostRematchRoom implements AnonymousRematchRoom {
   readonly #signal: AbortSignal;
   /** ゲストが再戦ルームに入室するのを待つPromise */
   readonly #receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
-  /** ゲストからの再戦キャンセル通知 */
-  readonly #guestRematchCancelNotifier: ReplaySubject<GuestCancelRematch> =
-    new ReplaySubject<GuestCancelRematch>(1);
+  /** iceConnectionがdisconnected状態になったことを通知する */
+  readonly #iceConnectionDisconnectedNotifier: ReplaySubject<unknown> =
+    new ReplaySubject<unknown>(1);
   /** アンサブスクライブ */
   readonly #unsubscribe: Subscription;
 
@@ -236,7 +229,6 @@ class HostRematchRoom implements AnonymousRematchRoom {
    * @param options オプション
    * @param options.rematchRoomID 再戦ルームID
    * @param options.receiveEnterRematchRoomPromise ゲストが再戦ルームに入室するのを待つPromise
-   * @param options.guestRematchCancelNotifier ゲストからの再戦キャンセル通知
    */
   constructor(
     options: {
@@ -244,7 +236,6 @@ class HostRematchRoom implements AnonymousRematchRoom {
       connection: RTCPeerConnection;
       dataChannel: RTCDataChannel;
       receiveEnterRematchRoomPromise: Promise<EnterRematchRoom>;
-      guestRematchCancelNotifier: Observable<GuestCancelRematch>;
     } & SignalContainer,
   ) {
     this.rematchRoomID = options.rematchRoomID;
@@ -253,9 +244,9 @@ class HostRematchRoom implements AnonymousRematchRoom {
     this.#signal = options.signal;
     this.#receiveEnterRematchRoomPromise =
       options.receiveEnterRematchRoomPromise;
-    this.#unsubscribe = options.guestRematchCancelNotifier.subscribe(
-      this.#guestRematchCancelNotifier,
-    );
+    this.#unsubscribe = notifyIceConnectionDisconnected(
+      this.#connection,
+    ).subscribe((value) => this.#iceConnectionDisconnectedNotifier.next(value));
   }
 
   /** @override */
@@ -309,6 +300,6 @@ class HostRematchRoom implements AnonymousRematchRoom {
 
   /** @override */
   opponentCancelledRematchNotifier(): Observable<unknown> {
-    return this.#guestRematchCancelNotifier;
+    return this.#iceConnectionDisconnectedNotifier;
   }
 }
