@@ -120,7 +120,7 @@ export class LocalWebRTCRoomImpl implements LocalWebRTCRoom {
       guestArmdozerId,
       guestPilotId,
       webRTCConnection: this.#webRTCConnection,
-      abortManager: this.#abortManager,
+      signal,
     });
     sendHostMessage(dataChannel, {
       type: "battle-start",
