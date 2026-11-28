@@ -16,10 +16,8 @@ import {
 
 import { SignalContainer } from "../../abort-controller/signal-container";
 import { sendGuestMessage } from "../../webrtc/guest/guest-message";
-import { notifyHostRematchCancel } from "../../webrtc/guest/notify-host-rematch-cancel";
 import { receiveBattleStart } from "../../webrtc/guest/receive-battle-start";
 import { receiveBattleUpdate } from "../../webrtc/guest/receive-battle-update";
-import { HostCancelRematch } from "../../webrtc/host/host-message";
 import { notifyIceConnectionDisconnected } from "../../webrtc/notify-ice-connection-disconnected";
 import {
   AnonymousBattleSDK,
@@ -104,13 +102,8 @@ export class GuestBattleSDK implements AnonymousBattleSDK {
       this.flowID = battleUpdate.flowID;
     } else if (battleUpdate.type === "battle-end") {
       const { rematchRoomID } = battleUpdate;
-      const hostRematchCancelNotifier = notifyHostRematchCancel({
-        rematchRoomID,
-        dataChannel: this.#dataChannel,
-      });
       this.#rematchRoom = new GuestRematchRoom({
         rematchRoomID,
-        hostRematchCancelNotifier,
         connection: this.#connection,
         dataChannel: this.#dataChannel,
         signal: this.#signal,
@@ -144,16 +137,15 @@ class GuestRematchRoom implements AnonymousRematchRoom {
   readonly #dataChannel: RTCDataChannel;
   /** アボートシグナル */
   readonly #signal: AbortSignal;
-  /** ホストからの再戦キャンセル通知 */
-  readonly #hostRematchCancelNotifier: ReplaySubject<HostCancelRematch> =
-    new ReplaySubject<HostCancelRematch>(1);
+  /** iceConnectionがdisconnected状態になったことを通知する */
+  readonly #iceConnectionDisconnectedNotifier: ReplaySubject<unknown> =
+    new ReplaySubject<unknown>(1);
   readonly #unsubscribe: Subscription;
 
   /**
    * コンストラクタ
    * @param options オプション
    * @param options.rematchRoomID 再戦ルームID
-   * @param options.hostRematchCancelNotifier ホストからの再戦キャンセル通知
    * @param options.connection WebRTCコネクション
    * @param options.dataChannel データチャネル
    * @param options.signal アボートシグナル
@@ -161,7 +153,6 @@ class GuestRematchRoom implements AnonymousRematchRoom {
   constructor(
     options: {
       rematchRoomID: string;
-      hostRematchCancelNotifier: Observable<HostCancelRematch>;
       connection: RTCPeerConnection;
       dataChannel: RTCDataChannel;
     } & SignalContainer,
@@ -170,9 +161,9 @@ class GuestRematchRoom implements AnonymousRematchRoom {
     this.#connection = options.connection;
     this.#dataChannel = options.dataChannel;
     this.#signal = options.signal;
-    this.#unsubscribe = options.hostRematchCancelNotifier.subscribe(
-      this.#hostRematchCancelNotifier,
-    );
+    this.#unsubscribe = notifyIceConnectionDisconnected(
+      this.#connection,
+    ).subscribe(this.#iceConnectionDisconnectedNotifier);
   }
 
   /** @override */
@@ -212,19 +203,7 @@ class GuestRematchRoom implements AnonymousRematchRoom {
   }
 
   /** @override */
-  async cancelRematch(): Promise<void> {
-    if (this.#signal.aborted) {
-      return Promise.reject(this.#signal.reason);
-    }
-
-    sendGuestMessage(this.#dataChannel, {
-      type: "guest-cancel-rematch",
-      rematchRoomID: this.rematchRoomID,
-    });
-  }
-
-  /** @override */
   opponentCancelledRematchNotifier(): Observable<unknown> {
-    return this.#hostRematchCancelNotifier;
+    return this.#iceConnectionDisconnectedNotifier;
   }
 }

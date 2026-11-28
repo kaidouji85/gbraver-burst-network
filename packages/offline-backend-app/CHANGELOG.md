@@ -1,5 +1,15 @@
 # @gbraver-burst-network/offline-backend-app
 
+## 3.1.0
+
+### Minor Changes
+
+- あいことば対戦の再戦キャンセルをWebRTC切断に寄せた
+
+## 3.1.0-beta.0
+
+No changes in this release.
+
 ## 3.0.0
 
 ### Major Changes

@@ -1,5 +1,22 @@
 # @gbraver-burst-network/serverless-stub
 
+## 3.1.0
+
+### Minor Changes
+
+- あいことば対戦の再戦キャンセルをWebRTC切断に寄せた
+
+### Patch Changes
+
+- Updated dependencies
+  - @gbraver-burst-network/browser-sdk@3.1.0
+
+## 3.1.0-beta.0
+
+### Patch Changes
+
+- @gbraver-burst-network/browser-sdk@3.1.0-beta.0
+
 ## 3.0.0
 
 ### Major Changes
