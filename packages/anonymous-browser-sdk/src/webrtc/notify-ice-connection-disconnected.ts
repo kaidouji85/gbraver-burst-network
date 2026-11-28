@@ -5,7 +5,7 @@ import { filter, fromEvent, map, merge, Observable } from "rxjs";
  * @param connection WebRTCコネクション
  * @returns disconnected状態になったことを通知するObservable
  */
-export const notifyDisconnected = (
+export const notifyIceConnectionDisconnected = (
   connection: RTCPeerConnection,
 ): Observable<unknown> =>
   merge(
