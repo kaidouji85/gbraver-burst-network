@@ -1,5 +1,11 @@
 # @gbraver-burst-network/local-webrtc-browser-sdk
 
+## 3.1.0-beta.0
+
+### Minor Changes
+
+- あいことば対戦の再戦キャンセルをWebRTC切断によせた
+
 ## 3.0.0
 
 ### Major Changes

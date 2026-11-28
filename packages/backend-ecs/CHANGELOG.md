@@ -1,5 +1,9 @@
 # @gbraver-burst-network/backend-ecs
 
+## 3.1.0-beta.0
+
+No changes in this release.
+
 ## 3.0.0
 
 ### Major Changes

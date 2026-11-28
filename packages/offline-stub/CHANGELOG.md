@@ -1,5 +1,11 @@
 # @gbraver-burst-network/offline-stub
 
+## 3.1.0-beta.0
+
+### Patch Changes
+
+- @gbraver-burst-network/offline-browser-sdk@3.1.0-beta.0
+
 ## 3.0.0
 
 ### Major Changes
